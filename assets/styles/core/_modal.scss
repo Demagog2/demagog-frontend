@@ -1,0 +1,105 @@
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  //visibility: hidden;
+  //opacity: 0;
+  margin: 0;
+  //transition: opacity $base-transition;
+  z-index: 100;
+
+  &.is-open {
+    visibility: visible;
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.7);
+  }
+
+  .modal-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .close-button {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    cursor: pointer;
+    outline: none;
+    z-index: 5;
+    background-color: transparent;
+    span {
+      pointer-events: none;
+    }
+
+
+    &:hover, &:active {
+      color: #f26538;
+    }
+  }
+
+  .youtube-player-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+
+    div > iframe, > object, > embed {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+.modal-enter {
+  opacity: 0;
+
+  .modal-container {
+    transform: scale(0.9);
+  }
+}
+.modal-enter-active {
+  opacity: 1;
+  transition: opacity 500ms;
+
+  .modal-container {
+    transform: scale(1);
+    transition: transform 500ms;
+  }
+  
+}
+.modal-exit {
+  opacity: 1;
+
+  .modal-container {
+    transform: scale(1);
+  }
+}
+.modal-exit-active {
+  opacity: 0;
+  transition: opacity 500ms;
+
+  .modal-container {
+    transform: scale(0.9);
+    transition: transform 500ms;
+  }
+}
