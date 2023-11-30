@@ -39,7 +39,7 @@ export function Pagination({
         )}
       </span>
 
-      {[...Array(totalPages).keys()].map((i) => (
+      {Array.from(Array(10).keys()).map((i) => (
         <span
           key={i}
           className={`page${currentPage === i + 1 ? ' current' : ''}`}

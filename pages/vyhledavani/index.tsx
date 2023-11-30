@@ -7,8 +7,9 @@ import {
   SearchResultSpeaker,
   SearchResultSpeakerFragment,
 } from '@/components/SearchResultSpeaker'
+import { NextPageContext } from 'next'
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q || ''
 
   const { data: searchData } = await client.query({

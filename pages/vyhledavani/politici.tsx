@@ -7,12 +7,13 @@ import client from '@/libs/apollo-client'
 import gql from 'graphql-tag'
 import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
+import { NextPageContext } from 'next'
 
 const SEARCH_PAGE_SIZE = 12
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q ?? ''
-  const page = parseInt(query?.page ?? 1, 10) ?? 1
+  const page = parseInt(String(query?.page ?? 1), 10) ?? 1
 
   const { data: searchData } = await client.query({
     query: gql`
@@ -42,7 +43,14 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-export default function SearchSpeakers(props) {
+export default function SearchSpeakers(props: {
+  term: string
+  page: number
+  speakerSearchResult: {
+    speakers: any[]
+    totalCount: number
+  }
+}) {
   return (
     <div className="container">
       <div className="row g-5 g-lg-10 justify-content-center">

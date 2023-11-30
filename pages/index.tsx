@@ -17,6 +17,7 @@ import {
 interface HomeProps {
   articles: ArticleItemType[]
   tags: any
+  mostSearchedSpeakers: any[]
 }
 
 const PAGE_SIZE = 10
