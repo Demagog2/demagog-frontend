@@ -1,4 +1,4 @@
-import gql from 'graphql-tag';
+import gql from 'graphql-tag'
 
 export const GetArticles = gql`
   query GetArticles($offset: Int, $limit: Int) {
@@ -29,7 +29,7 @@ export const GetArticles = gql`
       }
     }
   }
-`;
+`
 
 export const GetArticle = gql`
   query GetArticle($slug: String!) {
@@ -48,10 +48,10 @@ export const GetArticle = gql`
         textSlatejson
         promiseUrl
         statementId
-        statements{
+        statements {
           id
           content
-          tags{
+          tags {
             id
             name
           }
@@ -65,7 +65,7 @@ export const GetArticle = gql`
               key
             }
           }
-          source{
+          source {
             id
             releasedAt
             medium {
@@ -73,7 +73,7 @@ export const GetArticle = gql`
               name
             }
           }
-          sourceSpeaker{
+          sourceSpeaker {
             id
             firstName
             lastName
@@ -81,7 +81,7 @@ export const GetArticle = gql`
               id
               shortName
             }
-            speaker{
+            speaker {
               id
               avatar
             }
@@ -103,7 +103,6 @@ export const GetArticle = gql`
           id
           name
         }
-       
       }
       articleTags {
         id
@@ -111,18 +110,7 @@ export const GetArticle = gql`
       }
     }
   }
-`;
-
-export const GetArticleTags = gql`
-query GetArticleTags {
-  articleTags(limit: 10000) {
-    id
-    title
-    slug
-    icon
-  }
-}
-`;
+`
 
 export const GetSpeakers = gql`
   query GetSpeakers($offset: Int, $limit: Int) {
@@ -138,7 +126,7 @@ export const GetSpeakers = gql`
       }
     }
   }
-`;
+`
 
 export const GetSpeaker = gql`
   query GetSpeakers($id: Int!) {
@@ -152,10 +140,10 @@ export const GetSpeaker = gql`
         id
         shortName
       }
-      statements{
+      statements {
         id
         content
-        tags{
+        tags {
           id
           name
         }
@@ -169,7 +157,7 @@ export const GetSpeaker = gql`
             key
           }
         }
-        source{
+        source {
           id
           releasedAt
           medium {
@@ -177,7 +165,7 @@ export const GetSpeaker = gql`
             name
           }
         }
-        sourceSpeaker{
+        sourceSpeaker {
           id
           firstName
           lastName
@@ -185,7 +173,7 @@ export const GetSpeaker = gql`
             id
             shortName
           }
-          speaker{
+          speaker {
             id
             avatar
           }
@@ -193,50 +181,52 @@ export const GetSpeaker = gql`
       }
     }
   }
-`;
-
+`
 
 export const GetStatements = gql`
   query GetStatements($offset: Int, $limit: Int) {
-    statements(offset: $offset, limit: $limit, sortSourcesInReverseChronologicalOrder: true) {
+    statements(
+      offset: $offset
+      limit: $limit
+      sortSourcesInReverseChronologicalOrder: true
+    ) {
       id
-        content
-        tags{
+      content
+      tags {
+        id
+        name
+      }
+      assessment {
+        id
+        shortExplanation
+        explanationHtml
+        veracity {
+          id
+          name
+          key
+        }
+      }
+      source {
+        id
+        releasedAt
+        medium {
           id
           name
         }
-        assessment {
+      }
+      sourceSpeaker {
+        id
+        firstName
+        lastName
+        body {
           id
-          shortExplanation
-          explanationHtml
-          veracity {
-            id
-            name
-            key
-          }
+          shortName
         }
-        source{
+        speaker {
           id
-          releasedAt
-          medium {
-            id
-            name
-          }
+          avatar
         }
-        sourceSpeaker{
-          id
-          firstName
-          lastName
-          body {
-            id
-            shortName
-          }
-          speaker{
-            id
-            avatar
-          }
-        }
+      }
     }
   }
-`;
-  
+`

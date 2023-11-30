@@ -1,7 +1,7 @@
-import { GetArticles, GetArticleTags } from '../libs/queries'
+import { GetArticles } from '../libs/queries'
 import client from '../libs/apollo-client'
 import ArticleItem from '../components/article/Item'
-import ArticleTags from '../components/article/Tags'
+import ArticleTags, { ArticleTagsFragment } from '../components/article/Tags'
 import { useState } from 'react'
 import HomeSidebar from '@/components/site/HomeSidebar'
 import DonateSidebar from '@/components/site/DonateSidebar'
@@ -30,26 +30,25 @@ export async function getStaticProps() {
     },
   })
 
-  const { data: tags } = await client.query({
-    query: GetArticleTags,
-    variables: { offset: 0, limit: 20 },
-  })
-
   const { data: homepageData } = await client.query({
     query: gql`
       query homepageData {
         getMostSearchedSpeakers {
           ...MostSearchedSpeakerDetail
         }
+        articleTags(limit: 5) {
+          ...ArticleTagDetail
+        }
       }
       ${MostSearchedSpeakerFragment}
+      ${ArticleTagsFragment}
     `,
   })
 
   return {
     props: {
       articles: articles.articles,
-      tags: tags.articleTags,
+      tags: homepageData.articleTags,
       mostSearchedSpeakers: homepageData.getMostSearchedSpeakers,
     },
   }
