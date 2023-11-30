@@ -1,20 +1,23 @@
-import TitleIcon from '@/assets/icons/demagog.svg'
-import client from '@/libs/apollo-client'
-import gql from 'graphql-tag'
-import Link from 'next/link'
 import React from 'react'
 import {
   SearchResultSpeaker,
   SearchResultSpeakerFragment,
 } from '@/components/SearchResultSpeaker'
+import client from '@/libs/apollo-client'
+import gql from 'graphql-tag'
+import Link from 'next/link'
+import { Pagination } from '@/components/pagination'
+
+const SEARCH_PAGE_SIZE = 12
 
 export async function getServerSideProps({ query }) {
-  const term = query?.q || ''
+  const term = query?.q ?? ''
+  const page = parseInt(query?.page ?? 1, 10) ?? 1
 
   const { data: searchData } = await client.query({
     query: gql`
-      query searchData($term: String!) {
-        searchSpeakers(term: $term, limit: 4) {
+      query searchData($term: String!, $limit: Int, $offset: Int) {
+        searchSpeakers(term: $term, limit: $limit, offset: $offset) {
           speakers {
             ...SearchResultSpeakerDetail
           }
@@ -25,40 +28,21 @@ export async function getServerSideProps({ query }) {
     `,
     variables: {
       term,
+      limit: SEARCH_PAGE_SIZE,
+      offset: (page - 1) * SEARCH_PAGE_SIZE,
     },
   })
 
   return {
     props: {
       term,
+      page,
       speakerSearchResult: searchData.searchSpeakers,
     },
   }
 }
 
-function ShowMoreLink(props: { link: string; totalCount: number }) {
-  return (
-    <Link href={props.link} className="btn h-50px px-8 fs-6 s-more">
-      Zobrazit všech {props.totalCount} politiků &rarr;
-    </Link>
-  )
-}
-
-type Props = {
-  term: string
-  speakerSearchResult: {
-    speakers: {
-      id: string
-      fullName: string
-      avatar: string
-      body: { shortName: string }
-      verifiedStatementsCount: number
-    }[]
-    totalCount: number
-  }
-}
-
-const Search: React.FC<Props> = (props) => {
+export default function SearchSpeakers(props) {
   return (
     <div className="container">
       <div className="row g-5 g-lg-10 justify-content-center">
@@ -96,50 +80,36 @@ const Search: React.FC<Props> = (props) => {
             </button>
           </form>
         </div>
-        {props.speakerSearchResult.totalCount > 0 && (
-          <div className="col col-12 s-section-speakers">
-            <div className="w-100">
-              <div className="d-flex">
-                <span className="d-flex align-items-center me-2">
-                  <TitleIcon />
-                </span>
-                <h2 className="display-5 fw-bold m-0 p-0">Nalezení politici</h2>
-              </div>
-              <div className="row row-cols-2 row-cols-lg-6 g-5">
-                {props.speakerSearchResult.speakers.map((speaker) => (
-                  <SearchResultSpeaker key={speaker.id} speaker={speaker} />
-                ))}
-              </div>
-              {props.speakerSearchResult.totalCount > 4 && (
-                <div className="my-5 d-flex">
-                  <ShowMoreLink
-                    link={`/vyhledavani/politici/?q=${props.term}`}
-                    totalCount={props.speakerSearchResult.totalCount}
-                  />
-                </div>
-              )}
+        <div className="col col-12">
+          <div className="d-flex align-items-center justify-content-between mb-5 mb-lg-10">
+            <div className="my-5">
+              <h2 className="display-5 fw-bold">Nalezené výsledky</h2>
+            </div>
+            <div className="my-5">
+              <Link
+                href={`/vyhledavani?q=${props.term}`}
+                className="btn h-50px fs-6 s-back-link"
+              >
+                <span className="me-2">←</span>
+
+                <span>Zpět na souhrn výsledků hledání</span>
+              </Link>
             </div>
           </div>
-        )}
-        <div className="col col-12 s-section-articles">
-          <div className="d-flex">
-            <span className="d-flex align-items-center me-2">
-              <TitleIcon />
-            </span>
-            <h2 className="display-5 fw-bold m-0 p-0">Nalezené výstupy</h2>
+          <div className="row row-cols-2 row-cols-lg-6 g-5 g-lg-10">
+            {props.speakerSearchResult.speakers.map((speaker) => (
+              <SearchResultSpeaker key={speaker.id} speaker={speaker} />
+            ))}
           </div>
-        </div>
-        <div className="col col-12 s-section-articles">
-          <div className="d-flex">
-            <span className="d-flex align-items-center me-2">
-              <TitleIcon />
-            </span>
-            <h2 className="display-5 fw-bold m-0 p-0">Nalezené výroky</h2>
+          <div className="d-flex justify-content-center my-5 my-lg-10">
+            <Pagination
+              currentPage={props.page}
+              pageSize={SEARCH_PAGE_SIZE}
+              totalCount={props.speakerSearchResult.totalCount}
+            />
           </div>
         </div>
       </div>
     </div>
   )
 }
-
-export default Search
