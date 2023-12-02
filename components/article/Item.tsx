@@ -1,7 +1,30 @@
 import Link from 'next/link'
 import truncate from '@/libs/truncate'
 import formatDate from '@/libs/format-date'
-import Speaker from './Spreaker'
+import Speaker, { ArticleSpeakerFragment } from './Spreaker'
+import gql from 'graphql-tag'
+
+export const ArticleDetailFragment = gql`
+  fragment ArticleDetail on Article {
+    id
+    perex
+    slug
+    illustration
+    title
+    speakers {
+      ...ArticleSpeakerDetail
+    }
+    articleType
+    source {
+      medium {
+        name
+      }
+      releasedAt
+    }
+    publishedAt
+  }
+  ${ArticleSpeakerFragment}
+`
 
 export default function ArticleItem({ article, prefix }: any) {
   const perex = truncate(article.perex, 190)

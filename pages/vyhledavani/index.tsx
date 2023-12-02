@@ -8,6 +8,7 @@ import {
   SearchResultSpeakerFragment,
 } from '@/components/SearchResultSpeaker'
 import { NextPageContext } from 'next'
+import ArticleItem, { ArticleDetailFragment } from '@/components/article/Item'
 
 export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q || ''
@@ -21,8 +22,15 @@ export async function getServerSideProps({ query }: NextPageContext) {
           }
           totalCount
         }
+        searchArticles(term: $term, limit: 6) {
+          articles {
+            ...ArticleDetail
+          }
+          totalCount
+        }
       }
       ${SearchResultSpeakerFragment}
+      ${ArticleDetailFragment}
     `,
     variables: {
       term,
@@ -33,14 +41,19 @@ export async function getServerSideProps({ query }: NextPageContext) {
     props: {
       term,
       speakerSearchResult: searchData.searchSpeakers,
+      articleSearchResult: searchData.searchArticles,
     },
   }
 }
 
-function ShowMoreLink(props: { link: string; totalCount: number }) {
+function ShowMoreLink(props: {
+  link: string
+  totalCount: number
+  contentType: string
+}) {
   return (
     <Link href={props.link} className="btn h-50px px-8 fs-6 s-more">
-      Zobrazit všech {props.totalCount} politiků &rarr;
+      Zobrazit všech {props.totalCount} {props.contentType} &rarr;
     </Link>
   )
 }
@@ -54,6 +67,13 @@ type Props = {
       avatar: string
       body: { shortName: string }
       verifiedStatementsCount: number
+    }[]
+    totalCount: number
+  }
+  articleSearchResult: {
+    articles: {
+      id: string
+      title: string
     }[]
     totalCount: number
   }
@@ -116,6 +136,7 @@ const Search: React.FC<Props> = (props) => {
                   <ShowMoreLink
                     link={`/vyhledavani/politici/?q=${props.term}`}
                     totalCount={props.speakerSearchResult.totalCount}
+                    contentType={'politiků'}
                   />
                 </div>
               )}
@@ -123,12 +144,30 @@ const Search: React.FC<Props> = (props) => {
           </div>
         )}
         <div className="col col-12 s-section-articles">
-          <div className="d-flex">
+          <div className="d-flex mb-5">
             <span className="d-flex align-items-center me-2">
               <TitleIcon />
             </span>
             <h2 className="display-5 fw-bold m-0 p-0">Nalezené výstupy</h2>
           </div>
+          <div className="row row-cols-1 row-cols-lg-2 g-5 g-lg-10">
+            {props.articleSearchResult.articles.map((article) => (
+              <ArticleItem
+                key={article.id}
+                article={article}
+                prefix={'/diskuze/'}
+              />
+            ))}
+          </div>
+          {props.articleSearchResult.totalCount > 6 && (
+            <div className="my-5 d-flex">
+              <ShowMoreLink
+                link={`/vyhledavani/vystupy/?q=${props.term}`}
+                totalCount={props.articleSearchResult.totalCount}
+                contentType={'výstupů'}
+              />
+            </div>
+          )}
         </div>
         <div className="col col-12 s-section-articles">
           <div className="d-flex">
