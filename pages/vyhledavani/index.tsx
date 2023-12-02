@@ -9,6 +9,9 @@ import {
 } from '@/components/SearchResultSpeaker'
 import { NextPageContext } from 'next'
 import ArticleItem, { ArticleDetailFragment } from '@/components/article/Item'
+import StatementItem, {
+  StatementItemFragment,
+} from '@/components/statement/Item'
 
 export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q || ''
@@ -28,9 +31,16 @@ export async function getServerSideProps({ query }: NextPageContext) {
           }
           totalCount
         }
+        searchStatements(term: $term, limit: 4) {
+          statements {
+            ...StatementDetail
+          }
+          totalCount
+        }
       }
       ${SearchResultSpeakerFragment}
       ${ArticleDetailFragment}
+      ${StatementItemFragment}
     `,
     variables: {
       term,
@@ -42,6 +52,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
       term,
       speakerSearchResult: searchData.searchSpeakers,
       articleSearchResult: searchData.searchArticles,
+      statementSearchResult: searchData.searchStatements,
     },
   }
 }
@@ -74,6 +85,12 @@ type Props = {
     articles: {
       id: string
       title: string
+    }[]
+    totalCount: number
+  }
+  statementSearchResult: {
+    statements: {
+      id: string
     }[]
     totalCount: number
   }
@@ -143,40 +160,60 @@ const Search: React.FC<Props> = (props) => {
             </div>
           </div>
         )}
-        <div className="col col-12 s-section-articles">
-          <div className="d-flex mb-5">
-            <span className="d-flex align-items-center me-2">
-              <TitleIcon />
-            </span>
-            <h2 className="display-5 fw-bold m-0 p-0">Nalezené výstupy</h2>
-          </div>
-          <div className="row row-cols-1 row-cols-lg-2 g-5 g-lg-10">
-            {props.articleSearchResult.articles.map((article) => (
-              <ArticleItem
-                key={article.id}
-                article={article}
-                prefix={'/diskuze/'}
-              />
-            ))}
-          </div>
-          {props.articleSearchResult.totalCount > 6 && (
-            <div className="my-5 d-flex">
-              <ShowMoreLink
-                link={`/vyhledavani/vystupy/?q=${props.term}`}
-                totalCount={props.articleSearchResult.totalCount}
-                contentType={'výstupů'}
-              />
+
+        {props.articleSearchResult.totalCount > 0 && (
+          <div className="col col-12 s-section-articles">
+            <div className="d-flex mb-5">
+              <span className="d-flex align-items-center me-2">
+                <TitleIcon />
+              </span>
+              <h2 className="display-5 fw-bold m-0 p-0">Nalezené výstupy</h2>
             </div>
-          )}
-        </div>
-        <div className="col col-12 s-section-articles">
-          <div className="d-flex">
-            <span className="d-flex align-items-center me-2">
-              <TitleIcon />
-            </span>
-            <h2 className="display-5 fw-bold m-0 p-0">Nalezené výroky</h2>
+            <div className="row row-cols-1 row-cols-lg-2 g-5 g-lg-10">
+              {props.articleSearchResult.articles.map((article) => (
+                <ArticleItem
+                  key={article.id}
+                  article={article}
+                  prefix={'/diskuze/'}
+                />
+              ))}
+            </div>
+            {props.articleSearchResult.totalCount > 6 && (
+              <div className="my-5 d-flex">
+                <ShowMoreLink
+                  link={`/vyhledavani/vystupy/?q=${props.term}`}
+                  totalCount={props.articleSearchResult.totalCount}
+                  contentType={'výstupů'}
+                />
+              </div>
+            )}
           </div>
-        </div>
+        )}
+
+        {props.statementSearchResult.totalCount > 0 && (
+          <div className="col col-12 s-section-articles">
+            <div className="d-flex mb-5">
+              <span className="d-flex align-items-center me-2">
+                <TitleIcon />
+              </span>
+              <h2 className="display-5 fw-bold m-0 p-0">Nalezené výroky</h2>
+            </div>
+            <div className="w-100">
+              {props.statementSearchResult.statements.map((statement) => (
+                <StatementItem key={statement.id} statement={statement} />
+              ))}
+            </div>
+            {props.statementSearchResult.totalCount > 4 && (
+              <div className="my-5 d-flex">
+                <ShowMoreLink
+                  link={`/vyhledavani/vyroky/?q=${props.term}`}
+                  totalCount={props.statementSearchResult.totalCount}
+                  contentType={'výroků'}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </div>
   )
