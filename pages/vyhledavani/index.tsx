@@ -214,6 +214,17 @@ const Search: React.FC<Props> = (props) => {
             )}
           </div>
         )}
+
+        {props.term.length > 0 &&
+          !props.statementSearchResult.totalCount &&
+          !props.articleSearchResult.totalCount &&
+          !props.speakerSearchResult.totalCount && (
+            <div className="col col-12 min-h-25vh py-10 text-center">
+              <h1 className="display-4 fw-bold">
+                Nenašli jsme nic, co by odpovídalo Vašemu hledanému výrazu.
+              </h1>
+            </div>
+          )}
       </div>
     </div>
   )
