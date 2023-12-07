@@ -16,10 +16,19 @@ export const TagFilterFragment = gql`
   }
 `
 
-export function TagFilter({ tag, count }: TagAggregation) {
+type Props = TagAggregation & {
+  defaultChecked: boolean
+}
+
+export function TagFilter({ tag, count, defaultChecked = false }: Props) {
   return (
     <div className="check-btn py-2" key={tag.id}>
-      <input type="checkbox" defaultValue={tag.id} />
+      <input
+        name="tags"
+        type="checkbox"
+        value={tag.id}
+        defaultChecked={defaultChecked}
+      />
       <span className="checkmark" />
       <span className="small fw-600 me-2">{tag.name}</span>
       <span className="smallest min-w-40px">
