@@ -4,7 +4,7 @@ import StatementItem, {
   StatementItemFragment,
 } from '@/components/statement/Item'
 import gql from 'graphql-tag'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   TagAggregation,
   TagFilter,
@@ -12,18 +12,36 @@ import {
 } from '@/components/statement/filtering/TagFilter'
 import { NextPageContext } from 'next'
 import { Pagination } from '@/components/pagination'
+import classNames from 'classnames'
+import {
+  VeracityAggregation,
+  VeracityFilter,
+  VeracityFilterFragment,
+} from '@/components/statement/filtering/VeracityFilter'
+import { parsePage } from '@/libs/pagination'
+import { FilterSection } from '@/components/statement/filtering/FilterSection'
+import { ResetFilters } from '@/components/statement/filtering/ResetFilters'
+import {
+  ReleasedYearAggregation,
+  ReleasedYearFilter,
+} from '@/components/statement/filtering/ReleasedYearFilter'
 
 const PAGE_SIZE = 10
 
 interface StatementsProps {
+  page: number
   statements: any
   tags: TagAggregation[]
+  years: ReleasedYearAggregation[]
+  veracities: VeracityAggregation[]
   term: string
   totalCount: number
   selectedTags: number[]
+  selectedYears: number[]
+  selectedVeracities: string[]
 }
 
-function getSelectedTags(queryTags?: string | string[]): number[] {
+function getNumericalArrayParams(queryTags?: string | string[]): number[] {
   if (!queryTags) {
     return []
   }
@@ -33,9 +51,20 @@ function getSelectedTags(queryTags?: string | string[]): number[] {
   )
 }
 
+function getSelectedVeracities(queryVeracities?: string | string[]): string[] {
+  if (!queryVeracities) {
+    return []
+  }
+
+  return Array.isArray(queryVeracities) ? queryVeracities : [queryVeracities]
+}
+
 export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q ?? ''
-  const selectedTags = getSelectedTags(query?.tags)
+  const selectedTags = getNumericalArrayParams(query?.tags)
+  const selectedYears = getNumericalArrayParams(query?.years)
+  const selectedVeracities = getSelectedVeracities(query?.veracities)
+  const page = parsePage(query?.page)
 
   const { data } = await client.query({
     query: gql`
@@ -58,39 +87,111 @@ export async function getServerSideProps({ query }: NextPageContext) {
           tags {
             ...TagFilter
           }
+          veracities {
+            ...VeracityFilter
+          }
+          years {
+            year
+            count
+          }
           totalCount
         }
       }
       ${StatementItemFragment}
       ${TagFilterFragment}
+      ${VeracityFilterFragment}
     `,
     variables: {
       offset: 0,
       limit: PAGE_SIZE,
       term,
-      filters: selectedTags ? { tags: selectedTags } : undefined,
+      filters: { tags: selectedTags, veracities: selectedVeracities },
     },
   })
 
   return {
     props: {
       tags: data.searchStatements.tags,
+      years: data.searchStatements.years,
       statements: data.searchStatements.statements,
+      veracities: data.searchStatements.veracities,
       totalCount: data.searchStatements.totalCount,
       term,
       selectedTags,
+      selectedVeracities,
+      selectedYears,
+      page,
     },
   }
 }
 
+function TagFilters(props: { tags: TagAggregation[]; selectedTags: number[] }) {
+  return (
+    <FilterSection name="Témata" defaultOpen>
+      {props.tags.map(({ tag, count }) => (
+        <TagFilter
+          key={tag.id}
+          tag={tag}
+          count={count}
+          defaultChecked={props.selectedTags.includes(parseInt(tag.id, 10))}
+        />
+      ))}
+    </FilterSection>
+  )
+}
+
+function VeracityFilters(props: {
+  veracities: VeracityAggregation[]
+  selectedVeracities: string[]
+}) {
+  return (
+    <FilterSection name="Hodnocení">
+      {props.veracities.map(({ veracity, count }) => (
+        <VeracityFilter
+          key={veracity.id}
+          veracity={veracity}
+          count={count}
+          isSelected={props.selectedVeracities.includes(veracity.key)}
+        />
+      ))}
+    </FilterSection>
+  )
+}
+
+function ReleasedYearFilters(props: {
+  years: { year: number; count: number }[]
+  selectedYears: number[]
+}) {
+  return (
+    <FilterSection name="Roky">
+      {props.years.map(({ year, count }) => (
+        <ReleasedYearFilter
+          key={year}
+          year={year}
+          count={count}
+          isSelected={props.selectedYears.includes(year)}
+        />
+      ))}
+    </FilterSection>
+  )
+}
+
 const Statements: React.FC<StatementsProps> = ({
+  page,
   term,
   statements,
   tags,
+  years,
+  veracities,
   totalCount,
   selectedTags,
+  selectedYears,
+  selectedVeracities,
 }) => {
-  const [areFiltersOpen, setFiltersOpen] = useState(false)
+  const hasAnyFilters =
+    [...selectedVeracities, ...selectedYears, ...selectedVeracities].length > 0
+
+  const [areFiltersOpen, setFiltersOpen] = useState(hasAnyFilters)
 
   return (
     <div className="container">
@@ -153,65 +254,38 @@ const Statements: React.FC<StatementsProps> = ({
             {areFiltersOpen && (
               <div className="col col-12 col-lg-4">
                 <div className="bg-light rounded-l p-5">
-                  <div className="filter w-100 mb-5">
-                    <div className="filter-link d-flex align-items-center justify-content-between w-100 min-h-40px">
-                      <span className="fs-6 fw-600">Témata</span>
-                      <span className="filter-icon">
-                        <svg
-                          width="23"
-                          height="12"
-                          viewBox="0 0 23 12"
-                          fill="none"
-                          xmlns="http://www.w3.org/2000/svg"
-                        >
-                          <path
-                            d="M1 0.597656L11.646 11.2437L22.2435 0.646237"
-                            stroke="#111827"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                    <div className="filter-content">
-                      {tags.map(({ tag, count }) => (
-                        <TagFilter
-                          key={tag.id}
-                          tag={tag}
-                          count={count}
-                          defaultChecked={selectedTags.includes(
-                            parseInt(tag.id, 10)
-                          )}
-                        />
-                      ))}
-                    </div>
+                  <TagFilters tags={tags} selectedTags={selectedTags} />
 
-                    <div className="w-100 mt-5">
-                      <a
-                        className="btn w-100"
-                        onClick={() => setFiltersOpen(false)}
-                      >
-                        <span className="text-white">Zrušit filtry</span>
-                      </a>
-                    </div>
-                  </div>
+                  <VeracityFilters
+                    veracities={veracities}
+                    selectedVeracities={selectedVeracities}
+                  />
+
+                  <ReleasedYearFilters
+                    years={years}
+                    selectedYears={selectedYears}
+                  />
+
+                  <ResetFilters onClick={() => setFiltersOpen(false)} />
                 </div>
               </div>
             )}
 
             <div
-              className={areFiltersOpen ? 'col col-12 col-lg-8' : 'col col-12'}
+              className={classNames('col col-12 ', {
+                'col-lg-8': areFiltersOpen,
+              })}
             >
-              <div>
-                {statements.map((statement: any) => (
-                  <StatementItem key={statement.id} statement={statement} />
-                ))}
-              </div>
+              {statements.map((statement: any) => (
+                <StatementItem key={statement.id} statement={statement} />
+              ))}
             </div>
           </div>
 
           <div className="d-flex justify-content-center my-5 my-lg-10">
             <Pagination
               pageSize={PAGE_SIZE}
-              currentPage={1}
+              currentPage={page}
               totalCount={totalCount}
             />
           </div>

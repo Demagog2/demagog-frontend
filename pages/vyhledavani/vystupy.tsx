@@ -5,12 +5,13 @@ import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
 import { NextPageContext } from 'next'
 import ArticleItem, { ArticleDetailFragment } from '@/components/article/Item'
+import { parsePage } from '@/libs/pagination'
 
 const SEARCH_PAGE_SIZE = 10
 
 export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q ?? ''
-  const page = parseInt(String(query?.page ?? 1), 10) ?? 1
+  const page = parsePage(query?.page)
 
   const { data: searchData } = await client.query({
     query: gql`
