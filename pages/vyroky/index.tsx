@@ -105,7 +105,11 @@ export async function getServerSideProps({ query }: NextPageContext) {
       offset: 0,
       limit: PAGE_SIZE,
       term,
-      filters: { tags: selectedTags, veracities: selectedVeracities },
+      filters: {
+        tags: selectedTags,
+        veracities: selectedVeracities,
+        years: selectedYears,
+      },
     },
   })
 
