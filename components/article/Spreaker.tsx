@@ -4,8 +4,7 @@ import gql from 'graphql-tag'
 export const ArticleSpeakerFragment = gql`
   fragment ArticleSpeakerDetail on SourceSpeaker {
     id
-    firstName
-    lastName
+    fullName
     speaker {
       avatar
     }
@@ -17,13 +16,10 @@ export default function ArticleSpeaker({ speaker, prefix }: any) {
   return (
     <Link
       href={prefix + speaker.speaker.id}
-      title={speaker.firstName + ' ' + speaker.lastName}
+      title={speaker.fullName}
       className="symbol symbol-40px rounded-circle bg-gray-500 overflow-hidden"
     >
-      <img
-        src={mediaUrl + speaker.speaker.avatar}
-        alt={speaker.firstName + ' ' + speaker.lastName}
-      />
+      <img src={mediaUrl + speaker.speaker.avatar} alt={speaker.fullName} />
     </Link>
   )
 }
