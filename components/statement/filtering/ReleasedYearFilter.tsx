@@ -8,10 +8,8 @@ export type ReleasedYearAggregation = {
 }
 
 export const ReleasedYearFilterFragment = gql`
-  fragment ReleasedYearFilter on YearAggregation {
-    year {
-      year
-    }
+  fragment ReleasedYearFilter on YearAggregate {
+    year
     count
   }
 `

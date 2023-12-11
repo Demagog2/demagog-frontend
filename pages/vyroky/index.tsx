@@ -24,6 +24,7 @@ import { ResetFilters } from '@/components/statement/filtering/ResetFilters'
 import {
   ReleasedYearAggregation,
   ReleasedYearFilter,
+  ReleasedYearFilterFragment,
 } from '@/components/statement/filtering/ReleasedYearFilter'
 
 const PAGE_SIZE = 10
@@ -91,8 +92,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
             ...VeracityFilter
           }
           years {
-            year
-            count
+            ...ReleasedYearFilter
           }
           totalCount
         }
@@ -100,6 +100,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
       ${StatementItemFragment}
       ${TagFilterFragment}
       ${VeracityFilterFragment}
+      ${ReleasedYearFilterFragment}
     `,
     variables: {
       offset: 0,
