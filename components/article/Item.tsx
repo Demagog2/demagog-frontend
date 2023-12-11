@@ -9,7 +9,7 @@ export const ArticleDetailFragment = gql`
     id
     perex
     slug
-    illustration
+    illustration(size: medium)
     title
     speakers {
       ...ArticleSpeakerDetail
@@ -35,7 +35,11 @@ export default function ArticleItem({ article, prefix }: any) {
         <div className="col col-12 col-md-5">
           <div className="d-flex">
             <Link href={prefix + article.slug} className="illustration d-flex">
-              <img src={mediaUrl + article.illustration} className="w-100" />
+              <img
+                src={mediaUrl + article.illustration}
+                className="w-100"
+                alt={`Ilustrační obrázek k ${article.title}`}
+              />
             </Link>
           </div>
           <div className="d-flex justify-content-between align-items-center mt-2">

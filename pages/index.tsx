@@ -1,8 +1,6 @@
-import { GetArticles } from '../libs/queries'
 import client from '../libs/apollo-client'
-import ArticleItem from '../components/article/Item'
+import ArticleItem, { ArticleDetailFragment } from '../components/article/Item'
 import ArticleTags, { ArticleTagsFragment } from '../components/article/Tags'
-import { useState } from 'react'
 import HomeSidebar from '@/components/site/HomeSidebar'
 import DonateSidebar from '@/components/site/DonateSidebar'
 import { ArticleItem as ArticleItemType } from '@/libs/results-type'
@@ -20,20 +18,13 @@ interface HomeProps {
   mostSearchedSpeakers: any[]
 }
 
-const PAGE_SIZE = 10
-
 export async function getStaticProps() {
-  const { data: articles } = await client.query({
-    query: GetArticles,
-    variables: {
-      offset: 0,
-      limit: 10,
-    },
-  })
-
   const { data: homepageData } = await client.query({
     query: gql`
       query homepageData {
+        homepageArticles {
+          ...ArticleDetail
+        }
         getMostSearchedSpeakers {
           ...MostSearchedSpeakerDetail
         }
@@ -41,6 +32,7 @@ export async function getStaticProps() {
           ...ArticleTagDetail
         }
       }
+      ${ArticleDetailFragment}
       ${MostSearchedSpeakerFragment}
       ${ArticleTagsFragment}
     `,
@@ -48,7 +40,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      articles: articles.articles,
+      articles: homepageData.homepageArticles,
       tags: homepageData.articleTags,
       mostSearchedSpeakers: homepageData.getMostSearchedSpeakers,
     },
@@ -60,7 +52,6 @@ const Home: React.FC<HomeProps> = ({
   tags,
   mostSearchedSpeakers,
 }) => {
-  const [offset, setOffset] = useState(PAGE_SIZE)
   const topArticles = articles.slice(0, 4)
   const bottomArticles =
     articles.length > 4 ? articles.slice(4, articles.length) : []

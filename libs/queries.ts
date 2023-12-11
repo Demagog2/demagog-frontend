@@ -1,35 +1,5 @@
 import gql from 'graphql-tag'
 
-export const GetArticles = gql`
-  query GetArticles($offset: Int, $limit: Int) {
-    articles(offset: $offset, limit: $limit) {
-      id
-      articleType
-      title
-      slug
-      perex
-      illustration
-      publishedAt
-      published
-      source {
-        releasedAt
-        medium {
-          name
-        }
-      }
-      speakers {
-        id
-        fullName
-        role
-        speaker {
-          id
-          avatar
-        }
-      }
-    }
-  }
-`
-
 export const GetArticle = gql`
   query GetArticle($slug: String!) {
     article(slug: $slug) {
@@ -39,7 +9,7 @@ export const GetArticle = gql`
       slug
       perex
       publishedAt
-      illustration
+      illustration(size: medium)
       segments {
         id
         segmentType
