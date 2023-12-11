@@ -20,7 +20,7 @@ type Props = ReleasedYearAggregation & {
 
 export function ReleasedYearFilter({ year, count, isSelected }: Props) {
   return (
-    <div className="check-btn py-2">
+    <div className={classNames('check-btn', 'py-2', { disabled: count === 0 })}>
       <input
         type="checkbox"
         disabled={count === 0}
