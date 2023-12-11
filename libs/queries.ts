@@ -19,8 +19,7 @@ export const GetArticles = gql`
       }
       speakers {
         id
-        firstName
-        lastName
+        fullName
         role
         speaker {
           id
@@ -75,8 +74,7 @@ export const GetArticle = gql`
           }
           sourceSpeaker {
             id
-            firstName
-            lastName
+            fullName
             body {
               id
               shortName
@@ -116,8 +114,7 @@ export const GetSpeakers = gql`
   query GetSpeakers($offset: Int, $limit: Int) {
     speakers(offset: $offset, limit: $limit) {
       id
-      firstName
-      lastName
+      fullName
       avatar
       role
       body {
@@ -132,8 +129,7 @@ export const GetSpeaker = gql`
   query GetSpeakers($id: Int!) {
     speaker(id: $id) {
       id
-      firstName
-      lastName
+      fullName
       avatar
       role
       body {
@@ -167,8 +163,7 @@ export const GetSpeaker = gql`
         }
         sourceSpeaker {
           id
-          firstName
-          lastName
+          fullName
           body {
             id
             shortName
@@ -177,54 +172,6 @@ export const GetSpeaker = gql`
             id
             avatar
           }
-        }
-      }
-    }
-  }
-`
-
-export const GetStatements = gql`
-  query GetStatements($offset: Int, $limit: Int) {
-    statements(
-      offset: $offset
-      limit: $limit
-      sortSourcesInReverseChronologicalOrder: true
-    ) {
-      id
-      content
-      tags {
-        id
-        name
-      }
-      assessment {
-        id
-        shortExplanation
-        explanationHtml
-        veracity {
-          id
-          name
-          key
-        }
-      }
-      source {
-        id
-        releasedAt
-        medium {
-          id
-          name
-        }
-      }
-      sourceSpeaker {
-        id
-        firstName
-        lastName
-        body {
-          id
-          shortName
-        }
-        speaker {
-          id
-          avatar
         }
       }
     }

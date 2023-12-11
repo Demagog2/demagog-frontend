@@ -15,8 +15,7 @@ export const StatementItemFragment = gql`
         id
         avatar
       }
-      firstName
-      lastName
+      fullName
     }
     source {
       releasedAt
@@ -57,19 +56,14 @@ export default function StatementItem({ statement }: any) {
                   <span className="symbol symbol-square symbol-circle">
                     <img
                       src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
-                      alt={
-                        statement.sourceSpeaker.firstName +
-                        ' ' +
-                        statement.sourceSpeaker.lastName
-                      }
+                      alt={statement.sourceSpeaker.fullName}
                     />
                   </span>
                 </Link>
               </div>
               <div className="mt-2 text-center w-100">
                 <h3 className="fs-6 fs-600">
-                  {statement.sourceSpeaker.firstName}{' '}
-                  {statement.sourceSpeaker.lastName}
+                  {statement.sourceSpeaker.fullName}
                 </h3>
               </div>
             </div>
