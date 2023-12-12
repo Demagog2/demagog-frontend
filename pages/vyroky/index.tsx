@@ -68,7 +68,7 @@ function getSelectedVeracities(queryVeracities?: string | string[]): string[] {
   return Array.isArray(queryVeracities) ? queryVeracities : [queryVeracities]
 }
 
-function getBooleanParam(param: string | string[]): boolean {
+function getBooleanParam(param?: string | string[]): boolean {
   if (!param) {
     return false
   }
