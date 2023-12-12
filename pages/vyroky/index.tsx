@@ -27,6 +27,11 @@ import {
   ReleasedYearFilterFragment,
 } from '@/components/statement/filtering/ReleasedYearFilter'
 import { SearchButton } from '@/components/search/SearchButton'
+import {
+  EditorPickedAggregation,
+  EditorPickedFilter,
+  EditorPickedFilterFragment,
+} from '@/components/statement/filtering/EditorPickedFilter'
 
 const PAGE_SIZE = 10
 
@@ -36,11 +41,13 @@ interface StatementsProps {
   tags: TagAggregation[]
   years: ReleasedYearAggregation[]
   veracities: VeracityAggregation[]
+  editorPicked: EditorPickedAggregation
   term: string
   totalCount: number
   selectedTags: number[]
   selectedYears: number[]
   selectedVeracities: string[]
+  editorPickedSelected: boolean
 }
 
 function getNumericalArrayParams(queryTags?: string | string[]): number[] {
@@ -61,11 +68,20 @@ function getSelectedVeracities(queryVeracities?: string | string[]): string[] {
   return Array.isArray(queryVeracities) ? queryVeracities : [queryVeracities]
 }
 
+function getBooleanParam(param: string | string[]): boolean {
+  if (!param) {
+    return false
+  }
+
+  return Array.isArray(param) ? false : Boolean(param)
+}
+
 export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q ?? ''
   const selectedTags = getNumericalArrayParams(query?.tags)
   const selectedYears = getNumericalArrayParams(query?.years)
   const selectedVeracities = getSelectedVeracities(query?.veracities)
+  const editorPickedSelected = getBooleanParam(query?.editorPicked)
   const page = parsePage(query?.page)
 
   const { data } = await client.query({
@@ -95,6 +111,9 @@ export async function getServerSideProps({ query }: NextPageContext) {
           years {
             ...ReleasedYearFilter
           }
+          editorPicked {
+            ...EditorPickedFilter
+          }
           totalCount
         }
       }
@@ -102,6 +121,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
       ${TagFilterFragment}
       ${VeracityFilterFragment}
       ${ReleasedYearFilterFragment}
+      ${EditorPickedFilterFragment}
     `,
     variables: {
       offset: 0,
@@ -111,6 +131,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
         tags: selectedTags,
         veracities: selectedVeracities,
         years: selectedYears,
+        editorPicked: editorPickedSelected,
       },
     },
   })
@@ -121,11 +142,13 @@ export async function getServerSideProps({ query }: NextPageContext) {
       years: data.searchStatements.years,
       statements: data.searchStatements.statements,
       veracities: data.searchStatements.veracities,
+      editorPicked: data.searchStatements.editorPicked,
       totalCount: data.searchStatements.totalCount,
       term,
       selectedTags,
       selectedVeracities,
       selectedYears,
+      editorPickedSelected,
       page,
     },
   }
@@ -182,20 +205,13 @@ function ReleasedYearFilters(props: {
   )
 }
 
-const Statements: React.FC<StatementsProps> = ({
-  page,
-  term,
-  statements,
-  tags,
-  years,
-  veracities,
-  totalCount,
-  selectedTags,
-  selectedYears,
-  selectedVeracities,
-}) => {
+export default function Statements(props: StatementsProps) {
   const hasAnyFilters =
-    [...selectedVeracities, ...selectedYears, ...selectedVeracities].length > 0
+    [
+      ...props.selectedVeracities,
+      ...props.selectedYears,
+      ...props.selectedVeracities,
+    ].length > 0
 
   const [areFiltersOpen, setFiltersOpen] = useState(hasAnyFilters)
 
@@ -231,7 +247,7 @@ const Statements: React.FC<StatementsProps> = ({
                     <input
                       name="q"
                       type="text"
-                      defaultValue={term}
+                      defaultValue={props.term}
                       className="input outline focus-primary search"
                       placeholder="Zadejte hledaný výrok"
                     />
@@ -244,16 +260,24 @@ const Statements: React.FC<StatementsProps> = ({
             {areFiltersOpen && (
               <div className="col col-12 col-lg-4">
                 <div className="bg-light rounded-l p-5">
-                  <TagFilters tags={tags} selectedTags={selectedTags} />
+                  <TagFilters
+                    tags={props.tags}
+                    selectedTags={props.selectedTags}
+                  />
 
                   <VeracityFilters
-                    veracities={veracities}
-                    selectedVeracities={selectedVeracities}
+                    veracities={props.veracities}
+                    selectedVeracities={props.selectedVeracities}
                   />
 
                   <ReleasedYearFilters
-                    years={years}
-                    selectedYears={selectedYears}
+                    years={props.years}
+                    selectedYears={props.selectedYears}
+                  />
+
+                  <EditorPickedFilter
+                    count={props.editorPicked.count}
+                    isSelected={props.editorPickedSelected}
                   />
 
                   <ResetFilters onClick={() => setFiltersOpen(false)} />
@@ -266,7 +290,7 @@ const Statements: React.FC<StatementsProps> = ({
                 'col-lg-8': areFiltersOpen,
               })}
             >
-              {statements.map((statement: any) => (
+              {props.statements.map((statement: any) => (
                 <StatementItem key={statement.id} statement={statement} />
               ))}
             </div>
@@ -275,8 +299,8 @@ const Statements: React.FC<StatementsProps> = ({
           <div className="d-flex justify-content-center my-5 my-lg-10">
             <Pagination
               pageSize={PAGE_SIZE}
-              currentPage={page}
-              totalCount={totalCount}
+              currentPage={props.page}
+              totalCount={props.totalCount}
             />
           </div>
         </form>
@@ -284,5 +308,3 @@ const Statements: React.FC<StatementsProps> = ({
     </div>
   )
 }
-
-export default Statements
