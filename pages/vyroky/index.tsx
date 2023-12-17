@@ -4,15 +4,13 @@ import StatementItem, {
   StatementItemFragment,
 } from '@/components/statement/Item'
 import gql from 'graphql-tag'
-import { useState } from 'react'
+import { useCallback } from 'react'
 import {
   TagAggregation,
   TagFilter,
   TagFilterFragment,
 } from '@/components/statement/filtering/TagFilter'
 import { NextPageContext } from 'next'
-import { Pagination } from '@/components/pagination'
-import classNames from 'classnames'
 import {
   VeracityAggregation,
   VeracityFilter,
@@ -20,18 +18,17 @@ import {
 } from '@/components/statement/filtering/VeracityFilter'
 import { parsePage } from '@/libs/pagination'
 import { FilterSection } from '@/components/statement/filtering/FilterSection'
-import { ResetFilters } from '@/components/statement/filtering/ResetFilters'
 import {
   ReleasedYearAggregation,
   ReleasedYearFilter,
   ReleasedYearFilterFragment,
 } from '@/components/statement/filtering/ReleasedYearFilter'
-import { SearchButton } from '@/components/search/SearchButton'
 import {
   EditorPickedAggregation,
   EditorPickedFilter,
   EditorPickedFilterFragment,
 } from '@/components/statement/filtering/EditorPickedFilter'
+import { FilterForm } from '@/components/statement/filtering/FilterForm'
 
 const PAGE_SIZE = 10
 
@@ -207,13 +204,40 @@ function ReleasedYearFilters(props: {
 
 export default function Statements(props: StatementsProps) {
   const hasAnyFilters =
-    [
-      ...props.selectedVeracities,
-      ...props.selectedYears,
-      ...props.selectedVeracities,
-    ].length > 0
+    [...props.selectedVeracities, ...props.selectedYears, ...props.selectedTags]
+      .length > 0
 
-  const [areFiltersOpen, setFiltersOpen] = useState(hasAnyFilters)
+  const renderFilters = useCallback(() => {
+    return (
+      <>
+        <TagFilters tags={props.tags} selectedTags={props.selectedTags} />
+
+        <VeracityFilters
+          veracities={props.veracities}
+          selectedVeracities={props.selectedVeracities}
+        />
+
+        <ReleasedYearFilters
+          years={props.years}
+          selectedYears={props.selectedYears}
+        />
+
+        <EditorPickedFilter
+          count={props.editorPicked.count}
+          isSelected={props.editorPickedSelected}
+        />
+      </>
+    )
+  }, [
+    props.editorPicked.count,
+    props.editorPickedSelected,
+    props.selectedTags,
+    props.selectedVeracities,
+    props.selectedYears,
+    props.tags,
+    props.veracities,
+    props.years,
+  ])
 
   return (
     <div className="container">
@@ -228,82 +252,19 @@ export default function Statements(props: StatementsProps) {
             </h1>
           </div>
         </div>
-        <form>
-          <div className="row g-10 mt-10">
-            <div className="col col-12 col-lg-4">
-              <a
-                className="btn w-100 h-44px"
-                onClick={() => setFiltersOpen(!areFiltersOpen)}
-              >
-                <span className="text-white">
-                  {areFiltersOpen ? 'Skrýt filtry' : 'Zobrazit filtry'}
-                </span>
-              </a>
-            </div>
-            <div className="col col-12 col-lg-8">
-              <div className="d-flex justify-content-end">
-                <div className="w-100 mw-350px">
-                  <div className="w-100 position-relative">
-                    <input
-                      name="q"
-                      type="text"
-                      defaultValue={props.term}
-                      className="input outline focus-primary search"
-                      placeholder="Zadejte hledaný výrok"
-                    />
-                    <SearchButton />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {areFiltersOpen && (
-              <div className="col col-12 col-lg-4">
-                <div className="bg-light rounded-l p-5">
-                  <TagFilters
-                    tags={props.tags}
-                    selectedTags={props.selectedTags}
-                  />
-
-                  <VeracityFilters
-                    veracities={props.veracities}
-                    selectedVeracities={props.selectedVeracities}
-                  />
-
-                  <ReleasedYearFilters
-                    years={props.years}
-                    selectedYears={props.selectedYears}
-                  />
-
-                  <EditorPickedFilter
-                    count={props.editorPicked.count}
-                    isSelected={props.editorPickedSelected}
-                  />
-
-                  <ResetFilters onClick={() => setFiltersOpen(false)} />
-                </div>
-              </div>
-            )}
-
-            <div
-              className={classNames('col col-12 ', {
-                'col-lg-8': areFiltersOpen,
-              })}
-            >
-              {props.statements.map((statement: any) => (
-                <StatementItem key={statement.id} statement={statement} />
-              ))}
-            </div>
-          </div>
-
-          <div className="d-flex justify-content-center my-5 my-lg-10">
-            <Pagination
-              pageSize={PAGE_SIZE}
-              currentPage={props.page}
-              totalCount={props.totalCount}
-            />
-          </div>
-        </form>
+        <FilterForm
+          hasAnyFilters={hasAnyFilters}
+          term={props.term}
+          pageSize={PAGE_SIZE}
+          page={props.page}
+          totalCount={props.totalCount}
+          renderFilters={renderFilters}
+          searchPlaceholder="Zadejte hledaný výrok"
+        >
+          {props.statements.map((statement: any) => (
+            <StatementItem key={statement.id} statement={statement} />
+          ))}
+        </FilterForm>
       </div>
     </div>
   )
