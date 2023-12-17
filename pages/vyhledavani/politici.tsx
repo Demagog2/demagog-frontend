@@ -20,6 +20,11 @@ export async function getServerSideProps({ query }: NextPageContext) {
   const { data: searchData } = await client.query({
     query: gql`
       query searchData($term: String!, $limit: Int, $offset: Int) {
+        getPresidentAndGovernmentalSpeakers {
+          speakers {
+            ...SearchResultSpeakerDetail
+          }
+        }
         searchSpeakers(term: $term, limit: $limit, offset: $offset) {
           speakers {
             ...SearchResultSpeakerDetail
@@ -40,6 +45,8 @@ export async function getServerSideProps({ query }: NextPageContext) {
     props: {
       term,
       page,
+      presidentAndGovernmentalSpeakers:
+        searchData.getPresidentAndGovernmentalSpeakers,
       speakerSearchResult: searchData.searchSpeakers,
     },
   }
@@ -51,6 +58,9 @@ export default function SearchSpeakers(props: {
   speakerSearchResult: {
     speakers: any[]
     totalCount: number
+  }
+  getPresidentAndGovernmentalSpeakers: {
+    speakers: any[]
   }
 }) {
   return (
@@ -91,6 +101,12 @@ export default function SearchSpeakers(props: {
             </div>
           </div>
           <div className="row row-cols-2 row-cols-lg-6 g-5 g-lg-10">
+            {props.page === 1 &&
+              props.getPresidentAndGovernmentalSpeakers.speakers.map(
+                (speaker) => (
+                  <SearchResultSpeaker key={speaker.id} speaker={speaker} />
+                )
+              )}
             {props.speakerSearchResult.speakers.map((speaker) => (
               <SearchResultSpeaker key={speaker.id} speaker={speaker} />
             ))}
