@@ -80,21 +80,6 @@ export const GetArticle = gql`
   }
 `
 
-export const GetSpeakers = gql`
-  query GetSpeakers($offset: Int, $limit: Int) {
-    speakers(offset: $offset, limit: $limit) {
-      id
-      fullName
-      avatar
-      role
-      body {
-        id
-        shortName
-      }
-    }
-  }
-`
-
 export const GetSpeaker = gql`
   query GetSpeakers($id: Int!) {
     speaker(id: $id) {

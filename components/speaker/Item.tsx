@@ -1,6 +1,29 @@
 import Link from 'next/link'
+import gql from 'graphql-tag'
 
-export default function SpeakerItem({ speaker }: any) {
+export const SpeakerItemFragment = gql`
+  fragment SpeakerItemDetail on Speaker {
+    id
+    fullName
+    avatar
+    body {
+      shortName
+    }
+    role
+  }
+`
+
+export type SpeakerItemProps = {
+  speaker: {
+    id: string
+    fullName: string
+    avatar: string
+    body: { shortName: string } | null
+    role: string
+  }
+}
+
+export default function SpeakerItem({ speaker }: SpeakerItemProps) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   return (
     <div className="col s-speaker">
