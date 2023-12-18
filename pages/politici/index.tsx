@@ -8,20 +8,33 @@ import { FilterForm } from '@/components/statement/filtering/FilterForm'
 import { useCallback } from 'react'
 import { FilterSection } from '@/components/statement/filtering/FilterSection'
 import { pluralize } from '@/libs/pluralize'
+import { getNumericalArrayParams } from '@/libs/query-params'
 
 const PAGE_SIZE = 24
 
 export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q ?? ''
   const page = parsePage(query?.page)
+  const bodies = getNumericalArrayParams(query?.bodies)
 
   const { data: searchData } = await client.query({
     query: gql`
-      query searchData($term: String!) {
+      query searchData(
+        $term: String!
+        $limit: Int
+        $offset: Int
+        $filters: SpeakerFilterInput
+      ) {
         getPresidentAndGovermentSpeakers {
           ...SpeakerItemDetail
         }
-        searchSpeakers(term: $term, includeAggregations: true) {
+        searchSpeakers(
+          term: $term
+          limit: $limit
+          offset: $offset
+          includeAggregations: true
+          filters: $filters
+        ) {
           speakers {
             ...SpeakerItemDetail
           }
@@ -45,10 +58,9 @@ export async function getServerSideProps({ query }: NextPageContext) {
       term,
       limit: PAGE_SIZE,
       offset: (page - 1) * PAGE_SIZE,
+      filter: { bodies },
     },
   })
-
-  console.log(searchData.searchSpeakers)
 
   return {
     props: {
@@ -57,6 +69,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
       presidentAndGovernmentalSpeakers:
         searchData.getPresidentAndGovermentSpeakers,
       speakerSearchResult: searchData.searchSpeakers,
+      selectedBodies: bodies,
     },
   }
 }
@@ -80,6 +93,7 @@ type SpeakersProps = {
       }[]
     }[]
   }
+  selectedBodies: number[]
 }
 
 type BodyFilterProps = {
@@ -124,11 +138,12 @@ function BodyFilters(props: BodyFilterProps) {
 }
 
 const Speakers = (props: SpeakersProps) => {
-  const hasAnyFilters = false
+  const hasAnyFilters = props.selectedBodies.length > 0
 
-  const renderFilters = useCallback(() => {
-    return <BodyFilters bodyGroups={props.speakerSearchResult.bodyGroups} />
-  }, [props.speakerSearchResult.bodyGroups])
+  const renderFilters = useCallback(
+    () => <BodyFilters bodyGroups={props.speakerSearchResult.bodyGroups} />,
+    [props.speakerSearchResult.bodyGroups]
+  )
 
   return (
     <div className="container">

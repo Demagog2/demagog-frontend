@@ -29,6 +29,7 @@ import {
   EditorPickedFilterFragment,
 } from '@/components/statement/filtering/EditorPickedFilter'
 import { FilterForm } from '@/components/statement/filtering/FilterForm'
+import { getNumericalArrayParams } from '@/libs/query-params'
 
 const PAGE_SIZE = 10
 
@@ -45,16 +46,6 @@ interface StatementsProps {
   selectedYears: number[]
   selectedVeracities: string[]
   editorPickedSelected: boolean
-}
-
-function getNumericalArrayParams(queryTags?: string | string[]): number[] {
-  if (!queryTags) {
-    return []
-  }
-
-  return (Array.isArray(queryTags) ? queryTags : [queryTags]).map((tagId) =>
-    parseInt(tagId, 10)
-  )
 }
 
 function getSelectedVeracities(queryVeracities?: string | string[]): string[] {
