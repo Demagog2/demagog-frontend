@@ -157,7 +157,13 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
         />
       </>
     )
-  }, [speaker.searchStatements.tags])
+  }, [
+    speaker.searchStatements.editorPicked.count,
+    speaker.searchStatements.editorPicked.isSelected,
+    speaker.searchStatements.tags,
+    speaker.searchStatements.veracities,
+    speaker.searchStatements.years,
+  ])
 
   return (
     <div className="container">
