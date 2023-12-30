@@ -17,7 +17,7 @@ export function VeracityIcon(props: VeracityIconProps) {
 
   switch (props.type) {
     case 'true':
-      return <TrueIcon classNames={iconStyles} />
+      return <TrueIcon className={iconStyles} />
     case 'untrue':
       return <UntrueIcon className={iconStyles} />
     case 'unverifiable':

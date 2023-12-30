@@ -121,6 +121,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
       editorPicked: data.searchStatements.editorPicked,
       totalCount: data.searchStatements.totalCount,
       term,
+      selectedTags,
       selectedVeracities,
       selectedYears,
       editorPickedSelected,
