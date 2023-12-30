@@ -31,7 +31,7 @@ type AboutUsProps = {
     fullName: string
     positionDescription: string
     bio: string
-    avatar
+    avatar: string
   }[]
 }
 
