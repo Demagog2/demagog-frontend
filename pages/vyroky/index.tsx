@@ -183,10 +183,7 @@ export default function Statements(props: StatementsProps) {
     )
   }, [
     props.editorPicked.count,
-    props.editorPickedSelected,
-    props.selectedTags,
-    props.selectedVeracities,
-    props.selectedYears,
+    props.editorPicked.isSelected,
     props.tags,
     props.veracities,
     props.years,
