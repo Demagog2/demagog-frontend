@@ -5,18 +5,18 @@ import gql from 'graphql-tag'
 export type ReleasedYearAggregation = {
   year: number
   count: number
+  isSelected: boolean
 }
 
 export const ReleasedYearFilterFragment = gql`
   fragment ReleasedYearFilter on YearAggregate {
     year
     count
+    isSelected
   }
 `
 
-type Props = ReleasedYearAggregation & {
-  isSelected: boolean
-}
+type Props = ReleasedYearAggregation
 
 export function ReleasedYearFilter({ year, count, isSelected }: Props) {
   return (
