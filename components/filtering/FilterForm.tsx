@@ -1,8 +1,18 @@
 import { SearchButton } from '@/components/search/SearchButton'
 import { ResetFilters } from '@/components/filtering/ResetFilters'
 import { Pagination } from '@/components/pagination'
-import { PropsWithChildren, ReactNode, useState } from 'react'
+import {
+  ChangeEvent,
+  FormEvent,
+  PropsWithChildren,
+  ReactNode,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react'
 import classNames from 'classnames'
+import { debounceTime, Subject } from 'rxjs'
+import { redirect, usePathname, useRouter } from 'next/navigation'
 
 type FilterFormProps = PropsWithChildren<{
   hasAnyFilters: boolean
@@ -17,9 +27,31 @@ type FilterFormProps = PropsWithChildren<{
 
 export function FilterForm(props: FilterFormProps) {
   const [areFiltersOpen, setFiltersOpen] = useState(props.hasAnyFilters)
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const submit$ = useMemo(() => {
+    const subject = new Subject<HTMLFormElement>()
+
+    subject.pipe(debounceTime(1000)).subscribe((form) => {
+      form.submit()
+    })
+
+    return subject
+  }, [])
+
+  const handleChange = useCallback(
+    (evt: ChangeEvent<HTMLFormElement>) => submit$.next(evt.target.form),
+    [submit$]
+  )
+
+  const handleReset = useCallback(() => {
+    setFiltersOpen(false)
+    router.push(pathname)
+  }, [pathname, router])
 
   return (
-    <form>
+    <form onChange={handleChange} onReset={handleReset}>
       <div className="row g-10 mt-10">
         <div className="col col-12 col-lg-4">
           <a
@@ -53,7 +85,7 @@ export function FilterForm(props: FilterFormProps) {
             <div className="bg-light rounded-l p-5">
               {props.renderFilters()}
 
-              <ResetFilters onClick={() => setFiltersOpen(false)} />
+              <ResetFilters />
             </div>
           </div>
         )}
