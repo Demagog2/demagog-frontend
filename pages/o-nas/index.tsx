@@ -1,6 +1,7 @@
 import TitleIcon from '@/assets/icons/demagog.svg'
 import client from '@/libs/apollo-client'
 import gql from 'graphql-tag'
+import Image from 'next/image'
 
 export async function getStaticProps() {
   const { data } = await client.query({
@@ -66,9 +67,11 @@ export default function AboutUs(props: AboutUsProps) {
                 <div className="row g-5 g-lg-10">
                   <div className="col col-2">
                     <span className="symbol symbol-square symbol-circle">
-                      <img
+                      <Image
                         src={mediaUrl + member.avatar}
                         alt={member.fullName}
+                        width={144}
+                        height={144}
                       />
                     </span>
                   </div>
