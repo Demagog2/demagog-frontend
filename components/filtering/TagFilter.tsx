@@ -3,6 +3,7 @@ import gql from 'graphql-tag'
 
 export type TagAggregation = {
   tag: { id: string; name: string }
+  isSelected: boolean
   count: number
 }
 
@@ -12,22 +13,21 @@ export const TagFilterFragment = gql`
       id
       name
     }
+    isSelected
     count
   }
 `
 
-type Props = TagAggregation & {
-  defaultChecked: boolean
-}
+type Props = TagAggregation
 
-export function TagFilter({ tag, count, defaultChecked = false }: Props) {
+export function TagFilter({ tag, count, isSelected = false }: Props) {
   return (
     <div className="check-btn py-2" key={tag.id}>
       <input
         name="tags"
         type="checkbox"
         value={tag.id}
-        defaultChecked={defaultChecked}
+        defaultChecked={isSelected}
       />
       <span className="checkmark" />
       <span className="small fw-600 me-2">{tag.name}</span>

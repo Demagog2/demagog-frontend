@@ -8,6 +8,7 @@ export type VeracityAggregation = {
     key: string
     name: string
   }
+  isSelected: boolean
   count: number
 }
 
@@ -18,13 +19,12 @@ export const VeracityFilterFragment = gql`
       key
       name
     }
+    isSelected
     count
   }
 `
 
-type Props = VeracityAggregation & {
-  isSelected: boolean
-}
+type Props = VeracityAggregation
 
 export function VeracityFilter({ veracity, count, isSelected }: Props) {
   return (

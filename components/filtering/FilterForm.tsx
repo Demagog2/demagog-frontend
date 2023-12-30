@@ -1,5 +1,5 @@
 import { SearchButton } from '@/components/search/SearchButton'
-import { ResetFilters } from '@/components/statement/filtering/ResetFilters'
+import { ResetFilters } from '@/components/filtering/ResetFilters'
 import { Pagination } from '@/components/pagination'
 import { PropsWithChildren, ReactNode, useState } from 'react'
 import classNames from 'classnames'

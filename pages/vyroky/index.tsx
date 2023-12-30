@@ -9,27 +9,31 @@ import {
   TagAggregation,
   TagFilter,
   TagFilterFragment,
-} from '@/components/statement/filtering/TagFilter'
+} from '@/components/filtering/TagFilter'
 import { NextPageContext } from 'next'
 import {
   VeracityAggregation,
   VeracityFilter,
   VeracityFilterFragment,
-} from '@/components/statement/filtering/VeracityFilter'
+} from '@/components/filtering/VeracityFilter'
 import { parsePage } from '@/libs/pagination'
-import { FilterSection } from '@/components/statement/filtering/FilterSection'
+import { FilterSection } from '@/components/filtering/FilterSection'
 import {
   ReleasedYearAggregation,
   ReleasedYearFilter,
   ReleasedYearFilterFragment,
-} from '@/components/statement/filtering/ReleasedYearFilter'
+} from '@/components/filtering/ReleasedYearFilter'
 import {
   EditorPickedAggregation,
   EditorPickedFilter,
   EditorPickedFilterFragment,
-} from '@/components/statement/filtering/EditorPickedFilter'
-import { FilterForm } from '@/components/statement/filtering/FilterForm'
-import { getNumericalArrayParams } from '@/libs/query-params'
+} from '@/components/filtering/EditorPickedFilter'
+import { FilterForm } from '@/components/filtering/FilterForm'
+import {
+  getBooleanParam,
+  getNumericalArrayParams,
+  getStringArrayParams,
+} from '@/libs/query-params'
 
 const PAGE_SIZE = 10
 
@@ -48,27 +52,11 @@ interface StatementsProps {
   editorPickedSelected: boolean
 }
 
-function getSelectedVeracities(queryVeracities?: string | string[]): string[] {
-  if (!queryVeracities) {
-    return []
-  }
-
-  return Array.isArray(queryVeracities) ? queryVeracities : [queryVeracities]
-}
-
-function getBooleanParam(param?: string | string[]): boolean {
-  if (!param) {
-    return false
-  }
-
-  return Array.isArray(param) ? false : Boolean(param)
-}
-
 export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q ?? ''
   const selectedTags = getNumericalArrayParams(query?.tags)
   const selectedYears = getNumericalArrayParams(query?.years)
-  const selectedVeracities = getSelectedVeracities(query?.veracities)
+  const selectedVeracities = getStringArrayParams(query?.veracities)
   const editorPickedSelected = getBooleanParam(query?.editorPicked)
   const page = parsePage(query?.page)
 
@@ -84,8 +72,8 @@ export async function getServerSideProps({ query }: NextPageContext) {
           term: $term
           limit: $limit
           offset: $offset
-          includeAggregations: true
           filters: $filters
+          includeAggregations: true
         ) {
           statements {
             ...StatementDetail
@@ -112,7 +100,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
       ${EditorPickedFilterFragment}
     `,
     variables: {
-      offset: 0,
+      offset: (page - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
       term,
       filters: {
@@ -133,7 +121,6 @@ export async function getServerSideProps({ query }: NextPageContext) {
       editorPicked: data.searchStatements.editorPicked,
       totalCount: data.searchStatements.totalCount,
       term,
-      selectedTags,
       selectedVeracities,
       selectedYears,
       editorPickedSelected,
@@ -142,52 +129,33 @@ export async function getServerSideProps({ query }: NextPageContext) {
   }
 }
 
-function TagFilters(props: { tags: TagAggregation[]; selectedTags: number[] }) {
+export function TagFilters(props: { tags: TagAggregation[] }) {
   return (
     <FilterSection name="Témata" defaultOpen>
-      {props.tags.map(({ tag, count }) => (
-        <TagFilter
-          key={tag.id}
-          tag={tag}
-          count={count}
-          defaultChecked={props.selectedTags.includes(parseInt(tag.id, 10))}
-        />
+      {props.tags.map((tag) => (
+        <TagFilter key={tag.tag.id} {...tag} />
       ))}
     </FilterSection>
   )
 }
 
-function VeracityFilters(props: {
-  veracities: VeracityAggregation[]
-  selectedVeracities: string[]
-}) {
+export function VeracityFilters(props: { veracities: VeracityAggregation[] }) {
   return (
     <FilterSection name="Hodnocení">
-      {props.veracities.map(({ veracity, count }) => (
-        <VeracityFilter
-          key={veracity.id}
-          veracity={veracity}
-          count={count}
-          isSelected={props.selectedVeracities.includes(veracity.key)}
-        />
+      {props.veracities.map((veracity) => (
+        <VeracityFilter key={veracity.veracity.id} {...veracity} />
       ))}
     </FilterSection>
   )
 }
 
-function ReleasedYearFilters(props: {
-  years: { year: number; count: number }[]
-  selectedYears: number[]
+export function ReleasedYearFilters(props: {
+  years: { year: number; count: number; isSelected: boolean }[]
 }) {
   return (
     <FilterSection name="Roky">
-      {props.years.map(({ year, count }) => (
-        <ReleasedYearFilter
-          key={year}
-          year={year}
-          count={count}
-          isSelected={props.selectedYears.includes(year)}
-        />
+      {props.years.map((year) => (
+        <ReleasedYearFilter key={year.year} {...year} />
       ))}
     </FilterSection>
   )
@@ -201,21 +169,15 @@ export default function Statements(props: StatementsProps) {
   const renderFilters = useCallback(() => {
     return (
       <>
-        <TagFilters tags={props.tags} selectedTags={props.selectedTags} />
+        <TagFilters tags={props.tags} />
 
-        <VeracityFilters
-          veracities={props.veracities}
-          selectedVeracities={props.selectedVeracities}
-        />
+        <VeracityFilters veracities={props.veracities} />
 
-        <ReleasedYearFilters
-          years={props.years}
-          selectedYears={props.selectedYears}
-        />
+        <ReleasedYearFilters years={props.years} />
 
         <EditorPickedFilter
           count={props.editorPicked.count}
-          isSelected={props.editorPickedSelected}
+          isSelected={props.editorPicked.isSelected}
         />
       </>
     )

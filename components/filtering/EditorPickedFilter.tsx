@@ -1,24 +1,29 @@
 import { pluralize } from '@/libs/pluralize'
 import gql from 'graphql-tag'
+import classNames from 'classnames'
 
 export type EditorPickedAggregation = {
   count: number
+  isSelected: boolean
 }
 
 export const EditorPickedFilterFragment = gql`
   fragment EditorPickedFilter on EditorPickedAggregate {
     count
+    isSelected
   }
 `
 
-type Props = EditorPickedAggregation & {
-  isSelected: boolean
-}
+type Props = EditorPickedAggregation
 
 export function EditorPickedFilter(props: Props) {
   return (
     <div className="mt-5">
-      <div className="check-btn py-2 <% if statement_elastic_filterable_list_presenter.filter_options[:editor_picked][:count] == 0 %>disabled<% end %>">
+      <div
+        className={classNames('check-btn', 'py-2', {
+          disabled: props.count === 0,
+        })}
+      >
         <input
           type="checkbox"
           name="editorPicked"
