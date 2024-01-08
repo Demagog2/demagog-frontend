@@ -3,7 +3,6 @@ import { ResetFilters } from '@/components/filtering/ResetFilters'
 import { Pagination } from '@/components/pagination'
 import {
   ChangeEvent,
-  FormEvent,
   PropsWithChildren,
   ReactNode,
   useCallback,
@@ -12,7 +11,7 @@ import {
 } from 'react'
 import classNames from 'classnames'
 import { debounceTime, Subject } from 'rxjs'
-import { redirect, usePathname, useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 type FilterFormProps = PropsWithChildren<{
   hasAnyFilters: boolean
