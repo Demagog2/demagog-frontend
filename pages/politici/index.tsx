@@ -24,8 +24,10 @@ export async function getServerSideProps({ query }: NextPageContext) {
         $limit: Int
         $offset: Int
         $filters: SpeakerFilterInput
+        $includeGovernmentSpeakers: Boolean!
       ) {
-        getPresidentAndGovermentSpeakers {
+        getPresidentAndGovernmentSpeakers
+          @include(if: $includeGovernmentSpeakers) {
           ...SpeakerItemDetail
         }
         searchSpeakers(
@@ -59,6 +61,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
       limit: PAGE_SIZE,
       offset: (page - 1) * PAGE_SIZE,
       filter: { bodies },
+      includeGovernmentSpeakers: page === 1,
     },
   })
 
@@ -67,7 +70,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
       term,
       page,
       presidentAndGovernmentalSpeakers:
-        searchData.getPresidentAndGovermentSpeakers,
+        searchData.getPresidentAndGovernmentSpeakers ?? [],
       speakerSearchResult: searchData.searchSpeakers,
       selectedBodies: bodies,
     },
