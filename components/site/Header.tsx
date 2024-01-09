@@ -92,7 +92,7 @@ export default function Header() {
                   className="btn bg-primary"
                   onClick={() => setDonateModal(true)}
                 >
-                  <span className="mx-2">Darujte</span>
+                  <span className="mx-2">Podpořte nás</span>
                 </a>
               </div>
               <div className="menu-item d-flex d-xl-none ms-2">
