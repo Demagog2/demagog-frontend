@@ -1,5 +1,6 @@
 import gql from 'graphql-tag'
 import Image from 'next/image'
+import classNames from 'classnames'
 
 export const SpeakerWithStatsFragment = gql`
   fragment SpeakerWithStatsFragment on ArticleSpeakerStats {
@@ -78,7 +79,9 @@ export function SpeakerWithStats(props: SpeakerWithStatsProps) {
           <div className="row g-5" data-controller="components--stats">
             <div className="col col-6">
               <div
-                className="d-flex align-items-center mb-5 <%= 'cursor-pointer stat-link' if stats[:true] > 0 %>"
+                className={classNames('d-flex align-items-center mb-5', {
+                  'cursor-pointer stat-link': props.stats.true > 0,
+                })}
                 title="Pravda"
                 data-action="click->components--stats#toggleLink"
                 data-url="?hodnoceni[]=true&recnici[]=<%= speaker.id %>"
@@ -101,7 +104,9 @@ export function SpeakerWithStats(props: SpeakerWithStatsProps) {
                 <span className="fs-2 fw-bold">{props.stats.true}</span>
               </div>
               <div
-                className="d-flex align-items-center <%= 'cursor-pointer stat-link' if stats[:unverifiable] > 0 %>"
+                className={classNames('d-flex align-items-center mb-5', {
+                  'cursor-pointer stat-link': props.stats.unverifiable > 0,
+                })}
                 title="Neověřitelné"
                 data-action="click->components--stats#toggleLink"
                 data-url="?hodnoceni[]=unverifiable&recnici[]=<%= speaker.id %>"
@@ -126,7 +131,9 @@ export function SpeakerWithStats(props: SpeakerWithStatsProps) {
             </div>
             <div className="col col-6">
               <div
-                className="d-flex align-items-center mb-5 <%= 'cursor-pointer stat-link' if stats[:untrue] > 0 %>"
+                className={classNames('d-flex align-items-center mb-5', {
+                  'cursor-pointer stat-link': props.stats.untrue > 0,
+                })}
                 title="Nepravda"
                 data-action="click->components--stats#toggleLink"
                 data-url="?hodnoceni[]=untrue&recnici[]=<%= speaker.id %>"
@@ -149,7 +156,9 @@ export function SpeakerWithStats(props: SpeakerWithStatsProps) {
                 <span className="fs-2 fw-bold">{props.stats.untrue}</span>
               </div>
               <div
-                className="d-flex align-items-center <%= 'cursor-pointer stat-link' if stats[:misleading] > 0 %>"
+                className={classNames('d-flex align-items-center mb-5', {
+                  'cursor-pointer stat-link': props.stats.misleading > 0,
+                })}
                 title="Zavádějící"
                 data-action="click->components--stats#toggleLink"
                 data-url="?hodnoceni[]=misleading&recnici[]=<%= speaker.id %>"
