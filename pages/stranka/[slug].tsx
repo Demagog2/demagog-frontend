@@ -12,10 +12,10 @@ const MenuItemsFragment = gql`
         id
       }
       ... on MenuItemPage {
+        title
         page {
           id
           slug
-          title
         }
       }
     }
@@ -84,10 +84,10 @@ type AboutUsProps = {
     | {
         __typename: 'MenuItemPage'
         id: string
+        title: string
         page: {
           id: string
           slug: string
-          title: string
         }
       }
   >
@@ -122,7 +122,7 @@ export default function AboutUs(props: AboutUsProps) {
                             'min-h-30px d-inline-flex fs-5 fw-bold text-dark align-items-center text-none state-line mb-2'
                           }
                         >
-                          <span>{menuItem.page.title}</span>
+                          <span>{menuItem.title}</span>
                         </Link>
                       </li>
                     )
