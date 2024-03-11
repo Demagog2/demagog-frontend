@@ -17,9 +17,9 @@ export async function getServerSideProps({ query }: NextPageContext) {
   const page = parsePage(query?.page)
   const bodies = getNumericalArrayParams(query?.bodies)
 
-  const { data: searchData } = await client.query({
+  const { data } = await client.query({
     query: gql`
-      query searchData(
+      query speakersSearch(
         $term: String!
         $limit: Int
         $offset: Int
@@ -70,8 +70,8 @@ export async function getServerSideProps({ query }: NextPageContext) {
       term,
       page,
       presidentAndGovernmentalSpeakers:
-        searchData.getPresidentAndGovernmentSpeakers ?? [],
-      speakerSearchResult: searchData.searchSpeakers,
+        data.getPresidentAndGovernmentSpeakers ?? [],
+      speakerSearchResult: data.searchSpeakers,
       selectedBodies: bodies,
     },
   }

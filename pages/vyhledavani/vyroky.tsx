@@ -20,9 +20,9 @@ export async function getServerSideProps({ query }: NextPageContext) {
   const term = query?.q ?? ''
   const page = parsePage(query?.page)
 
-  const { data: searchData } = await client.query({
+  const { data } = await client.query({
     query: gql`
-      query searchData($term: String!, $limit: Int, $offset: Int) {
+      query searchStatements($term: String!, $limit: Int, $offset: Int) {
         searchStatements(term: $term, limit: $limit, offset: $offset) {
           statements {
             ...StatementDetail
@@ -43,7 +43,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
     props: {
       term,
       page,
-      statementSearchResult: searchData.searchStatements,
+      statementSearchResult: data,
     },
   }
 }

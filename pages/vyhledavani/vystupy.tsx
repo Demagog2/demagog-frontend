@@ -16,7 +16,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
 
   const { data: searchData } = await client.query({
     query: gql`
-      query searchData($term: String!, $limit: Int, $offset: Int) {
+      query searchArticles($term: String!, $limit: Int, $offset: Int) {
         searchArticles(term: $term, limit: $limit, offset: $offset) {
           articles {
             ...ArticleDetail

@@ -40,3 +40,5 @@ next-env.d.ts
 
 # custom env file
 /.env
+
+/__generated__
