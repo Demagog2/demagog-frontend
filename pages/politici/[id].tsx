@@ -13,10 +13,6 @@ import { TagFilterFragment } from '@/components/filtering/TagFilter'
 import { VeracityFilterFragment } from '@/components/filtering/VeracityFilter'
 import { ReleasedYearFilterFragment } from '@/components/filtering/ReleasedYearFilter'
 import {
-  EditorPickedFilter,
-  EditorPickedFilterFragment,
-} from '@/components/filtering/EditorPickedFilter'
-import {
   getBooleanParam,
   getNumericalArrayParams,
   getStringArrayParams,
@@ -40,7 +36,6 @@ export async function getServerSideProps({
   const selectedTags = getNumericalArrayParams(query?.tags)
   const selectedYears = getNumericalArrayParams(query?.years)
   const selectedVeracities = getStringArrayParams(query?.veracities)
-  const editorPickedSelected = getBooleanParam(query?.editorPicked)
   const page = parsePage(query?.page)
 
   const { data } = await client.query({
@@ -84,9 +79,6 @@ export async function getServerSideProps({
             years {
               ...ReleasedYearFilter
             }
-            editorPicked {
-              ...EditorPickedFilter
-            }
             totalCount
           }
         }
@@ -95,7 +87,6 @@ export async function getServerSideProps({
       ${TagFilterFragment}
       ${VeracityFilterFragment}
       ${ReleasedYearFilterFragment}
-      ${EditorPickedFilterFragment}
     `,
     variables: {
       id: parseInt(params.id, 10),
@@ -106,7 +97,6 @@ export async function getServerSideProps({
         tags: selectedTags,
         veracities: selectedVeracities,
         years: selectedYears,
-        editorPicked: editorPickedSelected,
       },
     },
   })
@@ -118,7 +108,6 @@ export async function getServerSideProps({
       selectedVeracities,
       selectedYears,
       selectedTags,
-      editorPickedSelected,
       page,
     },
   }
@@ -130,7 +119,6 @@ interface SpeakerDetailProps {
   selectedVeracities: string[]
   selectedYears: number[]
   selectedTags: number[]
-  editorPickedSelected: boolean
   page: number
 }
 
@@ -150,16 +138,9 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
         <VeracityFilters veracities={speaker.searchStatements.veracities} />
 
         <ReleasedYearFilters years={speaker.searchStatements.years} />
-
-        <EditorPickedFilter
-          count={speaker.searchStatements.editorPicked.count}
-          isSelected={speaker.searchStatements.editorPicked.isSelected}
-        />
       </>
     )
   }, [
-    speaker.searchStatements.editorPicked.count,
-    speaker.searchStatements.editorPicked.isSelected,
     speaker.searchStatements.tags,
     speaker.searchStatements.veracities,
     speaker.searchStatements.years,
