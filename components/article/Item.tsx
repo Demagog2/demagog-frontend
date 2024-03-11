@@ -27,7 +27,7 @@ export const ArticleDetailFragment = gql`
 `
 
 export default function ArticleItem({ article, prefix }: any) {
-  const perex = truncate(article.perex, 190)
+  const perex = truncate(article.perex ?? '', 190)
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   return (
     <article className="col s-article" key={article.id}>
