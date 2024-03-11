@@ -1,1 +1,0 @@
-release: npm run generate && npm run build
