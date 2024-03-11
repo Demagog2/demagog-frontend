@@ -23,11 +23,6 @@ import {
   ReleasedYearFilter,
   ReleasedYearFilterFragment,
 } from '@/components/filtering/ReleasedYearFilter'
-import {
-  EditorPickedAggregation,
-  EditorPickedFilter,
-  EditorPickedFilterFragment,
-} from '@/components/filtering/EditorPickedFilter'
 import { FilterForm } from '@/components/filtering/FilterForm'
 import {
   getBooleanParam,
@@ -43,13 +38,11 @@ interface StatementsProps {
   tags: TagAggregation[]
   years: ReleasedYearAggregation[]
   veracities: VeracityAggregation[]
-  editorPicked: EditorPickedAggregation
   term: string
   totalCount: number
   selectedTags: number[]
   selectedYears: number[]
   selectedVeracities: string[]
-  editorPickedSelected: boolean
 }
 
 export async function getServerSideProps({ query }: NextPageContext) {
@@ -57,7 +50,6 @@ export async function getServerSideProps({ query }: NextPageContext) {
   const selectedTags = getNumericalArrayParams(query?.tags)
   const selectedYears = getNumericalArrayParams(query?.years)
   const selectedVeracities = getStringArrayParams(query?.veracities)
-  const editorPickedSelected = getBooleanParam(query?.editorPicked)
   const page = parsePage(query?.page)
 
   const { data } = await client.query({
@@ -87,9 +79,6 @@ export async function getServerSideProps({ query }: NextPageContext) {
           years {
             ...ReleasedYearFilter
           }
-          editorPicked {
-            ...EditorPickedFilter
-          }
           totalCount
         }
       }
@@ -97,7 +86,6 @@ export async function getServerSideProps({ query }: NextPageContext) {
       ${TagFilterFragment}
       ${VeracityFilterFragment}
       ${ReleasedYearFilterFragment}
-      ${EditorPickedFilterFragment}
     `,
     variables: {
       offset: (page - 1) * PAGE_SIZE,
@@ -107,7 +95,6 @@ export async function getServerSideProps({ query }: NextPageContext) {
         tags: selectedTags,
         veracities: selectedVeracities,
         years: selectedYears,
-        editorPicked: editorPickedSelected,
       },
     },
   })
@@ -118,13 +105,11 @@ export async function getServerSideProps({ query }: NextPageContext) {
       years: data.searchStatements.years,
       statements: data.searchStatements.statements,
       veracities: data.searchStatements.veracities,
-      editorPicked: data.searchStatements.editorPicked,
       totalCount: data.searchStatements.totalCount,
       term,
       selectedTags,
       selectedVeracities,
       selectedYears,
-      editorPickedSelected,
       page,
     },
   }
@@ -175,20 +160,9 @@ export default function Statements(props: StatementsProps) {
         <VeracityFilters veracities={props.veracities} />
 
         <ReleasedYearFilters years={props.years} />
-
-        <EditorPickedFilter
-          count={props.editorPicked.count}
-          isSelected={props.editorPicked.isSelected}
-        />
       </>
     )
-  }, [
-    props.editorPicked.count,
-    props.editorPicked.isSelected,
-    props.tags,
-    props.veracities,
-    props.years,
-  ])
+  }, [props.tags, props.veracities, props.years])
 
   return (
     <div className="container">
