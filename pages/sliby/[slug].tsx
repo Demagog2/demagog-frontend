@@ -9,13 +9,14 @@ import Stalled from '@/assets/icons/promises/stalled.svg'
 import NotYetEvaluated from '@/assets/icons/promises/not_yet_evaluated.svg'
 import { pluralize } from '@/libs/pluralize'
 import classNames from 'classnames'
+import { PromisesQuery } from '@/__generated__/graphql'
 
 export async function getServerSideProps({
   params,
 }: {
   params: { slug: string }
 }) {
-  const { data } = await client.query({
+  const { data } = await client.query<PromisesQuery>({
     query: gql`
       query promises($slug: String) {
         governmentPromisesEvaluationBySlug(slug: "my-slug") {
@@ -42,29 +43,44 @@ export async function getServerSideProps({
   return {
     props: {
       article: data.governmentPromisesEvaluationBySlug,
-      stats: [
-        { key: 'fulfilled', count: 3, percentage: 10 },
-        { key: 'in_progress', count: 15, percentage: 70 },
-      ],
     },
   }
 }
 
 type PromisesProps = {
-  article: {
-    id: string
-    title: string
-    perex: string
-    promiseCount: number
-    promises: {
-      id: string
-    }[]
+  article: PromisesQuery['governmentPromisesEvaluationBySlug']
+}
+
+enum PromiseRatingKey {
+  Fulfilled = 'fulfilled',
+  InProgress = 'in_progress',
+  PartiallyFulfilled = 'partially_fulfilled',
+  NotYetEvaluated = 'not_yet_evaluated',
+  Broken = 'broken',
+  Stalled = 'stalled',
+}
+
+function getPromiseRatingKey(s: string): PromiseRatingKey {
+  switch (s) {
+    case 'fulfilled':
+      return PromiseRatingKey.Fulfilled
+    case 'in_progress':
+      return PromiseRatingKey.InProgress
+    case 'partially_fulfilled':
+      return PromiseRatingKey.PartiallyFulfilled
+    case 'not_yet_evaluated':
+      return PromiseRatingKey.NotYetEvaluated
+    case 'broken':
+      return PromiseRatingKey.Broken
+    case 'stalled':
+      return PromiseRatingKey.Stalled
+    default:
+      throw new Error('Unknown promise rating key')
   }
-  stats: { key: string; count: number; percentage: number }[]
 }
 
 const PromiseRatings = {
-  fulfilled: {
+  [PromiseRatingKey.Fulfilled]: {
     backgroundColor: 'bg-primary',
     textColor: 'text-primary',
     label: {
@@ -73,8 +89,9 @@ const PromiseRatings = {
       other: 'splněno',
     },
     icon: Fulfilled,
+    isVisible: () => true,
   },
-  in_progress: {
+  [PromiseRatingKey.InProgress]: {
     backgroundColor: 'bg-primary-light',
     textColor: 'text-primary-light',
     label: {
@@ -83,8 +100,9 @@ const PromiseRatings = {
       other: 'rozpracováno',
     },
     icon: InProgress,
+    isVisible: () => true,
   },
-  partially_fulfilled: {
+  [PromiseRatingKey.PartiallyFulfilled]: {
     backgroundColor: 'bg-secondary',
     textColor: 'text-secondary',
     label: {
@@ -93,8 +111,9 @@ const PromiseRatings = {
       other: 'část. splněno',
     },
     icon: PartiallyFulfilled,
+    isVisible: () => true,
   },
-  not_yet_evaluated: {
+  [PromiseRatingKey.NotYetEvaluated]: {
     backgroundColor: 'bg-dark',
     textColor: 'text-dark',
     label: {
@@ -105,7 +124,7 @@ const PromiseRatings = {
     icon: NotYetEvaluated,
     isVisible: (count: number) => count > 0,
   },
-  broken: {
+  [PromiseRatingKey.Broken]: {
     backgroundColor: 'bg-red',
     textColor: 'text-red',
     label: {
@@ -114,8 +133,9 @@ const PromiseRatings = {
       other: 'porušeno',
     },
     icon: Broken,
+    isVisible: () => true,
   },
-  stalled: {
+  [PromiseRatingKey.Stalled]: {
     backgroundColor: 'bg-gray',
     textColor: 'text-gray',
     label: {
@@ -124,6 +144,7 @@ const PromiseRatings = {
       other: 'nerealizováno',
     },
     icon: Stalled,
+    isVisible: () => true,
   },
 }
 
@@ -139,8 +160,8 @@ function PromiseRating({
     textColor,
     label,
     icon: Icon,
-    isVisible = (_count: number) => true,
-  } = PromiseRatings[ratingKey]
+    isVisible,
+  } = PromiseRatings[getPromiseRatingKey(ratingKey)]
 
   if (!isVisible(count)) {
     return null
@@ -175,6 +196,10 @@ function PromiseRating({
 }
 
 export default function Promises(props: PromisesProps) {
+  if (!props.article) {
+    return null
+  }
+
   return (
     <div className="container">
       <div className="section">
@@ -268,7 +293,7 @@ export default function Promises(props: PromisesProps) {
 
         <div>
           <div className="d-flex flex-wrap my-10">
-            {props.stats.map(({ key, count }) => (
+            {props.article.stats?.map(({ key, count }) => (
               <div
                 key={key}
                 className="d-flex flex-wrap align-items-center me-5 me-lg-10 py-2"
@@ -279,11 +304,12 @@ export default function Promises(props: PromisesProps) {
           </div>
 
           <div className="d-none d-md-flex rounded-pill overflow-hidden h-30px">
-            {props.stats.map(({ key, count }) => (
+            {props.article.stats?.map(({ key, count }) => (
               <div key={key} style={{ width: `${count}%` }}>
                 <span
                   className={classNames('d-block h-100 mb-4', {
-                    [PromiseRatings[key].backgroundColor]: true,
+                    [PromiseRatings[getPromiseRatingKey(key)].backgroundColor]:
+                      true,
                   })}
                 />
               </div>
@@ -291,8 +317,8 @@ export default function Promises(props: PromisesProps) {
           </div>
 
           <div className="d-none d-md-flex mt-5">
-            {props.stats
-              .filter(({ key }) => key !== 'not_yet_evaluated')
+            {props.article.stats
+              ?.filter(({ key }) => key !== 'not_yet_evaluated')
               .map(({ key, percentage }) => (
                 <div key={key} style={{ width: `${percentage}%` }}>
                   <span
@@ -302,7 +328,8 @@ export default function Promises(props: PromisesProps) {
                   >
                     <span
                       className={classNames('d-block h-25px mb-4', {
-                        [PromiseRatings[key].textColor]: true,
+                        [PromiseRatings[getPromiseRatingKey(key)].textColor]:
+                          true,
                       })}
                     >
                       {percentage}%
