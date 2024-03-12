@@ -16,7 +16,7 @@ import { runAnimatedChartEffects } from '@/libs/campaign/animate-charts'
 import classNames from 'classnames'
 
 const Campaign: NextPageWithLayout = () => {
-  const [page, setPage] = useState(2)
+  const [page, setPage] = useState(0)
 
   useEffect(() => {
     if (page === 1) {
