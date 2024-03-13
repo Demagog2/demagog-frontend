@@ -1,6 +1,23 @@
 import Link from 'next/link'
+import React from 'react'
+import { hasCookie, setCookie } from 'cookies-next'
 
 export function CookiesBanner() {
+  const [showConsent, setShowConsent] = React.useState(true)
+
+  React.useEffect(() => {
+    setShowConsent(hasCookie('localConsent'))
+  }, [])
+
+  const acceptCookie = () => {
+    setShowConsent(true)
+    setCookie('localConsent', 'true', {})
+  }
+
+  if (showConsent) {
+    return null
+  }
+
   return (
     <div className="cookies p-5 p-lg-8" data-controller="components--footer">
       <div className="cookies-wrap bg-white shadow-l p-5 mw-400px rounded-l">
@@ -15,7 +32,7 @@ export function CookiesBanner() {
           </Link>
         </p>
         <div className="mt-4">
-          <button className="btn me-2 my-2" onClick={() => console.log('TODO')}>
+          <button className="btn me-2 my-2" onClick={acceptCookie}>
             <span>Souhlasím s&nbsp;cookies</span>
           </button>
           <a className="btn outline  my-2" onClick={() => console.log('TODO')}>
