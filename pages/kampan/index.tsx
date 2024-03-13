@@ -30,11 +30,18 @@ const Campaign: NextPageWithLayout = () => {
         <CampaignHeader />
 
         <div className={style.headerContainerPage1}>
-          {/* TODO: Do we want to have multiple H1? Google might not like it */}
-          <h1 className={style.headerOrange}>Dezinformace</h1>
-          <h1 className={style.headerWhite}>nás mohou zasáhnout...</h1>
+          <h1 className={style.headerWhite}>
+            <span className={style.headerOrange}>Dezinformace</span>
+            <br></br>
+            nás mohou zasáhnout...
+          </h1>
         </div>
-        <div className={style.partnersContainer1Page1}>
+        <div
+          className={classNames(
+            style.partnersContainer1,
+            style.partnersContainer1Page1
+          )}
+        >
           <div className={style.partnersContainer2}>
             <p className={style.partnersP}>Partneři projektu:</p>
             <div className={style.partnersContainerLogo}>
@@ -87,6 +94,25 @@ const Campaign: NextPageWithLayout = () => {
             <p className={style.additionalInfo}>
               *Tady vysvětlení hvězdicky, může být takto dlouhé, možná víc
             </p>
+          </div>
+        </div>
+        <div
+          className={classNames(
+            style.partnersContainer1,
+            style.partnersContainer1Page2
+          )}
+        >
+          <div className={style.partnersContainer2}>
+            <p className={style.partnersP}>Partneři projektu:</p>
+            <div className={style.partnersContainerLogo}>
+              <Image src={LogoCedmo} className={style.logoCedmo} alt="CEDMO" />
+
+              <Image
+                src={LogoCT}
+                className={style.logoCt}
+                alt="Ceska televize"
+              />
+            </div>
           </div>
         </div>
 
@@ -171,6 +197,25 @@ const Campaign: NextPageWithLayout = () => {
               allowfullscreen
             ></iframe> */}
             <span className="close">&times;</span>
+          </div>
+        </div>
+        <div
+          className={classNames(
+            style.partnersContainer1,
+            style.partnersContainer1Page3
+          )}
+        >
+          <div className={style.partnersContainer2page3}>
+            <p className={style.partnersP}>Partneři projektu:</p>
+            <div className={style.partnersContainerLogo}>
+              <Image src={LogoCedmo} className={style.logoCedmo} alt="CEDMO" />
+
+              <Image
+                src={LogoCT}
+                className={style.logoCt}
+                alt="Ceska televize"
+              />
+            </div>
           </div>
         </div>
 
