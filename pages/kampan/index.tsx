@@ -14,6 +14,7 @@ import { CampaignHeader } from '@/components/campaign/CampaignHeader'
 import { AnimatedChart } from '@/components/campaign/AnimatedChart'
 import { runAnimatedChartEffects } from '@/libs/campaign/animate-charts'
 import classNames from 'classnames'
+import { CookiesBanner } from '@/components/campaign/CookiesBanner'
 
 const Campaign: NextPageWithLayout = () => {
   const [page, setPage] = useState(0)
@@ -233,6 +234,7 @@ const Campaign: NextPageWithLayout = () => {
           <ButtonNext isHidden />
         </ArrowsWrapper>
       </Page>
+      <CookiesBanner />
     </>
   )
 }
