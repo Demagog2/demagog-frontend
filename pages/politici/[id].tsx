@@ -49,7 +49,7 @@ export async function getServerSideProps({
       ) {
         speaker(id: $id) {
           fullName
-          avatar
+          avatar(size: detail)
           role
           body {
             shortName

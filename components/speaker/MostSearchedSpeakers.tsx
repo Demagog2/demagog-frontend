@@ -1,26 +1,26 @@
-import gql from 'graphql-tag'
 import Link from 'next/link'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 
-export const MostSearchedSpeakerFragment = gql`
-  fragment MostSearchedSpeakerDetail on Speaker {
-    id
-    avatar
-    fullName
+export const MostSearchedSpeakersFragment = gql(`
+  fragment MostSearchedSpeakers on Query {
+    getMostSearchedSpeakers {
+      id
+      avatar(size: detail)
+      fullName
+    }
   }
-`
+`)
 
 export function MostSearchedSpeakers(props: {
-  speakers: {
-    id: string
-    avatar: string
-    fullName: string
-  }[]
+  speakers: FragmentType<typeof MostSearchedSpeakersFragment>
 }) {
-  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
+  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
+
+  const data = useFragment(MostSearchedSpeakersFragment, props.speakers)
 
   return (
     <div className="symbol-group">
-      {props.speakers.map((speaker) => (
+      {data.getMostSearchedSpeakers.map((speaker) => (
         <Link
           key={speaker.id}
           href={`/politici/${speaker.id}`}

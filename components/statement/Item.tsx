@@ -13,7 +13,7 @@ export const StatementItemFragment = gql`
     sourceSpeaker {
       speaker {
         id
-        avatar
+        avatar(size: detail)
       }
       fullName
     }

@@ -7,7 +7,7 @@ export const SearchResultSpeakerFragment = gql`
   fragment SearchResultSpeakerDetail on Speaker {
     id
     fullName
-    avatar
+    avatar(size: detail)
     body {
       shortName
     }

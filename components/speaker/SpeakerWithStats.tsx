@@ -6,7 +6,7 @@ export const SpeakerWithStatsFragment = gql`
   fragment SpeakerWithStatsFragment on ArticleSpeakerStats {
     speaker {
       id
-      avatar
+      avatar(size: detail)
       fullName
       role
       body {

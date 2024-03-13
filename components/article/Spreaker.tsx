@@ -1,7 +1,7 @@
 import Link from 'next/link'
-import gql from 'graphql-tag'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 
-export const ArticleSpeakerFragment = gql`
+export const ArticleSpeakerFragment = gql(`
   fragment ArticleSpeakerDetail on SourceSpeaker {
     id
     fullName
@@ -9,17 +9,26 @@ export const ArticleSpeakerFragment = gql`
       avatar
     }
   }
-`
+`)
 
-export default function ArticleSpeaker({ speaker, prefix }: any) {
-  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
+export default function ArticleSpeaker(props: {
+  speaker: FragmentType<typeof ArticleSpeakerFragment>
+  prefix: string
+}) {
+  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
+
+  const sourceSpeaker = useFragment(ArticleSpeakerFragment, props.speaker)
+
   return (
     <Link
-      href={prefix + speaker.speaker.id}
-      title={speaker.fullName}
+      href={props.prefix + sourceSpeaker.id}
+      title={sourceSpeaker.fullName}
       className="symbol symbol-40px rounded-circle bg-gray-500 overflow-hidden"
     >
-      <img src={mediaUrl + speaker.speaker.avatar} alt={speaker.fullName} />
+      <img
+        src={mediaUrl + sourceSpeaker.speaker.avatar}
+        alt={sourceSpeaker.fullName}
+      />
     </Link>
   )
 }
