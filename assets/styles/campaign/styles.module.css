@@ -26,6 +26,16 @@ ul {
 } */
 
 .logoDemagog {
+  display: none;
+  width: 98px;
+  height: 30px;
+  margin-top: 20px;
+  margin-left: 25px;
+}
+
+.logoDemagogMobile {
+
+  background-image: url(../../images/campaign/demagog-logo-mobile.svg);
   width: 98px;
   height: 30px;
   margin-top: 20px;
@@ -500,10 +510,15 @@ ul {
   }
 
   .logoDemagog {
+    display: inline;
     width: 183px;
     height: 55px;
     margin-top: 41px;
     margin-left: 96px;
+  }
+
+  .logoDemagogMobile {
+    display: none;
   }
 
   .headerContainerPage1 {
