@@ -9,8 +9,13 @@ import {
   MostSearchedSpeakerFragment,
   MostSearchedSpeakers,
 } from '@/components/speaker/MostSearchedSpeakers'
+import { Metadata } from 'next'
 
 // TODO - Fetch more, paginations
+
+export const metadata: Metadata = {
+  title: 'Ověřujeme pro Vás',
+}
 
 interface HomeProps {
   articles: ArticleItemType[]
