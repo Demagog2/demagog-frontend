@@ -83,10 +83,7 @@ type Props = {
     totalCount: number
   }
   articleSearchResult: {
-    articles: {
-      id: string
-      title: string
-    }[]
+    articles: any[]
     totalCount: number
   }
   statementSearchResult: {

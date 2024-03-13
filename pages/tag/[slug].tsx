@@ -4,7 +4,6 @@ import gql from 'graphql-tag'
 import ArticleItem, { ArticleDetailFragment } from '@/components/article/Item'
 import { parsePage } from '@/libs/pagination'
 import ArticleTags, {
-  ArticleTag,
   ArticleTagsFragment,
 } from '@/components/article/Tags'
 
@@ -51,29 +50,9 @@ type TagProps = {
   articleTag: {
     title: string
     description: string
-    articles: {
-      id: string
-      perex: string
-      slug: string
-      illustration: string
-      title: string
-      speakers: {
-        id: string
-        name: string
-        slug: string
-        avatar: string
-      }[]
-      articleType: string
-      source: {
-        medium: {
-          name: string
-        }
-        releasedAt: string
-      }
-      publishedAt: string
-    }[]
+    articles: any[]
   }
-  articleTags: ArticleTag[]
+  articleTags: any[]
 }
 
 const Tag = (props: TagProps) => {
@@ -136,8 +115,6 @@ const Tag = (props: TagProps) => {
                 key={article.id}
                 article={article}
                 prefix="/diskuze/"
-                showPortraits={false}
-                smallerGaps={true}
               />
             ))}
           </div>
@@ -149,8 +126,7 @@ const Tag = (props: TagProps) => {
                 <ArticleItem
                   key={article.id}
                   article={article}
-                  showPortraits={false}
-                  smallerGaps={true}
+                  prefix="/diskuze/"
                 />
               ))}
             </div>

@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import truncate from '@/libs/truncate'
 import formatDate from '@/libs/format-date'
-import Speaker, { ArticleSpeakerFragment } from './Spreaker'
-import gql from 'graphql-tag'
+import Speaker from './Spreaker'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 
-export const ArticleDetailFragment = gql`
+export const ArticleDetailFragment = gql(`
   fragment ArticleDetail on Article {
     id
     perex
@@ -12,6 +12,7 @@ export const ArticleDetailFragment = gql`
     illustration(size: medium)
     title
     speakers {
+      id
       ...ArticleSpeakerDetail
     }
     articleType
@@ -23,18 +24,27 @@ export const ArticleDetailFragment = gql`
     }
     publishedAt
   }
-  ${ArticleSpeakerFragment}
-`
+`)
 
-export default function ArticleItem({ article, prefix }: any) {
+export default function ArticleItem(props: {
+  article: FragmentType<typeof ArticleDetailFragment>
+  prefix: string
+}) {
+  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
+
+  const article = useFragment(ArticleDetailFragment, props.article)
+
   const perex = truncate(article.perex ?? '', 190)
-  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
+
   return (
     <article className="col s-article" key={article.id}>
       <div className="row g-2 g-lg-5">
         <div className="col col-12 col-md-5">
           <div className="d-flex">
-            <Link href={prefix + article.slug} className="illustration d-flex">
+            <Link
+              href={props.prefix + article.slug}
+              className="illustration d-flex"
+            >
               <img
                 src={mediaUrl + article.illustration}
                 className="w-100"
@@ -44,7 +54,7 @@ export default function ArticleItem({ article, prefix }: any) {
           </div>
           <div className="d-flex justify-content-between align-items-center mt-2">
             <div className="symbol-group">
-              {article.speakers.map((speaker: any) => (
+              {article.speakers?.map((speaker) => (
                 <Speaker
                   key={speaker.id}
                   speaker={speaker}
@@ -61,15 +71,18 @@ export default function ArticleItem({ article, prefix }: any) {
         </div>
         <div className="col col-12 col-md-7">
           <h2 className="fs-2 fw-bold mb-2">
-            <Link href={prefix + article.slug} className="text-dark s-title">
+            <Link
+              href={props.prefix + article.slug}
+              className="text-dark s-title"
+            >
               {article.title}
             </Link>
           </h2>
           <div className="mb-2">
             {article.articleType === 'default' && article.source && (
               <i>
-                {article.source.medium.name},{' '}
-                {formatDate(article.source.releasedAt)}
+                {article.source.medium?.name},{' '}
+                {article.source?.releasedAt && formatDate(article.source.releasedAt)}
               </i>
             )}
 
@@ -79,8 +92,8 @@ export default function ArticleItem({ article, prefix }: any) {
 
             {article.articleType === 'single_statement' && article.source && (
               <i>
-                {article.source.medium.name},{' '}
-                {formatDate(article.source.releasedAt)}
+                {article.source.medium?.name},{' '}
+                {article.source?.releasedAt && formatDate(article.source.releasedAt)}
               </i>
             )}
           </div>
@@ -89,7 +102,7 @@ export default function ArticleItem({ article, prefix }: any) {
           </div>
           <div className="mt-4">
             <Link
-              href={prefix + article.slug}
+              href={props.prefix + article.slug}
               className="btn outline h-40px px-6 fw-bold fs-7"
             >
               Číst dál

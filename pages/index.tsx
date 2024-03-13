@@ -1,15 +1,13 @@
 import client from '../libs/apollo-client'
-import ArticleItem, { ArticleDetailFragment } from '../components/article/Item'
-import ArticleTags, { ArticleTagsFragment } from '../components/article/Tags'
+import ArticleItem from '../components/article/Item'
+import ArticleTags from '../components/article/Tags'
 import HomeSidebar from '@/components/site/HomeSidebar'
 import DonateSidebar from '@/components/site/DonateSidebar'
-import { ArticleItem as ArticleItemType } from '@/libs/results-type'
-import gql from 'graphql-tag'
-import {
-  MostSearchedSpeakerFragment,
-  MostSearchedSpeakers,
-} from '@/components/speaker/MostSearchedSpeakers'
+import { MostSearchedSpeakers } from '@/components/speaker/MostSearchedSpeakers'
 import { Metadata } from 'next'
+import { HomepageDataQuery } from '@/__generated__/graphql'
+import Link from 'next/link'
+import { gql } from '@/__generated__'
 
 // TODO - Fetch more, paginations
 
@@ -18,48 +16,38 @@ export const metadata: Metadata = {
 }
 
 interface HomeProps {
-  articles: ArticleItemType[]
-  tags: any
-  mostSearchedSpeakers: any[]
+  data: HomepageDataQuery
 }
 
 export async function getStaticProps() {
-  const { data: homepageData } = await client.query({
-    query: gql`
+  const { data } = await client.query<HomepageDataQuery>({
+    query: gql(`
       query homepageData {
         homepageArticles {
+          id
           ...ArticleDetail
-        }
-        getMostSearchedSpeakers {
-          ...MostSearchedSpeakerDetail
         }
         articleTags(limit: 5) {
           ...ArticleTagDetail
         }
+        ...MostSearchedSpeakers
       }
-      ${ArticleDetailFragment}
-      ${MostSearchedSpeakerFragment}
-      ${ArticleTagsFragment}
-    `,
+    `),
   })
 
   return {
     props: {
-      articles: homepageData.homepageArticles,
-      tags: homepageData.articleTags,
-      mostSearchedSpeakers: homepageData.getMostSearchedSpeakers,
+      data,
     },
   }
 }
 
-const Home: React.FC<HomeProps> = ({
-  articles,
-  tags,
-  mostSearchedSpeakers,
-}) => {
-  const topArticles = articles.slice(0, 4)
+const Home: React.FC<HomeProps> = ({ data }) => {
+  const topArticles = data.homepageArticles.slice(0, 4)
   const bottomArticles =
-    articles.length > 4 ? articles.slice(4, articles.length) : []
+    data.homepageArticles.length > 4
+      ? data.homepageArticles.slice(4, data.homepageArticles.length)
+      : []
   return (
     <>
       <div className="container">
@@ -70,7 +58,7 @@ const Home: React.FC<HomeProps> = ({
                 Nejvyhledávanější
               </span>
               <div className="symbol-group">
-                <MostSearchedSpeakers speakers={mostSearchedSpeakers} />
+                <MostSearchedSpeakers speakers={data} />
               </div>
             </div>
             <HomeSidebar />
@@ -78,10 +66,10 @@ const Home: React.FC<HomeProps> = ({
           </div>
           <div className="col col-12 col-lg-8 mb-0 mb-lg-10">
             <div className="mb-5 mb-lg-10">
-              <ArticleTags tags={tags} />
+              <ArticleTags tags={data.articleTags} />
             </div>
             <div className="row row-cols-1 g-5 g-lg-10">
-              {topArticles.map((article: any) => (
+              {topArticles.map((article) => (
                 <ArticleItem
                   article={article}
                   key={article.id}
@@ -93,7 +81,7 @@ const Home: React.FC<HomeProps> = ({
           <div className="col col-12"></div>
         </div>
         <div className="row row-cols-1 row-cols-lg-2 g-5 g-lg-10">
-          {bottomArticles.map((article: any) => (
+          {bottomArticles.map((article) => (
             <ArticleItem
               article={article}
               key={article.id}
@@ -116,12 +104,12 @@ const Home: React.FC<HomeProps> = ({
                 zabarvených textů a prohloubíme rovněž kritické myšlení, což je
                 pro dnešní dobu zcela zásadní dovednost.
               </p>
-              <a
+              <Link
                 href="/stranka/workshopy-demagogcz"
                 className="btn bg-primary h-44px"
               >
                 <span>Zjistit více</span>
-              </a>
+              </Link>
             </div>
             <div className="col col-12 col-lg-5">
               <img

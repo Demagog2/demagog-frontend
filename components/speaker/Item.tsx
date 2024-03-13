@@ -5,7 +5,7 @@ export const SpeakerItemFragment = gql`
   fragment SpeakerItemDetail on Speaker {
     id
     fullName
-    avatar
+    avatar(size: detail)
     body {
       shortName
     }
