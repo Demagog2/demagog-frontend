@@ -7,7 +7,10 @@ import type { Metadata, NextPage } from 'next'
 import { Inter } from 'next/font/google'
 import { ReactElement, ReactNode } from 'react'
 
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '600', '800', '900'],
+})
 
 // TODO - Meta, google tags
 
