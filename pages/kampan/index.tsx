@@ -169,19 +169,28 @@ const Campaign: NextPageWithLayout = () => {
               Jaké dezinformace se šíří aktuálně na sítích
             </a>
           </div>
-          <div className="video-container-page3">
+          <div className={style.videoContainerPage3}>
             <button
-              className="play-video-icon open-modal"
+              className={classNames(
+                style.playVideoIconDesktop,
+                style.openModal
+              )}
               title="play-video"
             ></button>
             <a href="https://www.youtube.com/embed/V9QM6XogqvU" title="video">
-              <button className="play-video-icon-mobile" title="video"></button>
+              <button
+                className={style.playVideoIconMobile}
+                title="video"
+              ></button>
             </a>
-            <button className="play-video-text open-modal" title="video">
+            <button
+              className={classNames(style.playVideoText, style.openModal)}
+              title="video"
+            >
               Přehrát video
             </button>
             <a href="https://www.youtube.com/embed/V9QM6XogqvU">
-              <button className="play-video-text-mobile" title="video">
+              <button className={style.playVideoTextMobile} title="video">
                 Přehrát video
               </button>
             </a>
@@ -196,7 +205,7 @@ const Campaign: NextPageWithLayout = () => {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
               allowfullscreen
             ></iframe> */}
-            <span className="close">&times;</span>
+            <span className={style.close}>&times;</span>
           </div>
         </div>
         <div
@@ -205,7 +214,7 @@ const Campaign: NextPageWithLayout = () => {
             style.partnersContainer1Page3
           )}
         >
-          <div className={style.partnersContainer2page3}>
+          <div className={style.partnersContainer2Page3}>
             <p className={style.partnersP}>Partneři projektu:</p>
             <div className={style.partnersContainerLogo}>
               <Image src={LogoCedmo} className={style.logoCedmo} alt="CEDMO" />

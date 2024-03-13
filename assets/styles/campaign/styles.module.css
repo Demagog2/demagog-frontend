@@ -168,7 +168,7 @@ ul {
 }
 
 .textSection1Page2 {
-  margin-bottom: 50px;
+  margin-bottom: 20px;
 }
 
 .textWhite {
@@ -177,6 +177,7 @@ ul {
   font-style: normal;
   font-weight: 600;
   line-height: 23px;
+  padding-left: 27px;
   padding-right: 23px;
   margin-top: 0px;
   margin-bottom: 0px;
@@ -315,8 +316,8 @@ ul {
   margin-bottom: 13px;
 }
 
-/* .playVideoIconMobile {
-  background-image: url('./images/play-video.svg');
+.playVideoIconMobile {
+  background-image: url('../../images/campaign/play-video-icon-mobile.svg');
   src: 'https://youtu.be/V9QM6XogqvU';
   width: 20px;
   height: 20px;
@@ -326,12 +327,11 @@ ul {
   border: none;
   cursor: pointer;
   margin-right: 8px;
-} */
+}
 
-/* .playVideoIcon {
+.playVideoIconDesktop {
   display: none;
-  background-image: url('./images/play-video.svg');
-  src: 'https://youtu.be/V9QM6XogqvU';
+  background-image: url('../../images/campaign/play-video-icon-desktop.svg');
   width: 20px;
   height: 20px;
   background-color: inherit;
@@ -340,7 +340,7 @@ ul {
   border: none;
   cursor: pointer;
   margin-right: 8px;
-} */
+}
 
 .playVideoTextMobile {
   src: 'https://youtu.be/V9QM6XogqvU';
@@ -410,7 +410,6 @@ ul {
   composes: partnersContainer1;
   margin-top: 56px;
 }
-
 
 .partnersContainer1Page2 {
   margin-top: 30px;
@@ -655,15 +654,15 @@ ul {
     display: none;
   }
 
-  .playVideoTextMobile {
-    display: none;
-  }
-
-  .playVideoIcon {
+  .playVideoIconDesktop {
     display: block;
     width: 29px;
     height: 29px;
     margin-right: 13.5px;
+  }
+
+  .playVideoTextMobile {
+    display: none;
   }
 
   .playVideoText {
