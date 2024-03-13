@@ -6,7 +6,7 @@ import Apollo from '../components/Apollo'
 import type { Metadata, NextPage } from 'next'
 import { Inter } from 'next/font/google'
 import { ReactElement, ReactNode } from 'react'
-import { GoogleAnalytics } from '@next/third-parties/google'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -33,5 +33,11 @@ type AppPropsWithLayout = AppProps & {
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>)
 
-  return <Apollo>{getLayout(<Component {...pageProps} />)}</Apollo>
+  return (
+    <Apollo>
+      {getLayout(<Component {...pageProps} />)}
+
+      <GoogleTagManager gtmId="GTM-KM5DMFFR" />
+    </Apollo>
+  )
 }
