@@ -6,6 +6,7 @@ import Apollo from '../components/Apollo'
 import type { Metadata, NextPage } from 'next'
 import { Inter } from 'next/font/google'
 import { ReactElement, ReactNode } from 'react'
+import { GoogleAnalytics } from '@next/third-parties/google'
 
 const inter = Inter({
   subsets: ['latin'],
