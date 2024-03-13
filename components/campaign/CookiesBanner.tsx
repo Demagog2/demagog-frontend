@@ -1,20 +1,25 @@
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { hasCookie, setCookie } from 'cookies-next'
 
 export function CookiesBanner() {
-  const [showConsent, setShowConsent] = React.useState(true)
+  const [showConsent, setShowConsent] = useState(false)
 
-  React.useEffect(() => {
-    setShowConsent(hasCookie('localConsent'))
+  useEffect(() => {
+    setShowConsent(!hasCookie('localConsent'))
   }, [])
 
-  const acceptCookie = () => {
-    setShowConsent(true)
+  const acceptCookies = () => {
+    setShowConsent(false)
     setCookie('localConsent', 'true', {})
   }
 
-  if (showConsent) {
+  const rejectCookies = () => {
+    setShowConsent(false)
+    setCookie('localConsent', 'false', {})
+  }
+
+  if (!showConsent) {
     return null
   }
 
@@ -32,10 +37,10 @@ export function CookiesBanner() {
           </Link>
         </p>
         <div className="mt-4">
-          <button className="btn me-2 my-2" onClick={acceptCookie}>
+          <button className="btn me-2 my-2" onClick={acceptCookies}>
             <span>Souhlasím s&nbsp;cookies</span>
           </button>
-          <a className="btn outline  my-2" onClick={() => console.log('TODO')}>
+          <a className="btn outline  my-2" onClick={rejectCookies}>
             <span className="text-dark">Nesouhlasím</span>
           </a>
         </div>

@@ -7,6 +7,7 @@ import type { Metadata, NextPage } from 'next'
 import { Inter } from 'next/font/google'
 import { ReactElement, ReactNode } from 'react'
 import { GoogleTagManager } from '@next/third-parties/google'
+import { getCookie } from 'cookies-next'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -37,7 +38,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     <Apollo>
       {getLayout(<Component {...pageProps} />)}
 
-      <GoogleTagManager gtmId="GTM-KM5DMFFR" />
+      {getCookie('localConsent') === 'true' && (
+        <GoogleTagManager gtmId="GTM-KM5DMFFR" />
+      )}
     </Apollo>
   )
 }
