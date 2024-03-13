@@ -12,7 +12,10 @@ const inter = Inter({ subsets: ['latin'] })
 // TODO - Meta, google tags
 
 export const metadata: Metadata = {
-  title: 'Demagog',
+  title: {
+    template: '%s &mdash; Demagog.cz',
+    default: 'Demagog.cz',
+  },
 }
 
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
@@ -25,6 +28,6 @@ type AppPropsWithLayout = AppProps & {
 
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   const getLayout = Component.getLayout ?? ((page) => <Layout>{page}</Layout>)
- 
+
   return <Apollo>{getLayout(<Component {...pageProps} />)}</Apollo>
 }
