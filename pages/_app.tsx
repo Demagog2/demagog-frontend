@@ -39,7 +39,7 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
     <Apollo>
       {getLayout(<Component {...pageProps} />)}
 
-      {getCookie('localConsent') === 'true' && (
+      {getCookie('localConsent') !== 'false' && (
         <GoogleTagManager gtmId="GTM-NDL7SQZ6" />
       )}
 
