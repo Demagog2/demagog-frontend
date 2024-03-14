@@ -3,8 +3,8 @@ import { useBetween } from 'use-between'
 import CloseIcon from '@/assets/icons/close.svg'
 import YouTube from 'react-youtube'
 
-export default function VideoModal() {
-  const { setVideoModal } = useBetween(useShareableState)
+export default function CampaignVideoModal() {
+  const { setCampaignVideoModal } = useBetween(useShareableState)
 
   const opts = {
     playerVars: {
@@ -19,7 +19,7 @@ export default function VideoModal() {
           <button
             className="close-button rounded-circle bg-white"
             data-micromodal-close
-            onClick={() => setVideoModal(false)}
+            onClick={() => setCampaignVideoModal(false)}
           >
             <span className="symbol symbol-50px d-flex align-items-center justify-content-center ">
               <svg xmlns="http://www.w3.org/2000/svg" height="24" width="24">
@@ -31,7 +31,7 @@ export default function VideoModal() {
             <div className="youtube-player-wrapper">
               <YouTube
                 className="position-absolute w-100 h-100"
-                videoId="GvOT6RNDVg8"
+                videoId="V9QM6XogqvU"
                 opts={opts}
               />
             </div>

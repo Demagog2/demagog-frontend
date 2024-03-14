@@ -1,20 +1,16 @@
-"use client"
-import { useState} from 'react';
+'use client'
+import { useState } from 'react'
 export const useShareableState = () => {
-    const [
-        donateModal,
-        setDonateModal,
-    ] = useState<Boolean | false>(false);
+  const [donateModal, setDonateModal] = useState<boolean>(false)
+  const [videoModal, setVideoModal] = useState<boolean>(false)
+  const [campaignVideoModal, setCampaignVideoModal] = useState<boolean>(false)
 
-    const [
-        videoModal,
-        setVideoModal,
-    ] = useState<Boolean | false>(false);
-
-    return {
-        donateModal,
-        setDonateModal,
-        videoModal,
-        setVideoModal
-    };
-};
+  return {
+    donateModal,
+    setDonateModal,
+    videoModal,
+    setVideoModal,
+    campaignVideoModal,
+    setCampaignVideoModal,
+  }
+}

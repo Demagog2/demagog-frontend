@@ -15,9 +15,14 @@ import { AnimatedChart } from '@/components/campaign/AnimatedChart'
 import { runAnimatedChartEffects } from '@/libs/campaign/animate-charts'
 import classNames from 'classnames'
 import { CookiesBanner } from '@/components/campaign/CookiesBanner'
+import Modals from '@/components/Modals'
+import { useShareableState } from '@/libs/useShareableState'
+import { useBetween } from 'use-between'
 
 const Campaign: NextPageWithLayout = () => {
   const [page, setPage] = useState(0)
+
+  const { setCampaignVideoModal } = useBetween(useShareableState)
 
   useEffect(() => {
     if (page === 1) {
@@ -190,23 +195,13 @@ const Campaign: NextPageWithLayout = () => {
             >
               Přehrát video
             </button>
-            <a href="https://www.youtube.com/embed/V9QM6XogqvU">
-              <button className={style.playVideoTextMobile} title="video">
-                Přehrát video
-              </button>
-            </a>
-          </div>
-          <div className={style.modal}>
-            {/* <iframe
-              width="100%"
-              height="100%"
-              src="https://www.youtube.com/embed/V9QM6XogqvU"
-              title="Jaromir Jagr commercial (1998)"
-              frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
-            ></iframe> */}
-            <span className={style.close}>&times;</span>
+            <button
+              className={style.playVideoTextMobile}
+              title="video"
+              onClick={() => setCampaignVideoModal(true)}
+            >
+              Přehrát video
+            </button>
           </div>
         </div>
         <div
@@ -240,7 +235,12 @@ const Campaign: NextPageWithLayout = () => {
 }
 
 Campaign.getLayout = (page) => {
-  return <div>{page}</div>
+  return (
+    <div>
+      {page}
+      <Modals />
+    </div>
+  )
 }
 
 export default Campaign
