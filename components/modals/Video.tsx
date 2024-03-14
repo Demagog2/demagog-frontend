@@ -1,6 +1,5 @@
 import { useShareableState } from '@/libs/useShareableState'
 import { useBetween } from 'use-between'
-import CloseIcon from '@/assets/icons/close.svg'
 import YouTube from 'react-youtube'
 
 export default function VideoModal() {
