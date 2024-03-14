@@ -8,6 +8,8 @@ import NavSearch from './NavSearch'
 import NavItemLink from './NavItemLink'
 import NavSubItem from './NavSubItem'
 import NavSubLink from './NavSubLink'
+import { gql, useQuery } from '@apollo/client'
+import { GovernmentPromisesForNavigationQuery } from '@/__generated__/graphql'
 
 // TODO - Promises pages
 
@@ -15,6 +17,16 @@ export default function Header() {
   const [lastScroll, setLastScroll] = useState(0)
   const { setDonateModal } = useBetween(useShareableState)
   const [isOpen, setIsOpen] = useState<Boolean | false>(false)
+
+  const { data } = useQuery<GovernmentPromisesForNavigationQuery>(gql`
+    query governmentPromisesForNavigation {
+      governmentPromisesEvaluations {
+        id
+        slug
+        title
+      }
+    }
+  `)
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll)
@@ -68,10 +80,13 @@ export default function Header() {
                   <NavItemLink title="Výroky" url="/vyroky" />
                   <NavSubItem title="Sliby">
                     <ul className="dropmenu-wrap d-flex flex-column flex-xl-row flex-xl-flex justify-content-start justify-content-xl-center flex-wrap list py-2 py-xl-8">
-                      <NavSubLink
-                        title="Sliby vlády Andreje Babiše (2018—2021)"
-                        url="/sliby/druha-vlada-andreje-babise"
-                      />
+                      {data?.governmentPromisesEvaluations.map((article) => (
+                        <NavSubLink
+                          key={article.id}
+                          title={article.title}
+                          url={`/sliby/${article.slug}`}
+                        />
+                      ))}
                       <NavSubLink
                         title="Sliby prezidenta Miloše Zemana (2013—2018)"
                         url="https://zpravy.aktualne.cz/domaci/zverejnujeme-velkou-inventuru-zemanovych-slibu-ktere-slovo-d/r~9ebe8728ff6911e7adc2ac1f6b220ee8/"

@@ -1,15 +1,12 @@
 import client from '@/libs/apollo-client'
-import gql from 'graphql-tag'
 import TitleIcon from '@/assets/icons/promises.svg'
-import Fulfilled from '@/assets/icons/promises/fulfilled.svg'
-import InProgress from '@/assets/icons/promises/in_progress.svg'
-import PartiallyFulfilled from '@/assets/icons/promises/partially_fulfilled.svg'
-import Broken from '@/assets/icons/promises/broken.svg'
-import Stalled from '@/assets/icons/promises/stalled.svg'
-import NotYetEvaluated from '@/assets/icons/promises/not_yet_evaluated.svg'
+
 import { pluralize } from '@/libs/pluralize'
 import classNames from 'classnames'
 import { PromisesQuery } from '@/__generated__/graphql'
+import { GovernmentalPromise } from '@/components/promises/GovernmentalPromise'
+import { gql } from '@/__generated__'
+import { PromiseRatings } from '@/components/promises/PromiseRatingConf'
 
 export async function getServerSideProps({
   params,
@@ -17,14 +14,15 @@ export async function getServerSideProps({
   params: { slug: string }
 }) {
   const { data } = await client.query<PromisesQuery>({
-    query: gql`
-      query promises($slug: String) {
-        governmentPromisesEvaluationBySlug(slug: "my-slug") {
+    query: gql(`
+      query promises($slug: String!) {
+        governmentPromisesEvaluationBySlug(slug: $slug) {
           id
           title
           perex
           promises {
             id
+            ...GovernmentalPromiseDetail
           }
           promiseCount
           stats {
@@ -34,21 +32,23 @@ export async function getServerSideProps({
           }
         }
       }
-    `,
+    `),
     variables: {
-      slug: params?.slug || '',
+      slug: params?.slug ?? '',
     },
   })
 
   return {
     props: {
       article: data.governmentPromisesEvaluationBySlug,
+      slug: params?.slug ?? '',
     },
   }
 }
 
 type PromisesProps = {
   article: PromisesQuery['governmentPromisesEvaluationBySlug']
+  slug: string
 }
 
 enum PromiseRatingKey {
@@ -77,75 +77,6 @@ function getPromiseRatingKey(s: string): PromiseRatingKey {
     default:
       throw new Error('Unknown promise rating key')
   }
-}
-
-const PromiseRatings = {
-  [PromiseRatingKey.Fulfilled]: {
-    backgroundColor: 'bg-primary',
-    textColor: 'text-primary',
-    label: {
-      singular: 'splněný',
-      plural: 'splněné',
-      other: 'splněno',
-    },
-    icon: Fulfilled,
-    isVisible: () => true,
-  },
-  [PromiseRatingKey.InProgress]: {
-    backgroundColor: 'bg-primary-light',
-    textColor: 'text-primary-light',
-    label: {
-      singular: 'rozpracovaný',
-      plural: 'rozpracované',
-      other: 'rozpracováno',
-    },
-    icon: InProgress,
-    isVisible: () => true,
-  },
-  [PromiseRatingKey.PartiallyFulfilled]: {
-    backgroundColor: 'bg-secondary',
-    textColor: 'text-secondary',
-    label: {
-      singular: 'část. splněný',
-      plural: 'část. splněné',
-      other: 'část. splněno',
-    },
-    icon: PartiallyFulfilled,
-    isVisible: () => true,
-  },
-  [PromiseRatingKey.NotYetEvaluated]: {
-    backgroundColor: 'bg-dark',
-    textColor: 'text-dark',
-    label: {
-      singular: 'zatím nehodnocený',
-      plural: 'zatím nehodnocené',
-      other: 'zatím nehodnoceno',
-    },
-    icon: NotYetEvaluated,
-    isVisible: (count: number) => count > 0,
-  },
-  [PromiseRatingKey.Broken]: {
-    backgroundColor: 'bg-red',
-    textColor: 'text-red',
-    label: {
-      singular: 'porušený',
-      plural: 'porušené',
-      other: 'porušeno',
-    },
-    icon: Broken,
-    isVisible: () => true,
-  },
-  [PromiseRatingKey.Stalled]: {
-    backgroundColor: 'bg-gray',
-    textColor: 'text-gray',
-    label: {
-      singular: 'nerealizovaný',
-      plural: 'nerealizované',
-      other: 'nerealizováno',
-    },
-    icon: Stalled,
-    isVisible: () => true,
-  },
 }
 
 function PromiseRating({
@@ -304,8 +235,8 @@ export default function Promises(props: PromisesProps) {
           </div>
 
           <div className="d-none d-md-flex rounded-pill overflow-hidden h-30px">
-            {props.article.stats?.map(({ key, count }) => (
-              <div key={key} style={{ width: `${count}%` }}>
+            {props.article.stats?.map(({ key, percentage }) => (
+              <div key={key} style={{ width: `${percentage}%` }}>
                 <span
                   className={classNames('d-block h-100 mb-4', {
                     [PromiseRatings[getPromiseRatingKey(key)].backgroundColor]:
@@ -337,6 +268,144 @@ export default function Promises(props: PromisesProps) {
                   </span>
                 </div>
               ))}
+          </div>
+
+          <div className="row g-10">
+            <div
+              className="col col-12 col-lg-4"
+              data-target="components--filter.filter"
+            >
+              <div className="bg-light rounded-l p-5">
+                <div className="filter w-100 mb-5">
+                  <div
+                    className="filter-link d-flex align-items-center justify-content-between w-100 min-h-40px"
+                    data-action="click->components--filter#toggleLink"
+                    data-target="components--filter.filterLink"
+                    aria-show="true"
+                  >
+                    <span className="fs-6 fw-600">Oblast</span>
+                    <span className="filter-icon">
+                      <svg
+                        width="23"
+                        height="12"
+                        viewBox="0 0 23 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M1 0.597656L11.646 11.2437L22.2435 0.646237"
+                          stroke="#111827"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                  <div className="filter-content">
+                    {/* <% @area_tags.each do |area_tag| %>
+              <div
+                className="check-btn py-2"
+
+              >
+                <input
+                  type="checkbox"
+                  data-target="components--filter.filterCheckbox"
+                  data-action="change->components--filter#toggleFilter"
+                  data-filter-value="<%= area_tag.id %>"
+                  data-filter-type="oblast"
+                >
+                <span className="checkmark"></span>
+                <span className="small fw-600 me-2"><%= area_tag.name %></span>
+              </div>
+              <% end %> */}
+                  </div>
+                </div>
+                <div className="separator bg-dark mb-5"></div>
+                <div className="filter w-100 mb-5">
+                  <div
+                    className="filter-link d-flex align-items-center justify-content-between w-100 min-h-40px"
+                    data-action="click->components--filter#toggleLink"
+                    data-target="components--filter.filterLink"
+                    aria-show="true"
+                  >
+                    <span className="fs-6 fw-600">Hodnocení</span>
+                    <span className="filter-icon">
+                      <svg
+                        width="23"
+                        height="12"
+                        viewBox="0 0 23 12"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M1 0.597656L11.646 11.2437L22.2435 0.646237"
+                          stroke="#111827"
+                        />
+                      </svg>
+                    </span>
+                  </div>
+                  <div className="filter-content">
+                    {/* <% @promise_rating_keys.each do |promise_rating_key| %>
+              <div className="check-btn py-2">
+                <input
+                  type="checkbox"
+                  data-target="components--filter.filterCheckbox"
+                  data-action="change->components--filter#toggleFilter"
+                  data-filter-value="<%= promise_rating_key %>"
+                  data-filter-type="hodnoceni"
+                >
+                <span className="checkmark"></span>
+                <span className="small fw-600 me-2">
+                  <%= (
+                    {
+                      PromiseRating::FULFILLED => "splněné",
+                      PromiseRating::IN_PROGRESS => "rozpracované",
+                      PromiseRating::PARTIALLY_FULFILLED =>  "částečně splněné",
+                      PromiseRating::BROKEN => "porušené",
+                      PromiseRating::STALLED => "nerealizované",
+                      PromiseRating::NOT_YET_EVALUATED => "zatím nehodnoceno",
+                    }[promise_rating_key]
+                  ) %>
+                </span>
+              </div>
+              <% end %> */}
+                  </div>
+                </div>
+                <div className="separator bg-dark mb-5"></div>
+                <div className="w-100 mt-5">
+                  <a
+                    className="btn w-100"
+                    href="#"
+                    data-action="click->components--filter#clearFilter"
+                  >
+                    <span className="text-white">Zrušit filtry</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+
+            <div
+              className="col col-12 col-lg-8"
+              data-target="components--filter.content"
+            >
+              <div className="d-none d-md-block">
+                <div className="row g-3 g-lf-6 py-2">
+                  <div className="col col-12 col-md-5"></div>
+                  <div className="col col-12 col-md-2">
+                    <h6 className="fs-5 text-uppercase">Oblast</h6>
+                  </div>
+                  <div className="col col-12 col-md-2">
+                    <h6 className="fs-5 text-uppercase">Hodnocení</h6>
+                  </div>
+                  <div className="col col-12 col-md-3"></div>
+                </div>
+              </div>
+              {props.article.promises.map((promise) => (
+                <GovernmentalPromise
+                  key={promise.id}
+                  promise={promise}
+                  slug={props.slug}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
