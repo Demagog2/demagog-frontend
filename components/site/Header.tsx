@@ -76,8 +76,8 @@ export default function Header() {
                   <NavSearchForm />
                 </div>
                 <ul className="list menu-list d-flex flex-column flex-xl-row align-items-start align-items-xl-center px-5 p-xl-0">
-                  <NavItemLink title="Politici" url="/" />
-                  <NavItemLink title="Výroky" url="/vypis-recniku" />
+                  <NavItemLink title="Politici" url="/vypis-recniku" />
+                  <NavItemLink title="Výroky" url="/vyroky" />
                   <NavSubItem title="Sliby">
                     <ul className="dropmenu-wrap d-flex flex-column flex-xl-row flex-xl-flex justify-content-start justify-content-xl-center flex-wrap list py-2 py-xl-8">
                       {data?.governmentPromisesEvaluations.map((article) => (
