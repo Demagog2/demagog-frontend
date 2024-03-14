@@ -145,7 +145,7 @@ const Campaign: NextPageWithLayout = () => {
             je unikátní český projekt zaměřený na ověřování politických výroků a
             obsahu na sociálních sítích.
           </p>
-          <ul style={{ listStyle: 'bullet' }} className={style.ulPage3}>
+          <ul className={style.ulPage3}>
             <li className={style.listPage3}>
               <p className={style.liText}>více, než deset let zkušeností</p>
             </li>
@@ -177,26 +177,12 @@ const Campaign: NextPageWithLayout = () => {
           </div>
           <div className={style.videoContainerPage3}>
             <button
-              className={classNames(
-                style.playVideoIconDesktop,
-                style.openModal
-              )}
+              className={style.playVideoIconDesktop}
               title="play-video"
+              onClick={() => setCampaignVideoModal(true)}
             ></button>
-            <a href="https://www.youtube.com/embed/V9QM6XogqvU" title="video">
-              <button
-                className={style.playVideoIconMobile}
-                title="video"
-              ></button>
-            </a>
             <button
-              className={classNames(style.playVideoText, style.openModal)}
-              title="video"
-            >
-              Přehrát video
-            </button>
-            <button
-              className={style.playVideoTextMobile}
+              className={style.playVideoText}
               title="video"
               onClick={() => setCampaignVideoModal(true)}
             >
