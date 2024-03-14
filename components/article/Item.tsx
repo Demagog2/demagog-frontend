@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import truncate from '@/libs/truncate'
 import formatDate from '@/libs/format-date'
-import Speaker from './Spreaker'
+import Speaker from './SpeakerDetail'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 
 export const ArticleDetailFragment = gql(`
@@ -82,7 +82,8 @@ export default function ArticleItem(props: {
             {article.articleType === 'default' && article.source && (
               <i>
                 {article.source.medium?.name},{' '}
-                {article.source?.releasedAt && formatDate(article.source.releasedAt)}
+                {article.source?.releasedAt &&
+                  formatDate(article.source.releasedAt)}
               </i>
             )}
 
@@ -93,7 +94,8 @@ export default function ArticleItem(props: {
             {article.articleType === 'single_statement' && article.source && (
               <i>
                 {article.source.medium?.name},{' '}
-                {article.source?.releasedAt && formatDate(article.source.releasedAt)}
+                {article.source?.releasedAt &&
+                  formatDate(article.source.releasedAt)}
               </i>
             )}
           </div>

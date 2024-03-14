@@ -6,7 +6,7 @@ export const ArticleSpeakerFragment = gql(`
     id
     fullName
     speaker {
-      avatar
+      avatar(size: detail)
     }
   }
 `)
