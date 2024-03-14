@@ -18,6 +18,7 @@ import { CookiesBanner } from '@/components/campaign/CookiesBanner'
 import Modals from '@/components/Modals'
 import { useShareableState } from '@/libs/useShareableState'
 import { useBetween } from 'use-between'
+import Link from 'next/link'
 
 const Campaign: NextPageWithLayout = () => {
   const [page, setPage] = useState(0)
@@ -139,9 +140,9 @@ const Campaign: NextPageWithLayout = () => {
 
         <div className={style.blurBg}>
           <p className={style.textPage3}>
-            <a className={style.linkOrange} href="https://demagog.cz">
+            <Link className={style.linkOrange} href="/">
               Demagog.cz
-            </a>{' '}
+            </Link>{' '}
             je unikátní český projekt zaměřený na ověřování politických výroků a
             obsahu na sociálních sítích.
           </p>
@@ -162,18 +163,19 @@ const Campaign: NextPageWithLayout = () => {
 
         <div className={style.buttonsContainer1Page3}>
           <div className={style.buttonsContainer2Page3}>
-            <a
+            <Link
               className={classNames(style.buttonsPage3, style.btnTop)}
-              href="https://demagog.cz/vypis-recniku"
+              href="/vypis-recniku"
             >
               Co říkají politici
-            </a>
-            <a
+            </Link>
+            {/* TODO: Implement facebook factchecking page & fix the link */}
+            <Link
               className={style.buttonsPage3}
               href="https://demagog.cz/spoluprace-s-facebookem"
             >
               Jaké dezinformace se šíří aktuálně na sítích
-            </a>
+            </Link>
           </div>
           <div className={style.videoContainerPage3}>
             <button
