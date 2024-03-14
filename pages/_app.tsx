@@ -8,6 +8,7 @@ import { Inter } from 'next/font/google'
 import { ReactElement, ReactNode } from 'react'
 import { GoogleTagManager } from '@next/third-parties/google'
 import { getCookie } from 'cookies-next'
+import FacebookPixel from '@/components/FacebookPixel'
 
 const inter = Inter({
   subsets: ['latin'],
@@ -39,8 +40,10 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
       {getLayout(<Component {...pageProps} />)}
 
       {getCookie('localConsent') === 'true' && (
-        <GoogleTagManager gtmId="GTM-KM5DMFFR" />
+        <GoogleTagManager gtmId="GTM-NDL7SQZ6" />
       )}
+
+      <FacebookPixel />
     </Apollo>
   )
 }
