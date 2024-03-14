@@ -1,19 +1,18 @@
 import type { NextPageContext } from 'next'
 import apolloClient from '@/libs/apollo-client'
-import gql from 'graphql-tag'
 import ArticleItem, { ArticleDetailFragment } from '@/components/article/Item'
 import { parsePage } from '@/libs/pagination'
-import ArticleTags, {
-  ArticleTagsFragment,
-} from '@/components/article/Tags'
+import ArticleTags, { ArticleTagsFragment } from '@/components/article/Tags'
+import { gql } from '@/__generated__'
+import { ArticleTagQuery } from '@/__generated__/graphql'
 
 const PAGE_SIZE = 10
 
 export async function getServerSideProps({ query }: NextPageContext) {
   const page = parsePage(query?.page)
 
-  const { data } = await apolloClient.query({
-    query: gql`
+  const { data } = await apolloClient.query<ArticleTagQuery>({
+    query: gql(`
       query articleTag($slug: String!, $limit: Int, $offset: Int) {
         articleTagBySlug(slug: $slug) {
           title
@@ -26,9 +25,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
           ...ArticleTagDetail
         }
       }
-      ${ArticleTagsFragment}
-      ${ArticleDetailFragment}
-    `,
+    `),
     variables: {
       slug: query.slug,
       limit: PAGE_SIZE,
