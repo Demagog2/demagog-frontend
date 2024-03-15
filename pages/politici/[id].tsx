@@ -13,7 +13,6 @@ import { TagFilterFragment } from '@/components/filtering/TagFilter'
 import { VeracityFilterFragment } from '@/components/filtering/VeracityFilter'
 import { ReleasedYearFilterFragment } from '@/components/filtering/ReleasedYearFilter'
 import {
-  getBooleanParam,
   getNumericalArrayParams,
   getStringArrayParams,
 } from '@/libs/query-params'

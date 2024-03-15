@@ -21,7 +21,7 @@ export function Pagination({
 
       return `${pathname}?${params.toString()}`
     },
-    [searchParams]
+    [pathname, searchParams]
   )
 
   const totalPages = Math.ceil(totalCount / pageSize)
