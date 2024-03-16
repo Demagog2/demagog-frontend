@@ -9,6 +9,7 @@ import { Pagination } from '@/components/article/Pagination'
 import ArticleTags from '@/components/article/Tags'
 import client from '@/libs/apollo-client'
 import { NextPageContext } from 'next'
+import Link from 'next/link'
 
 export async function getServerSideProps({ query }: NextPageContext) {
   const after = query?.after
@@ -56,7 +57,24 @@ export default function FacebookCollaboration({
         {data.facebookFactchecks.pageInfo.hasPreviousPage ? (
           <FacebookFactcheckNextPage data={data.facebookFactchecks} />
         ) : (
-          <FacebookFactcheckFirstPage data={data.facebookFactchecks} />
+          <FacebookFactcheckFirstPage
+            data={data.facebookFactchecks}
+            title="Spolupráce s Facebookem"
+            description={
+              <>
+                Demagog.cz se v květnu 2020 zapojil do sítě nezávislých
+                fact-checkingových partnerů, kteří pro společnost Facebook
+                ověřují pravdivost vybraného facebookového a instagramového
+                obsahu. Pokud se ukáže, že jde o nepravdivý nebo zavádějící
+                obsah, díky naší spolupráci s Facebookem se při dalším sdílení
+                uživatelům může ukázat varování a odkaz na ověření na našem
+                webu.{' '}
+                <Link href="/diskuze/demagog-cz-bude">
+                  Více o spolupráci si přečtete v našem komentáři.
+                </Link>
+              </>
+            }
+          />
         )}
 
         <Pagination pageInfo={data.facebookFactchecks.pageInfo} />

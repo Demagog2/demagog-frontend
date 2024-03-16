@@ -14,6 +14,8 @@ const FacebookFactcheckFirstPageFragment = gql(`
 
 export function FacebookFactcheckFirstPage(props: {
   data: FragmentType<typeof FacebookFactcheckFirstPageFragment>
+  title: string
+  description: JSX.Element
 }) {
   const data = useFragment(FacebookFactcheckFirstPageFragment, props.data)
   return (
@@ -32,22 +34,8 @@ export function FacebookFactcheckFirstPage(props: {
             className="expander expander-dark-light"
             data-target="components--mobile-expander.expander"
           >
-            {/* <h1 className="display-5 fw-bold m-0 p-0"><%= get_web_content("article.collaboration_with_facebook", "title") %></h1> */}
-            <h1 className="display-5 fw-bold m-0 p-0">
-              Spolupráce s Facebookem
-            </h1>
-            <div className="fs-5 mt-5 dark-content">
-              {/* <%= raw(get_web_content("article.collaboration_with_facebook", "intro")) %> */}
-              Demagog.cz se v květnu 2020 zapojil do sítě nezávislých
-              fact-checkingových partnerů, kteří pro společnost Facebook ověřují
-              pravdivost vybraného facebookového a instagramového obsahu. Pokud
-              se ukáže, že jde o nepravdivý nebo zavádějící obsah, díky naší
-              spolupráci s Facebookem se při dalším sdílení uživatelům může
-              ukázat varování a odkaz na ověření na našem webu.{' '}
-              <Link href="/diskuze/demagog-cz-bude">
-                Více o spolupráci si přečtete v našem komentáři.
-              </Link>
-            </div>
+            <h1 className="display-5 fw-bold m-0 p-0">{props.title}</h1>
+            <div className="fs-5 mt-5 dark-content">{props.description}</div>
           </div>
           <div className="d-flex">
             <a
