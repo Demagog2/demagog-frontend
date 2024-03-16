@@ -22,13 +22,7 @@ export function FacebookFactcheckNextPage(props: {
             return []
           }
 
-          return [
-            <ArticleItem
-              key={article?.id}
-              article={article}
-              prefix="/diskuze/"
-            />,
-          ]
+          return [<ArticleItem key={article?.id} article={article} />]
         })}
       </div>
     </div>

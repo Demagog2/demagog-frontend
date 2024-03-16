@@ -1,5 +1,4 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import Link from 'next/link'
 import ArticleItem from './Item'
 import { drop, take } from 'lodash'
 
@@ -84,13 +83,7 @@ export function FacebookFactcheckFirstPage(props: {
               return []
             }
 
-            return [
-              <ArticleItem
-                key={article?.id}
-                article={article}
-                prefix="/diskuze/"
-              />,
-            ]
+            return [<ArticleItem key={article?.id} article={article} />]
           })}
         </div>
       </div>
@@ -101,13 +94,7 @@ export function FacebookFactcheckFirstPage(props: {
               return null
             }
 
-            return [
-              <ArticleItem
-                key={article?.id}
-                article={article}
-                prefix="/diskuze/"
-              />,
-            ]
+            return [<ArticleItem key={article?.id} article={article} />]
           })}
         </div>
       </div>

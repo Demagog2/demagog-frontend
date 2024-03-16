@@ -13,7 +13,6 @@ export const ArticleSpeakerFragment = gql(`
 
 export default function ArticleSpeaker(props: {
   speaker: FragmentType<typeof ArticleSpeakerFragment>
-  prefix: string
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
@@ -21,7 +20,7 @@ export default function ArticleSpeaker(props: {
 
   return (
     <Link
-      href={props.prefix + sourceSpeaker.id}
+      href={`/politici/${sourceSpeaker.id}`}
       title={sourceSpeaker.fullName}
       className="symbol symbol-40px rounded-circle bg-gray-500 overflow-hidden"
     >

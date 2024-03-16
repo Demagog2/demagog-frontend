@@ -28,7 +28,6 @@ export const ArticleDetailFragment = gql(`
 
 export default function ArticleItem(props: {
   article: FragmentType<typeof ArticleDetailFragment>
-  prefix: string
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
@@ -36,15 +35,14 @@ export default function ArticleItem(props: {
 
   const perex = truncate(article.perex ?? '', 190)
 
+  const articlePath = `/diskuze/${article.id}`
+
   return (
-    <article className="col s-article" key={article.id}>
+    <article className="col s-article">
       <div className="row g-2 g-lg-5">
         <div className="col col-12 col-md-5">
           <div className="d-flex">
-            <Link
-              href={props.prefix + article.slug}
-              className="illustration d-flex"
-            >
+            <Link href={articlePath} className="illustration d-flex">
               <img
                 src={mediaUrl + article.illustration}
                 className="w-100"
@@ -55,11 +53,7 @@ export default function ArticleItem(props: {
           <div className="d-flex justify-content-between align-items-center mt-2">
             <div className="symbol-group">
               {article.speakers?.map((speaker) => (
-                <Speaker
-                  key={speaker.id}
-                  speaker={speaker}
-                  prefix="/politici/"
-                />
+                <Speaker key={speaker.id} speaker={speaker} />
               ))}
             </div>
             <div>
@@ -71,10 +65,7 @@ export default function ArticleItem(props: {
         </div>
         <div className="col col-12 col-md-7">
           <h2 className="fs-2 fw-bold mb-2">
-            <Link
-              href={props.prefix + article.slug}
-              className="text-dark s-title"
-            >
+            <Link href={articlePath} className="text-dark s-title">
               {article.title}
             </Link>
           </h2>
@@ -104,7 +95,7 @@ export default function ArticleItem(props: {
           </div>
           <div className="mt-4">
             <Link
-              href={props.prefix + article.slug}
+              href={articlePath}
               className="btn outline h-40px px-6 fw-bold fs-7"
             >
               Číst dál

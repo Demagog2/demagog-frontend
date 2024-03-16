@@ -1,5 +1,4 @@
 import client from '../libs/apollo-client'
-import ArticleItem from '../components/article/Item'
 import ArticleTags from '../components/article/Tags'
 import HomeSidebar from '@/components/site/HomeSidebar'
 import DonateSidebar from '@/components/site/DonateSidebar'
@@ -8,6 +7,10 @@ import { Metadata } from 'next'
 import { HomepageDataQuery } from '@/__generated__/graphql'
 import Link from 'next/link'
 import { gql } from '@/__generated__'
+import { Pagination } from '@/components/article/Pagination'
+import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
+import { notFound } from 'next/navigation'
+import { drop, take } from 'lodash'
 
 // TODO - Fetch more, paginations
 
@@ -23,9 +26,20 @@ export async function getStaticProps() {
   const { data } = await client.query<HomepageDataQuery>({
     query: gql(`
       query homepageData {
-        homepageArticles {
-          id
-          ...ArticleDetail
+        homepageArticlesV3(first: 10) {
+          nodes {
+            ... on Article {
+              id
+            }
+            ... on SingleStatementArticle {
+              id
+            }
+            ...ArticleV2PreviewFragment
+          }
+          pageInfo {
+            hasPreviousPage
+            ...PaginationFragment
+          }
         }
         articleTags(limit: 5) {
           ...ArticleTagDetail
@@ -43,11 +57,13 @@ export async function getStaticProps() {
 }
 
 const Home: React.FC<HomeProps> = ({ data }) => {
-  const topArticles = data.homepageArticles.slice(0, 4)
-  const bottomArticles =
-    data.homepageArticles.length > 4
-      ? data.homepageArticles.slice(4, data.homepageArticles.length)
-      : []
+  if (!data.homepageArticlesV3) {
+    notFound()
+  }
+
+  const topArticles = take(data.homepageArticlesV3.nodes, 4)
+  const bottomArticles = drop(data.homepageArticlesV3.nodes, 4)
+
   return (
     <>
       <div className="container">
@@ -69,29 +85,30 @@ const Home: React.FC<HomeProps> = ({ data }) => {
               <ArticleTags tags={data.articleTags} />
             </div>
             <div className="row row-cols-1 g-5 g-lg-10">
-              {topArticles.map((article) => (
-                <ArticleItem
-                  article={article}
-                  key={article.id}
-                  prefix="/diskuze/"
-                />
-              ))}
+              {topArticles?.flatMap((article) => {
+                if (!article) {
+                  return null
+                }
+
+                return [
+                  <ArticleV2Preview article={article} key={article?.id} />,
+                ]
+              })}
             </div>
           </div>
           <div className="col col-12"></div>
         </div>
         <div className="row row-cols-1 row-cols-lg-2 g-5 g-lg-10">
-          {bottomArticles.map((article) => (
-            <ArticleItem
-              article={article}
-              key={article.id}
-              prefix="/diskuze/"
-            />
-          ))}
+          {bottomArticles?.flatMap((article) => {
+            if (!article) {
+              return null
+            }
+
+            return [<ArticleV2Preview article={article} key={article?.id} />]
+          })}
         </div>
-        <div className="mt-5 mt-lg-10">
-          <a className="btn h-50px fs-6 me-2 mb-2 px-8">Načíst další</a>
-        </div>
+
+        <Pagination pageInfo={data.homepageArticlesV3.pageInfo} />
 
         <div className="bg-light text-dark p-5 p-lg-10 rounded-l mt-10">
           <div className="row g-10 justify-content-between">

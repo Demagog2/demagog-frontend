@@ -153,11 +153,7 @@ const Search: React.FC<Props> = (props) => {
             </div>
             <div className="row row-cols-1 row-cols-lg-2 g-5 g-lg-10">
               {props.articleSearchResult.articles.map((article) => (
-                <ArticleItem
-                  key={article.id}
-                  article={article}
-                  prefix={'/diskuze/'}
-                />
+                <ArticleItem key={article.id} article={article} />
               ))}
             </div>
             {props.articleSearchResult.totalCount > 6 && (
