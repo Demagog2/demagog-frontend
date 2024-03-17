@@ -2,6 +2,18 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  async redirects() {
+    return process.env.SERVE_CAMPAIGN_WEBSITE_FROM_RAILS
+      ? [
+          {
+            source: '/kampan',
+            destination: 'https://demagog.cz/kampan',
+            permanent: true,
+          },
+        ]
+      : []
+  },
+
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
