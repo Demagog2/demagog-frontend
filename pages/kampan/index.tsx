@@ -19,13 +19,13 @@ import Modals from '@/components/Modals'
 import { useShareableState } from '@/libs/useShareableState'
 import { useBetween } from 'use-between'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { permanentRedirect } from 'next/navigation'
 
 const Campaign: NextPageWithLayout = () => {
   // Redirect to the old website
   // We'll launch the campaign with the Ruby on Rails version of it
   if (process.env.SERVE_CAMPAIGN_WEBSITE_FROM_RAILS) {
-    redirect('https://demagog.cz/kampan')
+    permanentRedirect('https://demagog.cz/kampan')
   }
 
   const [page, setPage] = useState(0)
