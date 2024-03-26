@@ -1,35 +1,30 @@
 import client from '@/libs/apollo-client'
-import gql from 'graphql-tag'
-import {
-  WorkshopOffer,
-  WorkshopType,
-} from '@/components/workshops/WorkshopOffer'
+import { WorkshopOffer } from '@/components/workshops/WorkshopOffer'
+import { gql } from '@/__generated__'
+import { WorkshopsDataQuery } from '@/__generated__/graphql'
 
 export async function getStaticProps() {
-  const { data } = await client.query({
-    query: gql`
+  const { data } = await client.query<WorkshopsDataQuery>({
+    query: gql(`
       query workshopsData {
         workshops {
           nodes {
             id
-            description
-            image
-            name
-            priceFormatted
+            ...WorkshopOfferFragment
           }
         }
       }
-    `,
+    `),
   })
 
   return {
     props: {
-      workshops: data.workshops.nodes,
+      workshops: data.workshops,
     },
   }
 }
 
-const Workshops = (props: { workshops: Array<WorkshopType> }) => {
+const Workshops = (props: { workshops: WorkshopsDataQuery['workshops'] }) => {
   return (
     <div className="container">
       <div className="row g-5 mb-5">
@@ -90,9 +85,13 @@ const Workshops = (props: { workshops: Array<WorkshopType> }) => {
       </div>
 
       <div className="row mt-1 gx-20 gy-20 display-flex">
-        {props.workshops.map((workshop) => (
-          <WorkshopOffer key={workshop.id} workshop={workshop} />
-        ))}
+        {props.workshops.nodes?.map((workshop) => {
+          if (!workshop) {
+            return null
+          }
+
+          return <WorkshopOffer key={workshop.id} workshop={workshop} />
+        })}
       </div>
     </div>
   )

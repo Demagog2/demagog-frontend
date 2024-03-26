@@ -1,13 +1,21 @@
-export type WorkshopType = {
-  id: string
-  name: string
-  description: string
-  priceFormatted: string
-  image?: string
-}
+import { FragmentType, gql, useFragment } from '@/__generated__'
 
-export function WorkshopOffer({ workshop }: { workshop: WorkshopType }) {
+export const WorkshopOfferFragment = gql(`
+  fragment WorkshopOfferFragment on Workshop {
+    id
+    name
+    description
+    image
+    priceFormatted
+  }
+`)
+
+export function WorkshopOffer(props: {
+  workshop: FragmentType<typeof WorkshopOfferFragment>
+}) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
+
+  const workshop = useFragment(WorkshopOfferFragment, props.workshop)
 
   return (
     <div className="col col-12 col-lg-6">
