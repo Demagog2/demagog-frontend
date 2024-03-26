@@ -59,10 +59,7 @@ const Tag = (props: TagProps) => {
 
   return (
     <div className="container">
-      <div
-        className="row g-5 g-lg-10 flex-lg-row-reverse"
-        data-controller="components--modal"
-      >
+      <div className="row g-5 g-lg-10 flex-lg-row-reverse">
         <div className="col col-12">
           <ArticleTags tags={props.articleTags} />
         </div>
