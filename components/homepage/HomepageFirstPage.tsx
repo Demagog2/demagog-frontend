@@ -66,10 +66,7 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
               prohloubíme rovněž kritické myšlení, což je pro dnešní dobu zcela
               zásadní dovednost.
             </p>
-            <Link
-              href="/stranka/workshopy-demagogcz"
-              className="btn bg-primary h-44px"
-            >
+            <Link href="/workshopy" className="btn bg-primary h-44px">
               <span>Zjistit více</span>
             </Link>
           </div>
