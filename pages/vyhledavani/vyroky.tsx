@@ -1,37 +1,33 @@
 import React from 'react'
-import {
-  SearchResultSpeaker,
-  SearchResultSpeakerFragment,
-} from '@/components/SearchResultSpeaker'
 import client from '@/libs/apollo-client'
-import gql from 'graphql-tag'
 import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
 import { NextPageContext } from 'next'
-import StatementItem, {
-  StatementItemFragment,
-} from '@/components/statement/Item'
+import StatementItem from '@/components/statement/Item'
 import { parsePage } from '@/libs/pagination'
 import { SearchButton } from '@/components/search/SearchButton'
+import { gql } from '@/__generated__'
+import { getStringParam } from '@/libs/query-params'
+import { SearchStatementsQuery } from '@/__generated__/graphql'
 
 const SEARCH_PAGE_SIZE = 10
 
 export async function getServerSideProps({ query }: NextPageContext) {
-  const term = query?.q ?? ''
+  const term = getStringParam(query?.q)
   const page = parsePage(query?.page)
 
   const { data } = await client.query({
-    query: gql`
+    query: gql(`
       query searchStatements($term: String!, $limit: Int, $offset: Int) {
         searchStatements(term: $term, limit: $limit, offset: $offset) {
           statements {
+            id
             ...StatementDetail
           }
           totalCount
         }
       }
-      ${StatementItemFragment}
-    `,
+    `),
     variables: {
       term,
       limit: SEARCH_PAGE_SIZE,
@@ -43,7 +39,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
     props: {
       term,
       page,
-      statementSearchResult: data,
+      statementSearchResult: data['searchStatements'],
     },
   }
 }
@@ -51,10 +47,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
 export default function SearchSpeakers(props: {
   term: string
   page: number
-  statementSearchResult: {
-    statements: any[]
-    totalCount: number
-  }
+  statementSearchResult: SearchStatementsQuery['searchStatements']
 }) {
   return (
     <div className="container">

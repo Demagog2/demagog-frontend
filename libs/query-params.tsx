@@ -10,6 +10,14 @@ export function getNumericalArrayParams(
   )
 }
 
+export function getStringParam(queryParams?: string | string[]): string {
+  if (!queryParams) {
+    return ''
+  }
+
+  return Array.isArray(queryParams) ? queryParams[0] : queryParams
+}
+
 export function getStringArrayParams(
   queryParams?: string | string[]
 ): string[] {

@@ -1,34 +1,33 @@
 import React from 'react'
-import {
-  SearchResultSpeaker,
-  SearchResultSpeakerFragment,
-} from '@/components/SearchResultSpeaker'
+import { SearchResultSpeaker } from '@/components/SearchResultSpeaker'
 import client from '@/libs/apollo-client'
-import gql from 'graphql-tag'
 import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
 import { NextPageContext } from 'next'
 import { parsePage } from '@/libs/pagination'
 import { SearchButton } from '@/components/search/SearchButton'
+import { gql } from '@/__generated__'
+import { getStringParam } from '@/libs/query-params'
+import { SearchSpeakersQuery } from '@/__generated__/graphql'
 
 const SEARCH_PAGE_SIZE = 12
 
 export async function getServerSideProps({ query }: NextPageContext) {
-  const term = query?.q ?? ''
+  const term = getStringParam(query?.q)
   const page = parsePage(query?.page)
 
   const { data: searchData } = await client.query({
-    query: gql`
+    query: gql(`
       query searchSpeakers($term: String!, $limit: Int, $offset: Int) {
         searchSpeakers(term: $term, limit: $limit, offset: $offset) {
           speakers {
+            id
             ...SearchResultSpeakerDetail
           }
           totalCount
         }
       }
-      ${SearchResultSpeakerFragment}
-    `,
+    `),
     variables: {
       term,
       limit: SEARCH_PAGE_SIZE,
@@ -48,10 +47,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
 export default function SearchSpeakers(props: {
   term: string
   page: number
-  speakerSearchResult: {
-    speakers: any[]
-    totalCount: number
-  }
+  speakerSearchResult: SearchSpeakersQuery['searchSpeakers']
 }) {
   return (
     <div className="container">
