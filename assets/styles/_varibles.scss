@@ -26,6 +26,12 @@ $font-family: 'Inter', sans-serif;
 $header-shadow: 0 2px 5px 0px rgba($dark, 0.1 )!default;
 $base-transition: 900ms cubic-bezier(0.22, 1, 0.19, 1);
 
+$accordion-button-active-bg: $dark !default;
+$accordion-button-active-color: #FFF;
+
+$accordion-button-focus-box-shadow: none;
+$accordion-button-focus-border-color: $dark-light;
+
 $grays: (
     "100": $gray-100,
     "200": $gray-200,
