@@ -1,31 +1,33 @@
 import React from 'react'
 import client from '@/libs/apollo-client'
-import gql from 'graphql-tag'
 import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
 import { NextPageContext } from 'next'
-import ArticleItem, { ArticleDetailFragment } from '@/components/article/Item'
+import ArticleItem from '@/components/article/Item'
 import { parsePage } from '@/libs/pagination'
 import { SearchButton } from '@/components/search/SearchButton'
+import { gql } from '@/__generated__'
+import { SearchArticlesQuery } from '@/__generated__/graphql'
+import { getStringParam } from '@/libs/query-params'
 
 const SEARCH_PAGE_SIZE = 10
 
 export async function getServerSideProps({ query }: NextPageContext) {
-  const term = query?.q ?? ''
+  const term = getStringParam(query?.q)
   const page = parsePage(query?.page)
 
   const { data: searchData } = await client.query({
-    query: gql`
+    query: gql(`
       query searchArticles($term: String!, $limit: Int, $offset: Int) {
         searchArticles(term: $term, limit: $limit, offset: $offset) {
           articles {
+            id
             ...ArticleDetail
           }
           totalCount
         }
       }
-      ${ArticleDetailFragment}
-    `,
+    `),
     variables: {
       term,
       limit: SEARCH_PAGE_SIZE,
@@ -45,10 +47,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
 export default function SearchArticles(props: {
   term: string
   page: number
-  articleSearchResult: {
-    articles: any[]
-    totalCount: number
-  }
+  articleSearchResult: SearchArticlesQuery['searchArticles']
 }) {
   return (
     <div className="container">
