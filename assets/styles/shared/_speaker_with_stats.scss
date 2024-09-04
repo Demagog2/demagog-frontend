@@ -1,0 +1,47 @@
+.container-speaker-with-stats {
+  display: flex;
+  margin: 0 0 1rem;
+
+  .portrait {
+    flex: 0 0 auto;
+    width: var(--small-portrait);
+    height: var(--small-portrait);
+    margin-right: 20px;
+  }
+
+  .name-and-stats {
+    align-self: center;
+    flex: 1 0 0px;
+
+    .name {
+      margin: 0 0 6px 0;
+      font-weight: bold;
+      color: var(--violet);
+      line-height: 1.4;
+
+      .name-inner {
+        margin-right: 12px;
+      }
+
+      .role {
+        font-weight: normal;
+      }
+    }
+
+    > .stats {
+      margin-bottom: 5px;
+    }
+  }
+
+  &:hover, &:focus {
+    text-decoration: none;
+
+    .name {
+      color: var(--orange);
+    }
+
+    .portrait {
+      box-shadow: 0 0 0 3px var(--orange)
+    }
+  }
+}

@@ -1,0 +1,377 @@
+:root {
+  /* ci colors */
+  --blue: #0060ff;
+  --violet: #3c325c;
+  --orange: #f26538;
+  --white: #f4f9fd;
+  --light-gray: #d0d3e8;
+  --dark-gray: #282828;
+
+  /* grays */
+  --silver: #eee;
+  --aluminum: #999;
+  --jumbo: #888;
+  --steel: #666;
+
+  /* veracity */
+  --true: var(--blue);
+  --untrue: #eb1d2b;
+  --misleading: #ffba00;
+  --unverifiable: #9dbaeb;
+
+  /* statement backgrounds */
+  --statement-background: #d7e5ef;
+  --statement-important-background: #f3dbd3;
+
+  /* font */
+  --font-family: Lato, sans-serif;
+  --normal-typesize: 16px;
+  --medium-typesize: 18px;
+  --large-typesize: 22px;
+
+  /* grid */
+  --gutter: 50px;
+  --gap: 1.5rem;
+
+  /* photos */
+  --large-portrait: 100px;
+  --small-portrait: 70px;
+
+  /* root props */
+  font-size: var(--normal-typesize);
+  font-family: var(--font-family);
+  color: var(--violet);
+  background-color: var(--white);
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  // -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--orange);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1 {
+  font-size: var(--large-typesize);
+  margin: 2rem 0 0.5rem;
+  line-height: 1.4;
+}
+
+h2 {
+  font-size: var(--medium-typesize);
+  margin: 2rem 0 0.5rem;
+  line-height: 1.4;
+}
+
+h3 {
+  margin: 2rem 0 0.5rem;
+}
+
+p {
+  margin: 0 0 1rem;
+}
+
+p,
+li,
+blockquote,
+h3,
+h4 {
+  font-size: var(--small-typesize);
+  line-height: 1.6;
+}
+
+figure {
+  margin: 0;
+}
+
+header {
+  display: flex;
+  align-items: center;
+
+  > h1 {
+    flex: 1 0 auto;
+    margin: 1.5rem 2rem 1rem 0;
+
+    a {
+      display: block;
+
+      img {
+        display: block;
+        max-width: 250px;
+        max-height: 52px;
+      }
+    }
+  }
+}
+
+blockquote {
+  letter-spacing: 0.025em;
+  margin-left: 0;
+
+  b {
+    font-size: 90%;
+    font-style: normal;
+    text-transform: uppercase;
+  }
+}
+
+ul.bare-list {
+  padding: 0;
+
+  li {
+    list-style-type: none;
+    margin-bottom: 0.25rem;
+  }
+}
+/*
+nav {
+  ul { padding: 0; }
+  li {
+    list-style-type: none;
+    margin-bottom: 0.25rem;
+  }
+}
+*/
+
+p.lead {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+
+.box {
+  margin: 2rem -15px;
+  padding: 15px;
+}
+
+.color-legend {
+  -webkit-box-shadow: 0 0 1px 1px #eee;
+  box-shadow: 0 0 1px 1px #eee;
+  background: #f6f6f6;
+  padding: 0 10px 5px;
+  line-height: 32px;
+  margin-bottom: 32px;
+}
+
+.portrait {
+  display: inline-block;
+  background: #eee;
+  border-radius: 50%;
+  width: var(--small-portrait);
+  height: var(--small-portrait);
+  overflow: hidden;
+  margin: 0 3px 3px -2px;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.05);
+
+  img {
+    width: 100%;
+  }
+}
+
+.article-factcheck-video {
+  .veracity-label {
+    @include veracity;
+  }
+}
+
+.statement-preview {
+  margin-bottom: 1.5rem;
+
+  .portrait {
+    float: left;
+    margin: 0 1rem 0 -0.5rem;
+  }
+
+  p { margin: 0; }
+
+  .name {
+    font-size: var(--medium-typesize);
+    font-weight: bold;
+  }
+
+  .veracity {
+    @include veracity(1.3);
+
+    margin: 0 0.3rem 0 -2rem;
+  }
+}
+
+.pagination {
+  font-size: var(--medium-typesize);
+
+  span {
+    padding: 0 2rem 0 0;
+  }
+
+  .current-page {
+    background-color: var(--violet);
+    color: var(--white);
+  }
+}
+
+.label {
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 90%;
+  margin-right: 2px;
+
+  &.factcheck { color: var(--true); }
+  &.editorial { color: var(--orange); }
+  &.facebook-factcheck { color: #4267B2; }
+  &.important { color: var(--steel); }
+
+  &.important::after { content: ') '; }
+  &.important::before { content: ' ('; }
+
+  &.veracity {
+    @include veracity;
+
+    position: relative;
+    top: 1px;
+
+    font-weight: bold;
+    margin-right: 2px;
+  }
+}
+
+
+[data-theme="dark"] {
+  color: var(--white);
+  background-color: var(--dark-gray);
+
+  p,
+  li,
+  blockquote,
+  h3,
+  h4 {
+    //color: var(--white);
+  }
+}
+
+article.preview {
+  .speakers {
+    float: right;
+    max-width: 35%;
+    margin: 0 0 -0.5rem 0.5rem;
+  }
+}
+
+article.detail .intro .article-factcheck-video {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+#facebook {
+  overflow: hidden;
+}
+
+.promise-evaluation {
+  text-transform: uppercase;
+  font-size: 90%;
+  margin-left: -0.1em;
+  white-space: nowrap;
+  font-weight: bold;
+
+  &:before {
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    position: relative;
+    top: -2px;
+    width: 18.7px;
+    height: 18.7px;
+    border-radius: 10px;
+    background-repeat: no-repeat;
+    margin-right: 3px;
+  }
+
+  &.size-24::before {
+    top: -3px;
+    width: 24px;
+    height: 24px;
+    border-radius: 12px;
+  }
+
+  &.fulfilled {
+    color: var(--true);
+
+    &:before {
+      background-color: var(--true);
+      background-image: image-url('true-symbol.svg');
+      background-position: 48% 55%;
+      background-size: 10px;
+    }
+
+    &.size-24::before {
+      background-size: 12px;
+    }
+  }
+
+  &.partially-fulfilled, &.in-progress {
+    color: var(--unverifiable);
+
+    &:before {
+      background-color: var(--unverifiable);
+      background-image: image-url('promise-partially-fulfilled-symbol.svg');
+      background-position: 48% 51%;
+      background-size: 13px;
+    }
+
+    &.size-24::before {
+      background-size: 16px;
+    }
+  }
+
+  &.broken {
+    color: var(--untrue);
+
+    &:before {
+      background-color: var(--untrue);
+      background-image: image-url('untrue-symbol.svg');
+      background-position: 50% 55%;
+      background-size: 8.6px;
+    }
+
+    &.size-24::before {
+      background-size: 10px 9px;
+    }
+  }
+
+  &.stalled {
+    color: var(--misleading);
+
+    &:before {
+      background-color: var(--misleading);
+      background-image: image-url('unverifiable-symbol.svg');
+      background-position: 55% 50%;
+      background-size: 6px;
+    }
+
+    &.size-24::before {
+      background-size: 7px;
+    }
+  }
+}
+
+.about {
+  display: flex;
+  .about-nav {
+    width: 30%;
+    padding: 1rem 0;
+    ul {
+      list-style: none;
+    }
+  }
+  .about-content {
+    width: 70%;
+  }
+}

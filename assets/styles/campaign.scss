@@ -1,6 +1,11 @@
-/* 
+@import "custom_variables";
+@import "vendor/mixins";
 
-OTAZKY: 
+$orange: #FFBF00;
+
+/*
+
+OTAZKY:
 1) tlačítko šipky jde zmáčknout i v blízkém okolí šipky, kde ale šipka vidět není. Asi o nic nejde, ale není to moc profi, ne?
 2) page3 tlačítka buttons-page3 mají mít podle figmy šířku 366px, iphone SE má šířku 375, takže je to zrovna tam skoro od kraje ke kraji..?
 3) stránka tři je trochu na punk.. kdybych dávala tu část s partnery projektu podle figmy, tak se na menších desktopech překrývají s textem "přehrát video"
@@ -12,7 +17,6 @@ TO DO:
 */
 
 /* Reset default browser margin & padding */
-/* body,
 html {
   margin: 0;
   padding: 0;
@@ -21,13 +25,9 @@ html {
   background-color: black;
 }
 
-ul {
-  list-style: none;
-} */
-
 .logoDemagog {
-  width: 98px;
-  height: 30px;
+  width: 120px;
+  height: 35px;
   margin-top: 20px;
   margin-left: 25px;
 }
@@ -37,6 +37,25 @@ ul {
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+
+  .blur-bg, .blur-bg p, .blur-bg h1 {
+    position: relative;
+    z-index: 1;
+  }
+
+  .blur-bg:before {
+    content: "";
+    position: absolute;
+    border-radius: 22px;
+    background: rgba(0, 0, 0, 0.20);
+    filter: blur(17.5px);
+    backdrop-filter: blur(2px);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+  }
 }
 
 .hidden {
@@ -44,24 +63,86 @@ ul {
 }
 
 .page1 {
-  background: url('../../images/campaign/obrazek-telka-small.png'), lightgray 50% / cover no-repeat;
+  background-image: url(image_path('campaign/obrazek-telka-small.webp'));
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+
+  .arrowsContainer2 {
+    position: absolute;
+    width: 95%;
+    justify-content: space-between;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+
+  .arrowsContainer1 {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+  }
 }
 
 .page2 {
-  background-image: url('../../images/campaign/obrazek-maska-small.png');
+  background-image: url(image_path('campaign/obrazek-maska-small.webp'));
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+
+  .container {
+    margin-top: 20vh;
+  }
 }
 
 .page3 {
-  background-image: url('../../images/campaign/obrazek-sundana-maska-small.png');
+  background-image: url(image_path('campaign/obrazek-sundana-maska-small.webp'));
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
+
+  .container {
+    margin-top: 20vh;
+  }
+}
+
+.fs-32px {
+  font-size: 2rem;
+}
+
+.text-orange {
+  color: $orange;
+}
+
+.metric-box {
+  display: grid;
+  grid-template-columns: 0.5rem auto;
+  grid-column-gap: 1rem;
+}
+
+.orange-border-left {
+  width: 100%;
+  height: 100%;
+  background-color: $orange;
+}
+
+@include media-breakpoint-up(lg) {
+  .fs-lg-96px {
+    font-size: 6rem !important;
+  }
+
+  .fs-lg-30px {
+    font-size: 1.875rem !important;
+  }
+}
+
+#campaignVideo {
+  .container {
+    margin-top: 0;
+  }
 }
 
 .headerOrange {
@@ -85,29 +166,17 @@ ul {
 }
 
 .headerContainerPage1 {
-  margin-top: 60vh;
+  margin-top: 50vh;
   padding-left: 20px;
   padding-right: 5px;
 }
 
-.headerContainerPage2 {
-  margin-top: 40vh;
-}
-
 .headerContainerPage3 {
-  margin-top: 34vh;
+  margin-top: 20vh;
 }
 
-.headerWhitePage2 {
-  color: #FFF;
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 40px;
-  padding-left: 20px;
-  padding-right: 25px;
-  margin-top: 0px;
-  margin-bottom: 0px;
+.text-shadow-strong {
+  text-shadow: #141313 2px 2px 10px;
 }
 
 .headerPage3 {
@@ -116,9 +185,6 @@ ul {
   font-style: normal;
   font-weight: 600;
   line-height: 40px;
-  padding-left: 17px;
-  padding-right: 17px;
-  margin-bottom: 12px;
   margin-top: 0px;
   text-shadow: #141313 2px 2px 50px;
 }
@@ -133,44 +199,6 @@ ul {
   margin-top: 29px;
 }
 
-.blurBgPage2 {
-  position: relative;
-  display: inline-block;
-}
-
-.blurBgPage2 img {
-  position: relative;
-  z-index: 1;
-}
-
-.blurBgPage2 p {
-  position: relative;
-  z-index: 1;
-}
-
-.blurBgPage2:before {
-  top: 20px;
-  right: 0;
-  left: 20px;
-  bottom: 20px;
-  content: "";
-  position: absolute;
-  border-radius: 22px;
-  background: rgba(0, 0, 0, 0.20);
-  filter: blur(17.5px);
-  backdrop-filter: blur(2px);
-}
-
-.textSection1Page2,
-.textSection2Page2 {
-  display: flex;
-  align-items: center;
-}
-
-.textSection1Page2 {
-  margin-bottom: 20px;
-}
-
 .textWhite {
   color: #FFF;
   font-size: 15px;
@@ -183,65 +211,12 @@ ul {
   margin-bottom: 0px;
 }
 
-.textOrange {
-  color: #FFBF00;
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 800;
-  line-height: 23px;
-}
-
-.additionalInfo {
-  color: #FFF;
-  font-size: 12px;
-  font-style: italic;
-  font-weight: 400;
-  line-height: 16px;
-  margin-bottom: 30px;
-  padding-right: 23px;
-
-}
-
-/*nachystany blur pozadi page3 mobile. Kdyby se pouzil, je treba jeste upravit rozmery*/
-
-/*.blur-bg {
-  position: relative;
-  display: inline-block;
-}
-
-.blur-bg p {
-  position: relative;
-  z-index: 1;
-}
-
-.blur-bg:before {
-  content: "";
-  position: absolute;
-  border-radius: 22px;
-  background: rgba(0, 0, 0, 0.20);
-  filter: blur(17.5px);
-  backdrop-filter: blur(2px);
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-}*/
-
 .textPage3 {
   color: #FFF;
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
   line-height: 23px;
-  padding-left: 20px;
-  padding-right: 20px;
-  margin-top: 0px;
-  text-shadow: #141313 2px 2px 20px;
-}
-
-.textOrangePage3 {
-  color: #FFBF00;
-  font-weight: 800;
 }
 
 .linkOrange {
@@ -264,7 +239,7 @@ ul {
 .liIcon,
 .liText {
   display: inline;
-  margin: 8px 0px;
+  margin: 10px 0;
 }
 
 .liIcon {
@@ -304,9 +279,6 @@ ul {
   text-decoration: none;
 }
 
-.btnTop {
-  margin-bottom: 16px;
-}
 
 .videoContainerPage3 {
   display: flex;
@@ -314,10 +286,11 @@ ul {
   align-items: center;
   margin-top: 7px;
   margin-bottom: 13px;
+  justify-content: center;
 }
 
 .playVideoIconDesktop {
-  background-image: url('../../images/campaign/play-video-icon-desktop.svg');
+  background-image: url(image_path('campaign/play-video-icon-desktop.svg'));
   width: 20px;
   height: 20px;
   background-color: inherit;
@@ -352,22 +325,32 @@ ul {
   margin-top: 0px;
 }
 
-.partnersContainer1 {
+.footer {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-.partnersContainer1Page1 {
-  composes: partnersContainer1;
-  margin-top: 56px;
+.page1 {
+  .footer {
+    margin-top: 55px;
+  }
 }
 
-.partnersContainer1Page2 {
-  margin-top: 30px;
+.page2 {
+  .footer {
+    margin-top: 30px;
+  }
 }
 
-.partnersContainer2 {
+.page3 {
+  ul {
+    margin: 20px;
+  }
+}
+
+
+.footer > div {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -378,7 +361,6 @@ ul {
   justify-content: center;
   align-items: center;
 }
-
 
 .logoCedmo {
   width: 90px;
@@ -418,11 +400,11 @@ ul {
 }
 
 .arrowFwdBtn {
-  background-image: url('../../images/campaign/arrow-fwd-small.svg');
+  background-image: url(image_path('campaign/arrow-fwd-small.svg'));
 }
 
 .arrowBackBtn {
-  background-image: url('../../images/campaign/arrow-back-small.svg');
+  background-image: url(image_path('campaign/arrow-back-small.svg'));
 }
 
 .arrowBtn svg {
@@ -440,15 +422,15 @@ ul {
 
 @media screen and (min-width: 992px) {
   .page1 {
-    background-image: url('../../images/campaign/obrazek-telka-big.jpg');
+    background-image: url(image_path('campaign/obrazek-telka-big.webp'));
   }
 
   .page2 {
-    background-image: url('../../images/campaign/obrazek-maska-big.jpeg');
+    background-image: url(image_path('campaign/obrazek-maska-big.webp'));
   }
 
   .page3 {
-    background-image: url('../../images/campaign/obrazek-sundana-maska-big.jpeg');
+    background-image: url(image_path('campaign/obrazek-sundana-maska-big.webp'));
   }
 
   .logoDemagog {
@@ -460,17 +442,13 @@ ul {
   }
 
   .headerContainerPage1 {
-    margin-top: 47vh;
+    margin-top: 34vh;
     padding-left: 131px;
     text-shadow: #141313 2px 2px 50px;
   }
 
-  .headerContainerPage2 {
-    margin-top: 30vh;
-  }
-
   .headerContainerPage3 {
-    margin-top: 23vh;
+    margin-top: 10vh;
   }
 
   .headerDezinformace {
@@ -498,16 +476,6 @@ ul {
     line-height: 125px;
   }
 
-  .headerWhitePage2 {
-    font-size: 96px;
-    line-height: 125px;
-    margin-left: 141px;
-    margin-right: 141px;
-    padding-left: 0px;
-    padding-right: 0px;
-    text-shadow: #141313 2px 2px 50px;
-  }
-
   .headerPage3 {
     font-size: 96px;
     font-style: normal;
@@ -522,38 +490,10 @@ ul {
     font-weight: 800;
   }
 
-  .textContainerPage2 {
-    margin-left: 141px;
-    text-shadow: #141313 2px 2px 50px;
-  }
-
-  .textSection1Page2 {
-    margin-bottom: 43px;
-    margin-top: 48px;
-    align-items: center;
-  }
-
-  .textSection2Page2 {
-    align-items: center;
-  }
-
   .textWhite {
     font-size: 30px;
     line-height: 40px;
     padding-right: 140px;
-  }
-
-  .textOrange {
-    font-size: 30px;
-    line-height: 40px;
-  }
-
-  .additionalInfo {
-    font-size: 18px;
-    font-weight: 400;
-    line-height: 40px;
-    margin-top: 12px;
-    margin-left: 9px;
   }
 
   .textPage3 {
@@ -571,6 +511,7 @@ ul {
     line-height: 50px;
     max-width: 690px;
     margin-left: 20px;
+    margin-bottom: 5px;
   }
 
   .buttonsContainer2Page3 {
@@ -647,13 +588,13 @@ ul {
   }
 
   .arrowFwdBtn {
-    background-image: url(../../images/campaign/arrow-fwd-big.svg);
+    background-image: url(image_path('campaign/arrow-fwd-big.svg'));
     width: 33px;
     height: 57px;
   }
 
   .arrowBackBtn {
-    background-image: url(../../images/campaign/arrow-back-big.svg);
+    background-image: url(image_path('campaign/arrow-back-big.svg'));
     width: 33px;
     height: 57px;
   }
@@ -666,16 +607,6 @@ ul {
   .logoCt {
     width: 160px;
     height: 23px;
-  }
-
-  .partnersContainer1 {
-    align-items: flex-end;
-    padding-right: 73px;
-    padding-bottom: 65px;
-  }
-
-  .partnersContainer1Page1 {
-    margin-top: 47px;
   }
 
   .logoCedmo {
@@ -722,25 +653,72 @@ ul {
     left: 125px;
     bottom: 28px;
   }
+
+  .footer {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: right;
+    align-items: end;
+    padding: 50px 50px 40px;
+  }
+
+  .page1, .page2 {
+    .footer {
+      margin-top: 0;
+    }
+  }
+
+  .page3 .footer  {
+    padding-top: 0;
+  }
 }
 
 
-@media screen and (min-width: 1390px) {
-  .partnersContainer1Page3 {
-    padding-bottom: 0px;
+@media screen and (min-height: 1029px) {
+  .page {
+    height: 100vh;
   }
 
-  .videoContainerPage3 {
-    margin-bottom: 115px;
-  }
-
-  .partnersContainer1Page3 {
+  html {
     position: relative;
+    min-height: 100%;
   }
 
-  .partnersContainer2Page3 {
+  .footer {
     position: absolute;
-    bottom: 65px;
-    right: 73px;
+    bottom: 0;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .page3 .footer  {
+    padding-top: 0;
+    margin-top: -90px;
+  }
+}
+
+
+@include media-breakpoint-up(xs) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .container {
+    max-width: 800px;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .container {
+    max-width: 1100px;
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .container {
+    max-width: 1300px;
   }
 }

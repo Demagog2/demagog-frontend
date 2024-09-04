@@ -1,0 +1,64 @@
+// All these classes should be eventually replaced and removed.
+
+.rounded-l {
+  border-radius: 1rem;
+}
+
+.rounded-m {
+  border-radius: $border-radius / 2;
+}
+
+.small {
+  font-size: $small-font-size;
+  font-weight: $font-weight-normal;
+}
+
+.smallest {
+  font-size: 0.6rem;
+}
+
+p {
+  margin-bottom: 0;
+}
+
+.bg-dark-light {
+  background-color: $dark-light;
+}
+
+.bg-primary-light {
+  background-color: $primary-light;
+}
+
+.bg-gray {
+  background-color: $gray-500;
+}
+
+.bg-red {
+  background-color: $red;
+}
+
+.text-gray {
+  color: $gray-500;
+}
+
+.text-dark-light {
+  color: $dark-light;
+}
+
+.text-primary-light {
+  color: $primary-light;
+}
+
+.text-red {
+  color: $red;
+}
+
+.display-5 {
+  font-size: calc(1.305rem + 0.66vw);
+}
+
+@media (min-width: 1200px) {
+  .display-5 {
+    font-size: 1.8rem;
+  }
+}

@@ -19,11 +19,20 @@
     line-height: normal;
     margin: 0;
     padding: 0;
+    z-index: 3;
+  }
+
+  &:hover {
+    color: $white;
   }
 
   &.white {
     color: $dark;
     background-color: $white;
+
+    &:hover {
+      color: $dark;
+    }
   }
 
   &.outline {
@@ -50,7 +59,7 @@
       border-radius: 0;
       transform: translate3d(-160%,0,0) scale(1.1,2);
       transition: transform .3s,border-radius .2s;
-      z-index: -1;
+      z-index: 2;
     }
     &:hover:before,
     &.active:before {

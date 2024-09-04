@@ -1,0 +1,224 @@
+.container-statement-show {
+  flex: 1 0 100%;
+  margin-top: 3rem;
+
+  .speaker {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .portrait  {
+      flex: 0 0 var(--large-portrait);
+      width: var(--large-portrait);
+      height: var(--large-portrait);
+      margin: 0 1rem;
+      vertical-align: middle;
+    }
+
+    .name {
+      margin: 0.5rem 0 0 0;
+
+      text-align: left;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--violet);
+    }
+
+    .role {
+      margin: 0.5rem 0;
+
+      color: var(--violet);
+      text-align: left;
+    }
+
+    &:hover, &:focus {
+      text-decoration: none;
+
+      .portrait {
+        box-shadow: 0 0 0 3px var(--orange);
+      }
+
+      .name {
+        color: var(--orange);
+      }
+
+      .role {
+        color: var(--orange);
+      }
+    }
+  }
+
+  .statement-content {
+    margin-top: 3px;
+
+    blockquote {
+      position: relative;
+      border-radius: 5px;
+      background: var(--statement-background);
+      padding: 15px 25px 20px;
+      margin: 0;
+
+      font-size: 18px;
+
+      // CSS-only arrow pointing to the portrait
+      &:after {
+        content: " ";
+
+        position: absolute;
+        right: 100%;
+        top: 50px;
+        height: 0;
+        width: 0;
+
+        margin-top: -18px;
+
+        border: solid transparent;
+        border-right-color: var(--statement-background);
+        border-width: 13px;
+
+        pointer-events: none;
+      }
+
+      @media (max-width: 899.9px) {
+        margin-top: 0;
+
+        &.oneliner-statement {
+          margin-top: 0;
+        }
+
+        // Hide CSS arrow
+        &:after {
+          display: none;
+        }
+      }
+    }
+
+    cite {
+      display: block;
+      color: #918AA8;
+      font-size: 14px;
+      line-height: 1.3;
+      text-transform: uppercase;
+      margin: 10px 0 0 24px;
+      font-style: normal;
+  
+      &::before {
+        content: '— ';
+        margin: 0 2.5px 0 2px;
+      }
+  
+      .date {
+        white-space: nowrap;
+      }
+    }
+
+    > .editor-picked-label {
+      @include editor_picked_label(1.17);
+
+      margin: 8px 0 0 24px;
+    }
+
+    .tags-list {
+      margin: 6px 0 0 24px;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+  
+      .tag-item {
+        flex: 0 0 auto;
+        margin-right: 10px;
+        color: #918AA8;
+        font-size: 14px;
+        line-height: 1.3;
+        text-transform: uppercase;
+        white-space: nowrap;
+  
+        &::before {
+          content: '';
+          display: inline-block;
+          position: relative;
+          top: 2px;
+          width: 14px;
+          height: 14px;
+          margin-right: 5px;
+          background-image: image-url('tag-icon.svg');
+          background-position: 0px 0px;
+          background-repeat: no-repeat;
+          background-size: 14px;
+        }
+      }
+    }
+
+    & > h1 {
+      margin-top: 3rem;
+      margin-bottom: 2rem;
+
+      .veracity {
+        @include veracity;
+
+        margin-left: 0.25rem;
+        white-space: nowrap;
+      }
+    }
+
+    .infoboxes-list {
+      margin: 4rem 0 0 0;
+      display: flex;
+      flex-direction: column;
+    }
+  
+    .infobox-item {
+      flex: 0 0 auto;
+      margin: 0 0 12px 0;
+    }
+
+    aside {
+      margin-top: 4rem;
+
+      & > h1 {
+        margin-bottom: 2rem;
+      }
+    }
+  }
+
+  &.oneliner-statement blockquote {
+    margin-top: 18px;
+
+    &:after {
+      top: 36px;
+    }
+
+    .important-statement-sign {
+      margin-top: -38px;
+
+      .important-statement-icon {
+        display: none;
+      }
+    }
+  }
+
+  @media (min-width: 900px) {
+    display: flex;
+    flex-direction: row;
+
+    .speaker {
+      flex: 1 0 16.66666667%;
+      margin-right: var(--gap);
+      flex-direction: column;
+
+      .name {
+        text-align: center;
+      }
+
+      .role {
+        text-align: center;
+      }
+    }
+
+    .statement-content {
+      flex: 1 0 66.66666667%;
+      margin-right: 16.66666667%;
+    }
+  }
+}
