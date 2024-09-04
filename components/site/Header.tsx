@@ -93,7 +93,7 @@ export default function Header() {
                       />
                     </ul>
                   </NavSubItem>
-                  <NavItemLink title="O nás" url="/stranka/o-nas" />
+                  <NavItemLink title="O nás" url="/o-nas" />
                   <NavItemLink title="Workshopy" url="/workshopy" />
                 </ul>
               </nav>

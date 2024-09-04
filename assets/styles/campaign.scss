@@ -1,0 +1,724 @@
+@import "custom_variables";
+@import "vendor/mixins";
+
+$orange: #FFBF00;
+
+/*
+
+OTAZKY:
+1) tlačítko šipky jde zmáčknout i v blízkém okolí šipky, kde ale šipka vidět není. Asi o nic nejde, ale není to moc profi, ne?
+2) page3 tlačítka buttons-page3 mají mít podle figmy šířku 366px, iphone SE má šířku 375, takže je to zrovna tam skoro od kraje ke kraji..?
+3) stránka tři je trochu na punk.. kdybych dávala tu část s partnery projektu podle figmy, tak se na menších desktopech překrývají s textem "přehrát video"
+
+
+TO DO:
+- dodelat hover sipek arrowBtn
+- "přehrát video" má na hover poskočit, zkoušela jsem udělat hover s paddingem, ale skáče to i s pozadím, tak nevim, nápady vyčerpány
+*/
+
+/* Reset default browser margin & padding */
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Inter, Helvetica, Arial, sans-serif;
+  background-color: black;
+}
+
+.logoDemagog {
+  width: 120px;
+  height: 35px;
+  margin-top: 20px;
+  margin-left: 25px;
+}
+
+.page {
+  background-color: black;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  .blur-bg, .blur-bg p, .blur-bg h1 {
+    position: relative;
+    z-index: 1;
+  }
+
+  .blur-bg:before {
+    content: "";
+    position: absolute;
+    border-radius: 22px;
+    background: rgba(0, 0, 0, 0.20);
+    filter: blur(17.5px);
+    backdrop-filter: blur(2px);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 0;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.page1 {
+  background-image: url(image_path('campaign/obrazek-telka-small.webp'));
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  .arrowsContainer2 {
+    position: absolute;
+    width: 95%;
+    justify-content: space-between;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+
+  .arrowsContainer1 {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+  }
+}
+
+.page2 {
+  background-image: url(image_path('campaign/obrazek-maska-small.webp'));
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  .container {
+    margin-top: 20vh;
+  }
+}
+
+.page3 {
+  background-image: url(image_path('campaign/obrazek-sundana-maska-small.webp'));
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+
+  .container {
+    margin-top: 20vh;
+  }
+}
+
+.fs-32px {
+  font-size: 2rem;
+}
+
+.text-orange {
+  color: $orange;
+}
+
+.metric-box {
+  display: grid;
+  grid-template-columns: 0.5rem auto;
+  grid-column-gap: 1rem;
+}
+
+.orange-border-left {
+  width: 100%;
+  height: 100%;
+  background-color: $orange;
+}
+
+@include media-breakpoint-up(lg) {
+  .fs-lg-96px {
+    font-size: 6rem !important;
+  }
+
+  .fs-lg-30px {
+    font-size: 1.875rem !important;
+  }
+}
+
+#campaignVideo {
+  .container {
+    margin-top: 0;
+  }
+}
+
+.headerOrange {
+  color: #FFBF00;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 800;
+  line-height: 40px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.headerWhite {
+  color: #FFF;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 40px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.headerContainerPage1 {
+  margin-top: 50vh;
+  padding-left: 20px;
+  padding-right: 5px;
+}
+
+.headerContainerPage3 {
+  margin-top: 20vh;
+}
+
+.text-shadow-strong {
+  text-shadow: #141313 2px 2px 10px;
+}
+
+.headerPage3 {
+  color: #FFF;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 40px;
+  margin-top: 0px;
+  text-shadow: #141313 2px 2px 50px;
+}
+
+.headerOrangePage3 {
+  color: #FFBF00;
+  font-weight: 900;
+}
+
+.textContainerPage2 {
+  margin-left: 30px;
+  margin-top: 29px;
+}
+
+.textWhite {
+  color: #FFF;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 23px;
+  padding-left: 27px;
+  padding-right: 23px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+}
+
+.textPage3 {
+  color: #FFF;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 23px;
+}
+
+.linkOrange {
+  color: #FFBF00;
+  text-decoration: underline;
+}
+
+.listPage3 {
+  display: list-item;
+  color: #FFF;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 23px;
+  padding-right: 20px;
+  margin-top: 0px;
+  text-shadow: #141313 2px 2px 20px;
+}
+
+.liIcon,
+.liText {
+  display: inline;
+  margin: 10px 0;
+}
+
+.liIcon {
+  margin-right: 10px;
+}
+
+.buttonsContainer1Page3 {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.buttonsContainer2Page3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 350px;
+}
+
+.buttonsPage3 {
+  color: #FFF;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 38px;
+  height: 38px;
+  width: 100%;
+  border-radius: 32.5px;
+  background: rgba(0, 0, 0, 0.20);
+  backdrop-filter: blur(2px);
+  border-color: white;
+  border-style: solid;
+  border-width: 1px;
+  display: flex;
+  justify-content: center;
+  text-decoration: none;
+}
+
+
+.videoContainerPage3 {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 7px;
+  margin-bottom: 13px;
+  justify-content: center;
+}
+
+.playVideoIconDesktop {
+  background-image: url(image_path('campaign/play-video-icon-desktop.svg'));
+  width: 20px;
+  height: 20px;
+  background-color: inherit;
+  background-repeat: no-repeat;
+  background-size: contain;
+  border: none;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.playVideoText {
+  color: #FFF;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 40px;
+  text-decoration-line: underline;
+  cursor: pointer;
+  margin: 0px;
+  margin-left: 8px;
+  background-color: inherit;
+  border-style: none;
+}
+
+.partnersP {
+  color: #E5E7EB;
+  font-size: 12px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 20px;
+  margin-bottom: 0px;
+  margin-top: 0px;
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.page1 {
+  .footer {
+    margin-top: 55px;
+  }
+}
+
+.page2 {
+  .footer {
+    margin-top: 30px;
+  }
+}
+
+.page3 {
+  ul {
+    margin: 20px;
+  }
+}
+
+
+.footer > div {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.partnersContainerLogo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logoCedmo {
+  width: 90px;
+  height: 51px;
+  margin-right: 33px;
+}
+
+.logoCt {
+  width: 89px;
+  height: 13px;
+}
+
+.arrowsContainer1 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.arrowsContainer2 {
+  width: 40%;
+  display: flex;
+  justify-content: space-around;
+  margin-top: 23px;
+  margin-bottom: 26px;
+}
+
+.arrowBtn {
+  margin: 0;
+  padding: 0;
+  border: none;
+  cursor: pointer;
+  appearance: none;
+  background-color: inherit;
+  background-repeat: no-repeat;
+  width: 34px;
+  height: 25px;
+}
+
+.arrowFwdBtn {
+  background-image: url(image_path('campaign/arrow-fwd-small.svg'));
+}
+
+.arrowBackBtn {
+  background-image: url(image_path('campaign/arrow-back-small.svg'));
+}
+
+.arrowBtn svg {
+  width: 15px;
+  height: 24px;
+}
+
+.arrowVisible {
+  visibility: visible;
+}
+
+.arrowHidden {
+  visibility: hidden;
+}
+
+@media screen and (min-width: 992px) {
+  .page1 {
+    background-image: url(image_path('campaign/obrazek-telka-big.webp'));
+  }
+
+  .page2 {
+    background-image: url(image_path('campaign/obrazek-maska-big.webp'));
+  }
+
+  .page3 {
+    background-image: url(image_path('campaign/obrazek-sundana-maska-big.webp'));
+  }
+
+  .logoDemagog {
+    display: inline;
+    width: 183px;
+    height: 55px;
+    margin-top: 41px;
+    margin-left: 96px;
+  }
+
+  .headerContainerPage1 {
+    margin-top: 34vh;
+    padding-left: 131px;
+    text-shadow: #141313 2px 2px 50px;
+  }
+
+  .headerContainerPage3 {
+    margin-top: 10vh;
+  }
+
+  .headerDezinformace {
+    font-size: 96px;
+    font-weight: 800;
+    line-height: 125px;
+    padding-left: 96px;
+  }
+
+  .header {
+    font-size: 96px;
+    line-height: 125px;
+    padding-left: 96px;
+    margin-top: 0px;
+  }
+
+  .headerOrange {
+    font-size: 96px;
+    font-weight: 800;
+    line-height: 125px;
+  }
+
+  .headerWhite {
+    font-size: 96px;
+    line-height: 125px;
+  }
+
+  .headerPage3 {
+    font-size: 96px;
+    font-style: normal;
+    font-weight: 600;
+    line-height: 125px;
+    padding-left: 171px;
+    padding-right: 171px;
+    margin-bottom: 28px;
+  }
+
+  .headerOrangePage3 {
+    font-weight: 800;
+  }
+
+  .textWhite {
+    font-size: 30px;
+    line-height: 40px;
+    padding-right: 140px;
+  }
+
+  .textPage3 {
+    font-size: 30px;
+    line-height: 50px;
+    max-width: 690px;
+  }
+
+  .textOrangePage3 {
+    text-decoration-line: underline;
+  }
+
+  .listPage3 {
+    font-size: 30px;
+    line-height: 50px;
+    max-width: 690px;
+    margin-left: 20px;
+    margin-bottom: 5px;
+  }
+
+  .buttonsContainer2Page3 {
+    flex-direction: row;
+    align-items: flex-start;
+    width: 88vw;
+  }
+
+  .buttonsPage3 {
+    font-size: 20px;
+    text-wrap: nowrap;
+    padding: 0 10px;
+  }
+
+  .buttonsPage3:hover {
+    background-color: #FFBF00;
+    color: black;
+    border-color: #FFBF00;
+    transition: all .4s ease;
+  }
+
+  .btnTop {
+    margin-bottom: 0px;
+    margin-right: 42px;
+  }
+
+  .videoContainerPage3 {
+    margin-top: 63px;
+    margin-bottom: 63px;
+    padding-top: 0px;
+  }
+
+  .playVideoIconMobile {
+    display: none;
+  }
+
+  .playVideoIconDesktop {
+    display: block;
+    width: 29px;
+    height: 29px;
+    margin-right: 13.5px;
+  }
+
+  .playVideoTextMobile {
+    display: none;
+  }
+
+  .playVideoText {
+    display: block;
+    font-size: 24px;
+    margin-left: 13.5px;
+  }
+
+  .playVideoText:hover {
+    color: #FFBF00;
+  }
+
+  .arrowsContainer2 {
+    position: absolute;
+    width: 95%;
+    justify-content: space-between;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    margin: 0;
+  }
+
+  .arrowsContainer1 {
+    position: absolute;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%)
+  }
+
+  .arrowFwdBtn {
+    background-image: url(image_path('campaign/arrow-fwd-big.svg'));
+    width: 33px;
+    height: 57px;
+  }
+
+  .arrowBackBtn {
+    background-image: url(image_path('campaign/arrow-back-big.svg'));
+    width: 33px;
+    height: 57px;
+  }
+
+  .arrowBtn {
+    width: 33px;
+    height: 57px;
+  }
+
+  .logoCt {
+    width: 160px;
+    height: 23px;
+  }
+
+  .logoCedmo {
+    width: 162px;
+    height: 90px;
+    margin-right: 57px;
+  }
+
+  .partnersP {
+    font-size: 15px;
+  }
+
+  .blurBg {
+    position: relative;
+    display: inline-block;
+    margin-left: 170px;
+    margin-bottom: 50px;
+    padding: 20px;
+  }
+
+  .blurBg p,
+  .blurBg ul {
+    position: relative;
+    z-index: 1;
+    padding: 0;
+  }
+
+  .blurBg:before {
+    content: "";
+    position: absolute;
+    border-radius: 22px;
+    background: rgba(0, 0, 0, 0.20);
+    filter: blur(17.5px);
+    backdrop-filter: blur(2px);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+  }
+
+  .blurBgPage2:before {
+    top: 35px;
+    right: 100px;
+    left: 125px;
+    bottom: 28px;
+  }
+
+  .footer {
+    width: 100%;
+    margin: auto;
+    display: flex;
+    justify-content: right;
+    align-items: end;
+    padding: 50px 50px 40px;
+  }
+
+  .page1, .page2 {
+    .footer {
+      margin-top: 0;
+    }
+  }
+
+  .page3 .footer  {
+    padding-top: 0;
+  }
+}
+
+
+@media screen and (min-height: 1029px) {
+  .page {
+    height: 100vh;
+  }
+
+  html {
+    position: relative;
+    min-height: 100%;
+  }
+
+  .footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    margin: 0 auto;
+  }
+
+  .page3 .footer  {
+    padding-top: 0;
+    margin-top: -90px;
+  }
+}
+
+
+@include media-breakpoint-up(xs) {
+  .container {
+    max-width: 100%;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .container {
+    max-width: 800px;
+  }
+}
+
+@include media-breakpoint-up(xl) {
+  .container {
+    max-width: 1100px;
+  }
+}
+
+@include media-breakpoint-up(xxl) {
+  .container {
+    max-width: 1300px;
+  }
+}
