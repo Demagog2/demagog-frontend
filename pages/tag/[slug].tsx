@@ -61,7 +61,7 @@ const Tag = (props: TagProps) => {
     <div className="container">
       <div className="row g-5 g-lg-10 flex-lg-row-reverse">
         <div className="col col-12">
-          <ArticleTags tags={props.articleTags} />
+          <ArticleTags tags={props.articleTags} isTagDetailOpen />
         </div>
 
         {props.articleTag.articlesV2.pageInfo.hasPreviousPage ? (

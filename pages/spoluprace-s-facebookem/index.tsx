@@ -51,7 +51,11 @@ export default function FacebookCollaboration({
     <div className="container">
       <div className="row g-5 g-lg-10 flex-lg-row-reverse">
         <div className="col col-12">
-          <ArticleTags tags={data.articleTags} isFacebookActive />
+          <ArticleTags
+            tags={data.articleTags}
+            isFacebookActive
+            isTagDetailOpen
+          />
         </div>
 
         {data.facebookFactchecks.pageInfo.hasPreviousPage ? (
