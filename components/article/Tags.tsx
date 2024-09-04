@@ -36,6 +36,7 @@ function TagIcon(props: { icon: string }) {
 export default function ArticleTags(props: {
   tags: FragmentType<typeof ArticleTagsFragment>[]
   isFacebookActive?: boolean
+  isTagDetailOpen?: boolean
 }) {
   const pathname = usePathname()
 
@@ -91,6 +92,14 @@ export default function ArticleTags(props: {
             )
           })}
       </div>
+      {props.isTagDetailOpen && (
+        <div>
+          <Link href="/" className="btn outline mb-2 h-44px me-2 fs-6 px-6">
+            <span className="me-2">←</span>
+            <span>Zpět na všechna témata</span>
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
