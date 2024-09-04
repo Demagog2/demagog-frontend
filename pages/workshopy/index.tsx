@@ -93,6 +93,15 @@ const Workshops = (props: { workshops: WorkshopsDataQuery['workshops'] }) => {
           return <WorkshopOffer key={workshop.id} workshop={workshop} />
         })}
       </div>
+
+      <div className="row">
+        <div className="col col-12 col-lg-7">
+          <p className="fs-5 mt-5">
+            Objednávejte na <a href="mailto:info@demagog.cz">info@demagog.cz</a>
+            .
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
