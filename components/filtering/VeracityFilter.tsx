@@ -1,6 +1,6 @@
-import { pluralize } from '@/libs/pluralize'
 import classNames from 'classnames'
 import gql from 'graphql-tag'
+import { StatementCount } from './StatementCount'
 
 export type VeracityAggregation = {
   veracity: {
@@ -44,7 +44,7 @@ export function VeracityFilter({ veracity, count, isSelected }: Props) {
       <span className="checkmark"></span>
       <span className="small fw-600 me-2">{veracity.name}</span>
       <span className="smallest min-w-40px">
-        {count} {pluralize(count, 'výrok', 'výroky', 'výroků')}
+        <StatementCount count={count} />
       </span>
     </div>
   )
