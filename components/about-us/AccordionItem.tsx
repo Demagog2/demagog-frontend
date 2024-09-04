@@ -68,7 +68,7 @@ export function AccordionItem(props: {
           {data.__typename === 'AccordionItemMembers' && (
             <div className="row g-5">
               {data.members.map((member) => (
-                <div className="col col-12">
+                <div key={member.id} className="col col-12">
                   <div className="row g-5 g-lg-10">
                     <div className="col col-2">
                       <span className="symbol symbol-square symbol-circle">
