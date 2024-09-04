@@ -33,9 +33,7 @@ export default function NavSubLink(props: LinkProps) {
         ref={LinkRef}
       >
         <span>{props.title}</span>
-        <span className="symbol symbol-20px">
-          <ExpandIcon />
-        </span>
+        <ExpandIcon />
       </a>
       <ul className={`dropmenu ${isOpen ? 'open' : ''}`}>{props.children}</ul>
     </li>

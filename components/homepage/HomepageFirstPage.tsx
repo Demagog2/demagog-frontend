@@ -20,9 +20,7 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
             <span className="fs-7 fw-bold text-uppercase me-5 my-2">
               Nejvyhledávanější
             </span>
-            <div className="symbol-group">
-              <MostSearchedSpeakers speakers={data} />
-            </div>
+            <MostSearchedSpeakers speakers={data} />
           </div>
           <HomeSidebar />
           <DonateSidebar />

@@ -83,7 +83,7 @@ export default function ArticleTags(props: {
                   )}
                   href={tagPath}
                 >
-                  <span className="d-flex me-1">
+                  <span className="m-0 p-0 lh-1 me-2">
                     <TagIcon icon={tag.icon} />
                   </span>
                   <span className="lh-1 m-0 p-0">{tag.title}</span>

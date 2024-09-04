@@ -45,7 +45,7 @@ export default function ArticleItem(props: {
             <Link href={articlePath} className="illustration d-flex">
               <img
                 src={mediaUrl + article.illustration}
-                className="w-100"
+                className="w-100 rounded-m"
                 alt={`Ilustrační obrázek k ${article.title}`}
               />
             </Link>
