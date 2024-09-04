@@ -1,12 +1,13 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AccordionItem } from './AccordionItem'
+import { useState } from 'react'
 
 const AccordionSectionFragment = gql(`
   fragment AccordionSectionContent on AccordionSection {
     id
     slug
     title
-    accordionItems {
+    accordionItemsV2 {
       edges {
         cursor
         node {
@@ -26,13 +27,15 @@ export function AccordionSection(props: {
     props.accordionSection
   )
 
+  const [state, setState] = useState(0)
+
   return (
     <div className="accordion pb-10" id={accordionSection.slug}>
       <h2 className="pb-5">
         {props.index + 1}. {accordionSection.title}
       </h2>
 
-      {accordionSection.accordionItems.edges?.map((edge, index) => {
+      {accordionSection.accordionItemsV2.edges?.map((edge, index) => {
         if (!edge?.node) {
           return null
         }
@@ -41,8 +44,8 @@ export function AccordionSection(props: {
           <AccordionItem
             key={edge.cursor}
             data={edge.node}
-            isExpanded={index === 0}
-            parentId={accordionSection.slug}
+            isExpanded={index === state}
+            onToggle={() => setState(index)}
           />
         )
       })}

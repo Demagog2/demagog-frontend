@@ -1,20 +1,36 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import Image from 'next/image'
 import classNames from 'classnames'
 
 const AccordionItemFragment = gql(`
-    fragment AccordionItem on AccordionItem {
-      id
-      title
-      content
+    fragment AccordionItem on AccordionItemV2 {
+        ... on AccordionItemText {
+            id
+            title
+            content
+        }
+        ... on AccordionItemMembers {
+            id
+            title
+            members {
+                id
+                bio
+                fullName
+                positionDescription
+                avatar
+            }
+        }
     }
 `)
 
 export function AccordionItem(props: {
   data: FragmentType<typeof AccordionItemFragment>
   isExpanded: boolean
-  parentId: string
+  onToggle: () => void
 }) {
-  const { isExpanded, parentId } = props
+  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
+
+  const { isExpanded, onToggle } = props
 
   const data = useFragment(AccordionItemFragment, props.data)
 
@@ -27,10 +43,9 @@ export function AccordionItem(props: {
         <button
           className={classNames('accordion-button', { collapsed: !isExpanded })}
           type="button"
-          data-bs-toggle="collapse"
-          data-bs-target={`#${collapseId}`}
           aria-expanded={isExpanded}
           aria-controls={collapseId}
+          onClick={onToggle}
         >
           {data.title}
         </button>
@@ -41,13 +56,44 @@ export function AccordionItem(props: {
           show: isExpanded,
         })}
         aria-labelledby={headingId}
-        data-bs-parent={`#${parentId}`}
       >
         <div className="accordion-body">
-          <div
-            className="content"
-            dangerouslySetInnerHTML={{ __html: data.content }}
-          ></div>
+          {data.__typename === 'AccordionItemText' && (
+            <div
+              className="content"
+              dangerouslySetInnerHTML={{ __html: data.content }}
+            ></div>
+          )}
+
+          {data.__typename === 'AccordionItemMembers' && (
+            <div className="row g-5">
+              {data.members.map((member) => (
+                <div className="col col-12">
+                  <div className="row g-5 g-lg-10">
+                    <div className="col col-2">
+                      <span className="symbol symbol-square symbol-circle">
+                        {member.avatar && (
+                          <Image
+                            className="w-100"
+                            src={mediaUrl + member.avatar}
+                            alt={member.fullName}
+                            width={144}
+                            height={144}
+                          />
+                        )}
+                      </span>
+                    </div>
+                    <div className="col col-10">
+                      <h4 className="fs-2">{member.fullName}</h4>
+                      <p className="fs-6">
+                        <b>{member.positionDescription}</b> &ndash; {member.bio}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
