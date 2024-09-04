@@ -78,7 +78,8 @@ export default function ArticleItem(props: {
               </i>
             )}
 
-            {article.articleType === 'static' && (
+            {(article.articleType === 'static' ||
+              article.articleType === 'facebook_factcheck') && (
               <i>{formatDate(article.publishedAt)}</i>
             )}
 
