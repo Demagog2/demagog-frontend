@@ -26,8 +26,8 @@ export function VeracityFilter(props: Props) {
 
   return (
     <FormCheckbox
-      inputName="veracity"
-      value={veracity.name}
+      inputName="veracities"
+      value={veracity.key}
       name={veracity.name}
       isSelected={isSelected}
       isDisabled={count === 0}
