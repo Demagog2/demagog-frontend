@@ -9,6 +9,7 @@ import { useCallback } from 'react'
 import { FilterSection } from '@/components/filtering/FilterSection'
 import { pluralize } from '@/libs/pluralize'
 import { getNumericalArrayParams } from '@/libs/query-params'
+import { FormCheckbox } from '@/components/filtering/controls/FormCheckbox'
 
 const PAGE_SIZE = 24
 
@@ -119,20 +120,17 @@ function BodyFilters(props: BodyFilterProps) {
       {props.bodyGroups.map((bodyGroup) => (
         <FilterSection key={bodyGroup.name} name={bodyGroup.name} defaultOpen>
           {bodyGroup.bodies.map((body) => (
-            <div key={body.body.id} className="check-btn py-2">
-              <input
-                type="checkbox"
-                name="bodies"
-                value={body.body.id}
-                defaultChecked={body.isSelected}
-              />
-              <span className="checkmark"></span>
-              <span className="small fw-600 me-2">{body.body.displayName}</span>
-
-              <span className="smallest min-w-40px">
-                {body.count} {pluralize(body.count, 'osoba', 'osoby', 'osob')}
-              </span>
-            </div>
+            <FormCheckbox
+              key={body.body.id}
+              value={body.body.id}
+              name={body.body.displayName}
+              isSelected={body.isSelected}
+              label={
+                <>
+                  {body.count} {pluralize(body.count, 'osoba', 'osoby', 'osob')}
+                </>
+              }
+            />
           ))}
         </FilterSection>
       ))}

@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 import gql from 'graphql-tag'
 import { StatementCount } from './StatementCount'
+import { FormCheckbox } from './controls/FormCheckbox'
 
 export type ReleasedYearAggregation = {
   year: number
@@ -20,19 +21,12 @@ type Props = ReleasedYearAggregation
 
 export function ReleasedYearFilter({ year, count, isSelected }: Props) {
   return (
-    <div className={classNames('check-btn', 'py-2', { disabled: count === 0 })}>
-      <input
-        type="checkbox"
-        disabled={count === 0}
-        name="years"
-        value={year}
-        defaultChecked={isSelected}
-      />
-      <span className="checkmark"></span>
-      <span className="small fw-600 me-2">{year}</span>
-      <span className="smallest min-w-40px">
-        <StatementCount count={count} />
-      </span>
-    </div>
+    <FormCheckbox
+      value={year.toString()}
+      name={year.toString()}
+      label={<StatementCount count={count} />}
+      isDisabled={count === 0}
+      isSelected={isSelected}
+    />
   )
 }
