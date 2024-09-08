@@ -29,6 +29,10 @@ export function Pagination({
   const isFirstPage = currentPage === 1
   const isLastPage = currentPage === totalPages
 
+  if (totalPages === 0) {
+    return null
+  }
+
   return (
     <nav className="pagination">
       <span className="prev">

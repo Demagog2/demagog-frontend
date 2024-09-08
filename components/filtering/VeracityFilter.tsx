@@ -1,18 +1,8 @@
-import gql from 'graphql-tag'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 import { StatementCount } from './StatementCount'
 import { FormCheckbox } from './controls/FormCheckbox'
 
-export type VeracityAggregation = {
-  veracity: {
-    id: string
-    key: string
-    name: string
-  }
-  isSelected: boolean
-  count: number
-}
-
-export const VeracityFilterFragment = gql`
+export const VeracityFilterFragment = gql(`
   fragment VeracityFilter on VeracityAggregate {
     veracity {
       id
@@ -22,13 +12,21 @@ export const VeracityFilterFragment = gql`
     isSelected
     count
   }
-`
+`)
 
-type Props = VeracityAggregation
+type Props = {
+  veracity: FragmentType<typeof VeracityFilterFragment>
+}
 
-export function VeracityFilter({ veracity, count, isSelected }: Props) {
+export function VeracityFilter(props: Props) {
+  const { veracity, count, isSelected } = useFragment(
+    VeracityFilterFragment,
+    props.veracity
+  )
+
   return (
     <FormCheckbox
+      inputName="veracity"
       value={veracity.name}
       name={veracity.name}
       isSelected={isSelected}

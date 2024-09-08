@@ -79,6 +79,8 @@ export function FilterForm(props: FilterFormProps) {
           />
         </div>
       )}
-    />
+    >
+      {props.children}
+    </FilterFormRenderer>
   )
 }

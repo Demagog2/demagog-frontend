@@ -132,7 +132,7 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
   const renderFilters = useCallback(() => {
     return (
       <>
-        <TagFilters tags={speaker.searchStatements.tags} />
+        <TagFilters data={speaker.searchStatements.tags} />
 
         <VeracityFilters veracities={speaker.searchStatements.veracities} />
 

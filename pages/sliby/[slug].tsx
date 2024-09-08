@@ -3,28 +3,62 @@ import TitleIcon from '@/assets/icons/promises.svg'
 
 import { PromisesQuery } from '@/__generated__/graphql'
 import { gql } from '@/__generated__'
-import { PromiseRatings } from '@/components/promises/PromiseRatingConf'
-import { FilterFormRenderer } from '@/components/filtering/FilterFormRenderer'
-import { FormEvent, ReactNode } from 'react'
+import { ReactNode } from 'react'
 import { FilterSection } from '@/components/filtering/FilterSection'
 import { PromiseStatsBanner } from '@/components/promises/stats/PromiseStatsBanner'
-import { FormCheckbox } from '@/components/filtering/controls/FormCheckbox'
+import { TagFilter } from '@/components/filtering/TagFilter'
+import { FilterForm } from '@/components/filtering/FilterForm'
+import { PromiseCount } from '@/components/filtering/PromiseCount'
+import { PromiseRatingFilter } from '@/components/filtering/PromiseRatingFilter'
+import { GovernmentalPromise } from '@/components/promises/GovernmentalPromise'
+import {
+  getNumericalArrayParams,
+  getStringArrayParams,
+  getStringParam,
+} from '@/libs/query-params'
+import { NextPageContext } from 'next'
+import { parsePage } from '@/libs/pagination'
+
+const SEARCH_PAGE_SIZE = 2000
 
 export async function getServerSideProps({
   params,
+  query,
 }: {
   params: { slug: string }
-}) {
+} & NextPageContext) {
+  const term = getStringParam(query?.q)
+  const page = parsePage(query?.page)
+
+  const selectedTags = getNumericalArrayParams(query?.tags)
+  const selectedPromiseRatings = getStringArrayParams(query?.promise_ratings)
+
   const { data } = await client.query<PromisesQuery>({
     query: gql(`
-      query promises($slug: String!) {
+      query promises($slug: String!, $term: String!, $limit: Int, $offset: Int, $filters: PromiseFilterInput) {
         governmentPromisesEvaluationBySlug(slug: $slug) {
           id
+          slug
           title
           perex
-          promises {
-            id
-            ...GovernmentalPromiseDetail
+          searchPromises(term: $term, limit: $limit, offset: $offset, filters: $filters, includeAggregations: true) {
+            promises {
+              id
+              ...GovernmentalPromiseDetail
+            }
+            tags {
+              tag {
+                id
+              }
+              ...TagFilter
+            }
+            promiseRatings {
+              promiseRating {
+                id
+              }
+              ...PromiseRatingFilter
+            }
+            totalCount
           }
           ...PromiseStatsBanner
         }
@@ -32,22 +66,39 @@ export async function getServerSideProps({
     `),
     variables: {
       slug: params?.slug ?? '',
+      term: term,
+      limit: SEARCH_PAGE_SIZE,
+      offset: (page - 1) * SEARCH_PAGE_SIZE,
+      filters: {
+        tags: selectedTags,
+        promiseRatings: selectedPromiseRatings,
+      },
     },
   })
 
   return {
     props: {
       article: data.governmentPromisesEvaluationBySlug,
+      term,
+      page,
+      selectedTags,
+      selectedPromiseRatings,
     },
   }
 }
 
 type PromisesProps = {
   article: PromisesQuery['governmentPromisesEvaluationBySlug']
+  term: string
+  page: number
+  selectedTags: number[]
+  selectedPromiseRatings: string[]
 }
 
 export default function Promises(props: PromisesProps) {
-  if (!props.article) {
+  const { article } = props
+
+  if (!article) {
     return null
   }
 
@@ -60,13 +111,11 @@ export default function Promises(props: PromisesProps) {
               <span className="d-flex align-items-center me-2">
                 <TitleIcon />
               </span>
-              <h1 className="display-4 fw-bold m-0 p-0">
-                {props.article.title}
-              </h1>
+              <h1 className="display-4 fw-bold m-0 p-0">{article.title}</h1>
             </div>
           </div>
           <div className="col col-12 col-lg-6">
-            <span className="fs-2 fw-bold">{props.article.perex}</span>
+            <span className="fs-2 fw-bold">{article.perex}</span>
           </div>
         </div>
         <div className="row g-10">
@@ -138,39 +187,50 @@ export default function Promises(props: PromisesProps) {
         </div>
       </div>
       <div className="section">
-        <PromiseStatsBanner data={props.article} />
+        <PromiseStatsBanner data={article} />
 
-        <FilterFormRenderer
-          hasAnyFilters={false}
-          onChange={function (event: FormEvent<Element>): void {
-            throw new Error('Function not implemented.')
-          }}
-          onReset={function (): void {
-            throw new Error('Function not implemented.')
-          }}
-          renderFilters={function (): ReactNode {
-            return (
-              <>
-                <FilterSection name="Oblast" defaultOpen>
-                  <div>List of areas</div>
-                </FilterSection>
+        <FilterForm
+          hasAnyFilters={
+            props.selectedPromiseRatings.length > 0 ||
+            props.selectedTags.length > 0
+          }
+          renderFilters={(): ReactNode => (
+            <>
+              <FilterSection name="Oblast" defaultOpen>
+                {props.article?.searchPromises?.tags?.map((tag) => (
+                  <TagFilter
+                    key={tag.tag.id}
+                    tag={tag}
+                    renderLabel={PromiseCount}
+                  />
+                ))}
+              </FilterSection>
 
-                <FilterSection name="Hodnocení">
-                  {Object.entries(PromiseRatings).map(([ratingKey, obj]) => (
-                    <FormCheckbox
-                      key={ratingKey}
-                      value={ratingKey}
-                      name={obj.label.plural}
-                      isSelected={false}
+              <FilterSection
+                name="Hodnocení"
+                defaultOpen={props.selectedPromiseRatings.length > 0}
+              >
+                {props.article?.searchPromises?.promiseRatings?.map(
+                  (promiseRating) => (
+                    <PromiseRatingFilter
+                      key={promiseRating.promiseRating.id}
+                      promiseRating={promiseRating}
                     />
-                  ))}
-                </FilterSection>
-              </>
-            )
-          }}
+                  )
+                )}
+              </FilterSection>
+            </>
+          )}
+          term={props.term}
+          pageSize={SEARCH_PAGE_SIZE}
+          page={props.page}
+          totalCount={article.searchPromises.totalCount}
+          searchPlaceholder={'Hledat sliby'}
         >
-          My content
-        </FilterFormRenderer>
+          {article.searchPromises.promises.map((promise) => (
+            <GovernmentalPromise slug={article.slug} promise={promise} />
+          ))}
+        </FilterForm>
       </div>
     </div>
   )

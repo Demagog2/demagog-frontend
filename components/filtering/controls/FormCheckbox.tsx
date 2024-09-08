@@ -1,6 +1,7 @@
 import classNames from 'classnames'
 
 export function FormCheckbox(props: {
+  inputName: string
   value: string
   name: string
   label?: JSX.Element
@@ -14,7 +15,7 @@ export function FormCheckbox(props: {
       })}
     >
       <input
-        name="tags"
+        name={props.inputName}
         type="checkbox"
         value={props.value}
         defaultChecked={props.isSelected}
