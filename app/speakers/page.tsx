@@ -9,8 +9,16 @@ import { getStringArrayParams, getStringParam } from '@/libs/query-params'
 import { FormCheckbox } from '@/components/filtering/controls/FormCheckbox'
 import { QueryParams } from '@/libs/params'
 import { gql } from '@/__generated__'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
 
 const PAGE_SIZE = 24
+
+export const metadata: Metadata = {
+  title: getMetadataTitle('Přehled politiků a političek'),
+  description:
+    'Za svou existenci Demagog.cz už ověřil výroky stovek politiků a političek.',
+}
 
 type BodyFilterProps = {
   bodyGroups: {

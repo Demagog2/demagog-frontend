@@ -10,6 +10,22 @@ import { SearchButton } from '@/components/search/SearchButton'
 import type { SearchQuery } from '@/__generated__/graphql'
 import { QueryParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
+
+export async function generateMetadata(props: {
+  searchParams: QueryParams
+}): Promise<Metadata> {
+  return {
+    title: getMetadataTitle(
+      props.searchParams.term
+        ? `Vyhledávání: ${props.searchParams.term}`
+        : 'Vyhledávání'
+    ),
+    description:
+      'Hledejte mezi výstupy Demagog.cz, konkrétními faktickými výroky či v databázi politiků a političek',
+  }
+}
 
 function ShowMoreLink(props: {
   link: string

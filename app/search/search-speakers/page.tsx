@@ -8,8 +8,23 @@ import { SearchButton } from '@/components/search/SearchButton'
 import { gql } from '@/__generated__'
 import { getStringParam } from '@/libs/query-params'
 import { QueryParams } from '@/libs/params'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
 
 const SEARCH_PAGE_SIZE = 12
+
+export async function generateMetadata(props: {
+  searchParams: QueryParams
+}): Promise<Metadata> {
+  return {
+    title: getMetadataTitle(
+      props.searchParams.q
+        ? `Vyhledávání politiků a političek: ${props.searchParams.q}`
+        : 'Vyhledávání politiků a političek'
+    ),
+    description: 'Hledejte v databázi politiků a političek',
+  }
+}
 
 export default async function SearchSpeakers(props: {
   searchParams: QueryParams

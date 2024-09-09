@@ -17,8 +17,33 @@ import {
 } from '@/libs/query-params'
 import { parsePage } from '@/libs/pagination'
 import { QueryParams } from '@/libs/params'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
 
 const SEARCH_PAGE_SIZE = 2000
+
+export async function generateMetadata(props: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const {
+    data: { governmentPromisesEvaluationBySlug },
+  } = await client.query({
+    query: gql(`
+      query PromiseDetailMetadata($slug: String!) {
+        governmentPromisesEvaluationBySlug(slug: $slug) {
+          title
+        }
+      }
+    `),
+    variables: {
+      slug: props.params.slug,
+    },
+  })
+
+  return {
+    title: getMetadataTitle(governmentPromisesEvaluationBySlug?.title ?? ''),
+  }
+}
 
 export default async function Promises(props: {
   params: { slug: string }

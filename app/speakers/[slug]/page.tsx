@@ -13,16 +13,53 @@ import {
   parseParamId,
 } from '@/libs/query-params'
 import { parsePage } from '@/libs/pagination'
+import { gql } from '@/__generated__'
+import { SpeakerLink } from '@/components/speaker/SpeakerLink'
+import { QueryParams } from '@/libs/params'
 import {
   ReleasedYearFilters,
   TagFilters,
   VeracityFilters,
-} from '@/pages/vyroky'
-import { gql } from '@/__generated__'
-import { SpeakerLink } from '@/components/speaker/SpeakerLink'
-import { QueryParams } from '@/libs/params'
+} from '@/app/statements/page'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
+import { pluralize } from '@/libs/pluralize'
 
 const PAGE_SIZE = 10
+
+export async function generateMetadata(props: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const {
+    data: { speaker },
+  } = await client.query({
+    query: gql(`
+        query SpeakerDetailMetadata(
+          $id: Int!
+        ) {
+          speaker(id: $id) {
+            fullName
+            body {
+              shortName
+            }
+            verifiedStatementsCount
+          }
+        }
+      `),
+    variables: {
+      id: parseParamId(props.params.slug),
+    },
+  })
+
+  return {
+    title: getMetadataTitle(
+      speaker.body
+        ? `${speaker.fullName} (${speaker.body.shortName})`
+        : speaker.fullName
+    ),
+    description: `Demagog.cz ověřil již ${speaker.verifiedStatementsCount} ${pluralize(speaker.verifiedStatementsCount, 'faktický výrok', 'faktické výroky', 'faktických výroků')} politika*čky`,
+  }
+}
 
 const Speaker = async (props: {
   params: { slug: string }

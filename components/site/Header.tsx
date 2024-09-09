@@ -1,7 +1,4 @@
 import Link from 'next/link'
-// import { useState } from 'react'
-import { useBetween } from 'use-between'
-import { useShareableState } from '@/libs/useShareableState'
 import NavSearchForm from './NavSearchForm'
 import NavSearch from './NavSearch'
 import NavItemLink from './NavItemLink'
@@ -10,13 +7,11 @@ import NavSubLink from './NavSubLink'
 import { gql } from '@apollo/client'
 import { GovernmentPromisesForNavigationQuery } from '@/__generated__/graphql'
 import client from '@/libs/apollo-client'
-
-// TODO - Promises pages
+import { NavDonateButton } from './NavDonateButton'
 
 export default async function Header() {
   const isOpen = false
   // const [lastScroll, setLastScroll] = useState(0)
-  // const { setDonateModal } = useBetween(useShareableState)
   // const [isOpen, setIsOpen] = useState<Boolean | false>(false)
 
   const { data } = await client.query<GovernmentPromisesForNavigationQuery>({
@@ -107,12 +102,7 @@ export default async function Header() {
               </NavSearch>
 
               <div className="menu-item ms-2 ms-xl-10 d-none d-xl-flex">
-                {/* <a
-                  className="btn bg-primary"
-                  onClick={() => setDonateModal(true)}
-                >
-                  <span className="mx-2">Podpořte nás</span>
-                </a> */}
+                <NavDonateButton />
               </div>
               {/* <div className="menu-item d-flex d-xl-none ms-2">
                 <a

@@ -2,6 +2,12 @@ import client from '@/libs/apollo-client'
 import { WorkshopOffer } from '@/components/workshops/WorkshopOffer'
 import { gql } from '@/__generated__'
 import { WorkshopsDataQuery } from '@/__generated__/graphql'
+import { getMetadataTitle } from '@/libs/metadata'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+  title: getMetadataTitle('Workshopy'),
+}
 
 const Workshops = async () => {
   const { data } = await client.query<WorkshopsDataQuery>({
