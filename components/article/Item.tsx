@@ -1,8 +1,8 @@
-import Link from 'next/link'
 import truncate from '@/libs/truncate'
 import formatDate from '@/libs/format-date'
 import Speaker from './SpeakerDetail'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { ArticleLink } from './ArticleLink'
 
 export const ArticleDetailFragment = gql(`
   fragment ArticleDetail on Article {
@@ -23,6 +23,7 @@ export const ArticleDetailFragment = gql(`
       releasedAt
     }
     publishedAt
+    ...ArticleLink
   }
 `)
 
@@ -35,20 +36,18 @@ export default function ArticleItem(props: {
 
   const perex = truncate(article.perex ?? '', 190)
 
-  const articlePath = `/diskuze/${article.id}`
-
   return (
     <article className="col s-article">
       <div className="row g-2 g-lg-5">
         <div className="col col-12 col-md-5">
           <div className="d-flex">
-            <Link href={articlePath} className="illustration d-flex">
+            <ArticleLink className="illustration d-flex" article={article}>
               <img
                 src={mediaUrl + article.illustration}
                 className="w-100 rounded-m"
                 alt={`Ilustrační obrázek k ${article.title}`}
               />
-            </Link>
+            </ArticleLink>
           </div>
           <div className="d-flex justify-content-between align-items-center mt-2">
             <div className="symbol-group">
@@ -65,9 +64,9 @@ export default function ArticleItem(props: {
         </div>
         <div className="col col-12 col-md-7">
           <h2 className="fs-2 fw-bold mb-2">
-            <Link href={articlePath} className="text-dark s-title">
+            <ArticleLink article={article} className="text-dark s-title">
               {article.title}
-            </Link>
+            </ArticleLink>
           </h2>
           <div className="mb-2">
             {article.articleType === 'default' && article.source && (
@@ -95,12 +94,12 @@ export default function ArticleItem(props: {
             <span className="fs-6 lh-sm">{perex}</span>
           </div>
           <div className="mt-4">
-            <Link
-              href={articlePath}
+            <ArticleLink
+              article={article}
               className="btn outline h-40px px-6 fw-bold fs-7"
             >
               Číst dál
-            </Link>
+            </ArticleLink>
           </div>
         </div>
       </div>
