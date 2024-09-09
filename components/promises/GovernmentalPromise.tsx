@@ -121,7 +121,7 @@ export function GovernmentalPromise(props: {
                 <div className="d-block d-lg-flex justify-content-between align-items-center">
                   {promise.shortExplanation && (
                     <a
-                      className="link text-dark text-underline"
+                      className="link text-dark text-decoration-underline"
                       onClick={() =>
                         setFullExplanation(!isFullExplanationShown)
                       }
