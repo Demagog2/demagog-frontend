@@ -1,6 +1,7 @@
 'use client'
+
 import SearchIcon from '@/assets/icons/search.svg'
-import { ReactNode, useState, useEffect, useRef } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 
 interface LinkProps {
   title: string
@@ -25,7 +26,7 @@ export default function NavSearch(props: LinkProps) {
   }
 
   return (
-    <div className="menu-item d-none d-xl-flex" ref={WrapRef}>
+    <div className="menu-item d-none d-xl-flex">
       <a
         className="menu-link d-flex align-items-center text-white text-white text-none state-hover-color-secondary min-h-40px"
         onClick={() => setIsOpen(!isOpen)}

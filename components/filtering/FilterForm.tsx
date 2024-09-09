@@ -1,3 +1,5 @@
+'use client'
+
 import { Pagination } from '@/components/pagination'
 import {
   ChangeEvent,
@@ -20,7 +22,7 @@ type FilterFormProps = PropsWithChildren<{
   totalCount: number
   searchPlaceholder: string
 
-  renderFilters(): ReactNode
+  renderFilters: ReactNode
 }>
 
 export function FilterForm(props: FilterFormProps) {
@@ -45,7 +47,7 @@ export function FilterForm(props: FilterFormProps) {
 
   const handleReset = useCallback(() => {
     setFiltersOpen(false)
-    router.push(pathname)
+    router.push(pathname ?? '')
   }, [pathname, router])
 
   return (

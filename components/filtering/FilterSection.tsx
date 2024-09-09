@@ -1,3 +1,5 @@
+'use client'
+
 import { FilterToggleIcon } from '@/components/filtering/FilterToggleIcon'
 import classNames from 'classnames'
 import { PropsWithChildren, useCallback, useState } from 'react'

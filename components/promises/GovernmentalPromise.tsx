@@ -1,3 +1,5 @@
+'use client'
+
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import Link from 'next/link'
 import { PromiseRating } from './PromiseRating'

@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import StatementAssessment from '@/components/statement/Assessment'
 import TagIcon from '@/assets/icons/tag.svg'

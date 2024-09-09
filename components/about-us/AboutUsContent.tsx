@@ -1,5 +1,4 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import classNames from 'classnames'
 import { AccordionSection } from './AccordionSection'
 
 const AboutUsContentFragment = gql(`

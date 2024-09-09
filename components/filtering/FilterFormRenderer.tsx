@@ -8,7 +8,7 @@ type FilterFormProps = PropsWithChildren<{
   onChange: FormEventHandler
   onReset: () => void
 
-  renderFilters(): ReactNode
+  renderFilters: ReactNode
   renderSearch?(): ReactNode
   renderFooter?(): ReactNode
 }>
@@ -16,7 +16,6 @@ type FilterFormProps = PropsWithChildren<{
 export function FilterFormRenderer(props: FilterFormProps) {
   const [areFiltersOpen, setFiltersOpen] = useState(props.hasAnyFilters)
 
-  const FilterRenderer = props.renderFilters
   const SearchRenderer = props.renderSearch
   const FooterRenderer = props.renderFooter
 
@@ -43,7 +42,7 @@ export function FilterFormRenderer(props: FilterFormProps) {
         {areFiltersOpen && (
           <div className="col col-12 col-lg-4">
             <div className="bg-light rounded-l p-5">
-              <FilterRenderer />
+              {props.renderFilters}
 
               <ResetFilters />
             </div>

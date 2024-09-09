@@ -1,66 +1,64 @@
-'use client'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
-import { useBetween } from 'use-between'
-import { useShareableState } from '@/libs/useShareableState'
 import NavSearchForm from './NavSearchForm'
 import NavSearch from './NavSearch'
 import NavItemLink from './NavItemLink'
 import NavSubItem from './NavSubItem'
 import NavSubLink from './NavSubLink'
-import { gql, useQuery } from '@apollo/client'
+import { gql } from '@apollo/client'
 import { GovernmentPromisesForNavigationQuery } from '@/__generated__/graphql'
+import client from '@/libs/apollo-client'
+import { NavDonateButton } from './NavDonateButton'
 
-// TODO - Promises pages
+export default async function Header() {
+  const isOpen = false
+  // const [lastScroll, setLastScroll] = useState(0)
+  // const [isOpen, setIsOpen] = useState<Boolean | false>(false)
 
-export default function Header() {
-  const [lastScroll, setLastScroll] = useState(0)
-  const { setDonateModal } = useBetween(useShareableState)
-  const [isOpen, setIsOpen] = useState<Boolean | false>(false)
-
-  const { data } = useQuery<GovernmentPromisesForNavigationQuery>(gql`
-    query governmentPromisesForNavigation {
-      governmentPromisesEvaluations {
-        id
-        slug
-        title
+  const { data } = await client.query<GovernmentPromisesForNavigationQuery>({
+    query: gql`
+      query governmentPromisesForNavigation {
+        governmentPromisesEvaluations {
+          id
+          slug
+          title
+        }
       }
-    }
-  `)
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    `,
   })
 
-  const handleScroll = () => {
-    const mainHeader: HTMLElement | null = document.getElementById('header')
-    if (mainHeader) {
-      const st = window.pageYOffset || document.documentElement.scrollTop
-      if (st > 100) {
-        if (!mainHeader.classList.contains('on-scroll')) {
-          mainHeader.classList.add('on-scroll')
-        }
-      } else {
-        if (mainHeader.classList.contains('on-scroll')) {
-          mainHeader.classList.remove('on-scroll')
-        }
-      }
+  // useEffect(() => {
+  //   window.addEventListener('scroll', handleScroll)
+  //   return () => window.removeEventListener('scroll', handleScroll)
+  // })
 
-      if (st > lastScroll) {
-        if (!mainHeader.classList.contains('hide-header')) {
-          mainHeader.classList.add('hide-header')
-        }
-      } else {
-        if (mainHeader.classList.contains('hide-header')) {
-          mainHeader.classList.remove('hide-header')
-        }
-      }
+  // const handleScroll = () => {
+  //   const mainHeader: HTMLElement | null = document.getElementById('header')
+  //   if (mainHeader) {
+  //     const st = window.pageYOffset || document.documentElement.scrollTop
+  //     if (st > 100) {
+  //       if (!mainHeader.classList.contains('on-scroll')) {
+  //         mainHeader.classList.add('on-scroll')
+  //       }
+  //     } else {
+  //       if (mainHeader.classList.contains('on-scroll')) {
+  //         mainHeader.classList.remove('on-scroll')
+  //       }
+  //     }
 
-      const last = st <= 0 ? 0 : st
-      setLastScroll(last)
-    }
-  }
+  //     if (st > lastScroll) {
+  //       if (!mainHeader.classList.contains('hide-header')) {
+  //         mainHeader.classList.add('hide-header')
+  //       }
+  //     } else {
+  //       if (mainHeader.classList.contains('hide-header')) {
+  //         mainHeader.classList.remove('hide-header')
+  //       }
+  //     }
+
+  //     const last = st <= 0 ? 0 : st
+  //     setLastScroll(last)
+  //   }
+  // }
 
   return (
     <header id="header" className="header pt-5 pt-lg-10">
@@ -104,14 +102,9 @@ export default function Header() {
               </NavSearch>
 
               <div className="menu-item ms-2 ms-xl-10 d-none d-xl-flex">
-                <a
-                  className="btn bg-primary"
-                  onClick={() => setDonateModal(true)}
-                >
-                  <span className="mx-2">Podpořte nás</span>
-                </a>
+                <NavDonateButton />
               </div>
-              <div className="menu-item d-flex d-xl-none ms-2">
+              {/* <div className="menu-item d-flex d-xl-none ms-2">
                 <a
                   className={`nav-link d-flex w-40px h-40px ${
                     isOpen ? 'open' : ''
@@ -120,7 +113,7 @@ export default function Header() {
                 >
                   <span className="nav-icon"></span>
                 </a>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>

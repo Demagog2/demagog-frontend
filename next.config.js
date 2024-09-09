@@ -3,7 +3,21 @@ const nextConfig = {
   reactStrictMode: true,
 
   async rewrites() {
-    return [{ source: '/o-nas', destination: '/about-us' }]
+    return [
+      { source: '/diskuze/:slug', destination: '/articles/:slug' },
+      { source: '/o-nas', destination: '/about-us' },
+      { source: '/politici/:id', destination: '/speakers/:id' },
+      { source: '/sliby/:slug', destination: '/promises/:slug' },
+      { source: '/spoluprace-s-facebookem', destination: '/tags/facebook' },
+      { source: '/tag/:slug', destination: '/tags/:slug' },
+      { source: '/vyhledavani', destination: '/search' },
+      { source: '/vyhledavani/politici', destination: '/search/search-speakers' },
+      { source: '/vyhledavani/vyroky', destination: '/search/search-statements' },
+      { source: '/vyhledavani/vystupy', destination: '/search/search-articles' },
+      { source: '/vypis-recniku', destination: '/speakers' },
+      { source: '/vyroky', destination: '/statements' },
+      { source: '/workshopy', destination: '/workshops' },
+    ]
   },
 
   async redirects() {
@@ -34,9 +48,8 @@ const nextConfig = {
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      issuer: /\.[jt]sx?$/,
-      use: ['@svgr/webpack'],
-    })
+      use: ["@svgr/webpack"]
+    });
 
     return config
   },
