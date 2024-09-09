@@ -21,6 +21,8 @@ import {
 } from '@/pages/vyroky'
 import { gql } from '@/__generated__'
 import { SpeakerDetailQueryQuery } from '@/__generated__/graphql'
+import Link from 'next/link'
+import { SpeakerLink } from '@/components/speaker/SpeakerLink'
 
 const PAGE_SIZE = 10
 
@@ -44,6 +46,7 @@ export async function getServerSideProps({
         $filters: StatementFilterInput
       ) {
         speaker(id: $id) {
+          id
           fullName
           avatar(size: detail)
           role
@@ -72,6 +75,7 @@ export async function getServerSideProps({
             ...ReleasedYearFilters
             totalCount
           }
+          ...SpeakerLink
         }
       }
     `),
@@ -162,29 +166,40 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
             data-controller="components--stats"
           >
             <div className="me-5">
-              <div
-                className={classNames('d-flex', 'align-items-center', 'mb-2', {
-                  'cursor-pointer': (speaker.stats?.true ?? 0) > 0,
-                  'stat-link': (speaker.stats?.true ?? 0) > 0,
-                })}
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=pravda"
-                data-count={speaker.stats?.true}
+              <SpeakerLink
+                className={classNames(
+                  'd-flex',
+                  'align-items-center',
+                  'text-dark',
+                  'mb-2',
+                  {
+                    'cursor-pointer': (speaker.stats?.true ?? 0) > 0,
+                    'stat-link': (speaker.stats?.true ?? 0) > 0,
+                  }
+                )}
+                speaker={speaker}
+                queryParams="?veracities=true"
                 title="Pravda"
               >
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-primary rounded-circle me-2">
                   <TrueIcon width={17} height={13} />
                 </span>
                 <span className="display-4 fs-bold">{speaker.stats?.true}</span>
-              </div>
-              <div
-                className={classNames('d-flex', 'align-items-center', 'mb-2', {
-                  'cursor-pointer': (speaker.stats?.unverifiable ?? 0) > 0,
-                  'stat-link': (speaker.stats?.unverifiable ?? 0) > 0,
-                })}
-                data-url="?hodnoceni[]=neoveritelne"
-                data-action="click->components--stats#toggleLink"
-                data-count={speaker.stats?.unverifiable}
+              </SpeakerLink>
+
+              <SpeakerLink
+                className={classNames(
+                  'd-flex',
+                  'align-items-center',
+                  'text-dark',
+                  'mb-2',
+                  {
+                    'cursor-pointer': (speaker.stats?.unverifiable ?? 0) > 0,
+                    'stat-link': (speaker.stats?.unverifiable ?? 0) > 0,
+                  }
+                )}
+                speaker={speaker}
+                queryParams="?veracities=unverifiable"
                 title="Neověřitelné"
               >
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-gray rounded-circle me-2">
@@ -193,17 +208,22 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
                 <span className="display-4 fs-bold">
                   {speaker.stats?.unverifiable}
                 </span>
-              </div>
+              </SpeakerLink>
             </div>
             <div>
-              <div
-                className={classNames('d-flex', 'align-items-center', 'mb-2', {
-                  'cursor-pointer': (speaker.stats?.untrue ?? 0) > 0,
-                  'stat-link': (speaker.stats?.untrue ?? 0) > 0,
-                })}
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=nepravda"
-                data-count={speaker.stats?.untrue}
+              <SpeakerLink
+                className={classNames(
+                  'd-flex',
+                  'align-items-center',
+                  'text-dark',
+                  'mb-2',
+                  {
+                    'cursor-pointer': (speaker.stats?.untrue ?? 0) > 0,
+                    'stat-link': (speaker.stats?.untrue ?? 0) > 0,
+                  }
+                )}
+                speaker={speaker}
+                queryParams="?veracities=untrue"
                 title="Nepravda"
               >
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-red rounded-circle me-2">
@@ -212,15 +232,20 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
                 <span className="display-4 fs-bold">
                   {speaker.stats?.untrue}
                 </span>
-              </div>
-              <div
-                className={classNames('d-flex', 'align-items-center', 'mb-2', {
-                  'cursor-pointer': (speaker.stats?.misleading ?? 0) > 0,
-                  'stat-link': (speaker.stats?.misleading ?? 0) > 0,
-                })}
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=zavadejici"
-                data-count={speaker.stats?.misleading}
+              </SpeakerLink>
+              <SpeakerLink
+                className={classNames(
+                  'd-flex',
+                  'align-items-center',
+                  'text-dark',
+                  'mb-2',
+                  {
+                    'cursor-pointer': (speaker.stats?.misleading ?? 0) > 0,
+                    'stat-link': (speaker.stats?.misleading ?? 0) > 0,
+                  }
+                )}
+                speaker={speaker}
+                queryParams="?veracities=misleading"
                 title="Zavádějící"
               >
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-secondary rounded-circle me-2">
@@ -229,7 +254,7 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
                 <span className="display-4 fs-bold">
                   {speaker.stats?.misleading}
                 </span>
-              </div>
+              </SpeakerLink>
             </div>
           </div>
         </div>
