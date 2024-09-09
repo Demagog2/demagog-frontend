@@ -61,7 +61,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
       limit: PAGE_SIZE,
       offset: (page - 1) * PAGE_SIZE,
       filters: { bodies },
-      includeGovernmentSpeakers: page === 1,
+      includeGovernmentSpeakers: page === 1 && bodies.length === 0,
     },
   })
 
