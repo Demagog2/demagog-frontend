@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { SpeakerLink } from './SpeakerLink'
 
 export const MostSearchedSpeakersFragment = gql(`
   fragment MostSearchedSpeakers on Query {
@@ -7,6 +7,7 @@ export const MostSearchedSpeakersFragment = gql(`
       id
       avatar(size: detail)
       fullName
+      ...SpeakerLink
     }
   }
 `)
@@ -21,14 +22,14 @@ export function MostSearchedSpeakers(props: {
   return (
     <div className="symbol-group">
       {data.getMostSearchedSpeakers.map((speaker) => (
-        <Link
+        <SpeakerLink
           key={speaker.id}
-          href={`/politici/${speaker.id}`}
+          speaker={speaker}
           title={speaker.fullName}
           className="symbol symbol-45px rounded-circle bg-gray-500 overflow-hidden"
         >
           <img src={mediaUrl + speaker.avatar} alt={speaker.fullName} />
-        </Link>
+        </SpeakerLink>
       ))}
     </div>
   )

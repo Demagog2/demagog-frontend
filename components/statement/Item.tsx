@@ -5,6 +5,7 @@ import LinkIcon from '@/assets/icons/link.svg'
 import formatDate from '@/libs/format-date'
 import { useState, useRef } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { SpeakerLink } from '../speaker/SpeakerLink'
 
 const StatementItemFragment = gql(`
   fragment StatementDetail on Statement {
@@ -12,8 +13,8 @@ const StatementItemFragment = gql(`
     content
     sourceSpeaker {
       speaker {
-        id
         avatar(size: detail)
+        ...SpeakerLink
       }
       fullName
       body {
@@ -57,8 +58,8 @@ export default function StatementItem(props: {
           <div className="d-flex">
             <div className="w-100px min-w-100px">
               <div className="px-2">
-                <Link
-                  href={'/politici/' + statement.sourceSpeaker.speaker.id}
+                <SpeakerLink
+                  speaker={statement.sourceSpeaker.speaker}
                   className="d-block position-relative"
                 >
                   {statement.sourceSpeaker.speaker.avatar && (
@@ -76,7 +77,7 @@ export default function StatementItem(props: {
                       </span>
                     </div>
                   )}
-                </Link>
+                </SpeakerLink>
               </div>
               <div className="mt-2 text-center w-100">
                 <h3 className="fs-6 fs-600">

@@ -2,7 +2,6 @@ import type { NextPageContext } from 'next'
 import PackmanIcon from '@/assets/icons/packman.svg'
 import client from '@/libs/apollo-client'
 import SpeakerItem, { SpeakerItemFragment } from '@/components/speaker/Item'
-import gql from 'graphql-tag'
 import { parsePage } from '@/libs/pagination'
 import { FilterForm } from '@/components/filtering/FilterForm'
 import { useCallback } from 'react'
@@ -10,6 +9,7 @@ import { FilterSection } from '@/components/filtering/FilterSection'
 import { pluralize } from '@/libs/pluralize'
 import { getNumericalArrayParams } from '@/libs/query-params'
 import { FormCheckbox } from '@/components/filtering/controls/FormCheckbox'
+import { gql } from '@/__generated__'
 
 const PAGE_SIZE = 24
 
@@ -19,7 +19,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
   const bodies = getNumericalArrayParams(query?.bodies)
 
   const { data } = await client.query({
-    query: gql`
+    query: gql(`
       query speakersSearch(
         $term: String!
         $limit: Int
@@ -55,8 +55,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
           totalCount
         }
       }
-      ${SpeakerItemFragment}
-    `,
+    `),
     variables: {
       term,
       limit: PAGE_SIZE,

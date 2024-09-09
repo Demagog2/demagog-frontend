@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import classNames from 'classnames'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { SpeakerLink } from './SpeakerLink'
 
 export const SpeakerWithStatsFragment = gql(`
   fragment SpeakerWithStats on ArticleSpeakerStats {
@@ -12,6 +13,7 @@ export const SpeakerWithStatsFragment = gql(`
       body {
         shortName
       }
+      ...SpeakerLink
     }
     stats {
       true
@@ -29,16 +31,17 @@ export function SpeakerWithStats(props: {
 
   const { speaker, stats } = useFragment(SpeakerWithStatsFragment, props.data)
 
+  if (!speaker) {
+    return null
+  }
+
   return (
     <div className="row">
       <div className="col col-6 col-md-5">
         <div className="w-100 px-5">
-          <a
-            className="d-block position-relative"
-            href={`/politici/${speaker?.id}`}
-          >
+          <SpeakerLink speaker={speaker} className="d-block position-relative">
             <span className="symbol symbol-square symbol-circle">
-              {speaker?.avatar && (
+              {speaker.avatar && (
                 <Image
                   src={mediaUrl + speaker.avatar}
                   alt={speaker.fullName}
@@ -47,18 +50,18 @@ export function SpeakerWithStats(props: {
                 />
               )}
             </span>
-            {speaker?.body?.shortName && (
+            {speaker.body?.shortName && (
               <div className="symbol-label d-flex align-items-center justify-content-center w-45px h-45px rounded-circle bg-dark">
                 <span className="smallest text-white lh-1 text-center p-2">
                   {speaker.body.shortName}
                 </span>
               </div>
             )}
-          </a>
+          </SpeakerLink>
         </div>
         <div className="text-center lh-1 mt-5">
-          <h3 className="fs-4 fw-bold mb-4">{speaker?.fullName}</h3>
-          <p className="fs-6 fw-bold mb-4">{speaker?.role}</p>
+          <h3 className="fs-4 fw-bold mb-4">{speaker.fullName}</h3>
+          <p className="fs-6 fw-bold mb-4">{speaker.role}</p>
         </div>
       </div>
 
