@@ -10,6 +10,7 @@ import {
   getNumericalArrayParams,
   getStringArrayParams,
   getStringParam,
+  parseParamId,
 } from '@/libs/query-params'
 import { parsePage } from '@/libs/pagination'
 import { NextPageContext } from 'next'
@@ -21,7 +22,6 @@ import {
 } from '@/pages/vyroky'
 import { gql } from '@/__generated__'
 import { SpeakerDetailQueryQuery } from '@/__generated__/graphql'
-import Link from 'next/link'
 import { SpeakerLink } from '@/components/speaker/SpeakerLink'
 
 const PAGE_SIZE = 10
@@ -80,7 +80,7 @@ export async function getServerSideProps({
       }
     `),
     variables: {
-      id: parseInt(params.id, 10),
+      id: parseParamId(params.id),
       offset: (page - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
       term,

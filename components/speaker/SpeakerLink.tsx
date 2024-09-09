@@ -4,7 +4,7 @@ import { PropsWithChildren } from 'react'
 
 const SpeakerLinkFragment = gql(`
     fragment SpeakerLink on Speaker {
-      id
+      slug
     }
 `)
 
@@ -21,7 +21,7 @@ export function SpeakerLink(
 ) {
   const speaker = useFragment(SpeakerLinkFragment, props.speaker)
 
-  let href = `/politici/${speaker.id}`
+  let href = `/politici/${speaker.slug}`
 
   if (props.queryParams) {
     href += props.queryParams

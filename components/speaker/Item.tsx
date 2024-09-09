@@ -1,7 +1,7 @@
 import { SpeakerLink } from './SpeakerLink'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 
-export const SpeakerItemFragment = gql(`
+const SpeakerItemFragment = gql(`
   fragment SpeakerItemDetail on Speaker {
     id
     fullName
