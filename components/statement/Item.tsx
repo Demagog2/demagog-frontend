@@ -157,7 +157,7 @@ export default function StatementItem(props: {
               </div>
               <div className="d-flex justify-content-between align-items-center w-100">
                 <a
-                  className="accordion-link text-dark text-underline"
+                  className="accordion-link text-dark text-decoration-underline"
                   onClick={() => setOpenExplanation(!openExplanation)}
                 >
                   {openExplanation ? (
