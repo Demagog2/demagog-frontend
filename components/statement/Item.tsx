@@ -4,9 +4,9 @@ import TagIcon from '@/assets/icons/tag.svg'
 import LinkIcon from '@/assets/icons/link.svg'
 import formatDate from '@/libs/format-date'
 import { useState, useRef } from 'react'
-import gql from 'graphql-tag'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 
-export const StatementItemFragment = gql`
+const StatementItemFragment = gql(`
   fragment StatementDetail on Statement {
     id
     content
@@ -16,6 +16,10 @@ export const StatementItemFragment = gql`
         avatar(size: detail)
       }
       fullName
+      body {
+        id
+        shortName
+      }
     }
     source {
       releasedAt
@@ -36,9 +40,13 @@ export const StatementItemFragment = gql`
       explanationHtml
     }
   }
-`
+`)
 
-export default function StatementItem({ statement }: any) {
+export default function StatementItem(props: {
+  statement: FragmentType<typeof StatementItemFragment>
+}) {
+  const statement = useFragment(StatementItemFragment, props.statement)
+
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
@@ -53,12 +61,21 @@ export default function StatementItem({ statement }: any) {
                   href={'/politici/' + statement.sourceSpeaker.speaker.id}
                   className="d-block position-relative"
                 >
-                  <span className="symbol symbol-square symbol-circle">
-                    <img
-                      src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
-                      alt={statement.sourceSpeaker.fullName}
-                    />
-                  </span>
+                  {statement.sourceSpeaker.speaker.avatar && (
+                    <span className="symbol symbol-square symbol-circle">
+                      <img
+                        src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
+                        alt={statement.sourceSpeaker.fullName}
+                      />
+                    </span>
+                  )}
+                  {statement.sourceSpeaker?.body?.shortName && (
+                    <div className="symbol-label d-flex align-items-center justify-content-center w-45px h-45px rounded-circle bg-dark">
+                      <span className="smallest text-white lh-1 text-center p-2">
+                        {statement.sourceSpeaker.body.shortName}
+                      </span>
+                    </div>
+                  )}
                 </Link>
               </div>
               <div className="mt-2 text-center w-100">
@@ -75,7 +92,7 @@ export default function StatementItem({ statement }: any) {
                   dangerouslySetInnerHTML={{ __html: statement.content }}
                 ></span>
               </blockquote>
-              {statement.source.medium.name && statement.source.releasedAt && (
+              {statement.source.medium?.name && statement.source.releasedAt && (
                 <cite className="mb-2 fs-7">
                   {statement.source.medium.name}
                   <span>, </span>
@@ -100,8 +117,8 @@ export default function StatementItem({ statement }: any) {
         </div>
         <div className="col col-12 col-md-6 col-lg-5">
           <StatementAssessment
-            type={statement.assessment.veracity.key}
-            name={statement.assessment.veracity.name}
+            type={statement.assessment.veracity?.key}
+            name={statement.assessment.veracity?.name}
             size="15"
           />
           {statement.assessment.shortExplanation === null ? (
@@ -109,7 +126,7 @@ export default function StatementItem({ statement }: any) {
               <div
                 className="scroll-vertical mh-400px my-5 content fs-6"
                 dangerouslySetInnerHTML={{
-                  __html: statement.assessment.explanationHtml,
+                  __html: statement.assessment.explanationHtml ?? '',
                 }}
               ></div>
             </div>
@@ -118,7 +135,7 @@ export default function StatementItem({ statement }: any) {
               <div
                 className="content fs-6"
                 dangerouslySetInnerHTML={{
-                  __html: statement.assessment.shortExplanation,
+                  __html: statement.assessment.shortExplanation ?? '',
                 }}
               ></div>
               <div
@@ -133,7 +150,7 @@ export default function StatementItem({ statement }: any) {
                 <div
                   className="scroll-vertical mh-400px my-5 content fs-6"
                   dangerouslySetInnerHTML={{
-                    __html: statement.assessment.explanationHtml,
+                    __html: statement.assessment.explanationHtml ?? '',
                   }}
                 ></div>
               </div>

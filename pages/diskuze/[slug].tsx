@@ -1,22 +1,14 @@
 import client from '@/libs/apollo-client'
 import formatDate from '@/libs/format-date'
-import ArticleStatements from '@/components/article/Statements'
-import gql from 'graphql-tag'
-import { StatementItemFragment } from '@/components/statement/Item'
-import { SpeakerWithStatsFragment } from '@/components/speaker/SpeakerWithStats'
-
-// TODO - Html elements rerender in content
-
-interface DiskuzeProps {
-  article: any
-  slug: string
-}
+import { ArticleDetailQuery } from '@/__generated__/graphql'
+import { gql } from '@/__generated__'
+import { ArticleSegments } from '@/components/article/ArticleSegments'
 
 export async function getServerSideProps({ params }: any) {
   const { slug } = params
 
-  const { data: article } = await client.query({
-    query: gql`
+  const { data } = await client.query({
+    query: gql(`
       query ArticleDetail($slug: String!) {
         article(slug: $slug) {
           title
@@ -34,21 +26,10 @@ export async function getServerSideProps({ params }: any) {
               name
             }
           }
-          segments {
-            segmentType
-            textHtml
-            statements {
-              ...StatementDetail
-            }
-          }
-          debateStats {
-            ...SpeakerWithStatsFragment
-          }
+          ...ArticleSegments
         }
       }
-      ${StatementItemFragment}
-      ${SpeakerWithStatsFragment}
-    `,
+    `),
     variables: {
       slug: slug,
     },
@@ -56,13 +37,12 @@ export async function getServerSideProps({ params }: any) {
 
   return {
     props: {
-      article: article.article,
-      slug: slug,
+      article: data.article,
     },
   }
 }
 
-const Diskuze: React.FC<DiskuzeProps> = ({ article, slug }) => {
+const Diskuze = ({ article }: { article: ArticleDetailQuery['article'] }) => {
   return (
     <div className="container">
       <div className="row g-10">
@@ -80,22 +60,27 @@ const Diskuze: React.FC<DiskuzeProps> = ({ article, slug }) => {
               </h2>
               <div className="row g-1 mt-2">
                 <span className="col col-auto fs-5">
-                  {article.source.medium.name}
+                  {article.source.medium?.name}
                 </span>
-                <span className="col col-auto fs-5">ze dne</span>
-                <span className="col col-auto fs-5">
-                  {formatDate(article.source.releasedAt)}
-                </span>
-                {article.source.mediaPersonalities.length > 0 && (
+                {article.source?.releasedAt && (
+                  <>
+                    <span className="col col-auto fs-5">ze dne</span>
+                    <span className="col col-auto fs-5">
+                      {formatDate(article.source.releasedAt)}
+                    </span>
+                  </>
+                )}
+
+                {(article.source.mediaPersonalities?.length ?? 0) > 0 && (
                   <span className="col col-auto fs-5">
-                    {article.source.mediaPersonalities.length > 1 ? (
+                    {(article.source.mediaPersonalities?.length ?? 0) > 1 ? (
                       <>moderátoři</>
                     ) : (
                       <>moderátor</>
                     )}
                   </span>
                 )}
-                {article.source.mediaPersonalities.map(
+                {article.source.mediaPersonalities?.map(
                   (mediaPersonality: any) => (
                     <span
                       key={mediaPersonality.id}
@@ -106,7 +91,7 @@ const Diskuze: React.FC<DiskuzeProps> = ({ article, slug }) => {
                   )
                 )}
                 <span className="col col-auto fs-5">,</span>
-                {article.source.mediaPersonalities.length > 0 && (
+                {article.source.sourceUrl && (
                   <span className="col col-auto fs-5">
                     <a href={article.source.sourceUrl} className="ext">
                       záznam
@@ -114,42 +99,11 @@ const Diskuze: React.FC<DiskuzeProps> = ({ article, slug }) => {
                   </span>
                 )}
               </div>
-              {article.articleType === 'static' && (
-                <div>
-                  <span className="fs-5 text-primary">Komentář</span>
-                  <i className="fs-5">{formatDate(article.publishedAt)}</i>
-                </div>
-              )}
-              {article.articleType === 'facebook_factcheck' && (
-                <div>
-                  <span className="fs-5 text-primary">Meta fact-check</span>
-                  <i className="fs-5">{formatDate(article.publishedAt)}</i>
-                </div>
-              )}
             </div>
           )}
         </div>
         <div className="col col-12">
-          {article.segments.map((segment: any) => (
-            <div key={segment.id}>
-              {segment.segmentType === 'text' && (
-                <div className="row justify-content-center">
-                  <div className="col col-12 col-lg-8 content fs-6">
-                    <div
-                      dangerouslySetInnerHTML={{ __html: segment.textHtml }}
-                    ></div>
-                  </div>
-                </div>
-              )}
-              {segment.segmentType === 'source_statements' && (
-                <ArticleStatements
-                  key={segment.id}
-                  statements={segment.statements}
-                  debateStats={article.debateStats}
-                />
-              )}
-            </div>
-          ))}
+          <ArticleSegments data={article} />
         </div>
       </div>
     </div>
