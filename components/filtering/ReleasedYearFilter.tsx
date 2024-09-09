@@ -1,38 +1,33 @@
-import classNames from 'classnames'
-import gql from 'graphql-tag'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 import { StatementCount } from './StatementCount'
+import { FormCheckbox } from './controls/FormCheckbox'
 
-export type ReleasedYearAggregation = {
-  year: number
-  count: number
-  isSelected: boolean
-}
-
-export const ReleasedYearFilterFragment = gql`
+export const ReleasedYearFilterFragment = gql(`
   fragment ReleasedYearFilter on YearAggregate {
     year
     count
     isSelected
   }
-`
+`)
 
-type Props = ReleasedYearAggregation
+type Props = {
+  year: FragmentType<typeof ReleasedYearFilterFragment>
+}
 
-export function ReleasedYearFilter({ year, count, isSelected }: Props) {
+export function ReleasedYearFilter(props: Props) {
+  const { year, isSelected, count } = useFragment(
+    ReleasedYearFilterFragment,
+    props.year
+  )
+
   return (
-    <div className={classNames('check-btn', 'py-2', { disabled: count === 0 })}>
-      <input
-        type="checkbox"
-        disabled={count === 0}
-        name="years"
-        value={year}
-        defaultChecked={isSelected}
-      />
-      <span className="checkmark"></span>
-      <span className="small fw-600 me-2">{year}</span>
-      <span className="smallest min-w-40px">
-        <StatementCount count={count} />
-      </span>
-    </div>
+    <FormCheckbox
+      inputName="years"
+      value={year.toString()}
+      name={year.toString()}
+      label={<StatementCount count={count} />}
+      isDisabled={count === 0}
+      isSelected={isSelected}
+    />
   )
 }

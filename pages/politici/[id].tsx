@@ -2,7 +2,6 @@ import client from '@/libs/apollo-client'
 import StatementItem, {
   StatementItemFragment,
 } from '@/components/statement/Item'
-import gql from 'graphql-tag'
 import classNames from 'classnames'
 import TrueIcon from '@/assets/icons/true.svg'
 import UntrueIcon from '@/assets/icons/untrue.svg'
@@ -15,6 +14,7 @@ import { ReleasedYearFilterFragment } from '@/components/filtering/ReleasedYearF
 import {
   getNumericalArrayParams,
   getStringArrayParams,
+  getStringParam,
 } from '@/libs/query-params'
 import { parsePage } from '@/libs/pagination'
 import { NextPageContext } from 'next'
@@ -24,6 +24,7 @@ import {
   TagFilters,
   VeracityFilters,
 } from '@/pages/vyroky'
+import { gql } from '@/__generated__'
 
 const PAGE_SIZE = 10
 
@@ -31,14 +32,14 @@ export async function getServerSideProps({
   query,
   params,
 }: NextPageContext & { params: { id: string } }) {
-  const term = query?.q ?? ''
-  const selectedTags = getNumericalArrayParams(query?.tags)
-  const selectedYears = getNumericalArrayParams(query?.years)
-  const selectedVeracities = getStringArrayParams(query?.veracities)
-  const page = parsePage(query?.page)
+  const term = getStringParam(query.q)
+  const selectedTags = getNumericalArrayParams(query.tags)
+  const selectedYears = getNumericalArrayParams(query.years)
+  const selectedVeracities = getStringArrayParams(query.veracities)
+  const page = parsePage(query.page)
 
   const { data } = await client.query({
-    query: gql`
+    query: gql(`
       query SpeakerDetailQuery(
         $id: Int!
         $term: String!
@@ -69,24 +70,14 @@ export async function getServerSideProps({
             statements {
               ...StatementDetail
             }
-            tags {
-              ...TagFilter
-            }
-            veracities {
-              ...VeracityFilter
-            }
-            years {
-              ...ReleasedYearFilter
-            }
+            ...TagFilters
+            ...VeracityFilters
+            ...ReleasedYearFilters
             totalCount
           }
         }
       }
-      ${StatementItemFragment}
-      ${TagFilterFragment}
-      ${VeracityFilterFragment}
-      ${ReleasedYearFilterFragment}
-    `,
+    `),
     variables: {
       id: parseInt(params.id, 10),
       offset: (page - 1) * PAGE_SIZE,
@@ -132,18 +123,14 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
   const renderFilters = useCallback(() => {
     return (
       <>
-        <TagFilters tags={speaker.searchStatements.tags} />
+        <TagFilters data={speaker.searchStatements} />
 
-        <VeracityFilters veracities={speaker.searchStatements.veracities} />
+        <VeracityFilters data={speaker.searchStatements} />
 
-        <ReleasedYearFilters years={speaker.searchStatements.years} />
+        <ReleasedYearFilters data={speaker.searchStatements} />
       </>
     )
-  }, [
-    speaker.searchStatements.tags,
-    speaker.searchStatements.veracities,
-    speaker.searchStatements.years,
-  ])
+  }, [speaker.searchStatements])
 
   return (
     <div className="container">

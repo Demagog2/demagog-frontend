@@ -1,13 +1,8 @@
-import gql from 'graphql-tag'
-import { StatementCount } from './StatementCount'
+import { ReactNode } from 'react'
+import { FormCheckbox } from './controls/FormCheckbox'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 
-export type TagAggregation = {
-  tag: { id: string; name: string }
-  isSelected: boolean
-  count: number
-}
-
-export const TagFilterFragment = gql`
+export const TagFilterFragment = gql(`
   fragment TagFilter on TagAggregate {
     tag {
       id
@@ -16,24 +11,25 @@ export const TagFilterFragment = gql`
     isSelected
     count
   }
-`
+`)
 
-type Props = TagAggregation
+type Props = {
+  tag: FragmentType<typeof TagFilterFragment>
+  renderLabel(props: { count: number }): ReactNode
+}
 
-export function TagFilter({ tag, count, isSelected = false }: Props) {
+export function TagFilter(props: Props) {
+  const { tag, isSelected, count } = useFragment(TagFilterFragment, props.tag)
+
+  const LabelRenderer = props.renderLabel
+
   return (
-    <div className="check-btn py-2" key={tag.id}>
-      <input
-        name="tags"
-        type="checkbox"
-        value={tag.id}
-        defaultChecked={isSelected}
-      />
-      <span className="checkmark" />
-      <span className="small fw-600 me-2">{tag.name}</span>
-      <span className="smallest min-w-40px">
-        <StatementCount count={count} />
-      </span>
-    </div>
+    <FormCheckbox
+      inputName="tags"
+      value={tag.id}
+      name={tag.name}
+      isSelected={isSelected}
+      label={<LabelRenderer count={count} />}
+    />
   )
 }

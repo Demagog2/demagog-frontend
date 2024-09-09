@@ -1,18 +1,8 @@
-import classNames from 'classnames'
-import gql from 'graphql-tag'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 import { StatementCount } from './StatementCount'
+import { FormCheckbox } from './controls/FormCheckbox'
 
-export type VeracityAggregation = {
-  veracity: {
-    id: string
-    key: string
-    name: string
-  }
-  isSelected: boolean
-  count: number
-}
-
-export const VeracityFilterFragment = gql`
+export const VeracityFilterFragment = gql(`
   fragment VeracityFilter on VeracityAggregate {
     veracity {
       id
@@ -22,30 +12,26 @@ export const VeracityFilterFragment = gql`
     isSelected
     count
   }
-`
+`)
 
-type Props = VeracityAggregation
+type Props = {
+  veracity: FragmentType<typeof VeracityFilterFragment>
+}
 
-export function VeracityFilter({ veracity, count, isSelected }: Props) {
+export function VeracityFilter(props: Props) {
+  const { veracity, count, isSelected } = useFragment(
+    VeracityFilterFragment,
+    props.veracity
+  )
+
   return (
-    <div
-      key={veracity.id}
-      className={classNames('check-btn', 'py-2', {
-        disabled: count === 0,
-      })}
-    >
-      <input
-        type="checkbox"
-        name="veracities"
-        disabled={count === 0}
-        value={veracity.key}
-        defaultChecked={isSelected}
-      />
-      <span className="checkmark"></span>
-      <span className="small fw-600 me-2">{veracity.name}</span>
-      <span className="smallest min-w-40px">
-        <StatementCount count={count} />
-      </span>
-    </div>
+    <FormCheckbox
+      inputName="veracities"
+      value={veracity.key}
+      name={veracity.name}
+      isSelected={isSelected}
+      isDisabled={count === 0}
+      label={<StatementCount count={count} />}
+    />
   )
 }

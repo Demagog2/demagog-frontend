@@ -1,59 +1,43 @@
 import TitleIcon from '@/assets/icons/statements.svg'
 import client from '@/libs/apollo-client'
-import StatementItem, {
-  StatementItemFragment,
-} from '@/components/statement/Item'
-import gql from 'graphql-tag'
+import StatementItem from '@/components/statement/Item'
 import { useCallback } from 'react'
-import {
-  TagAggregation,
-  TagFilter,
-  TagFilterFragment,
-} from '@/components/filtering/TagFilter'
+import { TagFilter } from '@/components/filtering/TagFilter'
 import { NextPageContext } from 'next'
-import {
-  VeracityAggregation,
-  VeracityFilter,
-  VeracityFilterFragment,
-} from '@/components/filtering/VeracityFilter'
+import { VeracityFilter } from '@/components/filtering/VeracityFilter'
 import { parsePage } from '@/libs/pagination'
 import { FilterSection } from '@/components/filtering/FilterSection'
-import {
-  ReleasedYearAggregation,
-  ReleasedYearFilter,
-  ReleasedYearFilterFragment,
-} from '@/components/filtering/ReleasedYearFilter'
+import { ReleasedYearFilter } from '@/components/filtering/ReleasedYearFilter'
 import { FilterForm } from '@/components/filtering/FilterForm'
 import {
-  getBooleanParam,
   getNumericalArrayParams,
   getStringArrayParams,
+  getStringParam,
 } from '@/libs/query-params'
+import { FragmentType, gql, useFragment } from '@/__generated__'
+import { StatementsListingQueryQuery } from '@/__generated__/graphql'
+import { StatementCount } from '@/components/filtering/StatementCount'
 
 const PAGE_SIZE = 10
 
 interface StatementsProps {
   page: number
-  statements: any
-  tags: TagAggregation[]
-  years: ReleasedYearAggregation[]
-  veracities: VeracityAggregation[]
+  data: StatementsListingQueryQuery
   term: string
-  totalCount: number
   selectedTags: number[]
   selectedYears: number[]
   selectedVeracities: string[]
 }
 
 export async function getServerSideProps({ query }: NextPageContext) {
-  const term = query?.q ?? ''
+  const term = getStringParam(query?.q)
   const selectedTags = getNumericalArrayParams(query?.tags)
   const selectedYears = getNumericalArrayParams(query?.years)
   const selectedVeracities = getStringArrayParams(query?.veracities)
   const page = parsePage(query?.page)
 
   const { data } = await client.query({
-    query: gql`
+    query: gql(`
       query StatementsListingQuery(
         $term: String!
         $limit: Int
@@ -68,25 +52,16 @@ export async function getServerSideProps({ query }: NextPageContext) {
           includeAggregations: true
         ) {
           statements {
+            id
             ...StatementDetail
           }
-          tags {
-            ...TagFilter
-          }
-          veracities {
-            ...VeracityFilter
-          }
-          years {
-            ...ReleasedYearFilter
-          }
+          ...TagFilters
+          ...VeracityFilters
+          ...ReleasedYearFilters
           totalCount
         }
       }
-      ${StatementItemFragment}
-      ${TagFilterFragment}
-      ${VeracityFilterFragment}
-      ${ReleasedYearFilterFragment}
-    `,
+    `),
     variables: {
       offset: (page - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
@@ -101,11 +76,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
 
   return {
     props: {
-      tags: data.searchStatements.tags,
-      years: data.searchStatements.years,
-      statements: data.searchStatements.statements,
-      veracities: data.searchStatements.veracities,
-      totalCount: data.searchStatements.totalCount,
+      data,
       term,
       selectedTags,
       selectedVeracities,
@@ -115,33 +86,81 @@ export async function getServerSideProps({ query }: NextPageContext) {
   }
 }
 
-export function TagFilters(props: { tags: TagAggregation[] }) {
+const TagFiltersFragment = gql(`
+  fragment TagFilters on SearchResultStatement {
+    tags {
+      tag {
+        id
+      }
+      ...TagFilter
+    }
+  }
+`)
+
+export function TagFilters(props: {
+  data: FragmentType<typeof TagFiltersFragment>
+}) {
+  const data = useFragment(TagFiltersFragment, props.data)
+
   return (
     <FilterSection name="Témata" defaultOpen>
-      {props.tags.map((tag) => (
-        <TagFilter key={tag.tag.id} {...tag} />
+      {data.tags?.map((tagAggregate) => (
+        <TagFilter
+          key={tagAggregate.tag.id}
+          tag={tagAggregate}
+          renderLabel={StatementCount}
+        />
       ))}
     </FilterSection>
   )
 }
 
-export function VeracityFilters(props: { veracities: VeracityAggregation[] }) {
+const VeracityFiltersFragment = gql(`
+  fragment VeracityFilters on SearchResultStatement {
+    veracities {
+      veracity {
+        id
+      }
+      ...VeracityFilter
+    }
+  }
+`)
+
+export function VeracityFilters(props: {
+  data: FragmentType<typeof VeracityFiltersFragment>
+}) {
+  const data = useFragment(VeracityFiltersFragment, props.data)
+
   return (
     <FilterSection name="Hodnocení">
-      {props.veracities.map((veracity) => (
-        <VeracityFilter key={veracity.veracity.id} {...veracity} />
+      {data.veracities?.map((veracityAggregate) => (
+        <VeracityFilter
+          key={veracityAggregate.veracity.id}
+          veracity={veracityAggregate}
+        />
       ))}
     </FilterSection>
   )
 }
 
+const ReleasedYearFiltersFragment = gql(`
+  fragment ReleasedYearFilters on SearchResultStatement {
+    years {
+      year
+      ...ReleasedYearFilter
+    }
+  }
+`)
+
 export function ReleasedYearFilters(props: {
-  years: { year: number; count: number; isSelected: boolean }[]
+  data: FragmentType<typeof ReleasedYearFiltersFragment>
 }) {
+  const data = useFragment(ReleasedYearFiltersFragment, props.data)
+
   return (
     <FilterSection name="Roky">
-      {props.years.map((year) => (
-        <ReleasedYearFilter key={year.year} {...year} />
+      {data.years?.map((yearAggregate) => (
+        <ReleasedYearFilter key={yearAggregate.year} year={yearAggregate} />
       ))}
     </FilterSection>
   )
@@ -152,17 +171,20 @@ export default function Statements(props: StatementsProps) {
     [...props.selectedVeracities, ...props.selectedYears, ...props.selectedTags]
       .length > 0
 
-  const renderFilters = useCallback(() => {
-    return (
+  const { searchStatements } = props.data
+
+  const renderFilters = useCallback(
+    () => (
       <>
-        <TagFilters tags={props.tags} />
+        <TagFilters data={searchStatements} />
 
-        <VeracityFilters veracities={props.veracities} />
+        <VeracityFilters data={searchStatements} />
 
-        <ReleasedYearFilters years={props.years} />
+        <ReleasedYearFilters data={searchStatements} />
       </>
-    )
-  }, [props.tags, props.veracities, props.years])
+    ),
+    [searchStatements]
+  )
 
   return (
     <div className="container">
@@ -182,11 +204,11 @@ export default function Statements(props: StatementsProps) {
           term={props.term}
           pageSize={PAGE_SIZE}
           page={props.page}
-          totalCount={props.totalCount}
+          totalCount={searchStatements.totalCount}
           renderFilters={renderFilters}
           searchPlaceholder="Zadejte hledaný výrok"
         >
-          {props.statements.map((statement: any) => (
+          {searchStatements.statements.map((statement) => (
             <StatementItem key={statement.id} statement={statement} />
           ))}
         </FilterForm>

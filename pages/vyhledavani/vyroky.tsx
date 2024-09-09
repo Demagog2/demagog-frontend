@@ -39,7 +39,7 @@ export async function getServerSideProps({ query }: NextPageContext) {
     props: {
       term,
       page,
-      statementSearchResult: data['searchStatements'],
+      statementSearchResult: data.searchStatements,
     },
   }
 }
