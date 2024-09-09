@@ -1,16 +1,11 @@
 import client from '@/libs/apollo-client'
-import StatementItem, {
-  StatementItemFragment,
-} from '@/components/statement/Item'
+import StatementItem from '@/components/statement/Item'
 import classNames from 'classnames'
 import TrueIcon from '@/assets/icons/true.svg'
 import UntrueIcon from '@/assets/icons/untrue.svg'
 import UnverifiableIcon from '@/assets/icons/unverifiable.svg'
 import MisleadingIcon from '@/assets/icons/misleading.svg'
 import { FilterForm } from '@/components/filtering/FilterForm'
-import { TagFilterFragment } from '@/components/filtering/TagFilter'
-import { VeracityFilterFragment } from '@/components/filtering/VeracityFilter'
-import { ReleasedYearFilterFragment } from '@/components/filtering/ReleasedYearFilter'
 import {
   getNumericalArrayParams,
   getStringArrayParams,
@@ -25,6 +20,7 @@ import {
   VeracityFilters,
 } from '@/pages/vyroky'
 import { gql } from '@/__generated__'
+import { SpeakerDetailQueryQuery } from '@/__generated__/graphql'
 
 const PAGE_SIZE = 10
 
@@ -68,6 +64,7 @@ export async function getServerSideProps({
             includeAggregations: true
           ) {
             statements {
+              id
               ...StatementDetail
             }
             ...TagFilters
@@ -104,7 +101,7 @@ export async function getServerSideProps({
 }
 
 interface SpeakerDetailProps {
-  speaker: any
+  speaker: SpeakerDetailQueryQuery['speaker']
   term: string
   selectedVeracities: string[]
   selectedYears: number[]
@@ -138,9 +135,11 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
         <div className="col col-12 col-md-6 col-lg-8">
           <div className="d-flex flex-wrap">
             <div className="w-125px position-relative me-md-5 me-lg-10 mb-5 mb-md-0">
-              <span className="symbol symbol-square symbol-circle">
-                <img src={mediaUrl + speaker.avatar} alt={speaker.fullName} />
-              </span>
+              {speaker.avatar && (
+                <span className="symbol symbol-square symbol-circle">
+                  <img src={mediaUrl + speaker.avatar} alt={speaker.fullName} />
+                </span>
+              )}
               {speaker.body && (
                 <div className="symbol-label d-flex align-items-center justify-content-center w-45px h-45px rounded-circle bg-dark">
                   <span className="smallest text-white lh-1 text-center p-2">
@@ -165,70 +164,70 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
             <div className="me-5">
               <div
                 className={classNames('d-flex', 'align-items-center', 'mb-2', {
-                  'cursor-pointer': speaker.stats.true > 0,
-                  'stat-link': speaker.stats.true > 0,
+                  'cursor-pointer': (speaker.stats?.true ?? 0) > 0,
+                  'stat-link': (speaker.stats?.true ?? 0) > 0,
                 })}
                 data-action="click->components--stats#toggleLink"
                 data-url="?hodnoceni[]=pravda"
-                data-count={speaker.stats.true}
+                data-count={speaker.stats?.true}
                 title="Pravda"
               >
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-primary rounded-circle me-2">
                   <TrueIcon width={17} height={13} />
                 </span>
-                <span className="display-4 fs-bold">{speaker.stats.true}</span>
+                <span className="display-4 fs-bold">{speaker.stats?.true}</span>
               </div>
               <div
                 className={classNames('d-flex', 'align-items-center', 'mb-2', {
-                  'cursor-pointer': speaker.stats.unverifiable > 0,
-                  'stat-link': speaker.stats.unverifiable > 0,
+                  'cursor-pointer': (speaker.stats?.unverifiable ?? 0) > 0,
+                  'stat-link': (speaker.stats?.unverifiable ?? 0) > 0,
                 })}
                 data-url="?hodnoceni[]=neoveritelne"
                 data-action="click->components--stats#toggleLink"
-                data-count={speaker.stats.unverifiable}
+                data-count={speaker.stats?.unverifiable}
                 title="Neověřitelné"
               >
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-gray rounded-circle me-2">
                   <UnverifiableIcon width={12} height={22} />
                 </span>
                 <span className="display-4 fs-bold">
-                  {speaker.stats.unverifiable}
+                  {speaker.stats?.unverifiable}
                 </span>
               </div>
             </div>
             <div>
               <div
                 className={classNames('d-flex', 'align-items-center', 'mb-2', {
-                  'cursor-pointer': speaker.stats.untrue > 0,
-                  'stat-link': speaker.stats.untrue > 0,
+                  'cursor-pointer': (speaker.stats?.untrue ?? 0) > 0,
+                  'stat-link': (speaker.stats?.untrue ?? 0) > 0,
                 })}
                 data-action="click->components--stats#toggleLink"
                 data-url="?hodnoceni[]=nepravda"
-                data-count={speaker.stats.untrue}
+                data-count={speaker.stats?.untrue}
                 title="Nepravda"
               >
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-red rounded-circle me-2">
                   <UntrueIcon width={13} height={13} />
                 </span>
                 <span className="display-4 fs-bold">
-                  {speaker.stats.untrue}
+                  {speaker.stats?.untrue}
                 </span>
               </div>
               <div
                 className={classNames('d-flex', 'align-items-center', 'mb-2', {
-                  'cursor-pointer': speaker.stats.misleading > 0,
-                  'stat-link': speaker.stats.misleading > 0,
+                  'cursor-pointer': (speaker.stats?.misleading ?? 0) > 0,
+                  'stat-link': (speaker.stats?.misleading ?? 0) > 0,
                 })}
                 data-action="click->components--stats#toggleLink"
                 data-url="?hodnoceni[]=zavadejici"
-                data-count={speaker.stats.misleading}
+                data-count={speaker.stats?.misleading}
                 title="Zavádějící"
               >
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-secondary rounded-circle me-2">
                   <MisleadingIcon width={4} height={22} />
                 </span>
                 <span className="display-4 fs-bold">
-                  {speaker.stats.misleading}
+                  {speaker.stats?.misleading}
                 </span>
               </div>
             </div>
@@ -245,7 +244,7 @@ const PoliticiDetail = (props: SpeakerDetailProps) => {
         renderFilters={renderFilters}
         searchPlaceholder="Zadejte hledaný výrok"
       >
-        {speaker.searchStatements.statements.map((statement: any) => (
+        {speaker.searchStatements.statements.map((statement) => (
           <StatementItem key={statement.id} statement={statement} />
         ))}
       </FilterForm>
