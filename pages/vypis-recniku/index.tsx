@@ -121,6 +121,7 @@ function BodyFilters(props: BodyFilterProps) {
         <FilterSection key={bodyGroup.name} name={bodyGroup.name} defaultOpen>
           {bodyGroup.bodies.map((body) => (
             <FormCheckbox
+              inputName="bodies"
               key={body.body.id}
               value={body.body.id}
               name={body.body.displayName}
