@@ -8,45 +8,35 @@ import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactchec
 import { Pagination } from '@/components/article/Pagination'
 import ArticleTags from '@/components/article/Tags'
 import client from '@/libs/apollo-client'
-import { NextPageContext } from 'next'
+import { QueryParams } from '@/libs/params'
+
 import Link from 'next/link'
 
-export async function getServerSideProps({ query }: NextPageContext) {
-  const after = query?.after
-  const before = query?.before
+export default async function FacebookCollaboration(props: {
+  searchParams: QueryParams
+}) {
+  const after = props.searchParams?.after
+  const before = props.searchParams?.before
 
   const { data } = await client.query<FacebookCollaborationQuery>({
     query: gql(`
-        query facebookCollaboration($after: String, $before: String) {
-          facebookFactchecks(first: 10, after: $after, before: $before) {
-            ...FacebookFactcheckFirstPageFragment
-            ...FacebookFactcheckNextPageFragment
-            pageInfo {
-              hasPreviousPage
-              ...PaginationFragment
+          query facebookCollaboration($after: String, $before: String) {
+            facebookFactchecks(first: 10, after: $after, before: $before) {
+              ...FacebookFactcheckFirstPageFragment
+              ...FacebookFactcheckNextPageFragment
+              pageInfo {
+                hasPreviousPage
+                ...PaginationFragment
+              }
+            }
+            articleTags(limit: 5) {
+              ...ArticleTagDetail
             }
           }
-          articleTags(limit: 5) {
-            ...ArticleTagDetail
-          }
-        }
-      `),
+        `),
     variables: after ? { after } : before ? { before } : {},
   })
 
-  return {
-    props: {
-      data,
-    },
-  }
-}
-
-export default function FacebookCollaboration({
-  data,
-}: {
-  data: FacebookCollaborationQuery
-  page: number
-}) {
   return (
     <div className="container">
       <div className="row g-5 g-lg-10 flex-lg-row-reverse">

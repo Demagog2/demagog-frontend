@@ -3,7 +3,7 @@ import { WorkshopOffer } from '@/components/workshops/WorkshopOffer'
 import { gql } from '@/__generated__'
 import { WorkshopsDataQuery } from '@/__generated__/graphql'
 
-export async function getStaticProps() {
+const Workshops = async () => {
   const { data } = await client.query<WorkshopsDataQuery>({
     query: gql(`
       query workshopsData {
@@ -17,14 +17,6 @@ export async function getStaticProps() {
     `),
   })
 
-  return {
-    props: {
-      workshops: data.workshops,
-    },
-  }
-}
-
-const Workshops = (props: { workshops: WorkshopsDataQuery['workshops'] }) => {
   return (
     <div className="container">
       <div className="row g-5 mb-5">
@@ -85,7 +77,7 @@ const Workshops = (props: { workshops: WorkshopsDataQuery['workshops'] }) => {
       </div>
 
       <div className="row mt-1 gx-20 gy-20 display-flex">
-        {props.workshops.nodes?.map((workshop) => {
+        {data.workshops.nodes?.map((workshop) => {
           if (!workshop) {
             return null
           }

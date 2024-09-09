@@ -1,4 +1,3 @@
-import type { NextPageContext } from 'next'
 import apolloClient from '@/libs/apollo-client'
 import ArticleTags from '@/components/article/Tags'
 import { gql } from '@/__generated__'
@@ -7,10 +6,14 @@ import { Pagination } from '@/components/article/Pagination'
 import { notFound } from 'next/navigation'
 import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactcheckNextPage'
 import { FacebookFactcheckFirstPage } from '@/components/article/FacebookFactcheckFirstPage'
+import { QueryParams } from '@/libs/params'
 
-export async function getServerSideProps({ query }: NextPageContext) {
-  const after = query?.after
-  const before = query?.before
+export default async function Tag(props: {
+  params: { slug: string }
+  searchParams: QueryParams
+}) {
+  const after = props.searchParams?.after
+  const before = props.searchParams?.before
 
   const { data } = await apolloClient.query<ArticleTagDetailQuery>({
     query: gql(`
@@ -33,27 +36,13 @@ export async function getServerSideProps({ query }: NextPageContext) {
       }
     `),
     variables: after
-      ? { after, slug: query.slug }
+      ? { after, slug: props.params.slug }
       : before
-        ? { before, slug: query.slug }
-        : { slug: query.slug },
+        ? { before, slug: props.params.slug }
+        : { slug: props.params.slug },
   })
 
-  return {
-    props: {
-      articleTag: data.articleTagBySlug,
-      articleTags: data.articleTags,
-    },
-  }
-}
-
-type TagProps = {
-  articleTag: ArticleTagDetailQuery['articleTagBySlug']
-  articleTags: ArticleTagDetailQuery['articleTags']
-}
-
-const Tag = (props: TagProps) => {
-  if (!props.articleTag) {
+  if (!data.articleTagBySlug) {
     notFound()
   }
 
@@ -61,23 +50,21 @@ const Tag = (props: TagProps) => {
     <div className="container">
       <div className="row g-5 g-lg-10 flex-lg-row-reverse">
         <div className="col col-12">
-          <ArticleTags tags={props.articleTags} isTagDetailOpen />
+          <ArticleTags tags={data.articleTags} isTagDetailOpen />
         </div>
 
-        {props.articleTag.articlesV2.pageInfo.hasPreviousPage ? (
-          <FacebookFactcheckNextPage data={props.articleTag.articlesV2} />
+        {data.articleTagBySlug.articlesV2.pageInfo.hasPreviousPage ? (
+          <FacebookFactcheckNextPage data={data.articleTagBySlug.articlesV2} />
         ) : (
           <FacebookFactcheckFirstPage
-            data={props.articleTag.articlesV2}
-            title={props.articleTag.title ?? ''}
-            description={<>{props.articleTag.description}</>}
+            data={data.articleTagBySlug.articlesV2}
+            title={data.articleTagBySlug.title ?? ''}
+            description={<>{data.articleTagBySlug.description}</>}
           />
         )}
 
-        <Pagination pageInfo={props.articleTag.articlesV2.pageInfo} />
+        <Pagination pageInfo={data.articleTagBySlug.articlesV2.pageInfo} />
       </div>
     </div>
   )
 }
-
-export default Tag

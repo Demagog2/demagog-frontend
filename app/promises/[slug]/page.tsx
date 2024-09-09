@@ -3,7 +3,6 @@ import TitleIcon from '@/assets/icons/promises.svg'
 
 import { PromisesQuery } from '@/__generated__/graphql'
 import { gql } from '@/__generated__'
-import { ReactNode } from 'react'
 import { FilterSection } from '@/components/filtering/FilterSection'
 import { PromiseStatsBanner } from '@/components/promises/stats/PromiseStatsBanner'
 import { TagFilter } from '@/components/filtering/TagFilter'
@@ -16,56 +15,58 @@ import {
   getStringArrayParams,
   getStringParam,
 } from '@/libs/query-params'
-import { NextPageContext } from 'next'
 import { parsePage } from '@/libs/pagination'
+import { QueryParams } from '@/libs/params'
 
 const SEARCH_PAGE_SIZE = 2000
 
-export async function getServerSideProps({
-  params,
-  query,
-}: {
+export default async function Promises(props: {
   params: { slug: string }
-} & NextPageContext) {
-  const term = getStringParam(query?.q)
-  const page = parsePage(query?.page)
+  searchParams: QueryParams
+}) {
+  const term = getStringParam(props.searchParams.q)
+  const page = parsePage(props.searchParams.page)
 
-  const selectedTags = getNumericalArrayParams(query?.tags)
-  const selectedPromiseRatings = getStringArrayParams(query?.promise_ratings)
+  const selectedTags = getNumericalArrayParams(props.searchParams.tags)
+  const selectedPromiseRatings = getStringArrayParams(
+    props.searchParams.promise_ratings
+  )
 
-  const { data } = await client.query<PromisesQuery>({
+  const {
+    data: { governmentPromisesEvaluationBySlug: article },
+  } = await client.query<PromisesQuery>({
     query: gql(`
-      query promises($slug: String!, $term: String!, $limit: Int, $offset: Int, $filters: PromiseFilterInput) {
-        governmentPromisesEvaluationBySlug(slug: $slug) {
-          id
-          slug
-          title
-          perex
-          searchPromises(term: $term, limit: $limit, offset: $offset, filters: $filters, includeAggregations: true) {
-            promises {
-              id
-              ...GovernmentalPromiseDetail
-            }
-            tags {
-              tag {
+        query promises($slug: String!, $term: String!, $limit: Int, $offset: Int, $filters: PromiseFilterInput) {
+          governmentPromisesEvaluationBySlug(slug: $slug) {
+            id
+            slug
+            title
+            perex
+            searchPromises(term: $term, limit: $limit, offset: $offset, filters: $filters, includeAggregations: true) {
+              promises {
                 id
+                ...GovernmentalPromiseDetail
               }
-              ...TagFilter
-            }
-            promiseRatings {
-              promiseRating {
-                id
+              tags {
+                tag {
+                  id
+                }
+                ...TagFilter
               }
-              ...PromiseRatingFilter
+              promiseRatings {
+                promiseRating {
+                  id
+                }
+                ...PromiseRatingFilter
+              }
+              totalCount
             }
-            totalCount
+            ...PromiseStatsBanner
           }
-          ...PromiseStatsBanner
         }
-      }
-    `),
+      `),
     variables: {
-      slug: params?.slug ?? '',
+      slug: props.params.slug,
       term: term,
       limit: SEARCH_PAGE_SIZE,
       offset: (page - 1) * SEARCH_PAGE_SIZE,
@@ -75,28 +76,6 @@ export async function getServerSideProps({
       },
     },
   })
-
-  return {
-    props: {
-      article: data.governmentPromisesEvaluationBySlug,
-      term,
-      page,
-      selectedTags,
-      selectedPromiseRatings,
-    },
-  }
-}
-
-type PromisesProps = {
-  article: PromisesQuery['governmentPromisesEvaluationBySlug']
-  term: string
-  page: number
-  selectedTags: number[]
-  selectedPromiseRatings: string[]
-}
-
-export default function Promises(props: PromisesProps) {
-  const { article } = props
 
   if (!article) {
     return null
@@ -191,13 +170,12 @@ export default function Promises(props: PromisesProps) {
 
         <FilterForm
           hasAnyFilters={
-            props.selectedPromiseRatings.length > 0 ||
-            props.selectedTags.length > 0
+            selectedPromiseRatings.length > 0 || selectedTags.length > 0
           }
-          renderFilters={(): ReactNode => (
+          renderFilters={
             <>
               <FilterSection name="Oblast" defaultOpen>
-                {props.article?.searchPromises?.tags?.map((tag) => (
+                {article.searchPromises?.tags?.map((tag) => (
                   <TagFilter
                     key={tag.tag.id}
                     tag={tag}
@@ -208,9 +186,9 @@ export default function Promises(props: PromisesProps) {
 
               <FilterSection
                 name="Hodnocení"
-                defaultOpen={props.selectedPromiseRatings.length > 0}
+                defaultOpen={selectedPromiseRatings.length > 0}
               >
-                {props.article?.searchPromises?.promiseRatings?.map(
+                {article.searchPromises?.promiseRatings?.map(
                   (promiseRating) => (
                     <PromiseRatingFilter
                       key={promiseRating.promiseRating.id}
@@ -220,10 +198,10 @@ export default function Promises(props: PromisesProps) {
                 )}
               </FilterSection>
             </>
-          )}
-          term={props.term}
+          }
+          term={term}
           pageSize={SEARCH_PAGE_SIZE}
-          page={props.page}
+          page={page}
           totalCount={article.searchPromises.totalCount}
           searchPlaceholder={'Hledat sliby'}
         >

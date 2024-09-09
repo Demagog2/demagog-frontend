@@ -1,3 +1,5 @@
+'use client'
+
 import { Pagination } from '@/components/pagination'
 import {
   ChangeEvent,
@@ -20,7 +22,7 @@ type FilterFormProps = PropsWithChildren<{
   totalCount: number
   searchPlaceholder: string
 
-  renderFilters(): ReactNode
+  renderFilters: ReactNode
 }>
 
 export function FilterForm(props: FilterFormProps) {

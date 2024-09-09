@@ -1,24 +1,19 @@
 import client from '../libs/apollo-client'
-import { Metadata, NextPageContext } from 'next'
+import { Metadata } from 'next'
 import { HomepageDataQuery } from '@/__generated__/graphql'
 import { gql } from '@/__generated__'
 import { notFound } from 'next/navigation'
 import { HomepageFirstPage } from '@/components/homepage/HomepageFirstPage'
 import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
-
-// TODO - Fetch more, paginations
+import { QueryParams } from '@/libs/params'
 
 export const metadata: Metadata = {
   title: 'Ověřujeme pro Vás',
 }
 
-interface HomeProps {
-  data: HomepageDataQuery
-}
-
-export async function getServerSideProps({ query }: NextPageContext) {
-  const after = query?.after
-  const before = query?.before
+export default async function Homepage(props: { searchParams: QueryParams }) {
+  const after = props.searchParams?.after
+  const before = props.searchParams?.before
 
   const { data } = await client.query<HomepageDataQuery>({
     query: gql(`
@@ -47,14 +42,6 @@ export async function getServerSideProps({ query }: NextPageContext) {
     variables: after ? { after } : before ? { before } : {},
   })
 
-  return {
-    props: {
-      data,
-    },
-  }
-}
-
-const Home: React.FC<HomeProps> = ({ data }) => {
   if (!data.homepageArticlesV3) {
     notFound()
   }
@@ -65,5 +52,3 @@ const Home: React.FC<HomeProps> = ({ data }) => {
     <HomepageNextPage data={data} />
   )
 }
-
-export default Home

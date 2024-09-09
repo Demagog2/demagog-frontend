@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import PackmanIcon from '../../assets/icons/packman.svg'
 import UkrajineIcon from '../../assets/icons/ukrajine.svg'
@@ -52,7 +54,7 @@ export default function ArticleTags(props: {
           })}
           href="/spoluprace-s-facebookem"
         >
-          <span className="h-20px me-2">
+          <span className="m-0 p-0 lh-1 me-2">
             <svg
               width="43"
               height="20"

@@ -1,3 +1,5 @@
+'use client'
+
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AccordionItem } from './AccordionItem'
 import { useState } from 'react'

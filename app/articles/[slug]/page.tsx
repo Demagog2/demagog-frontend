@@ -4,10 +4,12 @@ import { ArticleDetailQuery } from '@/__generated__/graphql'
 import { gql } from '@/__generated__'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
 
-export async function getServerSideProps({ params }: any) {
-  const { slug } = params
+const Diskuze = async (props: { params: { slug: string } }) => {
+  const { slug } = props.params
 
-  const { data } = await client.query({
+  const {
+    data: { article },
+  } = await client.query({
     query: gql(`
       query ArticleDetail($slug: String!) {
         article(slug: $slug) {
@@ -35,14 +37,6 @@ export async function getServerSideProps({ params }: any) {
     },
   })
 
-  return {
-    props: {
-      article: data.article,
-    },
-  }
-}
-
-const Diskuze = ({ article }: { article: ArticleDetailQuery['article'] }) => {
   return (
     <div className="container">
       <div className="row g-10">

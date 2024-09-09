@@ -4,7 +4,7 @@ import { AboutUsContent } from '@/components/about-us/AboutUsContent'
 import { AboutUsMenu } from '@/components/about-us/AboutUsMenu'
 import client from '@/libs/apollo-client'
 
-export async function getServerSideProps() {
+export default async function AboutUs() {
   const { data } = await client.query<AboutUsQuery>({
     query: gql(`
       query AboutUs {
@@ -14,14 +14,6 @@ export async function getServerSideProps() {
     `),
   })
 
-  return {
-    props: {
-      aboutUs: data,
-    },
-  }
-}
-
-export default function AboutUs(props: { aboutUs: AboutUsQuery }) {
   return (
     <div className="container">
       <div
@@ -31,14 +23,14 @@ export default function AboutUs(props: { aboutUs: AboutUsQuery }) {
         data-components--sticky-breakpoint="992"
       >
         <div className="col col-12 col-lg-3 position-relative">
-          <AboutUsMenu data={props.aboutUs} />
+          <AboutUsMenu data={data} />
         </div>
 
         <div
           className="col col-12 col-lg-9"
           data-target="components--sticky.content"
         >
-          <AboutUsContent data={props.aboutUs} />
+          <AboutUsContent data={data} />
         </div>
       </div>
     </div>

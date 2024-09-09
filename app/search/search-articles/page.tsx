@@ -2,27 +2,28 @@ import React from 'react'
 import client from '@/libs/apollo-client'
 import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
-import { NextPageContext } from 'next'
-import StatementItem from '@/components/statement/Item'
+import ArticleItem from '@/components/article/Item'
 import { parsePage } from '@/libs/pagination'
 import { SearchButton } from '@/components/search/SearchButton'
 import { gql } from '@/__generated__'
 import { getStringParam } from '@/libs/query-params'
-import { SearchStatementsQuery } from '@/__generated__/graphql'
+import { QueryParams } from '@/libs/params'
 
 const SEARCH_PAGE_SIZE = 10
 
-export async function getServerSideProps({ query }: NextPageContext) {
-  const term = getStringParam(query?.q)
-  const page = parsePage(query?.page)
+export default async function SearchArticles(props: {
+  searchParams: QueryParams
+}) {
+  const term = getStringParam(props.searchParams.q)
+  const page = parsePage(props.searchParams.page)
 
   const { data } = await client.query({
     query: gql(`
-      query searchStatements($term: String!, $limit: Int, $offset: Int) {
-        searchStatements(term: $term, limit: $limit, offset: $offset) {
-          statements {
+      query searchArticles($term: String!, $limit: Int, $offset: Int) {
+        searchArticles(term: $term, limit: $limit, offset: $offset) {
+          articles {
             id
-            ...StatementDetail
+            ...ArticleDetail
           }
           totalCount
         }
@@ -35,20 +36,6 @@ export async function getServerSideProps({ query }: NextPageContext) {
     },
   })
 
-  return {
-    props: {
-      term,
-      page,
-      statementSearchResult: data.searchStatements,
-    },
-  }
-}
-
-export default function SearchSpeakers(props: {
-  term: string
-  page: number
-  statementSearchResult: SearchStatementsQuery['searchStatements']
-}) {
   return (
     <div className="container">
       <div className="row g-5 g-lg-10 justify-content-center">
@@ -63,7 +50,7 @@ export default function SearchSpeakers(props: {
               type="text"
               name="q"
               id="q"
-              defaultValue={props.term}
+              defaultValue={term}
               className="input outline focus-primary fs-4 min-h-50px s-search-field"
               placeholder="Zadejte hledaný výraz…"
             />
@@ -77,7 +64,7 @@ export default function SearchSpeakers(props: {
             </div>
             <div className="my-5">
               <Link
-                href={`/vyhledavani?q=${props.term}`}
+                href={`/vyhledavani?q=${term}`}
                 className="btn h-50px fs-6 s-back-link"
               >
                 <span className="me-2">←</span>
@@ -86,16 +73,16 @@ export default function SearchSpeakers(props: {
               </Link>
             </div>
           </div>
-          <div className="row row-cols-1 g-5 g-lg-10">
-            {props.statementSearchResult.statements.map((statement) => (
-              <StatementItem key={statement.id} statement={statement} />
+          <div className="row row-cols-1  row-cols-lg-2 g-5 g-lg-10">
+            {data.searchArticles.articles.map((article) => (
+              <ArticleItem key={article.id} article={article} />
             ))}
           </div>
           <div className="d-flex justify-content-center my-5 my-lg-10">
             <Pagination
-              currentPage={props.page}
+              currentPage={page}
               pageSize={SEARCH_PAGE_SIZE}
-              totalCount={props.statementSearchResult.totalCount}
+              totalCount={data.searchArticles.totalCount}
             />
           </div>
         </div>

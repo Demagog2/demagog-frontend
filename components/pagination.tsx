@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useCallback } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import Link from 'next/link'

@@ -2,27 +2,28 @@ import React from 'react'
 import client from '@/libs/apollo-client'
 import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
-import { NextPageContext } from 'next'
-import ArticleItem from '@/components/article/Item'
+import StatementItem from '@/components/statement/Item'
 import { parsePage } from '@/libs/pagination'
 import { SearchButton } from '@/components/search/SearchButton'
 import { gql } from '@/__generated__'
-import { SearchArticlesQuery } from '@/__generated__/graphql'
 import { getStringParam } from '@/libs/query-params'
+import { QueryParams } from '@/libs/params'
 
 const SEARCH_PAGE_SIZE = 10
 
-export async function getServerSideProps({ query }: NextPageContext) {
-  const term = getStringParam(query?.q)
-  const page = parsePage(query?.page)
+export default async function SearchStatements(props: {
+  searchParams: QueryParams
+}) {
+  const term = getStringParam(props.searchParams.q)
+  const page = parsePage(props.searchParams.page)
 
-  const { data: searchData } = await client.query({
+  const { data } = await client.query({
     query: gql(`
-      query searchArticles($term: String!, $limit: Int, $offset: Int) {
-        searchArticles(term: $term, limit: $limit, offset: $offset) {
-          articles {
+      query searchStatements($term: String!, $limit: Int, $offset: Int) {
+        searchStatements(term: $term, limit: $limit, offset: $offset) {
+          statements {
             id
-            ...ArticleDetail
+            ...StatementDetail
           }
           totalCount
         }
@@ -35,20 +36,6 @@ export async function getServerSideProps({ query }: NextPageContext) {
     },
   })
 
-  return {
-    props: {
-      term,
-      page,
-      articleSearchResult: searchData.searchArticles,
-    },
-  }
-}
-
-export default function SearchArticles(props: {
-  term: string
-  page: number
-  articleSearchResult: SearchArticlesQuery['searchArticles']
-}) {
   return (
     <div className="container">
       <div className="row g-5 g-lg-10 justify-content-center">
@@ -63,7 +50,7 @@ export default function SearchArticles(props: {
               type="text"
               name="q"
               id="q"
-              defaultValue={props.term}
+              defaultValue={term}
               className="input outline focus-primary fs-4 min-h-50px s-search-field"
               placeholder="Zadejte hledaný výraz…"
             />
@@ -77,7 +64,7 @@ export default function SearchArticles(props: {
             </div>
             <div className="my-5">
               <Link
-                href={`/vyhledavani?q=${props.term}`}
+                href={`/vyhledavani?q=${term}`}
                 className="btn h-50px fs-6 s-back-link"
               >
                 <span className="me-2">←</span>
@@ -86,16 +73,16 @@ export default function SearchArticles(props: {
               </Link>
             </div>
           </div>
-          <div className="row row-cols-1  row-cols-lg-2 g-5 g-lg-10">
-            {props.articleSearchResult.articles.map((article) => (
-              <ArticleItem key={article.id} article={article} />
+          <div className="row row-cols-1 g-5 g-lg-10">
+            {data.searchStatements.statements.map((statement) => (
+              <StatementItem key={statement.id} statement={statement} />
             ))}
           </div>
           <div className="d-flex justify-content-center my-5 my-lg-10">
             <Pagination
-              currentPage={props.page}
+              currentPage={page}
               pageSize={SEARCH_PAGE_SIZE}
-              totalCount={props.articleSearchResult.totalCount}
+              totalCount={data.searchStatements.totalCount}
             />
           </div>
         </div>
