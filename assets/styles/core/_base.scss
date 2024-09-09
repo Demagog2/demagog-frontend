@@ -195,10 +195,8 @@ main {
   span {
     text-transform: uppercase;
     color: $dark;
-    // @include font-size(1.2rem);
 
     &.current {
-      padding: 0.5rem;
       font-weight: bold;
     }
   }
