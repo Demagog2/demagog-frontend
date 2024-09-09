@@ -47,7 +47,7 @@ export function FilterForm(props: FilterFormProps) {
 
   const handleReset = useCallback(() => {
     setFiltersOpen(false)
-    router.push(pathname)
+    router.push(pathname ?? '')
   }, [pathname, router])
 
   return (

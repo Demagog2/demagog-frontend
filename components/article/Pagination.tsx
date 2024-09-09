@@ -22,14 +22,14 @@ export function Pagination(props: {
   const searchParams = useSearchParams()
 
   const createNextPage = (pageNumber: string) => {
-    const params = new URLSearchParams(searchParams)
+    const params = new URLSearchParams(searchParams ?? '')
     params.set('after', pageNumber.toString())
     params.delete('before')
     return `${pathname}?${params.toString()}`
   }
 
   const createPrevPage = (pageNumber: string) => {
-    const params = new URLSearchParams(searchParams)
+    const params = new URLSearchParams(searchParams ?? '')
     params.set('before', pageNumber.toString())
     params.delete('after')
     return `${pathname}?${params.toString()}`
