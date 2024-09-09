@@ -19,7 +19,7 @@ export async function generateMetadata(props: {
   return {
     title: getMetadataTitle(
       props.searchParams.q
-        ? `Vyhledávání výroků: ${props.searchParams.term}`
+        ? `Vyhledávání výroků: ${props.searchParams.q}`
         : 'Vyhledávání výroků'
     ),
     description: 'Hledejte mezi konkrétními faktickými výroky',

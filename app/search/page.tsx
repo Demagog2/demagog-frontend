@@ -18,8 +18,8 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   return {
     title: getMetadataTitle(
-      props.searchParams.term
-        ? `Vyhledávání: ${props.searchParams.term}`
+      props.searchParams.q
+        ? `Vyhledávání: ${props.searchParams.q}`
         : 'Vyhledávání'
     ),
     description:
