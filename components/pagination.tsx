@@ -29,7 +29,7 @@ export function Pagination({
   const isFirstPage = currentPage === 1
   const isLastPage = currentPage === totalPages
 
-  if (totalPages === 0) {
+  if (totalPages === 0 || totalPages === 1) {
     return null
   }
 
