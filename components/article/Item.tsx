@@ -98,7 +98,7 @@ export default function ArticleItem(props: {
               article={article}
               className="btn outline h-40px px-6 fw-bold fs-7"
             >
-              Číst dál
+              <span className="fs-7">Číst dál</span>
             </ArticleLink>
           </div>
         </div>
