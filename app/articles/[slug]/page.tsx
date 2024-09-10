@@ -1,8 +1,8 @@
 import client from '@/libs/apollo-client'
 import formatDate from '@/libs/format-date'
-import { ArticleDetailQuery } from '@/__generated__/graphql'
 import { gql } from '@/__generated__'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
+import { FacebookFactcheckMetadata } from '@/components/article/metainformation/FacebookFactcheckArticleMetadata'
 
 const Diskuze = async (props: { params: { slug: string } }) => {
   const { slug } = props.params
@@ -28,6 +28,7 @@ const Diskuze = async (props: { params: { slug: string } }) => {
               name
             }
           }
+          ...FacebookFactcheckMetadata
           ...ArticleSegments
         }
       }
@@ -95,6 +96,8 @@ const Diskuze = async (props: { params: { slug: string } }) => {
               </div>
             </div>
           )}
+
+          <FacebookFactcheckMetadata article={article} />
         </div>
         <div className="col col-12">
           <ArticleSegments data={article} />

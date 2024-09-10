@@ -122,7 +122,7 @@ export default function StatementItem(props: {
           <StatementAssessment
             type={statement.assessment.veracity?.key}
             name={statement.assessment.veracity?.name}
-            size="15"
+            size={15}
           />
           {statement.assessment.shortExplanation === null ? (
             <div className="d-block">
