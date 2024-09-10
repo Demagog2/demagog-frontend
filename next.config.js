@@ -15,6 +15,7 @@ const nextConfig = {
       { source: '/vyhledavani/vyroky', destination: '/search/search-statements' },
       { source: '/vyhledavani/vystupy', destination: '/search/search-articles' },
       { source: '/vypis-recniku', destination: '/speakers' },
+      { source: '/vyrok/:slug', destination: '/statements/:slug' },
       { source: '/vyroky', destination: '/statements' },
       { source: '/workshopy', destination: '/workshops' },
     ]

@@ -3,7 +3,6 @@ import TrueIcon from '@/assets/icons/true.svg'
 import UntrueIcon from '@/assets/icons/untrue.svg'
 import UnverifiableIcon from '@/assets/icons/unverifiable.svg'
 import MisleadingIcon from '@/assets/icons/misleading.svg'
-import classNames from 'classnames'
 
 type VeracityIconProps = {
   type: 'true' | 'untrue' | 'unverifiable' | 'misleading'
@@ -13,16 +12,17 @@ type VeracityIconProps = {
 export function VeracityIcon(props: VeracityIconProps) {
   const { iconSize = 30 } = props
 
-  const iconStyles = classNames(`h-${iconSize}px`, `w-${iconSize}px`)
-
+  const iconProps = {
+    style: { width: iconSize, height: iconSize },
+  }
   switch (props.type) {
     case 'true':
-      return <TrueIcon className={iconStyles} />
+      return <TrueIcon {...iconProps} />
     case 'untrue':
-      return <UntrueIcon className={iconStyles} />
+      return <UntrueIcon {...iconProps} />
     case 'unverifiable':
-      return <UnverifiableIcon className={iconStyles} />
+      return <UnverifiableIcon {...iconProps} />
     case 'misleading':
-      return <MisleadingIcon className={iconStyles} />
+      return <MisleadingIcon {...iconProps} />
   }
 }
