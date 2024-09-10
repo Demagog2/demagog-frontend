@@ -170,7 +170,7 @@ export default function StatementItem(props: {
                 </a>
                 <Link
                   className="d-flex text-gray align-items-center text-none"
-                  href={'/vyroky/' + statement.id}
+                  href={'/vyrok/' + statement.id}
                 >
                   <LinkIcon className="h-15px" />
                   <span className="ms-1">trvalý odkaz</span>
