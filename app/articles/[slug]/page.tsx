@@ -1,10 +1,10 @@
 import client from '@/libs/apollo-client'
-import formatDate from '@/libs/format-date'
 import { gql } from '@/__generated__'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
-import { FacebookFactcheckMetadata } from '@/components/article/metainformation/FacebookFactcheckArticleMetadata'
+import { FacebookFactcheckMetadata } from '@/components/article/metadata/FacebookFactcheckArticleMetadata'
+import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
 
-const Diskuze = async (props: { params: { slug: string } }) => {
+export default async function Article(props: { params: { slug: string } }) {
   const { slug } = props.params
 
   const {
@@ -15,19 +15,7 @@ const Diskuze = async (props: { params: { slug: string } }) => {
         article(slug: $slug) {
           title
           perex
-          articleType
-          publishedAt
-          source {
-            medium {
-              name
-            }
-            releasedAt
-            sourceUrl
-            mediaPersonalities {
-              id
-              name
-            }
-          }
+          ...DebateAticleMetadata
           ...FacebookFactcheckMetadata
           ...ArticleSegments
         }
@@ -48,55 +36,8 @@ const Diskuze = async (props: { params: { slug: string } }) => {
               <span className="fs-5">{article.perex}</span>
             </div>
           </div>
-          {article.articleType === 'default' && article.source && (
-            <div className="mb-5 mb-lg-10">
-              <h2 className='"fs-2 text-uppercase text-primary'>
-                Ověřili jsme
-              </h2>
-              <div className="row g-1 mt-2">
-                <span className="col col-auto fs-5">
-                  {article.source.medium?.name}
-                </span>
-                {article.source?.releasedAt && (
-                  <>
-                    <span className="col col-auto fs-5">ze dne</span>
-                    <span className="col col-auto fs-5">
-                      {formatDate(article.source.releasedAt)}
-                    </span>
-                  </>
-                )}
 
-                {(article.source.mediaPersonalities?.length ?? 0) > 0 && (
-                  <span className="col col-auto fs-5">
-                    {(article.source.mediaPersonalities?.length ?? 0) > 1 ? (
-                      <>moderátoři</>
-                    ) : (
-                      <>moderátor</>
-                    )}
-                  </span>
-                )}
-                {article.source.mediaPersonalities?.map(
-                  (mediaPersonality: any) => (
-                    <span
-                      key={mediaPersonality.id}
-                      className="col col-auto fs-5"
-                    >
-                      {mediaPersonality.name}
-                    </span>
-                  )
-                )}
-                <span className="col col-auto fs-5">,</span>
-                {article.source.sourceUrl && (
-                  <span className="col col-auto fs-5">
-                    <a href={article.source.sourceUrl} className="ext">
-                      záznam
-                    </a>
-                  </span>
-                )}
-              </div>
-            </div>
-          )}
-
+          <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} />
         </div>
         <div className="col col-12">
@@ -106,5 +47,3 @@ const Diskuze = async (props: { params: { slug: string } }) => {
     </div>
   )
 }
-
-export default Diskuze

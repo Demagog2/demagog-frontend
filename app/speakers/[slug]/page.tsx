@@ -15,7 +15,7 @@ import {
 import { parsePage } from '@/libs/pagination'
 import { gql } from '@/__generated__'
 import { SpeakerLink } from '@/components/speaker/SpeakerLink'
-import { QueryParams } from '@/libs/params'
+import { PropsWithSearchParams } from '@/libs/params'
 import {
   ReleasedYearFilters,
   TagFilters,
@@ -61,10 +61,9 @@ export async function generateMetadata(props: {
   }
 }
 
-const Speaker = async (props: {
-  params: { slug: string }
-  searchParams: QueryParams
-}) => {
+export default async function Speaker(
+  props: PropsWithSearchParams<{ params: { slug: string } }>
+) {
   const term = getStringParam(props.searchParams.q)
   const selectedTags = getNumericalArrayParams(props.searchParams.tags)
   const selectedYears = getNumericalArrayParams(props.searchParams.years)
@@ -285,5 +284,3 @@ const Speaker = async (props: {
     </div>
   )
 }
-
-export default Speaker

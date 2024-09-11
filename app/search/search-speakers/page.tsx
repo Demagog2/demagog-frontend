@@ -7,15 +7,15 @@ import { parsePage } from '@/libs/pagination'
 import { SearchButton } from '@/components/search/SearchButton'
 import { gql } from '@/__generated__'
 import { getStringParam } from '@/libs/query-params'
-import { QueryParams } from '@/libs/params'
+import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 
 const SEARCH_PAGE_SIZE = 12
 
-export async function generateMetadata(props: {
-  searchParams: QueryParams
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: PropsWithSearchParams
+): Promise<Metadata> {
   return {
     title: getMetadataTitle(
       props.searchParams.q
@@ -26,9 +26,7 @@ export async function generateMetadata(props: {
   }
 }
 
-export default async function SearchSpeakers(props: {
-  searchParams: QueryParams
-}) {
+export default async function SearchSpeakers(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
   const page = parsePage(props.searchParams.page)
 
