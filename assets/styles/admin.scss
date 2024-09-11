@@ -1,0 +1,43 @@
+@charset "UTF-8";
+
+// Make sure we load the Lato font, so we can use it in previews
+@import "fonts";
+
+body {
+  min-width: 768px;
+}
+
+.google-signin-btn {
+  display: inline-block;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+
+  width: 191px;
+  height: 46px;
+
+  background-image: asset-url("buttons/btn_google_signin_dark_normal_web.png");
+
+  &:hover {
+    background-image: asset-url("buttons/btn_google_signin_dark_focus_web.png");
+  }
+
+  &:active {
+    background-image: asset-url("buttons/btn_google_signin_dark_pressed_web.png");
+  }
+}
+
+.media {
+  .media-collapsible-list-item::after {
+    display: inline-block;
+    content: ", ";
+    padding: 0;
+    margin-right: 5px;
+  }
+
+  .media-collapsible-list-item::after:last-child::after {
+    display: none;
+  }
+}

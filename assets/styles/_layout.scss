@@ -1,0 +1,279 @@
+@media (max-width: 899.9px) {
+  :root {
+    --large-portrait: 80px;
+    --gutter: 30px;
+  }
+
+  .container {
+    padding: 15px;
+  }
+
+  header {
+    margin-bottom: calc(2 * var(--gutter));
+  }
+
+  .pagination {
+    margin: calc(2 * var(--gutter)) 0;
+  }
+
+  article {
+    img {
+      max-width: 100%;
+    }
+
+    figure.image {
+      margin: 0 0 1rem;
+
+      > figcaption {
+        font-size: 14px;
+        color: #9a95ab;
+        margin: .3rem 0 0 0;
+      }
+    }
+
+    .smap img {
+      max-width: none;
+    }
+  }
+
+  article iframe {
+    width: 100%;
+  }
+
+  article.preview {
+    margin-top: 35px;
+
+    .illustration {
+      max-width: 200px;
+      display: block;
+      position: relative;
+
+      img {
+        display: block;
+      }
+
+      .factcheck-video-label {
+        position: absolute;
+        left: 8px;
+        bottom: 8px;
+        height: 40px;
+        margin-right: 8px;
+        background-color: rgba(40, 40, 40, 0.8);
+        display: flex;
+        align-items: center;
+
+        .factcheck-video-label-play-icon {
+          height: 16px;
+          margin-left: 12px;
+        }
+
+        .factcheck-video-label-text {
+          margin-left: 8px;
+          margin-right: 12px;
+          color: white;
+          font-size: 14px;
+          line-height: 1.25;
+        }
+      }
+    }
+
+    .rest {
+      h2 {
+        margin-top: 16px;
+      }
+    }
+  }
+
+  #twitter, #facebook {
+    display: none;
+  }
+
+  article.detail {
+    section.segment-promise {
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+}
+
+@media (min-width: 900px) {
+  article {
+    img {
+      max-width: 100%;
+    }
+
+    figure.image {
+      margin: 0 0 1rem;
+
+      > figcaption {
+        font-size: 14px;
+        color: #9a95ab;
+        margin: .3rem 0 0 0;
+      }
+    }
+
+    .smap img {
+      max-width: none;
+    }
+  }
+
+  article iframe {
+    width: 100%;
+  }
+
+  article.preview {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    .illustration {
+      flex: 1 0 0px;
+      align-self: start;
+      position: relative;
+
+      img {
+        display: block;
+      }
+
+      .factcheck-video-label {
+        position: absolute;
+        left: 8px;
+        bottom: 8px;
+        height: 40px;
+        margin-right: 8px;
+        background-color: rgba(40, 40, 40, 0.8);
+        display: flex;
+        align-items: center;
+
+        .factcheck-video-label-play-icon {
+          height: 16px;
+          margin-left: 12px;
+        }
+
+        .factcheck-video-label-text {
+          margin-left: 8px;
+          margin-right: 12px;
+          color: white;
+          font-size: 14px;
+          line-height: 1.25;
+        }
+      }
+    }
+
+    .rest {
+      flex: 2 0 0px;
+      margin-left: var(--gap);
+
+      h2 {
+        margin-top: 0;
+      }
+    }
+  }
+
+  .box {
+    margin: 0 -2rem;
+    padding: 2rem 2rem 1rem;
+  }
+  /*
+  .container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    margin: 3rem auto;
+    max-width: 1000px;
+    box-sizing: border-box;
+  }
+
+
+  header {
+    flex: 5 0 0px;
+  }
+  */
+
+  #main-menu {
+    flex: 7 0 0px;
+    margin-left: 50px;
+  }
+
+  article,
+  nav.pagination,
+  .full-width {
+    flex: 1 0 100%;
+    margin-top: 3rem;
+  }
+
+  #twitter, #facebook {
+    flex: 1 0 50%;
+    max-width: 50%; // for IE11 not respecting border-box with flex-basis
+    box-sizing: border-box;
+  }
+
+  #twitter {
+    margin-top: 3rem;
+    padding-right: 25px;
+  }
+
+  #facebook {
+    margin-top: 3rem;
+    padding-left: 25px;
+  }
+
+  #interesting-statements {
+    flex: 1 0 66.66666667%;
+    margin-top: 3rem;
+
+    h2 {
+      margin: 0 0 1rem;
+    }
+  }
+
+  article > h1:first-child,
+  article > h2:first-child,
+  aside > h2:first-child {
+    margin-top: 0;
+  }
+
+  .meta {
+    flex: 1 0 25%;
+  }
+
+  article.detail {
+    flex: 1 0 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+
+    section.intro {
+      flex: 1 0 66.66666667%;
+      margin-left: 16.66666667%;
+      margin-right: 16.66666667%;
+    }
+
+    section.segment-text {
+      flex: 1 0 66.66666667%;
+      margin-left: 16.66666667%;
+      margin-right: 16.66666667%;
+    }
+
+    section.segment-source_statements {
+      flex: 1 0 100%;
+    }
+
+    section.segment-promise {
+      flex: 1 0 66.66666667%;
+      margin-left: 16.66666667%;
+      margin-right: 16.66666667%;
+      margin-top: 1rem;
+      margin-bottom: 1rem;
+    }
+  }
+
+  article.preview {
+    margin-top: 3rem;
+    flex: 1 0 100%;
+
+    &.smaller-gaps {
+      margin-top: 25px;
+    }
+  }
+}

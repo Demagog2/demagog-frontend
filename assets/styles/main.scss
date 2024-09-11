@@ -1,15 +1,20 @@
-@import "varibles";
-@import "mixins";
-/*@import "core/fonts";*/
-@import "core/utilities";
+@charset "UTF-8";
+
+@import "custom_variables";
+@import "vendor/bootstrap";
+
+// @import "varibles";
+// @import "mixins";
+// @import "core/fonts";
+// @import "core/utilities";
 
 @import "./core/base";
-@import "./core/container";
-@import "./core/grid";
+// @import "./core/container";
+// @import "./core/grid";
 @import "./core/header";
 @import "./core/btn";
 @import "./core/state";
-@import "./core/type";
+// @import "./core/type";
 @import "./core/form";
 @import "./core/symbol";
 @import "./core/modal";
@@ -17,3 +22,10 @@
 @import "./core/scroller";
 @import "./core/filter";
 @import "./core/icon";
+
+//mixins
+@import "editor_picked_label";
+@import "veracity";
+
+// Needed to be imported last.
+@import "back_compatibility";

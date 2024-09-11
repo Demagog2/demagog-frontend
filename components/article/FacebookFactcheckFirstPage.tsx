@@ -39,7 +39,7 @@ export function FacebookFactcheckFirstPage(props: {
           <div className="d-flex">
             <a
               href="#"
-              className="text-white text-underline mt-3 hide"
+              className="text-white text-decoration-underline mt-3 hide"
               data-target="components--mobile-expander.link"
               data-action="click->components--mobile-expander#toggle"
             >

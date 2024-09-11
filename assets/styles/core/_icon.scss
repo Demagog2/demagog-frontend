@@ -11,13 +11,6 @@
   }
 }
 
-.close-button .symbol {
-  > svg {
-    width: auto;
-    height: auto;
-  }
-}
-
 @each $name, $value in $icon-sizes {
   .icon-#{$name} {
 		height: $value;

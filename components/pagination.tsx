@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useCallback } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -16,7 +18,7 @@ export function Pagination({
 
   const createHref = useCallback(
     (value: number) => {
-      const params = new URLSearchParams(searchParams)
+      const params = new URLSearchParams(searchParams ?? '')
       params.set('page', String(value))
 
       return `${pathname}?${params.toString()}`
@@ -28,6 +30,10 @@ export function Pagination({
 
   const isFirstPage = currentPage === 1
   const isLastPage = currentPage === totalPages
+
+  if (totalPages === 0 || totalPages === 1) {
+    return null
+  }
 
   return (
     <nav className="pagination">

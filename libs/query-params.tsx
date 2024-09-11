@@ -10,6 +10,14 @@ export function getNumericalArrayParams(
   )
 }
 
+export function getStringParam(queryParams?: string | string[]): string {
+  if (!queryParams) {
+    return ''
+  }
+
+  return Array.isArray(queryParams) ? queryParams[0] : queryParams
+}
+
 export function getStringArrayParams(
   queryParams?: string | string[]
 ): string[] {
@@ -26,4 +34,14 @@ export function getBooleanParam(param?: string | string[]): boolean {
   }
 
   return Array.isArray(param) ? false : Boolean(param)
+}
+
+export function parseParamId(id: string) {
+  if (id.indexOf('-') !== 1) {
+    const parts = id.split('-')
+
+    return parseInt(parts[parts.length - 1], 10)
+  }
+
+  return parseInt(id, 10)
 }

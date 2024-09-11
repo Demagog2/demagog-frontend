@@ -30,7 +30,7 @@ export function CookiesBanner() {
           Abychom mohli měřit návštěvnost webu, potřebujeme Váš souhlas
           se&nbsp;zpracováním osobních údajů prostřednictvím cookies.
           <Link
-            className="text-dark text-underline link"
+            className="text-dark text-decoration-underline link"
             href="/stranka/zasady-zpracovani-osobnich-udaju"
           >
             Více o&nbsp;zpracování osobních údajů

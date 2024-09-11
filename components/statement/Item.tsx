@@ -1,21 +1,28 @@
+'use client'
+
 import Link from 'next/link'
 import StatementAssessment from '@/components/statement/Assessment'
 import TagIcon from '@/assets/icons/tag.svg'
 import LinkIcon from '@/assets/icons/link.svg'
 import formatDate from '@/libs/format-date'
 import { useState, useRef } from 'react'
-import gql from 'graphql-tag'
+import { FragmentType, gql, useFragment } from '@/__generated__'
+import { SpeakerLink } from '../speaker/SpeakerLink'
 
-export const StatementItemFragment = gql`
+const StatementItemFragment = gql(`
   fragment StatementDetail on Statement {
     id
     content
     sourceSpeaker {
       speaker {
-        id
         avatar(size: detail)
+        ...SpeakerLink
       }
       fullName
+      body {
+        id
+        shortName
+      }
     }
     source {
       releasedAt
@@ -36,9 +43,13 @@ export const StatementItemFragment = gql`
       explanationHtml
     }
   }
-`
+`)
 
-export default function StatementItem({ statement }: any) {
+export default function StatementItem(props: {
+  statement: FragmentType<typeof StatementItemFragment>
+}) {
+  const statement = useFragment(StatementItemFragment, props.statement)
+
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
@@ -49,17 +60,26 @@ export default function StatementItem({ statement }: any) {
           <div className="d-flex">
             <div className="w-100px min-w-100px">
               <div className="px-2">
-                <Link
-                  href={'/politici/' + statement.sourceSpeaker.speaker.id}
+                <SpeakerLink
+                  speaker={statement.sourceSpeaker.speaker}
                   className="d-block position-relative"
                 >
-                  <span className="symbol symbol-square symbol-circle">
-                    <img
-                      src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
-                      alt={statement.sourceSpeaker.fullName}
-                    />
-                  </span>
-                </Link>
+                  {statement.sourceSpeaker.speaker.avatar && (
+                    <span className="symbol symbol-square symbol-circle">
+                      <img
+                        src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
+                        alt={statement.sourceSpeaker.fullName}
+                      />
+                    </span>
+                  )}
+                  {statement.sourceSpeaker?.body?.shortName && (
+                    <div className="symbol-label d-flex align-items-center justify-content-center w-45px h-45px rounded-circle bg-dark">
+                      <span className="smallest text-white lh-1 text-center p-2">
+                        {statement.sourceSpeaker.body.shortName}
+                      </span>
+                    </div>
+                  )}
+                </SpeakerLink>
               </div>
               <div className="mt-2 text-center w-100">
                 <h3 className="fs-6 fs-600">
@@ -75,7 +95,7 @@ export default function StatementItem({ statement }: any) {
                   dangerouslySetInnerHTML={{ __html: statement.content }}
                 ></span>
               </blockquote>
-              {statement.source.medium.name && statement.source.releasedAt && (
+              {statement.source.medium?.name && statement.source.releasedAt && (
                 <cite className="mb-2 fs-7">
                   {statement.source.medium.name}
                   <span>, </span>
@@ -100,16 +120,16 @@ export default function StatementItem({ statement }: any) {
         </div>
         <div className="col col-12 col-md-6 col-lg-5">
           <StatementAssessment
-            type={statement.assessment.veracity.key}
-            name={statement.assessment.veracity.name}
-            size="15"
+            type={statement.assessment.veracity?.key}
+            name={statement.assessment.veracity?.name}
+            size={15}
           />
           {statement.assessment.shortExplanation === null ? (
             <div className="d-block">
               <div
                 className="scroll-vertical mh-400px my-5 content fs-6"
                 dangerouslySetInnerHTML={{
-                  __html: statement.assessment.explanationHtml,
+                  __html: statement.assessment.explanationHtml ?? '',
                 }}
               ></div>
             </div>
@@ -118,7 +138,7 @@ export default function StatementItem({ statement }: any) {
               <div
                 className="content fs-6"
                 dangerouslySetInnerHTML={{
-                  __html: statement.assessment.shortExplanation,
+                  __html: statement.assessment.shortExplanation ?? '',
                 }}
               ></div>
               <div
@@ -133,13 +153,13 @@ export default function StatementItem({ statement }: any) {
                 <div
                   className="scroll-vertical mh-400px my-5 content fs-6"
                   dangerouslySetInnerHTML={{
-                    __html: statement.assessment.explanationHtml,
+                    __html: statement.assessment.explanationHtml ?? '',
                   }}
                 ></div>
               </div>
               <div className="d-flex justify-content-between align-items-center w-100">
                 <a
-                  className="accordion-link text-dark text-underline"
+                  className="accordion-link text-dark text-decoration-underline"
                   onClick={() => setOpenExplanation(!openExplanation)}
                 >
                   {openExplanation ? (
@@ -150,7 +170,7 @@ export default function StatementItem({ statement }: any) {
                 </a>
                 <Link
                   className="d-flex text-gray align-items-center text-none"
-                  href={'/vyroky/' + statement.id}
+                  href={'/vyrok/' + statement.id}
                 >
                   <LinkIcon className="h-15px" />
                   <span className="ms-1">trvalý odkaz</span>

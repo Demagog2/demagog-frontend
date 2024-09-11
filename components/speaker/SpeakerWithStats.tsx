@@ -1,9 +1,10 @@
-import gql from 'graphql-tag'
 import Image from 'next/image'
 import classNames from 'classnames'
+import { FragmentType, gql, useFragment } from '@/__generated__'
+import { SpeakerLink } from './SpeakerLink'
 
-export const SpeakerWithStatsFragment = gql`
-  fragment SpeakerWithStatsFragment on ArticleSpeakerStats {
+export const SpeakerWithStatsFragment = gql(`
+  fragment SpeakerWithStats on ArticleSpeakerStats {
     speaker {
       id
       avatar(size: detail)
@@ -12,6 +13,7 @@ export const SpeakerWithStatsFragment = gql`
       body {
         shortName
       }
+      ...SpeakerLink
     }
     stats {
       true
@@ -20,57 +22,46 @@ export const SpeakerWithStatsFragment = gql`
       unverifiable
     }
   }
-`
+`)
 
-export type SpeakerWithStatsProps = {
-  speaker: {
-    id: string
-    avatar: string
-    fullName: string
-    role: string
-    body: {
-      shortName: string
-    }
-  }
-  stats: {
-    true: number
-    untrue: number
-    misleading: number
-    unverifiable: number
-  }
-}
-
-export function SpeakerWithStats(props: SpeakerWithStatsProps) {
+export function SpeakerWithStats(props: {
+  data: FragmentType<typeof SpeakerWithStatsFragment>
+}) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
+
+  const { speaker, stats } = useFragment(SpeakerWithStatsFragment, props.data)
+
+  if (!speaker) {
+    return null
+  }
 
   return (
     <div className="row">
       <div className="col col-6 col-md-5">
         <div className="w-100 px-5">
-          <a
-            className="d-block position-relative"
-            href={`/politici/${props.speaker.id}`}
-          >
+          <SpeakerLink speaker={speaker} className="d-block position-relative">
             <span className="symbol symbol-square symbol-circle">
-              <Image
-                src={mediaUrl + props.speaker.avatar}
-                alt={props.speaker.fullName}
-                width={127}
-                height={127}
-              />
+              {speaker.avatar && (
+                <Image
+                  src={mediaUrl + speaker.avatar}
+                  alt={speaker.fullName}
+                  width={127}
+                  height={127}
+                />
+              )}
             </span>
-            {props.speaker.body.shortName && (
+            {speaker.body?.shortName && (
               <div className="symbol-label d-flex align-items-center justify-content-center w-45px h-45px rounded-circle bg-dark">
                 <span className="smallest text-white lh-1 text-center p-2">
-                  {props.speaker.body.shortName}
+                  {speaker.body.shortName}
                 </span>
               </div>
             )}
-          </a>
+          </SpeakerLink>
         </div>
         <div className="text-center lh-1 mt-5">
-          <h3 className="fs-4 fw-bold mb-4">{props.speaker.fullName}</h3>
-          <p className="fs-6 fw-bold mb-4">{props.speaker.role}</p>
+          <h3 className="fs-4 fw-bold mb-4">{speaker.fullName}</h3>
+          <p className="fs-6 fw-bold mb-4">{speaker.role}</p>
         </div>
       </div>
 
@@ -80,7 +71,7 @@ export function SpeakerWithStats(props: SpeakerWithStatsProps) {
             <div className="col col-6">
               <div
                 className={classNames('d-flex align-items-center mb-5', {
-                  'cursor-pointer stat-link': props.stats.true > 0,
+                  'cursor-pointer stat-link': (stats?.true ?? 0) > 0,
                 })}
                 title="Pravda"
                 data-action="click->components--stats#toggleLink"
@@ -101,11 +92,11 @@ export function SpeakerWithStats(props: SpeakerWithStatsProps) {
                     />
                   </svg>
                 </span>
-                <span className="fs-2 fw-bold">{props.stats.true}</span>
+                <span className="fs-2 fw-bold">{stats?.true}</span>
               </div>
               <div
                 className={classNames('d-flex align-items-center mb-5', {
-                  'cursor-pointer stat-link': props.stats.unverifiable > 0,
+                  'cursor-pointer stat-link': (stats?.unverifiable ?? 0) > 0,
                 })}
                 title="Neověřitelné"
                 data-action="click->components--stats#toggleLink"
@@ -126,13 +117,13 @@ export function SpeakerWithStats(props: SpeakerWithStatsProps) {
                     />
                   </svg>
                 </span>
-                <span className="fs-2 fw-bold">{props.stats.unverifiable}</span>
+                <span className="fs-2 fw-bold">{stats?.unverifiable}</span>
               </div>
             </div>
             <div className="col col-6">
               <div
                 className={classNames('d-flex align-items-center mb-5', {
-                  'cursor-pointer stat-link': props.stats.untrue > 0,
+                  'cursor-pointer stat-link': (stats?.untrue ?? 0) > 0,
                 })}
                 title="Nepravda"
                 data-action="click->components--stats#toggleLink"
@@ -153,11 +144,11 @@ export function SpeakerWithStats(props: SpeakerWithStatsProps) {
                     />
                   </svg>
                 </span>
-                <span className="fs-2 fw-bold">{props.stats.untrue}</span>
+                <span className="fs-2 fw-bold">{stats?.untrue}</span>
               </div>
               <div
                 className={classNames('d-flex align-items-center mb-5', {
-                  'cursor-pointer stat-link': props.stats.misleading > 0,
+                  'cursor-pointer stat-link': (stats?.misleading ?? 0) > 0,
                 })}
                 title="Zavádějící"
                 data-action="click->components--stats#toggleLink"
@@ -178,7 +169,7 @@ export function SpeakerWithStats(props: SpeakerWithStatsProps) {
                     />
                   </svg>
                 </span>
-                <span className="fs-2 fw-bold">{props.stats.misleading}</span>
+                <span className="fs-2 fw-bold">{stats?.misleading}</span>
               </div>
             </div>
           </div>

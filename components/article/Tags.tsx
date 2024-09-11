@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import PackmanIcon from '../../assets/icons/packman.svg'
 import UkrajineIcon from '../../assets/icons/ukrajine.svg'
@@ -36,6 +38,7 @@ function TagIcon(props: { icon: string }) {
 export default function ArticleTags(props: {
   tags: FragmentType<typeof ArticleTagsFragment>[]
   isFacebookActive?: boolean
+  isTagDetailOpen?: boolean
 }) {
   const pathname = usePathname()
 
@@ -51,7 +54,7 @@ export default function ArticleTags(props: {
           })}
           href="/spoluprace-s-facebookem"
         >
-          <span className="h-20px me-2">
+          <span className="m-0 p-0 lh-1 me-2">
             <svg
               width="43"
               height="20"
@@ -82,7 +85,7 @@ export default function ArticleTags(props: {
                   )}
                   href={tagPath}
                 >
-                  <span className="d-flex me-1">
+                  <span className="m-0 p-0 lh-1 me-2">
                     <TagIcon icon={tag.icon} />
                   </span>
                   <span className="lh-1 m-0 p-0">{tag.title}</span>
@@ -91,6 +94,14 @@ export default function ArticleTags(props: {
             )
           })}
       </div>
+      {props.isTagDetailOpen && (
+        <div>
+          <Link href="/" className="btn outline mb-2 h-44px me-2 fs-6 px-6">
+            <span className="me-2">←</span>
+            <span>Zpět na všechna témata</span>
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
