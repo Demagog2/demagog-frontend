@@ -8,14 +8,14 @@ import ArticleItem from '@/components/article/Item'
 import StatementItem from '@/components/statement/Item'
 import { SearchButton } from '@/components/search/SearchButton'
 import type { SearchQuery } from '@/__generated__/graphql'
-import { QueryParams } from '@/libs/params'
+import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 
-export async function generateMetadata(props: {
-  searchParams: QueryParams
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: PropsWithSearchParams
+): Promise<Metadata> {
   return {
     title: getMetadataTitle(
       props.searchParams.q
@@ -39,7 +39,7 @@ function ShowMoreLink(props: {
   )
 }
 
-const Search: React.FC<{ searchParams: QueryParams }> = async (props) => {
+export default async function Search(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
 
   const { data } = await client.query<SearchQuery>({
@@ -185,5 +185,3 @@ const Search: React.FC<{ searchParams: QueryParams }> = async (props) => {
     </div>
   )
 }
-
-export default Search

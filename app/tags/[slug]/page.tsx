@@ -6,12 +6,13 @@ import { Pagination } from '@/components/article/Pagination'
 import { notFound } from 'next/navigation'
 import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactcheckNextPage'
 import { FacebookFactcheckFirstPage } from '@/components/article/FacebookFactcheckFirstPage'
-import { QueryParams } from '@/libs/params'
+import { PropsWithSearchParams } from '@/libs/params'
 
-export default async function Tag(props: {
-  params: { slug: string }
-  searchParams: QueryParams
-}) {
+export default async function Tag(
+  props: PropsWithSearchParams<{
+    params: { slug: string }
+  }>
+) {
   const after = props.searchParams?.after
   const before = props.searchParams?.before
 

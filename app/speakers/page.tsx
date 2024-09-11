@@ -7,7 +7,7 @@ import { FilterSection } from '@/components/filtering/FilterSection'
 import { pluralize } from '@/libs/pluralize'
 import { getStringArrayParams, getStringParam } from '@/libs/query-params'
 import { FormCheckbox } from '@/components/filtering/controls/FormCheckbox'
-import { QueryParams } from '@/libs/params'
+import { PropsWithSearchParams } from '@/libs/params'
 import { gql } from '@/__generated__'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
@@ -59,7 +59,7 @@ function BodyFilters(props: BodyFilterProps) {
   )
 }
 
-export default async function Speakers(props: { searchParams: QueryParams }) {
+export default async function Speakers(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
   const page = parsePage(props.searchParams?.page)
   const bodies = getStringArrayParams(props.searchParams?.bodies)

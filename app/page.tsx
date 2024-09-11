@@ -5,14 +5,14 @@ import { gql } from '@/__generated__'
 import { notFound } from 'next/navigation'
 import { HomepageFirstPage } from '@/components/homepage/HomepageFirstPage'
 import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
-import { QueryParams } from '@/libs/params'
+import { PropsWithSearchParams } from '@/libs/params'
 import { getMetadataTitle } from '@/libs/metadata'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Ověřujeme pro Vás'),
 }
 
-export default async function Homepage(props: { searchParams: QueryParams }) {
+export default async function Homepage(props: PropsWithSearchParams) {
   const after = props.searchParams?.after
   const before = props.searchParams?.before
 

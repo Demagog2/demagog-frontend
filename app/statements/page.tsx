@@ -14,7 +14,7 @@ import {
 } from '@/libs/query-params'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { StatementCount } from '@/components/filtering/StatementCount'
-import { QueryParams } from '@/libs/params'
+import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 
@@ -106,7 +106,7 @@ export function ReleasedYearFilters(props: {
   )
 }
 
-export default async function Statements(props: { searchParams: QueryParams }) {
+export default async function Statements(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
   const selectedTags = getNumericalArrayParams(props.searchParams.tags)
   const selectedYears = getNumericalArrayParams(props.searchParams.years)

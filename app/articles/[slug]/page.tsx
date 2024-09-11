@@ -4,7 +4,7 @@ import { ArticleSegments } from '@/components/article/ArticleSegments'
 import { FacebookFactcheckMetadata } from '@/components/article/metadata/FacebookFactcheckArticleMetadata'
 import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
 
-const Article = async (props: { params: { slug: string } }) => {
+export default async function Article(props: { params: { slug: string } }) {
   const { slug } = props.params
 
   const {
@@ -15,7 +15,6 @@ const Article = async (props: { params: { slug: string } }) => {
         article(slug: $slug) {
           title
           perex
-          articleType
           ...DebateAticleMetadata
           ...FacebookFactcheckMetadata
           ...ArticleSegments
@@ -48,5 +47,3 @@ const Article = async (props: { params: { slug: string } }) => {
     </div>
   )
 }
-
-export default Article
