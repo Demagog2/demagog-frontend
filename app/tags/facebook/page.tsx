@@ -8,13 +8,13 @@ import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactchec
 import { Pagination } from '@/components/article/Pagination'
 import ArticleTags from '@/components/article/Tags'
 import client from '@/libs/apollo-client'
-import { QueryParams } from '@/libs/params'
+import { PropsWithSearchParams } from '@/libs/params'
 
 import Link from 'next/link'
 
-export default async function FacebookCollaboration(props: {
-  searchParams: QueryParams
-}) {
+export default async function FacebookCollaboration(
+  props: PropsWithSearchParams
+) {
   const after = props.searchParams?.after
   const before = props.searchParams?.before
 

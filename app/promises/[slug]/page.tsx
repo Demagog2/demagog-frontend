@@ -16,7 +16,7 @@ import {
   getStringParam,
 } from '@/libs/query-params'
 import { parsePage } from '@/libs/pagination'
-import { QueryParams } from '@/libs/params'
+import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 
@@ -45,10 +45,11 @@ export async function generateMetadata(props: {
   }
 }
 
-export default async function Promises(props: {
-  params: { slug: string }
-  searchParams: QueryParams
-}) {
+export default async function Promises(
+  props: PropsWithSearchParams<{
+    params: { slug: string }
+  }>
+) {
   const term = getStringParam(props.searchParams.q)
   const page = parsePage(props.searchParams.page)
 

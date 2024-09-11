@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: getMetadataTitle('Workshopy'),
 }
 
-const Workshops = async () => {
+export default async function Workshops() {
   const { data } = await client.query<WorkshopsDataQuery>({
     query: gql(`
       query workshopsData {
@@ -103,5 +103,3 @@ const Workshops = async () => {
     </div>
   )
 }
-
-export default Workshops
