@@ -8,4 +8,15 @@ const client = new ApolloClient({
   }),
 })
 
+/**
+ * Experimental – invalidate server side rendered segments each 60 seconds.
+ */
+export const CACHING_CONFIG = {
+  context: {
+    fetchOptions: {
+      next: { revalidate: 60 },
+    },
+  },
+}
+
 export default client

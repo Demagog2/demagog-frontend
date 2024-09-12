@@ -1,4 +1,4 @@
-import client from '@/libs/apollo-client'
+import client, { CACHING_CONFIG } from '@/libs/apollo-client'
 import TitleIcon from '@/assets/icons/promises.svg'
 
 import { PromisesQuery } from '@/__generated__/graphql'
@@ -39,6 +39,7 @@ export async function generateMetadata(props: {
     variables: {
       slug: props.params.slug,
     },
+    ...CACHING_CONFIG,
   })
 
   return {
@@ -103,6 +104,7 @@ export default async function Promises(
         promiseRatings: selectedPromiseRatings,
       },
     },
+    ...CACHING_CONFIG,
   })
 
   if (!article) {
