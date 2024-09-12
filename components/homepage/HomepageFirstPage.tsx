@@ -49,9 +49,9 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
 
           return [<ArticleV2Preview article={article} key={article?.id} />]
         })}
-      </div>
 
-      <Pagination pageInfo={data.homepageArticlesV3.pageInfo} />
+        <Pagination pageInfo={data.homepageArticlesV3.pageInfo} />
+      </div>
 
       <div className="bg-light text-dark p-5 p-lg-10 rounded-l mt-10">
         <div className="row g-10 justify-content-between">

@@ -23,10 +23,10 @@ export function HomepageNextPage({ data }: Props) {
 
               return [<ArticleV2Preview article={article} key={article?.id} />]
             })}
+
+            <Pagination pageInfo={data.homepageArticlesV3.pageInfo} />
           </div>
         </div>
-
-        <Pagination pageInfo={data.homepageArticlesV3.pageInfo} />
       </div>
     </div>
   )

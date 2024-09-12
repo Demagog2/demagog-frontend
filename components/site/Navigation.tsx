@@ -8,6 +8,7 @@ import { useState } from 'react'
 import { NavDonateButton } from './NavDonateButton'
 import NavSearch from './NavSearch'
 import NavSubLink from './NavSubLink'
+import classNames from 'classnames'
 
 const NavigationFragment = gql(`
   fragment Navigation on Query {
@@ -65,7 +66,9 @@ export function Navigation(props: {
       </div>
       <div className="menu-item d-flex d-xl-none ms-2">
         <a
-          className={`nav-link d-flex w-40px h-40px ${isOpen ? 'open' : ''}`}
+          className={classNames('nav-link d-flex w-40px h-40px', {
+            open: isOpen,
+          })}
           onClick={() => setIsOpen(!isOpen)}
         >
           <span className="nav-icon"></span>
