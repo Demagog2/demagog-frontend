@@ -96,7 +96,9 @@ export function PromiseStatsBanner(props: {
 
   return (
     <>
-      <h2 className="fs-1 fw-600">{data.promiseCount} sledovaných slibů</h2>
+      <h2 className="fs-1 fw-600 mt-5">
+        {data.promiseCount} sledovaných slibů
+      </h2>
 
       <div>
         <div className="d-flex flex-wrap my-10">
