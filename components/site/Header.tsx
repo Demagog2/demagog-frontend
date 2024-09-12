@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { gql } from '@apollo/client'
-import client from '@/libs/apollo-client'
+import client, { CACHING_CONFIG } from '@/libs/apollo-client'
 import { Navigation } from './Navigation'
 
 export default async function Header() {
@@ -14,6 +14,7 @@ export default async function Header() {
         }
       }
     `),
+    ...CACHING_CONFIG,
   })
 
   return (
