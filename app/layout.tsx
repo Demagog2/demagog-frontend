@@ -1,6 +1,7 @@
 import Modals from '@/components/Modals'
 import Footer from '@/components/site/Footer'
 import Header from '@/components/site/Header'
+import { GoogleTagManager } from '@next/third-parties/google'
 
 import '../assets/styles/main.scss'
 import { Inter } from 'next/font/google'
@@ -21,6 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="cs">
+      <GoogleTagManager gtmId="GTM-NDL7SQZ6" />
       <body>
         <Header />
         <main>{children}</main>
