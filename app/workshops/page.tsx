@@ -3,6 +3,7 @@ import { WorkshopOffer } from '@/components/workshops/WorkshopOffer'
 import { gql } from '@/__generated__'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
+import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Workshopy'),
@@ -64,7 +65,8 @@ export default async function Workshops() {
             Toto tematické rozdělení je pouze orientační, vždy záleží na
             konkrétní domluvě mezi zadavatelem a našim lektorem; moduly jde
             kombinovat či přidávat témata dle zájmu, můžeme vytvořit akci i tak
-            trochu "na klíč". Workshopy také aktualizujeme o současné dění.
+            trochu &quot;na klíč&quot;. Workshopy také aktualizujeme o současné
+            dění.
           </p>
 
           <p className="fs-5 mb-5">
@@ -94,8 +96,8 @@ export default async function Workshops() {
       <div className="row">
         <div className="col col-12 col-lg-7">
           <p className="fs-5 mt-5">
-            Objednávejte na <a href="mailto:info@demagog.cz">info@demagog.cz</a>
-            .
+            Objednávejte na{' '}
+            <Link href="mailto:info@demagog.cz">info@demagog.cz</Link>.
           </p>
         </div>
       </div>

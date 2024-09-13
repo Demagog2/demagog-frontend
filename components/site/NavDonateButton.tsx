@@ -7,8 +7,8 @@ export function NavDonateButton() {
   const { setDonateModal } = useBetween(useShareableState)
 
   return (
-    <a className="btn bg-primary" onClick={() => setDonateModal(true)}>
+    <button className="btn bg-primary" onClick={() => setDonateModal(true)}>
       <span className="mx-2">Podpořte nás</span>
-    </a>
+    </button>
   )
 }

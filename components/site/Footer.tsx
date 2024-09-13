@@ -2,8 +2,6 @@ import Newsletter from './Newsletter'
 import Social from './Social'
 import Link from 'next/link'
 
-// TODO - Google tag manager
-
 export default function Footer() {
   return (
     <footer className="footer py-10">
@@ -221,13 +219,17 @@ export default function Footer() {
                     </Link>
                   </div>
                   <div className="mt-4">
-                    <a className="me-4" title="EFCSN" href="https://efcsn.com/">
+                    <Link
+                      className="me-4"
+                      title="EFCSN"
+                      href="https://efcsn.com/"
+                    >
                       <img
                         className="h-80px"
                         src="/images/badge-verified-member.png"
                         alt="EFCSN"
                       />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>
