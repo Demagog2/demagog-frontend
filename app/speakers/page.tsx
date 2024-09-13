@@ -1,5 +1,5 @@
 import PackmanIcon from '@/assets/icons/packman.svg'
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import SpeakerItem from '@/components/speaker/Item'
 import { parsePage } from '@/libs/pagination'
 import { FilterForm } from '@/components/filtering/FilterForm'
@@ -64,7 +64,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
   const page = parsePage(props.searchParams?.page)
   const bodies = getStringArrayParams(props.searchParams?.bodies)
 
-  const { data } = await client.query({
+  const { data } = await query({
     query: gql(`
         query speakersSearch(
           $term: String!

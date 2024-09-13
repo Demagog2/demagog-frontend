@@ -1,22 +1,22 @@
-import apolloClient from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import ArticleTags from '@/components/article/Tags'
 import { gql } from '@/__generated__'
-import { ArticleTagDetailQuery } from '@/__generated__/graphql'
 import { Pagination } from '@/components/article/Pagination'
 import { notFound } from 'next/navigation'
 import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactcheckNextPage'
 import { FacebookFactcheckFirstPage } from '@/components/article/FacebookFactcheckFirstPage'
 import { PropsWithSearchParams } from '@/libs/params'
+import { getStringParam } from '@/libs/query-params'
 
 export default async function Tag(
   props: PropsWithSearchParams<{
     params: { slug: string }
   }>
 ) {
-  const after = props.searchParams?.after
-  const before = props.searchParams?.before
+  const after = getStringParam(props.searchParams.after)
+  const before = getStringParam(props.searchParams.before)
 
-  const { data } = await apolloClient.query<ArticleTagDetailQuery>({
+  const { data } = await query({
     query: gql(`
       query articleTagDetail($slug: String!, $after: String, $before: String) {
         articleTags(limit: 5) {

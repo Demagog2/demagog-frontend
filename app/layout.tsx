@@ -5,6 +5,10 @@ import Header from '@/components/site/Header'
 import '../assets/styles/main.scss'
 import { Inter } from 'next/font/google'
 
+// Invalidate pages after n seconds
+// See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
+export const revalidate = 60
+
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '600', '800', '900'],

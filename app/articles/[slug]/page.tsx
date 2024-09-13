@@ -1,4 +1,4 @@
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
 import { FacebookFactcheckMetadata } from '@/components/article/metadata/FacebookFactcheckArticleMetadata'
@@ -9,7 +9,7 @@ export default async function Article(props: { params: { slug: string } }) {
 
   const {
     data: { article },
-  } = await client.query({
+  } = await query({
     query: gql(`
       query ArticleDetail($slug: String!) {
         article(slug: $slug) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { SearchResultSpeaker } from '@/components/SearchResultSpeaker'
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
 import { parsePage } from '@/libs/pagination'
@@ -30,7 +30,7 @@ export default async function SearchSpeakers(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
   const page = parsePage(props.searchParams.page)
 
-  const { data } = await client.query({
+  const { data } = await query({
     query: gql(`
       query searchSpeakers($term: String!, $limit: Int, $offset: Int) {
         searchSpeakers(term: $term, limit: $limit, offset: $offset) {

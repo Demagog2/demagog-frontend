@@ -1,22 +1,22 @@
-import client from '../libs/apollo-client'
+import { query } from '../libs/apollo-client'
 import { Metadata } from 'next'
-import { HomepageDataQuery } from '@/__generated__/graphql'
 import { gql } from '@/__generated__'
 import { notFound } from 'next/navigation'
 import { HomepageFirstPage } from '@/components/homepage/HomepageFirstPage'
 import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getMetadataTitle } from '@/libs/metadata'
+import { getStringParam } from '@/libs/query-params'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Ověřujeme pro Vás'),
 }
 
 export default async function Homepage(props: PropsWithSearchParams) {
-  const after = props.searchParams?.after
-  const before = props.searchParams?.before
+  const after = getStringParam(props.searchParams.after)
+  const before = getStringParam(props.searchParams.before)
 
-  const { data } = await client.query<HomepageDataQuery>({
+  const { data } = await query({
     query: gql(`
       query homepageData($after: String, $before: String) {
         homepageArticlesV3(first: 10, after: $after, before: $before) {

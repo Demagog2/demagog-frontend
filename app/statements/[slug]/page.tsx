@@ -3,7 +3,7 @@ import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
 import { SpeakerLink } from '@/components/speaker/SpeakerLink'
 import { AssessmentVeracityIcon } from '@/components/statement/AssessmentVeracityIcon'
 import { AssessmentVeracityLabel } from '@/components/statement/AssessmentVeracityLabel'
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import formatDate from '@/libs/format-date'
 import { getMetadataTitle } from '@/libs/metadata'
 import { parseParamId } from '@/libs/query-params'
@@ -16,7 +16,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const {
     data: { statement },
-  } = await client.query({
+  } = await query({
     query: gql(`
       query StatementDetailMetadata(
         $id: Int!
@@ -59,7 +59,7 @@ export default async function Statement(props: { params: { slug: string } }) {
 
   const {
     data: { statement },
-  } = await client.query({
+  } = await query({
     query: gql(`
       query StatementDetail($id: Int!) {
         statement(id: $id) {

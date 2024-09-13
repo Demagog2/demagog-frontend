@@ -2,23 +2,23 @@
 // <% content_for(:description, strip_tags(get_web_content("article.collaboration_with_facebook", "intro")).truncate(230)) %>
 
 import { gql } from '@/__generated__'
-import { FacebookCollaborationQuery } from '@/__generated__/graphql'
 import { FacebookFactcheckFirstPage } from '@/components/article/FacebookFactcheckFirstPage'
 import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactcheckNextPage'
 import { Pagination } from '@/components/article/Pagination'
 import ArticleTags from '@/components/article/Tags'
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import { PropsWithSearchParams } from '@/libs/params'
+import { getStringParam } from '@/libs/query-params'
 
 import Link from 'next/link'
 
 export default async function FacebookCollaboration(
   props: PropsWithSearchParams
 ) {
-  const after = props.searchParams?.after
-  const before = props.searchParams?.before
+  const after = getStringParam(props.searchParams.after)
+  const before = getStringParam(props.searchParams.before)
 
-  const { data } = await client.query<FacebookCollaborationQuery>({
+  const { data } = await query({
     query: gql(`
           query facebookCollaboration($after: String, $before: String) {
             facebookFactchecks(first: 10, after: $after, before: $before) {

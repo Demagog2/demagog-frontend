@@ -1,10 +1,10 @@
 import Link from 'next/link'
 import { gql } from '@apollo/client'
-import client, { CACHING_CONFIG } from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import { Navigation } from './Navigation'
 
 export default async function Header() {
-  const { data } = await client.query({
+  const { data } = await query({
     query: gql(`
       query header {
         governmentPromisesEvaluations {
@@ -14,7 +14,6 @@ export default async function Header() {
         }
       }
     `),
-    ...CACHING_CONFIG,
   })
 
   return (

@@ -2,7 +2,7 @@ import { gql } from '@/__generated__'
 import { AboutUsQuery } from '@/__generated__/graphql'
 import { AboutUsContent } from '@/components/about-us/AboutUsContent'
 import { AboutUsMenu } from '@/components/about-us/AboutUsMenu'
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 
@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 }
 
 export default async function AboutUs() {
-  const { data } = await client.query<AboutUsQuery>({
+  const { data } = await query<AboutUsQuery>({
     query: gql(`
       query AboutUs {
         ...AboutUsMenu

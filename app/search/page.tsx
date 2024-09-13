@@ -1,5 +1,5 @@
 import TitleIcon from '@/assets/icons/demagog.svg'
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
 import Link from 'next/link'
 import React from 'react'
@@ -42,7 +42,7 @@ function ShowMoreLink(props: {
 export default async function Search(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
 
-  const { data } = await client.query<SearchQuery>({
+  const { data } = await query<SearchQuery>({
     query: gql(`
       query search($term: String!) {
         searchSpeakers(term: $term, limit: 4) {

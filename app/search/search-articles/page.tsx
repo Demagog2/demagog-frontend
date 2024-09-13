@@ -1,5 +1,5 @@
 import React from 'react'
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
 import ArticleItem from '@/components/article/Item'
@@ -30,7 +30,7 @@ export default async function SearchArticles(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
   const page = parsePage(props.searchParams.page)
 
-  const { data } = await client.query({
+  const { data } = await query({
     query: gql(`
       query searchArticles($term: String!, $limit: Int, $offset: Int) {
         searchArticles(term: $term, limit: $limit, offset: $offset) {

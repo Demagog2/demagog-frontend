@@ -1,4 +1,4 @@
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import StatementItem from '@/components/statement/Item'
 import classNames from 'classnames'
 import TrueIcon from '@/assets/icons/true.svg'
@@ -32,7 +32,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const {
     data: { speaker },
-  } = await client.query({
+  } = await query({
     query: gql(`
         query SpeakerDetailMetadata(
           $id: Int!
@@ -72,7 +72,7 @@ export default async function Speaker(
 
   const {
     data: { speaker },
-  } = await client.query({
+  } = await query({
     query: gql(`
         query SpeakerDetailQuery(
           $id: Int!

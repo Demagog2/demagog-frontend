@@ -1,4 +1,4 @@
-import client, { CACHING_CONFIG } from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import TitleIcon from '@/assets/icons/promises.svg'
 
 import { PromisesQuery } from '@/__generated__/graphql'
@@ -28,7 +28,7 @@ export async function generateMetadata(props: {
 }): Promise<Metadata> {
   const {
     data: { governmentPromisesEvaluationBySlug },
-  } = await client.query({
+  } = await query({
     query: gql(`
       query PromiseDetailMetadata($slug: String!) {
         governmentPromisesEvaluationBySlug(slug: $slug) {
@@ -39,7 +39,6 @@ export async function generateMetadata(props: {
     variables: {
       slug: props.params.slug,
     },
-    ...CACHING_CONFIG,
   })
 
   return {
@@ -62,7 +61,7 @@ export default async function Promises(
 
   const {
     data: { governmentPromisesEvaluationBySlug: article },
-  } = await client.query<PromisesQuery>({
+  } = await query<PromisesQuery>({
     query: gql(`
         query promises($slug: String!, $term: String!, $limit: Int, $offset: Int, $filters: PromiseFilterInput) {
           governmentPromisesEvaluationBySlug(slug: $slug) {
@@ -104,7 +103,6 @@ export default async function Promises(
         promiseRatings: selectedPromiseRatings,
       },
     },
-    ...CACHING_CONFIG,
   })
 
   if (!article) {

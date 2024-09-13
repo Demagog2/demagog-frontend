@@ -1,5 +1,5 @@
 import TitleIcon from '@/assets/icons/statements.svg'
-import client from '@/libs/apollo-client'
+import { query } from '@/libs/apollo-client'
 import StatementItem from '@/components/statement/Item'
 import { TagFilter } from '@/components/filtering/TagFilter'
 import { VeracityFilter } from '@/components/filtering/VeracityFilter'
@@ -115,7 +115,7 @@ export default async function Statements(props: PropsWithSearchParams) {
 
   const {
     data: { searchStatements },
-  } = await client.query({
+  } = await query({
     query: gql(`
         query StatementsListingQuery(
           $term: String!
