@@ -1,13 +1,15 @@
-import { ApolloProvider } from '@apollo/client';
-import { FC, ReactNode } from 'react';
-import client from '../libs/apollo-client';
+'use client'
+
+import { ApolloProvider } from '@apollo/client'
+import { ReactNode } from 'react'
+import { createClient } from '../libs/apollo-client'
 
 interface ApolloProps {
-    children?: ReactNode
+  children?: ReactNode
 }
 
 const Apollo = ({ children }: ApolloProps) => (
-  <ApolloProvider client={client}>{children}</ApolloProvider>
-);
+  <ApolloProvider client={createClient()}>{children}</ApolloProvider>
+)
 
-export default Apollo;
+export default Apollo
