@@ -1,13 +1,12 @@
 'use client'
+
 import Link from 'next/link'
 import PlayIcon from '@/assets/icons/play.svg'
-import { useShareableState } from '@/libs/useShareableState'
-import { useBetween } from 'use-between'
+import { Expander } from '../util/Expander'
 
 export default function HomeSidebar() {
-  const { setVideoModal } = useBetween(useShareableState)
   return (
-    <div className="bg-dark-light text-white p-5 p-lg-8 rounded-l mb-10">
+    <Expander className="bg-dark-light text-white p-5 p-lg-8 rounded mb-10">
       <div className="w-100 position-relative">
         <h2 className="display-5 fw-bold mb-4">Co je Demagog.cz?</h2>
         <div className="fs-6 mb-10 dark-content">
@@ -21,18 +20,14 @@ export default function HomeSidebar() {
             </li>
             <li>
               Máme transparentní{' '}
-              <Link href="/stranka/jak-hodnotime-metodika">postupy</Link>{' '}
-              i&nbsp;
-              <Link href="/stranka/jak-je-projekt-demagogcz-financovan">
-                finance
-              </Link>
-              .
+              <Link href="/o-nas#jak-hodnotime">postupy</Link> i&nbsp;
+              <Link href="/o-nas#nase-financovani">finance</Link>.
             </li>
           </ul>
         </div>
         <div
           className="w-100 position-relative"
-          onClick={() => setVideoModal(true)}
+          onClick={() => console.log('Show modal')}
         >
           <img
             className="w-100"
@@ -52,11 +47,11 @@ export default function HomeSidebar() {
           </span>
         </div>
         <div className="mt-4">
-          <Link className="btn bg-secondary w-100" href="/">
+          <Link className="btn bg-secondary w-100" href="/o-nas#kontakty">
             <span className="text-dark">Upozornit</span>
           </Link>
         </div>
       </div>
-    </div>
+    </Expander>
   )
 }
