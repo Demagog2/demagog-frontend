@@ -3,6 +3,7 @@ import formatDate from '@/libs/format-date'
 import Speaker from './SpeakerDetail'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ArticleLink } from './ArticleLink'
+import { Article } from './Article'
 
 export const ArticleDetailFragment = gql(`
   fragment ArticleDetail on Article {
@@ -11,6 +12,7 @@ export const ArticleDetailFragment = gql(`
     slug
     illustration(size: medium)
     title
+    pinned
     speakers {
       id
       ...ArticleSpeakerDetail
@@ -37,7 +39,7 @@ export default function ArticleItem(props: {
   const perex = truncate(article.perex ?? '', 190)
 
   return (
-    <article className="col s-article">
+    <Article pinned={article.pinned}>
       <div className="row g-2 g-lg-5">
         <div className="col col-12 col-md-5">
           <div className="d-flex">
@@ -103,6 +105,6 @@ export default function ArticleItem(props: {
           </div>
         </div>
       </div>
-    </article>
+    </Article>
   )
 }

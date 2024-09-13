@@ -2,11 +2,13 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import Link from 'next/link'
 import ArticleSpeaker from './SpeakerDetail'
 import formatDate from '@/libs/format-date'
+import { Article } from './Article'
 
 export const SingleStatementArticlePreviewFragment = gql(`
     fragment SingleStatementArticlePreviewFragment on SingleStatementArticle {
         id
         title
+        pinned
         illustration(size: medium)
         statement {
             id
@@ -47,7 +49,7 @@ export function SingleStatementArticlePreview(props: {
   const articlePath = `/vyroky/${article.statement?.id}`
 
   return (
-    <article className="col s-article">
+    <Article pinned={article.pinned}>
       <div className="row g-2 g-lg-5">
         <div className="col col-12 col-md-5">
           <div className="d-flex">
@@ -145,6 +147,6 @@ export function SingleStatementArticlePreview(props: {
           </div>
         </div>
       </div>
-    </article>
+    </Article>
   )
 }
