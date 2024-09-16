@@ -12,6 +12,7 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
+import { permanentRedirect } from 'next/navigation'
 
 export async function generateMetadata(
   props: PropsWithSearchParams
@@ -41,6 +42,18 @@ function ShowMoreLink(props: {
 
 export default async function Search(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
+  const type = getStringParam(props.searchParams.type)
+
+  switch (type) {
+    case 'speakers':
+      return permanentRedirect(`/vyhledavani/politici?q=${term}`)
+    case 'statements':
+      return permanentRedirect(`/vyhledavani/vyroky?q=${term}`)
+    case 'articles':
+      return permanentRedirect(`/vyhledavani/vystupy?q=${term}`)
+    default:
+      break
+  }
 
   const { data } = await query<SearchQuery>({
     query: gql(`

@@ -2,10 +2,12 @@ import { ReactNode } from 'react'
 import { FormCheckbox } from './controls/FormCheckbox'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 
+export const TAG_FILTER_INPUT_NAME = 'tema[]'
+
 export const TagFilterFragment = gql(`
   fragment TagFilter on TagAggregate {
     tag {
-      id
+      filterKey
       name
     }
     isSelected
@@ -25,8 +27,8 @@ export function TagFilter(props: Props) {
 
   return (
     <FormCheckbox
-      inputName="tags"
-      value={tag.id}
+      inputName={TAG_FILTER_INPUT_NAME}
+      value={tag.filterKey}
       name={tag.name}
       isSelected={isSelected}
       label={<LabelRenderer count={count} />}

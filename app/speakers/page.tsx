@@ -5,7 +5,11 @@ import { parsePage } from '@/libs/pagination'
 import { FilterForm } from '@/components/filtering/FilterForm'
 import { FilterSection } from '@/components/filtering/FilterSection'
 import { pluralize } from '@/libs/pluralize'
-import { getStringArrayParams, getStringParam } from '@/libs/query-params'
+import {
+  getStringArrayParams,
+  getStringParam,
+  parseParamId,
+} from '@/libs/query-params'
 import { FormCheckbox } from '@/components/filtering/controls/FormCheckbox'
 import { PropsWithSearchParams } from '@/libs/params'
 import { gql } from '@/__generated__'
@@ -26,6 +30,7 @@ type BodyFilterProps = {
     bodies: {
       body: {
         id: string
+        filterKey: string
         displayName: string
       }
       isSelected: boolean
@@ -34,6 +39,8 @@ type BodyFilterProps = {
   }[]
 }
 
+const BODY_FILTER_INPUT_NAME = 'strana[]'
+
 function BodyFilters(props: BodyFilterProps) {
   return (
     <>
@@ -41,9 +48,9 @@ function BodyFilters(props: BodyFilterProps) {
         <FilterSection key={bodyGroup.name} name={bodyGroup.name} defaultOpen>
           {bodyGroup.bodies.map((body) => (
             <FormCheckbox
-              inputName="bodies"
+              inputName={BODY_FILTER_INPUT_NAME}
               key={body.body.id}
-              value={body.body.id}
+              value={body.body.filterKey}
               name={body.body.displayName}
               isSelected={body.isSelected}
               label={
@@ -62,7 +69,9 @@ function BodyFilters(props: BodyFilterProps) {
 export default async function Speakers(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
   const page = parsePage(props.searchParams?.page)
-  const bodies = getStringArrayParams(props.searchParams?.bodies)
+  const bodies = getStringArrayParams(
+    props.searchParams[BODY_FILTER_INPUT_NAME]
+  )
 
   const { data } = await query({
     query: gql(`
@@ -94,6 +103,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
               bodies {
                 body {
                   id
+                  filterKey
                   displayName
                 }
                 isSelected

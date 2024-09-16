@@ -1,7 +1,10 @@
 import TitleIcon from '@/assets/icons/statements.svg'
 import { query } from '@/libs/apollo-client'
 import StatementItem from '@/components/statement/Item'
-import { TagFilter } from '@/components/filtering/TagFilter'
+import {
+  TAG_FILTER_INPUT_NAME,
+  TagFilter,
+} from '@/components/filtering/TagFilter'
 import { VeracityFilter } from '@/components/filtering/VeracityFilter'
 import { parsePage } from '@/libs/pagination'
 import { FilterSection } from '@/components/filtering/FilterSection'
@@ -108,7 +111,9 @@ export function ReleasedYearFilters(props: {
 
 export default async function Statements(props: PropsWithSearchParams) {
   const term = getStringParam(props.searchParams.q)
-  const selectedTags = getNumericalArrayParams(props.searchParams.tags)
+  const selectedTags = getStringArrayParams(
+    props.searchParams[TAG_FILTER_INPUT_NAME]
+  )
   const selectedYears = getNumericalArrayParams(props.searchParams.years)
   const selectedVeracities = getStringArrayParams(props.searchParams.veracities)
   const page = parsePage(props.searchParams.page)
@@ -146,7 +151,7 @@ export default async function Statements(props: PropsWithSearchParams) {
       limit: PAGE_SIZE,
       term,
       filters: {
-        tags: selectedTags,
+        tagsV2: selectedTags,
         veracities: selectedVeracities,
         years: selectedYears,
       },
