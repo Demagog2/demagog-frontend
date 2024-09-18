@@ -11,26 +11,10 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
-import { ArticleTypeEnum } from '@/__generated__/graphql'
+import { toArticleTypeEnum } from '@/libs/enums'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam článků', 'Administrace'),
-}
-function toArticleTypeEnum(articleType: string): ArticleTypeEnum | undefined {
-  switch (articleType) {
-    case 'default':
-      return ArticleTypeEnum.Default
-    case 'facebook_factcheck':
-      return ArticleTypeEnum.FacebookFactcheck
-    case 'government_promises_evaluation':
-      return ArticleTypeEnum.GovernmentPromisesEvaluation
-    case 'single_statement':
-      return ArticleTypeEnum.SingleStatement
-    case 'static':
-      return ArticleTypeEnum.Static
-    default:
-      return undefined
-  }
 }
 
 export default async function AdminArticles(props: PropsWithSearchParams) {
