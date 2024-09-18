@@ -3,7 +3,7 @@ import Footer from '@/components/site/Footer'
 import Header from '@/components/site/Header'
 import { GoogleTagManager } from '@next/third-parties/google'
 
-import '../assets/styles/main.scss'
+import '../../assets/styles/main.scss'
 import { Inter } from 'next/font/google'
 
 // Invalidate pages after n seconds

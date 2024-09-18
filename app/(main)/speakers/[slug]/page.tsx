@@ -20,7 +20,7 @@ import {
   ReleasedYearFilters,
   TagFilters,
   VeracityFilters,
-} from '@/app/statements/page'
+} from '@/app/(main)/statements/page'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 import { pluralize } from '@/libs/pluralize'

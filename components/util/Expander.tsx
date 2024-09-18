@@ -10,9 +10,12 @@ const BREAKPOINT = 992
 const EXPANDER_FOLDED_HEIGHT = 100
 
 export function Expander(props: PropsWithChildren<{ className: string }>) {
-  const [isFoldingRequired, setFoldingRequired] = useState(
-    window.innerWidth <= BREAKPOINT
-  )
+  const [isFoldingRequired, setFoldingRequired] = useState(false)
+
+  // Needs to be in use effect, otherwise window is not defined on SSR
+  useEffect(() => {
+    setFoldingRequired(window.innerWidth <= BREAKPOINT)
+  }, [])
 
   const [isFolded, setFolded] = useState(true)
 
