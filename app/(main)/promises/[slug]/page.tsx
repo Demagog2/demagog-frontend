@@ -169,7 +169,11 @@ export default async function Promises(
           searchPlaceholder={'Hledat sliby'}
         >
           {article.searchPromises.promises.map((promise) => (
-            <GovernmentalPromise slug={article.slug} promise={promise} />
+            <GovernmentalPromise
+              key={promise.id}
+              slug={article.slug}
+              promise={promise}
+            />
           ))}
         </FilterForm>
       </div>
