@@ -1,6 +1,6 @@
 import { gql } from '@/__generated__'
 import { PublishedArticleLink } from '@/components/admin/articles/PublishedArticleLink'
-import { adminQuery, query } from '@/libs/apollo-client'
+import { adminQuery } from '@/libs/apollo-client'
 import Link from 'next/link'
 
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
@@ -9,24 +9,34 @@ import { ArticleState } from '@/components/admin/articles/ArticleState'
 import { ArticleTypeBadge } from '@/components/admin/articles/ArticleTypeBadge'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
+import { PropsWithSearchParams } from '@/libs/params'
+import { getStringParam } from '@/libs/query-params'
+import { toArticleTypeEnum } from '@/libs/enums'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam článků', 'Administrace'),
 }
 
-export default async function AdminArticles() {
+export default async function AdminArticles(props: PropsWithSearchParams) {
   const { data } = await adminQuery({
     query: gql(`
-      query AdminArticles {
-        articles(limit: 50, includeUnpublished: true) {
-          id
-          title
-          ...ArticleBadge
-          ...ArticleState
-          ...PublishedArticleLink
+      query AdminArticles($articleType: ArticleTypeEnum) {
+        articlesV2(filter: { includeUnpublished: true, articleType: $articleType }) {
+          edges {
+            node {
+              id
+              title
+              ...ArticleBadge
+              ...ArticleState
+              ...PublishedArticleLink
+            }
+          }
         }
       }
     `),
+    variables: {
+      articleType: toArticleTypeEnum(getStringParam(props.searchParams.type)),
+    },
   })
 
   return (
@@ -129,39 +139,45 @@ export default async function AdminArticles() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {data.articles.map((article) => (
-                  <tr key={article.id}>
-                    <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                      <Link href={`/admin/articles/${article.id}`}>
-                        {article.title}
-                      </Link>
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      <ArticleTypeBadge article={article} />
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      <ArticleState article={article} />
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      <PublishedArticleLink article={article} />
-                    </td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
-                      <Link
-                        href={`/admin/articles/${article.id}/edit`}
-                        className="text-indigo-600 hover:text-indigo-900"
-                      >
-                        Upravit
-                      </Link>
+                {data.articlesV2.edges?.map((edge) => {
+                  if (!edge?.node) {
+                    return null
+                  }
 
-                      <Link
-                        href={`/admin/articles/${article.id}/destroy`}
-                        className="text-indigo-600 hover:text-indigo-900 ml-3"
-                      >
-                        Odstranit
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
+                  return (
+                    <tr key={edge.node.id}>
+                      <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
+                        <Link href={`/admin/articles/${edge.node.id}`}>
+                          {edge.node.title}
+                        </Link>
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <ArticleTypeBadge article={edge.node} />
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <ArticleState article={edge.node} />
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                        <PublishedArticleLink article={edge.node} />
+                      </td>
+                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
+                        <Link
+                          href={`/admin/articles/${edge.node.id}/edit`}
+                          className="text-indigo-600 hover:text-indigo-900"
+                        >
+                          Upravit
+                        </Link>
+
+                        <Link
+                          href={`/admin/articles/${edge.node.id}/destroy`}
+                          className="text-indigo-600 hover:text-indigo-900 ml-3"
+                        >
+                          Odstranit
+                        </Link>
+                      </td>
+                    </tr>
+                  )
+                })}
               </tbody>
             </table>
           </div>
