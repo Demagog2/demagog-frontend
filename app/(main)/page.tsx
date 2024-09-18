@@ -1,4 +1,3 @@
-import { query } from '../libs/apollo-client'
 import { Metadata } from 'next'
 import { gql } from '@/__generated__'
 import { notFound } from 'next/navigation'
@@ -7,6 +6,7 @@ import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getMetadataTitle } from '@/libs/metadata'
 import { getStringParam } from '@/libs/query-params'
+import { query } from '@/libs/apollo-client'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Ověřujeme pro Vás'),

@@ -1,7 +1,7 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import ArticleItem from './Item'
 import { drop, take } from 'lodash'
-import { Expander } from '../util/Expander'
+import { TagIntro } from './ArticleTagIntro'
 
 const FacebookFactcheckFirstPageFragment = gql(`
     fragment FacebookFactcheckFirstPageFragment on ArticleConnection {
@@ -21,12 +21,7 @@ export function FacebookFactcheckFirstPage(props: {
   return (
     <>
       <div className="col col-12 col-lg-4">
-        <Expander className="bg-dark-light text-white p-5 p-lg-8 rounded-l mb-10">
-          <div>
-            <h1 className="display-5 fw-bold m-0 p-0">{props.title}</h1>
-            <div className="fs-5 mt-5 dark-content">{props.description}</div>
-          </div>
-        </Expander>
+        <TagIntro {...props} />
         <div className="bg-light text-dark p-5 p-lg-8 rounded-l d-none d-lg-flex">
           <div className="w-100">
             <div className="mb-4">
