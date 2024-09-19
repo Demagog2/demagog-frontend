@@ -5,11 +5,7 @@ import { parsePage } from '@/libs/pagination'
 import { FilterForm } from '@/components/filtering/FilterForm'
 import { FilterSection } from '@/components/filtering/FilterSection'
 import { pluralize } from '@/libs/pluralize'
-import {
-  getStringArrayParams,
-  getStringParam,
-  parseParamId,
-} from '@/libs/query-params'
+import { getStringArrayParams, getStringParam } from '@/libs/query-params'
 import { FormCheckbox } from '@/components/filtering/controls/FormCheckbox'
 import { PropsWithSearchParams } from '@/libs/params'
 import { gql } from '@/__generated__'
