@@ -27,8 +27,7 @@ export default async function AdminLayout({
     adminData = data
   } catch (error) {
     if (error instanceof ApolloError) {
-      // Redirect to proper login page
-      return redirect('http://localhost:3000/admin/test-login/240')
+      return redirect(process.env.ADMIN_LOGIN_REDIRECT ?? '')
     }
   }
 
