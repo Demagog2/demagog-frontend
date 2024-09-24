@@ -1,13 +1,15 @@
-// Invalidate pages after n seconds
-// See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
-export const revalidate = 60
-
 import '../../../assets/styles/tailwind.css'
+
 import AdminClientLayout from '@/components/admin/AdminClientLayout'
-import { adminQuery } from '@/libs/apollo-client'
+import { serverQuery } from '@/libs/apollo-client-server'
 import { gql } from '@/__generated__'
 import { ApolloError } from '@apollo/client'
 import { redirect } from 'next/navigation'
+
+// Invalidate pages after n seconds
+// See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
+
+export const revalidate = 60
 
 export default async function AdminLayout({
   children,
@@ -16,7 +18,7 @@ export default async function AdminLayout({
 }) {
   let adminData = null
   try {
-    const { data } = await adminQuery({
+    const { data } = await serverQuery({
       query: gql(`
         query AdminLayout {
           ...AdminClientLayout

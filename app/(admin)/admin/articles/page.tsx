@@ -1,6 +1,6 @@
 import { gql } from '@/__generated__'
 import { PublishedArticleLink } from '@/components/admin/articles/PublishedArticleLink'
-import { adminQuery } from '@/libs/apollo-client'
+import { serverQuery } from '@/libs/apollo-client-server'
 import Link from 'next/link'
 
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
@@ -12,13 +12,14 @@ import { Metadata } from 'next'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { toArticleTypeEnum } from '@/libs/enums'
+import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam článků', 'Administrace'),
 }
 
 export default async function AdminArticles(props: PropsWithSearchParams) {
-  const { data } = await adminQuery({
+  const { data } = await serverQuery({
     query: gql(`
       query AdminArticles($articleType: ArticleTypeEnum) {
         articlesV2(filter: { includeUnpublished: true, articleType: $articleType }) {
@@ -42,12 +43,8 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
   return (
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="pb-5 sm:flex sm:items-center sm:justify-between">
-        <div>
-          <h3 className="text-base font-semibold leading-6 text-gray-900">
-            Články
-          </h3>
-          <p className="mt-2 text-sm text-gray-700">Seznam článků</p>
-        </div>
+        <AdminPageTitle title="Články" description="Seznam článků" />
+
         <div className="sm:flex">
           <div className="mt-3 sm:ml-4 sm:mt-0">
             <label htmlFor="mobile-search-candidate" className="sr-only">

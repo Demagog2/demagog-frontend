@@ -1,11 +1,11 @@
-import { adminQuery } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
 
 import { AdminArticleHeader } from '@/components/admin/articles/AdminArticleHeader'
+import { serverQuery } from '@/libs/apollo-client-server'
 
 const ArticleQuery = gql(`
   query AdminArticle($id: ID!) {
-    article(id: $id) {
+    article(id: $id, includeUnpublished: true) {
       ...AdminArticleHeader
     }
   }
@@ -14,7 +14,7 @@ const ArticleQuery = gql(`
 export default async function AdminArticle(props: {
   params: { slug: string }
 }) {
-  const { data } = await adminQuery({
+  const { data } = await serverQuery({
     query: ArticleQuery,
     variables: {
       id: props.params.slug,
