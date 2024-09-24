@@ -41,6 +41,7 @@ export function AdminArticleForm(props: {
       articleType: ArticleTypeEnum.Default,
       segments: [],
       published: false,
+      publishedAt: new Date().toISOString().substring(0, 10),
       articleTags: [],
     },
   })
@@ -214,6 +215,16 @@ export function AdminArticleForm(props: {
                 ></span>
               </button>
             </div>
+
+            <Field>
+              <Label htmlFor="publishedAt">Datum zveřejnění</Label>
+
+              <Input
+                id="publishedAt"
+                type="date"
+                {...register('publishedAt')}
+              />
+            </Field>
 
             <div>
               <Label htmlFor="articleVeracity">Pravdivost článku</Label>
