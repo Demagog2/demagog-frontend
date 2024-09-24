@@ -65,7 +65,7 @@ export default async function Speaker(
   props: PropsWithSearchParams<{ params: { slug: string } }>
 ) {
   const term = getStringParam(props.searchParams.q)
-  const selectedTags = getNumericalArrayParams(props.searchParams.tags)
+  const selectedTags = getStringArrayParams(props.searchParams.tags)
   const selectedYears = getNumericalArrayParams(props.searchParams.years)
   const selectedVeracities = getStringArrayParams(props.searchParams.veracities)
   const page = parsePage(props.searchParams.page)
@@ -121,7 +121,7 @@ export default async function Speaker(
       limit: PAGE_SIZE,
       term,
       filters: {
-        tags: selectedTags,
+        tagsV2: selectedTags,
         veracities: selectedVeracities,
         years: selectedYears,
       },
