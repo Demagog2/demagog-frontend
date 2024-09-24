@@ -1,6 +1,6 @@
 'use client'
 
-import { Controller, useFieldArray, useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ARTICLE_TYPE_LABEL } from '@/libs/constants/article-type'
 import { SubmitButton } from '@/components/admin/forms/SubmitButton'
@@ -15,7 +15,7 @@ import { z } from 'zod'
 import { schema } from '@/libs/articles/schema'
 import { useRef } from 'react'
 import { useFormState } from 'react-dom'
-import { createArticle } from '@/app/(admin)/admin/articles/new/actions'
+import { FormState } from '@/app/(admin)/admin/articles/new/actions'
 
 export const AdminArticleFormFragment = gql(`
   fragment AdminArticleForm on Query {
@@ -28,7 +28,7 @@ export const AdminArticleFormFragment = gql(`
 
 export function AdminArticleForm(props: {
   data: FragmentType<typeof AdminArticleFormFragment>
-  action<T>(prevState: T, input: unknown): Promise<T>
+  action(prevState: FormState, input: unknown): Promise<FormState>
 }) {
   const [state, formAction] = useFormState(props.action, { message: '' })
   const data = useFragment(AdminArticleFormFragment, props.data)

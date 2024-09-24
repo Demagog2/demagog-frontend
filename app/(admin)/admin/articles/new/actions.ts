@@ -16,7 +16,7 @@ const adminCreateArticleMutation = gql(`
   }
 `)
 
-type FormState = {
+export type FormState = {
   message: string
   error?: string
 }
