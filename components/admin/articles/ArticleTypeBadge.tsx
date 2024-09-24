@@ -1,14 +1,7 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import classNames from 'classnames'
 import Link from 'next/link'
-
-const ARTICLE_TYPE_LABEL: Record<string, string> = {
-  default: 'Ověřeno',
-  static: 'Komentář',
-  single_statement: 'Jednotlivý výrok',
-  facebook_factcheck: 'Facebook factcheck',
-  government_promises_evaluation: 'Sliby',
-}
+import { ARTICLE_TYPE_LABEL } from '@/libs/constants/article-type'
 
 const ArticleTypeBadgeFragment = gql(`
   fragment ArticleBadge on Article {
