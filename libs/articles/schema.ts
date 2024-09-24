@@ -15,7 +15,8 @@ const segmentSchema = z.discriminatedUnion('segmentType', [
 const sharedArticleSchema = z.object({
   title: z.string().trim().min(1, 'Zadejte nazev clanku'),
   perex: z.string().trim().min(1, 'Zadejte perex clanku'),
-  published: z.boolean().optional(),
+  pinned: z.preprocess((value) => value === 'on', z.boolean()).optional(),
+  published: z.preprocess((value) => value === 'on', z.boolean()).optional(),
   publishedAt: z.string().date().optional(),
   segments: z.array(segmentSchema).min(0),
   articleTags: z.array(z.string()).optional(),
