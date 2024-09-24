@@ -9,8 +9,7 @@
     "lint": "next lint",
     "generate": "npm run generate-possible-types && graphql-codegen",
     "generate:watch": "npm run generate-possible-types && graphql-codegen --watch",
-    "generate-possible-types": "node ./scripts/generate-possible-types.js",
-    "test": "jest"
+    "generate-possible-types": "node ./scripts/generate-possible-types.js"
   },
   "prettier": {
     "trailingComma": "es5",
