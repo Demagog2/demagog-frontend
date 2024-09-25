@@ -11,9 +11,18 @@ const nextConfig = {
       { source: '/spoluprace-s-facebookem', destination: '/tags/facebook' },
       { source: '/tag/:slug', destination: '/tags/:slug' },
       { source: '/vyhledavani', destination: '/search' },
-      { source: '/vyhledavani/politici', destination: '/search/search-speakers' },
-      { source: '/vyhledavani/vyroky', destination: '/search/search-statements' },
-      { source: '/vyhledavani/vystupy', destination: '/search/search-articles' },
+      {
+        source: '/vyhledavani/politici',
+        destination: '/search/search-speakers',
+      },
+      {
+        source: '/vyhledavani/vyroky',
+        destination: '/search/search-statements',
+      },
+      {
+        source: '/vyhledavani/vystupy',
+        destination: '/search/search-articles',
+      },
       { source: '/vypis-recniku', destination: '/speakers' },
       { source: '/vyrok/:slug', destination: '/statements/:slug' },
       { source: '/vyroky', destination: '/statements' },
@@ -49,8 +58,8 @@ const nextConfig = {
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,
-      use: ["@svgr/webpack"]
-    });
+      use: ['@svgr/webpack'],
+    })
 
     return config
   },
@@ -62,6 +71,12 @@ const nextConfig = {
 
   images: {
     remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '3000',
+        pathname: '/rails/active_storage/**',
+      },
       {
         protocol: 'https',
         hostname: 'demagog.cz',

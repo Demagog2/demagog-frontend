@@ -21,6 +21,9 @@ import { FormState } from '@/app/(admin)/admin/articles/actions'
 import { PhotoIcon } from '@heroicons/react/24/solid'
 import Dropzone from 'react-dropzone'
 import invariant from 'ts-invariant'
+import { AdminSourcesList } from '@/components/admin/articles/AdminSourcesList'
+import { ApolloProvider } from '@apollo/client'
+import { createClient } from '@/libs/apollo-client'
 
 export const AdminArticleFormFragment = gql(`
   fragment AdminArticleForm on Query {
@@ -195,16 +198,48 @@ export function AdminArticleForm(props: {
               Add segment
             </Button>
 
+            <Button
+              onClick={() =>
+                append({ segmentType: 'source_statements', sourceId: '' })
+              }
+            >
+              Add source segment
+            </Button>
+
             {fields.map((field, index) => (
               <div key={field.id}>
                 <input
                   type="hidden"
                   {...register(`segments.${index}.segmentType`)}
                 />
-                <textarea
-                  {...register(`segments.${index}.textHtml`)}
-                ></textarea>
-                <Button onClick={() => remove(index)}>Remove segment</Button>
+
+                {field.segmentType === 'text' ? (
+                  <>
+                    <textarea
+                      {...register(`segments.${index}.textHtml`)}
+                    ></textarea>
+
+                    <Button onClick={() => remove(index)}>
+                      Remove segment
+                    </Button>
+                  </>
+                ) : (
+                  <ApolloProvider client={createClient()}>
+                    <Controller
+                      control={control}
+                      name={`segments.${index}.sourceId`}
+                      render={({ field }) => (
+                        <>
+                          <input type="hidden" {...field} />
+                          <AdminSourcesList
+                            onRemoveSegment={() => remove(index)}
+                            onChange={(sourceId) => field.onChange(sourceId)}
+                          />
+                        </>
+                      )}
+                    ></Controller>
+                  </ApolloProvider>
+                )}
               </div>
             ))}
 
