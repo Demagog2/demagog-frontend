@@ -13,6 +13,8 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { toArticleTypeEnum } from '@/libs/enums'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
+import { Button } from '@headlessui/react'
+import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam článků', 'Administrace'),
@@ -30,6 +32,7 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
               ...ArticleBadge
               ...ArticleState
               ...PublishedArticleLink
+              ...AdminArticleDeleteDialog
             }
           }
         }
@@ -165,12 +168,7 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                           Upravit
                         </Link>
 
-                        <Link
-                          href={`/admin/articles/${edge.node.id}/destroy`}
-                          className="text-indigo-600 hover:text-indigo-900 ml-3"
-                        >
-                          Odstranit
-                        </Link>
+                        <AdminArticleDeleteDialog article={edge.node} />
                       </td>
                     </tr>
                   )

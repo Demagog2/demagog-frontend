@@ -54,3 +54,24 @@ export async function createArticle(
     },
   }
 }
+
+const adminDeleteArticleMutation = gql(`
+  mutation AdminDeleteArticle($id: ID!) {
+    deleteArticle(id: $id) {
+      id
+    }
+  }
+`)
+
+export async function deleteArticle(id: string) {
+  const { data } = await serverMutation({
+    mutation: adminDeleteArticleMutation,
+    variables: {
+      id,
+    },
+  })
+
+  if (data?.deleteArticle?.id) {
+    redirect(`/admin/articles`)
+  }
+}
