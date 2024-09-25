@@ -24,10 +24,15 @@ export function createServerSideApolloClient() {
         fetch,
         credentials: 'include',
         headers: ssrMode
-          ? {
-              // On the server, pass the incoming request's cookies to the outgoing request
-              cookie: cookieStore.toString() || '',
-            }
+          ? process.env.NODE_ENV === 'production'
+            ? {
+                // On the server, pass the incoming request's cookies to the outgoing request
+                cookie: cookieStore.toString() || '',
+              }
+            : {
+                Authorization:
+                  process.env.GRAPHQL_SERVER_AUTHORIZATION_TOKEN ?? '',
+              }
           : undefined,
       }),
     ]),
