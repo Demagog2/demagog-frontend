@@ -12,7 +12,7 @@
     "noEmit": true,
     "esModuleInterop": true,
     "downlevelIteration": true,
-    "module": "nodenext",
+    "module": "ESNext",
     "moduleResolution": "bundler",
     "maxNodeModuleJsDepth": 10,
     "resolveJsonModule": true,
