@@ -13,7 +13,6 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { toArticleTypeEnum } from '@/libs/enums'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
-import { Button } from '@headlessui/react'
 import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 
 export const metadata: Metadata = {

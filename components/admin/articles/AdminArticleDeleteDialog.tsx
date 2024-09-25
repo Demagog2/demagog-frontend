@@ -77,9 +77,9 @@ export default function AdminArticleDeleteDialog(props: {
                   </DialogTitle>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Jste si opravdu jisti, že chcete smazat článek "
-                      {article.title}"? Všechny informace a obsah článku budou
-                      trvale odstraněny. Tato akce je nevratná.
+                      Jste si opravdu jisti, že chcete smazat článek &quot;
+                      {article.title}&quot;? Všechny informace a obsah článku
+                      budou trvale odstraněny. Tato akce je nevratná.
                     </p>
                   </div>
                 </div>
