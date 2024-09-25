@@ -19,6 +19,7 @@ const adminCreateArticleMutation = gql(`
 export type FormState = {
   message: string
   error?: string
+  fields?: Record<string, any>
 }
 
 export async function createArticle(
@@ -33,7 +34,10 @@ export async function createArticle(
     const { data } = await serverMutation({
       mutation: adminCreateArticleMutation,
       variables: {
-        input,
+        input: {
+          ...input,
+          segments: input.segments ?? [],
+        },
       },
     })
 
@@ -42,5 +46,11 @@ export async function createArticle(
     }
   }
 
-  return { message: 'There was a problem.', error: parsedInput.error?.message }
+  return {
+    message: 'There was a problem.',
+    error: parsedInput.error?.message,
+    fields: {
+      ...parsedInput.data,
+    },
+  }
 }

@@ -15,9 +15,12 @@ import { Input } from '@/components/admin/forms/Input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { schema } from '@/libs/articles/schema'
-import { useRef } from 'react'
+import { PropsWithChildren, useRef } from 'react'
 import { useFormState } from 'react-dom'
 import { FormState } from '@/app/(admin)/admin/articles/new/actions'
+import { PhotoIcon } from '@heroicons/react/24/solid'
+import Dropzone from 'react-dropzone'
+import invariant from 'ts-invariant'
 
 export const AdminArticleFormFragment = gql(`
   fragment AdminArticleForm on Query {
@@ -28,9 +31,43 @@ export const AdminArticleFormFragment = gql(`
   }
 `)
 
+function DropzoneField(
+  props: PropsWithChildren<{
+    name: string
+    control: any
+    multiple: boolean
+  }>
+) {
+  return (
+    <Controller
+      name={props.name}
+      control={props.control}
+      render={({ field }) => (
+        <Dropzone
+          accept={{
+            'image/png': [],
+            'image/jpeg': [],
+            'image/webp': [],
+          }}
+          onDrop={(acceptedFiles) => field.onChange(acceptedFiles[0])}
+        >
+          {({ getRootProps, getInputProps }) => (
+            <section>
+              <div {...getRootProps()}>
+                <input name={field.name} {...getInputProps()} />
+                {props.children}
+              </div>
+            </section>
+          )}
+        </Dropzone>
+      )}
+    />
+  )
+}
+
 export function AdminArticleForm(props: {
   data: FragmentType<typeof AdminArticleFormFragment>
-  action(prevState: FormState, input: unknown): Promise<FormState>
+  action(prevState: FormState, input: FormData): Promise<FormState>
 }) {
   const [state, formAction] = useFormState(props.action, { message: '' })
   const data = useFragment(AdminArticleFormFragment, props.data)
@@ -44,8 +81,10 @@ export function AdminArticleForm(props: {
       segments: [],
       pinned: false,
       published: false,
+      illustration: undefined,
       publishedAt: new Date().toISOString().substring(0, 10),
       articleTags: [],
+      ...(state.fields ?? {}),
     },
   })
 
@@ -61,12 +100,26 @@ export function AdminArticleForm(props: {
   return (
     <form
       ref={formRef}
-      action={formAction}
-      onSubmit={handleSubmit(() => formRef.current?.submit())}
+      onSubmit={handleSubmit(
+        (data) => {
+          const formElem = formRef.current
+          invariant(formElem, 'Form HTML DOM element must be present.')
+          formAction(new FormData(formElem))
+
+          // TODO: @vaclavbohac Remove once we are sure the forms are bug free
+          console.debug('Valid form data', data)
+        },
+        (data) => {
+          // TODO: @vaclavbohac Remove once we are sure the forms are bug free
+          console.debug('Invalid form data', data)
+        }
+      )}
     >
       <div className="container">
         <div className="flex gap-5 border-b border-gray-900/10 pb-12">
           <div className="grow gap-y-5 grid grid-cols-1">
+            {state.error && <div className="text-red">{state.error}</div>}
+
             <Field>
               <Label htmlFor="title">Název článku</Label>
 
@@ -88,6 +141,37 @@ export function AdminArticleForm(props: {
                 />
               </Field>
             )}
+
+            <Field>
+              <Label htmlFor="illustration">Ilustrační obrázek</Label>
+
+              <DropzoneField
+                control={control}
+                name={'illustration'}
+                multiple={false}
+              >
+                <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+                  <div className="text-center">
+                    <PhotoIcon
+                      aria-hidden="true"
+                      className="mx-auto h-12 w-12 text-gray-300"
+                    />
+                    <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
+                      <label
+                        htmlFor="illustration"
+                        className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+                      >
+                        <span>Vyberte soubor</span>
+                      </label>
+                      <p className="pl-1">nebo jej přetáhněte</p>
+                    </div>
+                    <p className="text-xs leading-5 text-gray-600">
+                      Formáty .png, .jpg, .jpeg nebo .gif. Velikost max 4 MB.
+                    </p>
+                  </div>
+                </div>
+              </DropzoneField>
+            </Field>
 
             <Field>
               <Label htmlFor="perex">Perex</Label>
