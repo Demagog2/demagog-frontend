@@ -251,6 +251,7 @@ export function AdminArticleForm(props: {
                         <>
                           <input type="hidden" {...field} />
                           <AdminSourcesList
+                            selectedSourceId={field.value}
                             onRemoveSegment={() => remove(index)}
                             onChange={(sourceId) => field.onChange(sourceId)}
                           />
@@ -280,7 +281,7 @@ export function AdminArticleForm(props: {
             {/*  </select>*/}
             {/*</Field>*/}
           </div>
-          <div className="grow-0 w-1/4 gap-y-5 grid grid-cols-1 content-start">
+          <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
             <div>
               <Label htmlFor="articleType">Typ článku</Label>
               <select
