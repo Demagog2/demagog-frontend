@@ -8,7 +8,10 @@ import { LinkButton } from '@/components/admin/forms/LinkButton'
 import { Switch } from '@/components/admin/forms/Switch'
 import { SwitchField } from '@/components/admin/forms/SwitchField'
 import { Label } from '@/components/admin/forms/Label'
-import { ArticleTypeEnum } from '@/__generated__/graphql'
+import {
+  ArticleTypeEnum,
+  AdminArticleFormFieldsFragment as ArticleFields,
+} from '@/__generated__/graphql'
 import { ARTICLE_VERACITY_OPTIONS } from '@/libs/constants/article-veracity'
 import { Button, Field } from '@headlessui/react'
 import { Input } from '@/components/admin/forms/Input'
@@ -30,6 +33,7 @@ import {
   ChatBubbleLeftIcon,
 } from '@heroicons/react/24/outline'
 import { AdminSegmentSelector } from './AdminSegmentSelector'
+import { toArticleTypeEnum } from '@/libs/enums'
 
 const items = [
   {
@@ -52,7 +56,28 @@ export const AdminArticleFormFragment = gql(`
   fragment AdminArticleForm on Query {
     articleTags {
       id
-      title
+    }
+  }
+`)
+
+export const AdminArticleFormFieldsFragment = gql(`
+  fragment AdminArticleFormFields on Article {
+    title
+    titleEn
+    perex
+    articleType
+    articleVeracity
+    published
+    publishedAt
+    pinned
+    segments {
+      id
+      segmentType
+      textHtml
+      source {
+        id
+      }
+      statementId
     }
   }
 `)
@@ -91,27 +116,91 @@ function DropzoneField(
   )
 }
 
+const DEFAULT_VALUES: Partial<z.output<typeof schema>> = {
+  articleType: ArticleTypeEnum.Default,
+  pinned: false,
+  published: false,
+  illustration: undefined,
+  publishedAt: new Date().toISOString().substring(0, 10),
+  articleTags: [],
+}
+
+function isNotNullish<T>(value: T | null | undefined): value is T {
+  return value !== undefined && value !== null
+}
+
+function buildDefaultValues(
+  article?: ArticleFields
+): Partial<z.output<typeof schema>> {
+  if (!article) {
+    return DEFAULT_VALUES
+  }
+
+  const articleType = toArticleTypeEnum(article.articleType)
+
+  const sharedFields = {
+    articleType,
+    articleVeracity: article.articleVeracity ?? '',
+    titleEn: article.titleEn ?? '',
+    title: article.title,
+    pinned: article.pinned,
+    published: article.pinned,
+    publishedAt: article.publishedAt.substring(0, 10),
+    segments: article.segments
+      ?.map((segment) => {
+        switch (segment.segmentType) {
+          case 'text':
+            return {
+              segmentType: 'text' as const,
+              textHtml: segment.textHtml ?? '',
+            }
+
+          case 'source_statements':
+            return {
+              segmentType: 'source_statements' as const,
+              sourceId: segment.source?.id ?? '',
+            }
+          case 'promise':
+            return {
+              segmentType: 'promise' as const,
+              statementId: segment.statementId ?? '',
+            }
+          default:
+            return null
+        }
+      })
+      .filter(isNotNullish),
+  }
+
+  switch (articleType) {
+    case ArticleTypeEnum.FacebookFactcheck:
+    case ArticleTypeEnum.GovernmentPromisesEvaluation:
+    case ArticleTypeEnum.SingleStatement:
+    case ArticleTypeEnum.Static:
+    case ArticleTypeEnum.Default:
+      return {
+        ...sharedFields,
+      }
+
+    default:
+      return DEFAULT_VALUES
+  }
+}
+
 export function AdminArticleForm(props: {
   data: FragmentType<typeof AdminArticleFormFragment>
+  article?: FragmentType<typeof AdminArticleFormFieldsFragment>
   action(prevState: FormState, input: FormData): Promise<FormState>
 }) {
   const [state, formAction] = useFormState(props.action, { message: '' })
   const data = useFragment(AdminArticleFormFragment, props.data)
+  const article = useFragment(AdminArticleFormFieldsFragment, props.article)
 
   const { register, watch, handleSubmit, control } = useForm<
     z.output<typeof schema>
   >({
     resolver: zodResolver(schema),
-    defaultValues: {
-      articleType: ArticleTypeEnum.Default,
-      segments: [],
-      pinned: false,
-      published: false,
-      illustration: undefined,
-      publishedAt: new Date().toISOString().substring(0, 10),
-      articleTags: [],
-      ...(state.fields ?? {}),
-    },
+    defaultValues: buildDefaultValues(article),
   })
 
   const { fields, append, remove } = useFieldArray({
@@ -121,7 +210,10 @@ export function AdminArticleForm(props: {
 
   const formRef = useRef<HTMLFormElement>(null)
 
-  const selectedArticleType = watch('articleType', ArticleTypeEnum.Default)
+  const selectedArticleType = watch(
+    'articleType',
+    article ? toArticleTypeEnum(article.articleType) : ArticleTypeEnum.Default
+  )
 
   return (
     <form

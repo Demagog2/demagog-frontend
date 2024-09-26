@@ -23,7 +23,7 @@ export type FormState = {
 }
 
 export async function createArticle(
-  prevState: FormState,
+  _: FormState,
   formData: FormData
 ): Promise<FormState> {
   const parsedInput = safeParse(schema, formData)
@@ -43,6 +43,51 @@ export async function createArticle(
 
     if (data?.createArticle?.article) {
       redirect(`/admin/articles/${data?.createArticle?.article.id}`)
+    }
+  }
+
+  return {
+    message: 'There was a problem.',
+    error: parsedInput.error?.message,
+    fields: {
+      ...parsedInput.data,
+    },
+  }
+}
+
+const adminEditArticleMutation = gql(`
+  mutation AdminEditArticleMutation($id: ID!, $input: ArticleInput!) {
+    updateArticle(id: $id, articleInput: $input) {
+      article {
+        id
+      }
+    }
+  }
+`)
+
+export async function updateArticle(
+  articleId: string,
+  _: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const parsedInput = safeParse(schema, formData)
+
+  if (parsedInput.success) {
+    const input = parsedInput.data
+
+    const { data } = await serverMutation({
+      mutation: adminEditArticleMutation,
+      variables: {
+        id: articleId,
+        input: {
+          ...input,
+          segments: input.segments ?? [],
+        },
+      },
+    })
+
+    if (data?.updateArticle?.article) {
+      redirect(`/admin/articles/${data?.updateArticle?.article.id}`)
     }
   }
 
