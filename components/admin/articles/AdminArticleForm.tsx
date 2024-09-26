@@ -206,50 +206,7 @@ export function AdminArticleForm(props: {
     z.output<typeof schema>
   >({
     resolver: zodResolver(schema),
-    defaultValues: buildDefaultValues(article),
-    // defaultValues: {
-    //   articleType: ArticleTypeEnum.Default,
-    //   pinned: false,
-    //   published: false,
-    //   illustration: undefined,
-    //   publishedAt: new Date().toISOString().substring(0, 10),
-    //   articleTags: [],
-    //   ...(article
-    //     ? {
-    //         articleType: toArticleTypeEnum(article.articleType),
-    //         articleVeracity: article.articleVeracity as string,
-    //         title: article.title,
-    //         titleEn: article.titleEn ?? '',
-    //         perex: article.perex ?? '',
-    //         pinned: article.pinned,
-    //         published: article.published,
-    //         publishedAt: article.publishedAt.substring(0, 10),
-    //         segments: article.segments?.map((segment) => {
-    //           switch (segment.segmentType) {
-    //             case 'text':
-    //               return {
-    //                 segmentType: 'text' as const,
-    //                 textHtml: segment.textHtml ?? '',
-    //               }
-    //
-    //             case 'source_statements':
-    //               return {
-    //                 segmentType: 'source_statements' as const,
-    //                 sourceId: segment.source?.id ?? '',
-    //               }
-    //             case 'promise':
-    //               return {
-    //                 segmentType: 'promise' as const,
-    //                 statement: segment.statementId ?? '',
-    //               }
-    //             default:
-    //               return null
-    //           }
-    //         }),
-    //       }
-    //     : {}),
-    //   ...(state.fields ?? {}),
-    // },
+    defaultValues: { ...buildDefaultValues(article), ...(state.fields ?? {}) },
   })
 
   const { fields, append, remove } = useFieldArray({
