@@ -12,7 +12,8 @@ const UserMenuFragment = gql(`
     currentUser {
       id
       firstName
-      lastName
+      lastName 
+      avatar
     }
   }
 `)
@@ -21,14 +22,15 @@ export function UserMenu(props: {
   data: FragmentType<typeof UserMenuFragment>
 }) {
   const data = useFragment(UserMenuFragment, props.data)
+  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
   return (
     <Menu as="div" className="relative">
       <MenuButton className="-m-1.5 flex items-center p-1.5">
         <span className="sr-only">Open user menu</span>
         <img
-          alt=""
-          src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+          alt={data.currentUser.firstName + data.currentUser.lastName}
+          src={mediaUrl + data.currentUser.avatar}
           className="h-8 w-8 rounded-full bg-gray-50"
         />
         <span className="hidden lg:flex lg:items-center">
