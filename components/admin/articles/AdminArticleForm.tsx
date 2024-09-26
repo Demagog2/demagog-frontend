@@ -143,6 +143,7 @@ function buildDefaultValues(
     articleVeracity: article.articleVeracity ?? '',
     titleEn: article.titleEn ?? '',
     title: article.title,
+    perex: article.perex,
     pinned: article.pinned,
     published: article.pinned,
     publishedAt: article.publishedAt.substring(0, 10),
