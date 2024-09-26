@@ -29,7 +29,7 @@ export function UserMenu(props: {
       <MenuButton className="-m-1.5 flex items-center p-1.5">
         <span className="sr-only">Open user menu</span>
         <img
-          alt={data.currentUser.firstName + data.currentUser.lastName}
+          alt={`${data.currentUser.firstName} ${data.currentUser.lastName}`}
           src={mediaUrl + data.currentUser.avatar}
           className="h-8 w-8 rounded-full bg-gray-50"
         />
