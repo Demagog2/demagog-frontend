@@ -25,6 +25,29 @@ import { AdminSourcesList } from '@/components/admin/articles/AdminSourcesList'
 import { ApolloProvider } from '@apollo/client'
 import { createClient } from '@/libs/apollo-client'
 
+import {
+  DocumentTextIcon,
+  ChatBubbleLeftIcon,
+} from '@heroicons/react/24/outline'
+import { AdminSegmentSelector } from './AdminSegmentSelector'
+
+const items = [
+  {
+    segmentType: 'text' as const,
+    title: 'Text',
+    description: 'Přidat textový segment',
+    icon: DocumentTextIcon,
+    background: 'bg-pink-500',
+  },
+  {
+    segmentType: 'source_statements' as const,
+    title: 'Zdroj výroků',
+    description: 'Vyberte diskuzi, jejíž výroky budou zobrazeny v článku',
+    icon: ChatBubbleLeftIcon,
+    background: 'bg-yellow-500',
+  },
+]
+
 export const AdminArticleFormFragment = gql(`
   fragment AdminArticleForm on Query {
     articleTags {
@@ -188,23 +211,18 @@ export function AdminArticleForm(props: {
               />
             </Field>
 
-            <Field>
-              <Label htmlFor="">Obsah</Label>
-            </Field>
-
-            <Button
-              onClick={() => append({ segmentType: 'text', textHtml: '' })}
-            >
-              Add segment
-            </Button>
-
-            <Button
-              onClick={() =>
-                append({ segmentType: 'source_statements', sourceId: '' })
-              }
-            >
-              Add source segment
-            </Button>
+            <AdminSegmentSelector
+              segments={items.map((item) => ({
+                ...item,
+                onClick: () => {
+                  if (item.segmentType === 'text') {
+                    append({ segmentType: item.segmentType, textHtml: '' })
+                  } else {
+                    append({ segmentType: item.segmentType, sourceId: '' })
+                  }
+                },
+              }))}
+            />
 
             {fields.map((field, index) => (
               <div key={field.id}>
@@ -217,11 +235,12 @@ export function AdminArticleForm(props: {
                   <>
                     <textarea
                       {...register(`segments.${index}.textHtml`)}
+                      rows={4}
+                      className="block mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                      placeholder="Zadejte text..."
                     ></textarea>
 
-                    <Button onClick={() => remove(index)}>
-                      Remove segment
-                    </Button>
+                    <Button onClick={() => remove(index)}>Odebrat</Button>
                   </>
                 ) : (
                   <ApolloProvider client={createClient()}>
