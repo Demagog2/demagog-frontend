@@ -281,7 +281,7 @@ export function AdminArticleForm(props: {
             <SwitchField
               htmlFor="pinned"
               label="Připnout článek"
-              description="Článek bude trvale zobrazen na hlavní stránce jako první"
+              description="Článek bude trvale zobrazen na hlavní stránce jako první."
             >
               <Controller
                 name="pinned"
