@@ -10,6 +10,10 @@ const segmentSchema = z.discriminatedUnion('segmentType', [
     segmentType: z.literal('source_statements'),
     sourceId: z.string(),
   }),
+  z.object({
+    segmentType: z.literal('promise'),
+    statementId: z.string(),
+  }),
 ])
 
 const MAX_FILE_SIZE = 1000000
@@ -52,6 +56,21 @@ export const schema = z.discriminatedUnion('articleType', [
   z
     .object({
       articleType: z.literal(ArticleTypeEnum.Default),
+    })
+    .merge(sharedArticleSchema),
+  z
+    .object({
+      articleType: z.literal(ArticleTypeEnum.Static),
+    })
+    .merge(sharedArticleSchema),
+  z
+    .object({
+      articleType: z.literal(ArticleTypeEnum.SingleStatement),
+    })
+    .merge(sharedArticleSchema),
+  z
+    .object({
+      articleType: z.literal(ArticleTypeEnum.GovernmentPromisesEvaluation),
     })
     .merge(sharedArticleSchema),
   z
