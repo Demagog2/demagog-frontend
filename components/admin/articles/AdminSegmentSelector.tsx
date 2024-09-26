@@ -1,3 +1,4 @@
+import { Button } from '@headlessui/react'
 import classNames from 'classnames'
 
 export function AdminSegmentSelector(props: {
@@ -38,14 +39,15 @@ export function AdminSegmentSelector(props: {
               </div>
               <div>
                 <h3 className="text-sm font-medium text-gray-900">
-                  <button
+                  <Button
+                    type="button"
                     onClick={segment.onClick}
                     className="focus:outline-none"
                   >
                     <span aria-hidden="true" className="absolute inset-0" />
                     <span>{segment.title}</span>
                     <span aria-hidden="true"> &rarr;</span>
-                  </button>
+                  </Button>
                 </h3>
                 <p className="mt-1 text-sm text-gray-500">
                   {segment.description}
