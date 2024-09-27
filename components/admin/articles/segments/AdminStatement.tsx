@@ -61,13 +61,13 @@ export function AdminStatement(props: {
           </div>
         </div>
       </div>
-      <div>
-        <p className="mt-1 text-base italic text-gray-600">
+      <div className="space-y-4">
+        <p className="text-base italic text-gray-600">
           &bdquo;{statement.content}&rdquo;
         </p>
         <span
           className={classNames(
-            'mt-1 inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
+            'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
             {
               'bg-green-100 text-green-700':
                 statement.assessment.veracity?.key === 'true',
@@ -82,7 +82,7 @@ export function AdminStatement(props: {
         >
           {statement.assessment?.veracity?.name}
         </span>
-        <p className="mt-1 text-sm text-gray-500">
+        <p className="text-sm text-gray-500">
           {statement.assessment?.shortExplanation}
         </p>
       </div>
