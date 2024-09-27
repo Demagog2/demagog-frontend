@@ -13,12 +13,16 @@ export default async function AdminTags() {
   const { data } = await serverQuery({
     query: gql(`
       query AdminTags {
-        tags {
-          id
-          name
-          forStatementType
-          publishedStatementsCount
-          allStatementsCount
+        tagsV2 {
+          edges {
+            node {
+              id
+              name
+              forStatementType
+              publishedStatementsCount
+              allStatementsCount
+            }
+          }
         }
       }
     `),
@@ -71,24 +75,30 @@ export default async function AdminTags() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 bg-white">
-                {data.tags.map((tag) => {
+                {data.tagsV2.edges?.map((edge) => {
+                  if (!edge?.node) {
+                    return null
+                  }
+
+                  const { node } = edge
+
                   return (
-                    <tr key={tag.id}>
+                    <tr key={node.id}>
                       <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                        <Link href={`/admin/tags/${tag.id}`}>{tag.name}</Link>
+                        <Link href={`/admin/tags/${node.id}`}>{node.name}</Link>
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {tag.forStatementType}
+                        {node.forStatementType}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {tag.publishedStatementsCount}
+                        {node.publishedStatementsCount}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {tag.allStatementsCount}
+                        {node.allStatementsCount}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
                         <Link
-                          href={`/admin/tags/${tag.id}/edit`}
+                          href={`/admin/tags/${node.id}/edit`}
                           className="text-indigo-600 hover:text-indigo-900"
                         >
                           Upravit
