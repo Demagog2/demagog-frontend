@@ -50,7 +50,12 @@ const content = [
     icon: NewspaperIcon,
     current: true,
   },
-  { name: 'Výroky', href: '#', icon: ChatBubbleLeftIcon, current: false },
+  {
+    name: 'Výroky',
+    href: '/admin/sources',
+    icon: ChatBubbleLeftIcon,
+    current: false,
+  },
   { name: 'Štítky', href: '/admin/tags', icon: HashtagIcon, current: false },
   { name: 'Obrázky', href: '#', icon: PhotoIcon, current: false },
   { name: 'Statistiky', href: '#', icon: ChartBarIcon, current: false },
