@@ -41,6 +41,7 @@ import Link from 'next/link'
 import { UserMenu } from '@/components/admin/UserMenu'
 import classNames from 'classnames'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { usePathname } from 'next/navigation'
 
 const content = [
   {
@@ -50,7 +51,7 @@ const content = [
     current: true,
   },
   { name: 'Výroky', href: '#', icon: ChatBubbleLeftIcon, current: false },
-  { name: 'Štítky', href: '#', icon: HashtagIcon, current: false },
+  { name: 'Štítky', href: '/admin/tags', icon: HashtagIcon, current: false },
   { name: 'Obrázky', href: '#', icon: PhotoIcon, current: false },
   { name: 'Statistiky', href: '#', icon: ChartBarIcon, current: false },
   { name: 'Tagy', href: '#', icon: TagIcon, current: false },
@@ -74,6 +75,8 @@ export default function AdminClientLayout(
   }>
 ) {
   const data = useFragment(AdminClientLayoutFragment, props.data)
+
+  const pathname = usePathname()
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
@@ -129,7 +132,7 @@ export default function AdminClientLayout(
                           <Link
                             href={item.href}
                             className={classNames(
-                              item.current
+                              pathname?.startsWith(item.href)
                                 ? 'bg-gray-50 text-indigo-600'
                                 : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
                               'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
@@ -138,7 +141,7 @@ export default function AdminClientLayout(
                             <item.icon
                               aria-hidden="true"
                               className={classNames(
-                                item.current
+                                pathname?.startsWith(item.href)
                                   ? 'text-indigo-600'
                                   : 'text-gray-400 group-hover:text-indigo-600',
                                 'h-6 w-6 shrink-0'
@@ -160,7 +163,7 @@ export default function AdminClientLayout(
                           <a
                             href={team.href}
                             className={classNames(
-                              team.current
+                              pathname?.startsWith(team.href)
                                 ? 'bg-gray-50 text-indigo-600'
                                 : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
                               'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
@@ -168,7 +171,7 @@ export default function AdminClientLayout(
                           >
                             <span
                               className={classNames(
-                                team.current
+                                pathname?.startsWith(team.href)
                                   ? 'border-indigo-600 text-indigo-600'
                                   : 'border-gray-200 text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
                                 'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border bg-white text-[0.625rem] font-medium'
@@ -224,7 +227,7 @@ export default function AdminClientLayout(
                       <a
                         href={item.href}
                         className={classNames(
-                          item.current
+                          pathname?.startsWith(item.href)
                             ? 'bg-gray-50 text-indigo-600'
                             : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
                           'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
@@ -233,7 +236,7 @@ export default function AdminClientLayout(
                         <item.icon
                           aria-hidden="true"
                           className={classNames(
-                            item.current
+                            pathname?.startsWith(item.href)
                               ? 'text-indigo-600'
                               : 'text-gray-400 group-hover:text-indigo-600',
                             'h-6 w-6 shrink-0'
@@ -255,7 +258,7 @@ export default function AdminClientLayout(
                       <a
                         href={team.href}
                         className={classNames(
-                          team.current
+                          pathname?.startsWith(team.href)
                             ? 'bg-gray-50 text-indigo-600'
                             : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
                           'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
@@ -263,7 +266,7 @@ export default function AdminClientLayout(
                       >
                         <span
                           className={classNames(
-                            team.current
+                            pathname?.startsWith(team.href)
                               ? 'border-indigo-600 text-indigo-600'
                               : 'border-gray-200 text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
                             'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border bg-white text-[0.625rem] font-medium'
