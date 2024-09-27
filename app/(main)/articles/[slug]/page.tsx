@@ -3,6 +3,31 @@ import { gql } from '@/__generated__'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
 import { FacebookFactcheckMetadata } from '@/components/article/metadata/FacebookFactcheckArticleMetadata'
 import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
+
+export async function generateMetadata(props: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const {
+    data: { article },
+  } = await query({
+    query: gql(`
+       query ArticleMetadata($id: ID!) {
+          article(id: $id) {
+            title
+          }
+        }
+      `),
+    variables: {
+      id: props.params.slug,
+    },
+  })
+
+  return {
+    title: getMetadataTitle(article.title),
+  }
+}
 
 export default async function Article(props: { params: { slug: string } }) {
   const { slug } = props.params
