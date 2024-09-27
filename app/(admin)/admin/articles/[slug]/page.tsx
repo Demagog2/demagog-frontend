@@ -3,6 +3,31 @@ import { gql } from '@/__generated__'
 import { AdminArticleHeader } from '@/components/admin/articles/AdminArticleHeader'
 import { AdminArticleContent } from '@/components/admin/articles/AdminArticleContent'
 import { serverQuery } from '@/libs/apollo-client-server'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
+
+export async function generateMetadata(props: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const {
+    data: { article },
+  } = await serverQuery({
+    query: gql(`
+       query AdminArticleMetadata($id: ID!) {
+          article(id: $id, includeUnpublished: true) {
+            title
+          }
+        }
+      `),
+    variables: {
+      id: props.params.slug,
+    },
+  })
+
+  return {
+    title: getMetadataTitle(article.title, 'Administrace'),
+  }
+}
 
 const ArticleQuery = gql(`
   query AdminArticle($id: ID!) {
