@@ -1,3 +1,33 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .article-content p {
+    @apply mt-8;
+  }
+
+  .article-content ul {
+    @apply mt-8 max-w-xl space-y-8 text-gray-600;
+  }
+
+  .article-content ul li {
+    list-style: inside;
+  }
+
+  .article-content h2 {
+    @apply mt-16 text-2xl font-bold tracking-tight text-gray-900;
+  }
+
+  .article-content figure {
+    @apply mt-8;
+  }
+
+  .article-content figure img {
+    @apply aspect-video rounded-xl bg-gray-50 object-cover;
+  }
+
+  .article-content figcaption {
+    @apply mt-4 flex gap-x-2 text-sm leading-6 text-gray-500;
+  }
+}
