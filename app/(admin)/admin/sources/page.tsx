@@ -32,9 +32,8 @@ export default async function AdminSources() {
           sourceUrl
           experts {
             id
-            avatar
-            firstName
-            lastName
+            fullName
+            avatar(size: small)
           }
           medium {
             name
@@ -156,10 +155,10 @@ export default async function AdminSources() {
                                 <Image
                                   width={24}
                                   height={24}
-                                  alt={`${expert.firstName} ${expert.lastName}`}
+                                  alt={expert.fullName}
                                   src={mediaUrl + expert.avatar}
                                   className="h-6 w-6 rounded-full bg-gray-50 ring-2 ring-white"
-                                  title={`${expert.firstName} ${expert.lastName}`}
+                                  title={expert.fullName}
                                 />
                               </span>
                             )

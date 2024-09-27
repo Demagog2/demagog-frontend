@@ -7,13 +7,14 @@ const userNavigation = [
   { name: 'Sign out', href: '#' },
 ]
 
+// TODO: @vaclavbohac Add initials to the API?
+
 const UserMenuFragment = gql(`
   fragment UserMenu on Query {
     currentUser {
       id
-      firstName
-      lastName 
-      avatar
+      fullName
+      avatar(size: small)
     }
   }
 `)
@@ -23,9 +24,6 @@ export function UserMenu(props: {
 }) {
   const data = useFragment(UserMenuFragment, props.data)
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
-  const initials =
-    data.currentUser.firstName.slice(0, 1) +
-    data.currentUser.lastName.slice(0, 1)
 
   return (
     <Menu as="div" className="relative">
@@ -35,12 +33,15 @@ export function UserMenu(props: {
         {!data.currentUser.avatar ? (
           <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
             <span className="text-sm font-medium leading-none text-white">
-              {initials}
+              {data.currentUser.fullName
+                .split(' ')
+                .map((name) => name.substring(0, 1))
+                .join('')}
             </span>
           </span>
         ) : (
           <img
-            alt={`${data.currentUser.firstName} ${data.currentUser.lastName}`}
+            alt={`${data.currentUser.fullName}`}
             src={mediaUrl + data.currentUser.avatar}
             className="h-8 w-8 rounded-full bg-gray-50"
           />
@@ -51,7 +52,7 @@ export function UserMenu(props: {
             aria-hidden="true"
             className="ml-4 text-sm font-semibold leading-6 text-gray-900"
           >
-            {data.currentUser.firstName} {data.currentUser.lastName}
+            {data.currentUser.fullName}
           </span>
           <ChevronDownIcon
             aria-hidden="true"
