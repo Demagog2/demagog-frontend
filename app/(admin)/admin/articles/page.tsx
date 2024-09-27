@@ -12,6 +12,9 @@ import { Metadata } from 'next'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { toArticleTypeEnum } from '@/libs/enums'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
+import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
+import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 
@@ -43,8 +46,8 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
   })
 
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="pb-5 sm:flex sm:items-center sm:justify-between">
+    <AdminPage>
+      <AdminPageHeader>
         <AdminPageTitle title="Články" description="Seznam článků" />
 
         <div className="sm:flex">
@@ -98,85 +101,59 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
             <NewArticleDropdown />
           </div>
         </div>
-      </div>
-      <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle">
-            <table className="min-w-full divide-y divide-gray-300">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8"
-                  >
-                    Název
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Typ článku
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Stav
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
-                  >
-                    Odkaz
-                  </th>
-                  <th
-                    scope="col"
-                    className="relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8"
-                  >
-                    <span className="sr-only">Edit</span>
-                  </th>
+      </AdminPageHeader>
+
+      <AdminPageContent>
+        <table className="admin-content-table">
+          <thead>
+            <tr>
+              <th scope="col">Název</th>
+              <th scope="col">Typ článku</th>
+              <th scope="col">Stav</th>
+              <th scope="col">Odkaz</th>
+              <th scope="col">
+                <span className="sr-only">Edit</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {data.articlesV2.edges?.map((edge) => {
+              if (!edge?.node) {
+                return null
+              }
+
+              return (
+                <tr key={edge.node.id}>
+                  <td>
+                    <Link href={`/admin/articles/${edge.node.id}`}>
+                      {edge.node.title}
+                    </Link>
+                  </td>
+                  <td>
+                    <ArticleTypeBadge article={edge.node} />
+                  </td>
+                  <td>
+                    <ArticleState article={edge.node} />
+                  </td>
+                  <td>
+                    <PublishedArticleLink article={edge.node} />
+                  </td>
+                  <td>
+                    <Link
+                      href={`/admin/articles/${edge.node.id}/edit`}
+                      className="text-indigo-600 hover:text-indigo-900"
+                    >
+                      Upravit
+                    </Link>
+
+                    <AdminArticleDeleteDialog article={edge.node} />
+                  </td>
                 </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 bg-white">
-                {data.articlesV2.edges?.map((edge) => {
-                  if (!edge?.node) {
-                    return null
-                  }
-
-                  return (
-                    <tr key={edge.node.id}>
-                      <td className="py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8">
-                        <Link href={`/admin/articles/${edge.node.id}`}>
-                          {edge.node.title}
-                        </Link>
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <ArticleTypeBadge article={edge.node} />
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <ArticleState article={edge.node} />
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        <PublishedArticleLink article={edge.node} />
-                      </td>
-                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8">
-                        <Link
-                          href={`/admin/articles/${edge.node.id}/edit`}
-                          className="text-indigo-600 hover:text-indigo-900"
-                        >
-                          Upravit
-                        </Link>
-
-                        <AdminArticleDeleteDialog article={edge.node} />
-                      </td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </div>
+              )
+            })}
+          </tbody>
+        </table>
+      </AdminPageContent>
+    </AdminPage>
   )
 }
