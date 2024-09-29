@@ -34,35 +34,33 @@
   /* Styling of admin page table */
   .admin-content-table {
     @apply min-w-full divide-y divide-gray-300;
+  }
 
-    thead {
-      th {
-        @apply px-3 py-3.5 text-left text-sm font-semibold text-gray-900;
+  .admin-content-table thead th {
+    @apply px-3 py-3.5 text-left text-sm font-semibold text-gray-900;
+  }
 
-        &:first-of-type {
-          @apply py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8;
-        }
+  .admin-content-table thead th:first-of-type {
+    @apply py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6 lg:pl-8;
+  }
 
-        &:last-of-type {
-          @apply relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8;
-        }
-      }
-    }
+  .admin-content-table thead th:last-of-type {
+    @apply relative py-3.5 pl-3 pr-4 sm:pr-6 lg:pr-8;
+  }
 
-    tbody {
-      @apply divide-y divide-gray-200 bg-white;
+  .admin-content-table tbody {
+    @apply divide-y divide-gray-200 bg-white;
+  }
 
-      td {
-        @apply whitespace-nowrap px-3 py-4 text-sm text-gray-500;
+  .admin-content-table tbody td {
+    @apply whitespace-nowrap px-3 py-4 text-sm text-gray-500;
+  }
 
-        &:first-of-type {
-          @apply py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 whitespace-normal;
-        }
+  .admin-content-table tbody td:first-of-type {
+    @apply py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6 lg:pl-8 whitespace-normal;
+  }
 
-        &:last-of-type {
-          @apply relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8;
-        }
-      }
-    }
+  .admin-content-table tbody td:last-of-type {
+    @apply relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8;
   }
 }
