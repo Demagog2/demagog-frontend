@@ -12,6 +12,7 @@ export function createClient() {
     cache: new InMemoryCache({
       possibleTypes: possibleTypes,
     }),
+    credentials: 'include',
   })
 }
 
