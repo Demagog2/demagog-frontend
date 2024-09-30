@@ -31,28 +31,31 @@ const nextConfig = {
   },
 
   async redirects() {
+    const constantRedirects = [
+      {
+        source: '/stranka/workshopy-demagogcz',
+        destination: '/workshopy',
+        permanent: true,
+      },
+      {
+        source: '/admin',
+        destination: '/admin/sources',
+        permanent: true,
+      },
+    ]
+
     if (process.env.SERVE_CAMPAIGN_WEBSITE_FROM_RAILS) {
       return [
+        ...constantRedirects,
         {
           source: '/kampan',
           destination: 'https://demagog.cz/kampan',
           permanent: true,
         },
-        {
-          source: '/stranka/workshopy-demagogcz',
-          destination: '/workshopy',
-          permanent: true,
-        },
-      ]
-    } else {
-      return [
-        {
-          source: '/stranka/workshopy-demagogcz',
-          destination: '/workshopy',
-          permanent: true,
-        },
       ]
     }
+
+    return constantRedirects
   },
 
   webpack(config) {
