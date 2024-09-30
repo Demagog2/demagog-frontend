@@ -1,5 +1,5 @@
 import { gql, FragmentType, useFragment } from '@/__generated__'
-import classNames from 'classnames'
+import { VeracityBadge } from '../../veracity/VeracityBadge'
 
 const AdminStatementFragment = gql(`
   fragment AdminStatement on Statement {
@@ -16,10 +16,7 @@ const AdminStatementFragment = gql(`
       name
     }
     assessment {
-      veracity {
-        key
-        name
-      }
+      ...VeracityBadge
       shortExplanation
     }
   }
@@ -65,23 +62,9 @@ export function AdminStatement(props: {
         <p className="text-base italic text-gray-600">
           &bdquo;{statement.content}&rdquo;
         </p>
-        <span
-          className={classNames(
-            'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
-            {
-              'bg-green-100 text-green-700':
-                statement.assessment.veracity?.key === 'true',
-              'bg-red-100 text-red-700':
-                statement.assessment.veracity?.key === 'untrue',
-              'bg-yellow-100 text-yellow-800':
-                statement.assessment.veracity?.key === 'misleading',
-              'bg-gray-100 text-gray-600':
-                statement.assessment.veracity?.key === 'unverifiable',
-            }
-          )}
-        >
-          {statement.assessment?.veracity?.name}
-        </span>
+
+        <VeracityBadge assessment={statement.assessment} />
+
         <p className="text-sm text-gray-500">
           {statement.assessment?.shortExplanation}
         </p>
