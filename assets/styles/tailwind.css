@@ -63,4 +63,20 @@
   .admin-content-table tbody td:last-of-type {
     @apply relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6 lg:pr-8;
   }
+
+  /*CK Editor (rich text editor) overrides*/
+
+  .ck-content .image {
+    @apply ml-0;
+  }
+
+  .ck-content .table {
+    @apply ml-0;
+  }
+
+  .ck-content h2 {
+    margin: 15px 0 8px 0;
+    font-size: 18px;
+    font-weight: 700px;
+  }
 }
