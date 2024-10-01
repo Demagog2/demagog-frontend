@@ -23,10 +23,13 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminArticles(props: PropsWithSearchParams) {
+  const before: string | null = getStringParam(props.searchParams.before)
+  const after: string | null = getStringParam(props.searchParams.after)
+
   const { data } = await serverQuery({
     query: gql(`
-      query AdminArticles($articleType: ArticleTypeEnum) {
-        articlesV2(filter: { includeUnpublished: true, articleType: $articleType }) {
+      query AdminArticles($articleType: ArticleTypeEnum, $after: String, $before: String) {
+        articlesV2(first: 15, after: $after, before: $before, filter: { includeUnpublished: true, articleType: $articleType }) {
           edges {
             node {
               id
@@ -37,11 +40,19 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
               ...AdminArticleDeleteDialog
             }
           }
+          pageInfo {
+            hasPreviousPage
+            hasNextPage
+            endCursor
+            startCursor
+          }
         }
       }
     `),
     variables: {
       articleType: toArticleTypeEnum(getStringParam(props.searchParams.type)),
+      ...(after ? { after } : {}),
+      ...(before ? { before } : {}),
     },
   })
 
@@ -153,6 +164,30 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
             })}
           </tbody>
         </table>
+
+        <nav
+          aria-label="Pagination"
+          className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+        >
+          <div className="flex flex-1 justify-between sm:justify-end">
+            {data.articlesV2.pageInfo.hasPreviousPage && (
+              <Link
+                href={`?before=${data.articlesV2.pageInfo.startCursor}`}
+                className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+              >
+                Předchozí
+              </Link>
+            )}
+            {data.articlesV2.pageInfo.hasNextPage && (
+              <Link
+                href={`?after=${data.articlesV2.pageInfo.endCursor}`}
+                className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+              >
+                Další
+              </Link>
+            )}
+          </div>
+        </nav>
       </AdminPageContent>
     </AdminPage>
   )
