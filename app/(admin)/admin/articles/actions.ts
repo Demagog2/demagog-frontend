@@ -1,7 +1,7 @@
 'use server'
 
 import { gql } from '@/__generated__'
-import { schema } from '@/libs/articles/schema'
+import { schema, singleStatementArticleSchema } from '@/libs/articles/schema'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { redirect } from 'next/navigation'
 import { safeParse } from '@/libs/form-data'
@@ -55,6 +55,44 @@ export async function createArticle(
   }
 }
 
+export async function createSingleStatementArticle(
+  _: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const parsedInput = safeParse(singleStatementArticleSchema, formData)
+
+  if (parsedInput.success) {
+    const { data } = await serverMutation({
+      mutation: adminCreateArticleMutation,
+      variables: {
+        input: {
+          ...parsedInput.data,
+          statementId: undefined,
+          articleType: 'single_statement' as const,
+          segments: [
+            {
+              segmentType: 'single_statement' as const,
+              statementId: parsedInput.data.statementId,
+            },
+          ],
+        },
+      },
+    })
+
+    if (data?.createArticle?.article) {
+      redirect(`/admin/articles/${data?.createArticle?.article.id}`)
+    }
+  }
+
+  return {
+    message: 'There was a problem.',
+    error: parsedInput.error?.message,
+    fields: {
+      ...parsedInput.data,
+    },
+  }
+}
+
 const adminEditArticleMutation = gql(`
   mutation AdminEditArticleMutation($id: ID!, $input: ArticleInput!) {
     updateArticle(id: $id, articleInput: $input) {
@@ -85,6 +123,48 @@ export async function updateArticle(
         },
       },
     })
+
+    if (data?.updateArticle?.article) {
+      redirect(`/admin/articles/${data?.updateArticle?.article.id}`)
+    }
+  }
+
+  return {
+    message: 'There was a problem.',
+    error: parsedInput.error?.message,
+    fields: {
+      ...parsedInput.data,
+    },
+  }
+}
+
+export async function updateArticleSingleStatement(
+  articleId: string,
+  _: FormState,
+  formData: FormData
+): Promise<FormState> {
+  const parsedInput = safeParse(singleStatementArticleSchema, formData)
+
+  if (parsedInput.success) {
+    const { data, errors } = await serverMutation({
+      mutation: adminEditArticleMutation,
+      variables: {
+        id: articleId,
+        input: {
+          ...parsedInput.data,
+          statementId: undefined,
+          articleType: 'single_statement' as const,
+          segments: [
+            {
+              segmentType: 'single_statement' as const,
+              statementId: parsedInput.data.statementId,
+            },
+          ],
+        },
+      },
+    })
+
+    console.debug(data)
 
     if (data?.updateArticle?.article) {
       redirect(`/admin/articles/${data?.updateArticle?.article.id}`)

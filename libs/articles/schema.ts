@@ -82,3 +82,11 @@ export const schema = z.discriminatedUnion('articleType', [
     })
     .merge(sharedArticleSchema),
 ])
+
+export const singleStatementArticleSchema = sharedArticleSchema
+  .omit({
+    perex: true,
+    pinned: true,
+    segments: true,
+  })
+  .merge(z.object({ statementId: z.string() }))
