@@ -5,7 +5,7 @@ import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
-import { Button } from '@headlessui/react'
+import { PropsWithSearchParams } from '@/libs/params'
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import { Metadata } from 'next'
 import Link from 'next/link'
@@ -14,11 +14,14 @@ export const metadata: Metadata = {
   title: getMetadataTitle('Seznam štítků', 'Administrace'),
 }
 
-export default async function AdminTags() {
+export default async function AdminTags(props: PropsWithSearchParams) {
+  const before: string | null = null
+  const after: string | null = null
+
   const { data } = await serverQuery({
     query: gql(`
-      query AdminTags {
-        tagsV2 {
+      query AdminTags($after: String, $before: String) {
+        tagsV2(first: 15, after: $after, before: $before) {
           edges {
             node {
               id
@@ -28,9 +31,19 @@ export default async function AdminTags() {
               allStatementsCount
             }
           }
+          pageInfo {
+            hasPreviousPage
+            hasNextPage
+            endCursor
+            startCursor
+          }
         }
       }
     `),
+    variables: {
+      ...(after ? { after } : {}),
+      ...(before ? { before } : {}),
+    },
   })
 
   return (
@@ -128,6 +141,18 @@ export default async function AdminTags() {
               )
             })}
           </tbody>
+
+          {/* This value tells you whether we have previous page */}
+          {data.tagsV2.pageInfo.hasPreviousPage}
+
+          {/* This value tells you whether we have the next page */}
+          {data.tagsV2.pageInfo.hasNextPage}
+
+          {/* This value will be used for the query parameter "before" */}
+          {data.tagsV2.pageInfo.startCursor}
+
+          {/* This value will be used for the query parameter "after" */}
+          {data.tagsV2.pageInfo.endCursor}
         </table>
       </AdminPageContent>
     </AdminPage>
