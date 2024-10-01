@@ -6,6 +6,7 @@ import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { PropsWithSearchParams } from '@/libs/params'
+import { getStringParam } from '@/libs/query-params'
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import { Metadata } from 'next'
 import Link from 'next/link'
@@ -15,8 +16,8 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminTags(props: PropsWithSearchParams) {
-  const before: string | null = null
-  const after: string | null = null
+  const before: string | null = getStringParam(props.searchParams.before)
+  const after: string | null = getStringParam(props.searchParams.after)
 
   const { data } = await serverQuery({
     query: gql(`
@@ -141,19 +142,30 @@ export default async function AdminTags(props: PropsWithSearchParams) {
               )
             })}
           </tbody>
-
-          {/* This value tells you whether we have previous page */}
-          {data.tagsV2.pageInfo.hasPreviousPage}
-
-          {/* This value tells you whether we have the next page */}
-          {data.tagsV2.pageInfo.hasNextPage}
-
-          {/* This value will be used for the query parameter "before" */}
-          {data.tagsV2.pageInfo.startCursor}
-
-          {/* This value will be used for the query parameter "after" */}
-          {data.tagsV2.pageInfo.endCursor}
         </table>
+        <nav
+          aria-label="Pagination"
+          className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+        >
+          <div className="flex flex-1 justify-between sm:justify-end">
+            {data.tagsV2.pageInfo.hasPreviousPage && (
+              <Link
+                href={`?before=${data.tagsV2.pageInfo.startCursor}`}
+                className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+              >
+                Předchozí
+              </Link>
+            )}
+            {data.tagsV2.pageInfo.hasNextPage && (
+              <Link
+                href={`?after=${data.tagsV2.pageInfo.endCursor}`}
+                className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+              >
+                Další
+              </Link>
+            )}
+          </div>
+        </nav>
       </AdminPageContent>
     </AdminPage>
   )
