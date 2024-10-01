@@ -23,10 +23,23 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminArticles(props: PropsWithSearchParams) {
+  // WARNING!: For STEP 1 go to the bottom of the file ↓↓ them come back for the step 2
+
+  // Step 2. Use the params from the props
+
+  // Note: To avoid complaints from typescript and type incompatibility you can use the "getStringParam" function like this
+  // getStringParam(yourQueryParamGoesHere)
+
+  // Get the param "before" from the props
+  const before: string | null = null // get param from search params (also known as query parameters)
+  //
+  // Get the param "after" from the props
+  const after: string | null = null // get param from search params (also known as query parameters)
+
   const { data } = await serverQuery({
     query: gql(`
-      query AdminArticles($articleType: ArticleTypeEnum) {
-        articlesV2(filter: { includeUnpublished: true, articleType: $articleType }) {
+      query AdminArticles($articleType: ArticleTypeEnum, $after: String, $before: String) {
+        articlesV2(first: 15, after: $after, before: $before, filter: { includeUnpublished: true, articleType: $articleType }) {
           edges {
             node {
               id
@@ -37,11 +50,19 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
               ...AdminArticleDeleteDialog
             }
           }
+          pageInfo {
+            hasPreviousPage
+            hasNextPage
+            endCursor
+            startCursor
+          }
         }
       }
     `),
     variables: {
       articleType: toArticleTypeEnum(getStringParam(props.searchParams.type)),
+      ...(after ? { after } : {}),
+      ...(before ? { before } : {}),
     },
   })
 
@@ -153,6 +174,24 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
             })}
           </tbody>
         </table>
+
+        {/* Step 1. Pagination UI */}
+
+        {/* Place the component from the Tailwind UI here* /}
+
+        {/* Then use the following variables in the new UI */}
+
+        {/* This value tells you whether we have previous page */}
+        {data.articlesV2.pageInfo.hasPreviousPage}
+
+        {/* This value tells you whether we have the next page */}
+        {data.articlesV2.pageInfo.hasNextPage}
+
+        {/* This value will be used for the query parameter "before" */}
+        {data.articlesV2.pageInfo.startCursor}
+
+        {/* This value will be used for the query parameter "after" */}
+        {data.articlesV2.pageInfo.endCursor}
       </AdminPageContent>
     </AdminPage>
   )
