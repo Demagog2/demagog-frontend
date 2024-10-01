@@ -5,7 +5,8 @@ import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
-import { Button } from '@headlessui/react'
+import { PropsWithSearchParams } from '@/libs/params'
+import { getStringParam } from '@/libs/query-params'
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import { Metadata } from 'next'
 import Link from 'next/link'
@@ -14,11 +15,14 @@ export const metadata: Metadata = {
   title: getMetadataTitle('Seznam štítků', 'Administrace'),
 }
 
-export default async function AdminTags() {
+export default async function AdminTags(props: PropsWithSearchParams) {
+  const before: string | null = getStringParam(props.searchParams.before)
+  const after: string | null = getStringParam(props.searchParams.after)
+
   const { data } = await serverQuery({
     query: gql(`
-      query AdminTags {
-        tagsV2 {
+      query AdminTags($after: String, $before: String) {
+        tagsV2(first: 15, after: $after, before: $before) {
           edges {
             node {
               id
@@ -28,9 +32,19 @@ export default async function AdminTags() {
               allStatementsCount
             }
           }
+          pageInfo {
+            hasPreviousPage
+            hasNextPage
+            endCursor
+            startCursor
+          }
         }
       }
     `),
+    variables: {
+      ...(after ? { after } : {}),
+      ...(before ? { before } : {}),
+    },
   })
 
   return (
@@ -129,6 +143,29 @@ export default async function AdminTags() {
             })}
           </tbody>
         </table>
+        <nav
+          aria-label="Pagination"
+          className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+        >
+          <div className="flex flex-1 justify-between sm:justify-end">
+            {data.tagsV2.pageInfo.hasPreviousPage && (
+              <Link
+                href={`?before=${data.tagsV2.pageInfo.startCursor}`}
+                className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+              >
+                Předchozí
+              </Link>
+            )}
+            {data.tagsV2.pageInfo.hasNextPage && (
+              <Link
+                href={`?after=${data.tagsV2.pageInfo.endCursor}`}
+                className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+              >
+                Další
+              </Link>
+            )}
+          </div>
+        </nav>
       </AdminPageContent>
     </AdminPage>
   )
