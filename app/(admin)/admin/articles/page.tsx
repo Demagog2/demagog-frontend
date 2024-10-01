@@ -23,18 +23,8 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminArticles(props: PropsWithSearchParams) {
-  // WARNING!: For STEP 1 go to the bottom of the file ↓↓ them come back for the step 2
-
-  // Step 2. Use the params from the props
-
-  // Note: To avoid complaints from typescript and type incompatibility you can use the "getStringParam" function like this
-  // getStringParam(yourQueryParamGoesHere)
-
-  // Get the param "before" from the props
-  const before: string | null = null // get param from search params (also known as query parameters)
-  //
-  // Get the param "after" from the props
-  const after: string | null = null // get param from search params (also known as query parameters)
+  const before: string | null = getStringParam(props.searchParams.before)
+  const after: string | null = getStringParam(props.searchParams.after)
 
   const { data } = await serverQuery({
     query: gql(`
@@ -175,23 +165,30 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
           </tbody>
         </table>
 
-        {/* Step 1. Pagination UI */}
+        <nav
+          aria-label="Pagination"
+          className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+        >
+          <div className="flex flex-1 justify-between sm:justify-end">
+            {data.articlesV2.pageInfo.hasPreviousPage ? (
+              <a
+                href={`?before=${data.articlesV2.pageInfo.startCursor}`}
+                className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+              >
+                Předchozí
+              </a>
+            ) : null}
 
-        {/* Place the component from the Tailwind UI here* /}
-
-        {/* Then use the following variables in the new UI */}
-
-        {/* This value tells you whether we have previous page */}
-        {data.articlesV2.pageInfo.hasPreviousPage}
-
-        {/* This value tells you whether we have the next page */}
-        {data.articlesV2.pageInfo.hasNextPage}
-
-        {/* This value will be used for the query parameter "before" */}
-        {data.articlesV2.pageInfo.startCursor}
-
-        {/* This value will be used for the query parameter "after" */}
-        {data.articlesV2.pageInfo.endCursor}
+            {data.articlesV2.pageInfo.hasNextPage ? (
+              <a
+                href={`?after=${data.articlesV2.pageInfo.endCursor}`}
+                className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+              >
+                Další
+              </a>
+            ) : null}
+          </div>
+        </nav>
       </AdminPageContent>
     </AdminPage>
   )
