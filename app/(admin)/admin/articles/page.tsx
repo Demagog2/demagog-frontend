@@ -170,23 +170,22 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
           className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
         >
           <div className="flex flex-1 justify-between sm:justify-end">
-            {data.articlesV2.pageInfo.hasPreviousPage ? (
-              <a
+            {data.articlesV2.pageInfo.hasPreviousPage && (
+              <Link
                 href={`?before=${data.articlesV2.pageInfo.startCursor}`}
                 className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
               >
                 Předchozí
-              </a>
-            ) : null}
-
-            {data.articlesV2.pageInfo.hasNextPage ? (
-              <a
+              </Link>
+            )}
+            {data.articlesV2.pageInfo.hasNextPage && (
+              <Link
                 href={`?after=${data.articlesV2.pageInfo.endCursor}`}
                 className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
               >
                 Další
-              </a>
-            ) : null}
+              </Link>
+            )}
           </div>
         </nav>
       </AdminPageContent>
