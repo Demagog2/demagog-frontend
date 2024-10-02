@@ -1,4 +1,5 @@
 import { gql } from '@/__generated__'
+import { AdminPagination } from '@/components/admin/AdminPagination'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
@@ -143,29 +144,8 @@ export default async function AdminTags(props: PropsWithSearchParams) {
             })}
           </tbody>
         </table>
-        <nav
-          aria-label="Pagination"
-          className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
-        >
-          <div className="flex flex-1 justify-between sm:justify-end">
-            {data.tagsV2.pageInfo.hasPreviousPage && (
-              <Link
-                href={`?before=${data.tagsV2.pageInfo.startCursor}`}
-                className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-              >
-                Předchozí
-              </Link>
-            )}
-            {data.tagsV2.pageInfo.hasNextPage && (
-              <Link
-                href={`?after=${data.tagsV2.pageInfo.endCursor}`}
-                className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
-              >
-                Další
-              </Link>
-            )}
-          </div>
-        </nav>
+
+        <AdminPagination pageInfo={data.tagsV2.pageInfo} />
       </AdminPageContent>
     </AdminPage>
   )
