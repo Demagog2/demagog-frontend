@@ -4,6 +4,31 @@ import { AdminArticleSingleStatementForm } from '@/components/admin/articles/Adm
 import { serverQuery } from '@/libs/apollo-client-server'
 import { updateArticle, updateArticleSingleStatement } from '../../actions'
 import { ArticleTypeEnum } from '@/__generated__/graphql'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
+
+export async function generateMetadata(props: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const {
+    data: { article },
+  } = await serverQuery({
+    query: gql(`
+       query AdminArticleEditMetadata($id: ID!) {
+          article(id: $id, includeUnpublished: true) {
+            title
+          }
+        }
+      `),
+    variables: {
+      id: props.params.slug,
+    },
+  })
+
+  return {
+    title: getMetadataTitle(`Upravit ${article.title}`, 'Administrace'),
+  }
+}
 
 export default async function AdminArticleEdit(props: {
   params: { slug: string }
