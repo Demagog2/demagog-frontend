@@ -99,7 +99,7 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
             {/* TODO: @zuzubel Step 1.5 make also the following div into a form. Make sure it has input field with a name "q" and it doesn't lose value after submit. */}
 
             {/* Desktop search */}
-            <form className="invisible md:visible">
+            <div className="invisible md:visible">
               <label htmlFor="desktop-search-candidate" className="sr-only">
                 Hledat článek
               </label>
@@ -121,7 +121,7 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                   />
                 </div>
               </div>
-            </form>
+            </div>
           </div>
 
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
