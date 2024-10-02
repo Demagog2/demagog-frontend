@@ -25,11 +25,7 @@ export const metadata: Metadata = {
 export default async function AdminArticles(props: PropsWithSearchParams) {
   const before: string | null = getStringParam(props.searchParams.before)
   const after: string | null = getStringParam(props.searchParams.after)
-
-  {
-    /* TODO: @zuzubel Step 2. - take the query parameter from the search form */
-  }
-  const term: string | null = null
+  const term: string | null = getStringParam(props.searchParams.q)
 
   const { data } = await serverQuery({
     query: gql(`
@@ -69,10 +65,8 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
 
         <div className="sm:flex">
           <div className="mt-3 sm:ml-4 sm:mt-0">
-            {/* TODO: @zuzubel Step 1 make the following div into a form. Make sure it has input field with a name "q" and it doesn't lose value after submit. */}
-
             {/* Mobile search */}
-            <div className="visible md:invisible">
+            <form method="GET" className="visible md:invisible">
               <label htmlFor="mobile-search-candidate" className="sr-only">
                 Hledat článek
               </label>
@@ -87,19 +81,18 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                   </div>
                   <input
                     id="mobile-search-candidate"
-                    name="ranndom-field-name"
+                    name="q"
                     type="text"
                     placeholder="Hledat"
+                    defaultValue={props.searchParams.q}
                     className="block w-full rounded-none rounded-l-md rounded-r-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:hidden"
                   />
                 </div>
               </div>
-            </div>
-
-            {/* TODO: @zuzubel Step 1.5 make also the following div into a form. Make sure it has input field with a name "q" and it doesn't lose value after submit. */}
+            </form>
 
             {/* Desktop search */}
-            <div className="invisible md:visible">
+            <form method="GET" className="invisible md:visible">
               <label htmlFor="desktop-search-candidate" className="sr-only">
                 Hledat článek
               </label>
@@ -114,14 +107,15 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                   </div>
                   <input
                     id="desktop-search-candidate"
-                    name="random-field-name"
+                    name="q"
                     type="text"
                     placeholder="Hledat článek"
+                    defaultValue={props.searchParams.q}
                     className="hidden w-full rounded-none rounded-l-md rounded-r-md border-0 py-1.5 pl-10 text-sm leading-6 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:block"
                   />
                 </div>
               </div>
-            </div>
+            </form>
           </div>
 
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
