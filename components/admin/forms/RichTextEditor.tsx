@@ -23,6 +23,7 @@ import {
   EventInfo,
   PasteFromOffice,
 } from 'ckeditor5'
+import { Embed } from '@/libs/ck-plugins/embed'
 
 import 'ckeditor5/ckeditor5.css'
 
@@ -52,6 +53,7 @@ export default function RickTextEditor(props: {
           'bullettedList',
           'numberedList',
           '|',
+          'embed',
           'insertImageViaUrl',
           '|',
           'specialCharacters',
@@ -62,6 +64,7 @@ export default function RickTextEditor(props: {
       },
       plugins: [
         Bold,
+        Embed,
         Essentials,
         Italic,
         Link,
