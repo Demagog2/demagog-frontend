@@ -1,5 +1,4 @@
 'use client'
-
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ARTICLE_TYPE_LABEL } from '@/libs/constants/article-type'
@@ -86,6 +85,8 @@ export const AdminArticleFormFieldsFragment = gql(`
     }
   }
 `)
+
+const HIDDEN_ARTICLE_TYPES = ['single_statement']
 
 const DEFAULT_VALUES: Partial<z.output<typeof schema>> = {
   articleType: ArticleTypeEnum.Default,
@@ -342,11 +343,17 @@ export function AdminArticleForm(props: {
                 defaultValue={ArticleTypeEnum.Default}
                 className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
-                {Object.entries(ARTICLE_TYPE_LABEL).map(([key, value]) => (
-                  <option key={key} value={key}>
-                    {value}
-                  </option>
-                ))}
+                {Object.entries(ARTICLE_TYPE_LABEL).map(([key, value]) => {
+                  if (HIDDEN_ARTICLE_TYPES.includes(key)) {
+                    return null
+                  }
+
+                  return (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  )
+                })}
               </select>
             </div>
 
