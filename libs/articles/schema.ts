@@ -16,7 +16,7 @@ const segmentSchema = z.discriminatedUnion('segmentType', [
   }),
 ])
 
-const MAX_FILE_SIZE = 1000000
+const MAX_FILE_SIZE = 4_000_000
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
   'image/jpg',
