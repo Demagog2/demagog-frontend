@@ -17,40 +17,62 @@ import {
   ASSESSMENT_STATUS_LABELS,
   ASSESSMENT_STATUS_PROOFREADING_NEEDED,
 } from '@/libs/constants/assessment'
+import { PropsWithSearchParams } from '@/libs/params'
+import { AdminPagination } from '@/components/admin/AdminPagination'
+import { getStringParam } from '@/libs/query-params'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam diskuzí', 'Administrace'),
 }
 
-export default async function AdminSources() {
+export default async function AdminSources(props: PropsWithSearchParams) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
+
+  const before: string | null = getStringParam(props.searchParams.before)
+  const after: string | null = getStringParam(props.searchParams.after)
+  const term: string | null = null
 
   const { data } = await serverQuery({
     query: gql(`
-      query AdminSources {
-        sources {
-          id
-          name
-          releasedAt
-          sourceUrl
-          experts {
-            id
-            fullName
-            avatar(size: small)
+      query AdminSources($after: String, $before: String, $term: String) {
+        sourcesV2(first: 15, after: $after, before: $before, filter: { includeOnesWithoutPublishedStatements: true, name: $term }) {
+          edges {
+            node {
+              id
+              name
+              releasedAt
+              sourceUrl
+              experts {
+                id
+                fullName
+                avatar(size: small)
+              }
+              medium {
+                name
+              }
+              mediaPersonalities {
+                name
+              }
+              statementsCountsByEvaluationStatus {
+                evaluationStatus
+                statementsCount
+              }
+            }
           }
-          medium {
-            name
-          }
-          mediaPersonalities {
-            name
-          }
-          statementsCountsByEvaluationStatus {
-            evaluationStatus
-            statementsCount
+          pageInfo {
+            hasPreviousPage
+            hasNextPage
+            endCursor
+            startCursor
           }
         }
       }
     `),
+    variables: {
+      ...(after ? { after } : {}),
+      ...(before ? { before } : {}),
+      ...(term ? { term } : {}),
+    },
   })
 
   return (
@@ -76,7 +98,13 @@ export default async function AdminSources() {
             </tr>
           </thead>
           <tbody>
-            {data.sources.map((source) => {
+            {data.sourcesV2.edges?.map((edge) => {
+              if (!edge?.node) {
+                return null
+              }
+
+              const source = edge.node
+
               const statementsCountsMap: Record<string, number> =
                 source.statementsCountsByEvaluationStatus.reduce(
                   (carry, item) => {
@@ -194,6 +222,7 @@ export default async function AdminSources() {
             })}
           </tbody>
         </table>
+        <AdminPagination pageInfo={data.sourcesV2.pageInfo} />
       </AdminPageContent>
     </AdminPage>
   )
