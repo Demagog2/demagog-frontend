@@ -1,4 +1,6 @@
 'use client'
+
+import dynamic from 'next/dynamic'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ARTICLE_TYPE_LABEL } from '@/libs/constants/article-type'
@@ -32,7 +34,7 @@ import {
 import { AdminSegmentSelector } from './AdminSegmentSelector'
 import { AdminArticleIllustrationInput } from './AdminArticleIllustrationInput'
 import { toArticleTypeEnum } from '@/libs/enums'
-import dynamic from 'next/dynamic'
+import { imagePath } from '@/libs/images/path'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -83,6 +85,7 @@ export const AdminArticleFormFieldsFragment = gql(`
       }
       statementId
     }
+    ...ArticleIllustration
   }
 `)
 
@@ -242,6 +245,7 @@ export function AdminArticleForm(props: {
               <Label htmlFor="illustration">Ilustrační obrázek</Label>
 
               <AdminArticleIllustrationInput
+                article={article}
                 control={control}
                 name="illustration"
               />
