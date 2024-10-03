@@ -34,7 +34,7 @@ const sharedArticleSchema = z.object({
   articleTags: z.array(z.string()).optional(),
   illustration: z
     .custom<File>()
-    .transform((file) => (file.size === 0 ? undefined : file))
+    .transform((file) => (file?.size === 0 ? undefined : file))
     .refine(
       (file) => {
         console.debug(file)
