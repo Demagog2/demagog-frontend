@@ -390,19 +390,6 @@ export function AdminArticleForm(props: {
                   </Listbox>
                 )}
               />
-              {/* <select */}
-              {/*   id="articleTag" */}
-              {/*   {...register('articleTags', { required: false })} */}
-              {/*   defaultValue="" */}
-              {/*   className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6" */}
-              {/* > */}
-              {/*   <option value="">Please select</option> */}
-              {/*   {data.articleTags.map((tag) => ( */}
-              {/*     <option key={tag.id} value={tag.id}> */}
-              {/*       {tag.title} */}
-              {/*     </option> */}
-              {/*   ))} */}
-              {/* </select> */}
             </Field>
           </div>
           <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
