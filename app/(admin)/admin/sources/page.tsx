@@ -20,6 +20,7 @@ import {
 import { PropsWithSearchParams } from '@/libs/params'
 import { AdminPagination } from '@/components/admin/AdminPagination'
 import { getStringParam } from '@/libs/query-params'
+import { AdminSearch } from '@/components/admin/AdminSearch'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam diskuzí', 'Administrace'),
@@ -30,7 +31,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
 
   const before: string | null = getStringParam(props.searchParams.before)
   const after: string | null = getStringParam(props.searchParams.after)
-  const term: string | null = null
+  const term: string | null = getStringParam(props.searchParams.q)
 
   const { data } = await serverQuery({
     query: gql(`
@@ -82,6 +83,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
           title="Diskuze"
           description="Seznam diskuzí s výroky politiků."
         />
+        <AdminSearch label="Hledat diskuzi" defaultValue={term} />
       </AdminPageHeader>
       <AdminPageContent>
         <table className="admin-content-table">
