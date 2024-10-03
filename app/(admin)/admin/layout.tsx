@@ -5,6 +5,8 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import { gql } from '@/__generated__'
 import { ApolloError } from '@apollo/client'
 import { redirect } from 'next/navigation'
+import { cookies } from 'next/headers'
+import { ADMIN_BANNER_VISIBILITY_COOKIE } from '@/libs/constants/cookies'
 
 // Invalidate pages after n seconds
 // See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
@@ -16,6 +18,8 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode
 }) {
+  const cookieStore = cookies()
+
   let adminData = null
   try {
     const { data } = await serverQuery({
@@ -33,11 +37,15 @@ export default async function AdminLayout({
     }
   }
 
+  const isBannerVisible = !cookieStore.has(ADMIN_BANNER_VISIBILITY_COOKIE)
+
   return (
     <html lang="cs" className="h-full">
       <body className="h-full">
         {adminData && (
-          <AdminClientLayout data={adminData}>{children}</AdminClientLayout>
+          <AdminClientLayout isBannerVisible={isBannerVisible} data={adminData}>
+            {children}
+          </AdminClientLayout>
         )}
       </body>
     </html>
