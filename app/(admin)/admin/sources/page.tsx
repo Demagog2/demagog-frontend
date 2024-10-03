@@ -18,6 +18,8 @@ import {
   ASSESSMENT_STATUS_PROOFREADING_NEEDED,
 } from '@/libs/constants/assessment'
 import { PropsWithSearchParams } from '@/libs/params'
+import { AdminPagination } from '@/components/admin/AdminPagination'
+import { getStringParam } from '@/libs/query-params'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam diskuzí', 'Administrace'),
@@ -26,8 +28,8 @@ export const metadata: Metadata = {
 export default async function AdminSources(props: PropsWithSearchParams) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
-  const before: string | null = null
-  const after: string | null = null
+  const before: string | null = getStringParam(props.searchParams.before)
+  const after: string | null = getStringParam(props.searchParams.after)
   const term: string | null = null
 
   const { data } = await serverQuery({
@@ -220,6 +222,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
             })}
           </tbody>
         </table>
+        <AdminPagination pageInfo={data.sourcesV2.pageInfo} />
       </AdminPageContent>
     </AdminPage>
   )
