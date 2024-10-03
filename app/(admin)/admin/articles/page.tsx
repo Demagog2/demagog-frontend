@@ -64,9 +64,11 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
     <AdminPage>
       <AdminPageHeader>
         <AdminPageTitle title="Články" description="Seznam článků" />
-        <AdminSearch label="Hledat článek" defaultValue={term} />
-        <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
-          <NewArticleDropdown />
+        <div className="sm:flex">
+          <AdminSearch label="Hledat článek" defaultValue={term} />
+          <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
+            <NewArticleDropdown />
+          </div>
         </div>
       </AdminPageHeader>
 

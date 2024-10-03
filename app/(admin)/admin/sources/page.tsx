@@ -83,7 +83,9 @@ export default async function AdminSources(props: PropsWithSearchParams) {
           title="Diskuze"
           description="Seznam diskuzí s výroky politiků."
         />
-        <AdminSearch label="Hledat diskuzi" defaultValue={term} />
+        <div className="sm:flex">
+          <AdminSearch label="Hledat diskuzi" defaultValue={term} />
+        </div>
       </AdminPageHeader>
       <AdminPageContent>
         <table className="admin-content-table">
