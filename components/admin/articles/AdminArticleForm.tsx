@@ -14,7 +14,14 @@ import {
   AdminArticleFormFieldsFragment as ArticleFields,
 } from '@/__generated__/graphql'
 import { ARTICLE_VERACITY_OPTIONS } from '@/libs/constants/article-veracity'
-import { Button, Field } from '@headlessui/react'
+import {
+  Button,
+  Field,
+  Listbox,
+  ListboxButton,
+  ListboxOption,
+  ListboxOptions,
+} from '@headlessui/react'
 import { Input } from '@/components/admin/forms/Input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -30,6 +37,8 @@ import { createClient } from '@/libs/apollo-client'
 import {
   DocumentTextIcon,
   ChatBubbleLeftIcon,
+  ChevronUpDownIcon,
+  CheckIcon,
 } from '@heroicons/react/24/outline'
 import { AdminSegmentSelector } from './AdminSegmentSelector'
 import { AdminArticleIllustrationInput } from './AdminArticleIllustrationInput'
@@ -62,6 +71,7 @@ export const AdminArticleFormFragment = gql(`
   fragment AdminArticleForm on Query {
     articleTags {
       id
+      title
     }
   }
 `)
@@ -84,6 +94,9 @@ export const AdminArticleFormFieldsFragment = gql(`
         id
       }
       statementId
+    }
+    articleTags {
+      id
     }
     ...ArticleIllustration
   }
@@ -117,6 +130,7 @@ function buildDefaultValues(
     perex: article.perex ?? '',
     published: article.pinned,
     publishedAt: article.publishedAt.substring(0, 10),
+    articleTags: article.articleTags.map((tag) => tag.id),
     segments: article.segments
       ?.map((segment) => {
         switch (segment.segmentType) {
@@ -320,23 +334,63 @@ export function AdminArticleForm(props: {
               </div>
             ))}
 
-            {/*<Field>*/}
-            {/*  <Label htmlFor="articleTag">Tagy článku</Label>*/}
+            <Field>
+              <Controller
+                control={control}
+                name="articleTags"
+                render={({ field }) => (
+                  <Listbox multiple name={field.name} onChange={field.onChange}>
+                    <Label htmlFor="articleTag">Tagy článku</Label>
+                    <div className="relative mt-2">
+                      <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                        <span className="block truncate">
+                          {(field.value?.length ?? 0) === 0
+                            ? 'Vyberte jeden nebo více tagů'
+                            : field.value
+                                ?.map(
+                                  (value) =>
+                                    data.articleTags.find(
+                                      (tag) => tag.id === value
+                                    )?.title
+                                )
+                                .join(', ')}
+                        </span>
+                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                          <ChevronUpDownIcon
+                            aria-hidden="true"
+                            className="h-5 w-5 text-gray-400"
+                          />
+                        </span>
+                      </ListboxButton>
 
-            {/*  <select*/}
-            {/*    id="articleTag"*/}
-            {/*    {...register('articleTags', { required: false })}*/}
-            {/*    defaultValue=""*/}
-            {/*    className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"*/}
-            {/*  >*/}
-            {/*    <option value="">Please select</option>*/}
-            {/*    {data.articleTags.map((tag) => (*/}
-            {/*      <option key={tag.id} value={tag.id}>*/}
-            {/*        {tag.title}*/}
-            {/*      </option>*/}
-            {/*    ))}*/}
-            {/*  </select>*/}
-            {/*</Field>*/}
+                      <ListboxOptions
+                        transition
+                        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
+                      >
+                        {data.articleTags.map((person) => (
+                          <ListboxOption
+                            key={person.id}
+                            value={person.id}
+                            className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
+                          >
+                            <span className="block truncate font-normal group-data-[selected]:font-semibold">
+                              {person.title}
+                            </span>
+
+                            <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden">
+                              <CheckIcon
+                                aria-hidden="true"
+                                className="h-5 w-5"
+                              />
+                            </span>
+                          </ListboxOption>
+                        ))}
+                      </ListboxOptions>
+                    </div>
+                  </Listbox>
+                )}
+              />
+            </Field>
           </div>
           <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
             <div>
