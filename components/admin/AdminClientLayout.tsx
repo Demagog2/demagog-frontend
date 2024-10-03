@@ -42,6 +42,7 @@ import { UserMenu } from '@/components/admin/UserMenu'
 import classNames from 'classnames'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { usePathname } from 'next/navigation'
+import { hideAdminBanner } from '@/app/(admin)/admin/actions'
 
 const content = [
   {
@@ -76,6 +77,7 @@ const AdminClientLayoutFragment = gql(`
 
 export default function AdminClientLayout(
   props: PropsWithChildren<{
+    isBannerVisible: boolean
     data: FragmentType<typeof AdminClientLayoutFragment>
   }>
 ) {
@@ -352,29 +354,33 @@ export default function AdminClientLayout(
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-x-6 bg-indigo-600 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
-          <p className="text-sm leading-6 text-white">
-            <strong className="font-semibold">Admin Preview</strong>
-            <svg
-              viewBox="0 0 2 2"
-              aria-hidden="true"
-              className="mx-2 inline h-0.5 w-0.5 fill-current"
-            >
-              <circle r={1} cx={1} cy={1} />
-            </svg>
-            Ukázka nového adminu. Buďte opatrní se změnami, které děláte,
-            projeví se na webu.
-          </p>
-          <div className="flex flex-1 justify-end">
-            <button
-              type="button"
-              className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
-            >
-              <span className="sr-only">Dismiss</span>
-              <XMarkIcon aria-hidden="true" className="h-5 w-5 text-white" />
-            </button>
+        {props.isBannerVisible && (
+          <div className="flex items-center gap-x-6 bg-indigo-600 px-6 py-2.5 sm:px-3.5 sm:before:flex-1">
+            <p className="text-sm leading-6 text-white">
+              <strong className="font-semibold">Admin Preview</strong>
+              <svg
+                viewBox="0 0 2 2"
+                aria-hidden="true"
+                className="mx-2 inline h-0.5 w-0.5 fill-current"
+              >
+                <circle r={1} cx={1} cy={1} />
+              </svg>
+              Ukázka nového adminu. Buďte opatrní se změnami, které děláte,
+              projeví se na webu.
+            </p>
+            <div className="flex flex-1 justify-end">
+              <button
+                type="button"
+                className="-m-3 p-3 focus-visible:outline-offset-[-4px]"
+                onClick={() => hideAdminBanner()}
+              >
+                <span className="sr-only">Dismiss</span>
+                <XMarkIcon aria-hidden="true" className="h-5 w-5 text-white" />
+              </button>
+            </div>
           </div>
-        </div>
+        )}
+
         <main className="py-10">
           <div className="px-4 sm:px-6 lg:px-8">{props.children}</div>
         </main>
