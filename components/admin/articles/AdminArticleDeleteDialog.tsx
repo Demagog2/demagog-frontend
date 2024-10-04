@@ -11,6 +11,7 @@ import {
 import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { deleteArticle } from '@/app/(admin)/admin/articles/actions'
+import classNames from 'classnames'
 
 const AdminArticleDeleteDialogFragment = gql(`
   fragment AdminArticleDeleteDialog on Article {
@@ -21,6 +22,7 @@ const AdminArticleDeleteDialogFragment = gql(`
 
 export default function AdminArticleDeleteDialog(props: {
   article: FragmentType<typeof AdminArticleDeleteDialogFragment>
+  className?: string
 }) {
   const article = useFragment(AdminArticleDeleteDialogFragment, props.article)
 
@@ -35,7 +37,10 @@ export default function AdminArticleDeleteDialog(props: {
     <>
       <Button
         onClick={() => setOpen(true)}
-        className="text-indigo-600 hover:text-indigo-900 ml-3"
+        className={classNames(
+          'text-indigo-600 hover:text-indigo-900 ml-3',
+          props.className
+        )}
       >
         Odstranit
       </Button>
