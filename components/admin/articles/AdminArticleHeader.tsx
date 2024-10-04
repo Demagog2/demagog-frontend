@@ -2,7 +2,6 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ArticleState } from '@/components/admin/articles/ArticleState'
 import {
   CalendarIcon,
-  CheckIcon,
   ChevronDownIcon,
   ChevronRightIcon,
   LinkIcon,
@@ -13,6 +12,7 @@ import React from 'react'
 import { PublishedArticleLink } from '@/components/admin/articles/PublishedArticleLink'
 import Link from 'next/link'
 import { AdminArticleTags } from '@/components/admin/articles/AdminArticleTags'
+import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 
 const AdminArticleHeaderFragment = gql(`
   fragment AdminArticleHeader on Article {
@@ -21,6 +21,7 @@ const AdminArticleHeaderFragment = gql(`
     ...PublishedArticleLink
     ...ArticleState
     ...AdminArticleTags
+    ...AdminArticleDeleteDialog
   }
 `)
 
@@ -89,6 +90,7 @@ export function AdminArticleHeader(props: {
             Upravit
           </Link>
         </span>
+
         <span className="ml-3 hidden sm:block">
           <PublishedArticleLink
             article={article}
@@ -101,15 +103,10 @@ export function AdminArticleHeader(props: {
           </PublishedArticleLink>
         </span>
 
-        <span className="sm:ml-3">
-          <button
-            type="button"
-            className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            <CheckIcon aria-hidden="true" className="-ml-0.5 mr-1.5 h-5 w-5" />
-            Zveřejnit
-          </button>
-        </span>
+        <AdminArticleDeleteDialog
+          article={article}
+          className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+        />
 
         {/* Dropdown */}
         <Menu as="div" className="relative ml-3 sm:hidden">
