@@ -25,7 +25,7 @@ import {
 import {
   NewspaperIcon,
   TagIcon,
-  ChatBubbleLeftIcon,
+  ChatBubbleLeftRightIcon,
   PhotoIcon,
   ChartBarIcon,
   HashtagIcon,
@@ -52,9 +52,9 @@ const content = [
     current: true,
   },
   {
-    name: 'Výroky',
+    name: 'Diskuze',
     href: '/admin/sources',
-    icon: ChatBubbleLeftIcon,
+    icon: ChatBubbleLeftRightIcon,
     current: false,
   },
   { name: 'Štítky', href: '/admin/tags', icon: HashtagIcon, current: false },
