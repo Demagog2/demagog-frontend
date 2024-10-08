@@ -76,7 +76,7 @@ export default function Footer() {
               <div className="mb-4">
                 <Link
                   className="text-white"
-                  href="https://onedrive.live.com/?authkey=%21APcY4m0I%5F%2DYrtMo&amp;id=A3F546CED092EB9D%2191240&amp;cid=A3F546CED092EB9D"
+                  href="https://drive.google.com/drive/folders/1J6nkGqAan4B5tet7dG5I9rRxHGyUwHGq"
                 >
                   Loga ke stažení
                 </Link>
