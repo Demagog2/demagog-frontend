@@ -4,7 +4,7 @@ import Script from 'next/script'
 import { useState } from 'react'
 
 export default function DonateSidebar() {
-  const [differentAmountOpened, setDifferentAmountOpened] = useState(false)
+  const [customAmountOpened, setCustomAmountOpened] = useState(false)
   const [amount, setAmount] = useState('')
 
   return (
@@ -24,7 +24,7 @@ export default function DonateSidebar() {
               name="frequency"
               id="onetime"
               value="onetime"
-              onClick={() => setDifferentAmountOpened(false)}
+              onClick={() => setCustomAmountOpened(false)}
             ></input>
 
             <label htmlFor="monthly">Měsíčně</label>
@@ -33,70 +33,47 @@ export default function DonateSidebar() {
               name="frequency"
               id="monthly"
               value="monthly"
-              onClick={() => setDifferentAmountOpened(false)}
+              onClick={() => setCustomAmountOpened(false)}
             ></input>
           </div>
-          <label htmlFor="differentAmount">Přispět v Kč:</label>
-          {differentAmountOpened ? (
+          <label htmlFor="customAmount">Přispět v Kč:</label>
+          {customAmountOpened ? (
             <>
               <input
                 type="number"
-                id="differentAmount"
+                id="customAmount"
                 onChange={(e) => setAmount(e.target.value)}
               />
             </>
           ) : (
-            <button
-              type="button"
-              onClick={() => setDifferentAmountOpened(true)}
-            >
+            <button type="button" onClick={() => setCustomAmountOpened(true)}>
               Jiná částka
             </button>
           )}
-
           <div>
-            <label htmlFor="100" className="btn btn-success">
-              100 Kč
-            </label>
-            <input
-              type="radio"
-              className="btn-check"
-              id="100"
-              name="amount"
-              value="100"
-              onClick={() => {
-                setDifferentAmountOpened(false)
-                setAmount('100')
-              }}
-            />
-            <label htmlFor="300" className="btn btn-success">
-              300 Kč
-            </label>
-            <input
-              type="radio"
-              className="btn-check"
-              id="300"
-              name="amount"
-              value="300"
-              onClick={() => {
-                setDifferentAmountOpened(false)
-                setAmount('300')
-              }}
-            />
-            <label htmlFor="1000" className="btn btn-success">
-              1000 Kč
-            </label>
-            <input
-              type="radio"
-              className="btn-check"
-              id="1000"
-              name="amount"
-              value="1000"
-              onClick={() => {
-                setDifferentAmountOpened(false)
-                setAmount('1000')
-              }}
-            />
+            {[100, 300, 1000].map((amount) => {
+              return (
+                <>
+                  <label
+                    htmlFor={amount.toString()}
+                    className="btn btn-success"
+                  >
+                    {amount} Kč
+                  </label>
+                  <input
+                    type="radio"
+                    className="btn-check"
+                    id={amount.toString()}
+                    name="amount"
+                    value={amount.toString()}
+                    onClick={() => {
+                      setCustomAmountOpened(false)
+                      setAmount(amount.toString())
+                    }}
+                  />
+                </>
+              )
+            })}
           </div>
           <button type="submit" className="btn btn-success">
             {amount ? `Darovat ${amount} Kč` : `Darovat`}
