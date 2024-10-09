@@ -7,8 +7,7 @@ import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactchec
 import { FacebookFactcheckFirstPage } from '@/components/article/FacebookFactcheckFirstPage'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
-
-const PAGE_SIZE = 10
+import { buildGraphQLVariables } from '@/libs/pagination'
 
 export default async function Tag(
   props: PropsWithSearchParams<{
@@ -38,11 +37,10 @@ export default async function Tag(
         }
       }
     `),
-    variables: after
-      ? { after, slug: props.params.slug, first: PAGE_SIZE }
-      : before
-        ? { before, slug: props.params.slug, last: PAGE_SIZE }
-        : { slug: props.params.slug, first: PAGE_SIZE },
+    variables: {
+      slug: props.params.slug,
+      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
+    },
   })
 
   if (!data.articleTagBySlug) {

@@ -6,13 +6,12 @@ import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
+import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import { Metadata } from 'next'
 import Link from 'next/link'
-
-const PAGE_SIZE = 15
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam štítků', 'Administrace'),
@@ -45,11 +44,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
       }
     `),
     variables: {
-      ...(after
-        ? { after, first: PAGE_SIZE }
-        : before
-          ? { before, last: PAGE_SIZE }
-          : { first: PAGE_SIZE }),
+      ...buildGraphQLVariables({ before, after, pageSize: 15 }),
     },
   })
 

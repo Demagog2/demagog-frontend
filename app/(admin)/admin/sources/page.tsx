@@ -10,6 +10,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import React from 'react'
 import Image from 'next/image'
+import classNames from 'classnames'
 import {
   ASSESSMENT_STATUS_APPROVAL_NEEDED,
   ASSESSMENT_STATUS_APPROVED,
@@ -21,9 +22,7 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { AdminPagination } from '@/components/admin/AdminPagination'
 import { getBooleanParam, getStringParam } from '@/libs/query-params'
 import { AdminSearch } from '@/components/admin/AdminSearch'
-import classNames from 'classnames'
-
-const PAGE_SIZE = 10
+import { buildGraphQLVariables } from '@/libs/pagination'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam diskuzí', 'Administrace'),
@@ -78,11 +77,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
       forCurrentUser: !showAll,
       ...(term ? { term } : {}),
 
-      ...(after
-        ? { after, first: PAGE_SIZE }
-        : before
-          ? { before, last: PAGE_SIZE }
-          : { first: PAGE_SIZE }),
+      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
     },
   })
 

@@ -7,12 +7,11 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getMetadataTitle } from '@/libs/metadata'
 import { getStringParam } from '@/libs/query-params'
 import { query } from '@/libs/apollo-client'
+import { buildGraphQLVariables } from '@/libs/pagination'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Ověřujeme pro Vás'),
 }
-
-const PAGE_SIZE = 10
 
 export default async function Homepage(props: PropsWithSearchParams) {
   const after = getStringParam(props.searchParams.after)
@@ -42,11 +41,7 @@ export default async function Homepage(props: PropsWithSearchParams) {
         ...MostSearchedSpeakers
       }
     `),
-    variables: after
-      ? { after, first: PAGE_SIZE }
-      : before
-        ? { before, last: PAGE_SIZE }
-        : { first: PAGE_SIZE },
+    variables: { ...buildGraphQLVariables({ before, after, pageSize: 10 }) },
   })
 
   if (!data.homepageArticlesV3) {

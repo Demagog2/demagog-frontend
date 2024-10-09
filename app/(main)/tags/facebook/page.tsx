@@ -7,12 +7,11 @@ import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactchec
 import { Pagination } from '@/components/article/Pagination'
 import ArticleTags from '@/components/article/Tags'
 import { query } from '@/libs/apollo-client'
+import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 
 import Link from 'next/link'
-
-const PAGE_SIZE = 10
 
 export default async function FacebookCollaboration(
   props: PropsWithSearchParams
@@ -36,11 +35,9 @@ export default async function FacebookCollaboration(
             }
           }
         `),
-    variables: after
-      ? { after, first: PAGE_SIZE }
-      : before
-        ? { before, last: PAGE_SIZE }
-        : { first: PAGE_SIZE },
+    variables: {
+      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
+    },
   })
 
   return (

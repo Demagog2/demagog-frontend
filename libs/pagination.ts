@@ -82,3 +82,23 @@ export function paginate({
     makePage(page, page === currentPage)
   )
 }
+
+export function buildGraphQLVariables({
+  before,
+  after,
+  pageSize,
+}: {
+  before?: string
+  after?: string
+  pageSize: number
+}) {
+  if (after) {
+    return { after: after, first: pageSize }
+  }
+
+  if (before) {
+    return { before: after, last: pageSize }
+  }
+
+  return { first: pageSize }
+}
