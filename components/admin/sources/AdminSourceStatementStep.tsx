@@ -24,14 +24,14 @@ const SourceStatementStepFragment = gql(`
 // }
 
 export function AdminSourceStatementStep(props: {
+  step: number
   statement: FragmentType<typeof SourceStatementStepFragment>
 }) {
+  const { step } = props
   const statement = useFragment(SourceStatementStepFragment, props.statement)
 
   // const step =
   //   EVALUATION_STATUS_STEP_MAP[statement.assessment.evaluationStatus] ?? 0
-
-  const step = random(0, 4)
 
   return (
     <div className="border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8">
@@ -43,38 +43,34 @@ export function AdminSourceStatementStep(props: {
       <div aria-hidden="true" className="mt-6">
         <div className="overflow-hidden rounded-full bg-gray-200">
           <div
-            style={{
-              width: `calc((${step} * 2 + 1) / 8 * 100%)`,
-            }}
-            className="h-2 rounded-full bg-indigo-600"
+            className={classNames('h-2 rounded-full bg-indigo-600', {
+              'w-[3%]': step === 0,
+              'w-[30%]': step === 1,
+              'w-1/2': step === 2,
+              'w-[70%]': step === 3,
+              'w-full': step === 4,
+            })}
           />
         </div>
-        <div className="mt-6 hidden grid-cols-4 text-sm font-medium text-gray-600 sm:grid">
-          <div className="text-indigo-600">Ověřování</div>
-          <div
-            className={classNames(
-              step > 0 ? 'text-indigo-600' : '',
-              'text-center'
-            )}
-          >
-            Verifikace
-          </div>
-          <div
-            className={classNames(
-              step > 1 ? 'text-indigo-600' : '',
-              'text-center'
-            )}
-          >
-            Korektura
-          </div>
-          <div
-            className={classNames(
-              step > 2 ? 'text-indigo-600' : '',
-              'text-right'
-            )}
-          >
-            Schváleno
-          </div>
+        <div className="mt-6 hidden grid-cols-5 text-sm font-medium text-gray-600 sm:grid">
+          {[
+            'Ověřování',
+            'Kontrola',
+            'Korektura',
+            'Schváleno',
+            'Zveřejněno',
+          ].map((name, i) => (
+            <div
+              key={name}
+              className={classNames({
+                'text-indigo-600': step >= i,
+                'text-center': i > 0 && i < 4,
+                'text-right': i === 4,
+              })}
+            >
+              {name}
+            </div>
+          ))}
         </div>
       </div>
     </div>
