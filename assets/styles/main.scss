@@ -1,31 +1,157 @@
 @charset "UTF-8";
 
-@import "custom_variables";
-@import "vendor/bootstrap";
+@import 'custom_variables';
+@import 'vendor/bootstrap';
 
 // @import "varibles";
 // @import "mixins";
 // @import "core/fonts";
 // @import "core/utilities";
 
-@import "./core/base";
+@import './core/base';
 // @import "./core/container";
 // @import "./core/grid";
-@import "./core/header";
-@import "./core/btn";
-@import "./core/state";
+@import './core/header';
+@import './core/btn';
+@import './core/state';
 // @import "./core/type";
-@import "./core/form";
-@import "./core/symbol";
-@import "./core/modal";
-@import "./core/accordion";
-@import "./core/scroller";
-@import "./core/filter";
-@import "./core/icon";
+@import './core/form';
+@import './core/symbol';
+@import './core/modal';
+@import './core/accordion';
+@import './core/scroller';
+@import './core/filter';
+@import './core/icon';
 
 //mixins
-@import "editor_picked_label";
-@import "veracity";
+@import 'editor_picked_label';
+@import 'veracity';
 
 // Needed to be imported last.
-@import "back_compatibility";
+@import 'back_compatibility';
+
+.widget {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .container {
+    padding: 0;
+    margin: 0;
+  }
+
+  .donate-form {
+    width: 100%;
+    margin-top: 16px;
+  }
+
+  .widget-periodic-button {
+    font-size: 14px;
+    padding: 10px 5px 9px 5px;
+    text-align: center;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    font-weight: 700;
+    border: 1px solid #cacaca;
+    border-radius: 3px;
+  }
+
+  .widget-custom-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+    font-size: 14px;
+  }
+
+  .widget-custom-title {
+    float: left;
+    color: #3c325c;
+  }
+
+  .widget-custom-currency {
+    font-weight: 700;
+  }
+
+  .widget-custom-open {
+    float: right;
+    color: $primary;
+    text-decoration: underline;
+    background-color: transparent;
+  }
+
+  .widget-custom-input {
+    font-size: 14px;
+    padding: 10px 5px 9px 5px;
+    margin-bottom: 2px;
+    cursor: auto;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #7c7c7c;
+    border: 1px solid #cacaca;
+    border-radius: 3px;
+    text-align: right;
+    background: rgba(0, 0, 0, 0);
+    width: 100%;
+  }
+
+  .widget-entries {
+    margin: 0 -3px;
+  }
+
+  .widget-entries-item {
+    float: left;
+    padding: 3px;
+    width: 33.333333333333336%;
+    white-space: nowrap;
+  }
+
+  .widget-entries-button {
+    width: 100%;
+    font-size: 14px;
+    padding: 10px 5px 9px 5px;
+    cursor: pointer;
+    text-align: center;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    font-weight: 700;
+    color: #3c325c;
+    border: 1px solid #cacaca;
+    border-radius: 3px;
+    float: left;
+  }
+
+  .donate-submit {
+    font-size: 14px;
+    padding: 10px 5px 9px 5px;
+    letter-spacing: 0.3px;
+    line-height: 1.2;
+    font-weight: 700;
+    border: 1px solid #cacaca;
+    border-color: $primary;
+    margin: 12px 0;
+    width: 100%;
+    color: #fff;
+    border-radius: 6px;
+    background: $primary;
+  }
+
+  input[type='radio']:checked + .widget-periodic-button {
+    background-color: transparent;
+    color: $primary;
+    border-color: $primary;
+  }
+
+  input[type='radio']:checked + .widget-entries-button {
+    background-color: transparent;
+    color: $primary;
+    border-color: $primary;
+  }
+
+  .widget-custom-input::-webkit-outer-spin-button,
+  .widget-custom-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
