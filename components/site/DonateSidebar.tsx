@@ -17,32 +17,41 @@ export default function DonateSidebar() {
           </span>
         </div>
         <div className="widget">
-          <form action="" className="donate-form">
-            <div className="widget-periodic">
-              <input
-                type="radio"
-                name="frequency"
-                id="onetime"
-                value="onetime"
-                className="btn-check"
-                onClick={() => setCustomAmountOpened(false)}
-              ></input>
-              <label htmlFor="onetime" className="widget-periodic-button">
-                Jednorázově
-              </label>
+          <form
+            action="https://www.darujme.cz/darovat/1202717"
+            className="donate-form"
+          >
+            <input type="hidden" name="currency" value="CZK" />
+            <input type="hidden" name="locale" value="cs" />
+            <input type="hidden" name="widget" value="1204039" />
+            <input type="hidden" name="project" value="1202717" />
 
-              <input
-                type="radio"
-                name="frequency"
-                id="monthly"
-                value="monthly"
-                className="btn-check"
-                onClick={() => setCustomAmountOpened(false)}
-              ></input>
-              <label htmlFor="monthly" className="widget-periodic-button">
-                Měsíčně
-              </label>
+            {/* TODO: Use bootstrap utils classes and grid for the rest of the widget */}
+
+            <div className="container">
+              <div className="row g-2 mb-3">
+                {['once', 'monthly'].map((frequency) => (
+                  <div key={frequency} className="col-6">
+                    <input
+                      type="radio"
+                      name="frequency"
+                      id={frequency}
+                      value={frequency}
+                      className="btn-check"
+                      defaultChecked={frequency === 'monthly'}
+                      onClick={() => setCustomAmountOpened(false)}
+                    />
+                    <label
+                      htmlFor={frequency}
+                      className="widget-periodic-button w-100"
+                    >
+                      {frequency === 'once' ? 'Jednorázově' : 'Měsíčně'}
+                    </label>
+                  </div>
+                ))}
+              </div>
             </div>
+
             <div className="widget-custom">
               <div className="widget-custom-row">
                 <div className="widget-custom-title">
@@ -66,6 +75,7 @@ export default function DonateSidebar() {
                 <div className="widget-custom-fieldset">
                   <input
                     type="number"
+                    name="amount"
                     id="customAmount"
                     className="widget-custom-input"
                     onChange={(e) => setAmount(e.target.value)}
