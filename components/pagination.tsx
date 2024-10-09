@@ -33,13 +33,14 @@ export function Pagination({
   const isFirstPage = currentPage === 1
   const isLastPage = currentPage === totalPages
 
+  const pages = useMemo(
+    () => paginate({ currentPage: currentPage - 1, totalCount }),
+    [currentPage, totalCount]
+  )
+
   if (totalPages === 0 || totalPages === 1) {
     return null
   }
-
-  const pages = useMemo(() => {
-    return paginate({ currentPage: currentPage - 1, totalCount })
-  }, [currentPage, totalPages])
 
   return (
     <nav className="pagination">
@@ -51,13 +52,18 @@ export function Pagination({
         )}
       </span>
 
-      {pages.map((page) => {
+      {pages.map((page, i) => {
         if (page.type === 'gap') {
-          return <span className="page gap">&hellip;</span>
+          return (
+            <span key={`gap-${i}`} className="page gap">
+              &hellip;
+            </span>
+          )
         }
 
         return (
           <span
+            key={page.value}
             className={classNames('page', {
               current: currentPage === page.value + 1,
             })}
