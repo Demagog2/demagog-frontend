@@ -8,6 +8,34 @@ import { FacebookFactcheckFirstPage } from '@/components/article/FacebookFactche
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { buildGraphQLVariables } from '@/libs/pagination'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
+import { truncate } from 'lodash'
+
+export async function generateMetadata(props: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const {
+    data: { articleTagBySlug },
+  } = await query({
+    query: gql(`
+      query ArticleTagMetadata($slug: String!) {
+        articleTagBySlug(slug: $slug) {
+          title
+          description
+        }
+      }
+    `),
+    variables: {
+      slug: props.params.slug,
+    },
+  })
+
+  return {
+    title: getMetadataTitle(articleTagBySlug?.title ?? 'Neznamy tag'),
+    description: truncate(articleTagBySlug?.description ?? '', { length: 255 }),
+  }
+}
 
 export default async function Tag(
   props: PropsWithSearchParams<{
