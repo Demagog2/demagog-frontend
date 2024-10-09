@@ -7,6 +7,7 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getMetadataTitle } from '@/libs/metadata'
 import { getStringParam } from '@/libs/query-params'
 import { query } from '@/libs/apollo-client'
+import { buildGraphQLVariables } from '@/libs/pagination'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Ověřujeme pro Vás'),
@@ -18,8 +19,8 @@ export default async function Homepage(props: PropsWithSearchParams) {
 
   const { data } = await query({
     query: gql(`
-      query homepageData($after: String, $before: String) {
-        homepageArticlesV3(first: 10, after: $after, before: $before) {
+      query homepageData($first: Int, $last: Int, $after: String, $before: String) {
+        homepageArticlesV3(first: $first, last: $last, after: $after, before: $before) {
           nodes {
             ... on Article {
               id
@@ -40,7 +41,7 @@ export default async function Homepage(props: PropsWithSearchParams) {
         ...MostSearchedSpeakers
       }
     `),
-    variables: after ? { after } : before ? { before } : {},
+    variables: { ...buildGraphQLVariables({ before, after, pageSize: 10 }) },
   })
 
   if (!data.homepageArticlesV3) {

@@ -7,6 +7,7 @@ import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactchec
 import { Pagination } from '@/components/article/Pagination'
 import ArticleTags from '@/components/article/Tags'
 import { query } from '@/libs/apollo-client'
+import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 
@@ -20,8 +21,8 @@ export default async function FacebookCollaboration(
 
   const { data } = await query({
     query: gql(`
-          query facebookCollaboration($after: String, $before: String) {
-            facebookFactchecks(first: 10, after: $after, before: $before) {
+          query facebookCollaboration($first: Int, $last: Int, $after: String, $before: String) {
+            facebookFactchecks(first: $first, last: $last, after: $after, before: $before) {
               ...FacebookFactcheckFirstPageFragment
               ...FacebookFactcheckNextPageFragment
               pageInfo {
@@ -34,7 +35,9 @@ export default async function FacebookCollaboration(
             }
           }
         `),
-    variables: after ? { after } : before ? { before } : {},
+    variables: {
+      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
+    },
   })
 
   return (

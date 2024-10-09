@@ -6,6 +6,7 @@ import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
+import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
@@ -22,8 +23,8 @@ export default async function AdminTags(props: PropsWithSearchParams) {
 
   const { data } = await serverQuery({
     query: gql(`
-      query AdminTags($after: String, $before: String) {
-        tagsV2(first: 15, after: $after, before: $before) {
+      query AdminTags($first: Int, $last: Int, $after: String, $before: String) {
+        tagsV2(first: $first, last: $last, after: $after, before: $before) {
           edges {
             node {
               id
@@ -43,8 +44,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
       }
     `),
     variables: {
-      ...(after ? { after } : {}),
-      ...(before ? { before } : {}),
+      ...buildGraphQLVariables({ before, after, pageSize: 15 }),
     },
   })
 

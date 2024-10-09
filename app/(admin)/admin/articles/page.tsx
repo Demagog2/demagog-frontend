@@ -3,7 +3,6 @@ import { PublishedArticleLink } from '@/components/admin/articles/PublishedArtic
 import { serverQuery } from '@/libs/apollo-client-server'
 import Link from 'next/link'
 
-import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import NewArticleDropdown from '@/components/admin/articles/NewArticleDropdown'
 import { ArticleState } from '@/components/admin/articles/ArticleState'
 import { ArticleTypeBadge } from '@/components/admin/articles/ArticleTypeBadge'
@@ -19,6 +18,7 @@ import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 import { AdminPagination } from '@/components/admin/AdminPagination'
 import { AdminSearch } from '@/components/admin/AdminSearch'
+import { buildGraphQLVariables } from '@/libs/pagination'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam článků', 'Administrace'),
@@ -31,8 +31,8 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
 
   const { data } = await serverQuery({
     query: gql(`
-      query AdminArticles($articleType: ArticleTypeEnum, $after: String, $before: String, $term: String) {
-        articlesV2(first: 15, after: $after, before: $before, filter: { includeUnpublished: true, articleType: $articleType, title: $term }) {
+      query AdminArticles($articleType: ArticleTypeEnum, $first: Int, $last: Int, $after: String, $before: String, $term: String) {
+        articlesV2(first: $first, last: $last, after: $after, before: $before, filter: { includeUnpublished: true, articleType: $articleType, title: $term }) {
           edges {
             node {
               id
@@ -54,9 +54,8 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
     `),
     variables: {
       articleType: toArticleTypeEnum(getStringParam(props.searchParams.type)),
-      ...(after ? { after } : {}),
-      ...(before ? { before } : {}),
       ...(term ? { term } : {}),
+      ...buildGraphQLVariables({ before, after, pageSize: 15 }),
     },
   })
 

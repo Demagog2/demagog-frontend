@@ -10,6 +10,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import React from 'react'
 import Image from 'next/image'
+import classNames from 'classnames'
 import {
   ASSESSMENT_STATUS_APPROVAL_NEEDED,
   ASSESSMENT_STATUS_APPROVED,
@@ -21,7 +22,7 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { AdminPagination } from '@/components/admin/AdminPagination'
 import { getBooleanParam, getStringParam } from '@/libs/query-params'
 import { AdminSearch } from '@/components/admin/AdminSearch'
-import classNames from 'classnames'
+import { buildGraphQLVariables } from '@/libs/pagination'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam diskuzí', 'Administrace'),
@@ -38,8 +39,8 @@ export default async function AdminSources(props: PropsWithSearchParams) {
 
   const { data } = await serverQuery({
     query: gql(`
-      query AdminSources($after: String, $before: String, $term: String, $forCurrentUser: Boolean) {
-        sourcesV2(first: 15, after: $after, before: $before, filter: { includeOnesWithoutPublishedStatements: true, name: $term, forCurrentUser: $forCurrentUser }) {
+      query AdminSources($first: Int, $last: Int, $after: String, $before: String, $term: String, $forCurrentUser: Boolean) {
+        sourcesV2(first: $first, last: $last, after: $after, before: $before, filter: { includeOnesWithoutPublishedStatements: true, name: $term, forCurrentUser: $forCurrentUser }) {
           edges {
             node {
               id
@@ -73,10 +74,10 @@ export default async function AdminSources(props: PropsWithSearchParams) {
       }
     `),
     variables: {
-      ...(after ? { after } : {}),
-      ...(before ? { before } : {}),
-      ...(term ? { term } : {}),
       forCurrentUser: !showAll,
+      ...(term ? { term } : {}),
+
+      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
     },
   })
 
