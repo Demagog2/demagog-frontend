@@ -38,7 +38,7 @@ export function Pagination({
   }
 
   const pages = useMemo(() => {
-    return paginate({ currentPage, totalCount })
+    return paginate({ currentPage: currentPage - 1, totalCount })
   }, [currentPage, totalPages])
 
   return (
