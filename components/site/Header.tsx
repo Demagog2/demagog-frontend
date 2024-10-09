@@ -1,23 +1,44 @@
-import Link from 'next/link'
-import { gql } from '@apollo/client'
-import { query } from '@/libs/apollo-client'
-import { Navigation } from './Navigation'
+'use client'
 
-export default async function Header() {
-  const { data } = await query({
-    query: gql(`
-      query header {
-        governmentPromisesEvaluations {
-          id
-          slug
-          title
-        }
-      }
-    `),
-  })
+import Link from 'next/link'
+import { Navigation, NavigationFragment } from './Navigation'
+import { FragmentType } from '@/__generated__'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import classNames from 'classnames'
+
+export default function Header(props: {
+  data: FragmentType<typeof NavigationFragment>
+}) {
+  const scrollTopRef = useRef<number>(0)
+  const headerRef = useRef<HTMLDivElement>(null)
+
+  const [showOnScroll, setShowOnScroll] = useState(false)
+  const [isHidden, setIsHidden] = useState(false)
+
+  const onScroll = useCallback(() => {
+    let scrollTop = window.document.documentElement.scrollTop
+
+    setShowOnScroll(scrollTop > 100)
+
+    setIsHidden(scrollTop >= scrollTopRef.current)
+
+    scrollTopRef.current = scrollTop
+  }, [])
+
+  useEffect(() => {
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [onScroll])
 
   return (
-    <header id="header" className="header pt-5 pt-lg-10">
+    <header
+      ref={headerRef}
+      id="header"
+      className={classNames('header pt-5 pt-lg-10', {
+        'on-scroll': showOnScroll,
+        'hide-header': isHidden,
+      })}
+    >
       <div className="container">
         <div className="header-wrap d-block position-relative w-100">
           <div className="header-content d-flex align-items-center justify-content-between bg-dark p-3">
@@ -25,7 +46,7 @@ export default async function Header() {
               <img className="h-100" src="/logo_white.svg" alt="Logo" />
             </Link>
 
-            <Navigation data={data} />
+            <Navigation data={props.data} />
           </div>
         </div>
       </div>

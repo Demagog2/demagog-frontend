@@ -10,7 +10,7 @@ import NavSearch from './NavSearch'
 import NavSubLink from './NavSubLink'
 import classNames from 'classnames'
 
-const NavigationFragment = gql(`
+export const NavigationFragment = gql(`
   fragment Navigation on Query {
     governmentPromisesEvaluations {
       id
