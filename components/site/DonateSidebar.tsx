@@ -77,7 +77,7 @@ export default function DonateSidebar() {
             <div className="widget-entries">
               {[100, 300, 1000].map((amount) => {
                 return (
-                  <div className="widget-entries-item">
+                  <div className="widget-entries-item" key={amount}>
                     <input
                       type="radio"
                       className="btn-check"
