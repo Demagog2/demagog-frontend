@@ -20,6 +20,14 @@ function makeGap(): Gap {
   return { type: 'gap' }
 }
 
+function isGapBeforeNeeded(currentPage: number): boolean {
+  return currentPage - GAP_WINDOW - 1 >= 0
+}
+
+function isGapAfterNeeded(currentPage: number, totalCount: number): boolean {
+  return currentPage + GAP_WINDOW + 1 < totalCount
+}
+
 function paginate({
   currentPage,
   totalCount,
@@ -27,15 +35,40 @@ function paginate({
   currentPage: number
   totalCount: number
 }): (Page | Gap)[] {
-  // If we need to generate a gap
-  if (currentPage + GAP_WINDOW + 1 < totalCount) {
+  if (
+    isGapBeforeNeeded(currentPage) &&
+    isGapAfterNeeded(currentPage, totalCount)
+  ) {
     return [
-      ...range(0, currentPage).map((page) => makePage(page, false)),
-      ...range(currentPage, currentPage + GAP_WINDOW).map((page) =>
+      makePage(0),
+      makeGap(),
+      ...range(currentPage - GAP_WINDOW + 1, currentPage + GAP_WINDOW).map(
+        (page) => makePage(page, page === currentPage)
+      ),
+      makeGap(),
+      makePage(totalCount - 1),
+    ]
+  }
+
+  // If we need to generate a gap before the current page
+  if (isGapBeforeNeeded(currentPage)) {
+    return [
+      makePage(0),
+      makeGap(),
+      ...range(currentPage - GAP_WINDOW + 1, totalCount).map((page) =>
+        makePage(page, page === currentPage)
+      ),
+    ]
+  }
+
+  // If we need to generate a gap after the current page
+  if (isGapAfterNeeded(currentPage, totalCount)) {
+    return [
+      ...range(0, currentPage + GAP_WINDOW).map((page) =>
         makePage(page, page === currentPage)
       ),
       makeGap(),
-      makePage(totalCount - 1, false),
+      makePage(totalCount - 1),
     ]
   }
 
@@ -59,81 +92,44 @@ describe('pagination', () => {
     ])
   })
 
-  describe('for total count 10', () => {
-    it('generates gap after 3 following pages with page 0 active', () => {
-      expect(paginate({ currentPage: 0, totalCount: 10 })).toEqual([
+  describe('for total count 20', () => {
+    const totalCount = 20
+
+    it('has gap after tree pages', () => {
+      expect(paginate({ currentPage: 0, totalCount })).toEqual([
         makePage(0, true),
         makePage(1),
         makePage(2),
         makePage(3),
         makeGap(),
-        makePage(9),
+        makePage(19),
       ])
     })
 
-    it('generates gap after 3 following pages with page 1 active', () => {
-      expect(paginate({ currentPage: 1, totalCount: 10 })).toEqual([
+    it('has gap before and after', () => {
+      expect(paginate({ currentPage: 10, totalCount })).toEqual([
         makePage(0),
-        makePage(1, true),
-        makePage(2),
-        makePage(3),
-        makePage(4),
         makeGap(),
-        makePage(9),
-      ])
-    })
-
-    it('generates gap after 3 following pages with page 2 active', () => {
-      expect(paginate({ currentPage: 2, totalCount: 10 })).toEqual([
-        makePage(0),
-        makePage(1),
-        makePage(2, true),
-        makePage(3),
-        makePage(4),
-        makePage(5),
-        makeGap(),
-        makePage(9),
-      ])
-    })
-
-    it('generates gap after 3 following pages with page 3 active', () => {
-      expect(paginate({ currentPage: 3, totalCount: 10 })).toEqual([
-        makePage(0),
-        makePage(1),
-        makePage(2),
-        makePage(3, true),
-        makePage(4),
-        makePage(5),
-        makePage(6),
-        makeGap(),
-        makePage(9),
-      ])
-    })
-
-    it('generates gap after 3 following pages with page 4 active', () => {
-      expect(paginate({ currentPage: 4, totalCount: 10 })).toEqual([
-        makePage(0),
-        makePage(1),
-        makePage(2),
-        makePage(3),
-        makePage(4, true),
-        makePage(5),
-        makePage(6),
         makePage(7),
-        makeGap(),
+        makePage(8),
         makePage(9),
+        makePage(10, true),
+        makePage(11),
+        makePage(12),
+        makePage(13),
+        makeGap(),
+        makePage(19),
       ])
     })
 
-    it('generates gap after 3 following pages with page 5 active', () => {
-      expect(paginate({ currentPage: 5, totalCount: 10 })).toEqual([
+    it('has gap before pages', () => {
+      expect(paginate({ currentPage: 19, totalCount })).toEqual([
         makePage(0),
         makeGap(),
-        makePage(5, true),
-        makePage(6),
-        makePage(7),
-        makePage(9),
-        makePage(9),
+        makePage(16),
+        makePage(17),
+        makePage(18),
+        makePage(19, true),
       ])
     })
   })
