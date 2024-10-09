@@ -20,6 +20,8 @@ import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDe
 import { AdminPagination } from '@/components/admin/AdminPagination'
 import { AdminSearch } from '@/components/admin/AdminSearch'
 
+const PAGE_SIZE = 15
+
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam článků', 'Administrace'),
 }
@@ -31,8 +33,8 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
 
   const { data } = await serverQuery({
     query: gql(`
-      query AdminArticles($articleType: ArticleTypeEnum, $after: String, $before: String, $term: String) {
-        articlesV2(first: 15, after: $after, before: $before, filter: { includeUnpublished: true, articleType: $articleType, title: $term }) {
+      query AdminArticles($articleType: ArticleTypeEnum, $first: Int, $last: Int, $after: String, $before: String, $term: String) {
+        articlesV2(first: $first, last: $last, after: $after, before: $before, filter: { includeUnpublished: true, articleType: $articleType, title: $term }) {
           edges {
             node {
               id
@@ -54,9 +56,12 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
     `),
     variables: {
       articleType: toArticleTypeEnum(getStringParam(props.searchParams.type)),
-      ...(after ? { after } : {}),
-      ...(before ? { before } : {}),
       ...(term ? { term } : {}),
+      ...(after
+        ? { after, first: PAGE_SIZE }
+        : before
+          ? { before, last: PAGE_SIZE }
+          : { first: PAGE_SIZE }),
     },
   })
 

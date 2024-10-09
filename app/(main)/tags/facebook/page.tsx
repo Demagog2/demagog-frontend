@@ -12,6 +12,8 @@ import { getStringParam } from '@/libs/query-params'
 
 import Link from 'next/link'
 
+const PAGE_SIZE = 10
+
 export default async function FacebookCollaboration(
   props: PropsWithSearchParams
 ) {
@@ -20,8 +22,8 @@ export default async function FacebookCollaboration(
 
   const { data } = await query({
     query: gql(`
-          query facebookCollaboration($after: String, $before: String) {
-            facebookFactchecks(first: 10, after: $after, before: $before) {
+          query facebookCollaboration($first: Int, $last: Int, $after: String, $before: String) {
+            facebookFactchecks(first: $first, last: $last, after: $after, before: $before) {
               ...FacebookFactcheckFirstPageFragment
               ...FacebookFactcheckNextPageFragment
               pageInfo {
@@ -34,7 +36,11 @@ export default async function FacebookCollaboration(
             }
           }
         `),
-    variables: after ? { after } : before ? { before } : {},
+    variables: after
+      ? { after, first: PAGE_SIZE }
+      : before
+        ? { before, last: PAGE_SIZE }
+        : { first: PAGE_SIZE },
   })
 
   return (

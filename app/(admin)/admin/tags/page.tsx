@@ -12,6 +12,8 @@ import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import { Metadata } from 'next'
 import Link from 'next/link'
 
+const PAGE_SIZE = 15
+
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam štítků', 'Administrace'),
 }
@@ -22,8 +24,8 @@ export default async function AdminTags(props: PropsWithSearchParams) {
 
   const { data } = await serverQuery({
     query: gql(`
-      query AdminTags($after: String, $before: String) {
-        tagsV2(first: 15, after: $after, before: $before) {
+      query AdminTags($first: Int, $last: Int, $after: String, $before: String) {
+        tagsV2(first: $first, last: $last, after: $after, before: $before) {
           edges {
             node {
               id
@@ -43,8 +45,11 @@ export default async function AdminTags(props: PropsWithSearchParams) {
       }
     `),
     variables: {
-      ...(after ? { after } : {}),
-      ...(before ? { before } : {}),
+      ...(after
+        ? { after, first: PAGE_SIZE }
+        : before
+          ? { before, last: PAGE_SIZE }
+          : { first: PAGE_SIZE }),
     },
   })
 

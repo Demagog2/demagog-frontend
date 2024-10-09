@@ -8,6 +8,8 @@ import { FacebookFactcheckFirstPage } from '@/components/article/FacebookFactche
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 
+const PAGE_SIZE = 10
+
 export default async function Tag(
   props: PropsWithSearchParams<{
     params: { slug: string }
@@ -18,14 +20,14 @@ export default async function Tag(
 
   const { data } = await query({
     query: gql(`
-      query articleTagDetail($slug: String!, $after: String, $before: String) {
+      query articleTagDetail($first: Int, $last: Int, $slug: String!, $after: String, $before: String) {
         articleTags(limit: 5) {
           ...ArticleTagDetail
         }
         articleTagBySlug(slug: $slug) {
           title
           description
-          articlesV2(first: 10, after: $after, before: $before) {
+          articlesV2(first: $first, last: $last, after: $after, before: $before) {
             ...FacebookFactcheckFirstPageFragment
             ...FacebookFactcheckNextPageFragment
             pageInfo {
@@ -37,10 +39,10 @@ export default async function Tag(
       }
     `),
     variables: after
-      ? { after, slug: props.params.slug }
+      ? { after, slug: props.params.slug, first: PAGE_SIZE }
       : before
-        ? { before, slug: props.params.slug }
-        : { slug: props.params.slug },
+        ? { before, slug: props.params.slug, last: PAGE_SIZE }
+        : { slug: props.params.slug, first: PAGE_SIZE },
   })
 
   if (!data.articleTagBySlug) {

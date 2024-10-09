@@ -23,6 +23,8 @@ import { getBooleanParam, getStringParam } from '@/libs/query-params'
 import { AdminSearch } from '@/components/admin/AdminSearch'
 import classNames from 'classnames'
 
+const PAGE_SIZE = 10
+
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam diskuzí', 'Administrace'),
 }
@@ -38,8 +40,8 @@ export default async function AdminSources(props: PropsWithSearchParams) {
 
   const { data } = await serverQuery({
     query: gql(`
-      query AdminSources($after: String, $before: String, $term: String, $forCurrentUser: Boolean) {
-        sourcesV2(first: 15, after: $after, before: $before, filter: { includeOnesWithoutPublishedStatements: true, name: $term, forCurrentUser: $forCurrentUser }) {
+      query AdminSources($first: Int, $last: Int, $after: String, $before: String, $term: String, $forCurrentUser: Boolean) {
+        sourcesV2(first: $first, last: $last, after: $after, before: $before, filter: { includeOnesWithoutPublishedStatements: true, name: $term, forCurrentUser: $forCurrentUser }) {
           edges {
             node {
               id
@@ -73,10 +75,14 @@ export default async function AdminSources(props: PropsWithSearchParams) {
       }
     `),
     variables: {
-      ...(after ? { after } : {}),
-      ...(before ? { before } : {}),
-      ...(term ? { term } : {}),
       forCurrentUser: !showAll,
+      ...(term ? { term } : {}),
+
+      ...(after
+        ? { after, first: PAGE_SIZE }
+        : before
+          ? { before, last: PAGE_SIZE }
+          : { first: PAGE_SIZE }),
     },
   })
 

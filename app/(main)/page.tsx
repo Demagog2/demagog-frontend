@@ -12,14 +12,16 @@ export const metadata: Metadata = {
   title: getMetadataTitle('Ověřujeme pro Vás'),
 }
 
+const PAGE_SIZE = 10
+
 export default async function Homepage(props: PropsWithSearchParams) {
   const after = getStringParam(props.searchParams.after)
   const before = getStringParam(props.searchParams.before)
 
   const { data } = await query({
     query: gql(`
-      query homepageData($after: String, $before: String) {
-        homepageArticlesV3(first: 10, after: $after, before: $before) {
+      query homepageData($first: Int, $last: Int, $after: String, $before: String) {
+        homepageArticlesV3(first: $first, last: $last, after: $after, before: $before) {
           nodes {
             ... on Article {
               id
@@ -40,7 +42,11 @@ export default async function Homepage(props: PropsWithSearchParams) {
         ...MostSearchedSpeakers
       }
     `),
-    variables: after ? { after } : before ? { before } : {},
+    variables: after
+      ? { after, first: PAGE_SIZE }
+      : before
+        ? { before, last: PAGE_SIZE }
+        : { first: PAGE_SIZE },
   })
 
   if (!data.homepageArticlesV3) {
