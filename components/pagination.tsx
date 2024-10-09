@@ -1,8 +1,10 @@
 'use client'
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import { paginate } from '@/libs/pagination'
+import classNames from 'classnames'
 
 export function Pagination({
   pageSize,
@@ -31,6 +33,11 @@ export function Pagination({
   const isFirstPage = currentPage === 1
   const isLastPage = currentPage === totalPages
 
+  const pages = useMemo(
+    () => paginate({ currentPage: currentPage - 1, totalCount }),
+    [currentPage, totalCount]
+  )
+
   if (totalPages === 0 || totalPages === 1) {
     return null
   }
@@ -45,14 +52,26 @@ export function Pagination({
         )}
       </span>
 
-      {Array.from(Array(totalPages).keys()).map((i) => (
-        <span
-          key={i}
-          className={`page${currentPage === i + 1 ? ' current' : ''}`}
-        >
-          <Link href={createHref(i + 1)}>{i + 1}</Link>
-        </span>
-      ))}
+      {pages.map((page, i) => {
+        if (page.type === 'gap') {
+          return (
+            <span key={`gap-${i}`} className="page gap">
+              &hellip;
+            </span>
+          )
+        }
+
+        return (
+          <span
+            key={page.value}
+            className={classNames('page', {
+              current: currentPage === page.value + 1,
+            })}
+          >
+            <Link href={createHref(page.value + 1)}>{page.value + 1}</Link>
+          </span>
+        )
+      })}
 
       <span className="next">
         {!isLastPage && (

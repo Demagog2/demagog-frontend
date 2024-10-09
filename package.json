@@ -9,7 +9,9 @@
     "lint": "next lint",
     "generate": "npm run generate-possible-types && graphql-codegen",
     "generate:watch": "npm run generate-possible-types && graphql-codegen --watch",
-    "generate-possible-types": "node ./scripts/generate-possible-types.js"
+    "generate-possible-types": "node ./scripts/generate-possible-types.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
   },
   "prettier": {
     "trailingComma": "es5",
@@ -54,6 +56,9 @@
     "@parcel/watcher": "^2.4.1",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/forms": "^0.5.9",
+    "@testing-library/jest-dom": "^6.5.0",
+    "@testing-library/react": "^16.0.1",
+    "@types/jest": "^29.5.13",
     "@types/lodash": "^4.17.0",
     "@types/luxon": "^3.4.2",
     "@types/node": "^20",
@@ -63,9 +68,12 @@
     "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "eslint-config-next": "14.0.3",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "postcss": "^8.4.47",
     "prettier": "^3.1.0",
     "tailwindcss": "^3.4.11",
+    "ts-node": "^10.9.2",
     "typescript": "^5"
   },
   "engines": {
