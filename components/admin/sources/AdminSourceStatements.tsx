@@ -38,7 +38,7 @@ export function AdminSourceStatements(props: {
         </h2>
 
         <div className="space-y-8">
-          {source.statements.map((statement) => (
+          {source.statements.map((statement, i) => (
             <div
               key={statement.id}
               className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
@@ -104,7 +104,7 @@ export function AdminSourceStatements(props: {
                 {/*   </div> */}
               </div>
 
-              <AdminSourceStatementStep statement={statement} />
+              <AdminSourceStatementStep statement={statement} step={i % 5} />
             </div>
           ))}
         </div>
