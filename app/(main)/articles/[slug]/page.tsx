@@ -4,7 +4,9 @@ import { ArticleSegments } from '@/components/article/ArticleSegments'
 import { FacebookFactcheckMetadata } from '@/components/article/metadata/FacebookFactcheckArticleMetadata'
 import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
 import { Metadata } from 'next'
+import { permanentRedirect } from 'next/navigation'
 import { getMetadataTitle } from '@/libs/metadata'
+import { ArticleTypeEnum } from '@/__generated__/graphql'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -39,10 +41,17 @@ export default async function Article(props: { params: { slug: string } }) {
       query ArticleDetail($slug: String!) {
         article(slug: $slug) {
           title
+          articleType
           perex
           ...DebateAticleMetadata
           ...FacebookFactcheckMetadata
           ...ArticleSegments
+          segments {
+            segmentType
+            statements {
+              id
+            }
+          }
         }
       }
     `),
@@ -50,6 +59,13 @@ export default async function Article(props: { params: { slug: string } }) {
       slug: slug,
     },
   })
+
+  // TODO: @vaclavbohac Refactor once segments field is a union
+  if (article.articleType === ArticleTypeEnum.SingleStatement) {
+    permanentRedirect(
+      `/statements/${article.segments?.find((segment) => segment.segmentType === 'single_statement')?.statements?.[0]?.id}`
+    )
+  }
 
   return (
     <div className="container">
