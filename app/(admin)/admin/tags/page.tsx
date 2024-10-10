@@ -12,6 +12,8 @@ import { getStringParam } from '@/libs/query-params'
 import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import { Metadata } from 'next'
 import Link from 'next/link'
+import { AdminTagType } from '@/components/admin/tags/AdminTagType'
+import { AdminSearch } from '@/components/admin/AdminSearch'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam štítků', 'Administrace'),
@@ -20,11 +22,12 @@ export const metadata: Metadata = {
 export default async function AdminTags(props: PropsWithSearchParams) {
   const before: string | null = getStringParam(props.searchParams.before)
   const after: string | null = getStringParam(props.searchParams.after)
+  const term: string | null = getStringParam(props.searchParams.q)
 
   const { data } = await serverQuery({
     query: gql(`
-      query AdminTags($first: Int, $last: Int, $after: String, $before: String) {
-        tagsV2(first: $first, last: $last, after: $after, before: $before) {
+      query AdminTags($first: Int, $last: Int, $after: String, $before: String, $filter: TagsFilterInput) {
+        tagsV2(first: $first, last: $last, after: $after, before: $before, filter: $filter) {
           edges {
             node {
               id
@@ -45,6 +48,9 @@ export default async function AdminTags(props: PropsWithSearchParams) {
     `),
     variables: {
       ...buildGraphQLVariables({ before, after, pageSize: 15 }),
+      filter: {
+        term,
+      },
     },
   })
 
@@ -57,38 +63,8 @@ export default async function AdminTags(props: PropsWithSearchParams) {
         />
 
         <div className="sm:flex">
-          <div className="mt-3 sm:ml-4 sm:mt-0">
-            <label htmlFor="mobile-search-candidate" className="sr-only">
-              Hledat článek
-            </label>
-            <label htmlFor="desktop-search-candidate" className="sr-only">
-              Hledat článek
-            </label>
-            <div className="flex rounded-md shadow-sm">
-              <div className="relative flex-grow focus-within:z-10">
-                <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
-                  <MagnifyingGlassIcon
-                    aria-hidden="true"
-                    className="h-5 w-5 text-gray-400"
-                  />
-                </div>
-                <input
-                  id="mobile-search-candidate"
-                  name="mobile-search-candidate"
-                  type="text"
-                  placeholder="Hledat"
-                  className="block w-full rounded-none rounded-l-md rounded-r-md border-0 py-1.5 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:hidden"
-                />
-                <input
-                  id="desktop-search-candidate"
-                  name="desktop-search-candidate"
-                  type="text"
-                  placeholder="Hledat štítek"
-                  className="hidden w-full rounded-none rounded-l-md rounded-r-md border-0 py-1.5 pl-10 text-sm leading-6 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:block"
-                />
-              </div>
-            </div>
-          </div>
+          <AdminSearch label="Hledat štítek" defaultValue={term} />
+
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
             <Link
               className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
@@ -126,7 +102,9 @@ export default async function AdminTags(props: PropsWithSearchParams) {
                   <td>
                     <Link href={`/admin/tags/${node.id}`}>{node.name}</Link>
                   </td>
-                  <td>{node.forStatementType}</td>
+                  <td>
+                    <AdminTagType statementType={node.forStatementType} />
+                  </td>
                   <td>{node.publishedStatementsCount}</td>
                   <td>{node.allStatementsCount}</td>
                   <td>

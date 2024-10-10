@@ -13,17 +13,29 @@ import { Label } from '../forms/Label'
 import { Input } from '../forms/Input'
 import { LinkButton } from '../forms/LinkButton'
 import { SubmitButton } from '../forms/SubmitButton'
+import { FragmentType, gql, useFragment } from '@/__generated__'
+
+const AdminTagFormFieldsFragment = gql(`
+  fragment AdminTagFormFields on Tag {
+    name
+    forStatementType
+  }
+`)
 
 export function AdminTagForm(props: {
+  tag?: FragmentType<typeof AdminTagFormFieldsFragment>
   action(prevState: FormState, input: FormData): Promise<FormState>
 }) {
   const [state, formAction] = useFormState(props.action, { message: '' })
+  const tag = useFragment(AdminTagFormFieldsFragment, props.tag)
 
-  const { register, watch, handleSubmit, control } = useForm<
-    z.output<typeof schema>
-  >({
+  const { register, handleSubmit } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: { forStatementType: 'factual', ...(state.fields ?? {}) },
+    defaultValues: {
+      forStatementType: 'factual',
+      ...(tag ? tag : {}),
+      ...(state.fields ?? {}),
+    },
   })
 
   const formRef = useRef<HTMLFormElement>(null)
@@ -72,7 +84,7 @@ export function AdminTagForm(props: {
               >
                 <option value="factual">Faktické výroky</option>
                 <option value="promise">Sliby politků</option>
-                <option value="newyear">Novoroční</option>
+                <option value="newyears">Novoroční</option>
               </Select>
             </Field>
           </div>
