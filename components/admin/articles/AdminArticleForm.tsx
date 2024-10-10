@@ -191,9 +191,13 @@ export function AdminArticleForm(props: {
   const data = useFragment(AdminArticleFormFragment, props.data)
   const article = useFragment(AdminArticleFormFieldsFragment, props.article)
 
-  const { register, watch, handleSubmit, control } = useForm<
-    z.output<typeof schema>
-  >({
+  const {
+    register,
+    watch,
+    handleSubmit,
+    control,
+    formState: { isSubmitting },
+  } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: { ...buildDefaultValues(article), ...(state.fields ?? {}) },
   })
@@ -220,7 +224,7 @@ export function AdminArticleForm(props: {
           formAction(new FormData(formElem))
 
           // TODO: @vaclavbohac Remove once we are sure the forms are bug free
-          console.debug('Valid form data', data)
+          console.debug('Valid form data', data, new FormData(formElem))
         },
         (data) => {
           // TODO: @vaclavbohac Remove once we are sure the forms are bug free
@@ -303,11 +307,18 @@ export function AdminArticleForm(props: {
                       control={control}
                       name={`segments.${index}.textHtml`}
                       render={({ field }) => (
-                        <RichTextEditor
-                          includeHeadings
-                          value={field.value}
-                          onChange={field.onChange}
-                        />
+                        <>
+                          <input
+                            type="hidden"
+                            name={field.name}
+                            value={field.value}
+                          />
+                          <RichTextEditor
+                            includeHeadings
+                            value={field.value}
+                            onChange={field.onChange}
+                          />
+                        </>
                       )}
                     />
 
@@ -492,7 +503,7 @@ export function AdminArticleForm(props: {
         <div className="mt-6 flex items-center justify-end gap-x-6">
           <LinkButton href="/admin/articles">Zpět</LinkButton>
 
-          <SubmitButton />
+          <SubmitButton isSubmitting={isSubmitting} />
         </div>
       </div>
     </form>
