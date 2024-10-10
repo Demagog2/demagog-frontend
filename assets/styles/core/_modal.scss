@@ -60,7 +60,7 @@
     height: 0;
     overflow: hidden;
 
-    > iframe, > object, > embed {
+    div > iframe, div > object, div > embed {
       position: absolute;
       top: 0;
       left: 0;

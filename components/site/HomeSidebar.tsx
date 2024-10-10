@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import PlayIcon from '@/assets/icons/play.svg'
 import { Expander } from '../util/Expander'
+import { VideoModal } from '@/components/modals/VideoModal'
 
 export default function HomeSidebar() {
   return (
@@ -25,21 +26,9 @@ export default function HomeSidebar() {
             </li>
           </ul>
         </div>
-        <div
-          className="w-100 position-relative"
-          onClick={() => console.log('Show modal')}
-        >
-          <img
-            className="w-100"
-            src="/images/homepage-intro-video-thumbnail.png"
-            alt="thumb"
-          />
-          <div className="overlay d-flex align-items-center justify-content-center link">
-            <span>
-              <PlayIcon />
-            </span>
-          </div>
-        </div>
+
+        <VideoModal />
+
         <div className="mt-5">
           <span className="fs-5 mb-4">
             Upozorněte nás, když narazíte na nepravdivý obsah na sociálních
