@@ -1,13 +1,8 @@
 'use client'
 
-import { useShareableState } from '@/libs/useShareableState'
-import { useBetween } from 'use-between'
-
-export function NavDonateButton() {
-  const { setDonateModal } = useBetween(useShareableState)
-
+export function NavDonateButton(props: { onClick(): void }) {
   return (
-    <button className="btn bg-primary" onClick={() => setDonateModal(true)}>
+    <button className="btn bg-primary" onClick={props.onClick}>
       <span className="mx-2">Podpořte nás</span>
     </button>
   )
