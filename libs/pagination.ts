@@ -93,11 +93,11 @@ export function buildGraphQLVariables({
   pageSize: number
 }) {
   if (after) {
-    return { after: after, first: pageSize }
+    return { after, first: pageSize }
   }
 
   if (before) {
-    return { before: after, last: pageSize }
+    return { before, last: pageSize }
   }
 
   return { first: pageSize }
