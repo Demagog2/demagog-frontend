@@ -22,6 +22,8 @@ import {
   Editor,
   EventInfo,
   PasteFromOffice,
+  ImageToolbar,
+  ImageCaption,
 } from 'ckeditor5'
 import { Embed } from '@/libs/ck-plugins/embed'
 
@@ -41,6 +43,13 @@ export default function RickTextEditor(props: {
 
   const config = useMemo(() => {
     return {
+      image: {
+        toolbar: [
+          'toggleImageCaption',
+          'imageTextAlternative',
+          'ckboxImageEdit',
+        ],
+      },
       toolbar: {
         items: [
           ...(props.includeHeadings ? ['heading', '|'] : []),
@@ -71,6 +80,8 @@ export default function RickTextEditor(props: {
         List,
         Image,
         ImageInsert,
+        ImageCaption,
+        ImageToolbar,
         Mention,
         Paragraph,
         Heading,
