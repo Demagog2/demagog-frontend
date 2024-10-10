@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer utilities {
+
   .article-content p,
   .ck-content p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
@@ -36,6 +37,11 @@
   .article-content figcaption,
   .ck-content figcaption {
     @apply !mt-4 !flex !gap-x-2 !text-sm !leading-6 !text-gray-500;
+  }
+
+  .ck-content a,
+  .article-content a {
+    @apply underline;
   }
 
   /* Styling of admin page table */
