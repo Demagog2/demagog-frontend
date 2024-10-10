@@ -1,9 +1,8 @@
 'use client'
 
-import Script from 'next/script'
 import { useState } from 'react'
 
-export default function DonateSidebar() {
+export default function DonateWidget() {
   const [customAmountOpened, setCustomAmountOpened] = useState(false)
   const [amount, setAmount] = useState('')
 
@@ -76,6 +75,7 @@ export default function DonateSidebar() {
                   <input
                     type="number"
                     name="amount"
+                    min={0}
                     id="customAmount"
                     className="widget-custom-input"
                     onChange={(e) => setAmount(e.target.value)}
