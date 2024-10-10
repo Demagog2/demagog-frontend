@@ -5,6 +5,7 @@ import { schema, singleStatementArticleSchema } from '@/libs/articles/schema'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { redirect } from 'next/navigation'
 import { safeParse } from '@/libs/form-data'
+import * as Sentry from '@sentry/nextjs'
 
 const adminCreateArticleMutation = gql(`
   mutation AdminArticleNewMutationV2($input: ArticleInput!) {
@@ -46,6 +47,8 @@ export async function createArticle(
     }
   }
 
+  Sentry.captureException(parsedInput.error)
+
   return {
     message: 'There was a problem.',
     error: parsedInput.error?.message,
@@ -83,6 +86,8 @@ export async function createSingleStatementArticle(
       redirect(`/admin/articles/${data?.createArticle?.article.id}`)
     }
   }
+
+  Sentry.captureException(parsedInput.error)
 
   return {
     message: 'There was a problem.',
@@ -129,6 +134,8 @@ export async function updateArticle(
     }
   }
 
+  Sentry.captureException(parsedInput.error)
+
   return {
     message: 'There was a problem.',
     error: parsedInput.error?.message,
@@ -170,6 +177,8 @@ export async function updateArticleSingleStatement(
       redirect(`/admin/articles/${data?.updateArticle?.article.id}`)
     }
   }
+
+  Sentry.captureException(parsedInput.error)
 
   return {
     message: 'There was a problem.',
