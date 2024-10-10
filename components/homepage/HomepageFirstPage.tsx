@@ -1,5 +1,5 @@
 import HomeSidebar from '@/components/site/HomeSidebar'
-import DonateSidebar from '@/components/site/DonateSidebar'
+import DonateWidget from '@/components/site/DonateWidget'
 import { MostSearchedSpeakers } from '@/components/speaker/MostSearchedSpeakers'
 import Link from 'next/link'
 import { Pagination } from '@/components/article/Pagination'
@@ -23,7 +23,7 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
             <MostSearchedSpeakers speakers={data} />
           </div>
           <HomeSidebar />
-          <DonateSidebar />
+          <DonateWidget />
         </div>
         <div className="col col-12 col-lg-8 mb-0 mb-lg-10">
           <div className="mb-5 mb-lg-10">
