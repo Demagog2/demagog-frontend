@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react'
 
 export function SubmitButton(
-  props: PropsWithChildren<{ isSubmitting: boolean }>
+  props: PropsWithChildren<{ isSubmitting?: boolean }>
 ) {
   const defaultMessage = props.isSubmitting ? 'Ukládání...' : 'Uložit'
   return (
