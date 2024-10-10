@@ -1,4 +1,3 @@
-import Modals from '@/components/Modals'
 import Footer from '@/components/site/Footer'
 import Header from '@/components/site/Header'
 import { GoogleTagManager } from '@next/third-parties/google'
@@ -37,7 +36,6 @@ export default async function RootLayout({
         <Header data={data} />
         <main>{children}</main>
         <Footer />
-        <Modals />
       </body>
     </html>
   )

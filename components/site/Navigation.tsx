@@ -5,10 +5,10 @@ import NavItemLink from './NavItemLink'
 import NavSearchForm from './NavSearchForm'
 import NavSubItem from './NavSubItem'
 import { useState } from 'react'
-import { NavDonateButton } from './NavDonateButton'
 import NavSearch from './NavSearch'
 import NavSubLink from './NavSubLink'
 import classNames from 'classnames'
+import { DonateModal } from '@/components/modals/DonateModal'
 
 export const NavigationFragment = gql(`
   fragment Navigation on Query {
@@ -62,8 +62,9 @@ export function Navigation(props: {
       </NavSearch>
 
       <div className="menu-item ms-2 ms-xl-10 d-none d-xl-flex">
-        <NavDonateButton />
+        <DonateModal />
       </div>
+
       <div className="menu-item d-flex d-xl-none ms-2">
         <a
           className={classNames('nav-link d-flex w-40px h-40px', {
