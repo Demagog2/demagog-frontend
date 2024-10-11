@@ -30,6 +30,13 @@ import {
   ChartBarIcon,
   HashtagIcon,
   BookOpenIcon,
+  UserIcon,
+  UserGroupIcon,
+  FilmIcon,
+  MicrophoneIcon,
+  IdentificationIcon,
+  CheckIcon,
+  SparklesIcon,
   // Default icons
   Bars3Icon,
   BellIcon,
@@ -57,15 +64,47 @@ const content = [
   },
   { name: 'Štítky', href: '/admin/tags', icon: HashtagIcon },
   { name: 'Obrázky', href: '/admin/images', icon: PhotoIcon },
-  { name: 'Statistiky', href: '#', icon: ChartBarIcon },
-  { name: 'Tagy', href: '#', icon: TagIcon },
-  { name: 'Workshopy', href: '#', icon: BookOpenIcon },
+  { name: 'Statistiky', href: '/admin/overall-stats', icon: ChartBarIcon },
+  { name: 'Tagy', href: '/admin/article-tags', icon: TagIcon },
+  { name: 'Workshopy', href: '/admin/workshops', icon: BookOpenIcon },
 ]
 
 const teams = [
-  { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
+  {
+    name: 'Lidé',
+    href: '/admin/speakers',
+    icon: UserIcon,
+  },
+  {
+    name: 'Strany a skupiny',
+    href: '/admin/bodies',
+    icon: UserGroupIcon,
+  },
+  {
+    name: 'Pořady',
+    href: '/admin/media',
+    icon: FilmIcon,
+  },
+  {
+    name: 'Moderátoři',
+    href: '/admin/media-personalities',
+    icon: MicrophoneIcon,
+  },
+]
+
+const aboutUs = [
+  { name: 'Tým', href: '/admin/users', icon: SparklesIcon },
+
+  {
+    name: 'Dostupnost',
+    href: '/admin/availability',
+    icon: CheckIcon,
+  },
+  {
+    name: 'Stránka o nás',
+    href: '/admin/accordion-sections',
+    icon: IdentificationIcon,
+  },
 ]
 
 const AdminClientLayoutFragment = gql(`
@@ -161,12 +200,12 @@ export default function AdminClientLayout(
                   </li>
                   <li>
                     <div className="text-xs font-semibold leading-6 text-gray-400">
-                      Your teams
+                      Kontext
                     </div>
-                    <ul role="list" className="-mx-2 mt-2 space-y-1">
+                    <ul role="list" className="-mx-2 space-y-1 mt-2">
                       {teams.map((team) => (
                         <li key={team.name}>
-                          <a
+                          <Link
                             href={team.href}
                             className={classNames(
                               pathname?.startsWith(team.href)
@@ -175,22 +214,57 @@ export default function AdminClientLayout(
                               'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
                             )}
                           >
-                            <span
-                              className={classNames(
-                                pathname?.startsWith(team.href)
-                                  ? 'border-indigo-600 text-indigo-600'
-                                  : 'border-gray-200 text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                                'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border bg-white text-[0.625rem] font-medium'
-                              )}
-                            >
-                              {team.initial}
-                            </span>
-                            <span className="truncate">{team.name}</span>
-                          </a>
+                            {
+                              <team.icon
+                                aria-hidden="true"
+                                className={classNames(
+                                  pathname?.startsWith(team.href)
+                                    ? 'text-indigo-600'
+                                    : 'text-gray-400 group-hover:text-indigo-600',
+                                  'h-6 w-6 shrink-0'
+                                )}
+                              />
+                            }
+
+                            {team.name}
+                          </Link>
                         </li>
                       ))}
                     </ul>
                   </li>
+                  <li>
+                    <div className="text-xs font-semibold leading-6 text-gray-400">
+                      O nás
+                    </div>
+                    <ul role="list" className="-mx-2 space-y-1 mt-2">
+                      {aboutUs.map((item) => (
+                        <li key={item.name}>
+                          <Link
+                            href={item.href}
+                            className={classNames(
+                              pathname?.startsWith(item.href)
+                                ? 'bg-gray-50 text-indigo-600'
+                                : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
+                              'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
+                            )}
+                          >
+                            <item.icon
+                              aria-hidden="true"
+                              className={classNames(
+                                pathname?.startsWith(item.href)
+                                  ? 'text-indigo-600'
+                                  : 'text-gray-400 group-hover:text-indigo-600',
+                                'h-6 w-6 shrink-0'
+                              )}
+                            />
+
+                            {item.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </li>
+
                   <li className="mt-auto">
                     <a
                       href="#"
@@ -256,9 +330,10 @@ export default function AdminClientLayout(
               </li>
               <li>
                 <div className="text-xs font-semibold leading-6 text-gray-400">
-                  Your teams
+                  Kontext
                 </div>
-                <ul role="list" className="-mx-2 mt-2 space-y-1">
+
+                <ul role="list" className="-mx-2 space-y-1 mt-2">
                   {teams.map((team) => (
                     <li key={team.name}>
                       <a
@@ -270,22 +345,54 @@ export default function AdminClientLayout(
                           'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
                         )}
                       >
-                        <span
+                        <team.icon
+                          aria-hidden="true"
                           className={classNames(
                             pathname?.startsWith(team.href)
-                              ? 'border-indigo-600 text-indigo-600'
-                              : 'border-gray-200 text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                            'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border bg-white text-[0.625rem] font-medium'
+                              ? 'text-indigo-600'
+                              : 'text-gray-400 group-hover:text-indigo-600',
+                            'h-6 w-6 shrink-0'
                           )}
-                        >
-                          {team.initial}
-                        </span>
-                        <span className="truncate">{team.name}</span>
+                        />
+                        {team.name}
                       </a>
                     </li>
                   ))}
                 </ul>
               </li>
+              <li>
+                <div className="text-xs font-semibold leading-6 text-gray-400">
+                  O nás
+                </div>
+
+                <ul role="list" className="-mx-2 space-y-1 mt-2">
+                  {aboutUs.map((item) => (
+                    <li key={item.name}>
+                      <a
+                        href={item.href}
+                        className={classNames(
+                          pathname?.startsWith(item.href)
+                            ? 'bg-gray-50 text-indigo-600'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
+                          'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
+                        )}
+                      >
+                        <item.icon
+                          aria-hidden="true"
+                          className={classNames(
+                            pathname?.startsWith(item.href)
+                              ? 'text-indigo-600'
+                              : 'text-gray-400 group-hover:text-indigo-600',
+                            'h-6 w-6 shrink-0'
+                          )}
+                        />
+                        {item.name}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+
               <li className="mt-auto">
                 <a
                   href="#"
