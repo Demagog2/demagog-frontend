@@ -49,20 +49,19 @@ const content = [
     name: 'Články',
     href: '/admin/articles',
     icon: NewspaperIcon,
-    current: true,
   },
   {
     name: 'Diskuze',
     href: '/admin/sources',
     icon: ChatBubbleLeftRightIcon,
-    current: false,
   },
-  { name: 'Štítky', href: '/admin/tags', icon: HashtagIcon, current: false },
-  { name: 'Obrázky', href: '#', icon: PhotoIcon, current: false },
-  { name: 'Statistiky', href: '#', icon: ChartBarIcon, current: false },
-  { name: 'Tagy', href: '#', icon: TagIcon, current: false },
-  { name: 'Workshopy', href: '#', icon: BookOpenIcon, current: false },
+  { name: 'Štítky', href: '/admin/tags', icon: HashtagIcon },
+  { name: 'Obrázky', href: '/admin/images', icon: PhotoIcon },
+  { name: 'Statistiky', href: '#', icon: ChartBarIcon },
+  { name: 'Tagy', href: '#', icon: TagIcon },
+  { name: 'Workshopy', href: '#', icon: BookOpenIcon },
 ]
+
 const teams = [
   { id: 1, name: 'Heroicons', href: '#', initial: 'H', current: false },
   { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
