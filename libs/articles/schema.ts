@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { ArticleTypeEnum } from '@/__generated__/graphql'
+import { imageFileSchema } from '@/libs/images/schema'
 
 const segmentSchema = z.discriminatedUnion('segmentType', [
   z.object({
@@ -16,14 +17,6 @@ const segmentSchema = z.discriminatedUnion('segmentType', [
   }),
 ])
 
-const MAX_FILE_SIZE = 4_000_000
-const ACCEPTED_IMAGE_TYPES = [
-  'image/jpeg',
-  'image/jpg',
-  'image/png',
-  'image/webp',
-]
-
 const sharedArticleSchema = z.object({
   title: z.string().trim().min(1, 'Zadejte nazev clanku.'),
   perex: z.string().trim().min(1, 'Zadejte perex clanku.'),
@@ -32,24 +25,7 @@ const sharedArticleSchema = z.object({
   publishedAt: z.string().date().optional(),
   segments: z.array(segmentSchema).optional(),
   articleTags: z.array(z.string()).optional(),
-  illustration: z
-    .custom<File>()
-    .transform((file) => (file?.size === 0 ? undefined : file))
-    .refine(
-      (file) => {
-        console.debug(file)
-        console.debug(file?.size)
-        return !file || file.size <= MAX_FILE_SIZE
-      },
-      {
-        message: 'Maximalni velikost obrazku jsou 4MB.',
-      }
-    )
-    .refine(
-      (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
-      'Pouze soubory.jpg, .jpeg, .png, .webp jsou podporovany.'
-    )
-    .optional(),
+  illustration: imageFileSchema.optional(),
 })
 
 export const schema = z.discriminatedUnion('articleType', [
