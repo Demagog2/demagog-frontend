@@ -5,8 +5,6 @@ import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { AdminArticleForm } from '@/components/admin/articles/AdminArticleForm'
 import { createArticle } from '@/app/(admin)/admin/articles/actions'
-import { createClient } from '@/libs/apollo-client'
-import { ApolloProvider } from '@apollo/client'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Nový článek', 'Administrace'),
