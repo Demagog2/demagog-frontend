@@ -5,6 +5,7 @@ import React from 'react'
 import Link from 'next/link'
 import { CopyButton } from '@/components/admin/images/CopyButton'
 import { imagePath } from '@/libs/images/path'
+import { AdminImageDeleteDialog } from '@/components/admin/images/AdminImageDeleteDialog'
 
 const AdminImageHeaderFragment = gql(`
   fragment AdminImageHeader on ContentImage {
@@ -14,6 +15,7 @@ const AdminImageHeaderFragment = gql(`
     user {
       fullName
     }
+    ...AdminImageDeleteDialog
   }
 `)
 
@@ -55,6 +57,11 @@ export function AdminImageHeader(props: {
         <span className="hidden sm:block">
           <CopyButton link={imagePath(image.image)} />
         </span>
+
+        <AdminImageDeleteDialog
+          image={image}
+          className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+        />
 
         {/* Dropdown */}
         <Menu as="div" className="relative ml-3 sm:hidden">
