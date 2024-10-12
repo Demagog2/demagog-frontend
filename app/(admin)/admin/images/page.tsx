@@ -1,7 +1,6 @@
-import { FragmentType, gql, useFragment } from '@/__generated__'
+import { gql } from '@/__generated__'
 import { AdminPagination } from '@/components/admin/AdminPagination'
 import { AdminSearch } from '@/components/admin/AdminSearch'
-import NewArticleDropdown from '@/components/admin/articles/NewArticleDropdown'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
@@ -14,7 +13,6 @@ import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getBooleanParam, getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
-import { show } from 'cli-cursor'
 import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 
 export const metadata: Metadata = {
