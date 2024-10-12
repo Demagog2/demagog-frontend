@@ -14,6 +14,7 @@ import { Metadata } from 'next'
 import Link from 'next/link'
 import { AdminTagType } from '@/components/admin/tags/AdminTagType'
 import { AdminSearch } from '@/components/admin/AdminSearch'
+import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam štítků', 'Administrace'),
@@ -66,13 +67,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
           <AdminSearch label="Hledat štítek" defaultValue={term} />
 
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
-            <Link
-              className="inline-flex w-full justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              href="/admin/tags/new"
-            >
-              <PlusCircleIcon aria-hidden="true" className="-ml-0.5 h-5 w-5" />
-              Přidat štítek
-            </Link>
+            <CreateButton href="/admin/tags/new">Přidat štítek</CreateButton>
           </div>
         </div>
       </AdminPageHeader>

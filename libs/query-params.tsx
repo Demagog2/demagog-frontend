@@ -33,7 +33,7 @@ export function getBooleanParam(param?: string | string[]): boolean {
     return false
   }
 
-  return Array.isArray(param) ? false : Boolean(param)
+  return Array.isArray(param) ? false : param === 'true'
 }
 
 export function parseParamId(id: string) {

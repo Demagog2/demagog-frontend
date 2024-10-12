@@ -1,11 +1,12 @@
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
+import { PropsWithChildren } from 'react'
 
 type AdminSearchProps = {
   label: string
   defaultValue?: string
 }
 
-export function AdminSearch(props: AdminSearchProps) {
+export function AdminSearch(props: PropsWithChildren<AdminSearchProps>) {
   return (
     <>
       <div className="mt-3 sm:ml-4 sm:mt-0">
@@ -59,6 +60,7 @@ export function AdminSearch(props: AdminSearchProps) {
               />
             </div>
           </div>
+          {props.children}
         </form>
       </div>
       <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0"></div>
