@@ -64,7 +64,7 @@ export default async function AdminImages(props: PropsWithSearchParams) {
       <AdminPageHeader>
         <AdminPageTitle
           title="Obrázky"
-          description="Obrázky použitelné v článcích."
+          description="Nahrávání a správa obrázků pro články. Na této stránce můžete nahrávat, zobrazovat náhledy a organizovat obrázky, které lze vkládat do obsahu."
         />
         <div className="sm:flex">
           <AdminSearch label="Hledat obrázek" defaultValue={term}>

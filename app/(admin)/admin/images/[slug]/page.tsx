@@ -3,6 +3,36 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import { notFound } from 'next/navigation'
 import { AdminImageHeader } from '@/components/admin/images/AdminImageHeader'
 import { AdminImagePreview } from '@/components/admin/images/AdminImagePreview'
+import { Metadata } from 'next'
+import { getMetadataTitle } from '@/libs/metadata'
+
+export async function generateMetadata(props: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const {
+    data: { contentImage },
+  } = await serverQuery({
+    query: gql(`
+      query AdminImageMetadata($id: ID!) {
+        contentImage(id: $id) {
+          id
+          name
+        }
+      }
+    `),
+    variables: {
+      id: props.params.slug,
+    },
+  })
+
+  return {
+    title: getMetadataTitle(
+      contentImage?.name ?? '',
+      'Obrázky',
+      'Administrace'
+    ),
+  }
+}
 
 const ImageQuery = gql(`
   query AdminImage($id: ID!) {
