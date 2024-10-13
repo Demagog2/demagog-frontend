@@ -1,6 +1,9 @@
 import { gql, FragmentType, useFragment } from '@/__generated__'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { AdminStatement } from './segments/AdminStatement'
+import React from 'react'
+import Script from 'next/script'
+import { Iframely } from '@/components/site/Iframely'
 
 const AdminArticleContentFragment = gql(`
   fragment AdminArticleContent on Article {
@@ -65,6 +68,7 @@ export function AdminArticleContent(props: {
           )
         )}
       </div>
+      <Iframely />
     </div>
   )
 }
