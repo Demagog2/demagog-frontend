@@ -7,6 +7,7 @@ import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
 import { getMetadataTitle } from '@/libs/metadata'
 import { ArticleTypeEnum } from '@/__generated__/graphql'
+import { Iframely } from '@/components/site/Iframely'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -85,6 +86,7 @@ export default async function Article(props: { params: { slug: string } }) {
           <ArticleSegments data={article} />
         </div>
       </div>
+      <Iframely />
     </div>
   )
 }
