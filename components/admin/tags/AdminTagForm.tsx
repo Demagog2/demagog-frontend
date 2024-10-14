@@ -16,6 +16,7 @@ import { SubmitButton } from '../forms/SubmitButton'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
+import { AdminFormActions } from '../layout/AdminFormActions'
 
 const AdminTagFormFieldsFragment = gql(`
   fragment AdminTagFormFields on Tag {
@@ -65,18 +66,18 @@ export function AdminTagForm(props: {
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />
-          <div className="flex items-center justify-end gap-x-6">
+          <AdminFormActions>
             <LinkButton href="/admin/tags">Zpět</LinkButton>
 
             <SubmitButton />
-          </div>
+          </AdminFormActions>
         </AdminFormHeader>
         <div className="mt-6 flex gap-5 pb-12">
           <div className="grow gap-y-5 grid grid-cols-1">
             {state.error && <div className="text-red">{state.error}</div>}
 
             <Field>
-              <Label htmlFor="title">Název článku</Label>
+              <Label htmlFor="title">Název štítku</Label>
 
               <Input
                 id="title"
