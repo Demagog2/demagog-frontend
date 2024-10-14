@@ -8,6 +8,9 @@ import { permanentRedirect } from 'next/navigation'
 import { getMetadataTitle } from '@/libs/metadata'
 import { ArticleTypeEnum } from '@/__generated__/graphql'
 import { Iframely } from '@/components/site/Iframely'
+import { DefaultMetadata } from '@/libs/constants/metadata'
+import { truncate } from 'lodash'
+import { imagePath } from '@/libs/images/path'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -19,6 +22,8 @@ export async function generateMetadata(props: {
        query ArticleMetadata($id: ID!) {
           article(id: $id) {
             title
+            perex
+            illustration(size: medium)
           }
         }
       `),
@@ -27,8 +32,28 @@ export async function generateMetadata(props: {
     },
   })
 
+  const title = getMetadataTitle(article.title)
+  const description = truncate(article.perex ?? '', { length: 230 })
+  const images = article.illustration
+    ? { images: imagePath(article.illustration) }
+    : {}
+
   return {
-    title: getMetadataTitle(article.title),
+    title,
+    description,
+    openGraph: {
+      ...DefaultMetadata.openGraph,
+      ...images,
+      title,
+      description,
+    },
+    twitter: {
+      ...DefaultMetadata.twitter,
+      ...images,
+      title,
+      description,
+      card: 'summary_large_image',
+    },
   }
 }
 
