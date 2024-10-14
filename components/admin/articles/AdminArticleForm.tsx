@@ -46,6 +46,7 @@ import { toArticleTypeEnum } from '@/libs/enums'
 import { imagePath } from '@/libs/images/path'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
+import { AdminFormActions } from '../layout/AdminFormActions'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -240,11 +241,11 @@ export function AdminArticleForm(props: {
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
 
-          <div className="flex items-center justify-end gap-x-6">
+          <AdminFormActions>
             <LinkButton href="/admin/articles">Zpět</LinkButton>
 
             <SubmitButton isSubmitting={isSubmitting} />
-          </div>
+          </AdminFormActions>
         </AdminFormHeader>
 
         <div className="mt-6 flex gap-5 pb-12">

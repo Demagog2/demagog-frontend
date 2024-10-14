@@ -20,6 +20,7 @@ import { AdminArticleIllustrationDialog } from '@/components/admin/articles/Admi
 import { LinkButton } from '@/components/admin/forms/LinkButton'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
+import { AdminFormActions } from '../layout/AdminFormActions'
 
 const AdminArticleSingleStatementFormFragment = gql(`
   fragment AdminArticleSingleStatementFormFields on Article {
@@ -91,11 +92,11 @@ export function AdminArticleSingleStatementForm(props: {
               description={props.description}
             />
 
-            <div className="flex items-center justify-end gap-x-6">
+            <AdminFormActions>
               <LinkButton href="/admin/articles">Zpět</LinkButton>
 
               <SubmitButton />
-            </div>
+            </AdminFormActions>
           </AdminFormHeader>
 
           <div className="mt-6 flex gap-5 border-b border-gray-900/10 pb-12">

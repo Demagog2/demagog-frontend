@@ -13,6 +13,7 @@ import { contentImageSchema } from '@/libs/images/schema'
 import { AdminImageInput } from '@/components/admin/images/AdminImageInput'
 import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
+import { AdminFormActions } from '../layout/AdminFormActions'
 
 export function AdminImageForm(props: {
   title: string
@@ -51,11 +52,11 @@ export function AdminImageForm(props: {
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
-          <div className="flex items-center justify-end gap-x-6">
+          <AdminFormActions>
             <LinkButton href="/admin/images">Zpět</LinkButton>
 
             <SubmitButton />
-          </div>
+          </AdminFormActions>
         </AdminFormHeader>
 
         <div className="mt-6 flex gap-5 pb-12">
