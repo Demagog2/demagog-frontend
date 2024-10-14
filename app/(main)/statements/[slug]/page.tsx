@@ -10,6 +10,7 @@ import { parseParamId } from '@/libs/query-params'
 import truncate from '@/libs/truncate'
 import { Metadata } from 'next'
 import Image from 'next/image'
+import { DefaultMetadata } from '@/libs/constants/metadata'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -48,9 +49,22 @@ export async function generateMetadata(props: {
 
   const statementSnippet = `„${truncate(statement.content, 45)}“`
 
+  const title = getMetadataTitle(`${speakerName} ${statementSnippet}`)
+  const description = `Tento výrok byl ověřen jako ${statement.assessment.veracity?.name}`
+
   return {
-    title: getMetadataTitle(`${speakerName} ${statementSnippet}`),
-    description: `Tento výrok byl ověřen jako ${statement.assessment.veracity?.name}`,
+    title,
+    description,
+    openGraph: {
+      ...DefaultMetadata.openGraph,
+      title,
+      description,
+    },
+    twitter: {
+      ...DefaultMetadata.twitter,
+      title,
+      description,
+    },
   }
 }
 
