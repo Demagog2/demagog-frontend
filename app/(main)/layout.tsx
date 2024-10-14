@@ -6,10 +6,13 @@ import '../../assets/styles/main.scss'
 import { Inter } from 'next/font/google'
 import { gql } from '@/__generated__'
 import { query } from '@/libs/apollo-client'
+import { DefaultMetadata } from '@/libs/constants/metadata'
 
 // Invalidate pages after n seconds
 // See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
 export const revalidate = 60
+
+export const metadata = DefaultMetadata
 
 const inter = Inter({
   subsets: ['latin'],
