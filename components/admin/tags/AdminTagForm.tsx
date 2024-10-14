@@ -14,6 +14,8 @@ import { Input } from '../forms/Input'
 import { LinkButton } from '../forms/LinkButton'
 import { SubmitButton } from '../forms/SubmitButton'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { AdminFormHeader } from '../layout/AdminFormHeader'
+import { AdminPageTitle } from '../layout/AdminPageTitle'
 
 const AdminTagFormFieldsFragment = gql(`
   fragment AdminTagFormFields on Tag {
@@ -23,6 +25,8 @@ const AdminTagFormFieldsFragment = gql(`
 `)
 
 export function AdminTagForm(props: {
+  title: string
+  description?: string
   tag?: FragmentType<typeof AdminTagFormFieldsFragment>
   action(prevState: FormState, input: FormData): Promise<FormState>
 }) {
@@ -59,7 +63,15 @@ export function AdminTagForm(props: {
       )}
     >
       <div className="container">
-        <div className="flex gap-5 border-b border-gray-900/10 pb-12">
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} />
+          <div className="flex items-center justify-end gap-x-6">
+            <LinkButton href="/admin/tags">Zpět</LinkButton>
+
+            <SubmitButton />
+          </div>
+        </AdminFormHeader>
+        <div className="mt-6 flex gap-5 pb-12">
           <div className="grow gap-y-5 grid grid-cols-1">
             {state.error && <div className="text-red">{state.error}</div>}
 
@@ -88,11 +100,6 @@ export function AdminTagForm(props: {
               </Select>
             </Field>
           </div>
-        </div>
-        <div className="mt-6 flex items-center justify-end gap-x-6">
-          <LinkButton href="/admin/tags">Zpět</LinkButton>
-
-          <SubmitButton />
         </div>
       </div>
     </form>
