@@ -51,6 +51,10 @@ export default async function AdminTagEdit(props: {
   }
 
   return (
-    <AdminTagForm tag={data.tag} action={updateTag.bind(null, data.tag.id)} />
+    <AdminTagForm
+      title="Upravit štítek"
+      tag={data.tag}
+      action={updateTag.bind(null, data.tag.id)}
+    />
   )
 }

@@ -1,4 +1,3 @@
-import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminTagForm } from '@/components/admin/tags/AdminTagForm'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
@@ -10,11 +9,10 @@ export const metadata: Metadata = {
 
 export default function AdminTagsNew() {
   return (
-    <div>
-      <AdminPageTitle title="Nový štítek" description="Vytvořte nový štítek" />
-      <div className="mt-6">
-        <AdminTagForm action={createTag} />
-      </div>
-    </div>
+    <AdminTagForm
+      action={createTag}
+      title="Nový štítek"
+      description="Vytvořte nový štítek"
+    />
   )
 }
