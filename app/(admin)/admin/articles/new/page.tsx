@@ -20,11 +20,11 @@ export default async function AdminArticleNew() {
   })
 
   return (
-    <div>
-      <AdminPageTitle title="Nový článek" description="Vytvořte nový článek" />
-      <div className="mt-6">
-        <AdminArticleForm data={data} action={createArticle} />
-      </div>
-    </div>
+    <AdminArticleForm
+      title="Nový článek"
+      description="Vytvořte nový článek"
+      data={data}
+      action={createArticle}
+    />
   )
 }
