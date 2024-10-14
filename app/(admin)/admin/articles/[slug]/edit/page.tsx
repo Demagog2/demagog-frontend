@@ -53,6 +53,7 @@ export default async function AdminArticleEdit(props: {
   if (data.article?.articleType === ArticleTypeEnum.SingleStatement) {
     return (
       <AdminArticleSingleStatementForm
+        title="Upravit článek s výrokem"
         article={data.article}
         action={updateArticleSingleStatement.bind(null, data.article.id)}
       />
@@ -61,6 +62,7 @@ export default async function AdminArticleEdit(props: {
 
   return (
     <AdminArticleForm
+      title="Upravit článek"
       data={data}
       article={data.article}
       action={updateArticle.bind(null, data.article.id)}

@@ -44,6 +44,8 @@ import { AdminSegmentSelector } from './AdminSegmentSelector'
 import { AdminArticleIllustrationInput } from './AdminArticleIllustrationInput'
 import { toArticleTypeEnum } from '@/libs/enums'
 import { imagePath } from '@/libs/images/path'
+import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
+import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -183,6 +185,8 @@ function buildDefaultValues(
 }
 
 export function AdminArticleForm(props: {
+  title: string
+  description?: string
   data: FragmentType<typeof AdminArticleFormFragment>
   article?: FragmentType<typeof AdminArticleFormFieldsFragment>
   action(prevState: FormState, input: FormData): Promise<FormState>
@@ -233,7 +237,17 @@ export function AdminArticleForm(props: {
       )}
     >
       <div className="container">
-        <div className="flex gap-5 border-b border-gray-900/10 pb-12">
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} description={props.description} />
+
+          <div className="flex items-center justify-end gap-x-6">
+            <LinkButton href="/admin/articles">Zpět</LinkButton>
+
+            <SubmitButton isSubmitting={isSubmitting} />
+          </div>
+        </AdminFormHeader>
+
+        <div className="mt-6 flex gap-5 pb-12">
           <div className="grow gap-y-5 grid grid-cols-1">
             {state.error && <div className="text-red">{state.error}</div>}
 
@@ -499,11 +513,6 @@ export function AdminArticleForm(props: {
               </select>
             </div>
           </div>
-        </div>
-        <div className="mt-6 flex items-center justify-end gap-x-6">
-          <LinkButton href="/admin/articles">Zpět</LinkButton>
-
-          <SubmitButton isSubmitting={isSubmitting} />
         </div>
       </div>
     </form>

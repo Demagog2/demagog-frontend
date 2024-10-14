@@ -17,6 +17,9 @@ import { FormState } from '@/app/(admin)/admin/articles/actions'
 import { invariant } from '@apollo/client/utilities/globals'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminArticleIllustrationDialog } from '@/components/admin/articles/AdminArticleIllustrationDialog'
+import { LinkButton } from '@/components/admin/forms/LinkButton'
+import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
+import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 
 const AdminArticleSingleStatementFormFragment = gql(`
   fragment AdminArticleSingleStatementFormFields on Article {
@@ -32,6 +35,8 @@ const AdminArticleSingleStatementFormFragment = gql(`
 `)
 
 export function AdminArticleSingleStatementForm(props: {
+  title: string
+  description?: string
   article?: FragmentType<typeof AdminArticleSingleStatementFormFragment>
   action(prevState: FormState, input: FormData): Promise<FormState>
 }) {
@@ -80,7 +85,20 @@ export function AdminArticleSingleStatementForm(props: {
         )}
       >
         <div className="container">
-          <div className="flex gap-5 border-b border-gray-900/10 pb-12">
+          <AdminFormHeader>
+            <AdminPageTitle
+              title={props.title}
+              description={props.description}
+            />
+
+            <div className="flex items-center justify-end gap-x-6">
+              <LinkButton href="/admin/articles">Zpět</LinkButton>
+
+              <SubmitButton />
+            </div>
+          </AdminFormHeader>
+
+          <div className="mt-6 flex gap-5 border-b border-gray-900/10 pb-12">
             {/* Main panel */}
             <div className="grow gap-y-5 grid grid-cols-1">
               <Fieldset className="space-y-4">
@@ -107,8 +125,6 @@ export function AdminArticleSingleStatementForm(props: {
                   <Label htmlFor="statementId">Výrok</Label>
                   <input id="statementId" {...register('statementId')} />
                 </Field>
-
-                <SubmitButton />
               </Fieldset>
             </div>
 
