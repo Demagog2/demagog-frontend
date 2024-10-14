@@ -9,6 +9,10 @@
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 
+  .ck-content p:first-child {
+    @apply !mt-4;
+  }
+
   .article-content ul,
   .ck-content ul {
     @apply !mt-8 !max-w-xl !space-y-8 !text-gray-600;
