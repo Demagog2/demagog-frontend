@@ -1,6 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { AdminUserAvatar } from './users/AdminUserAvatar'
 
 const userNavigation = [
   { name: 'Your profile', href: '#' },
@@ -30,22 +31,11 @@ export function UserMenu(props: {
       <MenuButton className="-m-1.5 flex items-center p-1.5">
         <span className="sr-only">Open user menu</span>
 
-        {!data.currentUser.avatar ? (
-          <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
-            <span className="text-sm font-medium leading-none text-white">
-              {data.currentUser.fullName
-                .split(' ')
-                .map((name) => name.substring(0, 1))
-                .join('')}
-            </span>
-          </span>
-        ) : (
-          <img
-            alt={`${data.currentUser.fullName}`}
-            src={mediaUrl + data.currentUser.avatar}
-            className="h-8 w-8 rounded-full bg-gray-50"
-          />
-        )}
+        <AdminUserAvatar
+          fullName={data.currentUser.fullName}
+          avatar={data.currentUser.avatar}
+          size={'large'}
+        />
 
         <span className="hidden lg:flex lg:items-center">
           <span
