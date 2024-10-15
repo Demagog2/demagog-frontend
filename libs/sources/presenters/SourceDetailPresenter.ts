@@ -8,7 +8,7 @@ import type { IFilterGroup, IFilterViewModel } from './FiltersViewModelBuilder'
 import { FiltersViewModelBuilder } from './FiltersViewModelBuilder'
 import { FiltersFactory } from '../model/filters/FiltersFactory'
 
-interface IStatementViewModel {
+export interface IStatementViewModel {
   id: string
   content: string
   published: boolean

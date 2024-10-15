@@ -1,6 +1,6 @@
 'use client'
 
-import { PropsWithChildren, useMemo, useState } from 'react'
+import { PropsWithChildren, ReactNode, useMemo, useState } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -12,9 +12,14 @@ import {
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { SourceDetailPresenter } from '@/libs/sources/presenters/SourceDetailPresenter'
+import {
+  IStatementViewModel,
+  SourceDetailPresenter,
+} from '@/libs/sources/presenters/SourceDetailPresenter'
 import { EMPTY_SOURCE, ISource } from '@/libs/sources/model/Source'
 import { createSourceFromQuery } from '@/libs/sources/data-mappers/SourceDataMapper'
+import { useStatementFilters } from '@/libs/sources/hooks/statement-filters'
+import { AdminSourceStatements } from '@/components/admin/sources/AdminSourceStatements'
 
 void gql(`
   fragment AdminSourcesFilterSegment on Statement {
@@ -61,6 +66,7 @@ void gql(`
 
 const AdminSourcesFilterFragment = gql(`
   fragment AdminSourcesFilters on Source {
+    ...SourceStatements
     id 
     name
     sourceUrl
@@ -96,11 +102,12 @@ const AdminSourcesFilterFragment = gql(`
   }
 `)
 
-export function AdminSourcesFilters(
-  props: PropsWithChildren<{
-    source: FragmentType<typeof AdminSourcesFilterFragment>
-  }>
-) {
+export function AdminSourcesFilters(props: {
+  source: FragmentType<typeof AdminSourcesFilterFragment>
+}) {
+  const { state, onStatementsFilterUpdate, onRemoveStatementsFilters } =
+    useStatementFilters()
+
   const data = useFragment(AdminSourcesFilterFragment, props.source)
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
@@ -112,8 +119,7 @@ export function AdminSourcesFilters(
 
   const sourceViewModel = new SourceDetailPresenter(
     source,
-    // state ? [state] : []
-    []
+    state ? [state] : []
   ).buildViewModel()
 
   return (
@@ -152,13 +158,14 @@ export function AdminSourcesFilters(
                 {sourceViewModel.filters.map((section) => {
                   if (section.type === 'filter') {
                     return (
-                      <div key={section.key} className="flex items-center">
+                      <div key={section.key} className="flex items-center p-4">
                         <input
-                          defaultChecked={section.active}
+                          checked={section.active}
                           id={`mobile-${section.key}`}
                           name={section.key}
                           type="checkbox"
                           className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          onChange={() => onStatementsFilterUpdate(section.key)}
                         />
                         <label
                           htmlFor={`mobile-${section.key}`}
@@ -198,11 +205,14 @@ export function AdminSourcesFilters(
                                 className="flex items-center"
                               >
                                 <input
-                                  defaultChecked={option.active}
+                                  checked={option.active}
                                   id={`mobile-${option.key}`}
                                   name={option.key}
                                   type="checkbox"
                                   className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                  onChange={() =>
+                                    onStatementsFilterUpdate(option.key)
+                                  }
                                 />
                                 <label
                                   htmlFor={`mobile-${option.key}`}
@@ -246,11 +256,12 @@ export function AdminSourcesFilters(
                     return (
                       <div key={section.key} className="flex items-center pt-6">
                         <input
-                          defaultChecked={section.active}
+                          checked={section.active}
                           id={section.key}
                           name={section.key}
                           type="checkbox"
                           className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                          onChange={() => onStatementsFilterUpdate(section.key)}
                         />
                         <label
                           htmlFor={section.key}
@@ -275,11 +286,14 @@ export function AdminSourcesFilters(
                           {section.filters.map((option, optionIdx) => (
                             <div key={option.key} className="flex items-center">
                               <input
-                                defaultChecked={option.active}
+                                checked={option.active}
                                 id={option.key}
                                 name={option.key}
                                 type="checkbox"
                                 className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                                onChange={() =>
+                                  onStatementsFilterUpdate(option.key)
+                                }
                               />
                               <label
                                 htmlFor={option.key}
@@ -299,7 +313,12 @@ export function AdminSourcesFilters(
           </aside>
 
           <div className="mt-6 lg:col-span-2 lg:mt-0 xl:col-span-3">
-            {props.children}
+            <AdminSourceStatements
+              source={data}
+              filteredStatementsIds={sourceViewModel.filteredStatements.map(
+                (statement) => statement.id
+              )}
+            />
           </div>
         </div>
       </div>
