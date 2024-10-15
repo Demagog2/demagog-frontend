@@ -4,7 +4,7 @@ import { VeracityBadge } from '../veracity/VeracityBadge'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
-    statements {
+    statements(includeUnpublished: true) {
       id
       title
       content
@@ -16,6 +16,10 @@ const SourceStatementsFragment = gql(`
       }
       assessment {
         ...VeracityBadge
+        evaluator {
+          avatar(size: small)
+          fullName
+        }
       }
       ...SourceStatementStep
     }
@@ -73,16 +77,16 @@ export function AdminSourceStatements(props: {
                   </div>
                 </div>
 
+                {statement.assessment.evaluator?.fullName}
+
                 {/* <div className="mt-6 lg:col-span-5 lg:mt-0"> */}
                 {/*   <dl className="grid grid-cols-2 gap-x-6 text-sm"> */}
                 {/*     <div> */}
                 {/*       <dt className="font-medium text-gray-900"> */}
-                {/*         Delivery address */}
+                {/*         Overovatel */}
                 {/*       </dt> */}
                 {/*       <dd className="mt-3 text-gray-500"> */}
-                {/* <span className="block">{statement.address[0]}</span> */}
-                {/* <span className="block">{statement.address[1]}</span> */}
-                {/* <span className="block">{statement.address[2]}</span> */}
+                {/* <span className="block">{statement.}</span> */}
                 {/*         </dd> */}
                 {/*       </div> */}
                 {/*       <div> */}
