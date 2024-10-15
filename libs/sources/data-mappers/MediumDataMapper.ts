@@ -1,7 +1,7 @@
 import { Medium } from '../model/Medium'
 
 export function createMediumFromQuery(
-  medium: { id: string; name: string } | null
+  medium?: { id: string; name: string } | null
 ) {
   if (!medium) {
     return null
