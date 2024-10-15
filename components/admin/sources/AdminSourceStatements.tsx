@@ -77,8 +77,6 @@ export function AdminSourceStatements(props: {
                   </div>
                 </div>
 
-                {statement.assessment.evaluator?.fullName}
-
                 {/* <div className="mt-6 lg:col-span-5 lg:mt-0"> */}
                 {/*   <dl className="grid grid-cols-2 gap-x-6 text-sm"> */}
                 {/*     <div> */}
