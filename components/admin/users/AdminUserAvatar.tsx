@@ -10,7 +10,15 @@ export function AdminUserAvatar(props: {
   return (
     <>
       {!props.avatar ? (
-        <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-gray-500">
+        <span
+          className={classNames(
+            'inline-flex items-center justify-center rounded-full bg-gray-500',
+            {
+              'h-6 w-6': size === 'small',
+              'h-8 w-8': size === 'large',
+            }
+          )}
+        >
           <span className="text-sm font-medium leading-none text-white">
             {props.fullName
               .split(' ')
