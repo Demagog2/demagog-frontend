@@ -9,7 +9,6 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import React from 'react'
-import Image from 'next/image'
 import {
   ASSESSMENT_STATUS_APPROVAL_NEEDED,
   ASSESSMENT_STATUS_APPROVED,
@@ -23,6 +22,7 @@ import { getBooleanParam, getStringParam } from '@/libs/query-params'
 import { AdminSearch } from '@/components/admin/AdminSearch'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { AdminPageTabs } from '@/components/admin/layout/AdminPageTabs'
+import { AdminUserAvatar } from '@/components/admin/users/AdminUserAvatar'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam diskuzí', 'Administrace'),
@@ -179,21 +179,11 @@ export default async function AdminSources(props: PropsWithSearchParams) {
                     <div className="flex -space-x-0.5">
                       <dt className="sr-only">Řečníci</dt>
                       {source.experts?.map((expert) => {
-                        // TODO: Show avatar placeholder like in UserMenu
-
-                        if (!expert?.avatar) {
-                          return null
-                        }
-
                         return (
                           <span key={expert.id}>
-                            <Image
-                              width={24}
-                              height={24}
-                              alt={expert.fullName}
-                              src={mediaUrl + expert.avatar}
-                              className="h-6 w-6 rounded-full bg-gray-50 ring-2 ring-white"
-                              title={expert.fullName}
+                            <AdminUserAvatar
+                              fullName={expert.fullName}
+                              avatar={expert.avatar}
                             />
                           </span>
                         )
