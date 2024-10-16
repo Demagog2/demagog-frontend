@@ -2,6 +2,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminSourceStatementStep } from './AdminSourceStatementStep'
 import { VeracityBadge } from '../veracity/VeracityBadge'
 import { IStatementViewModel } from '@/libs/sources/presenters/SourceDetailPresenter'
+import { AdminUserAvatar } from '../users/AdminUserAvatar'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -81,36 +82,48 @@ export function AdminSourceStatements(props: {
                       />
 
                       <p className="mt-3 text-sm text-gray-500">
-                        {statement.content}
+                        &bdquo;{statement.content}&bdquo;
                       </p>
                     </div>
                   </div>
 
-                  {/* FIXME: Use the data to show information */}
-                  {statement.assessment.evaluator?.avatar}
-                  {statement.assessment.evaluator?.fullName}
-
-                  {statement.commentsCount}
-
-                  <div className="mt-6 lg:col-span-5 lg:mt-0">
+                  <div className="mt-6 lg:col-span-5">
                     <dl className="grid grid-cols-2 gap-x-6 text-sm">
                       <div>
                         <dt className="font-medium text-gray-900">
-                          Overovatel
+                          Ověřovatel
                         </dt>
                         <dd className="mt-3 text-gray-500">
-                          <span className="block">Jarda Brablenec</span>
+                          {!statement.assessment.evaluator?.fullName ? (
+                            <span className="block">
+                              Výrok nemá ověřovatele
+                            </span>
+                          ) : (
+                            <>
+                              <span className="block">
+                                {statement.assessment.evaluator?.fullName}
+                              </span>
+                              <span className="block mt-3">
+                                <AdminUserAvatar
+                                  fullName={
+                                    statement.assessment.evaluator.fullName
+                                  }
+                                  avatar={statement.assessment.evaluator.avatar}
+                                />
+                              </span>
+                            </>
+                          )}
                         </dd>
                       </div>
                       <div>
-                        <dt className="font-medium text-gray-900">Komentare</dt>
+                        <dt className="font-medium text-gray-900">Komentáře</dt>
                         <dd className="mt-3 space-y-3 text-gray-500">
-                          <p>Pocet komentaru: 2</p>
+                          <p>Počet komentářů: {statement.commentsCount}</p>
                           <button
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                           >
-                            Edit
+                            Upravit
                           </button>
                         </dd>
                       </div>
