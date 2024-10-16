@@ -2,7 +2,6 @@
 
 import { FormState } from '@/app/(admin)/admin/tags/actions'
 import { schema } from '@/libs/tags/schema'
-import { invariant } from '@apollo/client/utilities/globals'
 import { Field, Select } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRef } from 'react'
@@ -17,6 +16,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { AdminFormActions } from '../layout/AdminFormActions'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 
 const AdminTagFormFieldsFragment = gql(`
   fragment AdminTagFormFields on Tag {
@@ -45,24 +45,14 @@ export function AdminTagForm(props: {
 
   const formRef = useRef<HTMLFormElement>(null)
 
-  return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit(
-        (data) => {
-          const formElem = formRef.current
-          invariant(formElem, 'Form HTML DOM element must be present.')
-          formAction(new FormData(formElem))
+  const { handleSubmitForm } = useFormSubmit<z.output<typeof schema>>(
+    handleSubmit,
+    formAction,
+    formRef
+  )
 
-          // TODO: @vaclavbohac Remove once we are sure the forms are bug free
-          console.debug('Valid form data', data)
-        },
-        (data) => {
-          // TODO: @vaclavbohac Remove once we are sure the forms are bug free
-          console.debug('Invalid form data', data)
-        }
-      )}
-    >
+  return (
+    <form ref={formRef} onSubmit={handleSubmitForm}>
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />

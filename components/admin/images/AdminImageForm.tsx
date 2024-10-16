@@ -1,9 +1,8 @@
 'use client'
 
 import { FormState } from '@/app/(admin)/admin/tags/actions'
-import { invariant } from '@apollo/client/utilities/globals'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef } from 'react'
+import React, { useRef } from 'react'
 import { useFormState } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -14,6 +13,7 @@ import { AdminImageInput } from '@/components/admin/images/AdminImageInput'
 import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { AdminFormActions } from '../layout/AdminFormActions'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 
 export function AdminImageForm(props: {
   title: string
@@ -31,24 +31,12 @@ export function AdminImageForm(props: {
 
   const formRef = useRef<HTMLFormElement>(null)
 
-  return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit(
-        (data) => {
-          const formElem = formRef.current
-          invariant(formElem, 'Form HTML DOM element must be present.')
-          formAction(new FormData(formElem))
+  const { handleSubmitForm } = useFormSubmit<
+    z.output<typeof contentImageSchema>
+  >(handleSubmit, formAction, formRef)
 
-          // TODO: @vaclavbohac Remove once we are sure the forms are bug free
-          console.debug('Valid form data', data)
-        },
-        (data) => {
-          // TODO: @vaclavbohac Remove once we are sure the forms are bug free
-          console.debug('Invalid form data', data)
-        }
-      )}
-    >
+  return (
+    <form ref={formRef} onSubmit={handleSubmitForm}>
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
