@@ -52,8 +52,8 @@ export function SingleStatementArticlePreview(props: {
     <Article pinned={article.pinned}>
       <div className="row g-2 g-lg-5">
         <div className="col col-12 col-md-5">
-          <div className="d-flex">
-            <Link href={articlePath} className="illustration d-flex">
+          <div className="w-100">
+            <Link href={articlePath} className="illustration">
               <img
                 src={mediaUrl + article.illustration}
                 className="w-100"
