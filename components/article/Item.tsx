@@ -42,8 +42,8 @@ export default function ArticleItem(props: {
     <Article pinned={article.pinned}>
       <div className="row g-2 g-lg-5">
         <div className="col col-12 col-md-5">
-          <div className="d-flex">
-            <ArticleLink className="illustration d-flex" article={article}>
+          <div className="w-100">
+            <ArticleLink className="illustration" article={article}>
               <img
                 src={mediaUrl + article.illustration}
                 className="w-100 rounded-m"
