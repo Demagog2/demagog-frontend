@@ -45,6 +45,7 @@ import { toArticleTypeEnum } from '@/libs/enums'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 import { AdminFormActions } from '../layout/AdminFormActions'
+import { AdminFormContent } from '@/components/admin/layout/AdminFormContent'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 
 const RichTextEditor = dynamic(
@@ -237,7 +238,7 @@ export function AdminArticleForm(props: {
           </AdminFormActions>
         </AdminFormHeader>
 
-        <div className="mt-6 flex gap-5 pb-12">
+        <AdminFormContent>
           <div className="grow gap-y-5 grid grid-cols-1">
             {state.error && <div className="text-red">{state.error}</div>}
 
@@ -503,7 +504,7 @@ export function AdminArticleForm(props: {
               </select>
             </div>
           </div>
-        </div>
+        </AdminFormContent>
       </div>
     </form>
   )

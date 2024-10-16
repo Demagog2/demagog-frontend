@@ -15,6 +15,7 @@ import { SubmitButton } from '../forms/SubmitButton'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
+import { AdminFormContent } from '../layout/AdminFormContent'
 import { AdminFormActions } from '../layout/AdminFormActions'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 
@@ -62,7 +63,8 @@ export function AdminTagForm(props: {
             <SubmitButton />
           </AdminFormActions>
         </AdminFormHeader>
-        <div className="mt-6 flex gap-5 pb-12">
+
+        <AdminFormContent>
           <div className="grow gap-y-5 grid grid-cols-1">
             {state.error && <div className="text-red">{state.error}</div>}
 
@@ -91,7 +93,7 @@ export function AdminTagForm(props: {
               </Select>
             </Field>
           </div>
-        </div>
+        </AdminFormContent>
       </div>
     </form>
   )
