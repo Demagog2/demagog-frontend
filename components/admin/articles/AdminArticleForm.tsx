@@ -29,7 +29,6 @@ import { schema } from '@/libs/articles/schema'
 import { useRef } from 'react'
 import { useFormState } from 'react-dom'
 import { FormState } from '@/app/(admin)/admin/articles/actions'
-import invariant from 'ts-invariant'
 import { AdminSourcesList } from '@/components/admin/articles/AdminSourcesList'
 import { ApolloProvider } from '@apollo/client'
 import { createClient } from '@/libs/apollo-client'
@@ -43,10 +42,10 @@ import {
 import { AdminSegmentSelector } from './AdminSegmentSelector'
 import { AdminArticleIllustrationInput } from './AdminArticleIllustrationInput'
 import { toArticleTypeEnum } from '@/libs/enums'
-import { imagePath } from '@/libs/images/path'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 import { AdminFormActions } from '../layout/AdminFormActions'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -219,24 +218,14 @@ export function AdminArticleForm(props: {
     article ? toArticleTypeEnum(article.articleType) : ArticleTypeEnum.Default
   )
 
-  return (
-    <form
-      ref={formRef}
-      onSubmit={handleSubmit(
-        (data) => {
-          const formElem = formRef.current
-          invariant(formElem, 'Form HTML DOM element must be present.')
-          formAction(new FormData(formElem))
+  const { handleSubmitForm } = useFormSubmit<z.output<typeof schema>>(
+    handleSubmit,
+    formAction,
+    formRef
+  )
 
-          // TODO: @vaclavbohac Remove once we are sure the forms are bug free
-          console.debug('Valid form data', data, new FormData(formElem))
-        },
-        (data) => {
-          // TODO: @vaclavbohac Remove once we are sure the forms are bug free
-          console.debug('Invalid form data', data)
-        }
-      )}
-    >
+  return (
+    <form ref={formRef} onSubmit={handleSubmitForm}>
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />

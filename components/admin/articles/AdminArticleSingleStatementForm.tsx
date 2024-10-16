@@ -21,6 +21,8 @@ import { LinkButton } from '@/components/admin/forms/LinkButton'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 import { AdminFormActions } from '../layout/AdminFormActions'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { schema } from '@/libs/tags/schema'
 
 const AdminArticleSingleStatementFormFragment = gql(`
   fragment AdminArticleSingleStatementFormFields on Article {
@@ -66,25 +68,13 @@ export function AdminArticleSingleStatementForm(props: {
 
   const formRef = useRef<HTMLFormElement>(null)
 
+  const { handleSubmitForm } = useFormSubmit<
+    z.output<typeof singleStatementArticleSchema>
+  >(handleSubmit, formAction, formRef)
+
   return (
     <>
-      <form
-        ref={formRef}
-        onSubmit={handleSubmit(
-          (data) => {
-            const formElem = formRef.current
-            invariant(formElem, 'Form HTML DOM element must be present.')
-            formAction(new FormData(formElem))
-
-            // TODO: @vaclavbohac Remove once we are sure the forms are bug free
-            console.debug('Valid form data', data)
-          },
-          (data) => {
-            // TODO: @vaclavbohac Remove once we are sure the forms are bug free
-            console.debug('Invalid form data', data)
-          }
-        )}
-      >
+      <form ref={formRef} onSubmit={handleSubmitForm}>
         <div className="container">
           <AdminFormHeader>
             <AdminPageTitle
