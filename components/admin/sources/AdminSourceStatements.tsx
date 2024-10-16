@@ -8,6 +8,7 @@ const SourceStatementsFragment = gql(`
     statements(includeUnpublished: true) {
       id
       title
+      commentsCount
       content
       sourceSpeaker {
         fullName
@@ -85,33 +86,36 @@ export function AdminSourceStatements(props: {
                     </div>
                   </div>
 
-                  {/* <div className="mt-6 lg:col-span-5 lg:mt-0"> */}
-                  {/*   <dl className="grid grid-cols-2 gap-x-6 text-sm"> */}
-                  {/*     <div> */}
-                  {/*       <dt className="font-medium text-gray-900"> */}
-                  {/*         Overovatel */}
-                  {/*       </dt> */}
-                  {/*       <dd className="mt-3 text-gray-500"> */}
-                  {/* <span className="block">{statement.}</span> */}
-                  {/*         </dd> */}
-                  {/*       </div> */}
-                  {/*       <div> */}
-                  {/*         <dt className="font-medium text-gray-900"> */}
-                  {/*           Shipping updates */}
-                  {/*         </dt> */}
-                  {/*         <dd className="mt-3 space-y-3 text-gray-500"> */}
-                  {/*           {/* <p>{statement.email}</p> */}
-                  {/*           {/* <p>{statement.phone}</p> */}
-                  {/*           <button */}
-                  {/*             type="button" */}
-                  {/*             className="font-medium text-indigo-600 hover:text-indigo-500" */}
-                  {/*           > */}
-                  {/*             Edit */}
-                  {/*           </button> */}
-                  {/*         </dd> */}
-                  {/*       </div> */}
-                  {/*     </dl> */}
-                  {/*   </div> */}
+                  {/* FIXME: Use the data to show information */}
+                  {statement.assessment.evaluator?.avatar}
+                  {statement.assessment.evaluator?.fullName}
+
+                  {statement.commentsCount}
+
+                  <div className="mt-6 lg:col-span-5 lg:mt-0">
+                    <dl className="grid grid-cols-2 gap-x-6 text-sm">
+                      <div>
+                        <dt className="font-medium text-gray-900">
+                          Overovatel
+                        </dt>
+                        <dd className="mt-3 text-gray-500">
+                          <span className="block">Jarda Brablenec</span>
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="font-medium text-gray-900">Komentare</dt>
+                        <dd className="mt-3 space-y-3 text-gray-500">
+                          <p>Pocet komentaru: 2</p>
+                          <button
+                            type="button"
+                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                          >
+                            Edit
+                          </button>
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
                 </div>
 
                 <AdminSourceStatementStep statement={statement} step={i % 5} />
