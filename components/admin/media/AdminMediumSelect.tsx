@@ -31,7 +31,7 @@ export function AdminMediumSelect(props: {
   }, [data])
 
   const handleChange = useCallback(
-    (item: { value: string }) => onChange(item.value),
+    (item: { value: string } | null) => item && onChange(item.value),
     [onChange]
   )
 
