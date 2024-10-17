@@ -1,7 +1,6 @@
 import { gql } from '@/__generated__'
 import { AdminSourceHeader } from '@/components/admin/sources/AdminSourceHeader'
 import { AdminSourcesFilters } from '@/components/admin/sources/AdminSourcesFilters'
-import { AdminSourceStatements } from '@/components/admin/sources/AdminSourceStatements'
 import { serverQuery } from '@/libs/apollo-client-server'
 
 export default async function AdminSource(props: { params: { slug: string } }) {

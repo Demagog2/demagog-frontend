@@ -14,10 +14,12 @@ import { useRef } from 'react'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { sourceSchema } from '@/libs/sources/source-schema'
 import { createSource } from '@/app/(admin)/admin/sources/actions'
-import { Field, Fieldset } from '@headlessui/react'
+import { Description, Field, Fieldset } from '@headlessui/react'
 import { Label } from '@/components/admin/forms/Label'
 import { Input } from '@/components/admin/forms/Input'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
+import { Textarea } from '@/components/admin/forms/Textarea'
+import { Select } from '@/components/admin/forms/Select'
 
 export function AdminSourceForm(props: {
   title: string
@@ -43,7 +45,7 @@ export function AdminSourceForm(props: {
   )
 
   return (
-    <form onSubmit={handleSubmitForm}>
+    <form ref={formRef} onSubmit={handleSubmitForm}>
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
@@ -70,8 +72,26 @@ export function AdminSourceForm(props: {
               <ErrorMessage message={errors.name?.message} />
             </Field>
 
+            <div className="columns-2">
+              <Field>
+                <Label htmlFor="mediumId" isOptional>
+                  Pořad
+                </Label>
+
+                <Select />
+              </Field>
+
+              <Field>
+                <Label htmlFor="mediaPersonalityIds" isOptional>
+                  Moderatori
+                </Label>
+              </Field>
+            </div>
+
             <Field>
-              <Label htmlFor="sourceUrl">URL zdroje diskuze</Label>
+              <Label htmlFor="sourceUrl" isOptional>
+                URL zdroje diskuze
+              </Label>
 
               <Input
                 id="sourceUrl"
@@ -82,6 +102,24 @@ export function AdminSourceForm(props: {
               />
 
               <ErrorMessage message={errors.sourceUrl?.message} />
+            </Field>
+
+            <Field>
+              <Label isOptional htmlFor="transcript">
+                Přepis
+              </Label>
+
+              <Description className="text-sm text-gray-500">
+                Je-li dostupný, doporučujeme vyplnit, protože usnaďňuje
+                vytváření výroků označováním v přepisu.
+              </Description>
+
+              <Textarea
+                id="transcript"
+                {...register('transcript')}
+                rows={10}
+                placeholder="Text přepisu diskuze..."
+              />
             </Field>
           </Fieldset>
         </AdminFormContent>

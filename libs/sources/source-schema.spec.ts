@@ -33,12 +33,12 @@ describe('Source schema', () => {
 
   it('validates source url', () => {
     expect(
-      sourceSchema.safeParse({ ...minReqValidFields, sourceUrl: '' }).success
-    ).toBe(false)
-    expect(
       sourceSchema.safeParse({ ...minReqValidFields, sourceUrl: 'hello' })
         .success
     ).toBe(false)
+    expect(
+      sourceSchema.safeParse({ ...minReqValidFields, sourceUrl: '' }).success
+    ).toBe(true)
     expect(sourceSchema.safeParse(validData).success).toBe(true)
   })
 
@@ -62,6 +62,16 @@ describe('Source schema', () => {
         ...minReqValidFields,
         transcript: 'Non empty transcript',
       }).success
+    ).toBe(true)
+  })
+
+  it('validates mediumId', () => {
+    expect(
+      sourceSchema.safeParse({ ...minReqValidFields, mediumId: 3 }).success
+    ).toBe(false)
+
+    expect(
+      sourceSchema.safeParse({ ...minReqValidFields, mediumId: '123' }).success
     ).toBe(true)
   })
 })
