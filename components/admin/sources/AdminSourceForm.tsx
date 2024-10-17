@@ -98,7 +98,16 @@ export function AdminSourceForm(props: {
                   items={people}
                   onChange={console.log}
                 />
-                <Description>TODO: Doplnit zpravu z odkazem</Description>
+                <Description className="text-sm text-gray-500">
+                  Chybí ti v seznamu pořad? Přidej si ho přes agendu{' '}
+                  <a
+                    href="https://demagog.cz/admin/media"
+                    className="underline"
+                  >
+                    Pořady
+                  </a>
+                  .
+                </Description>
               </Field>
 
               <Field>
@@ -112,20 +121,34 @@ export function AdminSourceForm(props: {
                   items={people}
                   onChange={console.log}
                 />
-                <Description>TODO: Doplnit zpravu z odkazem</Description>
+                <Description className="text-sm text-gray-500">
+                  Chybí ti v seznamu moderátoři? Přidej si je přes agendu{' '}
+                  <a
+                    href="https://demagog.cz/admin/media-personalities"
+                    className="underline"
+                  >
+                    Moderátoři
+                  </a>
+                  .
+                </Description>
               </Field>
             </div>
 
             <Field>
               <Label htmlFor="publishedAt" isOptional>
-                Published at
+                Publikováno
               </Label>
-
-              <Input {...register('publishedAt')} />
+              <div>
+                <Input
+                  type="date"
+                  className="w-fit"
+                  {...register('publishedAt')}
+                />
+              </div>
             </Field>
 
             <Field>
-              <Label htmlFor="speakers">Speakers</Label>
+              <Label htmlFor="speakers">Řečníci</Label>
 
               <Description className="text-sm text-gray-500" as="div">
                 <p>
@@ -151,7 +174,7 @@ export function AdminSourceForm(props: {
 
             <Field>
               <Label htmlFor="experts" isOptional>
-                Experts
+                Experti
               </Label>
 
               <Description className="text-sm text-gray-500">
