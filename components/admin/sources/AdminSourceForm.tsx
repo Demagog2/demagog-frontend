@@ -8,7 +8,7 @@ import { AdminFormContent } from '@/components/admin/layout/AdminFormContent'
 import { LinkButton } from '@/components/admin/forms/LinkButton'
 import { SubmitButton } from '@/components/admin/forms/SubmitButton'
 import { useFormState } from 'react-dom'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRef } from 'react'
@@ -21,23 +21,34 @@ import { Input } from '@/components/admin/forms/Input'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { Textarea } from '@/components/admin/forms/Textarea'
 import { Select } from '@/components/admin/forms/Select'
-import Link from 'next/link'
+import { AdminMediumSelect } from '@/components/admin/media/AdminMediumSelect'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 
 const people = [
-  { value: '1', name: 'Leslie Alexander 1' },
-  { value: '2', name: 'Leslie Alexander 2' },
-  { value: '3', name: 'Leslie Alexander 3' },
-  { value: '4', name: 'Leslie Alexander 4' },
-  { value: '5', name: 'Leslie Alexander 5' },
+  { value: '1', label: 'Leslie Alexander 1' },
+  { value: '2', label: 'Leslie Alexander 2' },
+  { value: '3', label: 'Leslie Alexander 3' },
+  { value: '4', label: 'Leslie Alexander 4' },
+  { value: '5', label: 'Leslie Alexander 5' },
 ]
+
+const AdminSourceFormFragment = gql(`
+  fragment AdminSourceForm on Query {
+    ...AdminMediumSelect
+  }
+`)
 
 export function AdminSourceForm(props: {
   title: string
   description?: string
+  data: FragmentType<typeof AdminSourceFormFragment>
 }) {
+  const data = useFragment(AdminSourceFormFragment, props.data)
+
   const [state, formAction] = useFormState(createSource, { message: '' })
 
   const {
+    control,
     handleSubmit,
     formState: { isSubmitting, errors },
     register,
@@ -45,7 +56,7 @@ export function AdminSourceForm(props: {
     resolver: zodResolver(sourceSchema),
     defaultValues: {
       name: '',
-      publishedAt: new Date().toISOString().substring(0, 10),
+      releasedAt: new Date().toISOString().substring(0, 10),
       ...(state.fields ?? {}),
     },
   })
@@ -92,11 +103,18 @@ export function AdminSourceForm(props: {
                   Pořad
                 </Label>
 
-                <Select
+                <Controller
+                  control={control}
                   name="mediumId"
-                  placeholder="Vyberte pořad"
-                  items={people}
-                  onChange={console.log}
+                  render={({ field }) => (
+                    <>
+                      <input type="hidden" {...field} />
+                      <AdminMediumSelect
+                        data={data}
+                        onChange={field.onChange}
+                      />
+                    </>
+                  )}
                 />
                 <Description className="text-sm text-gray-500">
                   Chybí ti v seznamu pořad? Přidej si ho přes agendu{' '}
@@ -116,7 +134,6 @@ export function AdminSourceForm(props: {
                 </Label>
 
                 <Select
-                  name="mediaPersonalityIds"
                   placeholder="Vyberte moderátory"
                   items={people}
                   onChange={console.log}
@@ -135,14 +152,14 @@ export function AdminSourceForm(props: {
             </div>
 
             <Field>
-              <Label htmlFor="publishedAt" isOptional>
+              <Label htmlFor="releasedAt" isOptional>
                 Publikováno
               </Label>
               <div>
                 <Input
                   type="date"
                   className="w-fit"
-                  {...register('publishedAt')}
+                  {...register('releasedAt')}
                 />
               </div>
             </Field>
@@ -165,7 +182,6 @@ export function AdminSourceForm(props: {
               </Description>
 
               <Select
-                name="speakers"
                 items={people}
                 onChange={console.log}
                 placeholder="Vyberte řečníky"
@@ -182,7 +198,7 @@ export function AdminSourceForm(props: {
                 této diskuze.
               </Description>
 
-              <Select name="experts" items={people} onChange={console.log} />
+              <Select items={people} onChange={console.log} />
             </Field>
 
             <Field>
