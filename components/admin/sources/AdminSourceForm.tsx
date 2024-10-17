@@ -42,7 +42,11 @@ export function AdminSourceForm(props: {
     register,
   } = useForm<z.output<typeof sourceSchema>>({
     resolver: zodResolver(sourceSchema),
-    defaultValues: { name: '', ...(state.fields ?? {}) },
+    defaultValues: {
+      name: '',
+      publishedAt: new Date().toISOString().substring(0, 10),
+      ...(state.fields ?? {}),
+    },
   })
 
   const formRef = useRef<HTMLFormElement>(null)
@@ -102,6 +106,14 @@ export function AdminSourceForm(props: {
                 />
               </Field>
             </div>
+
+            <Field>
+              <Label htmlFor="publishedAt" isOptional>
+                Published at
+              </Label>
+
+              <Input {...register('publishedAt')} />
+            </Field>
 
             <Field>
               <Label htmlFor="sourceUrl" isOptional>

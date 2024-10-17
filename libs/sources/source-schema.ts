@@ -10,4 +10,5 @@ export const sourceSchema = z.object({
     .or(emptyStringToUndefined),
   transcript: z.string().optional().or(emptyStringToUndefined),
   mediumId: z.string().optional(),
+  publishedAt: z.string().date().optional(),
 })
