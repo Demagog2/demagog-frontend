@@ -23,6 +23,7 @@ import { Textarea } from '@/components/admin/forms/Textarea'
 import { Select } from '@/components/admin/forms/Select'
 import { AdminMediumSelect } from '@/components/admin/media/AdminMediumSelect'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { Multiselect } from '@/components/admin/forms/Multiselect'
 
 const people = [
   { value: '1', label: 'Leslie Alexander 1' },
@@ -129,15 +130,17 @@ export function AdminSourceForm(props: {
               </Field>
 
               <Field>
-                <Label htmlFor="mediaPersonalityIds" isOptional>
+                <Label htmlFor="mediaPersonalities" isOptional>
                   Moderátoři
                 </Label>
 
-                <Select
+                <Multiselect
+                  name="mediaPersonalities"
                   placeholder="Vyberte moderátory"
+                  control={control}
                   items={people}
-                  onChange={console.log}
                 />
+
                 <Description className="text-sm text-gray-500 mt-1">
                   Chybí ti v seznamu moderátoři? Přidej si je přes agendu{' '}
                   <a
