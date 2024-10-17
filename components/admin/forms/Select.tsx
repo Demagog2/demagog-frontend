@@ -6,7 +6,6 @@ import {
   ComboboxInput,
   ComboboxOption,
   ComboboxOptions,
-  Label,
 } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react'
@@ -39,11 +38,8 @@ export function Select() {
         setSelectedPerson(person)
       }}
     >
-      <Label className="block text-sm font-medium leading-6 text-gray-900">
-        Assigned to
-      </Label>
       <div className="relative mt-2">
-        <ComboboxInput
+        <ComboboxInput<{ name: string }>
           className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           onChange={(event) => setQuery(event.target.value)}
           onBlur={() => setQuery('')}

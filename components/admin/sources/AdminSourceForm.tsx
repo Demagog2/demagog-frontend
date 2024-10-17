@@ -85,6 +85,8 @@ export function AdminSourceForm(props: {
                 <Label htmlFor="mediaPersonalityIds" isOptional>
                   Moderatori
                 </Label>
+
+                <Select />
               </Field>
             </div>
 
