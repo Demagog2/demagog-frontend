@@ -116,7 +116,7 @@ export function AdminSourceForm(props: {
                     </>
                   )}
                 />
-                <Description className="text-sm text-gray-500">
+                <Description className="text-sm text-gray-500 mt-1">
                   Chybí ti v seznamu pořad? Přidej si ho přes agendu{' '}
                   <a
                     href="https://demagog.cz/admin/media"
@@ -138,7 +138,7 @@ export function AdminSourceForm(props: {
                   items={people}
                   onChange={console.log}
                 />
-                <Description className="text-sm text-gray-500">
+                <Description className="text-sm text-gray-500 mt-1">
                   Chybí ti v seznamu moderátoři? Přidej si je přes agendu{' '}
                   <a
                     href="https://demagog.cz/admin/media-personalities"
