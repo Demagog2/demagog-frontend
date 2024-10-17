@@ -105,6 +105,22 @@ export function AdminSourceForm(props: {
               <ErrorMessage message={errors.name?.message} />
             </Field>
 
+            <Field>
+              <Label htmlFor="sourceUrl" isOptional>
+                URL zdroje diskuze
+              </Label>
+
+              <Input
+                id="sourceUrl"
+                placeholder="https://example.com"
+                type="url"
+                hasError={!!errors?.sourceUrl}
+                {...register('sourceUrl')}
+              />
+
+              <ErrorMessage message={errors.sourceUrl?.message} />
+            </Field>
+
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <Field>
                 <Label htmlFor="mediumId" isOptional>
@@ -214,22 +230,6 @@ export function AdminSourceForm(props: {
 
             <Field>
               <Select items={people} onChange={console.log} />
-            </Field>
-
-            <Field>
-              <Label htmlFor="sourceUrl" isOptional>
-                URL zdroje diskuze
-              </Label>
-
-              <Input
-                id="sourceUrl"
-                placeholder="https://example.com"
-                type="url"
-                hasError={!!errors?.sourceUrl}
-                {...register('sourceUrl')}
-              />
-
-              <ErrorMessage message={errors.sourceUrl?.message} />
             </Field>
           </Fieldset>
 
