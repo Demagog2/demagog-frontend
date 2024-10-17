@@ -85,8 +85,8 @@ export function AdminSourceForm(props: {
               <ErrorMessage message={errors.name?.message} />
             </Field>
 
-            <div className="columns-2">
-              <Field>
+            <div className="grid lg:grid-flow-col lg:justify-stretch">
+              <Field className="lg:mr-4">
                 <Label htmlFor="mediumId" isOptional>
                   Pořad
                 </Label>
