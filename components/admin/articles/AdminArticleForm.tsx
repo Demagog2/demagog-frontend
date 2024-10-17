@@ -45,7 +45,9 @@ import { toArticleTypeEnum } from '@/libs/enums'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 import { AdminFormActions } from '../layout/AdminFormActions'
+import { AdminFormContent } from '@/components/admin/layout/AdminFormContent'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { Textarea } from '@/components/admin/forms/Textarea'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -237,7 +239,7 @@ export function AdminArticleForm(props: {
           </AdminFormActions>
         </AdminFormHeader>
 
-        <div className="mt-6 flex gap-5 pb-12">
+        <AdminFormContent>
           <div className="grow gap-y-5 grid grid-cols-1">
             {state.error && <div className="text-red">{state.error}</div>}
 
@@ -276,11 +278,10 @@ export function AdminArticleForm(props: {
             <Field>
               <Label htmlFor="perex">Perex</Label>
 
-              <textarea
-                {...register('perex', { required: true })}
+              <Textarea
                 id="perex"
+                {...register('perex', { required: true })}
                 rows={4}
-                className="block mt-2 w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 placeholder="Zadejte perex..."
               />
             </Field>
@@ -503,7 +504,7 @@ export function AdminArticleForm(props: {
               </select>
             </div>
           </div>
-        </div>
+        </AdminFormContent>
       </div>
     </form>
   )
