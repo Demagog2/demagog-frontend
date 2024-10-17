@@ -1,6 +1,7 @@
 'use client'
 
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
+
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormActions } from '@/components/admin/layout/AdminFormActions'
 import { AdminFormContent } from '@/components/admin/layout/AdminFormContent'
@@ -20,6 +21,14 @@ import { Input } from '@/components/admin/forms/Input'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { Textarea } from '@/components/admin/forms/Textarea'
 import { Select } from '@/components/admin/forms/Select'
+
+const people = [
+  { value: '1', name: 'Leslie Alexander 1' },
+  { value: '2', name: 'Leslie Alexander 2' },
+  { value: '3', name: 'Leslie Alexander 3' },
+  { value: '4', name: 'Leslie Alexander 4' },
+  { value: '5', name: 'Leslie Alexander 5' },
+]
 
 export function AdminSourceForm(props: {
   title: string
@@ -78,15 +87,19 @@ export function AdminSourceForm(props: {
                   Pořad
                 </Label>
 
-                <Select />
+                <Select name="mediumId" items={people} onChange={console.log} />
               </Field>
 
               <Field>
                 <Label htmlFor="mediaPersonalityIds" isOptional>
-                  Moderatori
+                  Moderátoři
                 </Label>
 
-                <Select />
+                <Select
+                  name="mediaPersonalityIds"
+                  items={people}
+                  onChange={console.log}
+                />
               </Field>
             </div>
 

@@ -8,42 +8,52 @@ import {
   ComboboxOptions,
 } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 
-const people = [
-  { id: 1, name: 'Leslie Alexander 1' },
-  { id: 2, name: 'Leslie Alexander 2' },
-  { id: 3, name: 'Leslie Alexander 3' },
-  { id: 4, name: 'Leslie Alexander 4' },
-  { id: 5, name: 'Leslie Alexander 5' },
-]
+type Item = {
+  name: string
+  value: string
+}
 
-export function Select() {
+export function Select(props: {
+  name: string
+  items: Item[]
+  onChange(item: Item): void
+}) {
+  const { onChange } = props
+
   const [query, setQuery] = useState('')
-  const [selectedPerson, setSelectedPerson] = useState(null)
+  const [selectedItem, setSelectedItem] = useState<Item | null>(null)
 
-  const filteredPeople =
+  const filteredItems =
     query === ''
-      ? people
-      : people.filter((person) => {
-          return person.name.toLowerCase().includes(query.toLowerCase())
-        })
+      ? props.items
+      : props.items.filter((item) =>
+          item.name.toLowerCase().includes(query.toLowerCase())
+        )
+
+  const handleChange = useCallback(
+    (item: Item) => {
+      setQuery('')
+      onChange(item)
+      setSelectedItem(item)
+    },
+    [onChange]
+  )
 
   return (
     <Combobox
       as="div"
-      value={selectedPerson}
-      onChange={(person) => {
-        setQuery('')
-        setSelectedPerson(person)
-      }}
+      name={props.name}
+      value={selectedItem}
+      onChange={handleChange}
     >
       <div className="relative mt-2">
-        <ComboboxInput<{ name: string }>
+        <ComboboxInput<Item>
           className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           onChange={(event) => setQuery(event.target.value)}
           onBlur={() => setQuery('')}
-          displayValue={(person) => person?.name}
+          displayValue={(item) => item?.name}
         />
         <ComboboxButton className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
           <ChevronUpDownIcon
@@ -52,11 +62,11 @@ export function Select() {
           />
         </ComboboxButton>
 
-        {filteredPeople.length > 0 && (
+        {filteredItems.length > 0 && (
           <ComboboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-            {filteredPeople.map((person) => (
+            {filteredItems.map((person) => (
               <ComboboxOption
-                key={person.id}
+                key={person.value}
                 value={person}
                 className="group relative cursor-default select-none py-2 pl-8 pr-4 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
               >
