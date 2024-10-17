@@ -93,23 +93,23 @@ export function AdminSourceStatements(props: {
                         <dt className="font-medium text-gray-900">
                           Ověřovatel
                         </dt>
-                        <dd className="mt-3 text-gray-500">
+                        <dd className="mt-3 text-gray-500 lg:flex lg:items-center">
                           {!statement.assessment.evaluator?.fullName ? (
                             <span className="block">
                               Výrok nemá ověřovatele
                             </span>
                           ) : (
                             <>
-                              <span className="block">
-                                {statement.assessment.evaluator?.fullName}
-                              </span>
-                              <span className="block mt-3">
+                              <span className="block lg:mr-2">
                                 <AdminUserAvatar
                                   fullName={
                                     statement.assessment.evaluator.fullName
                                   }
                                   avatar={statement.assessment.evaluator.avatar}
                                 />
+                              </span>
+                              <span className="block mt-3 lg:mt-0">
+                                {statement.assessment.evaluator?.fullName}
                               </span>
                             </>
                           )}
