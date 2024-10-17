@@ -24,6 +24,7 @@ import { Select } from '@/components/admin/forms/Select'
 import { AdminMediumSelect } from '@/components/admin/media/AdminMediumSelect'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminMediaPersonalitiesMultiselect } from '@/components/admin/media-personalities/AdminMediaPersonalitiesMultiselect'
+import { AdminExpertsMultiselect } from '@/components/admin/sources/AdminExpertsMultiselect'
 
 const people = [
   { value: '1', label: 'Leslie Alexander 1' },
@@ -37,6 +38,7 @@ const AdminSourceFormFragment = gql(`
   fragment AdminSourceForm on Query {
     ...AdminMediumSelect
     ...AdminMediaPersonalitySelect
+    ...AdminExpertsSelect
   }
 `)
 
@@ -60,6 +62,7 @@ export function AdminSourceForm(props: {
     resolver: zodResolver(sourceSchema),
     defaultValues: {
       name: '',
+      experts: [],
       releasedAt: new Date().toISOString().substring(0, 10),
       mediaPersonalities: [],
       ...(state.fields ?? {}),
@@ -230,7 +233,11 @@ export function AdminSourceForm(props: {
             </p>
 
             <Field>
-              <Select items={people} onChange={console.log} />
+              <AdminExpertsMultiselect
+                control={control}
+                name="experts"
+                data={data}
+              />
             </Field>
           </Fieldset>
 
