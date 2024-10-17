@@ -15,7 +15,7 @@ import { useRef } from 'react'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { sourceSchema } from '@/libs/sources/source-schema'
 import { createSource } from '@/app/(admin)/admin/sources/actions'
-import { Description, Field, Fieldset } from '@headlessui/react'
+import { Description, Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '@/components/admin/forms/Label'
 import { Input } from '@/components/admin/forms/Input'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
@@ -23,7 +23,7 @@ import { Textarea } from '@/components/admin/forms/Textarea'
 import { Select } from '@/components/admin/forms/Select'
 import { AdminMediumSelect } from '@/components/admin/media/AdminMediumSelect'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { Multiselect } from '@/components/admin/forms/Multiselect'
+import { AdminMediaPersonalitiesMultiselect } from '@/components/admin/media-personalities/AdminMediaPersonalitiesMultiselect'
 
 const people = [
   { value: '1', label: 'Leslie Alexander 1' },
@@ -36,8 +36,11 @@ const people = [
 const AdminSourceFormFragment = gql(`
   fragment AdminSourceForm on Query {
     ...AdminMediumSelect
+    ...AdminMediaPersonalitySelect
   }
 `)
+
+type FieldValues = z.output<typeof sourceSchema>
 
 export function AdminSourceForm(props: {
   title: string
@@ -53,7 +56,7 @@ export function AdminSourceForm(props: {
     handleSubmit,
     formState: { isSubmitting, errors },
     register,
-  } = useForm<z.output<typeof sourceSchema>>({
+  } = useForm<FieldValues>({
     resolver: zodResolver(sourceSchema),
     defaultValues: {
       name: '',
@@ -64,7 +67,7 @@ export function AdminSourceForm(props: {
 
   const formRef = useRef<HTMLFormElement>(null)
 
-  const { handleSubmitForm } = useFormSubmit<z.output<typeof sourceSchema>>(
+  const { handleSubmitForm } = useFormSubmit<FieldValues>(
     handleSubmit,
     formAction,
     formRef
@@ -83,8 +86,12 @@ export function AdminSourceForm(props: {
           </AdminFormActions>
         </AdminFormHeader>
 
-        <AdminFormContent>
-          <Fieldset className="space-y-4 w-full">
+        <AdminFormContent className="flex-col">
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Základní údaje
+            </Legend>
+
             <Field>
               <Label htmlFor="name">Název diskuze</Label>
 
@@ -134,11 +141,10 @@ export function AdminSourceForm(props: {
                   Moderátoři
                 </Label>
 
-                <Multiselect
+                <AdminMediaPersonalitiesMultiselect<FieldValues>
                   name="mediaPersonalities"
-                  placeholder="Vyberte moderátory"
                   control={control}
-                  items={people}
+                  data={data}
                 />
 
                 <Description className="text-sm text-gray-500 mt-1">
@@ -158,31 +164,35 @@ export function AdminSourceForm(props: {
               <Label htmlFor="releasedAt" isOptional>
                 Publikováno
               </Label>
-              <div>
-                <Input
-                  type="date"
-                  className="w-fit"
-                  {...register('releasedAt')}
-                />
+
+              <div className="w-fit">
+                <Input type="date" {...register('releasedAt')} />
               </div>
             </Field>
+          </Fieldset>
+
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <div>
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Řečníci
+              </Legend>
+
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Výroky v rámci této diskuze půjde vytvořit jen pro osoby zde
+                vybrané.
+              </p>
+
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Stranu/skupinu můžete vybrat specificky jen pro tuto diskuzi,
+                například pokud je řečník součástí jiné na komunální a národní
+                úrovni a hodí se pro tuto diskuzi vybrat spíše komunální
+                příslušnost. Podobně lze upravovat i funkci jen pro tuto
+                diskuzi.
+              </p>
+            </div>
 
             <Field>
               <Label htmlFor="speakers">Řečníci</Label>
-
-              <Description className="text-sm text-gray-500" as="div">
-                <p>
-                  Výroky v rámci této diskuze půjde vytvořit jen pro osoby zde
-                  vybrané.
-                </p>
-                <p className="mt-2">
-                  Stranu/skupinu můžete vybrat specificky jen pro tuto diskuzi,
-                  například pokud je řečník součástí jiné na komunální a národní
-                  úrovni a hodí se pro tuto diskuzi vybrat spíše komunální
-                  příslušnost. Podobně lze upravovat i funkci jen pro tuto
-                  diskuzi.
-                </p>
-              </Description>
 
               <Select
                 items={people}
@@ -190,17 +200,19 @@ export function AdminSourceForm(props: {
                 placeholder="Vyberte řečníky"
               />
             </Field>
+          </Fieldset>
+
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Editoři
+            </Legend>
+
+            <p className="mt-1 text-sm leading-6 text-gray-600">
+              Vybraní budou dostávat notifikace při změnách výroků v rámci této
+              diskuze.
+            </p>
 
             <Field>
-              <Label htmlFor="experts" isOptional>
-                Experti
-              </Label>
-
-              <Description className="text-sm text-gray-500">
-                Vybraní budou dostávat notifikace při změnách výroků v rámci
-                této diskuze.
-              </Description>
-
               <Select items={people} onChange={console.log} />
             </Field>
 
@@ -219,22 +231,30 @@ export function AdminSourceForm(props: {
 
               <ErrorMessage message={errors.sourceUrl?.message} />
             </Field>
+          </Fieldset>
+
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <div>
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Přepis
+              </Legend>
+
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Je-li dostupný, doporučujeme vyplnit, protože usnaďňuje
+                vytváření výroků označováním v přepisu.
+              </p>
+            </div>
 
             <Field>
               <Label isOptional htmlFor="transcript">
-                Přepis
+                Text přepisu
               </Label>
-
-              <Description className="text-sm text-gray-500">
-                Je-li dostupný, doporučujeme vyplnit, protože usnaďňuje
-                vytváření výroků označováním v přepisu.
-              </Description>
 
               <Textarea
                 id="transcript"
                 {...register('transcript')}
                 rows={10}
-                placeholder="Text přepisu diskuze..."
+                placeholder="Zadejte text přepisu diskuze..."
               />
             </Field>
           </Fieldset>
