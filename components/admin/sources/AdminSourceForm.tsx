@@ -208,8 +208,8 @@ export function AdminSourceForm(props: {
             </Legend>
 
             <p className="mt-1 text-sm leading-6 text-gray-600">
-              Vybraní budou dostávat notifikace při změnách výroků v rámci této
-              diskuze.
+              Vybraní editoři budou dostávat notifikace při změnách výroků v
+              rámci této diskuze.
             </p>
 
             <Field>
