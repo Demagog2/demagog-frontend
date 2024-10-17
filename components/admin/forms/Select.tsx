@@ -18,6 +18,7 @@ type Item = {
 export function Select(props: {
   name: string
   items: Item[]
+  placeholder?: string
   onChange(item: Item): void
 }) {
   const { onChange } = props
@@ -54,6 +55,7 @@ export function Select(props: {
           onChange={(event) => setQuery(event.target.value)}
           onBlur={() => setQuery('')}
           displayValue={(item) => item?.name}
+          placeholder={props.placeholder}
         />
         <ComboboxButton className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
           <ChevronUpDownIcon

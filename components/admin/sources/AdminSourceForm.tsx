@@ -21,6 +21,7 @@ import { Input } from '@/components/admin/forms/Input'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { Textarea } from '@/components/admin/forms/Textarea'
 import { Select } from '@/components/admin/forms/Select'
+import Link from 'next/link'
 
 const people = [
   { value: '1', name: 'Leslie Alexander 1' },
@@ -91,7 +92,13 @@ export function AdminSourceForm(props: {
                   Pořad
                 </Label>
 
-                <Select name="mediumId" items={people} onChange={console.log} />
+                <Select
+                  name="mediumId"
+                  placeholder="Vyberte pořad"
+                  items={people}
+                  onChange={console.log}
+                />
+                <Description>TODO: Doplnit zpravu z odkazem</Description>
               </Field>
 
               <Field>
@@ -101,9 +108,11 @@ export function AdminSourceForm(props: {
 
                 <Select
                   name="mediaPersonalityIds"
+                  placeholder="Vyberte moderátory"
                   items={people}
                   onChange={console.log}
                 />
+                <Description>TODO: Doplnit zpravu z odkazem</Description>
               </Field>
             </div>
 
@@ -132,7 +141,12 @@ export function AdminSourceForm(props: {
                 </p>
               </Description>
 
-              <Select name="speakers" items={people} onChange={console.log} />
+              <Select
+                name="speakers"
+                items={people}
+                onChange={console.log}
+                placeholder="Vyberte řečníky"
+              />
             </Field>
 
             <Field>
