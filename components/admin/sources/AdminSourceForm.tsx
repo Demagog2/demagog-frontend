@@ -116,6 +116,39 @@ export function AdminSourceForm(props: {
             </Field>
 
             <Field>
+              <Label htmlFor="speakers">Speakers</Label>
+
+              <Description className="text-sm text-gray-500" as="div">
+                <p>
+                  Výroky v rámci této diskuze půjde vytvořit jen pro osoby zde
+                  vybrané.
+                </p>
+                <p className="mt-2">
+                  Stranu/skupinu můžete vybrat specificky jen pro tuto diskuzi,
+                  například pokud je řečník součástí jiné na komunální a národní
+                  úrovni a hodí se pro tuto diskuzi vybrat spíše komunální
+                  příslušnost. Podobně lze upravovat i funkci jen pro tuto
+                  diskuzi.
+                </p>
+              </Description>
+
+              <Select name="speakers" items={people} onChange={console.log} />
+            </Field>
+
+            <Field>
+              <Label htmlFor="experts" isOptional>
+                Experts
+              </Label>
+
+              <Description className="text-sm text-gray-500">
+                Vybraní budou dostávat notifikace při změnách výroků v rámci
+                této diskuze.
+              </Description>
+
+              <Select name="experts" items={people} onChange={console.log} />
+            </Field>
+
+            <Field>
               <Label htmlFor="sourceUrl" isOptional>
                 URL zdroje diskuze
               </Label>
