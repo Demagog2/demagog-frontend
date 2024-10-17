@@ -61,6 +61,7 @@ export function AdminSourceForm(props: {
     defaultValues: {
       name: '',
       releasedAt: new Date().toISOString().substring(0, 10),
+      mediaPersonalities: [],
       ...(state.fields ?? {}),
     },
   })

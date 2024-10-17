@@ -23,7 +23,6 @@ export function Multiselect<T extends FieldValues>(props: {
   placeholder?: string
 }) {
   const [query, setQuery] = useState('')
-  const [selectedItem, setSelectedItem] = useState<Item[]>([])
 
   const filteredItems =
     query === ''
@@ -38,24 +37,26 @@ export function Multiselect<T extends FieldValues>(props: {
       name={props.name as any}
       render={({ field }) => (
         <>
-          <input type="hidden" name={field.name} value={field.value} />
           <Combobox
             as="div"
-            value={selectedItem}
-            onChange={(items: Item[]) => {
+            value={field.value}
+            onChange={(ids: string[] | null) => {
               setQuery('')
-              setSelectedItem(items)
-              field.onChange(items.map((item) => item.value))
+              field.onChange(ids)
             }}
             multiple
+            name={field.name}
           >
             <div className="relative mt-2">
-              <ComboboxInput<Item[]>
+              <ComboboxInput<Array<Item['value']>>
                 className="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                 onChange={(event) => setQuery(event.target.value)}
                 onBlur={() => setQuery('')}
-                displayValue={(displayItems) =>
-                  displayItems.map((item) => item.label).join(', ')
+                displayValue={(selectedValues) =>
+                  props.items
+                    .filter((item) => selectedValues?.includes(item.value))
+                    .map((item) => item.label)
+                    .join(',  ')
                 }
                 placeholder={props.placeholder}
               />
@@ -71,7 +72,7 @@ export function Multiselect<T extends FieldValues>(props: {
                   {filteredItems.map((person) => (
                     <ComboboxOption
                       key={person.value}
-                      value={person}
+                      value={person.value}
                       className="group relative cursor-default select-none py-2 pl-8 pr-4 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
                     >
                       <span className="block truncate group-data-[selected]:font-semibold">
