@@ -8,6 +8,8 @@ const AdminSpeakerSelectFragment = gql(`
   fragment AdminSpeakerSelect on Query {
     speakers(limit: 10000) {
       id
+      firstName
+      lastName
       fullName
       body {
         id
@@ -19,9 +21,11 @@ const AdminSpeakerSelectFragment = gql(`
   }
 `)
 
+type SelectedValue = { id: string; firstName: string; lastName: string }
+
 export function AdminSpeakerSelect(props: {
   data: FragmentType<typeof AdminSpeakerSelectFragment>
-  onChange: (id: string) => void
+  onChange: (id: SelectedValue) => void
 }) {
   const { onChange } = props
 
@@ -29,20 +33,24 @@ export function AdminSpeakerSelect(props: {
 
   const items = useMemo(() => {
     return (
-      data.speakers?.map((medium) => ({
-        value: medium.id,
-        label: medium.fullName,
+      data.speakers?.map((speaker) => ({
+        value: {
+          id: speaker.id,
+          firstName: speaker.firstName,
+          lastName: speaker.lastName,
+        },
+        label: speaker.fullName,
       })) ?? []
     )
   }, [data])
 
   const handleChange = useCallback(
-    (item: { value: string } | null) => item && onChange(item.value),
+    (item: { value: SelectedValue } | null) => item && onChange(item.value),
     [onChange]
   )
 
   return (
-    <Select
+    <Select<SelectedValue>
       items={items}
       onChange={handleChange}
       placeholder="Přídat řečníka"

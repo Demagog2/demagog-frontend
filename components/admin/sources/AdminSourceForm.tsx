@@ -245,8 +245,11 @@ export function AdminSourceForm(props: {
 
               <AdminSpeakerSelect
                 data={data}
-                onChange={(speakerId: string) => {
-                  append({ speakerId, firstName: '', lastName: '' })
+                onChange={({ id, ...speaker }) => {
+                  append({
+                    speakerId: id,
+                    ...speaker,
+                  })
                 }}
               />
             </Field>
