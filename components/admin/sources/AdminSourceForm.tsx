@@ -27,6 +27,7 @@ import { AdminExpertsMultiselect } from '@/components/admin/sources/AdminExperts
 import { AdminSpeakerSelect } from '@/components/admin/sources/AdminSpeakerSelect'
 import { AdminBodySelect } from '@/components/admin/sources/AdminBodySelect'
 import { imagePath } from '@/libs/images/path'
+import { TrashIcon } from '@heroicons/react/24/outline'
 
 const AdminSourceFormFragment = gql(`
   fragment AdminSourceForm on Query {
@@ -213,56 +214,51 @@ export function AdminSourceForm(props: {
               </p>
             </div>
 
-            <Field>
-              <Label htmlFor="speakers">Řečníci</Label>
+            <Label htmlFor="speakers">Řečníci</Label>
 
-              {fields.map((field, i) => (
-                <div key={field.id}>
+            {fields.map((field, i) => (
+              <div key={field.id}>
+                <div>
+                  <img src="" alt="" />
+                </div>
+                <div className="space-y-4">
                   <input
                     type="hidden"
                     {...register(`sourceSpeakers.${i}.speakerId`)}
                   />
+                  <div className="flex justify-between">
+                    <p className="text-base font-semibold leading-7 text-gray-900">
+                      {field.firstName + ' ' + field.lastName}
+                    </p>
 
-                  {field.avatar && (
-                    <img src={imagePath(field.avatar)} alt={'Foo'} />
-                  )}
-
-                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                    <Field>
-                      <Label htmlFor={field.firstName}>Křestní jméno</Label>
-                      <Input
-                        id={field.firstName}
-                        type="text"
-                        disabled
-                        {...register(`sourceSpeakers.${i}.firstName`)}
-                      />
-                    </Field>
-                    <Field>
-                      <Label htmlFor={field.lastName}>Příjmení</Label>
-                      <Input
-                        id={field.lastName}
-                        type="text"
-                        {...register(`sourceSpeakers.${i}.lastName`)}
-                      />
-                    </Field>
+                    <Button onClick={() => remove(i)}>
+                      <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
+                    </Button>
                   </div>
-                  <Label htmlFor={field.bodyId}>Strana/skupina</Label>
-                  <AdminBodySelect
-                    id={field.bodyId}
-                    data={data}
-                    onChange={console.log}
-                  />
-                  <Label htmlFor={field.role}>Funkce</Label>
-                  <Input
-                    id={field.role}
-                    type="text"
-                    {...register(`sourceSpeakers.${i}.role`)}
-                  />
 
-                  <Button onClick={() => remove(i)}>Odebrat recnika</Button>
+                  <Field>
+                    <Label htmlFor={`sourceSpeakers.${i}.bodyId`}>
+                      Strana/skupina
+                    </Label>
+                    <AdminBodySelect
+                      id={`sourceSpeakers.${i}.bodyId`}
+                      data={data}
+                      onChange={console.log}
+                    />
+                  </Field>
+                  <Field>
+                    <Label htmlFor={`sourceSpeakers.${i}.role`}>Funkce</Label>
+                    <Input
+                      id={`sourceSpeakers.${i}.role`}
+                      type="text"
+                      {...register(`sourceSpeakers.${i}.role`)}
+                    />
+                  </Field>
                 </div>
-              ))}
-
+              </div>
+            ))}
+            <Field>
+              <Label htmlFor="">Přidat řečníka</Label>
               <AdminSpeakerSelect
                 data={data}
                 onChange={({ id, ...speaker }) => {
