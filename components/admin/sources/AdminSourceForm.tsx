@@ -217,11 +217,30 @@ export function AdminSourceForm(props: {
             <Label htmlFor="speakers">Řečníci</Label>
 
             {fields.map((field, i) => (
-              <div key={field.id}>
-                <div>
-                  <img src="" alt="" />
+              <div
+                key={field.id}
+                className="sm:flex gap-x-4 border-b border-gray-900/10 pb-8"
+              >
+                <div className="h-14 w-14">
+                  {!field.avatar ? (
+                    <span className="inline-block h-14 w-14 overflow-hidden rounded-full bg-gray-100">
+                      <svg
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        className="h-full w-full text-gray-300 object-cover object-center sm:h-full sm:w-full"
+                      >
+                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    </span>
+                  ) : (
+                    <img
+                      src={imagePath(field.avatar)}
+                      alt={field.firstName + ' ' + field.lastName}
+                      className="h-full w-full object-cover object-center rounded-full"
+                    />
+                  )}
                 </div>
-                <div className="space-y-4">
+                <div className="flex-grow">
                   <input
                     type="hidden"
                     {...register(`sourceSpeakers.${i}.speakerId`)}
