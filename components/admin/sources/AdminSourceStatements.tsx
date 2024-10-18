@@ -2,12 +2,14 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminSourceStatementStep } from './AdminSourceStatementStep'
 import { VeracityBadge } from '../veracity/VeracityBadge'
 import { IStatementViewModel } from '@/libs/sources/presenters/SourceDetailPresenter'
+import { AdminUserAvatar } from '../users/AdminUserAvatar'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
     statements(includeUnpublished: true) {
       id
       title
+      commentsCount
       content
       sourceSpeaker {
         fullName
@@ -80,38 +82,53 @@ export function AdminSourceStatements(props: {
                       />
 
                       <p className="mt-3 text-sm text-gray-500">
-                        {statement.content}
+                        &bdquo;{statement.content}&bdquo;
                       </p>
                     </div>
                   </div>
 
-                  {/* <div className="mt-6 lg:col-span-5 lg:mt-0"> */}
-                  {/*   <dl className="grid grid-cols-2 gap-x-6 text-sm"> */}
-                  {/*     <div> */}
-                  {/*       <dt className="font-medium text-gray-900"> */}
-                  {/*         Overovatel */}
-                  {/*       </dt> */}
-                  {/*       <dd className="mt-3 text-gray-500"> */}
-                  {/* <span className="block">{statement.}</span> */}
-                  {/*         </dd> */}
-                  {/*       </div> */}
-                  {/*       <div> */}
-                  {/*         <dt className="font-medium text-gray-900"> */}
-                  {/*           Shipping updates */}
-                  {/*         </dt> */}
-                  {/*         <dd className="mt-3 space-y-3 text-gray-500"> */}
-                  {/*           {/* <p>{statement.email}</p> */}
-                  {/*           {/* <p>{statement.phone}</p> */}
-                  {/*           <button */}
-                  {/*             type="button" */}
-                  {/*             className="font-medium text-indigo-600 hover:text-indigo-500" */}
-                  {/*           > */}
-                  {/*             Edit */}
-                  {/*           </button> */}
-                  {/*         </dd> */}
-                  {/*       </div> */}
-                  {/*     </dl> */}
-                  {/*   </div> */}
+                  <div className="mt-6 lg:col-span-5">
+                    <dl className="grid grid-cols-2 gap-x-6 text-sm">
+                      <div>
+                        <dt className="font-medium text-gray-900">
+                          Ověřovatel
+                        </dt>
+                        <dd className="mt-3 text-gray-500 lg:flex lg:items-center">
+                          {!statement.assessment.evaluator?.fullName ? (
+                            <span className="block">
+                              Výrok nemá ověřovatele
+                            </span>
+                          ) : (
+                            <>
+                              <span className="block lg:mr-2">
+                                <AdminUserAvatar
+                                  fullName={
+                                    statement.assessment.evaluator.fullName
+                                  }
+                                  avatar={statement.assessment.evaluator.avatar}
+                                />
+                              </span>
+                              <span className="block mt-3 lg:mt-0">
+                                {statement.assessment.evaluator?.fullName}
+                              </span>
+                            </>
+                          )}
+                        </dd>
+                      </div>
+                      <div>
+                        <dt className="font-medium text-gray-900">Komentáře</dt>
+                        <dd className="mt-3 space-y-3 text-gray-500">
+                          <p>Počet komentářů: {statement.commentsCount}</p>
+                          <button
+                            type="button"
+                            className="font-medium text-indigo-600 hover:text-indigo-500"
+                          >
+                            Upravit
+                          </button>
+                        </dd>
+                      </div>
+                    </dl>
+                  </div>
                 </div>
 
                 <AdminSourceStatementStep statement={statement} step={i % 5} />

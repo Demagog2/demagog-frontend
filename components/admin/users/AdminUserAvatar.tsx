@@ -36,8 +36,8 @@ export function AdminUserAvatar(props: {
             'ring-2',
             'ring-white',
             {
-              'h-6 w-6': size === 'small',
-              'h-8 w-8': size === 'large',
+              'h-6 w-6 min-w-6': size === 'small',
+              'h-8 w-8 min-w-8': size === 'large',
             }
           )}
           title={props.fullName}
