@@ -25,7 +25,7 @@ type SelectedValue = {
   id: string
   firstName: string
   lastName: string
-  avatar?: string | null
+  avatar?: string
 }
 
 export function AdminSpeakerSelect(props: {
@@ -43,7 +43,7 @@ export function AdminSpeakerSelect(props: {
           id: speaker.id,
           firstName: speaker.firstName,
           lastName: speaker.lastName,
-          avatar: speaker.avatar,
+          avatar: speaker.avatar ?? undefined,
         },
         label: speaker.fullName,
       })) ?? []

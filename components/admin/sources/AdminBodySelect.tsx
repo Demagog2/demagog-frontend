@@ -17,6 +17,7 @@ const AdminBodySelectFragment = gql(`
 `)
 
 export function AdminBodySelect(props: {
+  id?: string
   data: FragmentType<typeof AdminBodySelectFragment>
   onChange: (id: string) => void
 }) {
@@ -40,6 +41,7 @@ export function AdminBodySelect(props: {
 
   return (
     <Select
+      id={props.id}
       items={items}
       onChange={handleChange}
       placeholder="Vyberte stranu"
