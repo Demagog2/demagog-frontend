@@ -15,7 +15,7 @@ import { useRef } from 'react'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { sourceSchema } from '@/libs/sources/source-schema'
 import { createSource } from '@/app/(admin)/admin/sources/actions'
-import { Description, Field, Fieldset, Legend } from '@headlessui/react'
+import { Button, Description, Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '@/components/admin/forms/Label'
 import { Input } from '@/components/admin/forms/Input'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
@@ -238,6 +238,8 @@ export function AdminSourceForm(props: {
                     type="text"
                     {...register(`sourceSpeakers.${i}.role`)}
                   />
+
+                  <Button onClick={() => remove(i)}>Odebrat recnika</Button>
                 </div>
               ))}
 

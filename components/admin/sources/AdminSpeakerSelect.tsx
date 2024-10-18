@@ -45,7 +45,7 @@ export function AdminSpeakerSelect(props: {
     <Select
       items={items}
       onChange={handleChange}
-      placeholder="Vyberte řečníky"
+      placeholder="Přídat řečníka"
     />
   )
 }
