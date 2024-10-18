@@ -8,6 +8,7 @@ const sourceSpeaker = z.object({
   lastName: z.string(),
   role: z.string().optional(),
   bodyId: z.string().optional(),
+  avatar: z.string().optional(),
 })
 
 export const sourceSchema = z.object({

@@ -26,6 +26,7 @@ import { AdminMediaPersonalitiesMultiselect } from '@/components/admin/media-per
 import { AdminExpertsMultiselect } from '@/components/admin/sources/AdminExpertsMultiselect'
 import { AdminSpeakerSelect } from '@/components/admin/sources/AdminSpeakerSelect'
 import { AdminBodySelect } from '@/components/admin/sources/AdminBodySelect'
+import { imagePath } from '@/libs/images/path'
 
 const AdminSourceFormFragment = gql(`
   fragment AdminSourceForm on Query {
@@ -58,6 +59,7 @@ export function AdminSourceForm(props: {
     defaultValues: {
       name: '',
       experts: [],
+      sourceSpeakers: [],
       releasedAt: new Date().toISOString().substring(0, 10),
       mediaPersonalities: [],
       ...(state.fields ?? {}),
@@ -220,6 +222,11 @@ export function AdminSourceForm(props: {
                     type="hidden"
                     {...register(`sourceSpeakers.${i}.speakerId`)}
                   />
+
+                  {field.avatar && (
+                    <img src={imagePath(field.avatar)} alt={'Foo'} />
+                  )}
+
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <Field>
                       <Label htmlFor={field.firstName}>Křestní jméno</Label>

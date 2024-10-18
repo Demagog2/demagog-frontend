@@ -21,7 +21,12 @@ const AdminSpeakerSelectFragment = gql(`
   }
 `)
 
-type SelectedValue = { id: string; firstName: string; lastName: string }
+type SelectedValue = {
+  id: string
+  firstName: string
+  lastName: string
+  avatar?: string | null
+}
 
 export function AdminSpeakerSelect(props: {
   data: FragmentType<typeof AdminSpeakerSelectFragment>
@@ -38,6 +43,7 @@ export function AdminSpeakerSelect(props: {
           id: speaker.id,
           firstName: speaker.firstName,
           lastName: speaker.lastName,
+          avatar: speaker.avatar,
         },
         label: speaker.fullName,
       })) ?? []
