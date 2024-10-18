@@ -74,4 +74,18 @@ describe('Source schema', () => {
       sourceSchema.safeParse({ ...minReqValidFields, mediumId: '123' }).success
     ).toBe(true)
   })
+
+  it('validates sources speakers', () => {
+    expect(
+      sourceSchema.safeParse({ ...minReqValidFields, sourceSpeakers: 3 })
+        .success
+    ).toBe(false)
+
+    expect(
+      sourceSchema.safeParse({
+        ...minReqValidFields,
+        sourceSpeakers: [{ speakerId: '42', firstName: '', lastName: '' }],
+      }).success
+    ).toBe(true)
+  })
 })

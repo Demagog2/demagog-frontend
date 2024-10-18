@@ -8,7 +8,7 @@ import { AdminFormContent } from '@/components/admin/layout/AdminFormContent'
 import { LinkButton } from '@/components/admin/forms/LinkButton'
 import { SubmitButton } from '@/components/admin/forms/SubmitButton'
 import { useFormState } from 'react-dom'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRef } from 'react'
@@ -20,25 +20,20 @@ import { Label } from '@/components/admin/forms/Label'
 import { Input } from '@/components/admin/forms/Input'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { Textarea } from '@/components/admin/forms/Textarea'
-import { Select } from '@/components/admin/forms/Select'
 import { AdminMediumSelect } from '@/components/admin/media/AdminMediumSelect'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminMediaPersonalitiesMultiselect } from '@/components/admin/media-personalities/AdminMediaPersonalitiesMultiselect'
 import { AdminExpertsMultiselect } from '@/components/admin/sources/AdminExpertsMultiselect'
-
-const people = [
-  { value: '1', label: 'Leslie Alexander 1' },
-  { value: '2', label: 'Leslie Alexander 2' },
-  { value: '3', label: 'Leslie Alexander 3' },
-  { value: '4', label: 'Leslie Alexander 4' },
-  { value: '5', label: 'Leslie Alexander 5' },
-]
+import { AdminSpeakerSelect } from '@/components/admin/sources/AdminSpeakerSelect'
+import { AdminBodySelect } from '@/components/admin/sources/AdminBodySelect'
 
 const AdminSourceFormFragment = gql(`
   fragment AdminSourceForm on Query {
     ...AdminMediumSelect
     ...AdminMediaPersonalitySelect
     ...AdminExpertsSelect
+    ...AdminSpeakerSelect
+    ...AdminBodySelect
   }
 `)
 
@@ -67,6 +62,11 @@ export function AdminSourceForm(props: {
       mediaPersonalities: [],
       ...(state.fields ?? {}),
     },
+  })
+
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'sourceSpeakers',
   })
 
   const formRef = useRef<HTMLFormElement>(null)
@@ -214,10 +214,38 @@ export function AdminSourceForm(props: {
             <Field>
               <Label htmlFor="speakers">Řečníci</Label>
 
-              <Select
-                items={people}
-                onChange={console.log}
-                placeholder="Vyberte řečníky"
+              {fields.map((field, i) => (
+                <div key={field.id}>
+                  <input
+                    type="hidden"
+                    {...register(`sourceSpeakers.${i}.speakerId`)}
+                  />
+
+                  <Input
+                    type="text"
+                    disabled
+                    {...register(`sourceSpeakers.${i}.firstName`)}
+                  />
+
+                  <Input
+                    type="text"
+                    {...register(`sourceSpeakers.${i}.lastName`)}
+                  />
+
+                  <AdminBodySelect data={data} onChange={console.log} />
+
+                  <Input
+                    type="text"
+                    {...register(`sourceSpeakers.${i}.role`)}
+                  />
+                </div>
+              ))}
+
+              <AdminSpeakerSelect
+                data={data}
+                onChange={(speakerId: string) => {
+                  append({ speakerId, firstName: '', lastName: '' })
+                }}
               />
             </Field>
           </Fieldset>
