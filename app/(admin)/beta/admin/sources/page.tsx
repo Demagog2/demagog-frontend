@@ -101,7 +101,9 @@ export default async function AdminSources(props: PropsWithSearchParams) {
         <div className="sm:flex">
           <AdminSearch label="Hledat diskuzi" defaultValue={term} />
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
-            <CreateButton href="/admin/sources/new">Nová diskuze</CreateButton>
+            <CreateButton href="/beta/admin/sources/new">
+              Nová diskuze
+            </CreateButton>
           </div>
         </div>
       </AdminPageHeader>
