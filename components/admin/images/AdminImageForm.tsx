@@ -1,6 +1,6 @@
 'use client'
 
-import { FormState } from '@/app/(admin)/admin/tags/actions'
+import { FormState } from '@/app/(admin)/beta/admin/tags/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useRef } from 'react'
 import { useFormState } from 'react-dom'
@@ -42,7 +42,7 @@ export function AdminImageForm(props: {
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
           <AdminFormActions>
-            <LinkButton href="/admin/images">Zpět</LinkButton>
+            <LinkButton href="/beta/admin/images">Zpět</LinkButton>
 
             <SubmitButton />
           </AdminFormActions>

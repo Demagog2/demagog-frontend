@@ -30,7 +30,7 @@ export default function NewArticleDropdown() {
         <div className="py-1">
           <MenuItem>
             <Link
-              href="/admin/articles/new-single-statement"
+              href="/beta/admin/articles/new-single-statement"
               className="group flex items-center px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
             >
               <ChatBubbleLeftIcon
@@ -42,7 +42,7 @@ export default function NewArticleDropdown() {
           </MenuItem>
           <MenuItem>
             <Link
-              href="/admin/articles/new"
+              href="/beta/admin/articles/new"
               className="group flex items-center px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
             >
               <NewspaperIcon

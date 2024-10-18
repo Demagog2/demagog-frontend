@@ -43,7 +43,7 @@ export async function createArticle(
     })
 
     if (data?.createArticle?.article) {
-      redirect(`/admin/articles/${data?.createArticle?.article.id}`)
+      redirect(`/beta/admin/articles/${data?.createArticle?.article.id}`)
     }
   }
 
@@ -83,7 +83,7 @@ export async function createSingleStatementArticle(
     })
 
     if (data?.createArticle?.article) {
-      redirect(`/admin/articles/${data?.createArticle?.article.id}`)
+      redirect(`/beta/admin/articles/${data?.createArticle?.article.id}`)
     }
   }
 
@@ -130,7 +130,7 @@ export async function updateArticle(
     })
 
     if (data?.updateArticle?.article) {
-      redirect(`/admin/articles/${data?.updateArticle?.article.id}`)
+      redirect(`/beta/admin/articles/${data?.updateArticle?.article.id}`)
     }
   }
 
@@ -174,7 +174,7 @@ export async function updateArticleSingleStatement(
     console.debug(data)
 
     if (data?.updateArticle?.article) {
-      redirect(`/admin/articles/${data?.updateArticle?.article.id}`)
+      redirect(`/beta/admin/articles/${data?.updateArticle?.article.id}`)
     }
   }
 
@@ -206,6 +206,6 @@ export async function deleteArticle(id: string) {
   })
 
   if (data?.deleteArticle?.id) {
-    redirect(`/admin/articles`)
+    redirect(`/beta/admin/articles`)
   }
 }

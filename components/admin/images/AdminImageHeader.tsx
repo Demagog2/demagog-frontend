@@ -32,7 +32,7 @@ export function AdminImageHeader(props: {
             <li>
               <div className="flex">
                 <Link
-                  href="/admin/images"
+                  href="/beta/admin/images"
                   className="text-sm font-medium text-gray-500 hover:text-gray-700"
                 >
                   Obrázky

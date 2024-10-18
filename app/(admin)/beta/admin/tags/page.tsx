@@ -9,7 +9,6 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
-import { MagnifyingGlassIcon, PlusCircleIcon } from '@heroicons/react/20/solid'
 import { Metadata } from 'next'
 import Link from 'next/link'
 import { AdminTagType } from '@/components/admin/tags/AdminTagType'
@@ -67,7 +66,9 @@ export default async function AdminTags(props: PropsWithSearchParams) {
           <AdminSearch label="Hledat štítek" defaultValue={term} />
 
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
-            <CreateButton href="/admin/tags/new">Přidat štítek</CreateButton>
+            <CreateButton href="/beta/admin/tags/new">
+              Přidat štítek
+            </CreateButton>
           </div>
         </div>
       </AdminPageHeader>
@@ -104,7 +105,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
                   <td>{node.allStatementsCount}</td>
                   <td>
                     <Link
-                      href={`/admin/tags/${node.id}/edit`}
+                      href={`/beta/admin/tags/${node.id}/edit`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Upravit

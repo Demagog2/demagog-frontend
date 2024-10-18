@@ -23,7 +23,7 @@ export function AdminArticleTags(
     <>
       {article.articleTags.map((tag) => (
         <Link
-          href={`/admin/tags/${tag.id}`}
+          href={`/beta/admin/tags/${tag.id}`}
           key={tag.id}
           className="mt-2 flex items-center text-sm text-gray-500"
         >

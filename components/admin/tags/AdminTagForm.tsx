@@ -1,6 +1,6 @@
 'use client'
 
-import { FormState } from '@/app/(admin)/admin/tags/actions'
+import { FormState } from '@/app/(admin)/beta/admin/tags/actions'
 import { schema } from '@/libs/tags/schema'
 import { Field, Select } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -58,7 +58,7 @@ export function AdminTagForm(props: {
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />
           <AdminFormActions>
-            <LinkButton href="/admin/tags">Zpět</LinkButton>
+            <LinkButton href="/beta/admin/tags">Zpět</LinkButton>
 
             <SubmitButton />
           </AdminFormActions>

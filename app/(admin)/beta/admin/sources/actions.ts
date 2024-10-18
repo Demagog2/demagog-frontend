@@ -42,7 +42,7 @@ export async function createSource(
     })
 
     if (data?.createSource?.source) {
-      redirect(`/admin/sources/${data?.createSource?.source.id}`)
+      redirect(`/beta/admin/sources/${data?.createSource?.source.id}`)
     }
   }
 

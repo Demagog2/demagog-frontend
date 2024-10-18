@@ -72,7 +72,9 @@ export default async function AdminImages(props: PropsWithSearchParams) {
           </AdminSearch>
 
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
-            <CreateButton href="/admin/images/new">Nový obrázek</CreateButton>
+            <CreateButton href="/beta/admin/images/new">
+              Nový obrázek
+            </CreateButton>
           </div>
         </div>
       </AdminPageHeader>

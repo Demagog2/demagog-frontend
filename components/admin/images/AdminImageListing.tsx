@@ -46,7 +46,7 @@ export function ImagesListing(props: {
               <div key={contentImage.id}>
                 <div className="relative">
                   <div className="relative h-72 w-full overflow-hidden rounded-lg">
-                    <Link href={`/admin/images/${contentImage.id}`}>
+                    <Link href={`/beta/admin/images/${contentImage.id}`}>
                       <img
                         alt={contentImage.name}
                         src={imagePath(contentImage.image)}
