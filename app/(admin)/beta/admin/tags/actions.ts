@@ -57,7 +57,7 @@ export async function createTag(
     })
 
     if (data?.createTag?.tag) {
-      redirect(`/admin/tags/${data?.createTag?.tag.id}`)
+      redirect(`/beta/admin/tags/${data?.createTag?.tag.id}`)
     }
   }
 
@@ -91,7 +91,7 @@ export async function updateTag(
     })
 
     if (data?.updateTag?.__typename === 'UpdateTagSuccess') {
-      return redirect(`/admin/tags/${data?.updateTag?.tag.id}`)
+      return redirect(`/beta/admin/tags/${data?.updateTag?.tag.id}`)
     }
 
     return {

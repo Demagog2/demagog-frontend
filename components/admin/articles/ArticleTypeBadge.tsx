@@ -31,7 +31,7 @@ export function ArticleTypeBadge(props: {
   )
 
   return (
-    <Link href={`/admin/articles?type=${article.articleType}`}>
+    <Link href={`/beta/admin/articles?type=${article.articleType}`}>
       <span className={className}>
         {ARTICLE_TYPE_LABEL[article.articleType]}
       </span>

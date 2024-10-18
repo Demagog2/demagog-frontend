@@ -1,6 +1,6 @@
 import { Metadata } from 'next'
 import { AdminImageForm } from '@/components/admin/images/AdminImageForm'
-import { createImage } from '@/app/(admin)/admin/images/actions'
+import { createImage } from '@/app/(admin)/beta/admin/images/actions'
 import { getMetadataTitle } from '@/libs/metadata'
 
 export const metadata: Metadata = {

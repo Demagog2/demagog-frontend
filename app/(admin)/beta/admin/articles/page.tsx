@@ -93,7 +93,7 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
               return (
                 <tr key={edge.node.id}>
                   <td>
-                    <Link href={`/admin/articles/${edge.node.id}`}>
+                    <Link href={`/beta/admin/articles/${edge.node.id}`}>
                       {edge.node.title}
                     </Link>
                   </td>
@@ -108,7 +108,7 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                   </td>
                   <td>
                     <Link
-                      href={`/admin/articles/${edge.node.id}/edit`}
+                      href={`/beta/admin/articles/${edge.node.id}/edit`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Upravit

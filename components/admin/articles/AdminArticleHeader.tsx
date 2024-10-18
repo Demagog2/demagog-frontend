@@ -38,7 +38,7 @@ export function AdminArticleHeader(props: {
             <li>
               <div className="flex">
                 <Link
-                  href="/admin/articles"
+                  href="/beta/admin/articles"
                   className="text-sm font-medium text-gray-500 hover:text-gray-700"
                 >
                   Články
@@ -52,7 +52,7 @@ export function AdminArticleHeader(props: {
                   className="h-5 w-5 flex-shrink-0 text-gray-400"
                 />
                 <Link
-                  href="/admin/articles"
+                  href="/beta/admin/articles"
                   className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
                 >
                   Komentáře
@@ -80,7 +80,7 @@ export function AdminArticleHeader(props: {
       <div className="mt-5 flex lg:ml-4 lg:mt-0">
         <span className="hidden sm:block">
           <Link
-            href={`/admin/articles/${article.id}/edit`}
+            href={`/beta/admin/articles/${article.id}/edit`}
             className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           >
             <PencilIcon
@@ -124,7 +124,7 @@ export function AdminArticleHeader(props: {
           >
             <MenuItem>
               <Link
-                href={`/admin/articles/${article.id}/edit`}
+                href={`/beta/admin/articles/${article.id}/edit`}
                 className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
               >
                 Upravit

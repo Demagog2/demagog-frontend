@@ -148,7 +148,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
               return (
                 <tr key={source.id}>
                   <td>
-                    <Link href={`/admin/sources/${source.id}`}>
+                    <Link href={`/beta/admin/sources/${source.id}`}>
                       {source.name}
                     </Link>
 
@@ -223,7 +223,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
                   </td>
                   <td>
                     <Link
-                      href={`/admin/sources/${source.id}`}
+                      href={`/beta/admin/sources/${source.id}`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Detail

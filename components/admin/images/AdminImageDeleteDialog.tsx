@@ -11,7 +11,7 @@ import {
 import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import classNames from 'classnames'
-import { deleteImage } from '@/app/(admin)/admin/images/actions'
+import { deleteImage } from '@/app/(admin)/beta/admin/images/actions'
 import { truncate } from 'lodash'
 
 const AdminImageDeleteDialogFragment = gql(`

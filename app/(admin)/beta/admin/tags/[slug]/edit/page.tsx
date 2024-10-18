@@ -1,7 +1,7 @@
 import { serverQuery } from '@/libs/apollo-client-server'
 import { gql } from '@/__generated__'
 import { AdminTagForm } from '@/components/admin/tags/AdminTagForm'
-import { updateTag } from '@/app/(admin)/admin/tags/actions'
+import { updateTag } from '@/app/(admin)/beta/admin/tags/actions'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 import { notFound } from 'next/navigation'

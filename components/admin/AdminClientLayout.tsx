@@ -49,60 +49,60 @@ import { UserMenu } from '@/components/admin/UserMenu'
 import classNames from 'classnames'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { usePathname } from 'next/navigation'
-import { hideAdminBanner } from '@/app/(admin)/admin/actions'
+import { hideAdminBanner } from '@/app/(admin)/beta/admin/actions'
 
 const content = [
   {
     name: 'Články',
-    href: '/admin/articles',
+    href: '/beta/admin/articles',
     icon: NewspaperIcon,
   },
   {
     name: 'Diskuze',
-    href: '/admin/sources',
+    href: '/beta/admin/sources',
     icon: ChatBubbleLeftRightIcon,
   },
-  { name: 'Štítky', href: '/admin/tags', icon: HashtagIcon },
-  { name: 'Obrázky', href: '/admin/images', icon: PhotoIcon },
-  { name: 'Statistiky', href: '/admin/overall-stats', icon: ChartBarIcon },
-  { name: 'Tagy', href: '/admin/article-tags', icon: TagIcon },
-  { name: 'Workshopy', href: '/admin/workshops', icon: BookOpenIcon },
+  { name: 'Štítky', href: '/beta/admin/tags', icon: HashtagIcon },
+  { name: 'Obrázky', href: '/beta/admin/images', icon: PhotoIcon },
+  { name: 'Statistiky', href: '/beta/admin/overall-stats', icon: ChartBarIcon },
+  { name: 'Tagy', href: '/beta/admin/article-tags', icon: TagIcon },
+  { name: 'Workshopy', href: '/beta/admin/workshops', icon: BookOpenIcon },
 ]
 
 const context = [
   {
     name: 'Lidé',
-    href: '/admin/speakers',
+    href: '/beta/admin/speakers',
     icon: UserIcon,
   },
   {
     name: 'Strany a skupiny',
-    href: '/admin/bodies',
+    href: '/beta/admin/bodies',
     icon: UserGroupIcon,
   },
   {
     name: 'Pořady',
-    href: '/admin/media',
+    href: '/beta/admin/media',
     icon: FilmIcon,
   },
   {
     name: 'Moderátoři',
-    href: '/admin/moderators',
+    href: '/beta/admin/moderators',
     icon: MicrophoneIcon,
   },
 ]
 
 const aboutUs = [
-  { name: 'Tým', href: '/admin/users', icon: SparklesIcon },
+  { name: 'Tým', href: '/beta/admin/users', icon: SparklesIcon },
 
   {
     name: 'Dostupnost',
-    href: '/admin/availability',
+    href: '/beta/admin/availability',
     icon: CheckIcon,
   },
   {
     name: 'Stránka o nás',
-    href: '/admin/accordion-sections',
+    href: '/beta/admin/accordion-sections',
     icon: IdentificationIcon,
   },
 ]

@@ -46,7 +46,7 @@ export async function createImage(
 
     if (data?.createContentImage?.__typename === 'CreateContentImageSuccess') {
       return redirect(
-        `/admin/images/${data?.createContentImage?.contentImage.id}`
+        `/beta/admin/images/${data?.createContentImage?.contentImage.id}`
       )
     }
 
@@ -83,6 +83,6 @@ export async function deleteImage(id: string) {
   })
 
   if (data?.deleteContentImage?.id) {
-    redirect(`/admin/images`)
+    redirect(`/beta/admin/images`)
   }
 }

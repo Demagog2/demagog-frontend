@@ -10,7 +10,7 @@ import {
 } from '@headlessui/react'
 import { ExclamationTriangleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { deleteArticle } from '@/app/(admin)/admin/articles/actions'
+import { deleteArticle } from '@/app/(admin)/beta/admin/articles/actions'
 import classNames from 'classnames'
 
 const AdminArticleDeleteDialogFragment = gql(`

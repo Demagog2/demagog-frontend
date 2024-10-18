@@ -28,7 +28,7 @@ import { z } from 'zod'
 import { schema } from '@/libs/articles/schema'
 import { useRef } from 'react'
 import { useFormState } from 'react-dom'
-import { FormState } from '@/app/(admin)/admin/articles/actions'
+import { FormState } from '@/app/(admin)/beta/admin/articles/actions'
 import { AdminSourcesList } from '@/components/admin/articles/AdminSourcesList'
 import { ApolloProvider } from '@apollo/client'
 import { createClient } from '@/libs/apollo-client'
@@ -233,7 +233,7 @@ export function AdminArticleForm(props: {
           <AdminPageTitle title={props.title} description={props.description} />
 
           <AdminFormActions>
-            <LinkButton href="/admin/articles">Zpět</LinkButton>
+            <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
             <SubmitButton isSubmitting={isSubmitting} />
           </AdminFormActions>

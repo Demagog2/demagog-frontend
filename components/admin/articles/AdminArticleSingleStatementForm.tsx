@@ -13,7 +13,7 @@ import { Input } from '../forms/Input'
 import { AdminArticleIllustrationInput } from './AdminArticleIllustrationInput'
 import { SwitchField } from '../forms/SwitchField'
 import { Switch } from '../forms/Switch'
-import { FormState } from '@/app/(admin)/admin/articles/actions'
+import { FormState } from '@/app/(admin)/beta/admin/articles/actions'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminArticleIllustrationDialog } from '@/components/admin/articles/AdminArticleIllustrationDialog'
 import { LinkButton } from '@/components/admin/forms/LinkButton'
@@ -81,7 +81,7 @@ export function AdminArticleSingleStatementForm(props: {
             />
 
             <AdminFormActions>
-              <LinkButton href="/admin/articles">Zpět</LinkButton>
+              <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
               <SubmitButton />
             </AdminFormActions>
