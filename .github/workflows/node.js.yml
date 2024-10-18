@@ -4,8 +4,8 @@
 name: Node.js CI
 
 env:
-  NEXT_PUBLIC_GRAPHQL_URL: https://demagog.cz/graphql
-  NEXT_PUBLIC_MEDIA_URL: https://demagog.cz/
+  NEXT_PUBLIC_GRAPHQL_URL: https://api.demagog.cz/graphql
+  NEXT_PUBLIC_MEDIA_URL: https://api..demagog.cz
 
 on:
   push:
