@@ -220,21 +220,34 @@ export function AdminSourceForm(props: {
                     type="hidden"
                     {...register(`sourceSpeakers.${i}.speakerId`)}
                   />
-
-                  <Input
-                    type="text"
-                    disabled
-                    {...register(`sourceSpeakers.${i}.firstName`)}
+                  <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+                    <Field>
+                      <Label htmlFor={field.firstName}>Křestní jméno</Label>
+                      <Input
+                        id={field.firstName}
+                        type="text"
+                        disabled
+                        {...register(`sourceSpeakers.${i}.firstName`)}
+                      />
+                    </Field>
+                    <Field>
+                      <Label htmlFor={field.lastName}>Příjmení</Label>
+                      <Input
+                        id={field.lastName}
+                        type="text"
+                        {...register(`sourceSpeakers.${i}.lastName`)}
+                      />
+                    </Field>
+                  </div>
+                  <Label htmlFor={field.bodyId}>Strana/skupina</Label>
+                  <AdminBodySelect
+                    id={field.bodyId}
+                    data={data}
+                    onChange={console.log}
                   />
-
+                  <Label htmlFor={field.role}>Funkce</Label>
                   <Input
-                    type="text"
-                    {...register(`sourceSpeakers.${i}.lastName`)}
-                  />
-
-                  <AdminBodySelect data={data} onChange={console.log} />
-
-                  <Input
+                    id={field.role}
                     type="text"
                     {...register(`sourceSpeakers.${i}.role`)}
                   />
