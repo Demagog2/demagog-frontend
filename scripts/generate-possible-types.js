@@ -1,7 +1,7 @@
 const fetch = require('cross-fetch')
 const fs = require('fs')
 
-fetch(`https://demagog.cz/graphql`, {
+fetch(`https://api.demagog.cz/graphql`, {
   method: 'POST',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({
