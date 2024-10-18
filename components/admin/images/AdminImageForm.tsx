@@ -12,6 +12,7 @@ import { contentImageSchema } from '@/libs/images/schema'
 import { AdminImageInput } from '@/components/admin/images/AdminImageInput'
 import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
+import { AdminFormContent } from '../layout/AdminFormContent'
 import { AdminFormActions } from '../layout/AdminFormActions'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 
@@ -47,13 +48,13 @@ export function AdminImageForm(props: {
           </AdminFormActions>
         </AdminFormHeader>
 
-        <div className="mt-6 flex gap-5 pb-12">
+        <AdminFormContent>
           <div className="grow gap-y-5 grid grid-cols-1">
             {state.error && <div className="text-red">{state.error}</div>}
 
             <AdminImageInput control={control} name="image" />
           </div>
-        </div>
+        </AdminFormContent>
       </div>
     </form>
   )

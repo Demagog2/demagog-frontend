@@ -23,6 +23,7 @@ import { AdminSearch } from '@/components/admin/AdminSearch'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { AdminPageTabs } from '@/components/admin/layout/AdminPageTabs'
 import { AdminUserAvatar } from '@/components/admin/users/AdminUserAvatar'
+import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam diskuzí', 'Administrace'),
@@ -99,6 +100,9 @@ export default async function AdminSources(props: PropsWithSearchParams) {
         />
         <div className="sm:flex">
           <AdminSearch label="Hledat diskuzi" defaultValue={term} />
+          <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
+            <CreateButton href="/admin/sources/new">Nová diskuze</CreateButton>
+          </div>
         </div>
       </AdminPageHeader>
       <AdminPageContent>

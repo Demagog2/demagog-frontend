@@ -14,7 +14,6 @@ import { AdminArticleIllustrationInput } from './AdminArticleIllustrationInput'
 import { SwitchField } from '../forms/SwitchField'
 import { Switch } from '../forms/Switch'
 import { FormState } from '@/app/(admin)/admin/articles/actions'
-import { invariant } from '@apollo/client/utilities/globals'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminArticleIllustrationDialog } from '@/components/admin/articles/AdminArticleIllustrationDialog'
 import { LinkButton } from '@/components/admin/forms/LinkButton'
@@ -22,7 +21,6 @@ import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 import { AdminFormActions } from '../layout/AdminFormActions'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
-import { schema } from '@/libs/tags/schema'
 
 const AdminArticleSingleStatementFormFragment = gql(`
   fragment AdminArticleSingleStatementFormFields on Article {
