@@ -24,6 +24,7 @@ import {
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 import { pluralize } from '@/libs/pluralize'
+import { notFound } from 'next/navigation'
 
 const PAGE_SIZE = 10
 
@@ -31,13 +32,13 @@ export async function generateMetadata(props: {
   params: { slug: string }
 }): Promise<Metadata> {
   const {
-    data: { speaker },
+    data: { speakerV2: speaker },
   } = await query({
     query: gql(`
         query SpeakerDetailMetadata(
-          $id: Int!
+          $id: ID!
         ) {
-          speaker(id: $id) {
+          speakerV2(id: $id) {
             fullName
             body {
               shortName
@@ -47,9 +48,13 @@ export async function generateMetadata(props: {
         }
       `),
     variables: {
-      id: parseParamId(props.params.slug),
+      id: String(parseParamId(props.params.slug)),
     },
   })
+
+  if (!speaker) {
+    notFound()
+  }
 
   return {
     title: getMetadataTitle(
@@ -71,17 +76,17 @@ export default async function Speaker(
   const page = parsePage(props.searchParams.page)
 
   const {
-    data: { speaker },
+    data: { speakerV2: speaker },
   } = await query({
     query: gql(`
         query SpeakerDetailQuery(
-          $id: Int!
+          $id: ID!
           $term: String!
           $limit: Int
           $offset: Int
           $filters: StatementFilterInput
         ) {
-          speaker(id: $id) {
+          speakerV2(id: $id) {
             id
             fullName
             avatar(size: detail)
@@ -116,7 +121,7 @@ export default async function Speaker(
         }
       `),
     variables: {
-      id: parseParamId(props.params.slug),
+      id: String(parseParamId(props.params.slug)),
       offset: (page - 1) * PAGE_SIZE,
       limit: PAGE_SIZE,
       term,
@@ -127,6 +132,10 @@ export default async function Speaker(
       },
     },
   })
+
+  if (!speaker) {
+    notFound()
+  }
 
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
