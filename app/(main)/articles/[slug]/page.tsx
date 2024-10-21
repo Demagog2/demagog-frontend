@@ -11,16 +11,17 @@ import { Iframely } from '@/components/site/Iframely'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { truncate } from 'lodash'
 import { imagePath } from '@/libs/images/path'
+import { notFound } from 'next/navigation'
 
 export async function generateMetadata(props: {
   params: { slug: string }
 }): Promise<Metadata> {
   const {
-    data: { article },
+    data: { articleV2: article },
   } = await query({
     query: gql(`
        query ArticleMetadata($id: ID!) {
-          article(id: $id) {
+          articleV2(id: $id) {
             title
             perex
             illustration(size: medium)
@@ -31,6 +32,10 @@ export async function generateMetadata(props: {
       id: props.params.slug,
     },
   })
+
+  if (!article) {
+    notFound()
+  }
 
   const title = getMetadataTitle(article.title)
   const description = truncate(article.perex ?? '', { length: 230 })
@@ -61,11 +66,11 @@ export default async function Article(props: { params: { slug: string } }) {
   const { slug } = props.params
 
   const {
-    data: { article },
+    data: { articleV2: article },
   } = await query({
     query: gql(`
-      query ArticleDetail($slug: String!) {
-        article(slug: $slug) {
+      query ArticleDetail($slug: ID!) {
+        articleV2(id: $slug) {
           title
           articleType
           perex
@@ -85,6 +90,10 @@ export default async function Article(props: { params: { slug: string } }) {
       slug: slug,
     },
   })
+
+  if (!article) {
+    notFound()
+  }
 
   // TODO: @vaclavbohac Refactor once segments field is a union
   if (article.articleType === ArticleTypeEnum.SingleStatement) {
