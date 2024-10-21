@@ -5,6 +5,7 @@ import { AdminArticleContent } from '@/components/admin/articles/AdminArticleCon
 import { serverQuery } from '@/libs/apollo-client-server'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
+import { notFound } from 'next/navigation'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -23,6 +24,10 @@ export async function generateMetadata(props: {
       id: props.params.slug,
     },
   })
+
+  if (!article) {
+    notFound()
+  }
 
   return {
     title: getMetadataTitle(article.title, 'Administrace'),
@@ -47,6 +52,10 @@ export default async function AdminArticle(props: {
       id: props.params.slug,
     },
   })
+
+  if (!data) {
+    notFound()
+  }
 
   return (
     <>
