@@ -21,20 +21,17 @@ const AdminMediumDeleteDialogFragment = gql(`
 `)
 
 export default function AdminMediumDeleteDialog(props: {
-  mediaPersonality: FragmentType<typeof AdminMediumDeleteDialogFragment>
+  medium: FragmentType<typeof AdminMediumDeleteDialogFragment>
   className?: string
 }) {
-  const mediaPersonality = useFragment(
-    AdminMediumDeleteDialogFragment,
-    props.mediaPersonality
-  )
+  const medium = useFragment(AdminMediumDeleteDialogFragment, props.medium)
 
   const [open, setOpen] = useState(false)
 
   const handleDeleteMedium = useCallback(async () => {
-    await deleteMedium(mediaPersonality.id)
+    await deleteMedium(medium.id)
     setOpen(false)
-  }, [mediaPersonality, setOpen])
+  }, [medium, setOpen])
 
   return (
     <>
@@ -86,7 +83,7 @@ export default function AdminMediumDeleteDialog(props: {
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
                       Jste si opravdu jisti, že chcete smazat pořad &quot;
-                      {mediaPersonality.name}&quot;? Tato akce je nevratná.
+                      {medium.name}&quot;? Tato akce je nevratná.
                     </p>
                   </div>
                 </div>

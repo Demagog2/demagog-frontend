@@ -13,7 +13,7 @@ import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import Link from 'next/link'
 import { AdminPagination } from '@/components/admin/AdminPagination'
-import AdminMediumDelete from '@/components/admin/media/AdminMediumDelete'
+import AdminMediumDeleteDialog from '@/components/admin/media/AdminMediumDeleteDialog'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam pořadů', 'Administrace'),
@@ -32,6 +32,7 @@ export default async function AdminMedia(props: PropsWithSearchParams) {
             node{
               id
               name
+             ...AdminMediumDeleteDialog
             }
           }
             pageInfo{
@@ -94,7 +95,7 @@ export default async function AdminMedia(props: PropsWithSearchParams) {
                       Upravit
                     </Link>
 
-                    <AdminMediumDelete medium={edge.node} />
+                    <AdminMediumDeleteDialog medium={edge.node} />
                   </td>
                 </tr>
               )
