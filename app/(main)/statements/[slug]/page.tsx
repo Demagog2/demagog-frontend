@@ -11,18 +11,19 @@ import truncate from '@/libs/truncate'
 import { Metadata } from 'next'
 import Image from 'next/image'
 import { DefaultMetadata } from '@/libs/constants/metadata'
+import { notFound } from 'next/navigation'
 
 export async function generateMetadata(props: {
   params: { slug: string }
 }): Promise<Metadata> {
   const {
-    data: { statement },
+    data: { statementV2: statement },
   } = await query({
     query: gql(`
       query StatementDetailMetadata(
         $id: Int!
       ) {
-        statement(id: $id) {
+        statementV2(id: $id) {
           content
           sourceSpeaker {
             fullName
@@ -42,6 +43,10 @@ export async function generateMetadata(props: {
       id: parseParamId(props.params.slug),
     },
   })
+
+  if (!statement) {
+    notFound()
+  }
 
   const speakerName = statement.sourceSpeaker.body
     ? `${statement.sourceSpeaker.fullName} (${statement.sourceSpeaker.body.shortName})`
@@ -72,11 +77,11 @@ export default async function Statement(props: { params: { slug: string } }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
   const {
-    data: { statement },
+    data: { statementV2: statement },
   } = await query({
     query: gql(`
       query StatementDetail($id: Int!) {
-        statement(id: $id) {
+        statementV2(id: $id) {
           sourceSpeaker {
             fullName
             speaker {
@@ -120,6 +125,10 @@ export default async function Statement(props: { params: { slug: string } }) {
       id: parseInt(props.params.slug, 10),
     },
   })
+
+  if (!statement) {
+    notFound()
+  }
 
   return (
     <div className="container">
