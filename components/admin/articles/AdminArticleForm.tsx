@@ -326,8 +326,9 @@ export function AdminArticleForm(props: {
                         </>
                       )}
                     />
-
-                    <Button onClick={() => remove(index)}>Odebrat</Button>
+                    <div className="rounded-lg bg-white shadow px-4 py-4 sm:px-6">
+                      <Button onClick={() => remove(index)}>Odebrat</Button>
+                    </div>
                   </>
                 ) : (
                   <ApolloProvider client={createClient()}>
