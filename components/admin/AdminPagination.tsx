@@ -1,4 +1,4 @@
-"use client"
+'use client'
 
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
@@ -17,34 +17,28 @@ export function AdminPagination(props: { pageInfo: PageInfo }) {
 
   const { startCursor, endCursor } = props.pageInfo
 
-  const beforeLink = useMemo(
-    () => {
-      const params = new URLSearchParams(searchParams ?? '')
-      params.delete('after');
-      params.set('before', startCursor ?? '')
+  const beforeLink = useMemo(() => {
+    const params = new URLSearchParams(searchParams ?? '')
+    params.delete('after')
+    params.set('before', startCursor ?? '')
 
-      return `${pathname}?${params.toString()}`
-    },
-    [pathname, searchParams, startCursor]
-  )
+    return `${pathname}?${params.toString()}`
+  }, [pathname, searchParams, startCursor])
 
-  const afterLink = useMemo(
-    () => {
-      const params = new URLSearchParams(searchParams ?? '')
-      params.delete('before');
-      params.set('after', endCursor ?? '')
+  const afterLink = useMemo(() => {
+    const params = new URLSearchParams(searchParams ?? '')
+    params.delete('before')
+    params.set('after', endCursor ?? '')
 
-      return `${pathname}?${params.toString()}`
-    },
-    [pathname, searchParams, endCursor]
-  )
+    return `${pathname}?${params.toString()}`
+  }, [pathname, searchParams, endCursor])
 
   return (
     <nav
       aria-label="Pagination"
       className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
     >
-      <div className="flex flex-1 justify-between sm:justify-end">
+      <div className="flex flex-1 justify-between sm:justify-end mt-2">
         {props.pageInfo.hasPreviousPage && (
           <Link
             href={beforeLink}
