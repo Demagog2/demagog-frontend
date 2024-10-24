@@ -150,7 +150,7 @@ export function AdminSourceForm(props: {
                 <Description className="text-sm text-gray-500 mt-1">
                   Chybí ti v seznamu pořad? Přidej si ho přes agendu{' '}
                   <a
-                    href="https://demagog.cz/admin/media"
+                    href="https://demagog.cz/beta/admin/media"
                     className="underline"
                   >
                     Pořady
@@ -173,7 +173,7 @@ export function AdminSourceForm(props: {
                 <Description className="text-sm text-gray-500 mt-1">
                   Chybí ti v seznamu moderátoři? Přidej si je přes agendu{' '}
                   <a
-                    href="https://demagog.cz/admin/media-personalities"
+                    href="https://demagog.cz/beta/admin/moderators"
                     className="underline"
                   >
                     Moderátoři
