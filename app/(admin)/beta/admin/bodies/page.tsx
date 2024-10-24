@@ -11,6 +11,8 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Link } from 'ckeditor5'
 import { Metadata } from 'next'
+import { TrashIcon } from '@heroicons/react/24/outline'
+import { Button } from '@headlessui/react'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Strany a skupiny', 'Administrace'),
@@ -37,51 +39,55 @@ export default async function Bodies(props: PropsWithSearchParams) {
           </div>
         </div>
       </AdminPageHeader>
-
       <AdminPageContent>
-        {/*
-        <table className="admin-content-table">
-          <thead>
-            <tr>
-              <th scope="col">Název</th>
-              <th scope="col">
-                <span className="sr-only">Edit</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            
-            {data..edges?.map((edge) => {
-              if (!edge?.node) {
-                return null
-              }
+        <section className="mt-6">
+          <div className="space-y-8">
+            <div
+              key="--TODO--"
+              className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
+            >
+              <div className="px-4 py-6 sm:px-6 lg:gap-x-8 lg:p-8">
+                <div className="sm:flex">
+                  <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
+                    <img
+                      alt="fullname"
+                      src="https://placecats.com/300/200?fit=contain&position=top"
+                      className="h-full w-full object-cover object-center sm:h-full sm:w-full"
+                    />
+                  </div>
 
-              return (
-                <tr key={edge.node.id}>
-                  <td>
-                    <Link href={`/beta/admin/bodies/${edge.node.id}`}>
-                      {edge.node.name}
-                    </Link>
-                  </td>
-                  <td>
-                    <Link
-                      href={`/beta/admin/bodies/${edge.node.id}/edit`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                  <div className="flex-grow mt-6 sm:ml-6 sm:mt-0">
+                    <div className="flex justify-between">
+                      <h3 className="text-base font-medium text-gray-900">
+                        <a>Hnutí pro Prahu 11 (HPP11)</a>
+                      </h3>
+                      <Button>
+                        <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
+                      </Button>
+                    </div>
+
+                    <p className="mt-3 text-sm text-gray-500">
+                      (Označení here)
+                    </p>
+
+                    <p className="mt-3 text-sm text-gray-500">
+                      Respektovaný odkaz:
+                    </p>
+                    <a
+                      href="www.hnutiProPrahu11.cz"
+                      className="underline text-gray-500 hover:text-indigo-600"
                     >
-                      Upravit
-                    </Link>
-
-                    
-                  </td>
-                </tr>
-              )
-            })}
-            
-           
-          </tbody>
-        </table>
-
-        <AdminPagination pageInfo={data..pageInfo} /> */}
+                      www.hnutiproprahu11.cz
+                    </a>
+                    <p className="mt-3 text-sm text-gray-500">Vznik:</p>
+                    <p className=" text-sm text-gray-500">Nevyplněn</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        {/*<AdminPagination pageInfo={data.--TODO--.pageInfo} /> */}
       </AdminPageContent>
     </AdminPage>
   )
