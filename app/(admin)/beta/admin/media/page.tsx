@@ -27,23 +27,23 @@ export default async function AdminMedia(props: PropsWithSearchParams) {
   const { data } = await serverQuery({
     query: gql(`
         query AdminMedia($first: Int, $last: Int, $after: String, $before: String, $term: String) {
-          mediaV2(first: $first, last: $last, after: $after, before: $before, filter: {name: $term}){
+          mediaV2(first: $first, last: $last, after: $after, before: $before, filter: { name: $term }) {
           edges {
-            node{
+            node {
               id
               name
              ...AdminMediumDeleteDialog
             }
           }
-            pageInfo{
-              hasPreviousPage
-              hasNextPage
-              endCursor
-              startCursor
-            }
+          pageInfo {
+            hasPreviousPage
+            hasNextPage
+            endCursor
+            startCursor
           }
         }
-      `),
+      }
+    `),
     variables: {
       ...(term ? { term } : {}),
       ...buildGraphQLVariables({ before, after, pageSize: 10 }),
