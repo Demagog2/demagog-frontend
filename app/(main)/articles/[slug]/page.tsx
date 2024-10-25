@@ -58,7 +58,6 @@ export async function generateMetadata(props: {
     twitter: {
       ...DefaultMetadata.twitter,
       ...images,
-      url,
       title,
       description,
       card: 'summary_large_image',
