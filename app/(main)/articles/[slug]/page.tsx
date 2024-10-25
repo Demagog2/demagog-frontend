@@ -22,6 +22,7 @@ export async function generateMetadata(props: {
     query: gql(`
        query ArticleMetadata($id: ID!) {
           articleV2(id: $id) {
+            slug
             title
             perex
             illustration(size: medium)
@@ -42,6 +43,7 @@ export async function generateMetadata(props: {
   const images = article.illustration
     ? { images: imagePath(article.illustration) }
     : {}
+  const url = `${DefaultMetadata.openGraph?.url}/diskuze/${article.slug}`
 
   return {
     title,
@@ -49,6 +51,7 @@ export async function generateMetadata(props: {
     openGraph: {
       ...DefaultMetadata.openGraph,
       ...images,
+      url,
       title,
       description,
     },
