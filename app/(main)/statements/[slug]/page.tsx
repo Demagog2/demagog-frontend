@@ -24,6 +24,7 @@ export async function generateMetadata(props: {
         $id: Int!
       ) {
         statementV2(id: $id) {
+          id
           content
           sourceSpeaker {
             fullName
@@ -62,6 +63,7 @@ export async function generateMetadata(props: {
     description,
     openGraph: {
       ...DefaultMetadata.openGraph,
+      url: `${DefaultMetadata.openGraph?.url}/vyrok/${statement.id}`,
       title,
       description,
     },
