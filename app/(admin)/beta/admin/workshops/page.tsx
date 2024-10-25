@@ -28,12 +28,8 @@ export default async function AdminWorkshops(props: PropsWithSearchParams) {
         workshops(first: $first, last: $last, after: $after, before: $before) {
           edges {
             node {
-              description
               id
-              image
               name
-              price
-              priceFormatted
             }
           }
           pageInfo {
