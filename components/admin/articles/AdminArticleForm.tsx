@@ -326,7 +326,7 @@ export function AdminArticleForm(props: {
                         </>
                       )}
                     />
-                    <div className="rounded-lg bg-white shadow px-4 py-4 sm:px-6">
+                    <div className="rounded-b-lg bg-white shadow px-4 py-4 sm:px-6">
                       <Button onClick={() => remove(index)}>Odebrat</Button>
                     </div>
                   </>

@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer utilities {
+  .ck-editor .ck-sticky-panel__content {
+    @apply !rounded-t-lg;
+  }
 
   .article-content p,
   .ck-content p {
