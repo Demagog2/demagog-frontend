@@ -27,8 +27,8 @@ export default async function Speakers(props: PropsWithSearchParams) {
 
   const { data } = await serverQuery({
     query: gql(` 
-      query AdminSpeakers($first: Int, $last: Int, $after: String, $before: String){
-        speakersV2(first: $first, last: $last, after: $after, before: $before){
+      query AdminSpeakers($first: Int, $last: Int, $after: String, $before: String, $term: String){
+        speakersV2(first: $first, last: $last, after: $after, before: $before, filter: { name: $term}){
           edges {
             node {
               avatar
@@ -41,6 +41,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
                 body {
                   name
                 }
+                id
                 since
                 until
               }
@@ -59,6 +60,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
 			}
     `),
     variables: {
+      ...(term ? { term } : {}),
       ...buildGraphQLVariables({ before, after, pageSize: 10 }),
     },
   })
@@ -128,12 +130,17 @@ export default async function Speakers(props: PropsWithSearchParams) {
                         <p className="mt-3 text-sm text-gray-500">
                           Respektovaný odkaz:
                         </p>
-                        <a
-                          href={edge.node.websiteUrl}
-                          className="text-gray-500 hover:text-indigo-600"
-                        >
-                          www.hnutiproprahu11.cz
-                        </a>
+                        {!edge.node.websiteUrl ? (
+                          <p className="text-sm text-gray-500">Nevyplněn</p>
+                        ) : (
+                          <a
+                            href={edge.node.websiteUrl}
+                            className="text-sm text-gray-500 hover:text-indigo-600"
+                          >
+                            {edge.node.websiteUrl}
+                          </a>
+                        )}
+
                         <p className="mt-3 text-sm text-gray-500">
                           Příslušnost ke skupinám/stranám:
                         </p>
@@ -143,7 +150,10 @@ export default async function Speakers(props: PropsWithSearchParams) {
                         ) : (
                           edge.node.memberships?.map((membership) => {
                             return (
-                              <p className="text-sm text-gray900">
+                              <p
+                                key={membership.id}
+                                className="text-sm text-gray900"
+                              >
                                 {membership.body.name} -{' '}
                                 <span>
                                   od{' '}
