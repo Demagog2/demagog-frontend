@@ -4,6 +4,7 @@ import { gql } from '@/__generated__'
 import { useQuery } from '@apollo/client'
 import { Button } from '@headlessui/react'
 import { AdminStatement } from './AdminStatement'
+import formatDate from '@/libs/format-date'
 
 export function AdminSelectedSourceSegment(props: {
   selectedSourceId: string
@@ -17,6 +18,7 @@ export function AdminSelectedSourceSegment(props: {
         ) {
           id
           name
+          releasedAt
           statements(includeUnpublished: true) {
             id
             ...AdminStatement
@@ -33,7 +35,11 @@ export function AdminSelectedSourceSegment(props: {
         <h3 className="text-base font-semibold leading-6 text-gray-900">
           {data?.source.name}
         </h3>
-        <p className="mt-1 text-sm text-gray-500">Lorem ipsum</p>
+        <p className="mt-1 text-sm text-gray-500">
+          {data?.source.releasedAt && (
+            <>Publikováno: {formatDate(data.source.releasedAt)}</>
+          )}
+        </p>
       </div>
       <div className="divide-y divide-gray-100 px-4 py-5">
         {data?.source?.statements.map((statement) => (
