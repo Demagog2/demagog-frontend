@@ -15,6 +15,7 @@ import { Button } from '@headlessui/react'
 import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { buildGraphQLVariables } from '@/libs/pagination'
+import { imagePath } from '@/libs/images/path'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Lidé', 'Administrace'),
@@ -27,8 +28,8 @@ export default async function Speakers(props: PropsWithSearchParams) {
 
   const { data } = await serverQuery({
     query: gql(` 
-      query AdminSpeakers($first: Int, $last: Int, $after: String, $before: String, $term: String){
-        speakersV2(first: $first, last: $last, after: $after, before: $before, filter: { name: $term}){
+      query AdminSpeakers($first: Int, $last: Int, $after: String, $before: String, $term: String) {
+        speakersV2(first: $first, last: $last, after: $after, before: $before, filter: { name: $term}) {
           edges {
             node {
               avatar
@@ -104,7 +105,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
                         ) : (
                           <img
                             alt={edge.node.fullName}
-                            src={edge.node.avatar}
+                            src={imagePath(edge.node.avatar)}
                             className="h-full w-full rounded-lg object-cover"
                           />
                         )}
