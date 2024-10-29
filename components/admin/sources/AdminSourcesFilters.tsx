@@ -1,6 +1,6 @@
 'use client'
 
-import { PropsWithChildren, ReactNode, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -12,10 +12,7 @@ import {
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { ChevronDownIcon, PlusIcon } from '@heroicons/react/20/solid'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import {
-  IStatementViewModel,
-  SourceDetailPresenter,
-} from '@/libs/sources/presenters/SourceDetailPresenter'
+import { SourceDetailPresenter } from '@/libs/sources/presenters/SourceDetailPresenter'
 import { EMPTY_SOURCE, ISource } from '@/libs/sources/model/Source'
 import { createSourceFromQuery } from '@/libs/sources/data-mappers/SourceDataMapper'
 import { useStatementFilters } from '@/libs/sources/hooks/statement-filters'
