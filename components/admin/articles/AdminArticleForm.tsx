@@ -48,6 +48,7 @@ import { AdminFormActions } from '../layout/AdminFormActions'
 import { AdminFormContent } from '@/components/admin/layout/AdminFormContent'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { Textarea } from '@/components/admin/forms/Textarea'
+import { dateInputFormat } from '@/libs/date-time'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -113,7 +114,7 @@ const DEFAULT_VALUES: Partial<z.output<typeof schema>> = {
   pinned: false,
   published: false,
   illustration: undefined,
-  publishedAt: new Date().toISOString().substring(0, 10),
+  publishedAt: dateInputFormat(new Date().toISOString()),
   articleTags: [],
 }
 
@@ -133,7 +134,7 @@ function buildDefaultValues(
     pinned: article.pinned,
     perex: article.perex ?? '',
     published: article.pinned,
-    publishedAt: article.publishedAt.substring(0, 10),
+    publishedAt: dateInputFormat(article.publishedAt),
     articleTags: article.articleTags.map((tag) => tag.id),
     segments: article.segments
       ?.map((segment) => {

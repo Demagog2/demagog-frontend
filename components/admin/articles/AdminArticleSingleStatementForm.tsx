@@ -21,6 +21,7 @@ import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 import { AdminFormActions } from '../layout/AdminFormActions'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { dateInputFormat } from '@/libs/date-time'
 
 const AdminArticleSingleStatementFormFragment = gql(`
   fragment AdminArticleSingleStatementFormFields on Article {
@@ -57,9 +58,9 @@ export function AdminArticleSingleStatementForm(props: {
     defaultValues: {
       title: article?.title ?? '',
       published: article?.published ?? false,
-      publishedAt:
-        article?.publishedAt?.substring(0, 10) ??
-        new Date().toISOString().substring(0, 10),
+      publishedAt: dateInputFormat(
+        article?.publishedAt ?? new Date().toISOString()
+      ),
       statementId: article?.segments?.[0]?.statementId ?? undefined,
     },
   })
