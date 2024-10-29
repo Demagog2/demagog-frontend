@@ -12,6 +12,9 @@ import { Link } from 'ckeditor5'
 import { Metadata } from 'next'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { Button } from '@headlessui/react'
+import { gql } from '@/__generated__'
+import { serverQuery } from '@/libs/apollo-client-server'
+import { buildGraphQLVariables } from '@/libs/pagination'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Lidé', 'Administrace'),
@@ -21,6 +24,44 @@ export default async function Speakers(props: PropsWithSearchParams) {
   const before: string | null = getStringParam(props.searchParams.before)
   const after: string | null = getStringParam(props.searchParams.after)
   const term: string | null = getStringParam(props.searchParams.q)
+
+  const { data } = await serverQuery({
+    query: gql(` 
+      query AdminSpeakers($first: Int, $last: Int, $after: String, $before: String){
+        speakersV2(first: $first, last: $last, after: $after, before: $before){
+          edges {
+            node {
+              avatar
+              body {
+                name
+              }
+              fullName
+              id
+              memberships {
+                body {
+                  name
+                }
+                since
+                until
+              }
+              osobaId
+              websiteUrl
+              wikidataId
+            }
+          }
+          pageInfo {
+            hasPreviousPage
+            hasNextPage
+            endCursor
+            startCursor
+          }
+        }
+			}
+    `),
+    variables: {
+      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
+    },
+  })
 
   return (
     <AdminPage>
@@ -36,57 +77,101 @@ export default async function Speakers(props: PropsWithSearchParams) {
         </div>
       </AdminPageHeader>
       <AdminPageContent>
-        <section className="mt-6">
-          <div className="space-y-8">
-            <div
-              key="--TODO--"
-              className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
-            >
-              <div className="px-4 py-6 sm:px-6 lg:gap-x-8 lg:p-8">
-                <div className="sm:flex">
-                  <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
-                    <img
-                      alt="--TODO--"
-                      src="https://placecats.com/300/200?fit=contain&position=top"
-                      className="h-full w-full object-cover object-center sm:h-full sm:w-full"
-                    />
-                  </div>
+        {data.speakersV2.edges?.map((edge) => {
+          if (!edge?.node) {
+            return null
+          }
 
-                  <div className="flex-grow mt-6 sm:ml-6 sm:mt-0">
-                    <div className="flex justify-between">
-                      <h3 className="text-base font-medium text-gray-900">
-                        Jméno Příjmení
-                      </h3>
-                      <Button>
-                        <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
-                      </Button>
+          return (
+            <section key={edge.node.id} className="mt-6">
+              <div className="space-y-8">
+                <div className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
+                  <div className="px-4 py-6 sm:px-6 lg:gap-x-8 lg:p-8">
+                    <div className="sm:flex">
+                      <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
+                        {!edge.node.avatar ? (
+                          <span className="inline-block overflow-hidden rounded-lg bg-gray-100">
+                            <svg
+                              fill="currentColor"
+                              viewBox="0 0 24 24"
+                              className="h-full w-full object-cover text-gray-300"
+                            >
+                              <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                            </svg>
+                          </span>
+                        ) : (
+                          <img
+                            alt={edge.node.fullName}
+                            src={edge.node.avatar}
+                            className="h-full w-full rounded-lg object-cover"
+                          />
+                        )}
+                      </div>
+
+                      <div className="flex-grow mt-6 sm:ml-6 sm:mt-0 lg:ml-8">
+                        <div className="flex justify-between">
+                          <h3 className="text-base font-medium text-gray-900">
+                            {edge.node.fullName}
+                          </h3>
+                          <Button>
+                            <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
+                          </Button>
+                        </div>
+
+                        <p className="mt-3 text-sm text-gray-500">
+                          Wikidata ID: {edge.node.wikidataId}
+                        </p>
+
+                        <p className="mt-3 text-sm text-gray-500">
+                          Hlídač státu OsobaID: {edge.node.osobaId}
+                        </p>
+                        <p className="mt-3 text-sm text-gray-500">
+                          Respektovaný odkaz:
+                        </p>
+                        <a
+                          href={edge.node.websiteUrl}
+                          className="text-gray-500 hover:text-indigo-600"
+                        >
+                          www.hnutiproprahu11.cz
+                        </a>
+                        <p className="mt-3 text-sm text-gray-500">
+                          Příslušnost ke skupinám/stranám:
+                        </p>
+
+                        {!edge.node.memberships?.length ? (
+                          <p className="text-sm text-gray-500">Nevyplněno</p>
+                        ) : (
+                          edge.node.memberships?.map((membership) => {
+                            return (
+                              <p className="text-sm text-gray900">
+                                {membership.body.name} -{' '}
+                                <span>
+                                  od{' '}
+                                  {!membership.since
+                                    ? 'nevyplněno'
+                                    : membership.since}
+                                </span>
+                                <span>
+                                  {' '}
+                                  do{' '}
+                                  {!membership.until
+                                    ? 'nevyplněno'
+                                    : membership.until}
+                                </span>
+                              </p>
+                            )
+                          })
+                        )}
+                      </div>
                     </div>
-
-                    <p className="mt-3 text-sm text-gray-500">Wikidata ID:</p>
-
-                    <p className="mt-3 text-sm text-gray-500">
-                      Hlídač státu OsobaID:
-                    </p>
-                    <p className="mt-3 text-sm text-gray-500">
-                      Respektovaný odkaz:
-                    </p>
-                    <a
-                      href="www.hnutiProPrahu11.cz"
-                      className="underline text-gray-500 hover:text-indigo-600"
-                    >
-                      www.hnutiproprahu11.cz
-                    </a>
-                    <p className="mt-3 text-sm text-gray-500">
-                      Příslušnost ke skupinám/stranám:
-                    </p>
-                    <p className=" text-sm text-gray-500">Nevyplněno</p>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </section>
-        {/*<AdminPagination pageInfo={data.--TODO--.pageInfo} /> */}
+            </section>
+          )
+        })}
+
+        <AdminPagination pageInfo={data.speakersV2.pageInfo} />
       </AdminPageContent>
     </AdminPage>
   )
