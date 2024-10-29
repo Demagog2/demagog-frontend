@@ -115,7 +115,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
             <tr>
               <th scope="col">Název</th>
               <th scope="col" className="max-w-[200px]">
-                Editoří
+                Editoři
               </th>
               <th scope="col">Výroky</th>
               <th scope="col">
