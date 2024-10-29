@@ -3,7 +3,6 @@ import { ArticleState } from '@/components/admin/articles/ArticleState'
 import {
   CalendarIcon,
   ChevronDownIcon,
-  ChevronRightIcon,
   LinkIcon,
   PencilIcon,
 } from '@heroicons/react/20/solid'
@@ -13,6 +12,7 @@ import { PublishedArticleLink } from '@/components/admin/articles/PublishedArtic
 import Link from 'next/link'
 import { AdminArticleTags } from '@/components/admin/articles/AdminArticleTags'
 import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
+import { AdminArticleBreadcrumbs } from './AdminArticleBreadcrumbs'
 
 const AdminArticleHeaderFragment = gql(`
   fragment AdminArticleHeader on Article {
@@ -22,6 +22,7 @@ const AdminArticleHeaderFragment = gql(`
     ...ArticleState
     ...AdminArticleTags
     ...AdminArticleDeleteDialog
+    ...AdminArticleBreadcrumbs
   }
 `)
 
@@ -33,34 +34,7 @@ export function AdminArticleHeader(props: {
   return (
     <div className="lg:flex lg:items-center lg:justify-between">
       <div className="min-w-0 flex-1">
-        <nav aria-label="Breadcrumb" className="flex">
-          <ol role="list" className="flex items-center space-x-4">
-            <li>
-              <div className="flex">
-                <Link
-                  href="/beta/admin/articles"
-                  className="text-sm font-medium text-gray-500 hover:text-gray-700"
-                >
-                  Články
-                </Link>
-              </div>
-            </li>
-            <li>
-              <div className="flex items-center">
-                <ChevronRightIcon
-                  aria-hidden="true"
-                  className="h-5 w-5 flex-shrink-0 text-gray-400"
-                />
-                <Link
-                  href="/beta/admin/articles"
-                  className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
-                >
-                  Komentáře
-                </Link>
-              </div>
-            </li>
-          </ol>
-        </nav>
+        <AdminArticleBreadcrumbs article={article} />
         <h2 className="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
           {article.title}
         </h2>
