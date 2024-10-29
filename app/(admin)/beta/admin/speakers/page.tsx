@@ -29,7 +29,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
   const { data } = await serverQuery({
     query: gql(` 
       query AdminSpeakers($first: Int, $last: Int, $after: String, $before: String, $term: String) {
-        speakersV2(first: $first, last: $last, after: $after, before: $before, filter: { name: $term}) {
+        speakersV2(first: $first, last: $last, after: $after, before: $before, filter: { name: $term }) {
           edges {
             node {
               avatar
