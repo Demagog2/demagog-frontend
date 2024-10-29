@@ -28,6 +28,7 @@ import { AdminSpeakerSelect } from '@/components/admin/sources/AdminSpeakerSelec
 import { AdminBodySelect } from '@/components/admin/sources/AdminBodySelect'
 import { imagePath } from '@/libs/images/path'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import { dateInputFormat } from '@/libs/date-time'
 
 const AdminSourceFormFragment = gql(`
   fragment AdminSourceForm on Query {
@@ -61,7 +62,7 @@ export function AdminSourceForm(props: {
       name: '',
       experts: [],
       sourceSpeakers: [],
-      releasedAt: new Date().toISOString().substring(0, 10),
+      releasedAt: dateInputFormat(new Date().toISOString()),
       mediaPersonalities: [],
       ...(state.fields ?? {}),
     },

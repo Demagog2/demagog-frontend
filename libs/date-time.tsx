@@ -14,6 +14,13 @@ export function displayDateTime(datetime: string): string {
     .toLocaleString(DateTime.DATETIME_MED)
 }
 
+export function dateInputFormat(datetime: string): string {
+  return DateTime.fromISO(datetime)
+    .setLocale('cs')
+    .setZone('Europe/Prague')
+    .toFormat('yyyy-MM-dd')
+}
+
 export function isSameOrAfterToday(date: string): boolean {
   return DateTime.fromISO(date).diffNow().as('seconds') <= 0
 }
