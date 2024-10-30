@@ -1,8 +1,11 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { imagePath } from '@/libs/images/path'
 
 const ArticlePlayerFragment = gql(`
   fragment ArticlePlayer on Article {
     showPlayer
+    title
+    illustration(size: medium)
     source {
       # TODO: Rest of the necessary fields
       videoType
@@ -21,6 +24,15 @@ export function ArticlePlayer(props: {
 
   return (
     <div className="demagog-tv-player">
+      <div className="d-block">
+        {article.illustration && (
+          <img
+            className="w-100"
+            src={imagePath(article.illustration)}
+            alt={`Ilustrační obrázek v výstupu ${article.title}`}
+          />
+        )}
+      </div>
       {/* FIXME: Replace by native React elements with scss styles */}
       {/* <OpenPlayerButton type="button" onClick={openPlayer}>
         <OpenPlayerButtonOverlay>
