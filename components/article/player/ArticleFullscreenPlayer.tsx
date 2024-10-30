@@ -1,7 +1,7 @@
 'use client'
 
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { YouTubeVideo } from './players/YouTubeVideo'
 import Link from 'next/link'
 
@@ -15,10 +15,10 @@ const ArticleFullscrenPlayerFragment = gql(`
       statements {
         sourceSpeaker {
           fullName
-          }
+        }
         statementVideoMark {
           start
-          }
+        }
         id
         content
       }
@@ -45,6 +45,8 @@ export function ArticleFullscreenPlayer(props: {
 
     return () => document.removeEventListener('keydown', handleEscapeKey)
   }, [onClose])
+
+  const statementsColumn = useRef<HTMLDivElement | null>(null)
 
   if (!article.source) {
     return null
@@ -78,11 +80,12 @@ export function ArticleFullscreenPlayer(props: {
       </div>
 
       {/* Video column */}
-      <div>
+      <div className="video-column">
         <YouTubeVideo source={article.source} />
       </div>
 
-      <div>
+      {/* Statements column */}
+      <div ref={statementsColumn} className="statements-column">
         {article.segments.map((segment) => {
           return segment.statements.map((statement) => {
             return (
@@ -97,10 +100,6 @@ export function ArticleFullscreenPlayer(props: {
             )
           })
         })}
-
-        {/* TODO: Render list of statements */}
-
-        {/* Should include content, speaker, statement video mark start */}
       </div>
     </div>
   )
