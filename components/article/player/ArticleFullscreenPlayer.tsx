@@ -20,14 +20,19 @@ export function ArticleFullscreenPlayer(props: {
 }) {
   const article = useFragment(ArticleFullscrenPlayerFragment, props.article)
 
+  const { onClose } = props
+
   useEffect(() => {
     function handleEscapeKey(event: KeyboardEvent) {
       if (event.code === 'Escape') {
-        props.onClose()
+        onClose()
       }
     }
+
     document.addEventListener('keydown', handleEscapeKey)
-  }, [])
+
+    return () => document.removeEventListener('keydown', handleEscapeKey)
+  }, [onClose])
 
   if (!article.source) {
     return null
@@ -63,6 +68,12 @@ export function ArticleFullscreenPlayer(props: {
       {/* Video column */}
       <div>
         <YouTubeVideo source={article.source} />
+      </div>
+
+      <div>
+        {/* TODO: Render list of statements */}
+
+        {/* Should include content, speaker, statement video mark start */}
       </div>
     </div>
   )
