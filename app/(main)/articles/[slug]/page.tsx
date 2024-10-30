@@ -1,5 +1,6 @@
 import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
+import { ArticlePlayer } from '@/components/article/player/ArticlePlayer'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
 import { FacebookFactcheckMetadata } from '@/components/article/metadata/FacebookFactcheckArticleMetadata'
 import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
@@ -80,13 +81,13 @@ export default async function Article(props: { params: { slug: string } }) {
           ...DebateAticleMetadata
           ...FacebookFactcheckMetadata
           ...ArticleSegments
+          ...ArticlePlayer
           segments {
             segmentType
             statements {
               id
             }
           }
-          showPlayer
         }
       }
     `),
@@ -119,7 +120,7 @@ export default async function Article(props: { params: { slug: string } }) {
 
           <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} />
-          {article.showPlayer && <div className="bg-black">Video</div>}
+          <ArticlePlayer article={article} />
         </div>
 
         <div className="col col-12">
