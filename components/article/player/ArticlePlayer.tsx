@@ -28,7 +28,12 @@ export function ArticlePlayer(props: {
 
   return (
     <>
-      {isArticleOpen && <ArticleFullscreenPlayer article={article} />}
+      {isArticleOpen && (
+        <ArticleFullscreenPlayer
+          article={article}
+          onClose={() => setArticleOpen(false)}
+        />
+      )}
 
       <div className="demagog-tv-player">
         <div className="d-block">
