@@ -1,5 +1,48 @@
 .demagog-tv-fullscreen-player {
-  border: 1px solid red;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  z-index: 100;
+  min-width: 800px;
+
+  .header-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    border-bottom: 2px solid #d8e1e8;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .header-bar-close-button {
+      display: block;
+      margin: 0 15px 0 auto;
+      padding: 0 15px;
+      border: none;
+      background: none;
+      color: #111827;
+      font-size: 18px;
+      line-height: 1.2;
+      font-weight: bold;
+      cursor: pointer;
+
+      &:hover,
+      &:active {
+        color: #25ad23;
+      }
+
+      .header-bar-close-button-icon {
+        font-size: 22px;
+        line-height: 1;
+        margin-right: 7px;
+      }
+    }
+  }
 }
 
 .demagog-tv-player {
