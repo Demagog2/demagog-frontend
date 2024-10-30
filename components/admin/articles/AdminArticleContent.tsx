@@ -2,7 +2,6 @@ import { gql, FragmentType, useFragment } from '@/__generated__'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { AdminStatement } from './segments/AdminStatement'
 import React from 'react'
-import Script from 'next/script'
 import { Iframely } from '@/components/site/Iframely'
 
 const AdminArticleContentFragment = gql(`
@@ -14,7 +13,7 @@ const AdminArticleContentFragment = gql(`
       id
       segmentType
       textHtml
-      statements {
+      statements(includeUnpublished: true) {
         id
         ...AdminStatement 
       }
@@ -29,7 +28,7 @@ export function AdminArticleContent(props: {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
   return (
-    <div className="bg-white p-6 p-6 lg:px-0">
+    <div className="bg-white p-6 lg:px-0">
       <div className="max-w-3xl text-base leading-7 text-gray-700">
         <p className="mt-0 text-xl leading-8">{article.perex}</p>
         {article.illustration && (
