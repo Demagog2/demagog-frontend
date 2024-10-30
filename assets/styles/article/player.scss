@@ -1,47 +1,48 @@
 .demagog-tv-player {
-  border: 1px solid red;
-}
+  position: relative;
 
-.open-player-button {
-  display: block;
-  position: absolute;
-  width: 100%;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
+  .open-player-button {
+    display: block;
+    position: absolute;
+    width: 100%;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
 
-.open-player-button-overlay {
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: -115px;
-  margin-top: -35px;
-  width: 230px;
-  height: 70px;
-  background-color: rgba(40, 40, 40, 0.8);
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-}
+  .open-player-button-overlay {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -115px;
+    margin-top: -35px;
+    width: 230px;
+    height: 70px;
+    background-color: rgba(40, 40, 40, 0.8);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
 
-.open-player-button-overlay-play-icon {
-  margin-left: 20px;
-}
+  .open-player-button-overlay-play-icon {
+    margin-left: 20px;
+    width: 35px;
+  }
 
-.open-player-button-overlay-text {
-  margin-left: 15px;
-  margin-right: 20px;
-  color: white;
-  font-size: 14px;
-  line-height: 1.25;
-  font-family: Lato, sans-serif;
-  font-weight: normal;
-  text-align: left;
+  .open-player-button-overlay-text {
+    margin-left: 15px;
+    margin-right: 20px;
+    color: white;
+    font-size: 14px;
+    line-height: 1.25;
+    font-family: Lato, sans-serif;
+    font-weight: normal;
+    text-align: left;
+  }
 }
