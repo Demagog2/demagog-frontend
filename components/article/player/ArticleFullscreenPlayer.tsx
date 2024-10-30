@@ -11,6 +11,18 @@ const ArticleFullscrenPlayerFragment = gql(`
     source {
       ...YouTubeVideo
     }
+    segments {
+      statements {
+        sourceSpeaker {
+          fullName
+          }
+        statementVideoMark {
+          start
+          }
+        id
+        content
+      }
+    }
   }
 `)
 
@@ -71,6 +83,21 @@ export function ArticleFullscreenPlayer(props: {
       </div>
 
       <div>
+        {article.segments.map((segment) => {
+          return segment.statements.map((statement) => {
+            return (
+              <div key={statement.id}>
+                <div>
+                  <p className="mr-3">{statement.statementVideoMark?.start}</p>
+                  <h3>{statement.sourceSpeaker.fullName}</h3>
+                </div>
+
+                <p className="mt-3">{statement.content}</p>
+              </div>
+            )
+          })
+        })}
+
         {/* TODO: Render list of statements */}
 
         {/* Should include content, speaker, statement video mark start */}
