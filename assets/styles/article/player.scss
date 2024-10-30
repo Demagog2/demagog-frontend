@@ -92,6 +92,57 @@
     @media (min-width: 1200px) {
       left: 50%;
     }
+
+    .statement-container {
+      display: flex;
+      margin-top: 15px;
+      margin-bottom: 15px;
+      background-color: 'transparent';
+      padding: 13px 15px 18px 0;
+
+      // FIXME: Use when the statement is highlighted
+      &.highlighted {
+        background-color: '#EFF2F5';
+      }
+
+      .statement-content-wrapper {
+        flex: 1;
+      }
+
+      .time-container {
+        flex: 0 0 60px;
+        padding: 0 5px;
+        position: relative;
+
+        .time-button {
+          display: block;
+          padding: 9px 0;
+          width: 100%;
+          background: none;
+          border: none;
+          font-size: 16px;
+          font-weight: 600;
+          color: #111827;
+          cursor: pointer;
+          text-align: center;
+
+          &:hover,
+          &:active {
+            text-decoration: underline;
+            color: #25ad23;
+          }
+        }
+
+        .timeline {
+          position: absolute;
+          top: 39px;
+          bottom: -46px;
+          left: 50%;
+          margin-left: -1px;
+          border-left: 2px solid #d8e1e8;
+        }
+      }
+    }
   }
 }
 

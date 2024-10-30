@@ -1,3 +1,4 @@
+import { padStart } from 'lodash'
 import { DateTime } from 'luxon'
 
 export function displayDate(date: string): string {
@@ -19,6 +20,10 @@ export function dateInputFormat(datetime: string): string {
     .setLocale('cs')
     .setZone('Europe/Prague')
     .toFormat('yyyy-MM-dd')
+}
+
+export function displayTime(timeInSeconds: number): string {
+  return `${Math.floor(timeInSeconds / 60)}:${padStart(`${timeInSeconds % 60}`, 2, '0')}`
 }
 
 export function isSameOrAfterToday(date: string): boolean {

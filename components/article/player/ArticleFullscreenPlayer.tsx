@@ -4,6 +4,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useEffect, useRef } from 'react'
 import { YouTubeVideo } from './players/YouTubeVideo'
 import Link from 'next/link'
+import { displayTime } from '@/libs/date-time'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -87,15 +88,23 @@ export function ArticleFullscreenPlayer(props: {
       {/* Statements column */}
       <div ref={statementsColumn} className="statements-column">
         {article.segments.map((segment) => {
-          return segment.statements.map((statement) => {
+          return segment.statements.map((statement, index) => {
+            const lastStatement = index + 1 === segment.statements.length
+
             return (
-              <div key={statement.id}>
-                <div>
-                  <p className="mr-3">{statement.statementVideoMark?.start}</p>
-                  <h3>{statement.sourceSpeaker.fullName}</h3>
+              <div key={statement.id} className="statement-container">
+                <div className="time-container">
+                  <button className="time-button">
+                    {displayTime(statement.statementVideoMark?.start ?? 0)}
+                  </button>
+
+                  {!lastStatement && <div className="timeline" />}
                 </div>
 
-                <p className="mt-3">{statement.content}</p>
+                <div className="statement-content-wrapper">
+                  <h3>{statement.sourceSpeaker.fullName}</h3>
+                  <p className="mt-3">{statement.content}</p>
+                </div>
               </div>
             )
           })
