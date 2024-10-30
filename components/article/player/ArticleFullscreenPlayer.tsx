@@ -21,7 +21,12 @@ export function ArticleFullscreenPlayer(props: {
   const article = useFragment(ArticleFullscrenPlayerFragment, props.article)
 
   useEffect(() => {
-    // TODO: call `onClose` on escape
+    function handleEscapeKey(event: KeyboardEvent) {
+      if (event.code === 'Escape') {
+        props.onClose()
+      }
+    }
+    document.addEventListener('keydown', handleEscapeKey)
   }, [])
 
   if (!article.source) {
