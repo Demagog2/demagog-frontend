@@ -4,6 +4,7 @@ import StatementItem from '../statement/Item'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
+    showPlayer
     segments {
       id
       segmentType
@@ -27,7 +28,7 @@ type ArticleStatementsProps = {
 }
 
 export function ArticleSegments(props: ArticleStatementsProps) {
-  const { segments, debateStats } = useFragment(
+  const { segments, debateStats, showPlayer } = useFragment(
     ArticleSegmentsFragment,
     props.data
   )
@@ -65,12 +66,13 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                   </div>
                 ))}
               </div>
-
-              <div className="mt-5 mt-lg-10">
-                {segment.statements.map((statement) => (
-                  <StatementItem key={statement.id} statement={statement} />
-                ))}
-              </div>
+              {!showPlayer && (
+                <div className="mt-5 mt-lg-10">
+                  {segment.statements.map((statement) => (
+                    <StatementItem key={statement.id} statement={statement} />
+                  ))}
+                </div>
+              )}
             </div>
           )}
         </div>

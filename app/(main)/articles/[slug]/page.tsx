@@ -86,6 +86,7 @@ export default async function Article(props: { params: { slug: string } }) {
               id
             }
           }
+          showPlayer
         }
       }
     `),
@@ -105,8 +106,6 @@ export default async function Article(props: { params: { slug: string } }) {
     )
   }
 
-  const showPlayer = false
-
   return (
     <div className="container">
       <div className="row g-10">
@@ -120,17 +119,12 @@ export default async function Article(props: { params: { slug: string } }) {
 
           <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} />
+          {article.showPlayer && <div className="bg-black">Video</div>}
         </div>
-        {showPlayer ? (
-          <>
-            <div>Video</div>
-            <div>Statistiky komponenta SpeakerWithStats</div>
-          </>
-        ) : (
-          <div className="col col-12">
-            <ArticleSegments data={article} />
-          </div>
-        )}
+
+        <div className="col col-12">
+          <ArticleSegments data={article} />
+        </div>
       </div>
       <Iframely />
     </div>
