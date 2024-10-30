@@ -2,6 +2,7 @@
 
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useEffect } from 'react'
+import { YouTubeVideo } from './players/YouTubeVideo'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -41,22 +42,4 @@ export function ArticleFullscreenPlayer(props: {
       </div>
     </div>
   )
-}
-
-const YouTubeVideoFragment = gql(`
-  fragment YouTubeVideo on Source {
-    videoType
-  }
-`)
-
-function YouTubeVideo(props: {
-  source?: FragmentType<typeof YouTubeVideoFragment>
-}) {
-  const source = useFragment(YouTubeVideoFragment, props.source)
-
-  if (source?.videoType !== 'youtube') {
-    return null
-  }
-
-  return <div>Youtube player</div>
 }
