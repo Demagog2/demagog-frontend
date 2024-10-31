@@ -5,9 +5,10 @@ import StatementItem from '@/components/statement/Item'
 import { displayTime } from '@/libs/date-time'
 import classNames from 'classnames'
 import Link from 'next/link'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { YouTubeVideo } from './players/YouTubeVideo'
 import { VideoPlayer } from './players/VideoPlayer'
+import { orderBy } from 'lodash'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -27,6 +28,8 @@ const ArticleFullscrenPlayerFragment = gql(`
     }
   }
 `)
+
+const getStatementId = (id: string) => `player-statement-${id}`
 
 export function ArticleFullscreenPlayer(props: {
   article: FragmentType<typeof ArticleFullscrenPlayerFragment>
@@ -51,20 +54,51 @@ export function ArticleFullscreenPlayer(props: {
     return () => document.removeEventListener('keydown', handleEscapeKey)
   }, [handleEscapeKey])
 
-  const [currentPlayerTime, setCurrentPlayerTime] = useState<number>(0)
+  const [highlightedStatementId, setHiglightedStatementId] = useState<
+    string | null
+  >(null)
 
   const statementsColumn = useRef<HTMLDivElement | null>(null)
   const videoRef = useRef<VideoPlayer | null>(null)
 
+  const statements = useMemo(() => {
+    return orderBy(
+      article.segments.flatMap((segment) =>
+        segment.statements.filter((statement) => statement.statementVideoMark)
+      ),
+      (s) => s.statementVideoMark?.start
+    )
+  }, [article])
+
   useEffect(() => {
     const handle = setInterval(() => {
       if (videoRef.current) {
-        setCurrentPlayerTime(videoRef.current.getTime())
+        const time = videoRef.current.getTime()
+
+        const matchedStatementId =
+          statements.find(
+            (statement) =>
+              statement.statementVideoMark &&
+              statement.statementVideoMark.start < time &&
+              statement.statementVideoMark.stop > time
+          )?.id ?? null
+
+        setHiglightedStatementId(matchedStatementId)
+
+        if (matchedStatementId) {
+          statementsColumn.current?.scroll({
+            top:
+              document.getElementById(getStatementId(matchedStatementId))
+                ?.offsetTop ?? 0 - 15,
+            left: 0,
+            behavior: 'smooth',
+          })
+        }
       }
-    }, 1000)
+    }, 500)
 
     return () => clearInterval(handle)
-  }, [setCurrentPlayerTime])
+  }, [setHiglightedStatementId])
 
   if (!article.source) {
     return null
@@ -107,14 +141,11 @@ export function ArticleFullscreenPlayer(props: {
         {article.segments.map((segment) => {
           return segment.statements.map((statement, index) => {
             const lastStatement = index + 1 === segment.statements.length
-            const { statementVideoMark } = statement
-            const isHighlighted =
-              statementVideoMark &&
-              statementVideoMark.start < currentPlayerTime &&
-              statementVideoMark.stop > currentPlayerTime
+            const isHighlighted = statement.id === highlightedStatementId
 
             return (
               <div
+                id={getStatementId(statement.id)}
                 key={statement.id}
                 className={classNames('statement-container', {
                   highlighted: isHighlighted,
