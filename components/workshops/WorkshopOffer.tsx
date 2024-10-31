@@ -21,6 +21,7 @@ export function WorkshopOffer(props: {
     <div className="col col-12 col-lg-6">
       {workshop.image ? (
         <img
+          style={{ maxHeight: 308 }}
           src={`${mediaUrl}${workshop.image}`}
           alt={`Obrázek k workshopu ${workshop.name}`}
           className="rounded-l mb-10"
