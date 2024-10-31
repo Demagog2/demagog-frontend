@@ -47,17 +47,22 @@ const StatementItemFragment = gql(`
 
 export default function StatementItem(props: {
   statement: FragmentType<typeof StatementItemFragment>
+  vertical?: boolean
 }) {
   const statement = useFragment(StatementItemFragment, props.statement)
 
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
+  const { vertical = false } = props
+
   return (
     <div className="mb-10 s-statement">
-      <div className="row g-6">
-        <div className="col col-12 col-md-6 col-lg-7">
-          <div className="d-flex">
+      <div className={`g-6 ${props.vertical ? 'flex-column' : 'row'}`}>
+        <div
+          className={`${props.vertical ? '' : 'col col-12 col-md-6 col-lg-7'}`}
+        >
+          <div className="d-flex flex-column">
             <div className="w-100px min-w-100px">
               <div className="px-2">
                 <SpeakerLink
@@ -87,23 +92,30 @@ export default function StatementItem(props: {
                 </h3>
               </div>
             </div>
-            <div className="ps-5">
-              <blockquote className="p-3 fs-6 bg-dark text-white rounded-m mb-2 position-relative min-h-50px">
-                <span className="popover-arrow arrow-east"></span>
+            <div className={` ${vertical} ? '' : 'ps-5'`}>
+              <blockquote
+                className={`p-3 fs-6 bg-dark text-white rounded-m mb-2 position-relative min-h-50px ${vertical ? 'mt-3' : ''}`}
+              >
+                <span
+                  className={`popover-arrow ${vertical ? 'arrow-north-statement-item' : 'arrow-east'}`}
+                ></span>
                 <span
                   className="fs-6 position-relative"
                   dangerouslySetInnerHTML={{ __html: statement.content }}
                 ></span>
               </blockquote>
-              {statement.source.medium?.name && statement.source.releasedAt && (
-                <cite className="mb-2 fs-7">
-                  {statement.source.medium.name}
-                  <span>, </span>
-                  {formatDate(statement.source.releasedAt)}
-                </cite>
-              )}
 
-              {statement.tags.length > 0 && (
+              {!vertical &&
+                statement.source.medium?.name &&
+                statement.source.releasedAt && (
+                  <cite className="mb-2 fs-7">
+                    {statement.source.medium.name}
+                    <span>, </span>
+                    {formatDate(statement.source.releasedAt)}
+                  </cite>
+                )}
+
+              {!vertical && statement.tags.length > 0 && (
                 <div className="row g-2">
                   {statement.tags.map((tag: any) => (
                     <div key={tag.id} className="col col-auto">
@@ -118,7 +130,9 @@ export default function StatementItem(props: {
             </div>
           </div>
         </div>
-        <div className="col col-12 col-md-6 col-lg-5">
+        <div
+          className={`col ${props.vertical ? '' : 'col-12 col-md-6 col-lg-5'}`}
+        >
           <StatementAssessment
             type={statement.assessment.veracity?.key}
             name={statement.assessment.veracity?.name}

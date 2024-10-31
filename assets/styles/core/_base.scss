@@ -1,21 +1,23 @@
-*, :after, :before {
+*,
+:after,
+:before {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
   border: 0;
   outline: 0;
   -moz-osx-font-smoothing: grayscale;
-  -webkit-font-smoothing: antialiased!important;
+  -webkit-font-smoothing: antialiased !important;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility !important;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 html {
   font-family: sans-serif;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
   -ms-overflow-style: scrollnav-bar;
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   overflow: hidden;
   overflow-y: auto;
   width: 100%;
@@ -40,7 +42,8 @@ main {
     text-decoration: none;
   }
 
-  ul, ol {
+  ul,
+  ol {
     padding: 0 0 0 1rem;
   }
 
@@ -52,7 +55,8 @@ main {
 }
 
 .content {
-  p, h2 {
+  p,
+  h2 {
     margin-bottom: 0.5rem;
   }
 
@@ -149,7 +153,11 @@ main {
 .popover-arrow {
   &.arrow-north {
     left: 35px;
-    top: -9px;
+    top: -5px;
+  }
+  &.arrow-north-statement-item {
+    left: 9px;
+    top: -5px;
   }
   &.arrow-south {
     right: calc(50% - -10px);
@@ -168,27 +176,27 @@ main {
   }
 }
 .popover-arrow:before {
-    display: block;
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    transform: rotate(45deg);
-    border-radius: 2px;
-    content: "";
-    background: $dark;
-    border-radius: 2px;
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  transform: rotate(45deg);
+  border-radius: 2px;
+  content: '';
+  background: $dark;
+  border-radius: 2px;
 }
 .popover-arrow:after {
-    content: '';
-    display: block;
-    position: absolute;
-    z-index: 1;
-    left: auto;
-    background: $dark;
-    width: 20px;
-    height: 20px;
-    transform: rotate(45deg);
-    border-radius: 2px;
+  content: '';
+  display: block;
+  position: absolute;
+  z-index: 1;
+  left: auto;
+  background: $dark;
+  width: 20px;
+  height: 20px;
+  transform: rotate(45deg);
+  border-radius: 2px;
 }
 
 .pagination {
@@ -231,8 +239,6 @@ main {
       margin-right: 0.5rem;
     }
   }
-
-
 }
 
 .column-2 {

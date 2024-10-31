@@ -130,7 +130,7 @@ export function ArticleFullscreenPlayer(props: {
                 </div>
 
                 <div className="statement-content-wrapper">
-                  <StatementItem statement={statement} />
+                  <StatementItem statement={statement} vertical={true} />
                 </div>
               </div>
             )
