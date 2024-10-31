@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { VideoPlayer } from './players/VideoPlayer'
 import { YouTubeVideo } from './players/YouTubeVideo'
+import { stat } from 'fs'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -152,7 +153,16 @@ export function ArticleFullscreenPlayer(props: {
             >
               <div className="time-container">
                 {/* FIXME: Add on click callback that calls videoRef.current?.goToTime(1234) with the start time of the current statement */}
-                <button className="time-button">
+                <button
+                  className="time-button"
+                  onClick={() => {
+                    if (statement.statementVideoMark?.start != null) {
+                      videoRef.current?.goToTime(
+                        statement.statementVideoMark?.start
+                      )
+                    }
+                  }}
+                >
                   {displayTime(statement.statementVideoMark?.start ?? 0)}
                 </button>
 
