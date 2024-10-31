@@ -3,9 +3,11 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import StatementItem from '@/components/statement/Item'
 import { displayTime } from '@/libs/date-time'
+import classNames from 'classnames'
 import Link from 'next/link'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { YouTubeVideo } from './players/YouTubeVideo'
+import { VideoPlayer } from './players/VideoPlayer'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -18,6 +20,7 @@ const ArticleFullscrenPlayerFragment = gql(`
         id
         statementVideoMark {
           start
+          stop
         }
         ...StatementDetail
       }
@@ -48,7 +51,20 @@ export function ArticleFullscreenPlayer(props: {
     return () => document.removeEventListener('keydown', handleEscapeKey)
   }, [handleEscapeKey])
 
+  const [currentPlayerTime, setCurrentPlayerTime] = useState<number>(0)
+
   const statementsColumn = useRef<HTMLDivElement | null>(null)
+  const videoRef = useRef<VideoPlayer | null>(null)
+
+  useEffect(() => {
+    const handle = setInterval(() => {
+      if (videoRef.current) {
+        setCurrentPlayerTime(videoRef.current.getTime())
+      }
+    }, 1000)
+
+    return () => clearInterval(handle)
+  }, [setCurrentPlayerTime])
 
   if (!article.source) {
     return null
@@ -83,7 +99,7 @@ export function ArticleFullscreenPlayer(props: {
 
       {/* Video column */}
       <div className="video-column">
-        <YouTubeVideo source={article.source} />
+        <YouTubeVideo ref={videoRef} source={article.source} />
       </div>
 
       {/* Statements column */}
@@ -91,9 +107,19 @@ export function ArticleFullscreenPlayer(props: {
         {article.segments.map((segment) => {
           return segment.statements.map((statement, index) => {
             const lastStatement = index + 1 === segment.statements.length
+            const { statementVideoMark } = statement
+            const isHighlighted =
+              statementVideoMark &&
+              statementVideoMark.start < currentPlayerTime &&
+              statementVideoMark.stop > currentPlayerTime
 
             return (
-              <div key={statement.id} className="statement-container">
+              <div
+                key={statement.id}
+                className={classNames('statement-container', {
+                  highlighted: isHighlighted,
+                })}
+              >
                 <div className="time-container">
                   <button className="time-button">
                     {displayTime(statement.statementVideoMark?.start ?? 0)}
