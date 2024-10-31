@@ -8,6 +8,7 @@ import formatDate from '@/libs/format-date'
 import { useState, useRef } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerLink } from '../speaker/SpeakerLink'
+import classNames from 'classnames'
 
 const StatementItemFragment = gql(`
   fragment StatementDetail on Statement {
@@ -63,11 +64,16 @@ export default function StatementItem(props: {
           className={`${props.vertical ? '' : 'col col-12 col-md-6 col-lg-7'}`}
         >
           <div className="d-flex flex-column">
-            <div className="w-100px min-w-100px">
-              <div className="px-2">
+            <div
+              className={classNames({
+                'w-100px min-w-100px': !vertical,
+                'd-flex': vertical,
+              })}
+            >
+              <div className={classNames('px-2', { 'w-50px': vertical })}>
                 <SpeakerLink
                   speaker={statement.sourceSpeaker.speaker}
-                  className="d-block position-relative"
+                  className="d-block"
                 >
                   {statement.sourceSpeaker.speaker.avatar && (
                     <span className="symbol symbol-square symbol-circle">
@@ -86,7 +92,11 @@ export default function StatementItem(props: {
                   )}
                 </SpeakerLink>
               </div>
-              <div className="mt-2 text-center w-100">
+              <div
+                className={classNames('mt-2 ', {
+                  'text-center w-100': !vertical,
+                })}
+              >
                 <h3 className="fs-6 fs-600">
                   {statement.sourceSpeaker.fullName}
                 </h3>
