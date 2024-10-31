@@ -8,6 +8,7 @@ import formatDate from '@/libs/format-date'
 import { useState, useRef } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerLink } from '../speaker/SpeakerLink'
+import classNames from 'classnames'
 
 const StatementItemFragment = gql(`
   fragment StatementDetail on Statement {
@@ -47,22 +48,45 @@ const StatementItemFragment = gql(`
 
 export default function StatementItem(props: {
   statement: FragmentType<typeof StatementItemFragment>
+  isVertical?: boolean
 }) {
   const statement = useFragment(StatementItemFragment, props.statement)
 
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
+  const { isVertical = false } = props
+
   return (
     <div className="mb-10 s-statement">
-      <div className="row g-6">
-        <div className="col col-12 col-md-6 col-lg-7">
-          <div className="d-flex">
-            <div className="w-100px min-w-100px">
-              <div className="px-2">
+      <div
+        className={classNames('g-6', {
+          'flex-column': isVertical,
+          row: !isVertical,
+        })}
+      >
+        <div
+          className={classNames({
+            'col col-12 col-md-6 col-lg-7': !isVertical,
+          })}
+        >
+          <div
+            className={classNames('d-flex', {
+              'flex-column': isVertical,
+            })}
+          >
+            <div
+              className={classNames({
+                'w-100px min-w-100px': !isVertical,
+                'd-flex': isVertical,
+              })}
+            >
+              <div className={classNames('px-2', { 'w-50px': isVertical })}>
                 <SpeakerLink
                   speaker={statement.sourceSpeaker.speaker}
-                  className="d-block position-relative"
+                  className={classNames('d-block', {
+                    'position-relative': !isVertical,
+                  })}
                 >
                   {statement.sourceSpeaker.speaker.avatar && (
                     <span className="symbol symbol-square symbol-circle">
@@ -81,29 +105,54 @@ export default function StatementItem(props: {
                   )}
                 </SpeakerLink>
               </div>
-              <div className="mt-2 text-center w-100">
-                <h3 className="fs-6 fs-600">
+              <div
+                className={classNames('mt-2 ', {
+                  'text-center w-100': !isVertical,
+                })}
+              >
+                <h3
+                  className={classNames('fs-600', {
+                    'fs-8': isVertical,
+                    'fs-6': !isVertical,
+                  })}
+                >
                   {statement.sourceSpeaker.fullName}
                 </h3>
               </div>
             </div>
-            <div className="ps-5">
-              <blockquote className="p-3 fs-6 bg-dark text-white rounded-m mb-2 position-relative min-h-50px">
-                <span className="popover-arrow arrow-east"></span>
+            <div className={classNames({ 'ps-5': !isVertical })}>
+              <blockquote
+                className={classNames(
+                  'p-3 fs-6 bg-dark text-white rounded-m  position-relative min-h-50px',
+                  {
+                    'mb-2': !isVertical,
+                    'mt-4 mb-4': isVertical,
+                  }
+                )}
+              >
+                <span
+                  className={classNames('popover-arrow', {
+                    'arrow-north-statement-item': isVertical,
+                    'arrow-east': !isVertical,
+                  })}
+                ></span>
                 <span
                   className="fs-6 position-relative"
                   dangerouslySetInnerHTML={{ __html: statement.content }}
                 ></span>
               </blockquote>
-              {statement.source.medium?.name && statement.source.releasedAt && (
-                <cite className="mb-2 fs-7">
-                  {statement.source.medium.name}
-                  <span>, </span>
-                  {formatDate(statement.source.releasedAt)}
-                </cite>
-              )}
 
-              {statement.tags.length > 0 && (
+              {!isVertical &&
+                statement.source.medium?.name &&
+                statement.source.releasedAt && (
+                  <cite className="mb-2 fs-7">
+                    {statement.source.medium.name}
+                    <span>, </span>
+                    {formatDate(statement.source.releasedAt)}
+                  </cite>
+                )}
+
+              {!isVertical && statement.tags.length > 0 && (
                 <div className="row g-2">
                   {statement.tags.map((tag: any) => (
                     <div key={tag.id} className="col col-auto">
@@ -118,7 +167,11 @@ export default function StatementItem(props: {
             </div>
           </div>
         </div>
-        <div className="col col-12 col-md-6 col-lg-5">
+        <div
+          className={classNames('col', {
+            'col-12 col-md-6 col-lg-5': !isVertical,
+          })}
+        >
           <StatementAssessment
             type={statement.assessment.veracity?.key}
             name={statement.assessment.veracity?.name}

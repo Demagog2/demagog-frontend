@@ -30,6 +30,8 @@
 // Needed to be imported last.
 @import 'back_compatibility';
 
+@import './article/player';
+
 .widget {
   display: flex;
   flex-direction: column;
