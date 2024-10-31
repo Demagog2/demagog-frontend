@@ -1,10 +1,11 @@
 'use client'
 
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { useEffect, useRef } from 'react'
-import { YouTubeVideo } from './players/YouTubeVideo'
-import Link from 'next/link'
+import StatementItem from '@/components/statement/Item'
 import { displayTime } from '@/libs/date-time'
+import Link from 'next/link'
+import { useCallback, useEffect, useRef } from 'react'
+import { YouTubeVideo } from './players/YouTubeVideo'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -14,14 +15,11 @@ const ArticleFullscrenPlayerFragment = gql(`
     }
     segments {
       statements {
-        sourceSpeaker {
-          fullName
-        }
+        id
         statementVideoMark {
           start
         }
-        id
-        content
+        ...StatementDetail
       }
     }
   }
@@ -35,17 +33,20 @@ export function ArticleFullscreenPlayer(props: {
 
   const { onClose } = props
 
-  useEffect(() => {
-    function handleEscapeKey(event: KeyboardEvent) {
-      if (event.code === 'Escape') {
+  const handleEscapeKey = useCallback(
+    (evt: KeyboardEvent) => {
+      if (evt.code === 'Escape') {
         onClose()
       }
-    }
+    },
+    [onClose]
+  )
 
+  useEffect(() => {
     document.addEventListener('keydown', handleEscapeKey)
 
     return () => document.removeEventListener('keydown', handleEscapeKey)
-  }, [onClose])
+  }, [handleEscapeKey])
 
   const statementsColumn = useRef<HTMLDivElement | null>(null)
 
@@ -102,8 +103,7 @@ export function ArticleFullscreenPlayer(props: {
                 </div>
 
                 <div className="statement-content-wrapper">
-                  <h3>{statement.sourceSpeaker.fullName}</h3>
-                  <p className="mt-3">{statement.content}</p>
+                  <StatementItem statement={statement} />
                 </div>
               </div>
             )
