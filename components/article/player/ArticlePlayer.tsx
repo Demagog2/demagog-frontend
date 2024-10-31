@@ -4,7 +4,18 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { imagePath } from '@/libs/images/path'
 import PlayIcon from '@/assets/icons/play-icon.svg'
 import { ArticleFullscreenPlayer } from './ArticleFullscreenPlayer'
-import { useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+
+// These function can be defined outside of ArticlePlayer scope,
+// cause they work with global state and not react state.
+
+function onOpen() {
+  window.location.hash = 'video'
+}
+
+function onClose() {
+  window.location.hash = ''
+}
 
 const ArticlePlayerFragment = gql(`
   fragment ArticlePlayer on Article {
@@ -20,7 +31,19 @@ export function ArticlePlayer(props: {
 }) {
   const article = useFragment(ArticlePlayerFragment, props.article)
 
-  const [isArticleOpen, setArticleOpen] = useState(false)
+  const [isFullscreenPlayerOpen, setFullscreenPlayerOpen] = useState(false)
+
+  const handleHashChange = useCallback(() => {
+    setFullscreenPlayerOpen(window.location.hash === '#video')
+  }, [setFullscreenPlayerOpen])
+
+  useEffect(() => {
+    handleHashChange()
+
+    window.addEventListener('hashchange', handleHashChange)
+
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [])
 
   if (!article.showPlayer) {
     return null
@@ -28,11 +51,8 @@ export function ArticlePlayer(props: {
 
   return (
     <>
-      {isArticleOpen && (
-        <ArticleFullscreenPlayer
-          article={article}
-          onClose={() => setArticleOpen(false)}
-        />
+      {isFullscreenPlayerOpen && (
+        <ArticleFullscreenPlayer article={article} onClose={onClose} />
       )}
 
       <div className="demagog-tv-player">
@@ -45,11 +65,7 @@ export function ArticlePlayer(props: {
             />
           )}
         </div>
-        <button
-          type="button"
-          className="open-player-button"
-          onClick={() => setArticleOpen(true)}
-        >
+        <button type="button" className="open-player-button" onClick={onOpen}>
           <div className="open-player-button-overlay">
             <PlayIcon className="open-player-button-overlay-play-icon" />
 
