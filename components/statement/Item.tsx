@@ -48,14 +48,14 @@ const StatementItemFragment = gql(`
 
 export default function StatementItem(props: {
   statement: FragmentType<typeof StatementItemFragment>
-  vertical?: boolean
+  isVertical?: boolean
 }) {
   const statement = useFragment(StatementItemFragment, props.statement)
 
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
-  const { vertical: isVertical = false } = props
+  const { isVertical = false } = props
 
   return (
     <div className="mb-10 s-statement">
@@ -70,7 +70,11 @@ export default function StatementItem(props: {
             'col col-12 col-md-6 col-lg-7': !isVertical,
           })}
         >
-          <div className="d-flex flex-column">
+          <div
+            className={classNames('d-flex', {
+              'flex-column': isVertical,
+            })}
+          >
             <div
               className={classNames({
                 'w-100px min-w-100px': !isVertical,
@@ -80,7 +84,9 @@ export default function StatementItem(props: {
               <div className={classNames('px-2', { 'w-50px': isVertical })}>
                 <SpeakerLink
                   speaker={statement.sourceSpeaker.speaker}
-                  className="d-block"
+                  className={classNames('d-block', {
+                    'position-relative': !isVertical,
+                  })}
                 >
                   {statement.sourceSpeaker.speaker.avatar && (
                     <span className="symbol symbol-square symbol-circle">
