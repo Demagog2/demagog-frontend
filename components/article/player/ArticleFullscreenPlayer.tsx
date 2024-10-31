@@ -152,15 +152,12 @@ export function ArticleFullscreenPlayer(props: {
               })}
             >
               <div className="time-container">
-                {/* FIXME: Add on click callback that calls videoRef.current?.goToTime(1234) with the start time of the current statement */}
                 <button
                   className="time-button"
                   onClick={() => {
-                    if (statement.statementVideoMark?.start != null) {
-                      videoRef.current?.goToTime(
-                        statement.statementVideoMark?.start
-                      )
-                    }
+                    videoRef.current?.goToTime(
+                      statement.statementVideoMark?.start ?? 0
+                    )
                   }}
                 >
                   {displayTime(statement.statementVideoMark?.start ?? 0)}
