@@ -59,7 +59,12 @@ export default function StatementItem(props: {
 
   return (
     <div className="mb-10 s-statement">
-      <div className={`g-6 ${props.vertical ? 'flex-column' : 'row'}`}>
+      <div
+        className={classNames('g-6', {
+          'flex-column': vertical,
+          row: !vertical,
+        })}
+      >
         <div
           className={`${props.vertical ? '' : 'col col-12 col-md-6 col-lg-7'}`}
         >
