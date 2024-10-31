@@ -101,6 +101,26 @@ export function ArticleFullscreenPlayer(props: {
     return () => clearInterval(handle)
   }, [setHiglightedStatementId, statements])
 
+  useEffect(() => {
+    document.body.style.position = 'fixed'
+
+    let headMetaViewportContentBefore: string | null
+
+    const headMetaViewport = document.head.querySelector('meta[name=viewport]')
+    if (headMetaViewport) {
+      headMetaViewportContentBefore = headMetaViewport.getAttribute('content')
+      headMetaViewport.setAttribute('content', 'width=800')
+    }
+
+    return () => {
+      document.body.style.position = 'static'
+
+      if (headMetaViewport && headMetaViewportContentBefore) {
+        headMetaViewport.setAttribute('content', headMetaViewportContentBefore)
+      }
+    }
+  }, [])
+
   if (!article.source) {
     return null
   }
