@@ -138,34 +138,32 @@ export function ArticleFullscreenPlayer(props: {
 
       {/* Statements column */}
       <div ref={statementsColumn} className="statements-column">
-        {article.segments.map((segment) => {
-          return segment.statements.map((statement, index) => {
-            const lastStatement = index + 1 === segment.statements.length
-            const isHighlighted = statement.id === highlightedStatementId
+        {statements.map((statement, index) => {
+          const lastStatement = index + 1 === statements.length
+          const isHighlighted = statement.id === highlightedStatementId
 
-            return (
-              <div
-                id={getStatementId(statement.id)}
-                key={statement.id}
-                className={classNames('statement-container', {
-                  highlighted: isHighlighted,
-                })}
-              >
-                <div className="time-container">
-                  {/* FIXME: Add on click callback that calls videoRef.current?.goToTime(1234) with the start time of the current statement */}
-                  <button className="time-button">
-                    {displayTime(statement.statementVideoMark?.start ?? 0)}
-                  </button>
+          return (
+            <div
+              id={getStatementId(statement.id)}
+              key={statement.id}
+              className={classNames('statement-container', {
+                highlighted: isHighlighted,
+              })}
+            >
+              <div className="time-container">
+                {/* FIXME: Add on click callback that calls videoRef.current?.goToTime(1234) with the start time of the current statement */}
+                <button className="time-button">
+                  {displayTime(statement.statementVideoMark?.start ?? 0)}
+                </button>
 
-                  {!lastStatement && <div className="timeline" />}
-                </div>
-
-                <div className="statement-content-wrapper">
-                  <StatementItem statement={statement} vertical={true} />
-                </div>
+                {!lastStatement && <div className="timeline" />}
               </div>
-            )
-          })
+
+              <div className="statement-content-wrapper">
+                <StatementItem statement={statement} vertical={true} />
+              </div>
+            </div>
+          )
         })}
       </div>
     </div>
