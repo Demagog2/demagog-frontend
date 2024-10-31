@@ -66,7 +66,7 @@ export default function StatementItem(props: {
         })}
       >
         <div
-          className={`${props.vertical ? '' : 'col col-12 col-md-6 col-lg-7'}`}
+          className={classNames({ 'col col-12 col-md-6 col-lg-7': !vertical })}
         >
           <div className="d-flex flex-column">
             <div
@@ -107,12 +107,20 @@ export default function StatementItem(props: {
                 </h3>
               </div>
             </div>
-            <div className={` ${vertical} ? '' : 'ps-5'`}>
+            <div className={classNames({ 'ps-5': !vertical })}>
               <blockquote
-                className={`p-3 fs-6 bg-dark text-white rounded-m mb-2 position-relative min-h-50px ${vertical ? 'mt-3' : ''}`}
+                className={classNames(
+                  'p-3 fs-6 bg-dark text-white rounded-m mb-2 position-relative min-h-50px',
+                  {
+                    'mt-3': vertical,
+                  }
+                )}
               >
                 <span
-                  className={`popover-arrow ${vertical ? 'arrow-north-statement-item' : 'arrow-east'}`}
+                  className={classNames('popover-arrow', {
+                    'arrow-north-statement-item': vertical,
+                    'arrow-east': !vertical,
+                  })}
                 ></span>
                 <span
                   className="fs-6 position-relative"
@@ -146,7 +154,9 @@ export default function StatementItem(props: {
           </div>
         </div>
         <div
-          className={`col ${props.vertical ? '' : 'col-12 col-md-6 col-lg-5'}`}
+          className={classNames('col', {
+            'col-12 col-md-6 col-lg-5': !vertical,
+          })}
         >
           <StatementAssessment
             type={statement.assessment.veracity?.key}
