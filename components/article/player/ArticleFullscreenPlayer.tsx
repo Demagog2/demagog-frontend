@@ -4,11 +4,11 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import StatementItem from '@/components/statement/Item'
 import { displayTime } from '@/libs/date-time'
 import classNames from 'classnames'
+import { orderBy } from 'lodash'
 import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { YouTubeVideo } from './players/YouTubeVideo'
 import { VideoPlayer } from './players/VideoPlayer'
-import { orderBy } from 'lodash'
+import { YouTubeVideo } from './players/YouTubeVideo'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -98,7 +98,7 @@ export function ArticleFullscreenPlayer(props: {
     }, 500)
 
     return () => clearInterval(handle)
-  }, [setHiglightedStatementId])
+  }, [setHiglightedStatementId, statements])
 
   if (!article.source) {
     return null
