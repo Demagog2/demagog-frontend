@@ -43,7 +43,7 @@ export function ArticlePlayer(props: {
     window.addEventListener('hashchange', handleHashChange)
 
     return () => window.removeEventListener('hashchange', handleHashChange)
-  }, [])
+  }, [handleHashChange])
 
   if (!article.showPlayer) {
     return null
