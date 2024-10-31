@@ -55,27 +55,29 @@ export default function StatementItem(props: {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
-  const { vertical = false } = props
+  const { vertical: isVertical = false } = props
 
   return (
     <div className="mb-10 s-statement">
       <div
         className={classNames('g-6', {
-          'flex-column': vertical,
-          row: !vertical,
+          'flex-column': isVertical,
+          row: !isVertical,
         })}
       >
         <div
-          className={classNames({ 'col col-12 col-md-6 col-lg-7': !vertical })}
+          className={classNames({
+            'col col-12 col-md-6 col-lg-7': !isVertical,
+          })}
         >
           <div className="d-flex flex-column">
             <div
               className={classNames({
-                'w-100px min-w-100px': !vertical,
-                'd-flex': vertical,
+                'w-100px min-w-100px': !isVertical,
+                'd-flex': isVertical,
               })}
             >
-              <div className={classNames('px-2', { 'w-50px': vertical })}>
+              <div className={classNames('px-2', { 'w-50px': isVertical })}>
                 <SpeakerLink
                   speaker={statement.sourceSpeaker.speaker}
                   className="d-block"
@@ -99,27 +101,33 @@ export default function StatementItem(props: {
               </div>
               <div
                 className={classNames('mt-2 ', {
-                  'text-center w-100': !vertical,
+                  'text-center w-100': !isVertical,
                 })}
               >
-                <h3 className="fs-6 fs-600">
+                <h3
+                  className={classNames('fs-600', {
+                    'fs-8': isVertical,
+                    'fs-6': !isVertical,
+                  })}
+                >
                   {statement.sourceSpeaker.fullName}
                 </h3>
               </div>
             </div>
-            <div className={classNames({ 'ps-5': !vertical })}>
+            <div className={classNames({ 'ps-5': !isVertical })}>
               <blockquote
                 className={classNames(
-                  'p-3 fs-6 bg-dark text-white rounded-m mb-2 position-relative min-h-50px',
+                  'p-3 fs-6 bg-dark text-white rounded-m  position-relative min-h-50px',
                   {
-                    'mt-3': vertical,
+                    'mb-2': !isVertical,
+                    'mt-4 mb-4': isVertical,
                   }
                 )}
               >
                 <span
                   className={classNames('popover-arrow', {
-                    'arrow-north-statement-item': vertical,
-                    'arrow-east': !vertical,
+                    'arrow-north-statement-item': isVertical,
+                    'arrow-east': !isVertical,
                   })}
                 ></span>
                 <span
@@ -128,7 +136,7 @@ export default function StatementItem(props: {
                 ></span>
               </blockquote>
 
-              {!vertical &&
+              {!isVertical &&
                 statement.source.medium?.name &&
                 statement.source.releasedAt && (
                   <cite className="mb-2 fs-7">
@@ -138,7 +146,7 @@ export default function StatementItem(props: {
                   </cite>
                 )}
 
-              {!vertical && statement.tags.length > 0 && (
+              {!isVertical && statement.tags.length > 0 && (
                 <div className="row g-2">
                   {statement.tags.map((tag: any) => (
                     <div key={tag.id} className="col col-auto">
@@ -155,7 +163,7 @@ export default function StatementItem(props: {
         </div>
         <div
           className={classNames('col', {
-            'col-12 col-md-6 col-lg-5': !vertical,
+            'col-12 col-md-6 col-lg-5': !isVertical,
           })}
         >
           <StatementAssessment
