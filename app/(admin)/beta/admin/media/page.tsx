@@ -32,6 +32,7 @@ export default async function AdminMedia(props: PropsWithSearchParams) {
             node {
               id
               name
+              sourcesCount
              ...AdminMediumDeleteDialog
             }
           }
@@ -69,6 +70,7 @@ export default async function AdminMedia(props: PropsWithSearchParams) {
           <thead>
             <tr>
               <th scope="col">Název</th>
+              <th scope="col">Počet diskuzí</th>
               <th scope="col">
                 <span className="sr-only">Edit</span>
               </th>
@@ -87,6 +89,7 @@ export default async function AdminMedia(props: PropsWithSearchParams) {
                       {edge.node.name}
                     </Link>
                   </td>
+                  <td>{edge.node.sourcesCount}</td>
                   <td>
                     <Link
                       href={`/beta/admin/media/${edge.node.id}/edit`}
