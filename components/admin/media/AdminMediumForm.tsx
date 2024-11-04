@@ -5,7 +5,7 @@ import { createMedium } from '@/app/(admin)/beta/admin/media/actions'
 import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 
-export default function AdminMediumForm() {
+export default function AdminMediumForm(props: { action: string }) {
   const [name, setName] = useState('')
   const [hasError, setHasError] = useState(false)
 
@@ -17,7 +17,7 @@ export default function AdminMediumForm() {
   }
 
   return (
-    <form action={createMedium} onSubmit={handleSubmit}>
+    <form action={props.action} onSubmit={handleSubmit}>
       <label htmlFor="new-media-field"> Základní údaje</label>
       <Input
         name="name"

@@ -2,6 +2,10 @@ import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
+import AdminMediumForm from '@/components/admin/media/AdminMediumForm'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
+import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
+import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -42,5 +46,12 @@ export default async function AdminMediaEdit(props: {
     },
   })
 
-  return <div>Upravit pořad {data.medium.name}</div>
+  return (
+    <AdminPage>
+      <AdminPageHeader>
+        <AdminPageTitle title="Upravit pořad" />
+      </AdminPageHeader>
+      <AdminMediumForm action="createMedium" />
+    </AdminPage>
+  )
 }

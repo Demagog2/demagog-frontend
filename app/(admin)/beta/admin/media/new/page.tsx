@@ -14,7 +14,7 @@ export default function NewMedia() {
       <AdminPageHeader>
         <AdminPageTitle title="Přidat nový pořad" />
       </AdminPageHeader>
-      <AdminMediumForm />
+      <AdminMediumForm action="createMedium" />
     </AdminPage>
   )
 }
