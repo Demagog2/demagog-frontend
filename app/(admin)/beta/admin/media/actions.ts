@@ -5,7 +5,6 @@ import { serverMutation } from '@/libs/apollo-client-server'
 import { safeParse } from '@/libs/form-data'
 import { mediumSchema } from '@/libs/media/medium-schema'
 import { redirect } from 'next/navigation'
-import { parse } from 'path'
 
 const adminDeleteMediumMutation = gql(`
   mutation AdminDeleteMedium($id: ID!){

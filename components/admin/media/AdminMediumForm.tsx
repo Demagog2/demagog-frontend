@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { ChangeEvent, FormEvent, useState } from 'react'
 import { createMedium } from '@/app/(admin)/beta/admin/media/actions'
 import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
@@ -9,7 +9,7 @@ export default function AdminMediumForm() {
   const [name, setName] = useState('')
   const [hasError, setHasError] = useState(false)
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     if (name.trim() === '') {
       setHasError(true)
       e.preventDefault()
@@ -26,9 +26,9 @@ export default function AdminMediumForm() {
         required
         value={name}
         hasError={hasError}
-        onChange={(e) => {
-          setName(e.target.value)
-          if (e.target.value.trim() !== '') {
+        onChange={(evt: ChangeEvent<HTMLInputElement>) => {
+          setName(evt.target.value)
+          if (evt.target.value.trim() !== '') {
             setHasError(false)
           }
         }}
