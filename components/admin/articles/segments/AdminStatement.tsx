@@ -31,8 +31,8 @@ export function AdminStatement(props: {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
   return (
-    <div className={classNames('flex p-4', props.className)}>
-      <div className="mr-4 flex-shrink-0">
+    <div className="flex p-4">
+      <div className={classNames('mr-4 flex-shrink-0', props.className)}>
         <div className="flex items-center justify-center flex-col">
           <div>
             {statement.sourceSpeaker.speaker.avatar ? (

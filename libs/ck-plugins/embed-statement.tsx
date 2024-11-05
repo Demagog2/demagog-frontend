@@ -37,22 +37,16 @@ function renderStatement(model: Element, writer: DowncastWriter) {
 
     // TODO: Styling
     if (!data?.statementV2) {
-      // TODO: use react for not found state
-
-      // const root = createRoot(statementElem)
-      // root.render(
-      //   <div>Statement not found</div>
-      // )
-
-      statementElem.innerHTML = `<div class="statement">
-         <p>Výrok ${statementId} nenalezen</p>
-      </div>`
-    } else {
-      // Statement was found
-
       const root = createRoot(statementElem)
       root.render(
-        <AdminStatement className="mt-8" statement={data.statementV2} />
+        <div className="p-2 text-center text-gray-600 bg-gray-100 rounded-lg">
+          Výrok nenalezen
+        </div>
+      )
+    } else {
+      const root = createRoot(statementElem)
+      root.render(
+        <AdminStatement className="mt-4" statement={data.statementV2} />
       )
     }
   })
