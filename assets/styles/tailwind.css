@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @layer utilities {
-
   .article-content p,
   .ck-content p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
@@ -16,6 +15,10 @@
   .article-content ul,
   .ck-content ul {
     @apply !mt-8 !max-w-xl !space-y-8 !text-gray-600;
+  }
+
+  .ck-content .statement {
+    border: 1px solid red;
   }
 
   .article-content ul li,

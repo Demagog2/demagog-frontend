@@ -1,5 +1,6 @@
 import { gql, FragmentType, useFragment } from '@/__generated__'
 import { VeracityBadge } from '../../veracity/VeracityBadge'
+import classNames from 'classnames'
 
 const AdminStatementFragment = gql(`
   fragment AdminStatement on Statement {
@@ -23,6 +24,7 @@ const AdminStatementFragment = gql(`
 `)
 
 export function AdminStatement(props: {
+  className?: string
   statement: FragmentType<typeof AdminStatementFragment>
 }) {
   const statement = useFragment(AdminStatementFragment, props.statement)
@@ -30,7 +32,7 @@ export function AdminStatement(props: {
 
   return (
     <div className="flex p-4">
-      <div className="mr-4 flex-shrink-0">
+      <div className={classNames('mr-4 flex-shrink-0', props.className)}>
         <div className="flex items-center justify-center flex-col">
           <div>
             {statement.sourceSpeaker.speaker.avatar ? (
