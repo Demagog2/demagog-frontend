@@ -9,18 +9,20 @@ import {
 import '@ckeditor/ckeditor5-media-embed/theme/mediaembed.css'
 import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
+import { createRoot } from 'react-dom/client'
+import { AdminStatement } from '@/components/admin/articles/segments/AdminStatement'
 
 function renderStatement(model: Element, writer: DowncastWriter) {
   const statementId = model.getAttribute('statementId')
 
   query({
     query: gql(`
-          query AdminCkEditorStatement($id: Int!) {
-            statementV2(id: $id) {
-              content
-            }
+        query AdminCkEditorStatement($id: Int!) {
+          statementV2(id: $id) {
+            ...AdminStatement
           }
-        `),
+        }
+      `),
     variables: {
       id: parseInt(String(statementId), 10),
     },
@@ -35,13 +37,23 @@ function renderStatement(model: Element, writer: DowncastWriter) {
 
     // TODO: Styling
     if (!data?.statementV2) {
+      // TODO: use react for not found state
+
+      // const root = createRoot(statementElem)
+      // root.render(
+      //   <div>Statement not found</div>
+      // )
+
       statementElem.innerHTML = `<div class="statement">
          <p>Výrok ${statementId} nenalezen</p>
       </div>`
     } else {
-      statementElem.innerHTML = `<div class="statement">
-         Výrok: <p>&bdquo;${data.statementV2.content}&bdquo;</p>
-      </div>`
+      // Statement was found
+
+      const root = createRoot(statementElem)
+      root.render(
+        <AdminStatement className="mt-8" statement={data.statementV2} />
+      )
     }
   })
 

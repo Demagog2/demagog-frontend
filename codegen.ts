@@ -8,6 +8,7 @@ const config: CodegenConfig = {
     'app/**/*.ts',
     'components/**/*.tsx',
     'libs/**/*.ts',
+    'libs/**/*.tsx',
   ],
   generates: {
     './__generated__/': {
