@@ -56,15 +56,18 @@ export default async function MediaDetail(
   return (
     <AdminPage>
       <AdminPageHeader>
-        <AdminPageTitle title={`Diskuze s pořadem ${data.medium.name}`} />
+        <AdminPageTitle
+          title={data.medium.name}
+          description="Diskuze s pořadem"
+        />
       </AdminPageHeader>
       <AdminPageContent>
         {data.medium.sourcesCount === 0 ? (
           <>
             <div className="mx-4 sm:mx-6 lg:mx-8">
-              <h2 className="display-5 fw-bold mb-2">
+              <p className="mt-2 text-sm text-gray-700 mb-2">
                 Zde se bude zobrazovat seznam diskuzí
-              </h2>
+              </p>
               <Link href={`/beta/admin/sources/new`}>
                 <button
                   type="button"

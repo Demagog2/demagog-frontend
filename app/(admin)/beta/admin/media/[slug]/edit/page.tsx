@@ -40,9 +40,9 @@ export default async function AdminMediaEdit(props: {
         medium(id: $id) {
           id
           name
-          }
         }
-      `),
+      }
+    `),
     variables: {
       id: props.params.slug,
     },

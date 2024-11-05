@@ -8,6 +8,7 @@ import { LinkButton } from '../forms/LinkButton'
 import { AdminFormActions } from '../layout/AdminFormActions'
 import { AdminPageHeader } from '../layout/AdminPageHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
+import { Label } from '../forms/Label'
 
 export default function AdminMediumForm(props: {
   action: string
@@ -38,7 +39,7 @@ export default function AdminMediumForm(props: {
           <SubmitButton />
         </AdminFormActions>
       </AdminPageHeader>
-      <label htmlFor="new-media-field">Název</label>
+      <Label htmlFor="new-media-field">Název</Label>
       <Input
         name="name"
         id="new-media-field"
