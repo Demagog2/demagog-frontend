@@ -6,6 +6,8 @@ import { updateArticle, updateArticleSingleStatement } from '../../actions'
 import { ArticleTypeEnum } from '@/__generated__/graphql'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
+import { PropsWithSearchParams } from '@/libs/params'
+import { getBooleanParam } from '@/libs/query-params'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -30,9 +32,11 @@ export async function generateMetadata(props: {
   }
 }
 
-export default async function AdminArticleEdit(props: {
-  params: { slug: string }
-}) {
+export default async function AdminArticleEdit(
+  props: PropsWithSearchParams<{
+    params: { slug: string }
+  }>
+) {
   const { data } = await serverQuery({
     query: gql(`
       query AdminArticleEdit($id: ID!) {
@@ -50,6 +54,11 @@ export default async function AdminArticleEdit(props: {
     },
   })
 
+  // TODO: Remove once the embedding statements is launched
+  const allowEmbeddingStatements = getBooleanParam(
+    props.searchParams.embedStatements
+  )
+
   if (data.article?.articleType === ArticleTypeEnum.SingleStatement) {
     return (
       <AdminArticleSingleStatementForm
@@ -66,6 +75,7 @@ export default async function AdminArticleEdit(props: {
       data={data}
       article={data.article}
       action={updateArticle.bind(null, data.article.id)}
+      allowEmbeddingStatements={allowEmbeddingStatements}
     />
   )
 }

@@ -28,17 +28,21 @@ import {
 import { Embed } from '@/libs/ck-plugins/embed'
 
 import 'ckeditor5/ckeditor5.css'
+import { StatementEmbed } from '@/libs/ck-plugins/embed-statement'
 
 export default function RickTextEditor(props: {
-  includeHeadings: boolean
+  includeHeadings?: boolean
+  includeStatements?: boolean
   value: string
   onChange(value: string): void
 }) {
+  const { onChange } = props
+
   const handleChange = useCallback(
     (_: EventInfo, editor: Editor) => {
-      props.onChange(editor.getData())
+      onChange(editor.getData())
     },
-    [props.onChange]
+    [onChange]
   )
 
   const config = useMemo(() => {
@@ -59,11 +63,12 @@ export default function RickTextEditor(props: {
           '|',
           'link',
           '|',
-          'bullettedList',
+          'bulletedList',
           'numberedList',
           '|',
           'embed',
           'insertImageViaUrl',
+          ...(props.includeStatements ? ['statementEmbed'] : []),
           '|',
           'specialCharacters',
           '|',
@@ -91,6 +96,7 @@ export default function RickTextEditor(props: {
         SpecialCharacters,
         SpecialCharactersEssentials,
         SpecialCharactersSpaces,
+        StatementEmbed,
         TextTransformation,
         NonBreakableSpaceKeystrokes,
       ],
