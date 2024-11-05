@@ -6,6 +6,7 @@ import AdminMediumForm from '@/components/admin/media/AdminMediumForm'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
+import { updateMedium } from '../../actions'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -37,6 +38,7 @@ export default async function AdminMediaEdit(props: {
     query: gql(`
       query AdminMediaEdit($id: ID!) {
         medium(id: $id) {
+          id
           name
           }
         }
@@ -48,10 +50,11 @@ export default async function AdminMediaEdit(props: {
 
   return (
     <AdminPage>
-      <AdminPageHeader>
-        <AdminPageTitle title="Upravit pořad" />
-      </AdminPageHeader>
-      <AdminMediumForm action="createMedium" />
+      <AdminMediumForm
+        action={updateMedium.bind(null, data.medium.id)}
+        name={data.medium.name}
+        title="Upravit pořad"
+      />
     </AdminPage>
   )
 }
