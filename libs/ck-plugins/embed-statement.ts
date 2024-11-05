@@ -1,6 +1,69 @@
-import { ButtonView, toWidget, type Editor } from 'ckeditor5'
+import {
+  ButtonView,
+  toWidget,
+  type Editor,
+  DowncastWriter,
+  Element,
+} from 'ckeditor5'
 
 import '@ckeditor/ckeditor5-media-embed/theme/mediaembed.css'
+import { query } from '@/libs/apollo-client'
+import { gql } from '@/__generated__'
+
+function renderStatement(model: Element, writer: DowncastWriter) {
+  const statementId = model.getAttribute('statementId')
+
+  query({
+    query: gql(`
+          query AdminCkEditorStatement($id: Int!) {
+            statementV2(id: $id) {
+              content
+            }
+          }
+        `),
+    variables: {
+      id: parseInt(String(statementId), 10),
+    },
+  }).then(({ data }) => {
+    const statementElem = document.getElementById(
+      `statement-embed-${statementId}`
+    )
+
+    if (!statementElem) {
+      return
+    }
+
+    // TODO: Styling
+    if (!data?.statementV2) {
+      statementElem.innerHTML = `<div class="statement">
+         <p>Výrok ${statementId} nenalezen</p>
+      </div>`
+    } else {
+      statementElem.innerHTML = `<div class="statement">
+         Výrok: <p>&bdquo;${data.statementV2.content}&bdquo;</p>
+      </div>`
+    }
+  })
+
+  const div = writer.createRawElement(
+    'div',
+    {
+      id: `statement-embed-${statementId}`,
+      class: 'ck-media__wrapper',
+    },
+    (domElement: HTMLElement) => {
+      domElement.innerText = `Nahrávám`
+    }
+  )
+
+  const wrapperElement = writer.createContainerElement('div')
+
+  writer.insert(writer.createPositionAt(wrapperElement, 0), div)
+
+  return toWidget(wrapperElement, writer, {
+    label: 'statement embed widget',
+  })
+}
 
 export function StatementEmbed(editor: Editor) {
   const schema = editor.model.schema
@@ -12,105 +75,48 @@ export function StatementEmbed(editor: Editor) {
     isObject: true,
     isBlock: true,
     allowWhere: '$block',
-    allowAttributes: ['code'],
+    allowAttributes: ['statementId'],
   })
 
   // Model -> Data
-  // conversion.for('dataDowncast').elementToElement({
-  //   model: 'embed',
-  //   view: (modelElement, { writer }) => {
-  //     const code = modelElement.getAttribute('code')
-  //
-  //     return writer.createUIElement(
-  //       'figure',
-  //       { class: 'embed' },
-  //       function (domDocument) {
-  //         const domElement = this.toDomElement(domDocument)
-  //
-  //         domElement.innerHTML = code as string
-  //
-  //         return domElement
-  //       }
-  //     )
-  //   },
-  // })
+  conversion.for('dataDowncast').elementToElement({
+    model: 'statementEmbed',
+    view: (modelElement, { writer }) => {
+      const statementId = modelElement.getAttribute('statementId')
+
+      return writer.createUIElement(
+        'div',
+        { class: 'statement-embed', 'data-statement-id': statementId },
+        function (domDocument) {
+          return this.toDomElement(domDocument)
+        }
+      )
+    },
+  })
 
   // Model -> View
-  // conversion.for('editingDowncast').elementToElement({
-  //   model: 'embed',
-  //   view: (modelElement, { writer }) => {
-  //     const code = modelElement.getAttribute('code')
-  //
-  //     const iframeWrapperElement = writer.createRawElement(
-  //       'div',
-  //       {
-  //         class: 'ck-media__wrapper',
-  //       },
-  //       (domElement: HTMLElement) => {
-  //         domElement.innerHTML = code as string
-  //       }
-  //     )
-  //
-  //     const figureElement = writer.createContainerElement('figure', {
-  //       class: 'media',
-  //     })
-  //
-  //     writer.insert(
-  //       writer.createPositionAt(figureElement, 0),
-  //       iframeWrapperElement
-  //     )
-  //
-  //     return toWidget(figureElement, writer, { label: 'embed widget' })
-  //   },
-  // })
+  conversion.for('editingDowncast').elementToElement({
+    model: 'statementEmbed',
+    view: (model, { writer }) => renderStatement(model, writer),
+  })
 
   // View -> Model
-  // conversion
-  //   .for('upcast')
-  //   // figure.embed (Preferred way to represent embed)
-  //   .elementToElement({
-  //     view: {
-  //       name: 'figure',
-  //       attributes: {
-  //         class: 'embed',
-  //       },
-  //     },
-  //     model: (viewFigure, { writer }) => {
-  //       const figureEl = domConverter.viewToDom(viewFigure)
-  //       const code = figureEl.innerHTML
-  //
-  //       return writer.createElement('embed', { code })
-  //     },
-  //   })
-  //   // iframe (To be able to parse older representation)
-  //   .elementToElement({
-  //     view: {
-  //       name: 'iframe',
-  //     },
-  //     model: (viewIframe, { writer }) => {
-  //       const iframeEl = domConverter.viewToDom(viewIframe)
-  //       const code = iframeEl.outerHTML
-  //
-  //       return writer.createElement('embed', { code })
-  //     },
-  //   })
-  //   // div.infogram-embed (To be able to parse older representation)
-  //   .elementToElement({
-  //     view: {
-  //       name: 'div',
-  //     },
-  //     model: (viewIframe, { writer }) => {
-  //       const divEl = domConverter.viewToDom(viewIframe)
-  //
-  //       if (divEl.querySelector('.infogram-embed')) {
-  //         const code = divEl.outerHTML
-  //
-  //         return writer.createElement('embed', { code })
-  //       }
-  //
-  //       return null
-  //     },
-  //   })
+  conversion
+    .for('upcast')
+    // div.statement-embed
+    .elementToElement({
+      view: {
+        name: 'div',
+        classes: 'statement-embed',
+      },
+      model: (viewFigure, { writer }) => {
+        const domElement = domConverter.viewToDom(viewFigure)
+
+        const statementId = domElement.dataset.statementId
+
+        return writer.createElement('statementEmbed', { statementId })
+      },
+    })
 
   editor.ui.componentFactory.add('statementEmbed', (locale) => {
     const view = new ButtonView(locale)
@@ -123,16 +129,16 @@ export function StatementEmbed(editor: Editor) {
 
     // Callback executed once the toolbar item is clicked.
     view.on('execute', () => {
-      const code = prompt('Vložte ID výroku:')
+      const statementId = prompt('Vložte ID výroku:')
 
-      if (code === null || code.trim() === '') {
+      if (statementId === null || statementId.trim() === '') {
         // Prompt cancelled or nothing put in
         return
       }
 
       editor.model.change((writer) => {
         const embedElement = writer.createElement('statementEmbed', {
-          code,
+          statementId,
         })
 
         // Insert the embed in the current selection location.
