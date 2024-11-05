@@ -1,7 +1,6 @@
 'use client'
 
 import { ChangeEvent, FormEvent, useState } from 'react'
-import { createMedium } from '@/app/(admin)/beta/admin/media/actions'
 import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
@@ -11,7 +10,7 @@ import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { Label } from '../forms/Label'
 
 export default function AdminMediumForm(props: {
-  action: string
+  action(formData: FormData): void
   name?: string
   title: string
 }) {
@@ -54,6 +53,8 @@ export default function AdminMediumForm(props: {
           }
         }}
       />
+
+      <SubmitButton>Uložit</SubmitButton>
     </form>
   )
 }
