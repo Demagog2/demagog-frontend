@@ -55,3 +55,33 @@ export async function createMedium(formData: FormData) {
     }
   }
 }
+
+const adminUpdateMediumMutation = gql(`
+  mutation UpdateMedium($id: ID!, $mediumInput: MediumInput!) {
+    updateMedium(id: $id, mediumInput: $mediumInput) {
+      medium {
+        id
+      }
+    }
+  }
+`)
+
+export async function updateMedium(mediumId: string, formData: FormData) {
+  const parsedInput = safeParse(mediumSchema, formData)
+
+  if (parsedInput.success) {
+    const { data } = await serverMutation({
+      mutation: adminUpdateMediumMutation,
+      variables: {
+        id: mediumId,
+        mediumInput: {
+          name: String(formData.get('name')) ?? '',
+        },
+      },
+    })
+
+    if (data?.updateMedium?.medium.id) {
+      return redirect(`/beta/admin/media/${data.updateMedium.medium.id}`)
+    }
+  }
+}
