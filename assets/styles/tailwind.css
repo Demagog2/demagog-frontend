@@ -3,13 +3,17 @@
 @tailwind utilities;
 
 @layer utilities {
-  .article-content p,
-  .ck-content p {
+  .article-content > div > p,
+  .ck-content > p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 
   .ck-content p:first-child {
     @apply !mt-4;
+  }
+
+  .ck-content .admin-statement p {
+    @apply !mt-0;
   }
 
   .article-content ul,

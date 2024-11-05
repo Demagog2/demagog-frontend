@@ -85,7 +85,7 @@ export function AdminArticleContent(props: {
                 if (node.__typename === 'StatementNode' && node.statement) {
                   return (
                     <AdminStatement
-                      className="mt-4"
+                      className="mt-8"
                       key={cursor}
                       statement={node.statement}
                     />

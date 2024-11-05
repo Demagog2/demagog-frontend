@@ -46,7 +46,7 @@ function renderStatement(model: Element, writer: DowncastWriter) {
     } else {
       const root = createRoot(statementElem)
       root.render(
-        <AdminStatement className="mt-4" statement={data.statementV2} />
+        <AdminStatement className="mt-8" statement={data.statementV2} />
       )
     }
   })

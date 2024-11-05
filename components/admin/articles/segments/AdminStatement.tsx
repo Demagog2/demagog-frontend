@@ -31,15 +31,15 @@ export function AdminStatement(props: {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
   return (
-    <div className="flex p-4">
-      <div className={classNames('mr-4 flex-shrink-0', props.className)}>
+    <div className={classNames('admin-statement flex p-4', props.className)}>
+      <div className="mr-4 flex-shrink-0">
         <div className="flex items-center justify-center flex-col">
           <div>
             {statement.sourceSpeaker.speaker.avatar ? (
               <img
                 alt={statement.sourceSpeaker.fullName}
                 src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
-                className="inline-block h-9 w-9 rounded-full"
+                className="inline-block h-9 w-9 rounded-full object-cover"
               />
             ) : (
               <span className="inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-100">
