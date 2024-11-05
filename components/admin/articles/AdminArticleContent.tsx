@@ -13,6 +13,21 @@ const AdminArticleContentFragment = gql(`
       id
       segmentType
       textHtml
+      content {
+        edges {
+          node {
+            ... on TextNode {
+              text
+            }
+            ... on StatementNode {
+              statement {
+                ...AdminStatement
+              }
+            }
+          }
+          cursor
+        }
+      }
       statements(includeUnpublished: true) {
         id
         ...AdminStatement 
@@ -50,11 +65,34 @@ export function AdminArticleContent(props: {
 
         {article.segments.map((segment) =>
           segment.segmentType === 'text' ? (
-            <div
-              key={segment.id}
-              className="mt-10 max-w-2xl article-content"
-              dangerouslySetInnerHTML={{ __html: segment.textHtml ?? '' }}
-            ></div>
+            <div key={segment.id} className="mt-10 max-w-2xl article-content">
+              {segment.content.edges?.map((edge) => {
+                if (!edge?.node) {
+                  return null
+                }
+
+                const { node, cursor } = edge
+
+                if (node.__typename === 'TextNode') {
+                  return (
+                    <div
+                      key={cursor}
+                      dangerouslySetInnerHTML={{ __html: node.text }}
+                    />
+                  )
+                }
+
+                if (node.__typename === 'StatementNode' && node.statement) {
+                  return (
+                    <AdminStatement
+                      className="mt-4"
+                      key={cursor}
+                      statement={node.statement}
+                    />
+                  )
+                }
+              })}
+            </div>
           ) : (
             <div
               key={segment.id}
