@@ -20,6 +20,7 @@ const AdminStatementFragment = gql(`
       ...VeracityBadge
       shortExplanation
     }
+    published
   }
 `)
 
@@ -32,6 +33,13 @@ export function AdminStatement(props: {
 
   return (
     <div className={classNames('admin-statement flex p-4', props.className)}>
+      {!statement.published && (
+        <div className="absolute left-0 top-0 transform -translate-y-full">
+          <span className="inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
+            Nezveřejněno
+          </span>
+        </div>
+      )}
       <div className="mr-4 flex-shrink-0">
         <div className="flex items-center justify-center flex-col">
           <div>
