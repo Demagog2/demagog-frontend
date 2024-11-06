@@ -193,8 +193,6 @@ export function AdminArticleForm(props: {
   data: FragmentType<typeof AdminArticleFormFragment>
   article?: FragmentType<typeof AdminArticleFormFieldsFragment>
   action(prevState: FormState, input: FormData): Promise<FormState>
-  // TODO: Remove once the experiment is launched
-  allowEmbeddingStatements?: boolean
 }) {
   const [state, formAction] = useFormState(props.action, { message: '' })
   const data = useFragment(AdminArticleFormFragment, props.data)
@@ -323,7 +321,6 @@ export function AdminArticleForm(props: {
                           />
                           <RichTextEditor
                             includeHeadings
-                            includeStatements={props.allowEmbeddingStatements}
                             value={field.value}
                             onChange={field.onChange}
                           />

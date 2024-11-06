@@ -54,11 +54,6 @@ export default async function AdminArticleEdit(
     },
   })
 
-  // TODO: Remove once the embedding statements is launched
-  const allowEmbeddingStatements = getBooleanParam(
-    props.searchParams.embedStatements
-  )
-
   if (data.article?.articleType === ArticleTypeEnum.SingleStatement) {
     return (
       <AdminArticleSingleStatementForm
@@ -75,7 +70,6 @@ export default async function AdminArticleEdit(
       data={data}
       article={data.article}
       action={updateArticle.bind(null, data.article.id)}
-      allowEmbeddingStatements={allowEmbeddingStatements}
     />
   )
 }
