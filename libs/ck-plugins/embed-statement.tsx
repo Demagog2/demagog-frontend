@@ -20,7 +20,7 @@ function renderStatement(model: Element, writer: DowncastWriter) {
   query({
     query: gql(`
         query AdminCkEditorStatement($id: Int!) {
-          statementV2(id: $id) {
+          statementV2(id: $id, includeUnpublished: true) {
             ...AdminStatement
           }
         }
