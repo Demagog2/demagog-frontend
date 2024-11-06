@@ -1,4 +1,4 @@
-import { parseStatementId } from '@/libs/ck-plugins/embed-statement'
+import { parseStatementId } from './parse-id'
 
 describe('EmbedStatement', () => {
   describe('#parseStatementId', () => {

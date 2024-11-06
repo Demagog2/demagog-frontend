@@ -1,9 +1,9 @@
 import {
   ButtonView,
-  toWidget,
-  type Editor,
   DowncastWriter,
+  type Editor,
   Element,
+  toWidget,
 } from 'ckeditor5'
 
 import '@ckeditor/ckeditor5-media-embed/theme/mediaembed.css'
@@ -12,20 +12,7 @@ import { gql } from '@/__generated__'
 import { createRoot } from 'react-dom/client'
 import { AdminStatement } from '@/components/admin/articles/segments/AdminStatement'
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid'
-
-export function parseStatementId(s: string | null): number | null {
-  const matches = s?.match(/(\d+)/)
-
-  if (!matches) {
-    return null
-  }
-
-  if (matches.length > 0) {
-    return Number(matches[1])
-  }
-
-  return null
-}
+import { parseStatementId } from '@/libs/ck-plugins/utils/parse-id'
 
 function renderStatement(model: Element, writer: DowncastWriter) {
   const statementId = model.getAttribute('statementId')
