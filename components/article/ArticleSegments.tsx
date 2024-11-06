@@ -7,10 +7,24 @@ const ArticleSegmentsFragment = gql(`
     segments {
       id
       segmentType
-      textHtml
       statements {
         id
         ...StatementDetail
+      }
+      content {
+        edges {
+          node {
+            ... on StatementNode {
+              statement {
+                ... StatementDetail
+              }
+            }
+            ... on TextNode {
+              text
+            }
+          }
+          cursor
+        }
       }
     }
     debateStats {
@@ -39,9 +53,28 @@ export function ArticleSegments(props: ArticleStatementsProps) {
           {segment.segmentType === 'text' && (
             <div className="row justify-content-center">
               <div className="col col-12 col-lg-8 content fs-6">
-                <div
-                  dangerouslySetInnerHTML={{ __html: segment.textHtml ?? '' }}
-                ></div>
+                {segment.content.edges?.map((edge) => {
+                  if (!edge?.node) {
+                    return null
+                  }
+
+                  const { node, cursor } = edge
+
+                  if (node.__typename === 'TextNode') {
+                    return (
+                      <div
+                        key={cursor}
+                        dangerouslySetInnerHTML={{ __html: node.text }}
+                      />
+                    )
+                  }
+
+                  if (node.__typename === 'StatementNode' && node.statement) {
+                    return (
+                      <StatementItem key={cursor} statement={node.statement} />
+                    )
+                  }
+                })}
               </div>
             </div>
           )}
