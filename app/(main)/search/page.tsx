@@ -169,7 +169,11 @@ export default async function Search(props: PropsWithSearchParams) {
             </div>
             <div className="w-100">
               {data.searchStatements.statements.map((statement) => (
-                <StatementItem key={statement.id} statement={statement} />
+                <StatementItem
+                  key={statement.id}
+                  statement={statement}
+                  className="mb-10"
+                />
               ))}
             </div>
             {data.searchStatements.totalCount > 4 && (

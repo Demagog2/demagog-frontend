@@ -287,7 +287,11 @@ export default async function Speaker(
         searchPlaceholder="Zadejte hledaný výrok"
       >
         {speaker.searchStatements.statements.map((statement) => (
-          <StatementItem key={statement.id} statement={statement} />
+          <StatementItem
+            key={statement.id}
+            statement={statement}
+            className="mb-10"
+          />
         ))}
       </FilterForm>
     </div>

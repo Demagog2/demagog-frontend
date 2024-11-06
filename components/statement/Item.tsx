@@ -49,6 +49,7 @@ const StatementItemFragment = gql(`
 export default function StatementItem(props: {
   statement: FragmentType<typeof StatementItemFragment>
   isVertical?: boolean
+  className?: string
 }) {
   const statement = useFragment(StatementItemFragment, props.statement)
 
@@ -58,7 +59,7 @@ export default function StatementItem(props: {
   const { isVertical = false } = props
 
   return (
-    <div className="mb-10 s-statement">
+    <div className={classNames('s-statement', props.className)}>
       <div
         className={classNames('g-6', {
           'flex-column': isVertical,

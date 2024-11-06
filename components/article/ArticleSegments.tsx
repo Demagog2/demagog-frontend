@@ -71,7 +71,12 @@ export function ArticleSegments(props: ArticleStatementsProps) {
 
                   if (node.__typename === 'StatementNode' && node.statement) {
                     return (
-                      <StatementItem key={cursor} statement={node.statement} />
+                      <StatementItem
+                        className="mt-10"
+                        key={cursor}
+                        statement={node.statement}
+                        isVertical
+                      />
                     )
                   }
                 })}
@@ -101,7 +106,11 @@ export function ArticleSegments(props: ArticleStatementsProps) {
 
               <div className="mt-5 mt-lg-10">
                 {segment.statements.map((statement) => (
-                  <StatementItem key={statement.id} statement={statement} />
+                  <StatementItem
+                    key={statement.id}
+                    statement={statement}
+                    className="mb-10"
+                  />
                 ))}
               </div>
             </div>

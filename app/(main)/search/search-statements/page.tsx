@@ -88,7 +88,11 @@ export default async function SearchStatements(props: PropsWithSearchParams) {
           </div>
           <div className="row row-cols-1 g-5 g-lg-10">
             {data.searchStatements.statements.map((statement) => (
-              <StatementItem key={statement.id} statement={statement} />
+              <StatementItem
+                key={statement.id}
+                statement={statement}
+                className="mb-10"
+              />
             ))}
           </div>
           <div className="d-flex justify-content-center my-5 my-lg-10">
