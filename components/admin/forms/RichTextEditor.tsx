@@ -68,7 +68,7 @@ export default function RickTextEditor(props: {
           '|',
           'embed',
           'insertImageViaUrl',
-          ...(props.includeStatements ? ['statementEmbed'] : []),
+          'statementEmbed',
           '|',
           'specialCharacters',
           '|',

@@ -21,18 +21,12 @@ export default async function AdminArticleNew(props: PropsWithSearchParams) {
   `),
   })
 
-  // TODO: Remove once the embedding statements is launched
-  const allowEmbeddingStatements = getBooleanParam(
-    props.searchParams.embedStatements
-  )
-
   return (
     <AdminArticleForm
       title="Nový článek"
       description="Vytvořte nový článek"
       data={data}
       action={createArticle}
-      allowEmbeddingStatements={allowEmbeddingStatements}
     />
   )
 }
