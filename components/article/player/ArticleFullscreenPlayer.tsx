@@ -187,7 +187,11 @@ export function ArticleFullscreenPlayer(props: {
               </div>
 
               <div className="statement-content-wrapper">
-                <StatementItem statement={statement} isVertical />
+                <StatementItem
+                  statement={statement}
+                  isVertical
+                  className="mb-10"
+                />
               </div>
             </div>
           )
