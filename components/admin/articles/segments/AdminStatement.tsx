@@ -39,7 +39,7 @@ export function AdminStatement(props: {
               <img
                 alt={statement.sourceSpeaker.fullName}
                 src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
-                className="inline-block h-9 w-9 rounded-full object-cover"
+                className="inline-block h-9 w-9 rounded-full object-cover mt-1"
               />
             ) : (
               <span className="inline-block h-9 w-9 overflow-hidden rounded-full bg-gray-100">
@@ -61,15 +61,15 @@ export function AdminStatement(props: {
         </div>
       </div>
       <div className="space-y-4">
-        <p className="text-base italic text-gray-600">
+        <div className="text-base italic text-gray-600">
           &bdquo;{statement.content}&rdquo;
-        </p>
+        </div>
 
         <VeracityBadge assessment={statement.assessment} />
 
-        <p className="text-sm text-gray-500">
+        <div className="text-sm text-gray-500">
           {statement.assessment?.shortExplanation}
-        </p>
+        </div>
       </div>
     </div>
   )

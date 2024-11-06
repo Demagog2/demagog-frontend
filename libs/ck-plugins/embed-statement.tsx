@@ -1,9 +1,9 @@
 import {
   ButtonView,
-  toWidget,
-  type Editor,
   DowncastWriter,
+  type Editor,
   Element,
+  toWidget,
 } from 'ckeditor5'
 
 import '@ckeditor/ckeditor5-media-embed/theme/mediaembed.css'
@@ -11,6 +11,8 @@ import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
 import { createRoot } from 'react-dom/client'
 import { AdminStatement } from '@/components/admin/articles/segments/AdminStatement'
+import { ExclamationCircleIcon } from '@heroicons/react/20/solid'
+import { parseStatementId } from '@/libs/ck-plugins/utils/parse-id'
 
 function renderStatement(model: Element, writer: DowncastWriter) {
   const statementId = model.getAttribute('statementId')
@@ -26,30 +28,56 @@ function renderStatement(model: Element, writer: DowncastWriter) {
     variables: {
       id: parseInt(String(statementId), 10),
     },
-  }).then(({ data }) => {
-    const statementElem = document.getElementById(
-      `statement-embed-${statementId}`
-    )
+  }).then(
+    ({ data }) => {
+      const statementElem = document.getElementById(
+        `statement-embed-${statementId}`
+      )
 
-    if (!statementElem) {
-      return
-    }
+      if (!statementElem) {
+        return
+      }
 
-    // TODO: Styling
-    if (!data?.statementV2) {
+      if (!data?.statementV2) {
+        const root = createRoot(statementElem)
+        root.render(
+          <div className="p-2 text-center text-gray-600 bg-gray-100 flex">
+            <div className="shrink-0">
+              <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5" />
+            </div>
+            <div className="ml-3 flex-1 md:flex md:justify-between text-sm">
+              Výrok &quot;{String(statementId)}&quot; nenalezen
+            </div>
+          </div>
+        )
+      } else {
+        const root = createRoot(statementElem)
+        root.render(
+          <AdminStatement className="mt-8" statement={data.statementV2} />
+        )
+      }
+    },
+    () => {
+      const statementElem = document.getElementById(
+        `statement-embed-${statementId}`
+      )
+      if (!statementElem) {
+        return
+      }
       const root = createRoot(statementElem)
       root.render(
-        <div className="p-2 text-center text-gray-600 bg-gray-100 rounded-lg">
-          Výrok nenalezen
+        <div className="p-2 text-center text-gray-600 bg-gray-100 flex">
+          <div className="shrink-0">
+            <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5" />
+          </div>
+          <div className="ml-3 flex-1 md:flex md:justify-between text-sm">
+            Došlo k chybě při načítání výroku &quot;{String(statementId)}&quot;.
+            Kontaktujte administrátora.
+          </div>
         </div>
       )
-    } else {
-      const root = createRoot(statementElem)
-      root.render(
-        <AdminStatement className="mt-8" statement={data.statementV2} />
-      )
     }
-  })
+  )
 
   const div = writer.createRawElement(
     'div',
@@ -135,9 +163,9 @@ export function StatementEmbed(editor: Editor) {
 
     // Callback executed once the toolbar item is clicked.
     view.on('execute', () => {
-      const statementId = prompt('Vložte ID výroku:')
+      const statementId = parseStatementId(prompt('Vložte ID výroku:'))
 
-      if (statementId === null || statementId.trim() === '') {
+      if (statementId === null) {
         // Prompt cancelled or nothing put in
         return
       }
