@@ -82,12 +82,6 @@ export default async function Article(props: { params: { slug: string } }) {
           ...FacebookFactcheckMetadata
           ...ArticleSegments
           ...ArticlePlayer
-          segments {
-            segmentType
-            statements {
-              id
-            }
-          }
         }
       }
     `),
