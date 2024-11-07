@@ -6,10 +6,10 @@ export const AdminArticleV2PreviewFragment = gql(`
   fragment AdminArticleV2PreviewFragment on ArticleV2 {
       __typename
       ... on SingleStatementArticle {
-          ...SingleStatementArticlePreviewFragment
+        ...AdminSingleStatementArticlePreview
       }
       ... on Article {
-          ...ArticleDetail
+        ...AdminArticleDetail
       }
   }
 `)

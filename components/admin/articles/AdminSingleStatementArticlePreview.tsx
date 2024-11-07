@@ -1,12 +1,9 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import Link from 'next/link'
 import formatDate from '@/libs/format-date'
-import { Article } from '@/components/article/Article'
-import ArticleSpeaker from '@/components/article/SpeakerDetail'
 
 export const AdminSingleStatementArticlePreviewFragment = gql(`
-    fragment AdminSingleStatementArticlePreviewFragment on 
-    SingleStatementArticle {
+    fragment AdminSingleStatementArticlePreview on SingleStatementArticle {
       id
         title
         pinned
