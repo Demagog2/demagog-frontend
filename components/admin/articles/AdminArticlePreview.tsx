@@ -1,5 +1,6 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminSingleStatementArticlePreview } from './AdminSingleStatementArticlePreview'
+import AdminArticleItem from './AdminArticleItem'
 
 export const AdminArticleV2PreviewFragment = gql(`
   fragment AdminArticleV2PreviewFragment on ArticleV2 {
