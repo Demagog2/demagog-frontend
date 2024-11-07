@@ -15,7 +15,7 @@ import { ExclamationCircleIcon } from '@heroicons/react/20/solid'
 import { parseStatementId } from '@/libs/ck-plugins/utils/parse-id'
 
 function renderStatement(model: Element, writer: DowncastWriter) {
-  const statementId = model.getAttribute('statementId')
+  const articleId = model.getAttribute('articleId')
 
   query({
     query: gql(`
@@ -26,12 +26,12 @@ function renderStatement(model: Element, writer: DowncastWriter) {
         }
       `),
     variables: {
-      id: parseInt(String(statementId), 10),
+      id: parseInt(String(articleId), 10),
     },
   }).then(
     ({ data }) => {
       const statementElem = document.getElementById(
-        `statement-embed-${statementId}`
+        `statement-embed-${articleId}`
       )
 
       if (!statementElem) {
@@ -46,7 +46,7 @@ function renderStatement(model: Element, writer: DowncastWriter) {
               <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5" />
             </div>
             <div className="ml-3 flex-1 md:flex md:justify-between text-sm">
-              Výrok &quot;{String(statementId)}&quot; nenalezen
+              Výrok &quot;{String(articleId)}&quot; nenalezen
             </div>
           </div>
         )
@@ -59,7 +59,7 @@ function renderStatement(model: Element, writer: DowncastWriter) {
     },
     () => {
       const statementElem = document.getElementById(
-        `statement-embed-${statementId}`
+        `article-embed-${articleId}`
       )
       if (!statementElem) {
         return
@@ -71,7 +71,7 @@ function renderStatement(model: Element, writer: DowncastWriter) {
             <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5" />
           </div>
           <div className="ml-3 flex-1 md:flex md:justify-between text-sm">
-            Došlo k chybě při načítání výroku &quot;{String(statementId)}&quot;.
+            Došlo k chybě při načítání výroku &quot;{String(articleId)}&quot;.
             Kontaktujte administrátora.
           </div>
         </div>
@@ -82,7 +82,7 @@ function renderStatement(model: Element, writer: DowncastWriter) {
   const div = writer.createRawElement(
     'div',
     {
-      id: `statement-embed-${statementId}`,
+      id: `article-embed-${articleId}`,
       class: 'ck-media__wrapper',
     },
     (domElement: HTMLElement) => {
@@ -95,32 +95,32 @@ function renderStatement(model: Element, writer: DowncastWriter) {
   writer.insert(writer.createPositionAt(wrapperElement, 0), div)
 
   return toWidget(wrapperElement, writer, {
-    label: 'statement embed widget',
+    label: 'article embed widget',
   })
 }
 
-export function EmbedStatement(editor: Editor) {
+export function EmbedArticle(editor: Editor) {
   const schema = editor.model.schema
   const conversion = editor.conversion
   const domConverter = editor.editing.view.domConverter
 
   // Configure the schema.
-  schema.register('embedStatement', {
+  schema.register('embedArticle', {
     isObject: true,
     isBlock: true,
     allowWhere: '$block',
-    allowAttributes: ['statementId'],
+    allowAttributes: ['articleId'],
   })
 
   // Model -> Data
   conversion.for('dataDowncast').elementToElement({
-    model: 'embedStatement',
+    model: 'embedArticle',
     view: (modelElement, { writer }) => {
-      const statementId = modelElement.getAttribute('statementId')
+      const articleId = modelElement.getAttribute('articleId')
 
       return writer.createUIElement(
         'div',
-        { class: 'statement-embed', 'data-statement-id': statementId },
+        { class: 'article-embed', 'data-article-id': articleId },
         function (domDocument) {
           return this.toDomElement(domDocument)
         }
@@ -130,7 +130,7 @@ export function EmbedStatement(editor: Editor) {
 
   // Model -> View
   conversion.for('editingDowncast').elementToElement({
-    model: 'embedStatement',
+    model: 'embedArticle',
     view: (model, { writer }) => renderStatement(model, writer),
   })
 
@@ -141,38 +141,38 @@ export function EmbedStatement(editor: Editor) {
     .elementToElement({
       view: {
         name: 'div',
-        classes: 'statement-embed',
+        classes: 'article-embed',
       },
       model: (viewFigure, { writer }) => {
         const domElement = domConverter.viewToDom(viewFigure)
 
-        const statementId = domElement.dataset.statementId
+        const articleId = domElement.dataset.articleId
 
-        return writer.createElement('embedStatement', { statementId })
+        return writer.createElement('embedArticle', { articleId })
       },
     })
 
-  editor.ui.componentFactory.add('embedStatement', (locale) => {
+  editor.ui.componentFactory.add('embedArticle', (locale) => {
     const view = new ButtonView(locale)
 
     view.set({
-      label: 'Vložit výrok',
+      label: 'Vložit článek',
       tooltip: true,
       withText: true,
     })
 
     // Callback executed once the toolbar item is clicked.
     view.on('execute', () => {
-      const statementId = parseStatementId(prompt('Vložte ID výroku:'))
+      const articleId = parseStatementId(prompt('Vložte ID článku:'))
 
-      if (statementId === null) {
+      if (articleId === null) {
         // Prompt cancelled or nothing put in
         return
       }
 
       editor.model.change((writer) => {
-        const embedElement = writer.createElement('embedStatement', {
-          statementId,
+        const embedElement = writer.createElement('embedArticle', {
+          articleId,
         })
 
         // Insert the embed in the current selection location.

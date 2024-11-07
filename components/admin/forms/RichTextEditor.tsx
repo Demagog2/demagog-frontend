@@ -28,7 +28,8 @@ import {
 import { Embed } from '@/libs/ck-plugins/embed'
 
 import 'ckeditor5/ckeditor5.css'
-import { StatementEmbed } from '@/libs/ck-plugins/embed-statement'
+import { EmbedStatement } from '@/libs/ck-plugins/embed-statement'
+import { EmbedArticle } from '@/libs/ck-plugins/embed-article'
 
 export default function RickTextEditor(props: {
   includeHeadings?: boolean
@@ -68,7 +69,8 @@ export default function RickTextEditor(props: {
           '|',
           'embed',
           'insertImageViaUrl',
-          'statementEmbed',
+          'embedArticle',
+          'embedStatement',
           '|',
           'specialCharacters',
           '|',
@@ -79,6 +81,8 @@ export default function RickTextEditor(props: {
       plugins: [
         Bold,
         Embed,
+        EmbedArticle,
+        EmbedStatement,
         Essentials,
         Italic,
         Link,
@@ -96,7 +100,6 @@ export default function RickTextEditor(props: {
         SpecialCharacters,
         SpecialCharactersEssentials,
         SpecialCharactersSpaces,
-        StatementEmbed,
         TextTransformation,
         NonBreakableSpaceKeystrokes,
       ],
