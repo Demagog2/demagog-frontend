@@ -7,7 +7,6 @@ import { DebateArticleMetadata } from '@/components/article/metadata/DebateArtic
 import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
 import { getMetadataTitle } from '@/libs/metadata'
-import { ArticleTypeEnum } from '@/__generated__/graphql'
 import { Iframely } from '@/components/site/Iframely'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { truncate } from 'lodash'
@@ -70,24 +69,26 @@ export default async function Article(props: { params: { slug: string } }) {
   const { slug } = props.params
 
   const {
-    data: { articleV2: article },
+    data: { articleV3: article },
   } = await query({
     query: gql(`
       query ArticleDetail($slug: ID!) {
-        articleV2(id: $slug) {
-          title
-          articleType
-          perex
-          ...DebateAticleMetadata
-          ...FacebookFactcheckMetadata
-          ...ArticleSegments
-          ...ArticlePlayer
-          segments {
-            segmentType
-            statements {
+        articleV3(id: $slug) {
+          ... on Article {
+            title
+            articleType
+            perex
+            ...DebateAticleMetadata
+            ...FacebookFactcheckMetadata
+            ...ArticleSegments
+            ...ArticlePlayer
+          }
+          ... on SingleStatementArticle {
+            statement {
               id
             }
           }
+
         }
       }
     `),
@@ -100,11 +101,12 @@ export default async function Article(props: { params: { slug: string } }) {
     notFound()
   }
 
-  // TODO: @vaclavbohac Refactor once segments field is a union
-  if (article.articleType === ArticleTypeEnum.SingleStatement) {
-    permanentRedirect(
-      `/statements/${article.segments?.find((segment) => segment.segmentType === 'single_statement')?.statements?.[0]?.id}`
-    )
+  if (article.__typename === 'SingleStatementArticle') {
+    permanentRedirect(`/statements/${article.statement?.id}`)
+  }
+
+  if (article.__typename !== 'Article') {
+    return null
   }
 
   return (

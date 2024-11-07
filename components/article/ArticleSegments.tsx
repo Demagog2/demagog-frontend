@@ -1,6 +1,7 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerWithStats } from '@/components/speaker/SpeakerWithStats'
 import StatementItem from '../statement/Item'
+import { ArticleV2Preview } from './ArticleV2Preview'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -14,6 +15,11 @@ const ArticleSegmentsFragment = gql(`
       content {
         edges {
           node {
+            ... on ArticleNode {
+              article {
+                ...ArticleV2PreviewFragment
+              }
+            }
             ... on StatementNode {
               statement {
                 ... StatementDetail
@@ -66,6 +72,12 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                         key={cursor}
                         dangerouslySetInnerHTML={{ __html: node.text }}
                       />
+                    )
+                  }
+
+                  if (node.__typename === 'ArticleNode' && node.article) {
+                    return (
+                      <ArticleV2Preview key={cursor} article={node.article} />
                     )
                   }
 
