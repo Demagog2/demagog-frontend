@@ -30,8 +30,6 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminSources(props: PropsWithSearchParams) {
-  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
-
   const before: string | null = getStringParam(props.searchParams.before)
   const after: string | null = getStringParam(props.searchParams.after)
   const term: string | null = getStringParam(props.searchParams.q)

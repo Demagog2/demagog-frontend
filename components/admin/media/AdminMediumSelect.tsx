@@ -15,6 +15,7 @@ const AdminMediumSelectFragment = gql(`
 
 export function AdminMediumSelect(props: {
   data: FragmentType<typeof AdminMediumSelectFragment>
+  defaultValue?: string
   onChange: (id: string) => void
 }) {
   const { onChange } = props
@@ -36,6 +37,11 @@ export function AdminMediumSelect(props: {
   )
 
   return (
-    <Select items={items} onChange={handleChange} placeholder="Vyberte pořad" />
+    <Select
+      items={items}
+      onChange={handleChange}
+      defaultValue={props.defaultValue}
+      placeholder="Vyberte pořad"
+    />
   )
 }
