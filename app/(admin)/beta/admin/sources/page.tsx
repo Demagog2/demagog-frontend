@@ -30,8 +30,6 @@ export const metadata: Metadata = {
 }
 
 export default async function AdminSources(props: PropsWithSearchParams) {
-  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
-
   const before: string | null = getStringParam(props.searchParams.before)
   const after: string | null = getStringParam(props.searchParams.after)
   const term: string | null = getStringParam(props.searchParams.q)
@@ -51,7 +49,6 @@ export default async function AdminSources(props: PropsWithSearchParams) {
               experts {
                 id
                 fullName
-                avatar(size: small)
               }
               medium {
                 name
@@ -184,7 +181,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
                   <td className="max-w-[200px]">
                     <div className="flex -space-x-0.5">
                       <dt className="sr-only">Řečníci</dt>
-                      {source.experts?.map((expert) => {
+                      {/* {source.experts?.map((expert) => {
                         return (
                           <span key={expert.id}>
                             <AdminUserAvatar
@@ -193,7 +190,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
                             />
                           </span>
                         )
-                      })}
+                      })} */}
                     </div>
                   </td>
                   <td>

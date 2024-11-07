@@ -18,13 +18,16 @@ export type Item<T = string> = {
 export function Select<T>(props: {
   id?: string
   items: Item<T>[]
+  defaultValue?: T
   placeholder?: string
   onChange(item: Item<T>): void
 }) {
   const { onChange } = props
 
   const [query, setQuery] = useState('')
-  const [selectedItem, setSelectedItem] = useState<Item<T> | null>(null)
+  const [selectedItem, setSelectedItem] = useState<Item<T> | null>(
+    props.items.find((item) => item.value === props.defaultValue) ?? null
+  )
 
   const filteredItems =
     query === ''

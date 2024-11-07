@@ -14,7 +14,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useRef } from 'react'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { sourceSchema } from '@/libs/sources/source-schema'
-import { createSource } from '@/app/(admin)/beta/admin/sources/actions'
 import { Button, Description, Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '@/components/admin/forms/Label'
 import { Input } from '@/components/admin/forms/Input'
@@ -29,6 +28,7 @@ import { AdminBodySelect } from '@/components/admin/sources/AdminBodySelect'
 import { imagePath } from '@/libs/images/path'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { dateInputFormat } from '@/libs/date-time'
+import { FormState } from '@/app/(admin)/beta/admin/sources/actions'
 
 const AdminSourceFormFragment = gql(`
   fragment AdminSourceForm on Query {
@@ -40,16 +40,50 @@ const AdminSourceFormFragment = gql(`
   }
 `)
 
+const AdminSourceDataFragment = gql(`
+  fragment AdminSourceData on Source {
+    name
+    sourceUrl
+    medium {
+      id
+    }
+    mediaPersonalities {
+      id
+    }
+    sourceSpeakers {
+      id
+      firstName
+      lastName
+      speaker {
+        id
+        avatar
+      }
+      body {
+        id
+      }
+      role
+    }
+    experts {
+      id
+    }
+    releasedAt
+    transcript
+  }
+`)
+
 type FieldValues = z.output<typeof sourceSchema>
 
 export function AdminSourceForm(props: {
   title: string
   description?: string
+  action(prevState: FormState, input: FormData): Promise<FormState>
   data: FragmentType<typeof AdminSourceFormFragment>
+  source?: FragmentType<typeof AdminSourceDataFragment>
 }) {
   const data = useFragment(AdminSourceFormFragment, props.data)
+  const source = useFragment(AdminSourceDataFragment, props.source)
 
-  const [state, formAction] = useFormState(createSource, { message: '' })
+  const [state, formAction] = useFormState(props.action, { message: '' })
 
   const {
     control,
@@ -59,11 +93,28 @@ export function AdminSourceForm(props: {
   } = useForm<FieldValues>({
     resolver: zodResolver(sourceSchema),
     defaultValues: {
-      name: '',
-      experts: [],
-      sourceSpeakers: [],
-      releasedAt: dateInputFormat(new Date().toISOString()),
-      mediaPersonalities: [],
+      name: source?.name ?? '',
+      sourceUrl: source?.sourceUrl ?? undefined,
+      mediumId: source?.medium?.id ?? undefined,
+      mediaPersonalities:
+        source?.mediaPersonalities?.map(
+          (mediaPersonality) => mediaPersonality.id
+        ) ?? [],
+      experts: source?.experts?.map((expert) => expert.id) ?? [],
+      sourceSpeakers:
+        source?.sourceSpeakers?.map((sourceSpeaker) => ({
+          sourceSpeakerId: sourceSpeaker.id,
+          speakerId: sourceSpeaker.speaker.id,
+          firstName: sourceSpeaker.firstName,
+          lastName: sourceSpeaker.lastName,
+          avatar: sourceSpeaker.speaker.avatar ?? undefined,
+          bodyId: sourceSpeaker.body?.id,
+          role: sourceSpeaker.role ?? undefined,
+        })) ?? [],
+      releasedAt: dateInputFormat(
+        source?.releasedAt ?? new Date().toISOString()
+      ),
+      transcript: source?.transcript ?? undefined,
       ...(state.fields ?? {}),
     },
   })
@@ -88,7 +139,7 @@ export function AdminSourceForm(props: {
           <AdminPageTitle title={props.title} description={props.description} />
 
           <AdminFormActions>
-            <LinkButton href="/admin/sources">Zpět</LinkButton>
+            <LinkButton href="/beta/admin/sources">Zpět</LinkButton>
 
             <SubmitButton isSubmitting={isSubmitting} />
           </AdminFormActions>
@@ -144,6 +195,7 @@ export function AdminSourceForm(props: {
                       <AdminMediumSelect
                         data={data}
                         onChange={field.onChange}
+                        defaultValue={field.value}
                       />
                     </>
                   )}
@@ -242,10 +294,26 @@ export function AdminSourceForm(props: {
                   )}
                 </div>
                 <div className="flex-grow">
+                  {field.sourceSpeakerId && (
+                    <input
+                      type="hidden"
+                      {...register(`sourceSpeakers.${i}.sourceSpeakerId`)}
+                    />
+                  )}
+
                   <input
                     type="hidden"
                     {...register(`sourceSpeakers.${i}.speakerId`)}
                   />
+                  <input
+                    type="hidden"
+                    {...register(`sourceSpeakers.${i}.firstName`)}
+                  />
+                  <input
+                    type="hidden"
+                    {...register(`sourceSpeakers.${i}.lastName`)}
+                  />
+
                   <div className="flex justify-between">
                     <p className="text-base font-semibold leading-7 text-gray-900">
                       {field.firstName + ' ' + field.lastName}
@@ -260,12 +328,24 @@ export function AdminSourceForm(props: {
                     <Label htmlFor={`sourceSpeakers.${i}.bodyId`}>
                       Strana/skupina
                     </Label>
-                    <AdminBodySelect
-                      id={`sourceSpeakers.${i}.bodyId`}
-                      data={data}
-                      onChange={console.log}
+
+                    <Controller
+                      control={control}
+                      name={`sourceSpeakers.${i}.bodyId`}
+                      render={({ field }) => (
+                        <>
+                          <input type="hidden" {...field} />
+                          <AdminBodySelect
+                            id={`sourceSpeakers.${i}.bodyId`}
+                            data={data}
+                            onChange={field.onChange}
+                            defaultValue={field.value}
+                          />
+                        </>
+                      )}
                     />
                   </Field>
+
                   <Field>
                     <Label htmlFor={`sourceSpeakers.${i}.role`}>Funkce</Label>
                     <Input

@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { emptyStringToUndefined } from '@/libs/schema/empty-string'
 
 const sourceSpeaker = z.object({
-  id: z.string().optional(),
+  sourceSpeakerId: z.string().optional(),
   speakerId: z.string(),
   firstName: z.string(),
   lastName: z.string(),
