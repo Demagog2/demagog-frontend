@@ -3,6 +3,7 @@ import { InformationCircleIcon } from '@heroicons/react/20/solid'
 import { AdminStatement } from './segments/AdminStatement'
 import React from 'react'
 import { Iframely } from '@/components/site/Iframely'
+import { AdminArticleV2Preview } from './AdminArticlePreview'
 
 const AdminArticleContentFragment = gql(`
   fragment AdminArticleContent on Article {
@@ -16,6 +17,11 @@ const AdminArticleContentFragment = gql(`
       content {
         edges {
           node {
+            ... on ArticleNode {
+              article {
+                ...AdminArticleV2Preview 
+              }
+            }
             ... on TextNode {
               text
             }
@@ -88,6 +94,15 @@ export function AdminArticleContent(props: {
                       className="mt-8"
                       key={cursor}
                       statement={node.statement}
+                    />
+                  )
+                }
+
+                if (node.__typename === 'ArticleNode' && node.article) {
+                  return (
+                    <AdminArticleV2Preview
+                      key={cursor}
+                      article={node.article}
                     />
                   )
                 }
