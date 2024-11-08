@@ -37,7 +37,7 @@ const adminCreateMediaPersonalityMutation = gql(`
   }
 `)
 
-export async function createMedium(formData: FormData) {
+export async function createModerator(formData: FormData) {
   const parsedInput = safeParse(mediaPersonalitySchema, formData)
 
   if (parsedInput.success) {
