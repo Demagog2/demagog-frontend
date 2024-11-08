@@ -77,7 +77,11 @@ export function ArticleSegments(props: ArticleStatementsProps) {
 
                   if (node.__typename === 'ArticleNode' && node.article) {
                     return (
-                      <ArticleV2Preview key={cursor} article={node.article} />
+                      <ArticleV2Preview
+                        isEmbedded
+                        key={cursor}
+                        article={node.article}
+                      />
                     )
                   }
 

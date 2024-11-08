@@ -3,6 +3,7 @@ import Link from 'next/link'
 import ArticleSpeaker from './SpeakerDetail'
 import formatDate from '@/libs/format-date'
 import { Article } from './Article'
+import classNames from 'classnames'
 
 export const SingleStatementArticlePreviewFragment = gql(`
     fragment SingleStatementArticlePreviewFragment on SingleStatementArticle {
@@ -34,8 +35,11 @@ export const SingleStatementArticlePreviewFragment = gql(`
 
 export function SingleStatementArticlePreview(props: {
   article: FragmentType<typeof SingleStatementArticlePreviewFragment>
+  isEmbedded?: boolean
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
+
+  const { isEmbedded = false } = props
 
   const article = useFragment(
     SingleStatementArticlePreviewFragment,
@@ -50,7 +54,7 @@ export function SingleStatementArticlePreview(props: {
 
   return (
     <Article pinned={article.pinned}>
-      <div className="row g-2 g-lg-5">
+      <div className={classNames('row g-2 g-lg-5', { 'my-8': isEmbedded })}>
         <div className="col col-12 col-md-5">
           <div className="w-100">
             <Link href={articlePath} className="illustration">

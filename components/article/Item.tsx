@@ -4,6 +4,7 @@ import Speaker from './SpeakerDetail'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ArticleLink } from './ArticleLink'
 import { Article } from './Article'
+import classNames from 'classnames'
 
 export const ArticleDetailFragment = gql(`
   fragment ArticleDetail on Article {
@@ -31,6 +32,7 @@ export const ArticleDetailFragment = gql(`
 
 export default function ArticleItem(props: {
   article: FragmentType<typeof ArticleDetailFragment>
+  isEmbedded?: boolean
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
@@ -38,9 +40,11 @@ export default function ArticleItem(props: {
 
   const perex = truncate(article.perex ?? '', 190)
 
+  const { isEmbedded = false } = props
+
   return (
     <Article pinned={article.pinned}>
-      <div className="row g-2 g-lg-5">
+      <div className={classNames('row g-2 g-lg-5', { 'my-8': isEmbedded })}>
         <div className="col col-12 col-md-5">
           <div className="w-100">
             <ArticleLink className="illustration" article={article}>
