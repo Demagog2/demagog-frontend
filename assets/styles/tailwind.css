@@ -4,8 +4,8 @@
 
 @layer utilities {
 
-  .article-content > div > p,
-  .ck-content > p {
+  .article-content>div>p,
+  .ck-content>p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 
@@ -56,9 +56,6 @@
     @apply underline;
   }
 
-  .article-content .articleItemH2 {
-    @apply !mt-0
-  }
 
   /* Styling of admin page table */
   .admin-content-table {
@@ -103,5 +100,13 @@
     margin: 15px 0 8px;
     font-size: 18px;
     font-weight: 700px;
+  }
+
+  .article-content .articleItemH2 a {
+    text-decoration: none !important;
+  }
+
+  .articleItemH2 {
+    @apply !mt-0;
   }
 }
