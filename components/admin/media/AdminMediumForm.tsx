@@ -53,8 +53,6 @@ export default function AdminMediumForm(props: {
           }
         }}
       />
-
-      <SubmitButton>Uložit</SubmitButton>
     </form>
   )
 }
