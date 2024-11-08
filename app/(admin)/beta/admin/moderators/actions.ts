@@ -52,7 +52,7 @@ export async function createModerator(formData: FormData) {
 
     if (data?.createMediaPersonality?.mediaPersonality.id) {
       return redirect(
-        `/beta/admin/moderator/${data.createMediaPersonality.mediaPersonality.id}`
+        `/beta/admin/moderators/${data.createMediaPersonality.mediaPersonality.id}`
       )
     }
   }
