@@ -3,7 +3,7 @@ import { AdminSingleStatementArticlePreview } from './AdminSingleStatementArticl
 import AdminArticleItem from './AdminArticleItem'
 
 export const AdminArticleV2PreviewFragment = gql(`
-  fragment AdminArticleV2PreviewFragment on ArticleV2 {
+  fragment AdminArticleV2Preview on ArticleV2 {
       __typename
       ... on SingleStatementArticle {
         ...AdminSingleStatementArticlePreview

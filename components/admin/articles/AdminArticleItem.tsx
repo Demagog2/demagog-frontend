@@ -38,55 +38,46 @@ export default function AdminArticleItem(props: {
   const perex = truncate(article.perex ?? '', 190)
 
   return (
-    <article>
-      <div className="flex flex-wrap gap-2 lg:gap-5">
+    <article className="px-4 py-4 lg:px-0 max-w-screen-lg mt-8">
+      <div className="flex flex-col md:flex-row items-center justify-center gap-4 lg:gap-8">
         <div className="w-full md:w-5/12">
-          <div className="w-full">
-            <ArticleLink className="illustration" article={article}>
-              <img
-                src={mediaUrl + article.illustration}
-                className="w-full rounded-md"
-                alt={`Ilustrační obrázek k ${article.title}`}
-              />
-            </ArticleLink>
-          </div>
+          <ArticleLink className="illustration" article={article}>
+            <img
+              src={mediaUrl + article.illustration}
+              className="w-full rounded-md"
+              alt={`Ilustrační obrázek k ${article.title}`}
+            />
+          </ArticleLink>
           <div className="flex justify-between items-center mt-2">
-            <div className="flex space-x-2">
-              {/*article.speakers?.map((speaker) => (
-                <Speaker key={speaker.id} speaker={speaker} />
-              ))*/}
-            </div>
-            <div>
-              {article.articleType === 'default' && (
-                <span className="text-sm font-bold uppercase">Ověřeno</span>
-              )}
-            </div>
+            <div className="flex space-x-2"></div>
+            {article.articleType === 'default' && (
+              <span className="text-sm font-bold uppercase">Ověřeno</span>
+            )}
           </div>
         </div>
-        <div className="w-full md:w-7/12">
-          <h2 className="text-2xl font-bold mb-2">
+
+        <div className="w-full md:w-7/12 ">
+          <h2 className="text-2xl font-bold mb-2 mt-0 articleItemH2">
             <ArticleLink article={article} className="text-gray-900 s-title">
               {article.title}
             </ArticleLink>
           </h2>
-          <div className="mb-2">
+          <div className="mb-2 text-gray-700">
             {article.articleType === 'default' && article.source && (
               <i>
                 {article.source.medium?.name},{' '}
-                {article.source?.releasedAt &&
+                {article.source.releasedAt &&
                   formatDate(article.source.releasedAt)}
               </i>
             )}
-
             {(article.articleType === 'static' ||
               article.articleType === 'facebook_factcheck') && (
               <i>{formatDate(article.publishedAt)}</i>
             )}
-
             {article.articleType === 'single_statement' && article.source && (
               <i>
                 {article.source.medium?.name},{' '}
-                {article.source?.releasedAt &&
+                {article.source.releasedAt &&
                   formatDate(article.source.releasedAt)}
               </i>
             )}

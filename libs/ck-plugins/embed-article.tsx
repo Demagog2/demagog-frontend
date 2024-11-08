@@ -10,68 +10,62 @@ import '@ckeditor/ckeditor5-media-embed/theme/mediaembed.css'
 import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
 import { createRoot } from 'react-dom/client'
-import { AdminStatement } from '@/components/admin/articles/segments/AdminStatement'
 import { ExclamationCircleIcon } from '@heroicons/react/20/solid'
 import { parseStatementId } from '@/libs/ck-plugins/utils/parse-id'
+import { AdminArticleV2Preview } from '@/components/admin/articles/AdminArticlePreview'
 
-function renderStatement(model: Element, writer: DowncastWriter) {
+function renderArticle(model: Element, writer: DowncastWriter) {
   const articleId = model.getAttribute('articleId')
 
   query({
     query: gql(`
-        query AdminCkEditorStatement($id: Int!) {
-          statementV2(id: $id, includeUnpublished: true) {
-            ...AdminStatement
+        query AdminCkEditorArticle($id: ID!) {
+          articleV3(id: $id) {
+            ...AdminArticleV2Preview
           }
         }
       `),
     variables: {
-      id: parseInt(String(articleId), 10),
+      id: String(articleId),
     },
   }).then(
     ({ data }) => {
-      const statementElem = document.getElementById(
-        `statement-embed-${articleId}`
-      )
+      const articleElem = document.getElementById(`article-embed-${articleId}`)
 
-      if (!statementElem) {
+      if (!articleElem) {
         return
       }
 
-      if (!data?.statementV2) {
-        const root = createRoot(statementElem)
+      if (!data?.articleV3) {
+        const root = createRoot(articleElem)
         root.render(
           <div className="p-2 text-center text-gray-600 bg-gray-100 flex">
             <div className="shrink-0">
               <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5" />
             </div>
             <div className="ml-3 flex-1 md:flex md:justify-between text-sm">
-              Výrok &quot;{String(articleId)}&quot; nenalezen
+              Článek &quot;{String(articleId)}&quot; nenalezen
             </div>
           </div>
         )
       } else {
-        const root = createRoot(statementElem)
-        root.render(
-          <AdminStatement className="mt-8" statement={data.statementV2} />
-        )
+        const root = createRoot(articleElem)
+        root.render(<AdminArticleV2Preview article={data.articleV3} />)
       }
     },
     () => {
-      const statementElem = document.getElementById(
-        `article-embed-${articleId}`
-      )
-      if (!statementElem) {
+      const articleElem = document.getElementById(`article-embed-${articleId}`)
+      if (!articleElem) {
         return
       }
-      const root = createRoot(statementElem)
+      const root = createRoot(articleElem)
       root.render(
         <div className="p-2 text-center text-gray-600 bg-gray-100 flex">
           <div className="shrink-0">
             <ExclamationCircleIcon aria-hidden="true" className="h-5 w-5" />
           </div>
           <div className="ml-3 flex-1 md:flex md:justify-between text-sm">
-            Došlo k chybě při načítání výroku &quot;{String(articleId)}&quot;.
+            Došlo k chybě při načítání článku &quot;{String(articleId)}&quot;.
             Kontaktujte administrátora.
           </div>
         </div>
@@ -131,7 +125,7 @@ export function EmbedArticle(editor: Editor) {
   // Model -> View
   conversion.for('editingDowncast').elementToElement({
     model: 'embedArticle',
-    view: (model, { writer }) => renderStatement(model, writer),
+    view: (model, { writer }) => renderArticle(model, writer),
   })
 
   // View -> Model
