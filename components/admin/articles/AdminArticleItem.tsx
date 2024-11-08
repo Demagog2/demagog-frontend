@@ -38,9 +38,9 @@ export default function AdminArticleItem(props: {
   const perex = truncate(article.perex ?? '', 190)
 
   return (
-    <article className="px-4 py-4 lg:px-0 max-w-screen-lg mt-8">
-      <div className="flex flex-col md:flex-row items-center justify-center gap-4 lg:gap-8">
-        <div className="w-full md:w-5/12">
+    <article className="p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl">
+      <div className="flex flex-col md:flex-row items-start justify-center gap-4 lg:gap-8">
+        <div className="w-full h-full md:w-5/12">
           <ArticleLink className="illustration" article={article}>
             <img
               src={mediaUrl + article.illustration}
@@ -48,12 +48,6 @@ export default function AdminArticleItem(props: {
               alt={`Ilustrační obrázek k ${article.title}`}
             />
           </ArticleLink>
-          <div className="flex justify-between items-center mt-2">
-            <div className="flex space-x-2"></div>
-            {article.articleType === 'default' && (
-              <span className="text-sm font-bold uppercase">Ověřeno</span>
-            )}
-          </div>
         </div>
 
         <div className="w-full md:w-7/12 ">
@@ -84,14 +78,6 @@ export default function AdminArticleItem(props: {
           </div>
           <div>
             <span className="text-sm leading-tight">{perex}</span>
-          </div>
-          <div className="mt-4">
-            <ArticleLink
-              article={article}
-              className="btn border border-gray-300 py-2 px-4 font-bold text-sm"
-            >
-              <span className="text-sm">Číst dál</span>
-            </ArticleLink>
           </div>
         </div>
       </div>

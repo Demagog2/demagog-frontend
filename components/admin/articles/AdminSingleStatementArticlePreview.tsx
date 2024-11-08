@@ -47,9 +47,9 @@ export function AdminSingleStatementArticlePreview(props: {
   const articlePath = `/vyroky/${article.statement?.id}`
 
   return (
-    <article>
-      <div className="flex flex-wrap gap-2 lg:gap-5">
-        <div className="w-full md:w-5/12">
+    <article className="p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl">
+      <div className="flex flex-col md:flex-row items-start justify-center gap-4 lg:gap-8">
+        <div className="w-full h-full md:w-5/12">
           <div className="w-full">
             <Link href={articlePath} className="block">
               <img
@@ -120,7 +120,7 @@ export function AdminSingleStatementArticlePreview(props: {
         </div>
 
         <div className="w-full md:w-7/12">
-          <h2 className="text-2xl font-bold mb-2">
+          <h2 className="text-2xl font-bold mb-2 articleItemH2">
             <Link href={articlePath} className="text-gray-800 hover:underline">
               {article.title}
             </Link>
@@ -136,15 +136,6 @@ export function AdminSingleStatementArticlePreview(props: {
           <p className="text-base leading-snug">
             „{article.statement.content.trim()}“
           </p>
-
-          <div className="mt-4">
-            <Link
-              href={articlePath}
-              className="btn border border-gray-400 py-2 px-6 font-bold text-sm"
-            >
-              <span className="text-xs">Číst dál</span>
-            </Link>
-          </div>
         </div>
       </div>
     </article>
