@@ -46,7 +46,7 @@ export function SingleStatementArticlePreview(props: {
     return null
   }
 
-  const articlePath = `/vyroky/${article.statement?.id}`
+  const articlePath = `/vyrok/${article.statement?.id}`
 
   return (
     <Article pinned={article.pinned}>
