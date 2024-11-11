@@ -1,5 +1,5 @@
 import { set } from 'lodash'
-import { ZodType } from 'zod'
+import { SafeParseReturnType, ZodType } from 'zod'
 
 /**
  * Parses form data according to the given schema.
@@ -7,7 +7,10 @@ import { ZodType } from 'zod'
  * @param schema - zod schema, typically object containing properties
  * @param formData - form data sent to the server
  */
-export function safeParse<T extends ZodType>(schema: T, formData: FormData) {
+export function safeParse<T extends ZodType>(
+  schema: T,
+  formData: FormData
+): SafeParseReturnType<T['_input'], T['_output']> {
   return schema.safeParse(buildObject(formData))
 }
 
