@@ -28,7 +28,6 @@ import { z } from 'zod'
 import { schema } from '@/libs/articles/schema'
 import { useRef } from 'react'
 import { useFormState } from 'react-dom'
-import { FormState } from '@/app/(admin)/beta/admin/articles/actions'
 import { AdminSourcesList } from '@/components/admin/articles/AdminSourcesList'
 import { ApolloProvider } from '@apollo/client'
 import { createClient } from '@/libs/apollo-client'
@@ -49,6 +48,8 @@ import { AdminFormContent } from '@/components/admin/layout/AdminFormContent'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { Textarea } from '@/components/admin/forms/Textarea'
 import { dateInputFormat } from '@/libs/date-time'
+import { FormAction } from '@/libs/forms/form-action'
+import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -192,9 +193,14 @@ export function AdminArticleForm(props: {
   description?: string
   data: FragmentType<typeof AdminArticleFormFragment>
   article?: FragmentType<typeof AdminArticleFormFieldsFragment>
-  action(prevState: FormState, input: FormData): Promise<FormState>
+  action: FormAction
 }) {
-  const [state, formAction] = useFormState(props.action, { message: '' })
+  const [state, formAction] = useFormState(props.action, {
+    state: 'initial',
+  })
+
+  useFormToasts(state)
+
   const data = useFragment(AdminArticleFormFragment, props.data)
   const article = useFragment(AdminArticleFormFieldsFragment, props.article)
 
@@ -206,7 +212,10 @@ export function AdminArticleForm(props: {
     formState: { isSubmitting },
   } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: { ...buildDefaultValues(article), ...(state.fields ?? {}) },
+    defaultValues: {
+      ...buildDefaultValues(article),
+      ...(state?.state === 'initial' ? {} : state.fields),
+    },
   })
 
   const { fields, append, remove } = useFieldArray({

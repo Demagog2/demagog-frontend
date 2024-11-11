@@ -1,6 +1,5 @@
 'use client'
 
-import { FormState } from '@/app/(admin)/beta/admin/tags/actions'
 import { schema } from '@/libs/tags/schema'
 import { Field, Select } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -18,6 +17,9 @@ import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { AdminFormContent } from '../layout/AdminFormContent'
 import { AdminFormActions } from '../layout/AdminFormActions'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { FormAction } from '@/libs/forms/form-action'
+import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
+import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 
 const AdminTagFormFieldsFragment = gql(`
   fragment AdminTagFormFields on Tag {
@@ -30,17 +32,23 @@ export function AdminTagForm(props: {
   title: string
   description?: string
   tag?: FragmentType<typeof AdminTagFormFieldsFragment>
-  action(prevState: FormState, input: FormData): Promise<FormState>
+  action: FormAction
 }) {
-  const [state, formAction] = useFormState(props.action, { message: '' })
+  const [state, formAction] = useFormState(props.action, { state: 'initial' })
   const tag = useFragment(AdminTagFormFieldsFragment, props.tag)
 
-  const { register, handleSubmit } = useForm<z.output<typeof schema>>({
+  useFormToasts(state)
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
       forStatementType: 'factual',
       ...(tag ? tag : {}),
-      ...(state.fields ?? {}),
+      ...(state.state === 'initial' ? {} : state.fields),
     },
   })
 
@@ -66,7 +74,7 @@ export function AdminTagForm(props: {
 
         <AdminFormContent>
           <div className="grow gap-y-5 grid grid-cols-1">
-            {state.error && <div className="text-red">{state.error}</div>}
+            {errors.name && <ErrorMessage message={errors.name?.message} />}
 
             <Field>
               <Label htmlFor="title">Název štítku</Label>

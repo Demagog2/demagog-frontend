@@ -5,6 +5,8 @@ import { serverMutation } from '@/libs/apollo-client-server'
 import { safeParse } from '@/libs/form-data'
 import { mediaPersonalitySchema } from '@/libs/media-personality/media-personality-schema'
 import { redirect } from 'next/navigation'
+import { FormState } from '@/libs/forms/form-state'
+import { FormMessage } from '@/libs/forms/form-message'
 
 const adminDeleteMediaPersonalityMutation = gql(`
   mutation AdminDeleteMediaPersonality($id: ID!) {
@@ -37,7 +39,10 @@ const adminCreateMediaPersonalityMutation = gql(`
   }
 `)
 
-export async function createModerator(formData: FormData) {
+export async function createModerator(
+  formState: FormState,
+  formData: FormData
+): Promise<FormState> {
   const parsedInput = safeParse(mediaPersonalitySchema, formData)
 
   if (parsedInput.success) {
@@ -55,5 +60,13 @@ export async function createModerator(formData: FormData) {
         `/beta/admin/moderators/${data.createMediaPersonality.mediaPersonality.id}`
       )
     }
+  }
+
+  return {
+    state: 'error',
+    message: FormMessage.error.validation,
+    fields: {
+      ...parsedInput.data,
+    },
   }
 }

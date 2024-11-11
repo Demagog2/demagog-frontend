@@ -1,17 +1,8 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { ArticleState } from '@/components/admin/articles/ArticleState'
-import {
-  CalendarIcon,
-  ChevronDownIcon,
-  LinkIcon,
-  PencilIcon,
-} from '@heroicons/react/20/solid'
+import { ChevronDownIcon, PencilIcon } from '@heroicons/react/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import React from 'react'
-import { PublishedArticleLink } from '@/components/admin/articles/PublishedArticleLink'
 import Link from 'next/link'
-import { AdminArticleTags } from '@/components/admin/articles/AdminArticleTags'
-import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 
 const AdminTagHeaderFragment = gql(`
   fragment AdminTagHeader on Tag {
@@ -33,7 +24,7 @@ export function AdminTagHeader(props: {
             <li>
               <div className="flex">
                 <Link
-                  href="/admin/tags"
+                  href="/beta/admin/tags"
                   className="text-sm font-medium text-gray-500 hover:text-gray-700"
                 >
                   Tagy
@@ -61,7 +52,7 @@ export function AdminTagHeader(props: {
       <div className="mt-5 flex lg:ml-4 lg:mt-0">
         <span className="hidden sm:block">
           <Link
-            href={`/admin/tags/${tag.id}/edit`}
+            href={`/beta/admin/tags/${tag.id}/edit`}
             className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           >
             <PencilIcon
@@ -88,7 +79,7 @@ export function AdminTagHeader(props: {
           >
             <MenuItem>
               <Link
-                href={`/admin/articles/${tag.id}/edit`}
+                href={`/beta/admin/articles/${tag.id}/edit`}
                 className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
               >
                 Upravit

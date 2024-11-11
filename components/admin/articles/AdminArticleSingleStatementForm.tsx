@@ -13,7 +13,6 @@ import { Input } from '../forms/Input'
 import { AdminArticleIllustrationInput } from './AdminArticleIllustrationInput'
 import { SwitchField } from '../forms/SwitchField'
 import { Switch } from '../forms/Switch'
-import { FormState } from '@/app/(admin)/beta/admin/articles/actions'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminArticleIllustrationDialog } from '@/components/admin/articles/AdminArticleIllustrationDialog'
 import { LinkButton } from '@/components/admin/forms/LinkButton'
@@ -22,6 +21,8 @@ import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 import { AdminFormActions } from '../layout/AdminFormActions'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { dateInputFormat } from '@/libs/date-time'
+import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
+import { FormAction } from '@/libs/forms/form-action'
 
 const AdminArticleSingleStatementFormFragment = gql(`
   fragment AdminArticleSingleStatementFormFields on Article {
@@ -33,6 +34,7 @@ const AdminArticleSingleStatementFormFragment = gql(`
       segmentType
       statementId
     }
+    ...ArticleIllustration
   }
 `)
 
@@ -40,18 +42,20 @@ export function AdminArticleSingleStatementForm(props: {
   title: string
   description?: string
   article?: FragmentType<typeof AdminArticleSingleStatementFormFragment>
-  action(prevState: FormState, input: FormData): Promise<FormState>
+  action: FormAction
 }) {
   const [isOpen, setDialogOpen] = useState<boolean>(false)
 
-  const [state, formAction] = useFormState(props.action, { message: '' })
+  const [state, formAction] = useFormState(props.action, { state: 'initial' })
+
+  useFormToasts(state)
 
   const article = useFragment(
     AdminArticleSingleStatementFormFragment,
     props.article
   )
 
-  const { register, handleSubmit, control, setValue } = useForm<
+  const { register, handleSubmit, control, setValue, formState } = useForm<
     z.output<typeof singleStatementArticleSchema>
   >({
     resolver: zodResolver(singleStatementArticleSchema),
@@ -84,7 +88,7 @@ export function AdminArticleSingleStatementForm(props: {
             <AdminFormActions>
               <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
-              <SubmitButton />
+              <SubmitButton isSubmitting={formState.isSubmitting} />
             </AdminFormActions>
           </AdminFormHeader>
 
@@ -106,6 +110,7 @@ export function AdminArticleSingleStatementForm(props: {
                   <Label htmlFor="illustration">Ilustrační obrázek</Label>
 
                   <AdminArticleIllustrationInput
+                    article={article}
                     control={control}
                     name="illustration"
                   />
@@ -113,7 +118,11 @@ export function AdminArticleSingleStatementForm(props: {
 
                 <Field>
                   <Label htmlFor="statementId">Výrok</Label>
-                  <input id="statementId" {...register('statementId')} />
+                  <Input
+                    type="number"
+                    id="statementId"
+                    {...register('statementId')}
+                  />
                 </Field>
               </Fieldset>
             </div>

@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { StatementType } from '@/__generated__/graphql'
 
 export const schema = z.object({
-  name: z.string().min(1, 'Nazev stitku musi mit alespon jeden znak.'),
+  name: z.string().min(1, 'Název štítku musí mít alespoň jeden znak.'),
   forStatementType: z.enum(['factual', 'promise', 'newyears']),
 })
 

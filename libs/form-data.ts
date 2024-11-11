@@ -9,9 +9,9 @@ import { SafeParseReturnType, ZodType } from 'zod'
  */
 export function safeParse<T extends ZodType>(
   schema: T,
-  formData: FormData
+  formData?: FormData
 ): SafeParseReturnType<T['_input'], T['_output']> {
-  return schema.safeParse(buildObject(formData))
+  return schema.safeParse(formData ? buildObject(formData) : {})
 }
 
 /**

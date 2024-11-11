@@ -1,6 +1,6 @@
 'use client'
 
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { useRef } from 'react'
 import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
@@ -8,24 +8,45 @@ import { AdminFormActions } from '../layout/AdminFormActions'
 import { AdminPageHeader } from '../layout/AdminPageHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { Label } from '../forms/Label'
+import { FormAction } from '@/libs/forms/form-action'
+import { useFormState } from 'react-dom'
+import type { FormState } from '@/libs/forms/form-state'
+import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { z } from 'zod'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { mediaPersonalitySchema } from '@/libs/media-personality/media-personality-schema'
+import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 
 export default function AdminMediaPersonalitiesForm(props: {
-  action(formData: FormData): void
+  action: FormAction
   name?: string
   title: string
 }) {
-  const [name, setName] = useState(props.name || '')
-  const [hasError, setHasError] = useState(false)
+  const [state, formAction] = useFormState<FormState>(props.action, {
+    state: 'initial',
+  })
 
-  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
-    if (name.trim() === '') {
-      setHasError(true)
-      e.preventDefault()
-    }
-  }
+  const {
+    handleSubmit,
+    register,
+    formState: { errors },
+  } = useForm<z.output<typeof mediaPersonalitySchema>>({
+    resolver: zodResolver(mediaPersonalitySchema),
+    defaultValues: {},
+  })
+
+  useFormToasts(state)
+
+  const formRef = useRef<HTMLFormElement>(null)
+
+  const { handleSubmitForm } = useFormSubmit<
+    z.output<typeof mediaPersonalitySchema>
+  >(handleSubmit, formAction, formRef)
 
   return (
-    <form action={props.action} onSubmit={handleSubmit}>
+    <form action={formAction} onSubmit={handleSubmitForm}>
       <AdminPageHeader>
         <AdminPageTitle title={props.title} />
         <AdminFormActions>
@@ -38,21 +59,14 @@ export default function AdminMediaPersonalitiesForm(props: {
           <SubmitButton />
         </AdminFormActions>
       </AdminPageHeader>
-      <Label htmlFor="new-moderator-field">Jméno</Label>
+
+      <Label htmlFor="new-moderator-name">Jméno</Label>
       <Input
-        name="name"
-        id="new-moderator-field"
-        type="text"
-        required
-        value={name}
-        hasError={hasError}
-        onChange={(evt: ChangeEvent<HTMLInputElement>) => {
-          setName(evt.target.value)
-          if (evt.target.value.trim() !== '') {
-            setHasError(false)
-          }
-        }}
+        id="new-moderator-name"
+        hasError={!!errors.name}
+        {...register('name', { required: true })}
       />
+      <ErrorMessage message={errors.name?.message} />
     </form>
   )
 }

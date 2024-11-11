@@ -5,6 +5,8 @@ import { serverMutation } from '@/libs/apollo-client-server'
 import { safeParse } from '@/libs/form-data'
 import { mediumSchema } from '@/libs/media/medium-schema'
 import { redirect } from 'next/navigation'
+import { FormState } from '@/libs/forms/form-state'
+import { FormMessage } from '@/libs/forms/form-message'
 
 const adminDeleteMediumMutation = gql(`
   mutation AdminDeleteMedium($id: ID!){
@@ -37,7 +39,7 @@ const adminCreateMediumMutation = gql(`
   }
 `)
 
-export async function createMedium(formData: FormData) {
+export async function createMedium(formData: FormData): Promise<FormState> {
   const parsedInput = safeParse(mediumSchema, formData)
 
   if (parsedInput.success) {
@@ -45,14 +47,22 @@ export async function createMedium(formData: FormData) {
       mutation: adminCreateMediumMutation,
       variables: {
         mediumInput: {
-          name: String(formData.get('name')) ?? '',
+          name: parsedInput.data.name,
         },
       },
     })
 
     if (data?.createMedium?.medium.id) {
-      return redirect(`/beta/admin/media/${data.createMedium.medium.id}`)
+      redirect(`/beta/admin/media/${data.createMedium.medium.id}`)
     }
+  }
+
+  return {
+    state: 'error',
+    fields: {
+      ...parsedInput.data,
+    },
+    message: FormMessage.error.validation,
   }
 }
 
@@ -66,7 +76,10 @@ const adminUpdateMediumMutation = gql(`
   }
 `)
 
-export async function updateMedium(mediumId: string, formData: FormData) {
+export async function updateMedium(
+  mediumId: string,
+  formData: FormData
+): Promise<FormState> {
   const parsedInput = safeParse(mediumSchema, formData)
 
   if (parsedInput.success) {
@@ -75,13 +88,21 @@ export async function updateMedium(mediumId: string, formData: FormData) {
       variables: {
         id: mediumId,
         mediumInput: {
-          name: String(formData.get('name')) ?? '',
+          name: parsedInput.data.name,
         },
       },
     })
 
     if (data?.updateMedium?.medium.id) {
-      return redirect(`/beta/admin/media/${data.updateMedium.medium.id}`)
+      redirect(`/beta/admin/media/${data.updateMedium.medium.id}/edit`)
     }
+  }
+
+  return {
+    state: 'error',
+    fields: {
+      ...parsedInput.data,
+    },
+    message: FormMessage.error.validation,
   }
 }
