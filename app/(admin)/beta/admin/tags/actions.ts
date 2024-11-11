@@ -4,7 +4,8 @@ import { gql } from '@/__generated__'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { redirect } from 'next/navigation'
 import { safeParse } from '@/libs/form-data'
-import { schema } from '@/libs/tags/schema'
+import { schema, toStatementType } from '@/libs/tags/schema'
+import { StatementType } from '@/__generated__/graphql'
 
 const adminCreateTagMutation = gql(`
   mutation AdminTagNewMutation($input: TagInput!) {
@@ -51,7 +52,8 @@ export async function createTag(
       mutation: adminCreateTagMutation,
       variables: {
         input: {
-          ...input,
+          name: input.name,
+          forStatementType: toStatementType(input.forStatementType),
         },
       },
     })
@@ -85,7 +87,8 @@ export async function updateTag(
       variables: {
         input: {
           id: tagId,
-          ...input,
+          name: input.name,
+          forStatementType: toStatementType(input.forStatementType),
         },
       },
     })
