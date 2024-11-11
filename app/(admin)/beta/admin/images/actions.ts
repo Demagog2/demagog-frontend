@@ -40,7 +40,9 @@ export async function createImage(
     const { data } = await serverMutation({
       mutation: adminCreateImageMutation,
       variables: {
-        input,
+        input: {
+          image: input.image,
+        },
       },
     })
 
