@@ -88,7 +88,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
           return (
             <section key={edge.node.id} className="mt-6">
               <div className="space-y-8">
-                <div className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
+                <div className="border-b border-t border-gray-200 bg-white shadow-sm sm:g sm:border">
                   <div className="px-4 py-6 sm:px-6 lg:gap-x-8 lg:p-8">
                     <div className="sm:flex">
                       <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
