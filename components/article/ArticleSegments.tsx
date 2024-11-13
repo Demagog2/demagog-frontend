@@ -2,6 +2,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerWithStats } from '@/components/speaker/SpeakerWithStats'
 import StatementItem from '../statement/Item'
 import { ArticleV2Preview } from './ArticleV2Preview'
+import classNames from 'classnames'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -44,6 +45,7 @@ const ArticleSegmentsFragment = gql(`
 
 type ArticleStatementsProps = {
   data: FragmentType<typeof ArticleSegmentsFragment>
+  isRedesign?: boolean
 }
 
 export function ArticleSegments(props: ArticleStatementsProps) {
@@ -51,6 +53,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
     ArticleSegmentsFragment,
     props.data
   )
+  const { isRedesign = false } = props
 
   return (
     <>
@@ -58,7 +61,12 @@ export function ArticleSegments(props: ArticleStatementsProps) {
         <div key={segment.id}>
           {segment.segmentType === 'text' && (
             <div className="row justify-content-center">
-              <div className="col col-12 col-lg-8 content fs-6">
+              <div
+                className={classNames('col content fs-6', {
+                  'col-sm-10 mx-sm-auto': isRedesign,
+                  'col-12 col-lg-8': !isRedesign,
+                })}
+              >
                 {segment.content.edges?.map((edge) => {
                   if (!edge?.node) {
                     return null
