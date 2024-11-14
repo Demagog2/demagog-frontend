@@ -4,6 +4,7 @@ import { ArticlePlayer } from '@/components/article/player/ArticlePlayer'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
 import { FacebookFactcheckMetadata } from '@/components/article/metadata/FacebookFactcheckArticleMetadata'
 import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
+import { StaticArticleMetadata } from '@/components/article/metadata/StaticArticleMetadata'
 import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
 import { getMetadataTitle } from '@/libs/metadata'
@@ -12,7 +13,6 @@ import { DefaultMetadata } from '@/libs/constants/metadata'
 import { truncate } from 'lodash'
 import { imagePath } from '@/libs/images/path'
 import { notFound } from 'next/navigation'
-
 export async function generateMetadata(props: {
   params: { slug: string }
 }): Promise<Metadata> {
@@ -80,6 +80,7 @@ export default async function Article(props: { params: { slug: string } }) {
             perex
             ...DebateAticleMetadata
             ...FacebookFactcheckMetadata
+            ...StaticArticleMetadata
             ...ArticleSegments
             ...ArticlePlayer
           }
@@ -122,6 +123,7 @@ export default async function Article(props: { params: { slug: string } }) {
 
           <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} />
+          <StaticArticleMetadata article={article} />
           <ArticlePlayer article={article} />
         </div>
 

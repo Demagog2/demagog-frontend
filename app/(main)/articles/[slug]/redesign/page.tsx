@@ -4,6 +4,7 @@ import { ArticlePlayer } from '@/components/article/player/ArticlePlayer'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
 import { FacebookFactcheckMetadata } from '@/components/article/metadata/FacebookFactcheckArticleMetadata'
 import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
+import { StaticArticleMetadata } from '@/components/article/metadata/StaticArticleMetadata'
 import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
 import { getMetadataTitle } from '@/libs/metadata'
@@ -82,6 +83,7 @@ export default async function Article(props: { params: { slug: string } }) {
             perex
             ...DebateAticleMetadata
             ...FacebookFactcheckMetadata
+            ...StaticArticleMetadata
             ...ArticleSegments
             ...ArticlePlayer
             ...ArticleIllustrationRedesign
@@ -128,8 +130,13 @@ export default async function Article(props: { params: { slug: string } }) {
           </div>
 
           <DebateArticleMetadata article={article} />
+
           <FacebookFactcheckMetadata article={article} isRedesign={true} />
-          <ArticleSummaryFrameRedesign />
+  
+
+          <FacebookFactcheckMetadata article={article} isRedesign />
+          <StaticArticleMetadata article={article} isRedesign />
+
           <ArticlePlayer article={article} />
         </div>
 
