@@ -15,6 +15,7 @@ import { imagePath } from '@/libs/images/path'
 import { notFound } from 'next/navigation'
 import { ArticleIllustrationsRedesign } from '@/components/article/ArticleIllustrationsRedesign'
 import { ArticleSummaryFrameRedesign } from '@/components/article/ArticleSummaryFrameRedesign'
+import { ArticleSummaryGreyFrameRedesign } from '@/components/article/ArticleSummaryGreyFrameRedesign'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -131,7 +132,9 @@ export default async function Article(props: { params: { slug: string } }) {
 
           <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} isRedesign />
+          <StaticArticleMetadata article={article} isRedesign />
           <ArticleSummaryFrameRedesign />
+          <ArticleSummaryGreyFrameRedesign />
           <ArticlePlayer article={article} />
         </div>
 
