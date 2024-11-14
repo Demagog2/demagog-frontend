@@ -13,6 +13,7 @@ import { truncate } from 'lodash'
 import { imagePath } from '@/libs/images/path'
 import { notFound } from 'next/navigation'
 import { ArticleIllustrationsRedesign } from '@/components/article/ArticleIllustrationsRedesign'
+import { ArticleSummaryFrameRedesign } from '@/components/article/ArticleSummaryFrameRedesign'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -114,20 +115,21 @@ export default async function Article(props: { params: { slug: string } }) {
     <div className="container px-3 text-justify article-redesign col-sm-10 mx-sm-auto">
       <div className="row g-10">
         <div className="col-sm-10 mx-sm-auto">
-          <div className="mb-5 mb-lg-10">
-            <h1 className="display-4 fw-bold mb-5 text-start px-2">
+          <div>
+            <h1 className="display-4 fw-bold text-start px-3 px-sm-0">
               {article.title}
             </h1>
 
             <ArticleIllustrationsRedesign article={article} />
 
-            <div>
+            <div className="mt-4 mt-sm-37">
               <span className="fs-5">{article.perex}</span>
             </div>
           </div>
 
           <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} isRedesign={true} />
+          <ArticleSummaryFrameRedesign />
           <ArticlePlayer article={article} />
         </div>
 
