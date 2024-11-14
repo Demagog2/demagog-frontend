@@ -16,7 +16,7 @@ export function ArticleIllustrationsRedesign(props: {
   }
   return (
     <img
-      className="mt-sm-7 mt-2 mb-4 mb-custom rounded-l"
+      className="mt-sm-7 mt-2 rounded-l"
       alt="illustration"
       src={imagePath(article.image)}
     />

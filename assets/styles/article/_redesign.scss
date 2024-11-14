@@ -1,9 +1,31 @@
 .article-redesign {
   text-align: justify;
 
+  .custom-border-ul {
+    border-radius: 31px;
+    border: 1px solid #111827;
+    padding: 25px 44px;
+  }
+
+  li.li-item:not(:last-child) {
+    margin-bottom: 19px;
+  }
+
+  .mt-56 {
+    margin-top: 56px;
+  }
+
+  .mt-39 {
+    margin-top: 39px;
+  }
+
   @media (min-width: 576px) {
-    img.mb-custom {
-      margin-bottom: 2.3rem !important;
+    .mt-sm-37 {
+      margin-top: 2.3rem !important;
+    }
+
+    .mt-sm-56 {
+      margin-top: 56px !important;
     }
   }
 }
