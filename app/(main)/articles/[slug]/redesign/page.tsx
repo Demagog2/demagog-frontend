@@ -130,13 +130,8 @@ export default async function Article(props: { params: { slug: string } }) {
           </div>
 
           <DebateArticleMetadata article={article} />
-
-          <FacebookFactcheckMetadata article={article} isRedesign={true} />
-  
-
           <FacebookFactcheckMetadata article={article} isRedesign />
-          <StaticArticleMetadata article={article} isRedesign />
-
+          <ArticleSummaryFrameRedesign />
           <ArticlePlayer article={article} />
         </div>
 
