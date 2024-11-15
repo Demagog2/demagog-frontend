@@ -134,7 +134,7 @@ export default async function Article(props: { params: { slug: string } }) {
           <FacebookFactcheckMetadata article={article} isRedesign />
           <StaticArticleMetadata article={article} isRedesign />
           <ArticleSummaryFrameRedesign />
-          <ArticleSummaryGreyFrameRedesign />
+          <ArticleSummaryGreyFrameRedesign isFloating />
           <ArticlePlayer article={article} />
         </div>
 

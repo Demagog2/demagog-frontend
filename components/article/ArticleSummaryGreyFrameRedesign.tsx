@@ -1,6 +1,14 @@
-export function ArticleSummaryGreyFrameRedesign() {
+import classNames from 'classnames'
+
+export function ArticleSummaryGreyFrameRedesign(props: {
+  isFloating?: boolean
+}) {
   return (
-    <div className="custom-border-ul border-0 mt-39 mt-sm-56 bg-lightgrey">
+    <div
+      className={classNames('custom-ul border-0 mt-sm-56 bg-lightgrey', {
+        'custom-lg-float': props.isFloating,
+      })}
+    >
       <h5>Nárůst koncentrace CO₂</h5>
       <ul className="mb-0 mt-3">
         <li className="li-item">
