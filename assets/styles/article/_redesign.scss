@@ -12,16 +12,33 @@
     margin-bottom: 19px;
   }
 
-  .mt-56 {
-    margin-top: 56px;
-  }
-
   .mt-39 {
     margin-top: 39px;
   }
 
+  .mt-29 {
+    margin-top: 29px;
+  }
+
+  .mt-minus-10 {
+    margin-top: -10px;
+  }
+
   .bg-lightgrey {
     background-color: #e5e7eb;
+  }
+
+  .quote-mark {
+    font-size: 64px;
+    line-height: 1;
+  }
+
+  .fw-semibold {
+    font-weight: 600;
+  }
+
+  .quote + * {
+    margin-top: 39px;
   }
 
   @media (min-width: 576px) {
@@ -48,6 +65,30 @@
       float: right;
       padding: 25px 29px;
       margin: 60px 0px 60px 60px;
+    }
+
+    .mt-lg-87 {
+      margin-top: 86px;
+    }
+
+    .mt-lg-39 {
+      margin-top: 39px;
+    }
+
+    .quote + * {
+      margin-top: 87px;
+    }
+
+    .fs-lg-96 {
+      font-size: 96px;
+    }
+
+    .fs-lg-24 {
+      font-size: 24px;
+    }
+
+    .me-lg-30 {
+      margin-right: 30px !important;
     }
   }
 }
