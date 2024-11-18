@@ -16,6 +16,7 @@ import { notFound } from 'next/navigation'
 import { ArticleIllustrationsRedesign } from '@/components/article/ArticleIllustrationsRedesign'
 import { ArticleSummaryFrameRedesign } from '@/components/article/ArticleSummaryFrameRedesign'
 import { ArticleSummaryGreyFrameRedesign } from '@/components/article/ArticleSummaryGreyFrameRedesign'
+import { ArticleQuoteRedesign } from '@/components/article/ArticleQuoteRedesign'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -122,22 +123,19 @@ export default async function Article(props: { params: { slug: string } }) {
             <h1 className="display-4 fw-bold text-start px-3 px-sm-0">
               {article.title}
             </h1>
-
             <ArticleIllustrationsRedesign article={article} />
-
             <div className="mt-4 mt-sm-37">
               <span className="fs-5">{article.perex}</span>
             </div>
           </div>
-
           <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} isRedesign />
           <StaticArticleMetadata article={article} isRedesign />
+          <ArticleQuoteRedesign />
           <ArticleSummaryFrameRedesign />
           <ArticleSummaryGreyFrameRedesign isFloating />
           <ArticlePlayer article={article} />
         </div>
-
         <div>
           <ArticleSegments data={article} isRedesign={true} />
         </div>
