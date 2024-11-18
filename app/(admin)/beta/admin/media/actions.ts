@@ -2,11 +2,8 @@
 
 import { gql } from '@/__generated__'
 import { serverMutation } from '@/libs/apollo-client-server'
-import { safeParse } from '@/libs/form-data'
 import { mediumSchema } from '@/libs/media/medium-schema'
 import { redirect } from 'next/navigation'
-import { FormState } from '@/libs/forms/form-state'
-import { FormMessage } from '@/libs/forms/form-message'
 import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 import {
   CreateMediumMutation,
@@ -83,12 +80,10 @@ export const updateMedium = new UpdateActionBuilder<
   UpdateMediumMutationVariables,
   typeof adminUpdateMediumMutation
 >(mediumSchema)
-  .withMutation(adminUpdateMediumMutation, (id, data) => {
-    return {
-      id,
-      mediumInput: {
-        name: data.name,
-      },
-    }
-  })
+  .withMutation(adminUpdateMediumMutation, (id, data) => ({
+    id,
+    mediumInput: {
+      name: data.name,
+    },
+  }))
   .build()
