@@ -87,7 +87,7 @@ const adminEditArticleMutation = gql(`
 export async function updateArticle(
   articleId: string,
   _: FormState,
-  formData: FormData
+  formData?: FormData
 ): Promise<FormState> {
   const parsedInput = safeParse(schema, formData)
 
@@ -126,7 +126,7 @@ export async function updateArticle(
 export async function updateArticleSingleStatement(
   articleId: string,
   _: FormState,
-  formData: FormData
+  formData?: FormData
 ): Promise<FormState> {
   const parsedInput = safeParse(singleStatementArticleSchema, formData)
 
