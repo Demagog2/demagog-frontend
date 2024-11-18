@@ -2,11 +2,16 @@
 
 import { gql } from '@/__generated__'
 import { serverMutation } from '@/libs/apollo-client-server'
-import { safeParse } from '@/libs/form-data'
 import { mediaPersonalitySchema } from '@/libs/media-personality/media-personality-schema'
 import { redirect } from 'next/navigation'
-import { FormState } from '@/libs/forms/form-state'
-import { FormMessage } from '@/libs/forms/form-message'
+import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+import {
+  CreateMediaPersonalityMutation,
+  CreateMediaPersonalityMutationVariables,
+  UpdateMediaPersonalityMutation,
+  UpdateMediaPersonalityMutationVariables,
+} from '@/__generated__/graphql'
+import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 
 const adminDeleteMediaPersonalityMutation = gql(`
   mutation AdminDeleteMediaPersonality($id: ID!) {
@@ -39,34 +44,49 @@ const adminCreateMediaPersonalityMutation = gql(`
   }
 `)
 
-export async function createModerator(
-  formState: FormState,
-  formData: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(mediaPersonalitySchema, formData)
-
-  if (parsedInput.success) {
-    const { data } = await serverMutation({
-      mutation: adminCreateMediaPersonalityMutation,
-      variables: {
-        mediaPersonalityInput: {
-          name: String(formData.get('name')) ?? '',
-        },
+export const createModerator = new CreateActionBuilder<
+  typeof mediaPersonalitySchema,
+  CreateMediaPersonalityMutation,
+  CreateMediaPersonalityMutationVariables,
+  typeof adminCreateMediaPersonalityMutation
+>(mediaPersonalitySchema)
+  .withMutation(adminCreateMediaPersonalityMutation, (data) => {
+    return {
+      mediaPersonalityInput: {
+        name: data.name,
       },
-    })
+    }
+  })
+  .withRedirectUrl((data) => {
+    if (data?.createMediaPersonality?.mediaPersonality?.id) {
+      return `/beta/admin/moderators/${data.createMediaPersonality.mediaPersonality.id}`
+    }
 
-    if (data?.createMediaPersonality?.mediaPersonality.id) {
-      return redirect(
-        `/beta/admin/moderators/${data.createMediaPersonality.mediaPersonality.id}`
-      )
+    return null
+  })
+  .build()
+
+const adminUpdateMediaPersonalityMutation = gql(`
+  mutation UpdateMediaPersonality($id: ID!, $mediaPersonalityInput: MediaPersonalityInput!) {
+    updateMediaPersonality(id: $id, mediaPersonalityInput: $mediaPersonalityInput) {
+      mediaPersonality {
+        id
+      }
     }
   }
+`)
 
-  return {
-    state: 'error',
-    message: FormMessage.error.validation,
-    fields: {
-      ...parsedInput.data,
+// TODO: Use update moderator on the frontend
+export const updateModerator = new UpdateActionBuilder<
+  typeof mediaPersonalitySchema,
+  UpdateMediaPersonalityMutation,
+  UpdateMediaPersonalityMutationVariables,
+  typeof adminUpdateMediaPersonalityMutation
+>(mediaPersonalitySchema)
+  .withMutation(adminUpdateMediaPersonalityMutation, (id, data) => ({
+    id,
+    mediaPersonalityInput: {
+      name: data.name,
     },
-  }
-}
+  }))
+  .build()

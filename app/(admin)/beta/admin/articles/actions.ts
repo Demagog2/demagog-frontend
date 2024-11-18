@@ -8,6 +8,11 @@ import { safeParse } from '@/libs/form-data'
 import * as Sentry from '@sentry/nextjs'
 import { FormState } from '@/libs/forms/form-state'
 import { FormMessage } from '@/libs/forms/form-message'
+import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+import {
+  AdminArticleNewMutationV2Mutation,
+  AdminArticleNewMutationV2MutationVariables,
+} from '@/__generated__/graphql'
 
 const adminCreateArticleMutation = gql(`
   mutation AdminArticleNewMutationV2($input: ArticleInput!) {
@@ -19,80 +24,54 @@ const adminCreateArticleMutation = gql(`
   }
 `)
 
-export async function createArticle(
-  _: FormState,
-  formData: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(schema, formData)
+export const createArticle = new CreateActionBuilder<
+  typeof schema,
+  AdminArticleNewMutationV2Mutation,
+  AdminArticleNewMutationV2MutationVariables,
+  typeof adminCreateArticleMutation
+>(schema)
+  .withMutation(adminCreateArticleMutation, (data) => ({
+    input: {
+      ...data,
+      segments: data.segments ?? [],
+    },
+  }))
+  .withRedirectUrl((data) => {
+    if (data.createArticle?.article.id) {
+      redirect(`/beta/admin/articles/${data?.createArticle?.article.id}`)
+    }
 
-  if (parsedInput.success) {
-    const input = parsedInput.data
+    return null
+  })
+  .build()
 
-    const { data } = await serverMutation({
-      mutation: adminCreateArticleMutation,
-      variables: {
-        input: {
-          ...input,
-          segments: input.segments ?? [],
+export const createSingleStatementArticle = new CreateActionBuilder<
+  typeof singleStatementArticleSchema,
+  AdminArticleNewMutationV2Mutation,
+  AdminArticleNewMutationV2MutationVariables,
+  typeof adminCreateArticleMutation
+>(singleStatementArticleSchema)
+  .withMutation(adminCreateArticleMutation, (data) => ({
+    input: {
+      ...data,
+      statementId: undefined,
+      articleType: 'single_statement' as const,
+      segments: [
+        {
+          segmentType: 'single_statement' as const,
+          statementId: data.statementId,
         },
-      },
-    })
-
+      ],
+    },
+  }))
+  .withRedirectUrl((data) => {
     if (data?.createArticle?.article) {
       redirect(`/beta/admin/articles/${data?.createArticle?.article.id}`)
     }
-  }
 
-  Sentry.captureException(parsedInput.error)
-
-  return {
-    state: 'error',
-    error: parsedInput.error?.message,
-    fields: {
-      ...parsedInput.data,
-    },
-  }
-}
-
-export async function createSingleStatementArticle(
-  _: FormState,
-  formData: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(singleStatementArticleSchema, formData)
-
-  if (parsedInput.success) {
-    const { data } = await serverMutation({
-      mutation: adminCreateArticleMutation,
-      variables: {
-        input: {
-          ...parsedInput.data,
-          statementId: undefined,
-          articleType: 'single_statement' as const,
-          segments: [
-            {
-              segmentType: 'single_statement' as const,
-              statementId: parsedInput.data.statementId,
-            },
-          ],
-        },
-      },
-    })
-
-    if (data?.createArticle?.article) {
-      redirect(`/beta/admin/articles/${data?.createArticle?.article.id}`)
-    }
-  }
-
-  Sentry.captureException(parsedInput.error)
-
-  return {
-    state: 'error',
-    message: FormMessage.error.validation,
-    fields: {
-      ...parsedInput.data,
-    },
-  }
-}
+    return null
+  })
+  .build()
 
 const adminEditArticleMutation = gql(`
   mutation AdminEditArticleMutation($id: ID!, $input: ArticleInput!) {

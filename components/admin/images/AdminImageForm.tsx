@@ -1,6 +1,5 @@
 'use client'
 
-import { FormState } from '@/app/(admin)/beta/admin/tags/actions'
 import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useRef } from 'react'
 import { useFormState } from 'react-dom'
@@ -15,17 +14,21 @@ import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { AdminFormContent } from '../layout/AdminFormContent'
 import { AdminFormActions } from '../layout/AdminFormActions'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { FormState } from '@/libs/forms/form-state'
+import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 
 export function AdminImageForm(props: {
   title: string
   description?: string
   action(prevState: FormState, input: FormData): Promise<FormState>
 }) {
-  const [state, formAction] = useFormState(props.action, { message: '' })
+  const [state, formAction] = useFormState(props.action, { state: 'initial' })
 
-  const { control, handleSubmit } = useForm<
-    z.output<typeof contentImageSchema>
-  >({
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<z.output<typeof contentImageSchema>>({
     resolver: zodResolver(contentImageSchema),
     defaultValues: {},
   })
@@ -50,7 +53,7 @@ export function AdminImageForm(props: {
 
         <AdminFormContent>
           <div className="grow gap-y-5 grid grid-cols-1">
-            {state.error && <div className="text-red">{state.error}</div>}
+            {errors.image && <ErrorMessage message={errors.image.message} />}
 
             <AdminImageInput control={control} name="image" />
           </div>

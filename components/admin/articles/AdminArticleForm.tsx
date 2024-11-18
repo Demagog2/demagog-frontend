@@ -50,6 +50,7 @@ import { Textarea } from '@/components/admin/forms/Textarea'
 import { dateInputFormat } from '@/libs/date-time'
 import { FormAction } from '@/libs/forms/form-action'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
+import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -251,8 +252,6 @@ export function AdminArticleForm(props: {
 
         <AdminFormContent>
           <div className="grow gap-y-5 grid grid-cols-1">
-            {state.error && <div className="text-red">{state.error}</div>}
-
             <Field>
               <Label htmlFor="title">Název článku</Label>
 

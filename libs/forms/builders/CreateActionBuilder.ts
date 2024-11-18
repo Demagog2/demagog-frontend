@@ -7,11 +7,13 @@ import { FormMessage } from '@/libs/forms/form-message'
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import * as Sentry from '@sentry/nextjs'
 import { redirect } from 'next/navigation'
+import { onError } from '@apollo/client/link/error'
+import type { OperationVariables } from '@apollo/client/core/types'
 
 export class CreateActionBuilder<
   T extends ZodType,
   D,
-  V,
+  V extends OperationVariables,
   M extends TypedDocumentNode<D, V>,
 > {
   private mutation?: M
@@ -19,6 +21,8 @@ export class CreateActionBuilder<
   private variables?: (input: T['_output']) => V
 
   private redirectUrl?: (data: D) => string | null
+
+  private _onError?: (data: D) => void
 
   constructor(private schema: T) {}
 
@@ -31,6 +35,12 @@ export class CreateActionBuilder<
 
   withRedirectUrl(redirectUrl: (data: D) => string | null) {
     this.redirectUrl = redirectUrl
+
+    return this
+  }
+
+  onError(onError: (data: D) => void) {
+    this._onError = onError
 
     return this
   }
@@ -50,7 +60,7 @@ export class CreateActionBuilder<
 
         const { data, errors } = await serverMutation({
           mutation: this.mutation,
-          variables: variables as any,
+          variables,
         })
 
         if (errors?.length) {
@@ -67,6 +77,10 @@ export class CreateActionBuilder<
           const redirectUrl = await this.redirectUrl(data)
 
           redirectUrl && redirect(redirectUrl)
+        }
+
+        if (data && this._onError) {
+          this._onError(data)
         }
 
         return {
