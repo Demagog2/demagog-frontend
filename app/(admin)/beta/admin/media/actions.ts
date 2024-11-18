@@ -7,6 +7,14 @@ import { mediumSchema } from '@/libs/media/medium-schema'
 import { redirect } from 'next/navigation'
 import { FormState } from '@/libs/forms/form-state'
 import { FormMessage } from '@/libs/forms/form-message'
+import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
+import {
+  CreateMediumMutation,
+  CreateMediumMutationVariables,
+  UpdateMediumMutation,
+  UpdateMediumMutationVariables,
+} from '@/__generated__/graphql'
+import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
 
 const adminDeleteMediumMutation = gql(`
   mutation AdminDeleteMedium($id: ID!){
@@ -39,32 +47,25 @@ const adminCreateMediumMutation = gql(`
   }
 `)
 
-export async function createMedium(formData: FormData): Promise<FormState> {
-  const parsedInput = safeParse(mediumSchema, formData)
-
-  if (parsedInput.success) {
-    const { data } = await serverMutation({
-      mutation: adminCreateMediumMutation,
-      variables: {
-        mediumInput: {
-          name: parsedInput.data.name,
-        },
-      },
-    })
-
-    if (data?.createMedium?.medium.id) {
-      redirect(`/beta/admin/media/${data.createMedium.medium.id}`)
-    }
-  }
-
-  return {
-    state: 'error',
-    fields: {
-      ...parsedInput.data,
+export const createMedium = new CreateActionBuilder<
+  typeof mediumSchema,
+  CreateMediumMutation,
+  CreateMediumMutationVariables,
+  typeof adminCreateMediumMutation
+>(mediumSchema)
+  .withMutation(adminCreateMediumMutation, (data) => ({
+    mediumInput: {
+      name: data.name,
     },
-    message: FormMessage.error.validation,
-  }
-}
+  }))
+  .withRedirectUrl((data) => {
+    if (data?.createMedium?.medium) {
+      return `/beta/admin/media/${data?.createMedium?.medium.id}`
+    }
+
+    return null
+  })
+  .build()
 
 const adminUpdateMediumMutation = gql(`
   mutation UpdateMedium($id: ID!, $mediumInput: MediumInput!) {
@@ -76,33 +77,18 @@ const adminUpdateMediumMutation = gql(`
   }
 `)
 
-export async function updateMedium(
-  mediumId: string,
-  formData: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(mediumSchema, formData)
-
-  if (parsedInput.success) {
-    const { data } = await serverMutation({
-      mutation: adminUpdateMediumMutation,
-      variables: {
-        id: mediumId,
-        mediumInput: {
-          name: parsedInput.data.name,
-        },
+export const updateMedium = new UpdateActionBuilder<
+  typeof mediumSchema,
+  UpdateMediumMutation,
+  UpdateMediumMutationVariables,
+  typeof adminUpdateMediumMutation
+>(mediumSchema)
+  .withMutation(adminUpdateMediumMutation, (id, data) => {
+    return {
+      id,
+      mediumInput: {
+        name: data.name,
       },
-    })
-
-    if (data?.updateMedium?.medium.id) {
-      redirect(`/beta/admin/media/${data.updateMedium.medium.id}/edit`)
     }
-  }
-
-  return {
-    state: 'error',
-    fields: {
-      ...parsedInput.data,
-    },
-    message: FormMessage.error.validation,
-  }
-}
+  })
+  .build()
