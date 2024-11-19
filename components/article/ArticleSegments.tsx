@@ -3,6 +3,7 @@ import { SpeakerWithStats } from '@/components/speaker/SpeakerWithStats'
 import StatementItem from '../statement/Item'
 import { ArticleV2Preview } from './ArticleV2Preview'
 import classNames from 'classnames'
+import { ArticleQuoteRedesign } from '@/components/article/ArticleQuoteRedesign'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -27,6 +28,9 @@ const ArticleSegmentsFragment = gql(`
               }
             }
             ... on TextNode {
+              text
+            }
+            ... on BlockQuoteNode {
               text
             }
           }
@@ -80,6 +84,12 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                         key={cursor}
                         dangerouslySetInnerHTML={{ __html: node.text }}
                       />
+                    )
+                  }
+
+                  if (node.__typename === 'BlockQuoteNode') {
+                    return (
+                      <ArticleQuoteRedesign key={cursor} text={node.text} />
                     )
                   }
 

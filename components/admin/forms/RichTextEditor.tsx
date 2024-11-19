@@ -4,6 +4,7 @@ import { useCallback, useMemo } from 'react'
 import { CKEditor } from '@ckeditor/ckeditor5-react'
 import {
   Bold,
+  BlockQuote,
   ClassicEditor,
   Essentials,
   Heading,
@@ -61,6 +62,7 @@ export default function RickTextEditor(props: {
           'bold',
           'italic',
           'strikethrough',
+          'blockQuote',
           '|',
           'link',
           '|',
@@ -80,6 +82,7 @@ export default function RickTextEditor(props: {
       },
       plugins: [
         Bold,
+        BlockQuote,
         Embed,
         EmbedArticle,
         EmbedStatement,
