@@ -17,6 +17,7 @@ import { ArticleIllustrationsRedesign } from '@/components/article/ArticleIllust
 import { ArticleSummaryFrameRedesign } from '@/components/article/ArticleSummaryFrameRedesign'
 import { ArticleSummaryGreyFrameRedesign } from '@/components/article/ArticleSummaryGreyFrameRedesign'
 import { ArticleQuoteRedesign } from '@/components/article/ArticleQuoteRedesign'
+import { ArticleQuoteWithSpeakerRedesign } from '@/components/article/ArticleQuoteWithSpeakerRedesign'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -131,9 +132,10 @@ export default async function Article(props: { params: { slug: string } }) {
           <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} isRedesign />
           <StaticArticleMetadata article={article} isRedesign />
-          <ArticleQuoteRedesign />
+          <ArticleQuoteWithSpeakerRedesign />
           <ArticleSummaryFrameRedesign />
           <ArticleSummaryGreyFrameRedesign isFloating />
+          <ArticleQuoteRedesign />
           <ArticlePlayer article={article} />
         </div>
         <div>

@@ -41,6 +41,11 @@
     margin-top: 39px;
   }
 
+  .symbol-size {
+    width: 28px;
+    height: 28px;
+  }
+
   @media (min-width: 576px) {
     .mt-sm-37 {
       margin-top: 2.3rem;
@@ -89,6 +94,11 @@
 
     .me-lg-30 {
       margin-right: 30px !important;
+    }
+
+    .symbol-size {
+      width: 45px;
+      height: 45px;
     }
   }
 }
