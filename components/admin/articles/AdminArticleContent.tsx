@@ -19,10 +19,13 @@ const AdminArticleContentFragment = gql(`
           node {
             ... on ArticleNode {
               article {
-                ...AdminArticleV2Preview 
+                ...AdminArticleV2Preview
               }
             }
             ... on TextNode {
+              text
+            }
+            ... on BlockQuoteNode {
               text
             }
             ... on StatementNode {
@@ -36,7 +39,7 @@ const AdminArticleContentFragment = gql(`
       }
       statements(includeUnpublished: true) {
         id
-        ...AdminStatement 
+        ...AdminStatement
       }
     }
   }
@@ -95,6 +98,20 @@ export function AdminArticleContent(props: {
                       key={cursor}
                       statement={node.statement}
                     />
+                  )
+                }
+
+                if (node.__typename === 'BlockQuoteNode') {
+                  return (
+                    <figure
+                      key={cursor}
+                      className="mt-10 border-l border-indigo-600 pl-9"
+                    >
+                      <blockquote
+                        className="font-semibold text-gray-900"
+                        dangerouslySetInnerHTML={{ __html: node.text }}
+                      ></blockquote>
+                    </figure>
                   )
                 }
 
