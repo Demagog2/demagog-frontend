@@ -5,10 +5,7 @@ export function ArticleQuoteRedesign(props: { text: string }) {
         <span className="fs-64 quote-mark fst-italic me-4 mt-minus-10 align-self-start fs-lg-96 me-lg-30">
           ”
         </span>
-        <div
-          className="mb-0 px-0 py-0 fw-semibold fs-lg-24"
-          dangerouslySetInnerHTML={{ __html: props.text }}
-        ></div>
+        <p className="mb-0 px-0 py-0 fw-semibold fs-lg-24">{props.text}</p>
       </blockquote>
     </div>
   )

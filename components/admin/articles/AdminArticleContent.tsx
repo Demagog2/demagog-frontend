@@ -107,10 +107,9 @@ export function AdminArticleContent(props: {
                       key={cursor}
                       className="mt-10 border-l border-indigo-600 pl-9"
                     >
-                      <blockquote
-                        className="font-semibold text-gray-900"
-                        dangerouslySetInnerHTML={{ __html: node.text }}
-                      ></blockquote>
+                      <blockquote className="font-semibold text-gray-900">
+                        <p>{node.text}</p>
+                      </blockquote>
                     </figure>
                   )
                 }
