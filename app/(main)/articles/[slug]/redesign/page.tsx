@@ -135,7 +135,7 @@ export default async function Article(props: { params: { slug: string } }) {
           <ArticleQuoteWithSpeakerRedesign />
           <ArticleSummaryFrameRedesign />
           <ArticleSummaryGreyFrameRedesign isFloating />
-          <ArticleQuoteRedesign text="Lorem ipsum" />
+          <ArticleQuoteRedesign text="Lorem ipsum" withSpeaker />
           <ArticlePlayer article={article} />
         </div>
         <div>
