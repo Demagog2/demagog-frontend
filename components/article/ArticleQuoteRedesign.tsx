@@ -1,6 +1,6 @@
 export function ArticleQuoteRedesign(props: {
   text: string
-  withSpeaker: boolean
+  withSpeaker?: boolean
 }) {
   return (
     <div className="quote align-items-start fw-semibold mt-39 mx-3 text-start mt-lg-87 mx-lg-0 fs-lg-96">
