@@ -4,6 +4,7 @@ import { AdminStatement } from './segments/AdminStatement'
 import React from 'react'
 import { Iframely } from '@/components/site/Iframely'
 import { AdminArticleV2Preview } from './AdminArticlePreview'
+import { AdminArticleQuote } from './AdminArticleQuote'
 
 const AdminArticleContentFragment = gql(`
   fragment AdminArticleContent on Article {
@@ -102,16 +103,7 @@ export function AdminArticleContent(props: {
                 }
 
                 if (node.__typename === 'BlockQuoteNode') {
-                  return (
-                    <figure
-                      key={cursor}
-                      className="mt-10 border-l border-indigo-600 pl-9"
-                    >
-                      <blockquote className="font-semibold text-gray-900">
-                        <p>{node.text}</p>
-                      </blockquote>
-                    </figure>
-                  )
+                  return <AdminArticleQuote key={cursor} text={node.text} />
                 }
 
                 if (node.__typename === 'ArticleNode' && node.article) {
