@@ -19,7 +19,9 @@ export function StaticArticleMetadata(props: {
     <>
       {article.articleType === 'static' && (
         <p
-          className={classNames('fs-5', { 'mt-29 mt-lg-39': props.isRedesign })}
+          className={classNames('fs-5', {
+            'mt-29px mt-lg-39px': props.isRedesign,
+          })}
         >
           <span
             className={classNames('text-primary', {
