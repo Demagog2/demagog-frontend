@@ -31,6 +31,7 @@ import { Embed } from '@/libs/ck-plugins/embed'
 import 'ckeditor5/ckeditor5.css'
 import { EmbedStatement } from '@/libs/ck-plugins/embed-statement'
 import { EmbedArticle } from '@/libs/ck-plugins/embed-article'
+import { BlockQuoteWithSpeaker } from '@/libs/ck-plugins/block-quote/block-quote-with-speaker'
 
 export default function RickTextEditor(props: {
   includeHeadings?: boolean
@@ -73,6 +74,7 @@ export default function RickTextEditor(props: {
           'insertImageViaUrl',
           'embedArticle',
           'embedStatement',
+          'blockQuoteWithSpeaker',
           '|',
           'specialCharacters',
           '|',
@@ -83,6 +85,7 @@ export default function RickTextEditor(props: {
       plugins: [
         Bold,
         BlockQuote,
+        BlockQuoteWithSpeaker,
         Embed,
         EmbedArticle,
         EmbedStatement,
