@@ -76,6 +76,16 @@
     @apply !mt-0;
   }
 
+  @media (min-width: 992px) {
+    .custom-lg-float {
+      width: 35%;
+      max-width: 280px;
+      float: right;
+      padding: 25px 29px;
+      margin: 60px 0px 60px 60px;
+    }
+  }
+
   /* Styling of admin page table */
   .admin-content-table {
     @apply min-w-full divide-y divide-gray-300;

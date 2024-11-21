@@ -1,6 +1,15 @@
-export function AdminSummaryFrame() {
+import classNames from 'classnames'
+
+export function AdminSummaryFloatingFrame(props: { isFloating?: boolean }) {
   return (
-    <div className="flex flex-col ul-summary border-2 border-gray-200n rounded-3xl p-6 lg:px-8 mt-8">
+    <div
+      className={classNames(
+        'ul-summary rounded-3xl p-6 lg:px-8 mt-8 bg-gray-100',
+        {
+          'custom-lg-float': props.isFloating,
+        }
+      )}
+    >
       <h4 className="text-lg font-bold">Nárůst koncentrace CO₂</h4>
       <ul className="list-disc mb-0 px-6">
         <li>
