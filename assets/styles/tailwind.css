@@ -31,6 +31,14 @@
     list-style: inside;
   }
 
+  .article-content .ul-summary li {
+    list-style: outside;
+  }
+
+  .article-content .ul-summary ul {
+    @apply !mt-3 !space-y-3;
+  }
+
   .article-content h2,
   .ck-content h2 {
     @apply mt-16 text-2xl font-bold tracking-tight text-gray-900;
@@ -58,6 +66,14 @@
 
   .article-content figure img {
     @apply !rounded-full;
+  }
+
+  .article-content .articleItemH2 a {
+    text-decoration: none !important;
+  }
+
+  .articleItemH2 {
+    @apply !mt-0;
   }
 
   /* Styling of admin page table */
@@ -103,13 +119,5 @@
     margin: 15px 0 8px;
     font-size: 18px;
     font-weight: 700px;
-  }
-
-  .article-content .articleItemH2 a {
-    text-decoration: none !important;
-  }
-
-  .articleItemH2 {
-    @apply !mt-0;
   }
 }

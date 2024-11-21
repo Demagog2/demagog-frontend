@@ -4,7 +4,8 @@ import { AdminStatement } from './segments/AdminStatement'
 import React from 'react'
 import { Iframely } from '@/components/site/Iframely'
 import { AdminArticleV2Preview } from './AdminArticlePreview'
-import { AdminArticleQuote } from './AdminArticleQuote'
+import { AdminArticleQuote } from './segments/AdminArticleQuote'
+import { AdminSummaryFrame } from './segments/AdminSummaryFrame'
 
 const AdminArticleContentFragment = gql(`
   fragment AdminArticleContent on Article {
@@ -48,6 +49,7 @@ const AdminArticleContentFragment = gql(`
 
 export function AdminArticleContent(props: {
   article: FragmentType<typeof AdminArticleContentFragment>
+  isRedesign?: boolean
 }) {
   const article = useFragment(AdminArticleContentFragment, props.article)
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
@@ -72,7 +74,7 @@ export function AdminArticleContent(props: {
             </figcaption>
           </figure>
         )}
-
+        {props.isRedesign && <AdminSummaryFrame />}
         {article.segments.map((segment) =>
           segment.segmentType === 'text' ? (
             <div key={segment.id} className="mt-10 max-w-2xl article-content">

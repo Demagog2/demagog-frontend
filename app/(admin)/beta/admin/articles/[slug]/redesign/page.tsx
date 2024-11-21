@@ -62,7 +62,7 @@ export default async function AdminArticle(props: {
   return (
     <>
       <AdminArticleHeader article={article} />
-      <AdminArticleContent article={article} />
+      <AdminArticleContent isRedesign={true} article={article} />
     </>
   )
 }
