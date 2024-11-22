@@ -3,19 +3,25 @@
 import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 import { useMemo } from 'react'
+import { FragmentType, gql, useFragment } from '@/__generated__'
 
-type PageInfo = {
-  hasPreviousPage: boolean
-  hasNextPage: boolean
-  startCursor?: string | null | undefined
-  endCursor?: string | null | undefined
-}
+export const AdminPaginationFragment = gql(`
+  fragment AdminPagination on PageInfo {
+      hasPreviousPage
+      hasNextPage
+      endCursor
+      startCursor
+    }
+  `)
 
-export function AdminPagination(props: { pageInfo: PageInfo }) {
+export function AdminPagination(props: {
+  pageInfo: FragmentType<typeof AdminPaginationFragment>
+}) {
   const pathname = usePathname()
   const searchParams = useSearchParams()
+  const pageInfo = useFragment(AdminPaginationFragment, props.pageInfo)
 
-  const { startCursor, endCursor } = props.pageInfo
+  const { startCursor, endCursor } = pageInfo
 
   const beforeLink = useMemo(() => {
     const params = new URLSearchParams(searchParams ?? '')
@@ -39,7 +45,7 @@ export function AdminPagination(props: { pageInfo: PageInfo }) {
       className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
     >
       <div className="flex flex-1 justify-between sm:justify-end mt-2">
-        {props.pageInfo.hasPreviousPage && (
+        {pageInfo.hasPreviousPage && (
           <Link
             href={beforeLink}
             className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
@@ -47,7 +53,7 @@ export function AdminPagination(props: { pageInfo: PageInfo }) {
             Předchozí
           </Link>
         )}
-        {props.pageInfo.hasNextPage && (
+        {pageInfo.hasNextPage && (
           <Link
             href={afterLink}
             className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"

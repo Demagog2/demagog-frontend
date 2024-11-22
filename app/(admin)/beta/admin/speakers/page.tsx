@@ -52,10 +52,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
 			}
