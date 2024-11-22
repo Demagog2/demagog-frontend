@@ -64,10 +64,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
       }

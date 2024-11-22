@@ -40,10 +40,7 @@ export default async function Bodies(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
       }

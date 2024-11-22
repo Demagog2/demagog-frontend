@@ -37,10 +37,7 @@ export default async function AdminMedia(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
       }

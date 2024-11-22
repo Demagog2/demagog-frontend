@@ -37,10 +37,7 @@ export default async function AdminModerators(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           } 
         }
       }

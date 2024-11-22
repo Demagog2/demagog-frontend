@@ -33,10 +33,7 @@ export default async function AdminWorkshops(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
       }

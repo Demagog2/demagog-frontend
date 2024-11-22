@@ -38,10 +38,7 @@ export default async function MediaDetail(
               }
             }
             pageInfo {
-              hasPreviousPage
-              hasNextPage
-              endCursor
-              startCursor
+              ...AdminPagination
             } 
           }
         }
