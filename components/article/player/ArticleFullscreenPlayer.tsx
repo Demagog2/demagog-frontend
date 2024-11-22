@@ -84,9 +84,10 @@ export function ArticleFullscreenPlayer(props: {
               statement.statementVideoMark.stop > time
           )?.id ?? null
 
-        setHiglightedStatementId(matchedStatementId)
-
-        if (matchedStatementId) {
+        if (
+          matchedStatementId &&
+          matchedStatementId !== highlightedStatementId
+        ) {
           statementsColumn.current?.scroll({
             top:
               document.getElementById(getStatementId(matchedStatementId))
@@ -95,11 +96,12 @@ export function ArticleFullscreenPlayer(props: {
             behavior: 'smooth',
           })
         }
+        setHiglightedStatementId(matchedStatementId)
       }
     }, 500)
 
     return () => clearInterval(handle)
-  }, [setHiglightedStatementId, statements])
+  }, [setHiglightedStatementId, highlightedStatementId, statements])
 
   useEffect(() => {
     document.body.style.position = 'fixed'
