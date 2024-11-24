@@ -37,8 +37,6 @@ export class BlockQuoteWithSpeakerCommmand extends Command {
    * otherwise the command will remove the block quote. If not set, the command will act basing on its current value.
    */
   public override execute(options: { forceValue?: boolean } = {}): void {
-    console.log('Execute!')
-
     const model = this.editor.model
     const schema = model.schema
     const selection = model.document.selection
