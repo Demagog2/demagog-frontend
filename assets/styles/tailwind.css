@@ -3,6 +3,9 @@
 @tailwind utilities;
 
 @layer utilities {
+  .ck-editor .ck-sticky-panel__content {
+    @apply !rounded-t-lg overflow-hidden;
+  }
 
   .article-content>div>p,
   .ck-content>p {
