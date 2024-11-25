@@ -7,6 +7,7 @@ const ArticleQuoteRedesignFragment = gql(`
     speaker {
       avatar(size: small)
       fullName
+      role
     }
   }
 `)
@@ -38,7 +39,7 @@ export function ArticleQuoteRedesign(props: {
 
               <div className="mb-0 fs-7 fs-lg-5">
                 <p className="fw-semibold">{data.speaker.fullName}</p>
-                <p className="fw-normal">ředitel likérny Rudolf Jelínek</p>
+                <p className="fw-normal">{data.speaker.role}</p>
               </div>
             </div>
           )}
