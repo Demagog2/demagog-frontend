@@ -33,6 +33,7 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
   public init(): void {
     const editor = this.editor
     const schema = editor.model.schema
+    const domConverter = editor.editing.view.domConverter
 
     editor.commands.add(
       'blockQuoteWithSpeaker',
@@ -49,11 +50,25 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
       model: 'blockQuoteWithSpeaker',
       view: {
         name: 'blockquote',
-        attributes: {
-          'data-speaker-id': true,
-        },
       },
     })
+
+    // View -> Model
+    editor.conversion
+      .for('upcast')
+      // div.statement-embed
+      .elementToElement({
+        view: {
+          name: 'blockquote',
+        },
+        model: (viewFigure, { writer }) => {
+          const domElement = domConverter.viewToDom(viewFigure)
+
+          const speakerId = domElement.dataset.speakerId
+
+          return writer.createElement('blockQuoteWithSpeaker', { speakerId })
+        },
+      })
 
     // Model -> Data (DB)
     editor.conversion.for('dataDowncast').elementToElement({
