@@ -29,7 +29,7 @@ const AdminArticleContentFragment = gql(`
               text
             }
             ... on BlockQuoteNode {
-              text
+              ...AdminArticleQuote
             }
             ... on StatementNode {
               statement {
@@ -111,7 +111,7 @@ export function AdminArticleContent(props: {
                 }
 
                 if (node.__typename === 'BlockQuoteNode') {
-                  return <AdminArticleQuote key={cursor} text={node.text} />
+                  return <AdminArticleQuote key={cursor} node={node} />
                 }
 
                 if (node.__typename === 'ArticleNode' && node.article) {
