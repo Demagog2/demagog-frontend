@@ -194,59 +194,5 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
 
       return false
     })
-
-    const viewDocument = this.editor.editing.view.document
-    const selection = editor.model.document.selection
-    const blockQuoteCommand = editor.commands.get('blockQuoteWithSpeaker')!
-
-    // // Overwrite default Enter key behavior.
-    // // If Enter key is pressed with selection collapsed in empty block inside a quote, break the quote.
-    // this.listenTo<ViewDocumentEnterEvent>(
-    //   viewDocument,
-    //   'enter',
-    //   (evt, data) => {
-    //     if (!selection.isCollapsed || !blockQuoteCommand.value) {
-    //       return
-    //     }
-
-    //     const positionParent = selection.getLastPosition()!.parent
-
-    //     if (positionParent.isEmpty) {
-    //       editor.execute('blockQuoteWithSpeaker')
-    //       editor.editing.view.scrollToTheSelection()
-
-    //       data.preventDefault()
-    //       evt.stop()
-    //     }
-    //   },
-    //   { context: 'blockquote' }
-    // )
-
-    // // Overwrite default Backspace key behavior.
-    // // If Backspace key is pressed with selection collapsed in first empty block inside a quote, break the quote.
-    // this.listenTo<ViewDocumentDeleteEvent>(
-    //   viewDocument,
-    //   'delete',
-    //   (evt, data) => {
-    //     if (
-    //       data.direction != 'backward' ||
-    //       !selection.isCollapsed ||
-    //       !blockQuoteCommand!.value
-    //     ) {
-    //       return
-    //     }
-
-    //     const positionParent = selection.getLastPosition()!.parent
-
-    //     if (positionParent.isEmpty && !positionParent.previousSibling) {
-    //       editor.execute('blockQuote')
-    //       editor.editing.view.scrollToTheSelection()
-
-    //       data.preventDefault()
-    //       evt.stop()
-    //     }
-    //   },
-    //   { context: 'blockquote' }
-    // )
   }
 }
