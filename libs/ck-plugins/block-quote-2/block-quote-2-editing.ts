@@ -42,9 +42,40 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
       allowAttributes: ['speakerId'],
     })
 
-    editor.conversion.elementToElement({
+    // View -> Model
+    editor.conversion.for('upcast').elementToElement({
       model: 'blockQuoteWithSpeaker',
-      view: 'blockquote',
+      view: {
+        name: 'blockquote',
+        attributes: {
+          'data-speaker-id': true,
+        },
+      },
+    })
+
+    // Model -> Data (DB)
+    editor.conversion.for('dataDowncast').elementToElement({
+      model: 'blockQuoteWithSpeaker',
+      view: (modelElement, { writer }) => {
+        const speakerId = modelElement.getAttribute('speakerId')
+
+        return writer.createContainerElement('blockquote', {
+          'data-speaker-id': speakerId,
+        })
+      },
+    })
+
+    // Model -> View
+    editor.conversion.for('editingDowncast').elementToElement({
+      model: 'blockQuoteWithSpeaker',
+      view: (modelElement, { writer }) => {
+        const speakerId = modelElement.getAttribute('speakerId')
+        const blockQuote = writer.createContainerElement('blockquote', {
+          'data-speaker-id': speakerId,
+        })
+
+        return blockQuote
+      },
     })
 
     // Postfixer which cleans incorrect model states connected with block quotes.

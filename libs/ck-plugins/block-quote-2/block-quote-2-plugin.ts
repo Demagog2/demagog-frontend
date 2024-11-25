@@ -1,4 +1,4 @@
-import { BlockQuote, ButtonView, Dialog, Plugin, View, icons } from 'ckeditor5'
+import { ButtonView, Dialog, Plugin, View, icons } from 'ckeditor5'
 import { BlockQuoteEditingWithSpeakerEditing } from './block-quote-2-editing'
 import { BlockQuoteWithSpeakerCommmand } from './block-quote-2-command'
 import { BlockQuoteSpeakersView } from './block-quote-2-view-speakers'
@@ -8,7 +8,7 @@ export class BlockQuoteWithSpeaker extends Plugin {
    * @inheritDoc
    */
   public static get requires() {
-    return [BlockQuote, BlockQuoteEditingWithSpeakerEditing, Dialog] as const
+    return [BlockQuoteEditingWithSpeakerEditing, Dialog] as const
   }
 
   public static get pluginName() {
