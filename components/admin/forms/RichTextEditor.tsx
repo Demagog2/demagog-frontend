@@ -83,6 +83,7 @@ export default function RickTextEditor(props: {
       },
       plugins: [
         Bold,
+        BlockQuote,
         BlockQuoteWithSpeaker,
         Embed,
         EmbedArticle,

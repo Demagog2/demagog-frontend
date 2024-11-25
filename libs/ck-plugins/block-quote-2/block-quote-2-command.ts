@@ -35,10 +35,11 @@ export class BlockQuoteWithSpeakerCommmand extends Command {
    * @param options Command options.
    * @param options.forceValue If set, it will force the command behavior. If `true`, the command will apply a block quote,
    * otherwise the command will remove the block quote. If not set, the command will act basing on its current value.
+   * @param options.speakerId If set, block quote will be created with data-speaker-id attribute.
    */
-  public override execute(options: { forceValue?: boolean } = {}): void {
-    console.log('Execute!')
-
+  public override execute(
+    options: { forceValue?: boolean; speakerId?: string } = {}
+  ): void {
     const model = this.editor.model
     const schema = model.schema
     const selection = model.document.selection
@@ -58,7 +59,7 @@ export class BlockQuoteWithSpeakerCommmand extends Command {
           return findQuote(block) || checkCanBeQuoted(schema, block)
         })
 
-        this._applyQuote(writer, blocksToQuote)
+        this._applyQuote(writer, blocksToQuote, options.speakerId)
       }
     })
   }
@@ -145,7 +146,11 @@ export class BlockQuoteWithSpeakerCommmand extends Command {
   /**
    * Applies the quote to given blocks.
    */
-  private _applyQuote(writer: Writer, blocks: Array<Element>): void {
+  private _applyQuote(
+    writer: Writer,
+    blocks: Array<Element>,
+    speakerId?: string
+  ): void {
     const quotesToMerge: Array<Element | DocumentFragment> = []
 
     // Quote all groups of block. Iterate in the reverse order to not break following ranges.
@@ -155,7 +160,14 @@ export class BlockQuoteWithSpeakerCommmand extends Command {
         let quote = findQuote(groupRange.start)
 
         if (!quote) {
-          quote = writer.createElement('blockQuoteWithSpeaker')
+          quote = writer.createElement(
+            'blockQuoteWithSpeaker',
+            speakerId
+              ? {
+                  speakerId,
+                }
+              : {}
+          )
 
           writer.wrap(groupRange, quote)
         }

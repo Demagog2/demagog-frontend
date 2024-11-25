@@ -3,9 +3,26 @@
 @tailwind utilities;
 
 @layer utilities {
+  /* CK Editor dialog styles */
+  .ck-dialog .ck-list {
+    @apply !mt-2 space-y-1;
+  }
 
-  .article-content>div>p,
-  .ck-content>p {
+  .ck-dialog .ck-list li {
+    @apply cursor-pointer px-1;
+  }
+
+  .ck-dialog .ck-list li:hover {
+    background-color: #f5f5f5;
+  }
+
+  .ck-dialog .ck-button-action.ck-button-warning {
+    @apply bg-red-700;
+  }
+
+  /* CK Editor content and adminn article detail styles */
+  .article-content > div > p,
+  .ck-content > p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 
