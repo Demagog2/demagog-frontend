@@ -87,7 +87,7 @@ export class BlockQuoteWithSpeaker extends Plugin {
             },
             {
               label: 'Zavřít',
-              class: 'ck-button-action',
+              class: 'ck-button-action ck-button-warning',
               withText: true,
               onExecute: () => {
                 dialog.hide()

@@ -100,14 +100,7 @@ export function BlockQuoteSpeakersView(
 
   view.setTemplate({
     tag: 'div',
-    children: [
-      {
-        tag: 'h3',
-        children: ['Vyberte řečníka'],
-      },
-      inputView,
-      listView,
-    ],
+    children: [inputView, listView],
   })
 
   return view
