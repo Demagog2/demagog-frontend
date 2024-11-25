@@ -2,6 +2,8 @@ import { Plugin } from 'ckeditor5'
 import { Enter, type ViewDocumentEnterEvent } from 'ckeditor5'
 import { Delete, type ViewDocumentDeleteEvent } from 'ckeditor5'
 import { BlockQuoteWithSpeakerCommmand as BlockQuoteWithSpeakerCommmand } from './block-quote-2-command'
+import { query } from '@/libs/apollo-client'
+import { gql } from '@/__generated__'
 
 export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
   /**
@@ -42,9 +44,92 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
       allowAttributes: ['speakerId'],
     })
 
-    editor.conversion.elementToElement({
+    // View -> Model
+    editor.conversion.for('upcast').elementToElement({
       model: 'blockQuoteWithSpeaker',
-      view: 'blockquote',
+      view: {
+        name: 'blockquote',
+        attributes: {
+          'data-speaker-id': true,
+        },
+      },
+    })
+
+    // Model -> Data (DB)
+    editor.conversion.for('dataDowncast').elementToElement({
+      model: 'blockQuoteWithSpeaker',
+      view: (modelElement, { writer }) => {
+        const speakerId = modelElement.getAttribute('speakerId')
+
+        return writer.createContainerElement('blockquote', {
+          'data-speaker-id': speakerId,
+        })
+      },
+    })
+
+    // Model -> View
+    editor.conversion.for('editingDowncast').elementToElement({
+      model: 'blockQuoteWithSpeaker',
+      view: (modelElement, { writer }) => {
+        const speakerId = modelElement.getAttribute('speakerId')
+
+        if (!speakerId) {
+          return writer.createContainerElement('blockquote')
+        }
+
+        const blockQuote = writer.createContainerElement('blockquote', {
+          'data-speaker-id': speakerId,
+        })
+
+        const authorElement = writer.createUIElement(
+          'span',
+          { class: 'blockquote-author' },
+          function (domDocument) {
+            const domElement = this.toDomElement(domDocument)
+            domElement.innerHTML = 'Načítám autora...'
+            return domElement
+          }
+        )
+
+        writer.insert(writer.createPositionAt(blockQuote, 'end'), authorElement)
+
+        query({
+          query: gql(`
+            query BlockQuotePluginDetail($id: ID!) {
+              speakerV2(id: $id) {
+                fullName
+              }
+            }
+          `),
+          variables: {
+            id: speakerId as string,
+          },
+        }).then((payload) => {
+          if (payload.data.speakerV2) {
+            const editingView = editor.editing.view
+            editingView.change((writer) => {
+              writer.remove(authorElement)
+
+              const authorWithName = writer.createUIElement(
+                'span',
+                { class: 'blockquote-author' },
+                function (domDocument) {
+                  const domElement = this.toDomElement(domDocument)
+                  domElement.innerHTML = `— ${payload.data.speakerV2?.fullName}`
+                  return domElement
+                }
+              )
+
+              writer.insert(
+                writer.createPositionAt(blockQuote, 'end'),
+                authorWithName
+              )
+            })
+          }
+        })
+
+        return blockQuote
+      },
     })
 
     // Postfixer which cleans incorrect model states connected with block quotes.

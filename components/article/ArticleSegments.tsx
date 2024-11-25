@@ -31,7 +31,7 @@ const ArticleSegmentsFragment = gql(`
               text
             }
             ... on BlockQuoteNode {
-              text
+              ...ArticleQuoteRedesign
             }
           }
           cursor
@@ -88,9 +88,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                   }
 
                   if (node.__typename === 'BlockQuoteNode') {
-                    return (
-                      <ArticleQuoteRedesign key={cursor} text={node.text} />
-                    )
+                    return <ArticleQuoteRedesign key={cursor} node={node} />
                   }
 
                   if (node.__typename === 'ArticleNode' && node.article) {
