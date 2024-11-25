@@ -38,7 +38,14 @@ export class BlockQuoteWithSpeaker extends Plugin {
           },
           tabindex: -1,
         },
-        children: [BlockQuoteSpeakersView(editor)],
+        children: [
+          BlockQuoteSpeakersView(editor, {
+            onSelect(speakerId: string) {
+              editor.execute('blockQuoteWithSpeaker', { speakerId })
+              dialog.hide()
+            },
+          }),
+        ],
       })
 
       const command = editor.commands.get(
@@ -90,7 +97,6 @@ export class BlockQuoteWithSpeaker extends Plugin {
           onHide() {},
         })
 
-        // editor.execute('blockQuoteWithSpeaker')
         editor.editing.view.focus()
       })
 

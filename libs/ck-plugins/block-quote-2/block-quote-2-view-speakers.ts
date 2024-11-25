@@ -6,6 +6,7 @@ import { debounce } from 'lodash'
 function fetchSpeakers(
   editor: Editor,
   listView: ListView,
+  options: { onSelect(speakerId: string): void },
   name: string = ''
 ): void {
   const loadingItem = new ListItemView(editor.locale)
@@ -50,13 +51,21 @@ function fetchSpeakers(
       })
 
       listView.items.add(listItem)
+
+      listItem.element?.addEventListener('click', () => {
+        if (edge.node?.id) {
+          options.onSelect(edge.node.id)
+        }
+      })
     })
   })
 }
 
-export function BlockQuoteSpeakersView(editor: Editor) {
+export function BlockQuoteSpeakersView(
+  editor: Editor,
+  options: { onSelect(speakerId: string): void }
+) {
   const view = new View(editor.locale)
-
   const inputView = new InputTextView(editor.locale)
   const listView = new ListView(editor.locale)
 
@@ -65,12 +74,26 @@ export function BlockQuoteSpeakersView(editor: Editor) {
     isReadOnly: false,
   })
 
-  fetchSpeakers(editor, listView)
+  const customOptions = {
+    ...options,
+    onSelect(speakerId: string) {
+      options.onSelect(speakerId)
+      inputView.reset()
+    },
+  }
+
+  fetchSpeakers(editor, listView, customOptions)
 
   inputView.on(
     'input',
     debounce(
-      () => fetchSpeakers(editor, listView, inputView.element?.value ?? ''),
+      () =>
+        fetchSpeakers(
+          editor,
+          listView,
+          customOptions,
+          inputView.element?.value ?? ''
+        ),
       500
     )
   )
