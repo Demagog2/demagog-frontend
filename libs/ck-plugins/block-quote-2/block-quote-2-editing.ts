@@ -46,14 +46,6 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
     })
 
     // View -> Model
-    editor.conversion.for('upcast').elementToElement({
-      model: 'blockQuoteWithSpeaker',
-      view: {
-        name: 'blockquote',
-      },
-    })
-
-    // View -> Model
     editor.conversion
       .for('upcast')
       // div.statement-embed
