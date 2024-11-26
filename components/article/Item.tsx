@@ -14,16 +14,16 @@ export const ArticleDetailFragment = gql(`
     illustration(size: medium)
     title
     pinned
-    speakers {
-      id
-      ...ArticleSpeakerDetail
-    }
     articleType
     source {
       medium {
         name
       }
       releasedAt
+      sourceSpeakers {
+        id
+        ...ArticleSpeakerDetail
+      }
     }
     publishedAt
     ...ArticleLink
@@ -57,7 +57,7 @@ export default function ArticleItem(props: {
           </div>
           <div className="d-flex justify-content-between align-items-center mt-2">
             <div className="symbol-group">
-              {article.speakers?.map((speaker) => (
+              {article.source?.sourceSpeakers?.map((speaker) => (
                 <Speaker key={speaker.id} speaker={speaker} />
               ))}
             </div>
