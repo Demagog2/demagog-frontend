@@ -18,6 +18,7 @@ export const SingleStatementArticlePreviewFragment = gql(`
                 ...ArticleSpeakerDetail
             }
             source {
+              sourceUrl
               medium {
                 name
               }
@@ -54,8 +55,19 @@ export function SingleStatementArticlePreview(props: {
 
   return (
     <Article pinned={article.pinned}>
-      <div className={classNames('row g-2 g-lg-5', { 'my-8': isEmbedded })}>
-        <div className="col col-12 col-md-5">
+      <div
+        className={classNames('row', {
+          'd-flex justify-content-center justify-content-md-start mt-8 bg-lightgrey radius-22px g-4 text-start g-md-6':
+            isEmbedded,
+          'g-2 g-lg-5': !isEmbedded,
+        })}
+      >
+        <div
+          className={classNames('col', {
+            'mt-4 mt-md-7 ps-0 ms-md-7 mb-2 mb-md-3 col-4': isEmbedded,
+            'col-md-5 col-12': !isEmbedded,
+          })}
+        >
           <div className="w-100">
             <Link href={articlePath} className="illustration">
               <img
@@ -66,7 +78,12 @@ export function SingleStatementArticlePreview(props: {
             </Link>
           </div>
 
-          <div className="d-flex justify-content-between align-items-center mt-2">
+          <div
+            className={classNames(
+              'd-flex justify-content-between align-items-center mt-2',
+              { 'd-none d-md-flex': isEmbedded }
+            )}
+          >
             <div className="symbol-group">
               <ArticleSpeaker speaker={article.statement.sourceSpeaker} />
             </div>
@@ -125,30 +142,74 @@ export function SingleStatementArticlePreview(props: {
           </div>
         </div>
 
-        <div className="col col-12 col-md-7">
-          <h2 className="fs-2 fw-bold mb-2">
-            <Link href={articlePath} className="text-dark s-title">
+        <div
+          className={classNames('col', {
+            'mt-4 mt-md-7 col-7 col-md-6 mb-3 mb-md-6': isEmbedded,
+            'col-12 col-md-7': !isEmbedded,
+          })}
+        >
+          <h2
+            className={classNames('fw-bold', {
+              'fs-16px fs-md-26px mb-0 lh-110percent': isEmbedded,
+              'fs-2  mb-2': !isEmbedded,
+            })}
+          >
+            <Link
+              href={articlePath}
+              className={classNames('text-dark s-title', {
+                'text-decoration-none': isEmbedded,
+              })}
+            >
               {article.title}
             </Link>
           </h2>
-          <div className="mb-2">
-            <i>
+          <div
+            className={classNames('mb-2', {
+              'text-muted fs-12px fs-md-14px': isEmbedded,
+            })}
+          >
+            <i className={classNames({ 'text-muted': isEmbedded })}>
               {article.statement.source.medium?.name},{' '}
               {article.statement.source.releasedAt &&
                 formatDate(article.statement.source.releasedAt)}
             </i>
+            {isEmbedded && article.statement?.source?.sourceUrl && (
+              <>
+                <span className="col col-auto fs-12px fs-md-14px text-muted">
+                  ,{' '}
+                </span>
+                <span className="col col-auto fs-12px fs-md-14px text-decoration-underline underline-offset-2px">
+                  <i>
+                    <a
+                      href={article.statement.source.sourceUrl}
+                      className="ext text-muted"
+                    >
+                      záznam
+                    </a>
+                  </i>
+                </span>
+              </>
+            )}
           </div>
 
-          <p className="fs-6 lh-sm">„{article.statement.content.trim()}“</p>
-
-          <div className="mt-4">
-            <Link
-              href={articlePath}
-              className="btn outline h-40px px-6 fw-bold"
-            >
-              <span className="fs-7">Číst dál</span>
-            </Link>
-          </div>
+          <p
+            className={classNames({
+              'fs-12px fs-md-14px lh-md-base': isEmbedded,
+              'fs-6 lh-sm': !isEmbedded,
+            })}
+          >
+            „{article.statement.content.trim()}“
+          </p>
+          {isEmbedded ? null : (
+            <div className="mt-4">
+              <Link
+                href={articlePath}
+                className="btn outline h-40px px-6 fw-bold"
+              >
+                <span className="fs-7">Číst dál</span>
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </Article>

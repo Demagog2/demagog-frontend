@@ -66,9 +66,9 @@ export function ArticleSegments(props: ArticleStatementsProps) {
           {segment.segmentType === 'text' && (
             <div className="row justify-content-center">
               <div
-                className={classNames('col content fs-6', {
-                  'col-sm-10 mx-sm-auto': isRedesign,
-                  'col-12 col-lg-8': !isRedesign,
+                className={classNames('col fs-6', {
+                  'content-redesign col-sm-10 mx-sm-auto': isRedesign,
+                  'content col-12 col-lg-8': !isRedesign,
                 })}
               >
                 {segment.content.edges?.map((edge) => {
@@ -81,6 +81,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                   if (node.__typename === 'TextNode') {
                     return (
                       <div
+                        className={'content-text-node'}
                         key={cursor}
                         dangerouslySetInnerHTML={{ __html: node.text }}
                       />
