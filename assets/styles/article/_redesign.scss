@@ -104,38 +104,36 @@
       width: 45px;
       height: 45px;
     }
-  }
-}
-
-//Embedded single statement and single article item
-.content {
-  .underline-offset-2px {
-    text-underline-offset: 2px;
-  }
-
-  .fs-16px {
-    font-size: 16px !important;
-  }
-
-  .fs-12px {
-    font-size: 12px;
-  }
-
-  .lh-110percent {
-    line-height: 110% !important;
-  }
-
-  @media (min-width: 768px) {
-    .fs-14px {
-      font-size: 14px !important;
+  } //Embedded single statement and single article item
+  .content-redesign {
+    .underline-offset-2px {
+      text-underline-offset: 2px;
     }
 
-    .fs-26px {
-      font-size: 26px !important;
+    .fs-16px {
+      font-size: 16px;
     }
 
-    .lh-md-base {
-      line-height: 1.5;
+    .fs-12px {
+      font-size: 12px;
+    }
+
+    .lh-110percent {
+      line-height: 110%;
+    }
+
+    @media (min-width: 768px) {
+      .fs-14px {
+        font-size: 14px;
+      }
+
+      .fs-26px {
+        font-size: 26px;
+      }
+
+      .lh-md-base {
+        line-height: 1.5;
+      }
     }
   }
 }
