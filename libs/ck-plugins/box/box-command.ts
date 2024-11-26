@@ -6,9 +6,9 @@ import {
   removeWrapper,
 } from '../utils/containers'
 
-const MODEL_NAME = 'blockQuoteWithSpeaker'
+const MODEL_NAME = 'box'
 
-export class BlockQuoteWithSpeakerCommmand extends Command {
+export class BoxCommand extends Command {
   /**
    * Whether the selection starts in a block quote.
    *
@@ -34,11 +34,8 @@ export class BlockQuoteWithSpeakerCommmand extends Command {
    * @param options Command options.
    * @param options.forceValue If set, it will force the command behavior. If `true`, the command will apply a block quote,
    * otherwise the command will remove the block quote. If not set, the command will act basing on its current value.
-   * @param options.speakerId If set, block quote will be created with data-speaker-id attribute.
    */
-  public override execute(
-    options: { forceValue?: boolean; speakerId?: string } = {}
-  ): void {
+  public override execute(options: { forceValue?: boolean } = {}): void {
     const model = this.editor.model
     const selection = model.document.selection
 
@@ -51,17 +48,7 @@ export class BlockQuoteWithSpeakerCommmand extends Command {
       if (!value) {
         removeWrapper(writer, MODEL_NAME, blocks)
       } else {
-        applyWrapper(
-          this.editor,
-          writer,
-          blocks,
-          MODEL_NAME,
-          options.speakerId
-            ? {
-                speakerId: options.speakerId,
-              }
-            : {}
-        )
+        applyWrapper(this.editor, writer, blocks, MODEL_NAME)
       }
     })
   }

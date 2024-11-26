@@ -31,6 +31,7 @@ import 'ckeditor5/ckeditor5.css'
 import { EmbedStatement } from '@/libs/ck-plugins/embed-statement'
 import { EmbedArticle } from '@/libs/ck-plugins/embed-article'
 import { BlockQuoteWithSpeaker } from '@/libs/ck-plugins/block-quote-2/block-quote-2-plugin'
+import { Box } from '@/libs/ck-plugins/box/box'
 
 export default function RickTextEditor(props: {
   includeHeadings?: boolean
@@ -68,6 +69,7 @@ export default function RickTextEditor(props: {
           '|',
           'bulletedList',
           'numberedList',
+          'box',
           '|',
           'embed',
           'insertImageViaUrl',
@@ -83,6 +85,7 @@ export default function RickTextEditor(props: {
       plugins: [
         Bold,
         BlockQuoteWithSpeaker,
+        Box,
         Embed,
         EmbedArticle,
         EmbedStatement,
@@ -141,6 +144,12 @@ export default function RickTextEditor(props: {
                   view: 'h2',
                   title: 'Heading',
                   class: 'ck-heading_heading1',
+                },
+                {
+                  model: 'heading' as const,
+                  view: 'h3',
+                  title: 'Nadpis seznamu',
+                  class: 'ck-heading_heading2',
                 },
               ],
             },
