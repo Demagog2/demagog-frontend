@@ -124,7 +124,9 @@ export default async function Article(props: { params: { slug: string } }) {
             </h1>
             <ArticleIllustrationsRedesign article={article} />
             <div className="mt-4 mt-sm-37px">
-              <span className="fs-5">{article.perex}</span>
+              <span className="fs-16px fs-md-20px fw-medium">
+                {article.perex}
+              </span>
             </div>
           </div>
           <DebateArticleMetadata article={article} />

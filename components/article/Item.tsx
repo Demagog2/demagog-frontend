@@ -54,7 +54,7 @@ export default function ArticleItem(props: {
       >
         <div
           className={classNames('col', {
-            'mt-4 mt-md-7 ps-0 ms-md-7 mb-2 mb-md-3 col-4': isEmbedded,
+            'mt-4 mt-md-7 ps-0 ms-md-7 mb-2 mb-md-5 col-4': isEmbedded,
             'col-md-5 col-12': !isEmbedded,
           })}
         >
@@ -88,7 +88,7 @@ export default function ArticleItem(props: {
         >
           <h2
             className={classNames('fw-bold', {
-              'fs-16px fs-26px mb-0 lh-110percent': isEmbedded,
+              'fs-16px fs-md-26px mb-0 lh-110percent': isEmbedded,
               'fs-2  mb-2': !isEmbedded,
             })}
           >
@@ -103,7 +103,7 @@ export default function ArticleItem(props: {
           </h2>
           <div
             className={classNames('mb-2', {
-              'text-muted fs-12px fs-14px': isEmbedded,
+              'text-muted fs-12px fs-md-14px': isEmbedded,
             })}
           >
             {article.articleType === 'default' && article.source && (
@@ -128,10 +128,10 @@ export default function ArticleItem(props: {
             )}
             {isEmbedded && article.source?.sourceUrl && (
               <>
-                <span className="col col-auto fs-12px fs-14px text-muted">
+                <span className="col col-auto fs-12px fs-md-14px text-muted">
                   ,{' '}
                 </span>
-                <span className="col col-auto fs-12px fs-14px text-decoration-underline underline-offset-2px">
+                <span className="col col-auto fs-12px fs-md-14px text-decoration-underline underline-offset-2px">
                   <i>
                     <a
                       href={article.source.sourceUrl}
@@ -149,7 +149,7 @@ export default function ArticleItem(props: {
           >
             <span
               className={classNames({
-                'fs-12px fs-14px lh-md-base': isEmbedded,
+                'fs-12px fs-md-14px lh-md-base': isEmbedded,
                 'fs-6': !isEmbedded,
               })}
             >
