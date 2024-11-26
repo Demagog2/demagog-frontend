@@ -57,7 +57,7 @@ export function SingleStatementArticlePreview(props: {
     <Article pinned={article.pinned}>
       <div
         className={classNames('row', {
-          'd-flex justify-content-center justify-content-md-start my-8 bg-lightgrey radius-22px g-4 text-start g-md-6':
+          'd-flex justify-content-center justify-content-md-start mt-8 bg-lightgrey radius-22px g-4 text-start g-md-6':
             isEmbedded,
           'g-2 g-lg-5': !isEmbedded,
         })}

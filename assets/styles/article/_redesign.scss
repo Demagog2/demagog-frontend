@@ -149,6 +149,27 @@
         font-size: 18px;
         font-weight: 700;
       }
+
+      .ck-editor_demagog-box-wrapper {
+        @extend .border, .border-dark;
+        border-radius: 31px;
+        padding: 25px 27px;
+        text-align: start;
+        margin-top: 39px;
+
+        ul {
+          @extend .mb-0, .mt-3;
+
+          li {
+            @extend .li-item;
+            font-size: 14px;
+          }
+
+          li.li-item:not(:last-child) {
+            margin-bottom: 19px;
+          }
+        }
+      }
     }
 
     @media (min-width: 768px) {
@@ -164,6 +185,10 @@
         line-height: 1.5;
       }
 
+      .mt-md-56px {
+        margin-top: 56px;
+      }
+
       .content-text-node {
         p {
           font-size: 16px;
@@ -171,7 +196,46 @@
         h2 {
           font-size: 32px;
         }
+        .ck-editor_demagog-box-wrapper {
+          margin-top: 56px;
+          ul li {
+            font-size: 16px;
+          }
+        }
       }
+    }
+  }
+}
+
+//Embedded single statement and single article item
+.content {
+  .underline-offset-2px {
+    text-underline-offset: 2px;
+  }
+
+  .fs-16px {
+    font-size: 16px !important;
+  }
+
+  .fs-12px {
+    font-size: 12px;
+  }
+
+  .lh-110percent {
+    line-height: 110% !important;
+  }
+
+  @media (min-width: 768px) {
+    .fs-14px {
+      font-size: 14px;
+    }
+
+    .fs-26px {
+      font-size: 26px !important;
+    }
+
+    .lh-md-base {
+      line-height: 1.5;
     }
   }
 }
