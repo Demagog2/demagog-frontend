@@ -20,7 +20,22 @@
     @apply bg-red-700;
   }
 
-  /* CK Editor content and adminn article detail styles */
+  /* CK Editor content and admin article detail styles */
+  .article-content .ck-editor_demagog-box-wrapper,
+  .ck-content .ck-editor_demagog-box-wrapper {
+    @apply flex flex-col border-2 border-gray-200 rounded-3xl p-6 lg:px-8 mt-8;
+  }
+
+  .article-content .ck-editor_demagog-box-wrapper h3,
+  .ck-content .ck-editor_demagog-box-wrapper h3 {
+    @apply text-lg font-bold;
+  }
+
+  .article-content .ck-editor_demagog-box-wrapper ul,
+  .ck-content .ck-editor_demagog-box-wrapper ul {
+    @apply list-disc mb-0 px-6 !mt-0 !space-y-0;
+  }
+
   .article-content > div > p,
   .ck-content > p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
@@ -43,9 +58,13 @@
     border: 1px solid red;
   }
 
+  .article-content ul {
+    @apply !px-2;
+  }
+
   .article-content ul li,
   .ck-content ul li {
-    list-style: inside;
+    @apply !list-disc;
   }
 
   .article-content .ul-summary li {
