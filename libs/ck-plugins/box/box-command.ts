@@ -37,7 +37,11 @@ export class BoxCommand extends Command {
    * @param options.isFloating If set the box will be floating on the right
    */
   public override execute(
-    options: { forceValue?: boolean; isFloating?: boolean } = {}
+    options: {
+      forceValue?: boolean
+      isFloating?: boolean
+      hasBgGrey?: boolean
+    } = {}
   ): void {
     const model = this.editor.model
     const selection = model.document.selection
@@ -53,6 +57,7 @@ export class BoxCommand extends Command {
       } else {
         applyWrapper(this.editor, writer, blocks, MODEL_NAME, {
           isFloating: options.isFloating === true,
+          hasBgGrey: options.hasBgGrey === true,
         })
       }
     })

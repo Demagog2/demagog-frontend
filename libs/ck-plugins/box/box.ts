@@ -33,12 +33,12 @@ export function Box(editor: Editor) {
     model: 'box',
     view: (modelElement, { writer }) => {
       const isFloating = modelElement.getAttribute('isFloating')
-      const hasGreyBg = modelElement.getAttribute('hasGreyBg')
+      const hasBgGrey = modelElement.getAttribute('hasBgGrey')
 
       return writer.createContainerElement('div', {
         class: classNames(CUSTOM_CLASS_NAME, {
           [CUSTOM_CLASS_FLOAT_RIGHT]: isFloating,
-          [CUSTOM_CLASS_FLOAT_GREY_BG]: hasGreyBg,
+          [CUSTOM_CLASS_FLOAT_GREY_BG]: hasBgGrey,
         }),
       })
     },
@@ -49,12 +49,12 @@ export function Box(editor: Editor) {
     model: 'box',
     view: (modelElement, { writer }) => {
       const isFloating = modelElement.getAttribute('isFloating')
-      const hasGreyBg = modelElement.getAttribute('hasGreyBg')
+      const hasBgGrey = modelElement.getAttribute('hasBgGrey')
 
       return writer.createContainerElement('div', {
         class: classNames(CUSTOM_CLASS_NAME, {
           [CUSTOM_CLASS_FLOAT_RIGHT]: isFloating,
-          [CUSTOM_CLASS_FLOAT_GREY_BG]: hasGreyBg,
+          [CUSTOM_CLASS_FLOAT_GREY_BG]: hasBgGrey,
         }),
       })
     },
@@ -99,6 +99,28 @@ export function Box(editor: Editor) {
 
     view.on('execute', () => {
       editor.execute('box', { isFloating: true })
+    })
+
+    return view
+  })
+
+  editor.ui.componentFactory.add('boxGrey', () => {
+    const view = new ButtonView(editor.locale)
+
+    const command = editor.commands.get('box') as BoxCommand
+
+    view.bind('isEnabled').to(command, 'isEnabled')
+    view.bind('isOn').to(command, 'value')
+
+    view.set({
+      label: editor.locale.t('Šedý rámeček'),
+      icon: icons.objectFullWidth,
+      isToggleable: true,
+      tooltip: true,
+    })
+
+    view.on('execute', () => {
+      editor.execute('box', { hasBgGrey: true })
     })
 
     return view

@@ -71,6 +71,7 @@ export default function RickTextEditor(props: {
           'numberedList',
           'box',
           'boxRight',
+          'boxGrey',
           '|',
           'embed',
           'insertImageViaUrl',
