@@ -51,7 +51,7 @@
 
   .article-content ul,
   .ck-content ul {
-    @apply !mt-8 !max-w-xl !space-y-8 !text-gray-600;
+    @apply !mt-8 !max-w-xl !space-y-8 !text-gray-600 px-3;
   }
 
   .ck-content .statement {
