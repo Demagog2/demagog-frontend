@@ -24,8 +24,8 @@
     margin-top: 39px;
   }
 
-  .mt-29px {
-    margin-top: 29px;
+  .mt-30px {
+    margin-top: 30px;
   }
 
   .mt-minus-10px {
@@ -81,6 +81,10 @@
     .fs-md-20px {
       font-size: 20px;
     }
+
+    .mt-md-40px {
+      margin-top: 40px;
+    }
   }
 
   @media (min-width: 992px) {
@@ -94,10 +98,6 @@
 
     .mt-lg-87px {
       margin-top: 87px;
-    }
-
-    .mt-lg-39px {
-      margin-top: 39px;
     }
 
     .quote + * {
@@ -136,18 +136,20 @@
 
     .content-text-node {
       p {
-        margin-top: 20px;
+        margin-top: 15px;
         font-size: 14px;
       }
 
       h2 {
         font-size: 20px;
         font-weight: 800px;
+        margin-top: 30px;
       }
 
       h3 {
         font-size: 18px;
         font-weight: 700;
+        margin-top: 30px;
       }
 
       .ck-editor_demagog-box-wrapper {
@@ -155,7 +157,12 @@
         border-radius: 31px;
         padding: 25px 27px;
         text-align: start;
-        margin-top: 39px;
+        margin-top: 30px;
+
+        h3,
+        h2 {
+          @extend .mt-0;
+        }
 
         ul {
           @extend .mb-0, .mt-3;
@@ -192,12 +199,19 @@
       .content-text-node {
         p {
           font-size: 16px;
+          margin-top: 20px;
         }
         h2 {
           font-size: 32px;
+          margin-top: 40px;
         }
+
+        h3 {
+          margin-top: 40px;
+        }
+
         .ck-editor_demagog-box-wrapper {
-          margin-top: 56px;
+          margin-top: 40px;
           ul li {
             font-size: 16px;
           }

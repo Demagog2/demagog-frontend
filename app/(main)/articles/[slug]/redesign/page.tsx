@@ -14,8 +14,6 @@ import { truncate } from 'lodash'
 import { imagePath } from '@/libs/images/path'
 import { notFound } from 'next/navigation'
 import { ArticleIllustrationsRedesign } from '@/components/article/ArticleIllustrationsRedesign'
-import { ArticleSummaryFrameRedesign } from '@/components/article/ArticleSummaryFrameRedesign'
-import { ArticleSummaryGreyFrameRedesign } from '@/components/article/ArticleSummaryGreyFrameRedesign'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -129,11 +127,9 @@ export default async function Article(props: { params: { slug: string } }) {
               </span>
             </div>
           </div>
-          <DebateArticleMetadata article={article} />
+          <DebateArticleMetadata article={article} isRedesign />
           <FacebookFactcheckMetadata article={article} isRedesign />
           <StaticArticleMetadata article={article} isRedesign />
-          <ArticleSummaryFrameRedesign />
-          <ArticleSummaryGreyFrameRedesign isFloating />
           <ArticlePlayer article={article} />
         </div>
         <div>
