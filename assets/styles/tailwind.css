@@ -33,6 +33,14 @@
     /* TODO: finish styling */
   }
 
+  .article-content .ck-editor_demagog-box-wrapper.bg-grey,
+  .ck-content .ck-editor_demagog-box-wrapper.bg-grey {
+    /* TODO: finish styling */
+
+    /* Remove me */
+    background-color: grey;
+  }
+
   .article-content .ck-editor_demagog-box-wrapper h3,
   .ck-content .ck-editor_demagog-box-wrapper h3 {
     @apply text-lg font-bold;
