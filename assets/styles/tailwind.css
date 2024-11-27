@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer utilities {
+
   /* CK Editor dialog styles */
   .ck-dialog .ck-list {
     @apply !mt-2 space-y-1;
@@ -24,6 +25,11 @@
   .article-content .ck-editor_demagog-box-wrapper,
   .ck-content .ck-editor_demagog-box-wrapper {
     @apply flex flex-col border-2 border-gray-200 rounded-3xl p-6 lg:px-8 mt-8;
+
+    h3,
+    h2 {
+      @apply mt-0 mb-2;
+    }
   }
 
   .article-content .ck-editor_demagog-box-wrapper h3,
@@ -36,8 +42,8 @@
     @apply list-disc mb-0 px-6 !mt-0 !space-y-0;
   }
 
-  .article-content > div > p,
-  .ck-content > p {
+  .article-content>div>p,
+  .ck-content>p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 
@@ -90,6 +96,10 @@
     @apply !aspect-video !rounded-xl !bg-gray-50 !object-cover;
   }
 
+  .ck-content blockquote {
+    @apply mt-8;
+  }
+
   .article-content figcaption,
   .ck-content figcaption {
     @apply !mt-4 !flex !gap-x-2 !text-sm !leading-6 !text-gray-500;
@@ -100,7 +110,7 @@
     @apply underline;
   }
 
-  .article-content figure img {
+  .article-content figure img.avatar {
     @apply !rounded-full;
   }
 
