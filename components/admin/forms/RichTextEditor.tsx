@@ -70,6 +70,7 @@ export default function RickTextEditor(props: {
           'bulletedList',
           'numberedList',
           'box',
+          'boxRight',
           '|',
           'embed',
           'insertImageViaUrl',
