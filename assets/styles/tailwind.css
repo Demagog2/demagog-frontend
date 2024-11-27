@@ -27,16 +27,11 @@
     @apply flex flex-col border-2 border-gray-200 rounded-3xl p-6 lg:px-8 mt-8;
   }
 
-  .article-content .ck-editor_demagog-box-wrapper.float-right,
-  .ck-content .ck-editor_demagog-box-wrapper.float-right {
-    /* @apply float-right; we cannot use float right from tailwind, cause it will crash */
-    float: right;
-    /* TODO: finish styling */
-  }
 
   .article-content .ck-editor_demagog-box-wrapper.bg-grey,
   .ck-content .ck-editor_demagog-box-wrapper.bg-grey {
     @apply bg-slate-200 border-none;
+
   }
 
   .article-content .ck-editor_demagog-box-wrapper h3,
@@ -132,6 +127,16 @@
       float: right;
       padding: 25px 29px;
       margin: 60px 0px 60px 60px;
+    }
+
+    .article-content .ck-editor_demagog-box-wrapper.float-right,
+    .ck-content .ck-editor_demagog-box-wrapper.float-right {
+      width: 35%;
+      max-width: 280px;
+      float: right;
+      padding: 25px 29px;
+      margin: 32px 0px 32px 32px;
+
     }
   }
 
