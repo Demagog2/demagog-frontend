@@ -142,13 +142,13 @@ export default function RickTextEditor(props: {
                 {
                   model: 'heading1' as const,
                   view: 'h2',
-                  title: 'Heading',
+                  title: 'Nadpis h2',
                   class: 'ck-heading_heading1',
                 },
                 {
-                  model: 'heading' as const,
+                  model: 'heading2' as const,
                   view: 'h3',
-                  title: 'Nadpis seznamu',
+                  title: 'Nadpis h3',
                   class: 'ck-heading_heading2',
                 },
               ],
