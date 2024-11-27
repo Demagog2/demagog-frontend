@@ -5,7 +5,7 @@ export function ArticleSummaryGreyFrameRedesign(props: {
 }) {
   return (
     <div
-      className={classNames('custom-ul border-0 mt-sm-56px bg-lightgrey', {
+      className={classNames('custom-list border-0 mt-sm-56px bg-lightgrey', {
         'custom-lg-float': props.isFloating,
       })}
     >

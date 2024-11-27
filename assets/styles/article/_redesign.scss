@@ -9,7 +9,7 @@
     font-weight: 500;
   }
 
-  .custom-ul {
+  .custom-list {
     border-radius: 31px;
     padding: 25px 27px;
     text-align: start;
@@ -69,7 +69,7 @@
   }
 
   @media (min-width: 768px) {
-    .custom-ul {
+    .custom-list {
       padding-left: 44px;
       padding-right: 44px;
     }
@@ -176,6 +176,9 @@
             margin-bottom: 19px;
           }
         }
+      }
+      .ck-editor_demagog-box-wrapper.bg-grey {
+        @extend .border-0, .bg-lightgrey;
       }
     }
 

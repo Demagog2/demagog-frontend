@@ -3,6 +3,7 @@
 @tailwind utilities;
 
 @layer utilities {
+
   /* CK Editor dialog styles */
   .ck-dialog .ck-list {
     @apply !mt-2 space-y-1;
@@ -35,10 +36,7 @@
 
   .article-content .ck-editor_demagog-box-wrapper.bg-grey,
   .ck-content .ck-editor_demagog-box-wrapper.bg-grey {
-    /* TODO: finish styling */
-
-    /* Remove me */
-    background-color: grey;
+    @apply bg-slate-200 border-none;
   }
 
   .article-content .ck-editor_demagog-box-wrapper h3,
@@ -51,8 +49,8 @@
     @apply list-disc mb-0 px-6 !mt-0 !space-y-0;
   }
 
-  .article-content > div > p,
-  .ck-content > p {
+  .article-content>div>p,
+  .ck-content>p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 
