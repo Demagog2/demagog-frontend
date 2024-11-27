@@ -1,6 +1,5 @@
 import Newsletter from './Newsletter'
 import Social from './Social'
-import Link from 'next/link'
 
 export default function Footer() {
   return (
@@ -54,12 +53,12 @@ export default function Footer() {
                 </span>
               </div>
               <div className="mb-1">
-                <Link
+                <a
                   className="small text-white"
                   href="mailto:petr.gongala@demagog.cz"
                 >
                   petr.gongala@demagog.cz
-                </Link>
+                </a>
               </div>
               <div className="mb-4">
                 <span className="small">+420 775 275 177</span>
@@ -68,24 +67,24 @@ export default function Footer() {
                 Výtky k hodnocením, workshopy, různé
               </h6>
               <div className="mb-4">
-                <Link className="text-white" href="mailto:info@demagog.cz">
+                <a className="text-white" href="mailto:info@demagog.cz">
                   info@demagog.cz
-                </Link>
+                </a>
               </div>
               <h6 className="small mb-1">Pro média</h6>
               <div className="mb-4">
-                <Link
+                <a
                   className="text-white"
                   href="https://drive.google.com/drive/folders/1J6nkGqAan4B5tet7dG5I9rRxHGyUwHGq"
                 >
                   Loga ke stažení
-                </Link>
+                </a>
               </div>
             </div>
             <div className="col col-12 col-md-6 col-lg-4">
               <div className="d-flex">
                 <div className="mw-100px w-100 me-5 mb-5">
-                  <Link
+                  <a
                     href="https://ifcncodeofprinciples.poynter.org/profile/demagogcz"
                     target="_blank"
                   >
@@ -94,7 +93,7 @@ export default function Footer() {
                       src="https://cdn.ifcncodeofprinciples.poynter.org/storage/badges/36C9D629-AED1-C760-8B88-9FD45DD9156F.png"
                       alt="Demagog.cz is IFCN signatory"
                     />
-                  </Link>
+                  </a>
                 </div>
                 <div>
                   <h6 className="small">
@@ -105,7 +104,7 @@ export default function Footer() {
               </div>
               <div className="d-flex">
                 <div className="mw-100px w-100 me-5 mb-5">
-                  <Link
+                  <a
                     href="https://fb.me/Third-Party-Fact-Checking"
                     target="_blank"
                   >
@@ -114,7 +113,7 @@ export default function Footer() {
                       src="/images/Digital_Badge_Fact-Checkers_FOR_DARK_BACKGROUND.png"
                       alt="Demagog.cz is IFCN signatory"
                     />
-                  </Link>
+                  </a>
                 </div>
                 <div>
                   <h6 className="small">
@@ -129,7 +128,7 @@ export default function Footer() {
                 <div className="col col-12 col-lg-4">
                   <h6 className="mb-2">Projekt Demagog.cz podporují:</h6>
                   <div className="d-flex flex-wrap align-items-center">
-                    <Link
+                    <a
                       className="me-4 mb-4"
                       href="https://www.nfnz.cz/"
                       title="Nadační fond nezávislé žurnalistiky"
@@ -140,8 +139,8 @@ export default function Footer() {
                         src="/images/nfnz_light.svg"
                         alt="Nadační fond nezávislé žurnalistiky"
                       />
-                    </Link>
-                    <Link
+                    </a>
+                    <a
                       className="me-4 mb-4"
                       href="https://www.nfnz.cz/"
                       title="Národní plán obnovy"
@@ -152,8 +151,8 @@ export default function Footer() {
                         src="/images/npo.svg"
                         alt="Národní plán obnovy"
                       />
-                    </Link>
-                    <Link
+                    </a>
+                    <a
                       className="me-4 mb-4"
                       href="https://next-generation-eu.europa.eu/index_cs"
                       title="Next Generation EU"
@@ -164,13 +163,13 @@ export default function Footer() {
                         src="/images/eu.svg"
                         alt="Next Generation EU"
                       />
-                    </Link>
+                    </a>
                   </div>
                 </div>
                 <div className="col col-12 col-lg-4">
                   <h6 className="mb-2">Projekt Demagog.cz spolupracuje s:</h6>
                   <div className="d-flex flex-wrap align-items-center">
-                    <Link
+                    <a
                       className="me-4 mb-4"
                       href="http://littlegreta.co.uk/"
                       title="Little Greta"
@@ -181,8 +180,8 @@ export default function Footer() {
                         src="/images/little_greta_white.svg"
                         alt="Little Greta"
                       />
-                    </Link>
-                    <Link
+                    </a>
+                    <a
                       className="me-4 mb-4"
                       href="https://www.newtonmedia.cz/cs"
                       title="Newton Media"
@@ -193,19 +192,19 @@ export default function Footer() {
                         src="/images/newton_media_light.svg"
                         alt="Newton Media"
                       />
-                    </Link>
-                    <Link title="elv.ai" href="https://elv.ai/">
+                    </a>
+                    <a title="elv.ai" href="https://elv.ai/">
                       <img
                         loading="lazy"
                         className="h-50px"
                         src="/images/elvai.svg"
                       />
-                    </Link>
+                    </a>
                   </div>
                 </div>
                 <div className="col col-12 col-lg-4">
                   <div className="mt-4">
-                    <Link
+                    <a
                       className="me-4 mb-4"
                       href="https://cedmohub.eu/cs/"
                       title="CEDMO"
@@ -216,20 +215,16 @@ export default function Footer() {
                         src="/images/cedmo.jpg"
                         alt="CEDMO"
                       />
-                    </Link>
+                    </a>
                   </div>
                   <div className="mt-4">
-                    <Link
-                      className="me-4"
-                      title="EFCSN"
-                      href="https://efcsn.com/"
-                    >
+                    <a className="me-4" title="EFCSN" href="https://efcsn.com/">
                       <img
                         className="h-80px"
                         src="/images/badge-verified-member.png"
                         alt="EFCSN"
                       />
-                    </Link>
+                    </a>
                   </div>
                 </div>
               </div>
@@ -238,12 +233,12 @@ export default function Footer() {
         </div>
         <div className="d-flex justify-content-between">
           <div>
-            <Link
+            <a
               className="text-dark small"
               href="/zasady-zpracovani-osobnich-udaju"
             >
               Zásady zpracování osobních údajů
-            </Link>
+            </a>
           </div>
         </div>
       </div>

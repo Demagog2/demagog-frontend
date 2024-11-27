@@ -3,7 +3,6 @@ import { imagePath } from '@/libs/images/path'
 import { CopyButton } from '@/components/admin/images/CopyButton'
 import { PhotoIcon, ArrowUpOnSquareIcon } from '@heroicons/react/24/outline'
 import { LinkButton } from '@/components/admin/forms/LinkButton'
-import Link from 'next/link'
 
 const ImagesListingFragment = gql(`
   fragment ImagesListing on ContentImageConnection {
@@ -46,13 +45,13 @@ export function ImagesListing(props: {
               <div key={contentImage.id}>
                 <div className="relative">
                   <div className="relative h-72 w-full overflow-hidden rounded-lg">
-                    <Link href={`/beta/admin/images/${contentImage.id}`}>
+                    <a href={`/beta/admin/images/${contentImage.id}`}>
                       <img
                         alt={contentImage.name}
                         src={imagePath(contentImage.image)}
                         className="h-full w-full object-cover object-center"
                       />
-                    </Link>
+                    </a>
                   </div>
                   <div className="relative mt-4">
                     <h3 className="text-sm font-medium text-gray-900 truncate">

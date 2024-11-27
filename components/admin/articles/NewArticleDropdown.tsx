@@ -7,7 +7,6 @@ import {
   ChatBubbleLeftIcon,
   NewspaperIcon,
 } from '@heroicons/react/20/solid'
-import Link from 'next/link'
 
 export default function NewArticleDropdown() {
   return (
@@ -29,7 +28,7 @@ export default function NewArticleDropdown() {
       >
         <div className="py-1">
           <MenuItem>
-            <Link
+            <a
               href="/beta/admin/articles/new-single-statement"
               className="group flex items-center px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
             >
@@ -38,10 +37,10 @@ export default function NewArticleDropdown() {
                 className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 grow-0"
               />
               <div className="grow-0">Jednotlivý výrok</div>
-            </Link>
+            </a>
           </MenuItem>
           <MenuItem>
-            <Link
+            <a
               href="/beta/admin/articles/new"
               className="group flex items-center px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 data-[focus]:text-gray-900"
             >
@@ -50,7 +49,7 @@ export default function NewArticleDropdown() {
                 className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 grow-0"
               />
               <div className="grow-0">Komentář / ověřeno / factcheck</div>
-            </Link>
+            </a>
           </MenuItem>
         </div>
       </MenuItems>

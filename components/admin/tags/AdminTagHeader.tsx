@@ -9,7 +9,6 @@ import {
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import React from 'react'
 import { PublishedArticleLink } from '@/components/admin/articles/PublishedArticleLink'
-import Link from 'next/link'
 import { AdminArticleTags } from '@/components/admin/articles/AdminArticleTags'
 import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 
@@ -32,12 +31,12 @@ export function AdminTagHeader(props: {
           <ol role="list" className="flex items-center space-x-4">
             <li>
               <div className="flex">
-                <Link
+                <a
                   href="/admin/tags"
                   className="text-sm font-medium text-gray-500 hover:text-gray-700"
                 >
                   Tagy
-                </Link>
+                </a>
               </div>
             </li>
           </ol>
@@ -60,7 +59,7 @@ export function AdminTagHeader(props: {
       </div>
       <div className="mt-5 flex lg:ml-4 lg:mt-0">
         <span className="hidden sm:block">
-          <Link
+          <a
             href={`/admin/tags/${tag.id}/edit`}
             className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           >
@@ -69,7 +68,7 @@ export function AdminTagHeader(props: {
               className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
             />
             Upravit
-          </Link>
+          </a>
         </span>
 
         {/* Dropdown */}
@@ -87,12 +86,12 @@ export function AdminTagHeader(props: {
             className="absolute right-0 z-10 -mr-1 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition focus:outline-none data-[closed]:scale-95 data-[closed]:transform data-[closed]:opacity-0 data-[enter]:duration-200 data-[leave]:duration-75 data-[enter]:ease-out data-[leave]:ease-in"
           >
             <MenuItem>
-              <Link
+              <a
                 href={`/admin/articles/${tag.id}/edit`}
                 className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
               >
                 Upravit
-              </Link>
+              </a>
             </MenuItem>
           </MenuItems>
         </Menu>

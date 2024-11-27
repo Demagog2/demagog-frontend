@@ -11,7 +11,6 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { displayDate } from '@/libs/date-time'
-import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Detail pořadu'),
@@ -65,7 +64,7 @@ export default async function MediaDetail(
               <p className="mt-2 text-sm text-gray-700 mb-2">
                 Zde se bude zobrazovat seznam diskuzí
               </p>
-              <Link href={`/beta/admin/sources/new`}>
+              <a href={`/beta/admin/sources/new`}>
                 <button
                   type="button"
                   className="relative block w-full rounded-lg border-2 border-dashed border-gray-300 p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
@@ -88,7 +87,7 @@ export default async function MediaDetail(
                     Přidat novou diskuzi
                   </span>
                 </button>
-              </Link>
+              </a>
             </div>
           </>
         ) : (
@@ -112,9 +111,9 @@ export default async function MediaDetail(
                 return (
                   <tr key={edge.node.id}>
                     <td>
-                      <Link href={`/beta/admin/sources/${edge.node.id}`}>
+                      <a href={`/beta/admin/sources/${edge.node.id}`}>
                         {edge.node.name}
-                      </Link>
+                      </a>
                     </td>
                     <td>
                       {edge.node.releasedAt

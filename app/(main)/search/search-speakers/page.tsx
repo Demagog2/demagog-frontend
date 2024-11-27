@@ -1,7 +1,6 @@
 import React from 'react'
 import { SearchResultSpeaker } from '@/components/SearchResultSpeaker'
 import { query } from '@/libs/apollo-client'
-import Link from 'next/link'
 import { Pagination } from '@/components/pagination'
 import { parsePage } from '@/libs/pagination'
 import { SearchButton } from '@/components/search/SearchButton'
@@ -76,14 +75,14 @@ export default async function SearchSpeakers(props: PropsWithSearchParams) {
               <h2 className="display-5 fw-bold">Nalezené výsledky</h2>
             </div>
             <div className="my-5">
-              <Link
+              <a
                 href={`/vyhledavani?q=${term}`}
                 className="btn h-50px fs-6 s-back-link"
               >
                 <span className="me-2">←</span>
 
                 <span>Zpět na souhrn výsledků hledání</span>
-              </Link>
+              </a>
             </div>
           </div>
           <div className="row row-cols-2 row-cols-lg-6 g-5 g-lg-10">

@@ -1,7 +1,6 @@
 import HomeSidebar from '@/components/site/HomeSidebar'
 import DonateWidget from '@/components/site/DonateWidget'
 import { MostSearchedSpeakers } from '@/components/speaker/MostSearchedSpeakers'
-import Link from 'next/link'
 import { Pagination } from '@/components/article/Pagination'
 import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
 import { drop, take } from 'lodash'
@@ -64,9 +63,9 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
               prohloubíme rovněž kritické myšlení, což je pro dnešní dobu zcela
               zásadní dovednost.
             </p>
-            <Link href="/workshopy" className="btn bg-primary h-44px">
+            <a href="/workshopy" className="btn bg-primary h-44px">
               <span>Zjistit více</span>
-            </Link>
+            </a>
           </div>
           <div className="col col-12 col-lg-5">
             <img
