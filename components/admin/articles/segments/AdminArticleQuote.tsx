@@ -29,7 +29,7 @@ export function AdminArticleQuote(props: {
             <img
               alt={data.speaker.fullName}
               src={imagePath(data.speaker.avatar)}
-              className="avatar size-12 rounded-full bg-gray-50 me-1"
+              className="avatar size-12 bg-gray-50 me-1"
             />
           )}
 

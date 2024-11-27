@@ -28,7 +28,7 @@
 
     h3,
     h2 {
-      margin-top: 0px;
+      @apply mt-0 mb-2;
     }
   }
 
@@ -97,7 +97,7 @@
   }
 
   .ck-content blockquote {
-    margin-top: 32px;
+    @apply mt-8;
   }
 
   .article-content figcaption,
