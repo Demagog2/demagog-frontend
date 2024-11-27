@@ -25,6 +25,11 @@
   .article-content .ck-editor_demagog-box-wrapper,
   .ck-content .ck-editor_demagog-box-wrapper {
     @apply flex flex-col border-2 border-gray-200 rounded-3xl p-6 lg:px-8 mt-8;
+
+    h3,
+    h2 {
+      @apply mt-0 mb-2;
+    }
   }
 
 
@@ -98,6 +103,10 @@
     @apply !aspect-video !rounded-xl !bg-gray-50 !object-cover;
   }
 
+  .ck-content blockquote {
+    @apply mt-8;
+  }
+
   .article-content figcaption,
   .ck-content figcaption {
     @apply !mt-4 !flex !gap-x-2 !text-sm !leading-6 !text-gray-500;
@@ -108,7 +117,7 @@
     @apply underline;
   }
 
-  .article-content figure img {
+  .article-content figure img.avatar {
     @apply !rounded-full;
   }
 

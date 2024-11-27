@@ -130,7 +130,8 @@
           @extend .mt-0, .mb-3;
         }
 
-        ul {
+        ul,
+        ol {
           @extend .mb-0;
 
           li {
@@ -181,7 +182,9 @@
 
         .ck-editor_demagog-box-wrapper {
           margin-top: 40px;
-          ul li {
+          padding: 25px 45px;
+          ul li,
+          ol li {
             font-size: 16px;
           }
         }
