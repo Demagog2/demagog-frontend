@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import StatementAssessment from '@/components/statement/Assessment'
 import TagIcon from '@/assets/icons/tag.svg'
 import LinkIcon from '@/assets/icons/link.svg'
@@ -222,13 +221,13 @@ export default function StatementItem(props: {
                     <>zobrazit celé odůvodnění</>
                   )}
                 </a>
-                <Link
+                <a
                   className="d-flex text-gray align-items-center text-none"
                   href={'/vyrok/' + statement.id}
                 >
                   <LinkIcon className="h-15px" />
                   <span className="ms-1">trvalý odkaz</span>
-                </Link>
+                </a>
               </div>
             </div>
           )}

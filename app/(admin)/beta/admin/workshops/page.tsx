@@ -10,7 +10,6 @@ import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminSearch } from '@/components/admin/AdminSearch'
 import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
-import Link from 'next/link'
 import { AdminPagination } from '@/components/admin/AdminPagination'
 
 export const metadata: Metadata = {
@@ -74,17 +73,17 @@ export default async function AdminWorkshops(props: PropsWithSearchParams) {
             return (
               <tr key={edge.node.id}>
                 <td>
-                  <Link href={`/beta/admin/workshops/${edge.node.id}`}>
+                  <a href={`/beta/admin/workshops/${edge.node.id}`}>
                     {edge.node.name}
-                  </Link>
+                  </a>
                 </td>
                 <td>
-                  <Link
+                  <a
                     href={`/beta/admin/workshops/${edge.node.id}/edit`}
                     className="text-indigo-600 hover:text-indigo-900"
                   >
                     Upravit
-                  </Link>
+                  </a>
                 </td>
               </tr>
             )

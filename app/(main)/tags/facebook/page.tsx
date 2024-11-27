@@ -13,8 +13,6 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
 
-import Link from 'next/link'
-
 export const metadata: Metadata = {
   title: getMetadataTitle('Spolupráce s Facebookem'),
   description:
@@ -74,9 +72,9 @@ export default async function FacebookCollaboration(
                 obsah, díky naší spolupráci s Facebookem se při dalším sdílení
                 uživatelům může ukázat varování a odkaz na ověření na našem
                 webu.{' '}
-                <Link href="/diskuze/demagog-cz-bude">
+                <a href="/diskuze/demagog-cz-bude">
                   Více o spolupráci si přečtete v našem komentáři.
-                </Link>
+                </a>
               </>
             }
           />

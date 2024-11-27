@@ -5,11 +5,9 @@ import StatementItem from '@/components/statement/Item'
 import { displayTime } from '@/libs/date-time'
 import classNames from 'classnames'
 import { orderBy } from 'lodash'
-import Link from 'next/link'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { VideoPlayer } from './players/VideoPlayer'
 import { YouTubeVideo } from './players/YouTubeVideo'
-import { stat } from 'fs'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -131,7 +129,7 @@ export function ArticleFullscreenPlayer(props: {
     <div className="demagog-tv-fullscreen-player">
       {/* Header */}
       <div className="header-bar">
-        <Link href="/" className="ms-2 d-flex aling-items-center">
+        <a href="/" className="ms-2 d-flex aling-items-center">
           <svg
             width="40"
             height="40"
@@ -144,7 +142,7 @@ export function ArticleFullscreenPlayer(props: {
               fill="#111827"
             />
           </svg>
-        </Link>
+        </a>
 
         <h1 className="mx-2 fs-4">{article.title}</h1>
 
