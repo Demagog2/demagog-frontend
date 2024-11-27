@@ -1,5 +1,6 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import formatDate from '@/libs/format-date'
+import classNames from 'classnames'
 
 const DebateArticleMetadataFragment = gql(`
   fragment DebateAticleMetadata on Article {
@@ -20,13 +21,18 @@ const DebateArticleMetadataFragment = gql(`
 
 export function DebateArticleMetadata(props: {
   article: FragmentType<typeof DebateArticleMetadataFragment>
+  isRedesign?: boolean
 }) {
   const article = useFragment(DebateArticleMetadataFragment, props.article)
 
   return (
     <>
       {article.articleType === 'default' && article.source && (
-        <div className="mb-5 mb-lg-10">
+        <div
+          className={classNames('mb-5 mb-lg-10', {
+            'mt-30px mt-md-40px': props.isRedesign,
+          })}
+        >
           <h2 className='"fs-2 text-uppercase text-primary'>Ověřili jsme</h2>
           <div className="row g-1 mt-2">
             <span className="col col-auto fs-5">

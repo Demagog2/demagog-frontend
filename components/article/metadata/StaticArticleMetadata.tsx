@@ -20,7 +20,7 @@ export function StaticArticleMetadata(props: {
       {article.articleType === 'static' && (
         <p
           className={classNames('fs-5', {
-            'mt-29px mt-lg-39px': props.isRedesign,
+            'mt-30px mt-md-40px': props.isRedesign,
           })}
         >
           <span
