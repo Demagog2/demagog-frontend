@@ -110,7 +110,7 @@
     @apply underline;
   }
 
-  .article-content figure img {
+  .article-content figure img.avatar {
     @apply !rounded-full;
   }
 
