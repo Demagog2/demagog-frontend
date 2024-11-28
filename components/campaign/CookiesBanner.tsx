@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import { hasCookie, setCookie } from 'cookies-next'
 
@@ -29,12 +28,12 @@ export function CookiesBanner() {
         <p className="fs-7">
           Abychom mohli měřit návštěvnost webu, potřebujeme Váš souhlas
           se&nbsp;zpracováním osobních údajů prostřednictvím cookies.
-          <Link
+          <a
             className="text-dark text-decoration-underline link"
             href="/stranka/zasady-zpracovani-osobnich-udaju"
           >
             Více o&nbsp;zpracování osobních údajů
-          </Link>
+          </a>
         </p>
         <div className="mt-4">
           <button className="btn me-2 my-2" onClick={acceptCookies}>

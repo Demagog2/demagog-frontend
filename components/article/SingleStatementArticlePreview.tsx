@@ -1,5 +1,4 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import Link from 'next/link'
 import ArticleSpeaker from './SpeakerDetail'
 import formatDate from '@/libs/format-date'
 import { Article } from './Article'
@@ -69,13 +68,13 @@ export function SingleStatementArticlePreview(props: {
           })}
         >
           <div className="w-100">
-            <Link href={articlePath} className="illustration">
+            <a href={articlePath} className="illustration">
               <img
                 src={mediaUrl + article.illustration}
                 className="w-100"
                 alt={`Ilustrační obrázek k ${article.title}`}
               />
-            </Link>
+            </a>
           </div>
 
           <div
@@ -154,14 +153,14 @@ export function SingleStatementArticlePreview(props: {
               'fs-2  mb-2': !isEmbedded,
             })}
           >
-            <Link
+            <a
               href={articlePath}
               className={classNames('text-dark s-title', {
                 'text-decoration-none': isEmbedded,
               })}
             >
               {article.title}
-            </Link>
+            </a>
           </h2>
           <div
             className={classNames('mb-2', {
@@ -202,12 +201,9 @@ export function SingleStatementArticlePreview(props: {
           </p>
           {isEmbedded ? null : (
             <div className="mt-4">
-              <Link
-                href={articlePath}
-                className="btn outline h-40px px-6 fw-bold"
-              >
+              <a href={articlePath} className="btn outline h-40px px-6 fw-bold">
                 <span className="fs-7">Číst dál</span>
-              </Link>
+              </a>
             </div>
           )}
         </div>

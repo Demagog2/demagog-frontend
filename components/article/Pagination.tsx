@@ -1,7 +1,6 @@
 'use client'
 
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import Link from 'next/link'
 import { usePathname, useSearchParams } from 'next/navigation'
 
 export const PaginationFragment = gql(`
@@ -39,20 +38,20 @@ export function Pagination(props: {
     <div className="col col-12">
       <div className="mb-10">
         {pageInfo.hasPreviousPage && (
-          <Link
+          <a
             href={createPrevPage(pageInfo.startCursor ?? '')}
             className="btn h-50px fs-6 me-2 mb-2 px-8"
           >
             <span>Zobrazit předchozí</span>
-          </Link>
+          </a>
         )}
         {pageInfo.hasNextPage && (
-          <Link
+          <a
             href={createNextPage(pageInfo.endCursor ?? '')}
             className="btn h-50px fs-6 me-2 mb-2 px-8"
           >
             <span>Zobrazit další</span>
-          </Link>
+          </a>
         )}
       </div>
     </div>

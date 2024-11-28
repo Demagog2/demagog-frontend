@@ -1,7 +1,6 @@
 'use client'
 
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import Link from 'next/link'
 import { PromiseRating } from './PromiseRating'
 import { useState } from 'react'
 
@@ -76,13 +75,13 @@ export function GovernmentalPromise(props: {
                 </span>
                 {promise.source?.label && promise.source?.url && (
                   <div>
-                    <Link
+                    <a
                       href={promise.source.url}
                       className="text-white fs-7"
                       target="_blank"
                     >
                       {promise.source.label}
-                    </Link>
+                    </a>
                   </div>
                 )}
               </blockquote>
@@ -136,7 +135,7 @@ export function GovernmentalPromise(props: {
                     </a>
                   )}
 
-                  <Link
+                  <a
                     className="d-flex text-gray align-items-center text-none"
                     href={`/sliby/${props.slug}#slib-${promise.id}`}
                   >
@@ -167,7 +166,7 @@ export function GovernmentalPromise(props: {
                       </defs>
                     </svg>
                     <span className="ms-1">trvalý odkaz</span>
-                  </Link>
+                  </a>
                 </div>
               </div>
             </div>

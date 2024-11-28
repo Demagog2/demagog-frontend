@@ -42,9 +42,9 @@ export default function Header(props: {
       <div className="container">
         <div className="header-wrap d-block position-relative w-100">
           <div className="header-content d-flex align-items-center justify-content-between bg-dark p-3">
-            <Link className="logo h-40px p-1" href="/">
+            <a className="logo h-40px p-1" href="/">
               <img className="h-100" src="/logo_white.svg" alt="Logo" />
-            </Link>
+            </a>
 
             <Navigation data={props.data} />
           </div>

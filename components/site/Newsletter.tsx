@@ -1,5 +1,3 @@
-import Link from 'next/link'
-
 export default function SiteNewsletter() {
   return (
     <div className="bg-secondary min-h-100 rounded-l p-5 p-lg-10">
@@ -10,7 +8,7 @@ export default function SiteNewsletter() {
         tom, jaké dezinformace a nepravdy se zrovna v Česku šíří.
       </p>
       <div className="mt-5 mt-lg-0 justify-content-center d-flex">
-        <Link
+        <a
           href="https://bit.ly/odebirat_whatsapp"
           className="btn h-44px mb-2 ps-2"
         >
@@ -54,7 +52,7 @@ export default function SiteNewsletter() {
             </svg>
           </span>
           <span className="fw-bolder">Začít odebírat</span>
-        </Link>
+        </a>
       </div>
     </div>
   )

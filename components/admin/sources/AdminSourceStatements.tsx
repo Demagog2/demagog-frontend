@@ -2,7 +2,6 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminSourceStatementStep } from './AdminSourceStatementStep'
 import { VeracityBadge } from '../veracity/VeracityBadge'
 import { AdminUserAvatar } from '../users/AdminUserAvatar'
-import Link from 'next/link'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -72,11 +71,11 @@ export function AdminSourceStatements(props: {
 
                     <div className="mt-6 sm:ml-6 sm:mt-0">
                       <h3 className="text-base font-medium text-gray-900">
-                        <Link
+                        <a
                           href={`/beta/admin/speakers/${statement.sourceSpeaker.speaker.id}`}
                         >
                           {statement.sourceSpeaker.fullName}
-                        </Link>
+                        </a>
                       </h3>
 
                       <VeracityBadge

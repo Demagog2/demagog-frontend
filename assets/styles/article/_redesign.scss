@@ -28,6 +28,11 @@
     margin-top: 30px;
   }
 
+  figure.image,
+  figure.embed {
+    margin-top: 15px;
+  }
+
   .mt-minus-10px {
     margin-top: -10px;
   }
@@ -84,6 +89,10 @@
 
     .mt-md-40px {
       margin-top: 40px;
+    }
+    figure.image,
+    figure.embed {
+      margin-top: 20px;
     }
   }
 

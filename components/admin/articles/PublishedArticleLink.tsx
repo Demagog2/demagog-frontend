@@ -1,5 +1,4 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import Link from 'next/link'
 import React, { PropsWithChildren } from 'react'
 import { isSameOrAfterToday } from '@/libs/date-time'
 
@@ -32,7 +31,7 @@ export function PublishedArticleLink(
     case 'government_promises_evaluation':
       return (
         <>
-          <Link
+          <a
             href={`/sliby/${article.slug}`}
             className={props.className}
             target="_blank"
@@ -40,13 +39,13 @@ export function PublishedArticleLink(
           >
             {props.children}
             Veřejný odkaz
-          </Link>
+          </a>
         </>
       )
     default:
       return (
         <>
-          <Link
+          <a
             href={`/diskuze/${article.slug}`}
             className={props.className}
             target="_blank"
@@ -54,7 +53,7 @@ export function PublishedArticleLink(
           >
             {props.children}
             Veřejný odkaz
-          </Link>
+          </a>
         </>
       )
   }

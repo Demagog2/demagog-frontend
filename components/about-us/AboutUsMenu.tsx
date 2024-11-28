@@ -1,5 +1,4 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import Link from 'next/link'
 
 const AccordionSectionFragment = gql(`
     fragment AccordionMenuItem on AccordionSection {
@@ -20,14 +19,14 @@ function AccordionMenuItem(props: {
 
   return (
     <div>
-      <Link
+      <a
         href={`#${accordionSection.slug}`}
         className="min-h-30px d-inline-flex fs-5 fw-bold text-dark align-items-center text-none state-line mb-2"
       >
         <span>
           {props.index + 1}. {accordionSection.title}
         </span>
-      </Link>
+      </a>
     </div>
   )
 }
