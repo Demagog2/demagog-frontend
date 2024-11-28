@@ -25,7 +25,6 @@ import {
   PasteFromOffice,
   ImageToolbar,
   ImageCaption,
-  BalloonToolbar,
   ContextualBalloon,
 } from 'ckeditor5'
 import { Embed } from '@/libs/ck-plugins/embed'
@@ -60,13 +59,6 @@ export default function RickTextEditor(props: {
           'ckboxImageEdit',
         ],
       },
-      balloonToolbar: [
-        {
-          label: 'Nastaveni ramecku',
-          items: ['toggleGreyBg', 'toggleFloat'],
-          target: (model: Element) => model.name === 'box',
-        },
-      ],
       toolbar: {
         items: [
           ...(props.includeHeadings ? ['heading', '|'] : []),
@@ -93,7 +85,6 @@ export default function RickTextEditor(props: {
         ],
       },
       plugins: [
-        BalloonToolbar,
         ContextualBalloon,
         Bold,
         BlockQuoteWithSpeaker,
