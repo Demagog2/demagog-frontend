@@ -9,7 +9,7 @@
     font-weight: 500;
   }
 
-  .custom-ul {
+  .custom-list {
     border-radius: 31px;
     padding: 25px 27px;
     text-align: start;
@@ -74,7 +74,7 @@
   }
 
   @media (min-width: 768px) {
-    .custom-ul {
+    .custom-list {
       padding-left: 44px;
       padding-right: 44px;
     }
@@ -96,40 +96,6 @@
     }
   }
 
-  @media (min-width: 992px) {
-    .custom-lg-float {
-      width: 35%;
-      max-width: 280px;
-      float: right;
-      padding: 25px 29px;
-      margin: 60px 0px 60px 60px;
-    }
-
-    .mt-lg-87px {
-      margin-top: 87px;
-    }
-
-    .quote + * {
-      margin-top: 87px;
-    }
-
-    .fs-lg-96px {
-      font-size: 96px;
-    }
-
-    .fs-lg-24px {
-      font-size: 24px;
-    }
-
-    .me-lg-30px {
-      margin-right: 30px !important;
-    }
-
-    .symbol-size {
-      width: 45px;
-      height: 45px;
-    }
-  }
   .content-redesign {
     .underline-offset-2px {
       text-underline-offset: 2px;
@@ -170,12 +136,12 @@
 
         h3,
         h2 {
-          @extend .mt-0;
+          @extend .mt-0, .mb-3;
         }
 
         ul,
         ol {
-          @extend .mb-0, .mt-3;
+          @extend .mb-0;
 
           li {
             @extend .li-item;
@@ -186,6 +152,9 @@
             margin-bottom: 19px;
           }
         }
+      }
+      .ck-editor_demagog-box-wrapper.bg-grey {
+        @extend .border-0, .bg-lightgrey;
       }
     }
 
@@ -228,6 +197,48 @@
             font-size: 16px;
           }
         }
+      }
+    }
+    @media (min-width: 992px) {
+      .ck-editor_demagog-box-wrapper.float-right {
+        width: 35%;
+        max-width: 280px;
+        float: right;
+        padding: 25px 29px;
+        margin: 60px 0px 60px 60px;
+      }
+
+      .custom-lg-float {
+        width: 35%;
+        max-width: 280px;
+        float: right;
+        padding: 25px 29px;
+        margin: 60px 0px 60px 60px;
+      }
+
+      .mt-lg-87px {
+        margin-top: 87px;
+      }
+
+      .quote + * {
+        margin-top: 87px;
+      }
+
+      .fs-lg-96px {
+        font-size: 96px;
+      }
+
+      .fs-lg-24px {
+        font-size: 24px;
+      }
+
+      .me-lg-30px {
+        margin-right: 30px !important;
+      }
+
+      .symbol-size {
+        width: 45px;
+        height: 45px;
       }
     }
   }

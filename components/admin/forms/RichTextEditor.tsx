@@ -5,6 +5,7 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import {
   Bold,
   ClassicEditor,
+  Element,
   Essentials,
   Heading,
   Image,
@@ -24,6 +25,7 @@ import {
   PasteFromOffice,
   ImageToolbar,
   ImageCaption,
+  ContextualBalloon,
 } from 'ckeditor5'
 import { Embed } from '@/libs/ck-plugins/embed'
 
@@ -83,6 +85,7 @@ export default function RickTextEditor(props: {
         ],
       },
       plugins: [
+        ContextualBalloon,
         Bold,
         BlockQuoteWithSpeaker,
         Box,

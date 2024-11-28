@@ -15,7 +15,7 @@ export class BoxCommand extends Command {
    * @observable
    * @readonly
    */
-  public declare value: boolean
+  declare public value: boolean
 
   /**
    * @inheritDoc
@@ -34,8 +34,15 @@ export class BoxCommand extends Command {
    * @param options Command options.
    * @param options.forceValue If set, it will force the command behavior. If `true`, the command will apply a block quote,
    * otherwise the command will remove the block quote. If not set, the command will act basing on its current value.
+   * @param options.isFloating If set the box will be floating on the right
    */
-  public override execute(options: { forceValue?: boolean } = {}): void {
+  public override execute(
+    options: {
+      forceValue?: boolean
+      isFloating?: boolean
+      hasBgGrey?: boolean
+    } = {}
+  ): void {
     const model = this.editor.model
     const selection = model.document.selection
 
@@ -48,7 +55,10 @@ export class BoxCommand extends Command {
       if (!value) {
         removeWrapper(writer, MODEL_NAME, blocks)
       } else {
-        applyWrapper(this.editor, writer, blocks, MODEL_NAME)
+        applyWrapper(this.editor, writer, blocks, MODEL_NAME, {
+          isFloating: options.isFloating === true,
+          hasBgGrey: options.hasBgGrey === true,
+        })
       }
     })
   }

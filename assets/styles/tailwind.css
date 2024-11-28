@@ -3,7 +3,6 @@
 @tailwind utilities;
 
 @layer utilities {
-
   /* CK Editor dialog styles */
   .ck-dialog .ck-list {
     @apply !mt-2 space-y-1;
@@ -32,6 +31,20 @@
     }
   }
 
+  /* Box wrapper styles specific for editing */
+  .ck-content .ck-editor_demagog-box-wrapper {
+    @apply relative;
+  }
+
+  .ck-content .ck-editor_demagog-box-wrapper .settings {
+    @apply absolute top-0 right-0 mt-2 mr-2 cursor-pointer;
+  }
+
+  .article-content .ck-editor_demagog-box-wrapper.bg-grey,
+  .ck-content .ck-editor_demagog-box-wrapper.bg-grey {
+    @apply bg-slate-200 border-none;
+  }
+
   .article-content .ck-editor_demagog-box-wrapper h3,
   .ck-content .ck-editor_demagog-box-wrapper h3 {
     @apply text-lg font-bold;
@@ -42,8 +55,8 @@
     @apply list-disc mb-0 px-6 !mt-0 !space-y-0;
   }
 
-  .article-content>div>p,
-  .ck-content>p {
+  .article-content > div > p,
+  .ck-content > p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 
@@ -129,6 +142,15 @@
       float: right;
       padding: 25px 29px;
       margin: 60px 0px 60px 60px;
+    }
+
+    .article-content .ck-editor_demagog-box-wrapper.float-right,
+    .ck-content .ck-editor_demagog-box-wrapper.float-right {
+      width: 35%;
+      max-width: 280px;
+      float: right;
+      padding: 25px 29px;
+      margin: 32px 0px 32px 32px;
     }
   }
 
