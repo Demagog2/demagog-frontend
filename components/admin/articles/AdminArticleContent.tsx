@@ -57,7 +57,7 @@ export function AdminArticleContent(props: {
 
   return (
     <div className="bg-white p-6 lg:px-0">
-      <div className="max-w-3xl text-base leading-7 text-gray-700">
+      <div className="max-w-4xl text-base leading-7 text-gray-700">
         <p className="mt-0 text-xl leading-8">{article.perex}</p>
         {article.illustration && (
           <figure className="mt-10">
@@ -75,15 +75,9 @@ export function AdminArticleContent(props: {
             </figcaption>
           </figure>
         )}
-        {props.isRedesign && (
-          <>
-            <AdminSummaryFrame />
-            <AdminSummaryFloatingFrame isFloating />
-          </>
-        )}
         {article.segments.map((segment) =>
           segment.segmentType === 'text' ? (
-            <div key={segment.id} className="mt-10 max-w-2xl article-content">
+            <div key={segment.id} className="mt-10 max-w-3xl article-content">
               {segment.content.edges?.map((edge) => {
                 if (!edge?.node) {
                   return null

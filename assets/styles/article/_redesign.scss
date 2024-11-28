@@ -143,12 +143,12 @@
 
         h3,
         h2 {
-          @extend .mt-0;
+          @extend .mt-0, .mb-3;
         }
 
         ul,
         ol {
-          @extend .mb-0, .mt-3;
+          @extend .mb-0;
 
           li {
             @extend .li-item;
@@ -159,6 +159,9 @@
             margin-bottom: 19px;
           }
         }
+      }
+      .ck-editor_demagog-box-wrapper.bg-grey {
+        @extend .border-0, .bg-lightgrey;
       }
     }
 
@@ -196,6 +199,39 @@
           }
         }
       }
+    }
+  }
+}
+
+//Embedded single statement and single article item
+.content {
+  .underline-offset-2px {
+    text-underline-offset: 2px;
+  }
+
+  .fs-16px {
+    font-size: 16px !important;
+  }
+
+  .fs-12px {
+    font-size: 12px;
+  }
+
+  .lh-110percent {
+    line-height: 110% !important;
+  }
+
+  @media (min-width: 768px) {
+    .fs-14px {
+      font-size: 14px;
+    }
+
+    .fs-26px {
+      font-size: 26px !important;
+    }
+
+    .lh-md-base {
+      line-height: 1.5;
     }
   }
 }
