@@ -70,6 +70,14 @@
   }
 
   @media (min-width: 992px) {
+    .ck-editor_demagog-box-wrapper.float-right {
+      width: 35%;
+      max-width: 280px;
+      float: right;
+      padding: 25px 29px;
+      margin: 60px 0px 60px 60px;
+    }
+
     .custom-lg-float {
       width: 35%;
       max-width: 280px;
@@ -99,6 +107,7 @@
       height: 45px;
     }
   }
+
   .content-redesign {
     .underline-offset-2px {
       text-underline-offset: 2px;
