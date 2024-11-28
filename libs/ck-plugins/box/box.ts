@@ -147,11 +147,6 @@ export function Box(editor: Editor) {
       toggleButton.on('execute', () => {
         const model = editor.model
 
-        console.table({
-          container,
-          isFloating: container?.getAttribute('isFloating'),
-        })
-
         if (container) {
           model.change((writer) => {
             writer.setAttribute(
