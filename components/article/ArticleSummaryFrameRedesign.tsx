@@ -1,6 +1,6 @@
 export function ArticleSummaryFrameRedesign() {
   return (
-    <div className="border border-dark custom-ul mt-30px mt-md-40px">
+    <div className="border border-dark custom-list mt-8 mt-md-10">
       <h5>Nárůst koncentrace CO₂</h5>
       <ul className="mb-0 mt-3">
         <li className="li-item">

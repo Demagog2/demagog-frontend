@@ -30,7 +30,7 @@ export function DebateArticleMetadata(props: {
       {article.articleType === 'default' && article.source && (
         <div
           className={classNames('mb-5 mb-lg-10', {
-            'mt-30px mt-md-40px': props.isRedesign,
+            'mt-8 mt-md-10': props.isRedesign,
           })}
         >
           <h2 className='"fs-2 text-uppercase text-primary'>Ověřili jsme</h2>

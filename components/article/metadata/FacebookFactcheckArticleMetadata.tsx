@@ -21,7 +21,7 @@ export function FacebookFactcheckMetadata(props: {
       {article.articleType === 'facebook_factcheck' && (
         <p
           className={classNames({
-            'fs-16px fs-md-18px mt-30px mt-md-40px': isRedesign,
+            'fs-16px fs-md-18px mt-8 mt-md-10': isRedesign,
             'fs-5': !isRedesign,
           })}
         >

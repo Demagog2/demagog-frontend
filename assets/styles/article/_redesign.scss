@@ -9,28 +9,19 @@
     font-weight: 500;
   }
 
-  .custom-ul {
+  .custom-list {
     border-radius: 31px;
     padding: 25px 27px;
     text-align: start;
-    margin-top: 39px;
   }
 
   li.li-item:not(:last-child) {
     margin-bottom: 19px;
   }
 
-  .mt-39px {
-    margin-top: 39px;
-  }
-
-  .mt-30px {
-    margin-top: 30px;
-  }
-
   figure.image,
   figure.embed {
-    margin-top: 15px;
+    @extend .mt-6;
   }
 
   .mt-minus-10px {
@@ -51,7 +42,7 @@
   }
 
   .quote + * {
-    margin-top: 39px;
+    margin-top: 2.5rem;
   }
 
   .symbol-size {
@@ -63,18 +54,8 @@
     border-radius: 22px;
   }
 
-  @media (min-width: 576px) {
-    .mt-sm-37px {
-      margin-top: 2.3rem;
-    }
-
-    .mt-sm-56px {
-      margin-top: 56px;
-    }
-  }
-
   @media (min-width: 768px) {
-    .custom-ul {
+    .custom-list {
       padding-left: 44px;
       padding-right: 44px;
     }
@@ -85,14 +66,6 @@
 
     .fs-md-20px {
       font-size: 20px;
-    }
-
-    .mt-md-40px {
-      margin-top: 40px;
-    }
-    figure.image,
-    figure.embed {
-      margin-top: 20px;
     }
   }
 
@@ -105,12 +78,8 @@
       margin: 60px 0px 60px 60px;
     }
 
-    .mt-lg-87px {
-      margin-top: 87px;
-    }
-
     .quote + * {
-      margin-top: 87px;
+      margin-top: 5rem;
     }
 
     .fs-lg-96px {
@@ -139,26 +108,30 @@
       font-size: 12px;
     }
 
+    .fs-16px {
+      font-size: 16px !important;
+    }
+
     .lh-110percent {
       line-height: 110%;
     }
 
     .content-text-node {
       p {
-        margin-top: 15px;
+        @extend .mt-6;
         font-size: 14px;
       }
 
       h2 {
+        @extend .mt-8;
         font-size: 20px;
         font-weight: 800px;
-        margin-top: 30px;
       }
 
       h3 {
+        @extend .mt-8;
         font-size: 18px;
         font-weight: 700;
-        margin-top: 30px;
       }
 
       .ck-editor_demagog-box-wrapper {
@@ -202,22 +175,16 @@
         line-height: 1.5;
       }
 
-      .mt-md-56px {
-        margin-top: 56px;
-      }
-
       .content-text-node {
         p {
           font-size: 16px;
-          margin-top: 20px;
         }
         h2 {
           font-size: 32px;
-          margin-top: 40px;
         }
 
         h3 {
-          margin-top: 40px;
+          font-size: 24px;
         }
 
         .ck-editor_demagog-box-wrapper {
@@ -229,39 +196,6 @@
           }
         }
       }
-    }
-  }
-}
-
-//Embedded single statement and single article item
-.content {
-  .underline-offset-2px {
-    text-underline-offset: 2px;
-  }
-
-  .fs-16px {
-    font-size: 16px !important;
-  }
-
-  .fs-12px {
-    font-size: 12px;
-  }
-
-  .lh-110percent {
-    line-height: 110% !important;
-  }
-
-  @media (min-width: 768px) {
-    .fs-14px {
-      font-size: 14px;
-    }
-
-    .fs-26px {
-      font-size: 26px !important;
-    }
-
-    .lh-md-base {
-      line-height: 1.5;
     }
   }
 }
