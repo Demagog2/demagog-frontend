@@ -1,10 +1,20 @@
-import { ButtonView, Editor, icons } from 'ckeditor5'
+import {
+  ButtonView,
+  Editor,
+  icons,
+  View,
+  Element,
+  viewToModelPositionOutsideModelElement,
+  ContextualBalloon,
+} from 'ckeditor5'
 import { BoxCommand } from './box-command'
 import classNames from 'classnames'
+import { bind } from 'lodash'
 
 const CUSTOM_CLASS_NAME = 'ck-editor_demagog-box-wrapper'
 const CUSTOM_CLASS_FLOAT_RIGHT = 'float-right'
 const CUSTOM_CLASS_FLOAT_GREY_BG = 'bg-grey'
+const CUSTOM_CLASS_SETTINGS = 'settings'
 
 export function Box(editor: Editor) {
   editor.commands.add('box', new BoxCommand(editor))
@@ -51,13 +61,45 @@ export function Box(editor: Editor) {
       const isFloating = modelElement.getAttribute('isFloating')
       const hasBgGrey = modelElement.getAttribute('hasBgGrey')
 
-      return writer.createContainerElement('div', {
+      const container = writer.createContainerElement('div', {
         class: classNames(CUSTOM_CLASS_NAME, {
           [CUSTOM_CLASS_FLOAT_RIGHT]: isFloating,
           [CUSTOM_CLASS_FLOAT_GREY_BG]: hasBgGrey,
         }),
       })
+
+      const authorElement = writer.createUIElement(
+        'span',
+        { class: CUSTOM_CLASS_SETTINGS, tooltip: 'Nastavení' },
+        function (domDocument) {
+          const domElement = this.toDomElement(domDocument)
+          domElement.innerHTML = '⚙️'
+          return domElement
+        }
+      )
+
+      writer.insert(writer.createPositionAt(container, 'end'), authorElement)
+
+      return container
     },
+  })
+
+  editor.conversion.for('downcast').add((dispatcher) => {
+    dispatcher.on('attribute:isFloating', (_, data, conversionApi) => {
+      const viewElement = conversionApi.mapper.toViewElement(data.item)
+
+      if (!viewElement) {
+        return
+      }
+
+      const writer = conversionApi.writer
+
+      if (data.attributeNewValue) {
+        writer.addClass('float-right', viewElement)
+      } else {
+        writer.removeClass('float-right', viewElement)
+      }
+    })
   })
 
   editor.ui.componentFactory.add('box', () => {
@@ -70,7 +112,7 @@ export function Box(editor: Editor) {
 
     view.set({
       label: editor.locale.t('Rámeček'),
-      icon: icons.objectCenter,
+      icon: icons.objectFullWidth,
       isToggleable: true,
       tooltip: true,
     })
@@ -82,47 +124,80 @@ export function Box(editor: Editor) {
     return view
   })
 
-  editor.ui.componentFactory.add('boxRight', () => {
-    const view = new ButtonView(editor.locale)
+  const balloon = editor.plugins.get('ContextualBalloon')
+  const myBalloonView = new View()
 
-    const command = editor.commands.get('box') as BoxCommand
+  editor.editing.view.document.on('click', (_, data) => {
+    const clickedElement = data.target
 
-    view.bind('isEnabled').to(command, 'isEnabled')
-    view.bind('isOn').to(command, 'value')
+    if (clickedElement.hasClass(CUSTOM_CLASS_SETTINGS)) {
+      const containerDomElement = clickedElement.parent
+      const container =
+        editor.editing.mapper.toModelElement(containerDomElement)
 
-    view.set({
-      label: editor.locale.t('Rámeček napravo'),
-      icon: icons.objectBlockRight,
-      isToggleable: true,
-      tooltip: true,
-    })
+      const toggleButton = new ButtonView(editor.locale)
 
-    view.on('execute', () => {
-      editor.execute('box', { isFloating: true })
-    })
+      toggleButton.set({
+        label: editor.locale.t('Float'),
+        icon: icons.objectBlockRight,
+        isToggleable: true,
+        tooltip: true,
+      })
 
-    return view
+      toggleButton.on('execute', () => {
+        const model = editor.model
+
+        console.table({
+          container,
+          isFloating: container?.getAttribute('isFloating'),
+        })
+
+        if (container) {
+          model.change((writer) => {
+            writer.setAttribute(
+              'isFloating',
+              !container.getAttribute('isFloating'),
+              container
+            )
+          })
+        }
+      })
+
+      myBalloonView.setTemplate({
+        tag: 'div',
+        attributes: {
+          class: 'custom-balloon',
+        },
+        children: [toggleButton],
+      })
+
+      showBalloon(editor, balloon, myBalloonView, clickedElement)
+    } else {
+      balloon.remove(myBalloonView)
+    }
   })
+}
 
-  editor.ui.componentFactory.add('boxGrey', () => {
-    const view = new ButtonView(editor.locale)
-
-    const command = editor.commands.get('box') as BoxCommand
-
-    view.bind('isEnabled').to(command, 'isEnabled')
-    view.bind('isOn').to(command, 'value')
-
-    view.set({
-      label: editor.locale.t('Šedý rámeček'),
-      icon: icons.objectFullWidth,
-      isToggleable: true,
-      tooltip: true,
+function showBalloon(
+  editor: Editor,
+  balloon: ContextualBalloon,
+  view: View,
+  targetElement: any
+) {
+  if (!balloon.hasView(view)) {
+    balloon.add({
+      view: view,
+      position: getBalloonPositionData(editor, targetElement),
     })
+  }
+}
 
-    view.on('execute', () => {
-      editor.execute('box', { hasBgGrey: true })
-    })
+// Pomocná funkce pro určení pozice bubliny
+function getBalloonPositionData(editor: Editor, targetElement: any) {
+  const viewDomConverter = editor.editing.view.domConverter
+  const domTarget = viewDomConverter.mapViewToDom(targetElement)
 
-    return view
-  })
+  return {
+    target: domTarget?.getBoundingClientRect(),
+  }
 }
