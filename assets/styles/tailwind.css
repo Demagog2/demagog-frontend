@@ -27,7 +27,7 @@
       @apply relative flex flex-col border-2 border-gray-200 rounded-3xl p-6 lg:px-8 mt-8;
 
       h3,
-      h2 {s
+      h2 {
         @apply mt-0 mb-2;
       }
 
