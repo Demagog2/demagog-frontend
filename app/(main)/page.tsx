@@ -9,6 +9,9 @@ import { getStringParam } from '@/libs/query-params'
 import { query } from '@/libs/apollo-client'
 import { buildGraphQLVariables } from '@/libs/pagination'
 
+export const revalidate = 180
+export const dynamic = 'force-static'
+
 export const metadata: Metadata = {
   title: getMetadataTitle('Ověřujeme pro Vás'),
 }
