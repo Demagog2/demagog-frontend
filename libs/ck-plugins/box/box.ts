@@ -1,27 +1,24 @@
-import {
-  ButtonView,
-  Editor,
-  icons,
-  View,
-  Element,
-  viewToModelPositionOutsideModelElement,
-  ContextualBalloon,
-} from 'ckeditor5'
-import { BoxCommand } from './box-command'
 import classNames from 'classnames'
-import { bind } from 'lodash'
+import { ButtonView, Editor, icons } from 'ckeditor5'
+import { BoxCommand } from './box-command'
+import { BoxToggleBgCommand } from './box-toggle-bg-command'
+import { BoxToggleFloatCommand } from './box-toggle-float-command'
 
 const CUSTOM_CLASS_NAME = 'ck-editor_demagog-box-wrapper'
 const CUSTOM_CLASS_FLOAT_RIGHT = 'float-right'
 const CUSTOM_CLASS_FLOAT_GREY_BG = 'bg-grey'
-const CUSTOM_CLASS_SETTINGS = 'settings'
+
+const ATTRIBUTE_FLOAT = 'isFloating'
+const ATTRIBUTE_BG = 'hasGreyBg'
 
 export function Box(editor: Editor) {
   editor.commands.add('box', new BoxCommand(editor))
+  editor.commands.add('box:toggle-float', new BoxToggleFloatCommand(editor))
+  editor.commands.add('box:toggle-bg', new BoxToggleBgCommand(editor))
 
   editor.model.schema.register('box', {
     inheritAllFrom: '$container',
-    allowAttributes: ['isFloating', 'hasGreyBg'],
+    allowAttributes: [ATTRIBUTE_FLOAT, ATTRIBUTE_BG],
   })
 
   // View -> Model
@@ -42,8 +39,8 @@ export function Box(editor: Editor) {
   editor.conversion.for('dataDowncast').elementToElement({
     model: 'box',
     view: (modelElement, { writer }) => {
-      const isFloating = modelElement.getAttribute('isFloating')
-      const hasBgGrey = modelElement.getAttribute('hasBgGrey')
+      const isFloating = modelElement.getAttribute(ATTRIBUTE_FLOAT)
+      const hasBgGrey = modelElement.getAttribute(ATTRIBUTE_BG)
 
       return writer.createContainerElement('div', {
         class: classNames(CUSTOM_CLASS_NAME, {
@@ -58,8 +55,8 @@ export function Box(editor: Editor) {
   editor.conversion.for('editingDowncast').elementToElement({
     model: 'box',
     view: (modelElement, { writer }) => {
-      const isFloating = modelElement.getAttribute('isFloating')
-      const hasBgGrey = modelElement.getAttribute('hasBgGrey')
+      const isFloating = modelElement.getAttribute(ATTRIBUTE_FLOAT)
+      const hasBgGrey = modelElement.getAttribute(ATTRIBUTE_BG)
 
       const container = writer.createContainerElement('div', {
         class: classNames(CUSTOM_CLASS_NAME, {
@@ -68,17 +65,7 @@ export function Box(editor: Editor) {
         }),
       })
 
-      const authorElement = writer.createUIElement(
-        'span',
-        { class: CUSTOM_CLASS_SETTINGS, tooltip: 'Nastavení' },
-        function (domDocument) {
-          const domElement = this.toDomElement(domDocument)
-          domElement.innerHTML = '⚙️'
-          return domElement
-        }
-      )
-
-      writer.insert(writer.createPositionAt(container, 'end'), authorElement)
+      writer.setCustomProperty('box', true, container)
 
       return container
     },
@@ -95,9 +82,27 @@ export function Box(editor: Editor) {
       const writer = conversionApi.writer
 
       if (data.attributeNewValue) {
-        writer.addClass('float-right', viewElement)
+        writer.addClass(CUSTOM_CLASS_FLOAT_RIGHT, viewElement)
       } else {
-        writer.removeClass('float-right', viewElement)
+        writer.removeClass(CUSTOM_CLASS_FLOAT_RIGHT, viewElement)
+      }
+    })
+  })
+
+  editor.conversion.for('downcast').add((dispatcher) => {
+    dispatcher.on('attribute:hasGreyBg', (_, data, conversionApi) => {
+      const viewElement = conversionApi.mapper.toViewElement(data.item)
+
+      if (!viewElement) {
+        return
+      }
+
+      const writer = conversionApi.writer
+
+      if (data.attributeNewValue) {
+        writer.addClass(CUSTOM_CLASS_FLOAT_GREY_BG, viewElement)
+      } else {
+        writer.removeClass(CUSTOM_CLASS_FLOAT_GREY_BG, viewElement)
       }
     })
   })
@@ -117,82 +122,38 @@ export function Box(editor: Editor) {
       tooltip: true,
     })
 
-    view.on('execute', () => {
-      editor.execute('box')
-    })
+    view.on('execute', () => editor.execute('box'))
 
     return view
   })
 
-  const balloon = editor.plugins.get('ContextualBalloon')
-  const myBalloonView = new View()
+  editor.ui.componentFactory.add('box:toggle-float', () => {
+    const view = new ButtonView(editor.locale)
 
-  editor.editing.view.document.on('click', (_, data) => {
-    const clickedElement = data.target
-
-    if (clickedElement.hasClass(CUSTOM_CLASS_SETTINGS)) {
-      const containerDomElement = clickedElement.parent
-      const container =
-        editor.editing.mapper.toModelElement(containerDomElement)
-
-      const toggleButton = new ButtonView(editor.locale)
-
-      toggleButton.set({
-        label: editor.locale.t('Float'),
-        icon: icons.objectBlockRight,
-        isToggleable: true,
-        tooltip: true,
-      })
-
-      toggleButton.on('execute', () => {
-        const model = editor.model
-
-        if (container) {
-          model.change((writer) => {
-            writer.setAttribute(
-              'isFloating',
-              !container.getAttribute('isFloating'),
-              container
-            )
-          })
-        }
-      })
-
-      myBalloonView.setTemplate({
-        tag: 'div',
-        attributes: {
-          class: 'custom-balloon',
-        },
-        children: [toggleButton],
-      })
-
-      showBalloon(editor, balloon, myBalloonView, clickedElement)
-    } else {
-      balloon.remove(myBalloonView)
-    }
-  })
-}
-
-function showBalloon(
-  editor: Editor,
-  balloon: ContextualBalloon,
-  view: View,
-  targetElement: any
-) {
-  if (!balloon.hasView(view)) {
-    balloon.add({
-      view: view,
-      position: getBalloonPositionData(editor, targetElement),
+    view.set({
+      label: editor.locale.t('Obtékání'),
+      icon: icons.objectBlockRight,
+      isToggleable: true,
+      tooltip: true,
     })
-  }
-}
 
-// Pomocná funkce pro určení pozice bubliny
-function getBalloonPositionData(editor: Editor, targetElement: any) {
-  const viewDomConverter = editor.editing.view.domConverter
-  const domTarget = viewDomConverter.mapViewToDom(targetElement)
+    view.on('execute', () => editor.execute('box:toggle-float'))
 
-  return {
-    target: domTarget?.getBoundingClientRect(),
-  }
+    return view
+  })
+
+  editor.ui.componentFactory.add('box:toggle-bg', () => {
+    const view = new ButtonView(editor.locale)
+
+    view.set({
+      label: editor.locale.t('Pozadí'),
+      icon: icons.colorPalette,
+      isToggleable: true,
+      tooltip: true,
+    })
+
+    view.on('execute', () => editor.execute('box:toggle-bg'))
+
+    return view
+  })
 }

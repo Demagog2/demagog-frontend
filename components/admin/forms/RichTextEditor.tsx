@@ -5,7 +5,6 @@ import { CKEditor } from '@ckeditor/ckeditor5-react'
 import {
   Bold,
   ClassicEditor,
-  Element,
   Essentials,
   Heading,
   Image,
@@ -34,6 +33,7 @@ import { EmbedStatement } from '@/libs/ck-plugins/embed-statement'
 import { EmbedArticle } from '@/libs/ck-plugins/embed-article'
 import { BlockQuoteWithSpeaker } from '@/libs/ck-plugins/block-quote-2/block-quote-2-plugin'
 import { Box } from '@/libs/ck-plugins/box/box'
+import { BoxToolbar } from '@/libs/ck-plugins/box/box-toolbar'
 
 export default function RickTextEditor(props: {
   includeHeadings?: boolean
@@ -89,6 +89,7 @@ export default function RickTextEditor(props: {
         Bold,
         BlockQuoteWithSpeaker,
         Box,
+        BoxToolbar,
         Embed,
         EmbedArticle,
         EmbedStatement,

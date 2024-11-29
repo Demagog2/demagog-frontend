@@ -50,7 +50,7 @@ export function AdminSingleStatementArticlePreview(props: {
   return (
     <article
       className={classNames(
-        'p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl',
+        'p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl clear-both',
         { flex: props.isRedesign }
       )}
     >

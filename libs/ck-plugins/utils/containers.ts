@@ -8,6 +8,13 @@ import {
   first,
   Editor,
   NodeAttributes,
+  ViewNode,
+  ViewElement,
+  DocumentSelection,
+  Selection,
+  ViewSelection,
+  ViewDocumentFragment,
+  ViewDocumentSelection,
 } from 'ckeditor5'
 
 import { curry } from 'lodash'
@@ -207,4 +214,50 @@ export function applyWrapper(
 
     return nextQuote
   })
+}
+
+function isBox(viewElement: ViewElement): boolean {
+  return !!viewElement.getCustomProperty('box')
+}
+
+export function getClosestBoxViewElement(
+  selection: ViewSelection | ViewDocumentSelection
+): ViewElement | null {
+  const selectionPosition = selection.getFirstPosition()
+
+  if (!selectionPosition) {
+    return null
+  }
+
+  const viewElement = selection.getSelectedElement()
+
+  if (viewElement && isBox(viewElement)) {
+    return viewElement
+  }
+
+  let parent: ViewNode | ViewDocumentFragment | null = selectionPosition.parent
+
+  while (parent) {
+    if (parent.is('containerElement') && isBox(parent)) {
+      return parent
+    }
+
+    parent = parent.parent
+  }
+
+  return null
+}
+
+function isBoxElement(element: Element | null) {
+  return element?.is('element', 'box')
+}
+
+export function getClosestSelectedBoxElement(
+  selection: Selection | DocumentSelection
+): Element | null {
+  const selectedElement = selection.getSelectedElement()
+
+  return isBoxElement(selectedElement)
+    ? selectedElement
+    : selection.getFirstPosition()!.findAncestor('box')
 }

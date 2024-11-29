@@ -21,38 +21,33 @@
   }
 
   /* CK Editor content and admin article detail styles */
-  .article-content .ck-editor_demagog-box-wrapper,
-  .ck-content .ck-editor_demagog-box-wrapper {
-    @apply flex flex-col border-2 border-gray-200 rounded-3xl p-6 lg:px-8 mt-8;
+  .ck .ck-content,
+  .article-content {
+    .ck-editor_demagog-box-wrapper {
+      @apply relative flex flex-col border-2 border-gray-200 rounded-3xl p-6 lg:px-8 mt-8;
 
-    h3,
-    h2 {
-      @apply mt-0 mb-2;
+      h3,
+      h2 {
+        @apply mt-0 mb-2;
+      }
+
+      h3 {
+        @apply text-lg font-bold;
+      }
+
+      ul,
+      ol {
+        @apply mb-0 px-6 !mt-0 !space-y-0;
+      }
+
+      ul {
+        @apply list-disc;
+      }
+
+      &.bg-grey {
+        @apply bg-slate-200 border-none;
+      }
     }
-  }
-
-  /* Box wrapper styles specific for editing */
-  .ck-content .ck-editor_demagog-box-wrapper {
-    @apply relative;
-  }
-
-  .ck-content .ck-editor_demagog-box-wrapper .settings {
-    @apply absolute top-0 right-0 mt-2 mr-2 cursor-pointer;
-  }
-
-  .article-content .ck-editor_demagog-box-wrapper.bg-grey,
-  .ck-content .ck-editor_demagog-box-wrapper.bg-grey {
-    @apply bg-slate-200 border-none;
-  }
-
-  .article-content .ck-editor_demagog-box-wrapper h3,
-  .ck-content .ck-editor_demagog-box-wrapper h3 {
-    @apply text-lg font-bold;
-  }
-
-  .article-content .ck-editor_demagog-box-wrapper ul,
-  .ck-content .ck-editor_demagog-box-wrapper ul {
-    @apply list-disc mb-0 px-6 !mt-0 !space-y-0;
   }
 
   .article-content > div > p,

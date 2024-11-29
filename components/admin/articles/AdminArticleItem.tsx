@@ -42,11 +42,11 @@ export default function AdminArticleItem(props: {
   return (
     <article
       className={classNames(
-        'p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl',
+        'p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl clear-both',
         { flex: props.isRedesign }
       )}
     >
-      <div className="flex flex-col md:flex-row items-start justify-center gap-4 lg:gap-8">
+      <div className="flex flex-col md:flex-row items-start justify-center gap-4 lg:gap-8 clear-both">
         <div className="w-full h-full md:w-5/12">
           <ArticleLink className="illustration" article={article}>
             <img
