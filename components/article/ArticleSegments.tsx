@@ -81,7 +81,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                   if (node.__typename === 'TextNode') {
                     return (
                       <div
-                        className={'content-text-node'}
+                        className={'content-text-node mt-6'}
                         key={cursor}
                         dangerouslySetInnerHTML={{ __html: node.text }}
                       />
