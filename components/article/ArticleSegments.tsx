@@ -115,7 +115,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
           {segment.segmentType === 'source_statements' && (
             <div>
               <div className="row g-5 g-lg-10">
-                <div className="col-10 offset-sm-1">
+                <div className="col-12 col-sm-10 offset-sm-1">
                   <h2 className="fs-2 text-bold">
                     Řečníci s&nbsp;počty výroků dle hodnocení
                   </h2>
@@ -124,7 +124,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                 {debateStats?.map((debateStat) => (
                   <div
                     key={debateStat.speaker?.id}
-                    className="col-10 col-lg-4 offset-sm-1"
+                    className="col-12 col-sm-10 col-lg-4 offset-sm-1"
                   >
                     <div className="speakers-overview-speaker">
                       <SpeakerWithStats data={debateStat} />
@@ -133,7 +133,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                 ))}
               </div>
 
-              <div className="col-10 offset-sm-1">
+              <div className="col-12 col-sm-10 offset-sm-1">
                 <div className="mt-5 mt-lg-10">
                   {segment.statements.map((statement) => (
                     <StatementItem
