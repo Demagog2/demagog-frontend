@@ -15,6 +15,38 @@ import { truncate } from 'lodash'
 import { imagePath } from '@/libs/images/path'
 import { notFound } from 'next/navigation'
 
+export const revalidate = 180
+export const dynamic = 'force-static'
+
+// Return a list of `params` to populate the [slug] dynamic segment
+export async function generateStaticParams() {
+  const { data } = await query({
+    query: gql(`
+      query articleGenerateStaticParams($first: Int) {
+        homepageArticlesV3(first: $first) {
+          nodes {
+            ... on Article {
+              slug
+            }
+            ... on SingleStatementArticle {
+              slug
+            }
+          }
+        }
+      }
+    `),
+    variables: {
+      first: 20,
+    },
+  })
+
+  return (
+    data.homepageArticlesV3?.nodes?.flatMap((node) =>
+      node ? [{ slug: node.slug }] : []
+    ) ?? []
+  )
+}
+
 export async function generateMetadata(props: {
   params: { slug: string }
 }): Promise<Metadata> {
@@ -22,15 +54,15 @@ export async function generateMetadata(props: {
     data: { articleV2: article },
   } = await query({
     query: gql(`
-       query ArticleMetadata($id: ID!) {
-          articleV2(id: $id) {
-            slug
-            title
-            perex
-            illustration(size: medium)
-          }
+      query ArticleMetadata($id: ID!) {
+        articleV2(id: $id) {
+          slug
+          title
+          perex
+          illustration(size: medium)
         }
-      `),
+      }
+    `),
     variables: {
       id: props.params.slug,
     },
