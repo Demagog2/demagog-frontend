@@ -103,7 +103,7 @@ export const AdminArticleFormFieldsFragment = gql(`
     articleTags {
       id
     }
-    ...ArticleIllustration
+    ...AdminArticleIllustration
   }
 `)
 

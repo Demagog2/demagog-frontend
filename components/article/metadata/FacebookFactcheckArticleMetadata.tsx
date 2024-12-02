@@ -11,32 +11,18 @@ const FacebookFactcheckMetadataFragment = gql(`
 
 export function FacebookFactcheckMetadata(props: {
   article: FragmentType<typeof FacebookFactcheckMetadataFragment>
-  isRedesign?: boolean
 }) {
   const article = useFragment(FacebookFactcheckMetadataFragment, props.article)
-  const { isRedesign = false } = props
 
   return (
     <>
       {article.articleType === 'facebook_factcheck' && (
-        <p
-          className={classNames({
-            'fs-16px fs-md-18px mt-8 mt-md-10': isRedesign,
-            'fs-5': !isRedesign,
-          })}
-        >
-          <span
-            className={classNames('text-primary', { 'fw-bold': isRedesign })}
-          >
+        <p className={classNames('fs-16px fs-md-18px mt-8 mt-md-10')}>
+          <span className={classNames('text-primary fw-bold')}>
             Meta fact-check
           </span>{' '}
           <i>
-            <span
-              className={classNames('col col-auto', {
-                'fs16px fs-md-18px': isRedesign,
-                'fs-5': !isRedesign,
-              })}
-            >
+            <span className={classNames('col col-auto fs16px fs-md-18px')}>
               {formatDate(article.publishedAt)}
             </span>
           </i>
