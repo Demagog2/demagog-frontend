@@ -124,7 +124,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                 {debateStats?.map((debateStat) => (
                   <div
                     key={debateStat.speaker?.id}
-                    className="col-12 col-lg-4 offset-sm-1"
+                    className="col-12 col-sm-10 col-lg-4 offset-sm-1"
                   >
                     <div className="speakers-overview-speaker">
                       <SpeakerWithStats data={debateStat} />
