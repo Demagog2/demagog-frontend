@@ -133,7 +133,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                 ))}
               </div>
 
-              <div className="col-sm-10 offset-sm-1">
+              <div className="col-10 offset-sm-1">
                 <div className="mt-5 mt-lg-10">
                   {segment.statements.map((statement) => (
                     <StatementItem
