@@ -44,7 +44,6 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
-import Link from 'next/link'
 import { UserMenu } from '@/components/admin/UserMenu'
 import classNames from 'classnames'
 import { FragmentType, gql, useFragment } from '@/__generated__'
@@ -174,7 +173,7 @@ export default function AdminClientLayout(
                     <ul role="list" className="-mx-2 space-y-1 mt-2">
                       {content.map((item) => (
                         <li key={item.name}>
-                          <Link
+                          <a
                             href={item.href}
                             className={classNames(
                               pathname?.startsWith(item.href)
@@ -193,7 +192,7 @@ export default function AdminClientLayout(
                               )}
                             />
                             {item.name}
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -205,7 +204,7 @@ export default function AdminClientLayout(
                     <ul role="list" className="-mx-2 space-y-1 mt-2">
                       {context.map((item) => (
                         <li key={item.name}>
-                          <Link
+                          <a
                             href={item.href}
                             className={classNames(
                               pathname?.startsWith(item.href)
@@ -227,7 +226,7 @@ export default function AdminClientLayout(
                             }
 
                             {item.name}
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>
@@ -239,7 +238,7 @@ export default function AdminClientLayout(
                     <ul role="list" className="-mx-2 space-y-1 mt-2">
                       {aboutUs.map((item) => (
                         <li key={item.name}>
-                          <Link
+                          <a
                             href={item.href}
                             className={classNames(
                               pathname?.startsWith(item.href)
@@ -259,7 +258,7 @@ export default function AdminClientLayout(
                             />
 
                             {item.name}
-                          </Link>
+                          </a>
                         </li>
                       ))}
                     </ul>

@@ -31,10 +31,7 @@ export default async function AdminImages(props: PropsWithSearchParams) {
         contentImagesV2(first: $first, last: $last, after: $after, before: $before, filter: { createdByCurrentUser: $createdByCurrentUser, name: $term }) {
           ...ImagesListing
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
       }

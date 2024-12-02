@@ -1,6 +1,6 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import Link from 'next/link'
 import formatDate from '@/libs/format-date'
+import classNames from 'classnames'
 
 export const AdminSingleStatementArticlePreviewFragment = gql(`
     fragment AdminSingleStatementArticlePreview on SingleStatementArticle {
@@ -32,6 +32,7 @@ export const AdminSingleStatementArticlePreviewFragment = gql(`
 
 export function AdminSingleStatementArticlePreview(props: {
   article: FragmentType<typeof AdminSingleStatementArticlePreviewFragment>
+  isRedesign?: boolean
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
@@ -47,17 +48,22 @@ export function AdminSingleStatementArticlePreview(props: {
   const articlePath = `/vyroky/${article.statement?.id}`
 
   return (
-    <article className="p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl">
+    <article
+      className={classNames(
+        'p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl clear-both',
+        { flex: props.isRedesign }
+      )}
+    >
       <div className="flex flex-col md:flex-row items-start justify-center gap-4 lg:gap-8">
         <div className="w-full h-full md:w-5/12">
           <div className="w-full">
-            <Link href={articlePath} className="block">
+            <a href={articlePath} className="block">
               <img
                 src={mediaUrl + article.illustration}
                 className="w-full"
                 alt={`Ilustrační obrázek k ${article.title}`}
               />
-            </Link>
+            </a>
           </div>
 
           <div className="flex justify-between items-center mt-2">
@@ -121,9 +127,9 @@ export function AdminSingleStatementArticlePreview(props: {
 
         <div className="w-full md:w-7/12">
           <h2 className="text-2xl font-bold mb-2 articleItemH2">
-            <Link href={articlePath} className="text-gray-800 hover:underline">
+            <a href={articlePath} className="text-gray-800 hover:underline">
               {article.title}
-            </Link>
+            </a>
           </h2>
           <div className="mb-2">
             <i>

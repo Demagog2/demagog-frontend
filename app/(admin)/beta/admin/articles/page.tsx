@@ -1,7 +1,6 @@
 import { gql } from '@/__generated__'
 import { PublishedArticleLink } from '@/components/admin/articles/PublishedArticleLink'
 import { serverQuery } from '@/libs/apollo-client-server'
-import Link from 'next/link'
 
 import NewArticleDropdown from '@/components/admin/articles/NewArticleDropdown'
 import { ArticleState } from '@/components/admin/articles/ArticleState'
@@ -44,10 +43,7 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
       }
@@ -93,9 +89,9 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
               return (
                 <tr key={edge.node.id}>
                   <td>
-                    <Link href={`/beta/admin/articles/${edge.node.id}`}>
+                    <a href={`/beta/admin/articles/${edge.node.id}`}>
                       {edge.node.title}
-                    </Link>
+                    </a>
                   </td>
                   <td>
                     <ArticleTypeBadge article={edge.node} />
@@ -107,12 +103,12 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                     <PublishedArticleLink article={edge.node} />
                   </td>
                   <td>
-                    <Link
+                    <a
                       href={`/beta/admin/articles/${edge.node.id}/edit`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Upravit
-                    </Link>
+                    </a>
 
                     <AdminArticleDeleteDialog article={edge.node} />
                   </td>

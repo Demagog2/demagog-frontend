@@ -14,16 +14,17 @@ export const ArticleDetailFragment = gql(`
     illustration(size: medium)
     title
     pinned
-    speakers {
-      id
-      ...ArticleSpeakerDetail
-    }
     articleType
     source {
+      sourceUrl
       medium {
         name
       }
       releasedAt
+      sourceSpeakers {
+        id
+        ...ArticleSpeakerDetail
+      }
     }
     publishedAt
     ...ArticleLink
@@ -44,8 +45,19 @@ export default function ArticleItem(props: {
 
   return (
     <Article pinned={article.pinned}>
-      <div className={classNames('row g-2 g-lg-5', { 'my-8': isEmbedded })}>
-        <div className="col col-12 col-md-5">
+      <div
+        className={classNames('row', {
+          'd-flex justify-content-center justify-content-md-start mt-6 bg-lightgrey radius-22px g-4 text-start g-md-6':
+            isEmbedded,
+          'g-2 g-lg-5': !isEmbedded,
+        })}
+      >
+        <div
+          className={classNames('col', {
+            'mt-4 mt-md-7 ps-0 ms-md-7 mb-2 mb-md-5 col-4': isEmbedded,
+            'col-md-5 col-12': !isEmbedded,
+          })}
+        >
           <div className="w-100">
             <ArticleLink className="illustration" article={article}>
               <img
@@ -57,7 +69,7 @@ export default function ArticleItem(props: {
           </div>
           <div className="d-flex justify-content-between align-items-center mt-2">
             <div className="symbol-group">
-              {article.speakers?.map((speaker) => (
+              {article.source?.sourceSpeakers?.map((speaker) => (
                 <Speaker key={speaker.id} speaker={speaker} />
               ))}
             </div>
@@ -68,45 +80,92 @@ export default function ArticleItem(props: {
             </div>
           </div>
         </div>
-        <div className="col col-12 col-md-7">
-          <h2 className="fs-2 fw-bold mb-2">
-            <ArticleLink article={article} className="text-dark s-title">
+        <div
+          className={classNames('col', {
+            'mt-4 mt-md-7 col-7 col-md-6 mb-3 mb-md-6': isEmbedded,
+            'col-12 col-md-7': !isEmbedded,
+          })}
+        >
+          <h2
+            className={classNames('fw-bold', {
+              'fs-16px fs-md-26px mb-0 lh-110percent': isEmbedded,
+              'fs-2  mb-2': !isEmbedded,
+            })}
+          >
+            <ArticleLink
+              article={article}
+              className={classNames('text-dark s-title', {
+                'text-decoration-none': isEmbedded,
+              })}
+            >
               {article.title}
             </ArticleLink>
           </h2>
-          <div className="mb-2">
+          <div
+            className={classNames('mb-2', {
+              'text-muted fs-12px fs-md-14px': isEmbedded,
+            })}
+          >
             {article.articleType === 'default' && article.source && (
-              <i>
+              <i className={classNames({ 'text-muted': isEmbedded })}>
                 {article.source.medium?.name},{' '}
                 {article.source?.releasedAt &&
                   formatDate(article.source.releasedAt)}
               </i>
             )}
-
             {(article.articleType === 'static' ||
               article.articleType === 'facebook_factcheck') && (
-              <i>{formatDate(article.publishedAt)}</i>
+              <i className={classNames({ 'text-muted': isEmbedded })}>
+                {formatDate(article.publishedAt)}
+              </i>
             )}
-
             {article.articleType === 'single_statement' && article.source && (
-              <i>
+              <i className={classNames({ 'text-muted': isEmbedded })}>
                 {article.source.medium?.name},{' '}
                 {article.source?.releasedAt &&
                   formatDate(article.source.releasedAt)}
               </i>
             )}
+            {isEmbedded && article.source?.sourceUrl && (
+              <>
+                <span className="col col-auto fs-12px fs-md-14px text-muted">
+                  ,{' '}
+                </span>
+                <span className="col col-auto fs-12px fs-md-14px text-decoration-underline underline-offset-2px">
+                  <i>
+                    <a
+                      href={article.source.sourceUrl}
+                      className="ext text-muted"
+                    >
+                      záznam
+                    </a>
+                  </i>
+                </span>
+              </>
+            )}
           </div>
-          <div>
-            <span className="fs-6 lh-sm">{perex}</span>
-          </div>
-          <div className="mt-4">
-            <ArticleLink
-              article={article}
-              className="btn outline h-40px px-6 fw-bold fs-7"
+          <div
+            className={classNames({ 'lh-1': isEmbedded, 'lh-sm': !isEmbedded })}
+          >
+            <span
+              className={classNames({
+                'fs-12px fs-md-14px lh-md-base': isEmbedded,
+                'fs-6': !isEmbedded,
+              })}
             >
-              <span className="fs-7">Číst dál</span>
-            </ArticleLink>
+              {perex}
+            </span>
           </div>
+          {isEmbedded ? null : (
+            <div className="mt-4">
+              <ArticleLink
+                article={article}
+                className="btn outline h-40px px-6 fw-bold fs-7"
+              >
+                <span className="fs-7">Číst dál</span>
+              </ArticleLink>
+            </div>
+          )}
         </div>
       </div>
     </Article>

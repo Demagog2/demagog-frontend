@@ -7,7 +7,6 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import { displayDate } from '@/libs/date-time'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
-import Link from 'next/link'
 import React from 'react'
 import {
   ASSESSMENT_STATUS_APPROVAL_NEEDED,
@@ -64,10 +63,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
       }
@@ -148,9 +144,9 @@ export default async function AdminSources(props: PropsWithSearchParams) {
               return (
                 <tr key={source.id}>
                   <td>
-                    <Link href={`/beta/admin/sources/${source.id}`}>
+                    <a href={`/beta/admin/sources/${source.id}`}>
                       {source.name}
-                    </Link>
+                    </a>
 
                     <div className="text-sm text-gray-500 font-normal">
                       {source.medium?.name} ze dne{' '}
@@ -169,12 +165,12 @@ export default async function AdminSources(props: PropsWithSearchParams) {
                       {source.sourceUrl && (
                         <>
                           ,{' '}
-                          <Link
+                          <a
                             className="hover:underline"
                             href={source.sourceUrl}
                           >
                             odkaz
-                          </Link>
+                          </a>
                         </>
                       )}
                     </div>
@@ -222,12 +218,12 @@ export default async function AdminSources(props: PropsWithSearchParams) {
                     )}
                   </td>
                   <td>
-                    <Link
+                    <a
                       href={`/beta/admin/sources/${source.id}`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Detail
-                    </Link>
+                    </a>
 
                     {/* <AdminArticleDeleteDialog article={edge.node} /> */}
                   </td>

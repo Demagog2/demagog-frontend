@@ -3,7 +3,6 @@ import { WorkshopOffer } from '@/components/workshops/WorkshopOffer'
 import { gql } from '@/__generated__'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
-import Link from 'next/link'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Workshopy'),
@@ -96,8 +95,8 @@ export default async function Workshops() {
       <div className="row">
         <div className="col col-12 col-lg-7">
           <p className="fs-5 mt-5">
-            Objednávejte na{' '}
-            <Link href="mailto:info@demagog.cz">info@demagog.cz</Link>.
+            Objednávejte na <a href="mailto:info@demagog.cz">info@demagog.cz</a>
+            .
           </p>
         </div>
       </div>

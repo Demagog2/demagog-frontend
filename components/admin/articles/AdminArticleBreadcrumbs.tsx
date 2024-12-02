@@ -1,7 +1,6 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ARTICLE_TYPE_LABEL } from '@/libs/constants/article-type'
 import { ChevronRightIcon } from '@heroicons/react/20/solid'
-import Link from 'next/link'
 
 const AdminArticleBreadcrumbsFragment = gql(`
   fragment AdminArticleBreadcrumbs on Article {
@@ -11,12 +10,12 @@ const AdminArticleBreadcrumbsFragment = gql(`
 
 function ArticleTypeBreadcrumb(props: { articleType: string }) {
   return (
-    <Link
+    <a
       href={`/beta/admin/articles?type=${props.articleType}`}
       className="ml-4 text-sm font-medium text-gray-500 hover:text-gray-700"
     >
       {ARTICLE_TYPE_LABEL[props.articleType]}
-    </Link>
+    </a>
   )
 }
 
@@ -30,12 +29,12 @@ export function AdminArticleBreadcrumbs(props: {
       <ol role="list" className="flex items-center space-x-4">
         <li>
           <div className="flex">
-            <Link
+            <a
               href="/beta/admin/articles"
               className="text-sm font-medium text-gray-500 hover:text-gray-700"
             >
               Články
-            </Link>
+            </a>
           </div>
         </li>
         <li>

@@ -1,6 +1,5 @@
 import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
-import Link from 'next/link'
 
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
@@ -37,10 +36,7 @@ export default async function AdminModerators(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           } 
         }
       }
@@ -84,17 +80,17 @@ export default async function AdminModerators(props: PropsWithSearchParams) {
               return (
                 <tr key={edge.node.id}>
                   <td>
-                    <Link href={`/beta/admin/moderators/${edge.node.id}`}>
+                    <a href={`/beta/admin/moderators/${edge.node.id}`}>
                       {edge.node.name}
-                    </Link>
+                    </a>
                   </td>
                   <td>
-                    <Link
+                    <a
                       href={`/beta/admin/moderators/${edge.node.id}/edit`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Upravit
-                    </Link>
+                    </a>
 
                     <AdminMediaPersonalityDeleteDialog
                       mediaPersonality={edge.node}

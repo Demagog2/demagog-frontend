@@ -10,7 +10,7 @@ import { Button } from '@headlessui/react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 
 const ArticleIllustrationFragment = gql(`
-  fragment ArticleIllustration on Article {
+  fragment AdminArticleIllustration on Article {
     title
     illustration(size: medium)
   }

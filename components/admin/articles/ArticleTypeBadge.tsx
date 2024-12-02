@@ -1,6 +1,5 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import classNames from 'classnames'
-import Link from 'next/link'
 import { ARTICLE_TYPE_LABEL } from '@/libs/constants/article-type'
 
 const ArticleTypeBadgeFragment = gql(`
@@ -31,10 +30,10 @@ export function ArticleTypeBadge(props: {
   )
 
   return (
-    <Link href={`/beta/admin/articles?type=${article.articleType}`}>
+    <a href={`/beta/admin/articles?type=${article.articleType}`}>
       <span className={className}>
         {ARTICLE_TYPE_LABEL[article.articleType]}
       </span>
-    </Link>
+    </a>
   )
 }

@@ -3,6 +3,52 @@
 @tailwind utilities;
 
 @layer utilities {
+  /* CK Editor dialog styles */
+  .ck-dialog .ck-list {
+    @apply !mt-2 space-y-1;
+  }
+
+  .ck-dialog .ck-list li {
+    @apply cursor-pointer px-1;
+  }
+
+  .ck-dialog .ck-list li:hover {
+    background-color: #f5f5f5;
+  }
+
+  .ck-dialog .ck-button-action.ck-button-warning {
+    @apply bg-red-700;
+  }
+
+  /* CK Editor content and admin article detail styles */
+  .ck .ck-content,
+  .article-content {
+    .ck-editor_demagog-box-wrapper {
+      @apply relative flex flex-col border-2 border-gray-200 rounded-3xl p-6 lg:px-8 mt-8;
+
+      h3,
+      h2 {
+        @apply mt-0 mb-2;
+      }
+
+      h3 {
+        @apply text-lg font-bold;
+      }
+
+      ul,
+      ol {
+        @apply mb-0 px-6 !mt-0 !space-y-0;
+      }
+
+      ul {
+        @apply list-disc;
+      }
+
+      &.bg-grey {
+        @apply bg-slate-200 border-none;
+      }
+    }
+  }
 
   .article-content > div > p,
   .ck-content > p {
@@ -19,21 +65,39 @@
 
   .article-content ul,
   .ck-content ul {
-    @apply !mt-8 !max-w-xl !space-y-8 !text-gray-600;
+    @apply !mt-8 !max-w-xl !space-y-8 !text-gray-600 px-3;
   }
 
   .ck-content .statement {
     border: 1px solid red;
   }
 
-  .article-content ul li,
-  .ck-content ul li {
-    list-style: inside;
+  .article-content ul {
+    @apply !px-2;
   }
 
-  .article-content h2,
-  .ck-content h2 {
-    @apply mt-16 text-2xl font-bold tracking-tight text-gray-900;
+  .article-content ul li,
+  .ck-content ul li {
+    @apply !list-disc;
+  }
+
+  .article-content .ul-summary li {
+    list-style: outside;
+  }
+
+  .article-content .ul-summary ul {
+    @apply !mt-3 !space-y-3;
+  }
+
+  .article-content,
+  .ck-content {
+    h2 {
+      @apply mt-16 text-2xl font-bold tracking-tight text-gray-900;
+    }
+
+    h3 {
+      @apply mt-16 text-xl font-bold tracking-tight text-gray-900;
+    }
   }
 
   .article-content figure,
@@ -46,6 +110,10 @@
     @apply !aspect-video !rounded-xl !bg-gray-50 !object-cover;
   }
 
+  .ck-content blockquote {
+    @apply mt-8;
+  }
+
   .article-content figcaption,
   .ck-content figcaption {
     @apply !mt-4 !flex !gap-x-2 !text-sm !leading-6 !text-gray-500;
@@ -56,6 +124,36 @@
     @apply underline;
   }
 
+  .article-content figure img.avatar {
+    @apply !rounded-full;
+  }
+
+  .article-content .articleItemH2 a {
+    text-decoration: none !important;
+  }
+
+  .articleItemH2 {
+    @apply !mt-0;
+  }
+
+  @media (min-width: 992px) {
+    .custom-lg-float {
+      width: 35%;
+      max-width: 280px;
+      float: right;
+      padding: 25px 29px;
+      margin: 60px 0px 60px 60px;
+    }
+
+    .article-content .ck-editor_demagog-box-wrapper.float-right,
+    .ck-content .ck-editor_demagog-box-wrapper.float-right {
+      width: 35%;
+      max-width: 280px;
+      float: right;
+      padding: 25px 29px;
+      margin: 32px 0px 32px 32px;
+    }
+  }
 
   /* Styling of admin page table */
   .admin-content-table {
@@ -94,19 +192,5 @@
 
   .ck-content .table {
     @apply ml-0;
-  }
-
-  .ck-content h2 {
-    margin: 15px 0 8px;
-    font-size: 18px;
-    font-weight: 700px;
-  }
-
-  .article-content .articleItemH2 a {
-    text-decoration: none !important;
-  }
-
-  .articleItemH2 {
-    @apply !mt-0;
   }
 }

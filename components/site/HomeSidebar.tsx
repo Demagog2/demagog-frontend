@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import PlayIcon from '@/assets/icons/play.svg'
 import { Expander } from '../util/Expander'
 import { VideoModal } from '@/components/modals/VideoModal'
@@ -20,9 +19,9 @@ export default function HomeSidebar() {
               Hledáme důvěryhodné zdroje, které si každý může zkontrolovat.
             </li>
             <li>
-              Máme transparentní{' '}
-              <Link href="/o-nas#jak-hodnotime">postupy</Link> i&nbsp;
-              <Link href="/o-nas#nase-financovani">finance</Link>.
+              Máme transparentní <a href="/o-nas#jak-hodnotime">postupy</a>{' '}
+              i&nbsp;
+              <a href="/o-nas#nase-financovani">finance</a>.
             </li>
           </ul>
         </div>
@@ -36,9 +35,9 @@ export default function HomeSidebar() {
           </span>
         </div>
         <div className="mt-4">
-          <Link className="btn bg-secondary w-100" href="/o-nas#kontakty">
+          <a className="btn bg-secondary w-100" href="/o-nas#kontakty">
             <span className="text-dark">Upozornit</span>
-          </Link>
+          </a>
         </div>
       </div>
     </Expander>

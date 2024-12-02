@@ -1,9 +1,11 @@
 import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
 import { ArticlePlayer } from '@/components/article/player/ArticlePlayer'
+import { ArticleIllustration } from '@/components/article/ArticleIllustration'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
 import { FacebookFactcheckMetadata } from '@/components/article/metadata/FacebookFactcheckArticleMetadata'
 import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
+import { StaticArticleMetadata } from '@/components/article/metadata/StaticArticleMetadata'
 import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
 import { getMetadataTitle } from '@/libs/metadata'
@@ -80,15 +82,16 @@ export default async function Article(props: { params: { slug: string } }) {
             perex
             ...DebateAticleMetadata
             ...FacebookFactcheckMetadata
+            ...StaticArticleMetadata
             ...ArticleSegments
             ...ArticlePlayer
+            ...ArticleIllustration
           }
           ... on SingleStatementArticle {
             statement {
               id
             }
           }
-
         }
       }
     `),
@@ -110,22 +113,26 @@ export default async function Article(props: { params: { slug: string } }) {
   }
 
   return (
-    <div className="container">
-      <div className="row g-10">
-        <div className="col col-12 col-lg-8">
-          <div className="mb-5 mb-lg-10">
-            <h1 className="display-4 fw-bold mb-5">{article.title}</h1>
-            <div>
-              <span className="fs-5">{article.perex}</span>
+    <div className="container px-3 text-justify article-redesign col-sm-10 mx-sm-auto">
+      <div className="row">
+        <div className="col-sm-10 mx-sm-auto">
+          <div>
+            <h1 className="display-4 fw-bold text-start px-3 px-sm-0">
+              {article.title}
+            </h1>
+            <ArticleIllustration article={article} />
+            <div className="mt-4 mt-md-9">
+              <span className="fs-16px fs-md-20px fw-medium">
+                {article.perex}
+              </span>
             </div>
           </div>
-
           <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} />
+          <StaticArticleMetadata article={article} />
           <ArticlePlayer article={article} />
         </div>
-
-        <div className="col col-12">
+        <div>
           <ArticleSegments data={article} />
         </div>
       </div>

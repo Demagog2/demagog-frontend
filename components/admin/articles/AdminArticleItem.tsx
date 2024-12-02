@@ -3,6 +3,7 @@ import formatDate from '@/libs/format-date'
 import Speaker from '@/components/article/SpeakerDetail'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ArticleLink } from '@/components/article/ArticleLink'
+import classNames from 'classnames'
 
 export const AdminArticleDetailFragment = gql(`
     fragment AdminArticleDetail on Article {
@@ -30,6 +31,7 @@ export const AdminArticleDetailFragment = gql(`
 
 export default function AdminArticleItem(props: {
   article: FragmentType<typeof AdminArticleDetailFragment>
+  isRedesign?: boolean
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
@@ -38,8 +40,13 @@ export default function AdminArticleItem(props: {
   const perex = truncate(article.perex ?? '', 190)
 
   return (
-    <article className="p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl">
-      <div className="flex flex-col md:flex-row items-start justify-center gap-4 lg:gap-8">
+    <article
+      className={classNames(
+        'p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl clear-both',
+        { flex: props.isRedesign }
+      )}
+    >
+      <div className="flex flex-col md:flex-row items-start justify-center gap-4 lg:gap-8 clear-both">
         <div className="w-full h-full md:w-5/12">
           <ArticleLink className="illustration" article={article}>
             <img

@@ -10,7 +10,6 @@ import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
-import Link from 'next/link'
 import { AdminTagType } from '@/components/admin/tags/AdminTagType'
 import { AdminSearch } from '@/components/admin/AdminSearch'
 import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
@@ -38,10 +37,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
       }
@@ -96,7 +92,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
               return (
                 <tr key={node.id}>
                   <td>
-                    <Link href={`/admin/tags/${node.id}`}>{node.name}</Link>
+                    <a href={`/admin/tags/${node.id}`}>{node.name}</a>
                   </td>
                   <td>
                     <AdminTagType statementType={node.forStatementType} />
@@ -104,12 +100,12 @@ export default async function AdminTags(props: PropsWithSearchParams) {
                   <td>{node.publishedStatementsCount}</td>
                   <td>{node.allStatementsCount}</td>
                   <td>
-                    <Link
+                    <a
                       href={`/beta/admin/tags/${node.id}/edit`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       Upravit
-                    </Link>
+                    </a>
 
                     {/* <AdminArticleDeleteDialog article={edge.node} /> */}
                   </td>

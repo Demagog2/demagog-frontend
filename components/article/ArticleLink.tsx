@@ -1,5 +1,4 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import Link from 'next/link'
 import { PropsWithChildren } from 'react'
 
 const ArticleLinkFragment = gql(`
@@ -28,8 +27,8 @@ export function ArticleLink(
   }
 
   return (
-    <Link title={props.title} className={props.className} href={href}>
+    <a title={props.title} className={props.className} href={href}>
       {props.children}
-    </Link>
+    </a>
   )
 }

@@ -8,7 +8,6 @@ import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 import { getMetadataTitle } from '@/libs/metadata'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
-import { Link } from 'ckeditor5'
 import { Metadata } from 'next'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { Button } from '@headlessui/react'
@@ -52,10 +51,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
             }
           }
           pageInfo {
-            hasPreviousPage
-            hasNextPage
-            endCursor
-            startCursor
+            ...AdminPagination
           }
         }
 			}

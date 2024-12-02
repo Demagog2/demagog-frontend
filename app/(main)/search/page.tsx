@@ -1,7 +1,6 @@
 import TitleIcon from '@/assets/icons/demagog.svg'
 import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
-import Link from 'next/link'
 import React from 'react'
 import { SearchResultSpeaker } from '@/components/SearchResultSpeaker'
 import ArticleItem from '@/components/article/Item'
@@ -34,9 +33,9 @@ function ShowMoreLink(props: {
   contentType: string
 }) {
   return (
-    <Link href={props.link} className="btn h-50px px-8 fs-6 s-more">
+    <a href={props.link} className="btn h-50px px-8 fs-6 s-more">
       Zobrazit všech {props.totalCount} {props.contentType} &rarr;
-    </Link>
+    </a>
   )
 }
 

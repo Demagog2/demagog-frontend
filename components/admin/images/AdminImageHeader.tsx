@@ -2,7 +2,6 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import React from 'react'
-import Link from 'next/link'
 import { CopyButton } from '@/components/admin/images/CopyButton'
 import { imagePath } from '@/libs/images/path'
 import { AdminImageDeleteDialog } from '@/components/admin/images/AdminImageDeleteDialog'
@@ -31,12 +30,12 @@ export function AdminImageHeader(props: {
           <ol role="list" className="flex items-center space-x-4">
             <li>
               <div className="flex">
-                <Link
+                <a
                   href="/beta/admin/images"
                   className="text-sm font-medium text-gray-500 hover:text-gray-700"
                 >
                   Obrázky
-                </Link>
+                </a>
               </div>
             </li>
           </ol>

@@ -24,12 +24,16 @@ import {
   PasteFromOffice,
   ImageToolbar,
   ImageCaption,
+  ContextualBalloon,
 } from 'ckeditor5'
 import { Embed } from '@/libs/ck-plugins/embed'
 
 import 'ckeditor5/ckeditor5.css'
 import { EmbedStatement } from '@/libs/ck-plugins/embed-statement'
 import { EmbedArticle } from '@/libs/ck-plugins/embed-article'
+import { BlockQuoteWithSpeaker } from '@/libs/ck-plugins/block-quote-2/block-quote-2-plugin'
+import { Box } from '@/libs/ck-plugins/box/box'
+import { BoxToolbar } from '@/libs/ck-plugins/box/box-toolbar'
 
 export default function RickTextEditor(props: {
   includeHeadings?: boolean
@@ -61,11 +65,13 @@ export default function RickTextEditor(props: {
           'bold',
           'italic',
           'strikethrough',
+          'blockQuoteWithSpeaker',
           '|',
           'link',
           '|',
           'bulletedList',
           'numberedList',
+          'box',
           '|',
           'embed',
           'insertImageViaUrl',
@@ -79,7 +85,11 @@ export default function RickTextEditor(props: {
         ],
       },
       plugins: [
+        ContextualBalloon,
         Bold,
+        BlockQuoteWithSpeaker,
+        Box,
+        BoxToolbar,
         Embed,
         EmbedArticle,
         EmbedStatement,
@@ -136,8 +146,14 @@ export default function RickTextEditor(props: {
                 {
                   model: 'heading1' as const,
                   view: 'h2',
-                  title: 'Heading',
+                  title: 'Nadpis h2',
                   class: 'ck-heading_heading1',
+                },
+                {
+                  model: 'heading2' as const,
+                  view: 'h3',
+                  title: 'Nadpis h3',
+                  class: 'ck-heading_heading2',
                 },
               ],
             },

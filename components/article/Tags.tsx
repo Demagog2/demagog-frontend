@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import PackmanIcon from '../../assets/icons/packman.svg'
 import UkrajineIcon from '../../assets/icons/ukrajine.svg'
 import SlovakiaIcon from '../../assets/icons/slovakia.svg'
@@ -48,7 +47,7 @@ export default function ArticleTags(props: {
     <div className="d-flex flex-wrap align-items-center justify-content-between">
       <div className="d-flex flex-wrap align-items-center">
         {/* Migrate to normal article tag */}
-        <Link
+        <a
           className={classNames('btn outline mb-2 h-44px me-2 fs-6 px-4', {
             active: props.isFacebookActive,
           })}
@@ -67,7 +66,7 @@ export default function ArticleTags(props: {
             </svg>
           </span>
           <span className="lh-1 m-0 p-0">Facebook fact-check</span>
-        </Link>
+        </a>
 
         {data
           .filter((tag) => tag.published)
@@ -76,7 +75,7 @@ export default function ArticleTags(props: {
 
             return (
               <div key={tag.id}>
-                <Link
+                <a
                   className={classNames(
                     'btn outline mb-2 h-44px me-2 fs-6 px-4 lh-1',
                     {
@@ -89,17 +88,17 @@ export default function ArticleTags(props: {
                     <TagIcon icon={tag.icon} />
                   </span>
                   <span className="lh-1 m-0 p-0">{tag.title}</span>
-                </Link>
+                </a>
               </div>
             )
           })}
       </div>
       {props.isTagDetailOpen && (
         <div>
-          <Link href="/" className="btn outline mb-2 h-44px me-2 fs-6 px-6">
+          <a href="/" className="btn outline mb-2 h-44px me-2 fs-6 px-6">
             <span className="me-2">←</span>
             <span>Zpět na všechna témata</span>
-          </Link>
+          </a>
         </div>
       )}
     </div>

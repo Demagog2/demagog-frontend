@@ -46,9 +46,9 @@ export function Pagination({
     <nav className="pagination">
       <span className="prev">
         {!isFirstPage && (
-          <Link href={createHref(currentPage - 1)} rel="prev">
+          <a href={createHref(currentPage - 1)} rel="prev">
             &lsaquo; Předchozí
-          </Link>
+          </a>
         )}
       </span>
 
@@ -68,16 +68,16 @@ export function Pagination({
               current: currentPage === page.value + 1,
             })}
           >
-            <Link href={createHref(page.value + 1)}>{page.value + 1}</Link>
+            <a href={createHref(page.value + 1)}>{page.value + 1}</a>
           </span>
         )
       })}
 
       <span className="next">
         {!isLastPage && (
-          <Link href={createHref(currentPage + 1)} rel="next">
+          <a href={createHref(currentPage + 1)} rel="next">
             Další &rsaquo;
-          </Link>
+          </a>
         )}
       </span>
     </nav>

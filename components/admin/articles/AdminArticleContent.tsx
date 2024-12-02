@@ -4,6 +4,9 @@ import { AdminStatement } from './segments/AdminStatement'
 import React from 'react'
 import { Iframely } from '@/components/site/Iframely'
 import { AdminArticleV2Preview } from './AdminArticlePreview'
+import { AdminArticleQuote } from './segments/AdminArticleQuote'
+import { AdminSummaryFrame } from './segments/AdminSummaryFrame'
+import { AdminSummaryFloatingFrame } from './segments/AdminSummaryFloatingFrame'
 
 const AdminArticleContentFragment = gql(`
   fragment AdminArticleContent on Article {
@@ -19,11 +22,14 @@ const AdminArticleContentFragment = gql(`
           node {
             ... on ArticleNode {
               article {
-                ...AdminArticleV2Preview 
+                ...AdminArticleV2Preview
               }
             }
             ... on TextNode {
               text
+            }
+            ... on BlockQuoteNode {
+              ...AdminArticleQuote
             }
             ... on StatementNode {
               statement {
@@ -36,7 +42,7 @@ const AdminArticleContentFragment = gql(`
       }
       statements(includeUnpublished: true) {
         id
-        ...AdminStatement 
+        ...AdminStatement
       }
     }
   }
@@ -44,13 +50,14 @@ const AdminArticleContentFragment = gql(`
 
 export function AdminArticleContent(props: {
   article: FragmentType<typeof AdminArticleContentFragment>
+  isRedesign?: boolean
 }) {
   const article = useFragment(AdminArticleContentFragment, props.article)
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
   return (
     <div className="bg-white p-6 lg:px-0">
-      <div className="max-w-3xl text-base leading-7 text-gray-700">
+      <div className="max-w-4xl text-base leading-7 text-gray-700">
         <p className="mt-0 text-xl leading-8">{article.perex}</p>
         {article.illustration && (
           <figure className="mt-10">
@@ -68,10 +75,9 @@ export function AdminArticleContent(props: {
             </figcaption>
           </figure>
         )}
-
         {article.segments.map((segment) =>
           segment.segmentType === 'text' ? (
-            <div key={segment.id} className="mt-10 max-w-2xl article-content">
+            <div key={segment.id} className="mt-10 max-w-3xl article-content">
               {segment.content.edges?.map((edge) => {
                 if (!edge?.node) {
                   return null
@@ -98,9 +104,14 @@ export function AdminArticleContent(props: {
                   )
                 }
 
+                if (node.__typename === 'BlockQuoteNode') {
+                  return <AdminArticleQuote key={cursor} node={node} />
+                }
+
                 if (node.__typename === 'ArticleNode' && node.article) {
                   return (
                     <AdminArticleV2Preview
+                      isRedesign={props.isRedesign}
                       key={cursor}
                       article={node.article}
                     />
