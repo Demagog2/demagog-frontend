@@ -144,11 +144,10 @@
       }
 
       .ck-editor_demagog-box-wrapper {
-        @extend .border, .border-dark;
+        @extend .border, .border-dark, .mt-6;
         border-radius: 31px;
         padding: 25px 27px;
         text-align: start;
-        margin-top: 30px;
 
         h3,
         h2 {
