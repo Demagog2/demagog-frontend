@@ -40,6 +40,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.53.0",
+    "react-toastify": "^10.0.6",
     "react-youtube": "^10.1.0",
     "rxjs": "^7.8.1",
     "sass": "^1.69.5",

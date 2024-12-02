@@ -3,15 +3,13 @@
 import { serverMutation } from '@/libs/apollo-client-server'
 import { gql } from '@/__generated__'
 import { redirect } from 'next/navigation'
-import { safeParse } from '@/libs/form-data'
 import * as Sentry from '@sentry/nextjs'
 import { contentImageSchema } from '@/libs/images/schema'
-
-export type FormState = {
-  message: string
-  error?: string
-  fields?: Record<string, any>
-}
+import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+import {
+  AdminCreateImageMutationMutation,
+  AdminCreateImageMutationMutationVariables,
+} from '@/__generated__/graphql'
 
 const adminCreateImageMutation = gql(`
   mutation AdminCreateImageMutation($input: CreateContentImageMutationInput!) {
@@ -28,45 +26,32 @@ const adminCreateImageMutation = gql(`
   }
 `)
 
-export async function createImage(
-  _: FormState,
-  formData: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(contentImageSchema, formData)
-
-  if (parsedInput.success) {
-    const input = parsedInput.data
-
-    const { data } = await serverMutation({
-      mutation: adminCreateImageMutation,
-      variables: {
-        input: {
-          image: input.image,
-        },
-      },
-    })
-
+export const createImage = new CreateActionBuilder<
+  typeof contentImageSchema,
+  AdminCreateImageMutationMutation,
+  AdminCreateImageMutationMutationVariables,
+  typeof adminCreateImageMutation
+>(contentImageSchema)
+  .withMutation(adminCreateImageMutation, (data) => ({
+    input: {
+      image: data.image,
+    },
+  }))
+  .withRedirectUrl((data) => {
     if (data?.createContentImage?.__typename === 'CreateContentImageSuccess') {
       return redirect(
-        `/beta/admin/images/${data?.createContentImage?.contentImage.id}`
+        `/beta/admin/images/${data.createContentImage.contentImage.id}`
       )
     }
 
+    return null
+  })
+  .onError((data) => {
     if (data?.createContentImage?.__typename === 'CreateContentImageError') {
-      Sentry.captureException(data?.createContentImage.message)
+      Sentry.captureException(data.createContentImage.message)
     }
-  }
-
-  Sentry.captureException(parsedInput.error)
-
-  return {
-    message: 'There was a problem.',
-    error: parsedInput.error?.message,
-    fields: {
-      ...parsedInput.data,
-    },
-  }
-}
+  })
+  .build()
 
 const adminDeleteImageMutation = gql(`
   mutation AdminDeleteImage($id: ID!) {

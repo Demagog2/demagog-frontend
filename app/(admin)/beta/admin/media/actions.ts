@@ -2,9 +2,16 @@
 
 import { gql } from '@/__generated__'
 import { serverMutation } from '@/libs/apollo-client-server'
-import { safeParse } from '@/libs/form-data'
 import { mediumSchema } from '@/libs/media/medium-schema'
 import { redirect } from 'next/navigation'
+import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
+import {
+  CreateMediumMutation,
+  CreateMediumMutationVariables,
+  UpdateMediumMutation,
+  UpdateMediumMutationVariables,
+} from '@/__generated__/graphql'
+import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
 
 const adminDeleteMediumMutation = gql(`
   mutation AdminDeleteMedium($id: ID!){
@@ -37,24 +44,25 @@ const adminCreateMediumMutation = gql(`
   }
 `)
 
-export async function createMedium(formData: FormData) {
-  const parsedInput = safeParse(mediumSchema, formData)
-
-  if (parsedInput.success) {
-    const { data } = await serverMutation({
-      mutation: adminCreateMediumMutation,
-      variables: {
-        mediumInput: {
-          name: String(formData.get('name')) ?? '',
-        },
-      },
-    })
-
-    if (data?.createMedium?.medium.id) {
-      return redirect(`/beta/admin/media/${data.createMedium.medium.id}`)
+export const createMedium = new CreateActionBuilder<
+  typeof mediumSchema,
+  CreateMediumMutation,
+  CreateMediumMutationVariables,
+  typeof adminCreateMediumMutation
+>(mediumSchema)
+  .withMutation(adminCreateMediumMutation, (data) => ({
+    mediumInput: {
+      name: data.name,
+    },
+  }))
+  .withRedirectUrl((data) => {
+    if (data?.createMedium?.medium) {
+      return `/beta/admin/media/${data?.createMedium?.medium.id}`
     }
-  }
-}
+
+    return null
+  })
+  .build()
 
 const adminUpdateMediumMutation = gql(`
   mutation UpdateMedium($id: ID!, $mediumInput: MediumInput!) {
@@ -66,22 +74,16 @@ const adminUpdateMediumMutation = gql(`
   }
 `)
 
-export async function updateMedium(mediumId: string, formData: FormData) {
-  const parsedInput = safeParse(mediumSchema, formData)
-
-  if (parsedInput.success) {
-    const { data } = await serverMutation({
-      mutation: adminUpdateMediumMutation,
-      variables: {
-        id: mediumId,
-        mediumInput: {
-          name: String(formData.get('name')) ?? '',
-        },
-      },
-    })
-
-    if (data?.updateMedium?.medium.id) {
-      return redirect(`/beta/admin/media/${data.updateMedium.medium.id}`)
-    }
-  }
-}
+export const updateMedium = new UpdateActionBuilder<
+  typeof mediumSchema,
+  UpdateMediumMutation,
+  UpdateMediumMutationVariables,
+  typeof adminUpdateMediumMutation
+>(mediumSchema)
+  .withMutation(adminUpdateMediumMutation, (id, data) => ({
+    id,
+    mediumInput: {
+      name: data.name,
+    },
+  }))
+  .build()

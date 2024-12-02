@@ -8,6 +8,7 @@ import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getBooleanParam } from '@/libs/query-params'
+import { notFound } from 'next/navigation'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -53,6 +54,10 @@ export default async function AdminArticleEdit(
       id: props.params.slug,
     },
   })
+
+  if (!data?.article) {
+    notFound()
+  }
 
   if (data.article?.articleType === ArticleTypeEnum.SingleStatement) {
     return (

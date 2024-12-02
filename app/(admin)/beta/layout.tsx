@@ -1,4 +1,5 @@
 import '../../../assets/styles/tailwind.css'
+import 'react-toastify/dist/ReactToastify.css'
 
 import AdminClientLayout from '@/components/admin/AdminClientLayout'
 import { serverQuery } from '@/libs/apollo-client-server'
@@ -7,6 +8,7 @@ import { ApolloError } from '@apollo/client'
 import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { ADMIN_BANNER_VISIBILITY_COOKIE } from '@/libs/constants/cookies'
+import { ToastContainer } from 'react-toastify'
 
 // Invalidate pages after n seconds
 // See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
@@ -45,6 +47,7 @@ export default async function AdminLayout({
         {adminData && (
           <AdminClientLayout isBannerVisible={isBannerVisible} data={adminData}>
             {children}
+            <ToastContainer theme="light" />
           </AdminClientLayout>
         )}
       </body>

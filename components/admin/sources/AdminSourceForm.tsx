@@ -28,7 +28,8 @@ import { AdminBodySelect } from '@/components/admin/sources/AdminBodySelect'
 import { imagePath } from '@/libs/images/path'
 import { TrashIcon } from '@heroicons/react/24/outline'
 import { dateInputFormat } from '@/libs/date-time'
-import { FormState } from '@/app/(admin)/beta/admin/sources/actions'
+import { FormAction } from '@/libs/forms/form-action'
+import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 
 const AdminSourceFormFragment = gql(`
   fragment AdminSourceForm on Query {
@@ -76,14 +77,16 @@ type FieldValues = z.output<typeof sourceSchema>
 export function AdminSourceForm(props: {
   title: string
   description?: string
-  action(prevState: FormState, input: FormData): Promise<FormState>
+  action: FormAction
   data: FragmentType<typeof AdminSourceFormFragment>
   source?: FragmentType<typeof AdminSourceDataFragment>
 }) {
   const data = useFragment(AdminSourceFormFragment, props.data)
   const source = useFragment(AdminSourceDataFragment, props.source)
 
-  const [state, formAction] = useFormState(props.action, { message: '' })
+  const [state, formAction] = useFormState(props.action, { state: 'initial' })
+
+  useFormToasts(state)
 
   const {
     control,
@@ -115,7 +118,7 @@ export function AdminSourceForm(props: {
         source?.releasedAt ?? new Date().toISOString()
       ),
       transcript: source?.transcript ?? undefined,
-      ...(state.fields ?? {}),
+      ...(state.state === 'initial' ? {} : state.fields),
     },
   })
 

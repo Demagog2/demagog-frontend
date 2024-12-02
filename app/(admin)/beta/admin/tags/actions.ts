@@ -1,11 +1,15 @@
 'use server'
 
 import { gql } from '@/__generated__'
-import { serverMutation } from '@/libs/apollo-client-server'
-import { redirect } from 'next/navigation'
-import { safeParse } from '@/libs/form-data'
 import { schema, toStatementType } from '@/libs/tags/schema'
-import { StatementType } from '@/__generated__/graphql'
+import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
+import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+import {
+  AdminTagNewMutationMutation,
+  AdminTagNewMutationMutationVariables,
+  AdminTagUpdateMutationMutation,
+  AdminTagUpdateMutationMutationVariables,
+} from '@/__generated__/graphql'
 
 const adminCreateTagMutation = gql(`
   mutation AdminTagNewMutation($input: TagInput!) {
@@ -16,6 +20,27 @@ const adminCreateTagMutation = gql(`
     }
   }
 `)
+
+export const createTag = new CreateActionBuilder<
+  typeof schema,
+  AdminTagNewMutationMutation,
+  AdminTagNewMutationMutationVariables,
+  typeof adminCreateTagMutation
+>(schema)
+  .withMutation(adminCreateTagMutation, (data) => ({
+    input: {
+      name: data.name,
+      forStatementType: toStatementType(data.forStatementType),
+    },
+  }))
+  .withRedirectUrl((data) => {
+    if (data.createTag?.tag?.id) {
+      return `/beta/admin/tags/${data?.createTag?.tag.id}`
+    }
+
+    return null
+  })
+  .build()
 
 const adminUpdateTagMutation = gql(`
   mutation AdminTagUpdateMutation($input: UpdateTagMutationInput!) {
@@ -33,84 +58,17 @@ const adminUpdateTagMutation = gql(`
   }
 `)
 
-export type FormState = {
-  message: string
-  error?: string
-  fields?: Record<string, any>
-}
-
-export async function createTag(
-  _: FormState,
-  formData: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(schema, formData)
-
-  if (parsedInput.success) {
-    const input = parsedInput.data
-
-    const { data } = await serverMutation({
-      mutation: adminCreateTagMutation,
-      variables: {
-        input: {
-          name: input.name,
-          forStatementType: toStatementType(input.forStatementType),
-        },
-      },
-    })
-
-    if (data?.createTag?.tag) {
-      redirect(`/beta/admin/tags/${data?.createTag?.tag.id}`)
-    }
-  }
-
-  return {
-    message: 'There was a problem.',
-    error: parsedInput.error?.message,
-    fields: {
-      ...parsedInput.data,
+export const updateTag = new UpdateActionBuilder<
+  typeof schema,
+  AdminTagUpdateMutationMutation,
+  AdminTagUpdateMutationMutationVariables,
+  typeof adminUpdateTagMutation
+>(schema)
+  .withMutation(adminUpdateTagMutation, (id, data) => ({
+    input: {
+      id,
+      name: data.name,
+      forStatementType: toStatementType(data.forStatementType),
     },
-  }
-}
-
-export async function updateTag(
-  tagId: string,
-  _: FormState,
-  formData: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(schema, formData)
-
-  if (parsedInput.success) {
-    const input = parsedInput.data
-
-    const { data } = await serverMutation({
-      mutation: adminUpdateTagMutation,
-      variables: {
-        input: {
-          id: tagId,
-          name: input.name,
-          forStatementType: toStatementType(input.forStatementType),
-        },
-      },
-    })
-
-    if (data?.updateTag?.__typename === 'UpdateTagSuccess') {
-      return redirect(`/beta/admin/tags/${data?.updateTag?.tag.id}`)
-    }
-
-    return {
-      message: 'There was a problem with saving the data to the server.',
-      error: data?.updateTag?.message,
-      fields: {
-        ...parsedInput.data,
-      },
-    }
-  }
-
-  return {
-    message: 'There was a problem.',
-    error: parsedInput.error?.message,
-    fields: {
-      ...(parsedInput.data ?? {}),
-    },
-  }
-}
+  }))
+  .build()

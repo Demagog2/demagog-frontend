@@ -9,7 +9,7 @@ import { imagePath } from '@/libs/images/path'
 import { Button } from '@headlessui/react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 
-const ArticleIllustrationFragment = gql(`
+const AdminArticleIllustrationFragment = gql(`
   fragment AdminArticleIllustration on Article {
     title
     illustration(size: medium)
@@ -17,7 +17,7 @@ const ArticleIllustrationFragment = gql(`
 `)
 
 export function AdminArticleIllustrationInput(props: {
-  article?: FragmentType<typeof ArticleIllustrationFragment>
+  article?: FragmentType<typeof AdminArticleIllustrationFragment>
   control: Control<any>
   name: string
 }) {
@@ -26,7 +26,7 @@ export function AdminArticleIllustrationInput(props: {
     name: 'illustration',
   })
 
-  const article = useFragment(ArticleIllustrationFragment, props.article)
+  const article = useFragment(AdminArticleIllustrationFragment, props.article)
 
   const [articlePreview, setArticlePreview] = useState<string | null>(
     article?.illustration ? imagePath(article.illustration) : null

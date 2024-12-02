@@ -6,6 +6,13 @@ import { serverMutation } from '@/libs/apollo-client-server'
 import { redirect } from 'next/navigation'
 import { safeParse } from '@/libs/form-data'
 import * as Sentry from '@sentry/nextjs'
+import { FormState } from '@/libs/forms/form-state'
+import { FormMessage } from '@/libs/forms/form-message'
+import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+import {
+  AdminArticleNewMutationV2Mutation,
+  AdminArticleNewMutationV2MutationVariables,
+} from '@/__generated__/graphql'
 
 const adminCreateArticleMutation = gql(`
   mutation AdminArticleNewMutationV2($input: ArticleInput!) {
@@ -17,92 +24,61 @@ const adminCreateArticleMutation = gql(`
   }
 `)
 
-export type FormState = {
-  message: string
-  error?: string
-  fields?: Record<string, any>
-}
+export const createArticle = new CreateActionBuilder<
+  typeof schema,
+  AdminArticleNewMutationV2Mutation,
+  AdminArticleNewMutationV2MutationVariables,
+  typeof adminCreateArticleMutation
+>(schema)
+  .withMutation(adminCreateArticleMutation, (data) => ({
+    input: {
+      ...data,
+      segments: data.segments ?? [],
+    },
+  }))
+  .withRedirectUrl((data) => {
+    if (data.createArticle?.article.id) {
+      redirect(`/beta/admin/articles/${data?.createArticle?.article.id}`)
+    }
 
-export async function createArticle(
-  _: FormState,
-  formData: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(schema, formData)
+    return null
+  })
+  .build()
 
-  if (parsedInput.success) {
-    const input = parsedInput.data
-
-    const { data } = await serverMutation({
-      mutation: adminCreateArticleMutation,
-      variables: {
-        input: {
-          ...input,
-          segments: input.segments ?? [],
+export const createSingleStatementArticle = new CreateActionBuilder<
+  typeof singleStatementArticleSchema,
+  AdminArticleNewMutationV2Mutation,
+  AdminArticleNewMutationV2MutationVariables,
+  typeof adminCreateArticleMutation
+>(singleStatementArticleSchema)
+  .withMutation(adminCreateArticleMutation, (data) => ({
+    input: {
+      ...data,
+      statementId: undefined,
+      articleType: 'single_statement' as const,
+      segments: [
+        {
+          segmentType: 'single_statement' as const,
+          statementId: data.statementId,
         },
-      },
-    })
-
+      ],
+    },
+  }))
+  .withRedirectUrl((data) => {
     if (data?.createArticle?.article) {
       redirect(`/beta/admin/articles/${data?.createArticle?.article.id}`)
     }
-  }
 
-  Sentry.captureException(parsedInput.error)
-
-  return {
-    message: 'There was a problem.',
-    error: parsedInput.error?.message,
-    fields: {
-      ...parsedInput.data,
-    },
-  }
-}
-
-export async function createSingleStatementArticle(
-  _: FormState,
-  formData: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(singleStatementArticleSchema, formData)
-
-  if (parsedInput.success) {
-    const { data } = await serverMutation({
-      mutation: adminCreateArticleMutation,
-      variables: {
-        input: {
-          ...parsedInput.data,
-          statementId: undefined,
-          articleType: 'single_statement' as const,
-          segments: [
-            {
-              segmentType: 'single_statement' as const,
-              statementId: parsedInput.data.statementId,
-            },
-          ],
-        },
-      },
-    })
-
-    if (data?.createArticle?.article) {
-      redirect(`/beta/admin/articles/${data?.createArticle?.article.id}`)
-    }
-  }
-
-  Sentry.captureException(parsedInput.error)
-
-  return {
-    message: 'There was a problem.',
-    error: parsedInput.error?.message,
-    fields: {
-      ...parsedInput.data,
-    },
-  }
-}
+    return null
+  })
+  .build()
 
 const adminEditArticleMutation = gql(`
   mutation AdminEditArticleMutation($id: ID!, $input: ArticleInput!) {
     updateArticle(id: $id, articleInput: $input) {
       article {
         id
+        title
       }
     }
   }
@@ -111,7 +87,7 @@ const adminEditArticleMutation = gql(`
 export async function updateArticle(
   articleId: string,
   _: FormState,
-  formData: FormData
+  formData?: FormData
 ): Promise<FormState> {
   const parsedInput = safeParse(schema, formData)
 
@@ -130,15 +106,19 @@ export async function updateArticle(
     })
 
     if (data?.updateArticle?.article) {
-      redirect(`/beta/admin/articles/${data?.updateArticle?.article.id}`)
+      return {
+        state: 'success',
+        message: `Článek "${data?.updateArticle.article.title}" úspěšně uložen.`,
+        fields: {},
+      }
     }
   }
 
   Sentry.captureException(parsedInput.error)
 
   return {
-    message: 'There was a problem.',
-    error: parsedInput.error?.message,
+    state: 'error',
+    message: parsedInput.error?.message ?? FormMessage.error.validation,
     fields: {
       ...parsedInput.data,
     },
@@ -148,12 +128,15 @@ export async function updateArticle(
 export async function updateArticleSingleStatement(
   articleId: string,
   _: FormState,
-  formData: FormData
+  formData?: FormData
 ): Promise<FormState> {
   const parsedInput = safeParse(singleStatementArticleSchema, formData)
 
+  // Remove illustration which has a File value, otherwise we can't sent the fields back to the client
+  const { illustration, ...fields } = parsedInput.data ?? {}
+
   if (parsedInput.success) {
-    const { data, errors } = await serverMutation({
+    const { data } = await serverMutation({
       mutation: adminEditArticleMutation,
       variables: {
         id: articleId,
@@ -171,21 +154,27 @@ export async function updateArticleSingleStatement(
       },
     })
 
-    console.debug(data)
+    if (data?.updateArticle?.article?.id) {
+      return {
+        state: 'success',
+        message: `Článek "${data?.updateArticle.article.title}" úspěšně uložen.`,
+        fields,
+      }
+    }
 
-    if (data?.updateArticle?.article) {
-      redirect(`/beta/admin/articles/${data?.updateArticle?.article.id}`)
+    return {
+      state: 'error',
+      message: FormMessage.error.unknown,
+      fields,
     }
   }
 
   Sentry.captureException(parsedInput.error)
 
   return {
-    message: 'There was a problem.',
-    error: parsedInput.error?.message,
-    fields: {
-      ...parsedInput.data,
-    },
+    state: 'error',
+    message: FormMessage.error.validation,
+    fields,
   }
 }
 
