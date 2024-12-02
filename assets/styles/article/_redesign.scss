@@ -1,6 +1,12 @@
 .article-redesign {
   text-align: justify;
 
+  a {
+    color: $dark;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
   .fs-16px {
     font-size: 16px;
   }
