@@ -21,18 +21,13 @@ const DebateArticleMetadataFragment = gql(`
 
 export function DebateArticleMetadata(props: {
   article: FragmentType<typeof DebateArticleMetadataFragment>
-  isRedesign?: boolean
 }) {
   const article = useFragment(DebateArticleMetadataFragment, props.article)
 
   return (
     <>
       {article.articleType === 'default' && article.source && (
-        <div
-          className={classNames('mb-5 mb-lg-10', {
-            'mt-8 mt-md-10': props.isRedesign,
-          })}
-        >
+        <div className={classNames('mb-5 mb-lg-10 mt-8 mt-md-10')}>
           <h2 className='"fs-2 text-uppercase text-primary'>Ověřili jsme</h2>
           <div className="row g-1 mt-2">
             <span className="col col-auto fs-5">

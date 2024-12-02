@@ -2,12 +2,12 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { imagePath } from '@/libs/images/path'
 
 const ArticleIllustrationFragment = gql(`
-  fragment ArticleIllustrationRedesign on Article {
+  fragment ArticleIllustration on Article {
     image : illustration
   }
 `)
 
-export function ArticleIllustrationsRedesign(props: {
+export function ArticleIllustration(props: {
   article: FragmentType<typeof ArticleIllustrationFragment>
 }) {
   const article = useFragment(ArticleIllustrationFragment, props.article)

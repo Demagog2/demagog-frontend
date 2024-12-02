@@ -11,25 +11,14 @@ const StaticArticleMetadataFragment = gql(`
 
 export function StaticArticleMetadata(props: {
   article: FragmentType<typeof StaticArticleMetadataFragment>
-  isRedesign?: boolean
 }) {
   const article = useFragment(StaticArticleMetadataFragment, props.article)
 
   return (
     <>
       {article.articleType === 'static' && (
-        <p
-          className={classNames('fs-5', {
-            'mt-8 mt-md-10': props.isRedesign,
-          })}
-        >
-          <span
-            className={classNames('text-primary', {
-              'fw-bold': props.isRedesign,
-            })}
-          >
-            Komentář
-          </span>{' '}
+        <p className={classNames('fs-5 mt-8 mt-md-10')}>
+          <span className={classNames('text-primary fw-bold')}>Komentář</span>{' '}
           <i>
             <span className="col col-auto fs-5">
               {formatDate(article.publishedAt)}

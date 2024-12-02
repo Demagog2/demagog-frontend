@@ -49,7 +49,6 @@ const ArticleSegmentsFragment = gql(`
 
 type ArticleStatementsProps = {
   data: FragmentType<typeof ArticleSegmentsFragment>
-  isRedesign?: boolean
 }
 
 export function ArticleSegments(props: ArticleStatementsProps) {
@@ -57,8 +56,6 @@ export function ArticleSegments(props: ArticleStatementsProps) {
     ArticleSegmentsFragment,
     props.data
   )
-  const { isRedesign = false } = props
-
   return (
     <>
       {segments.map((segment) => (
@@ -66,10 +63,9 @@ export function ArticleSegments(props: ArticleStatementsProps) {
           {segment.segmentType === 'text' && (
             <div className="row justify-content-center">
               <div
-                className={classNames('col fs-6', {
-                  'content-redesign col-sm-10 mx-sm-auto': isRedesign,
-                  'content col-12 col-lg-8': !isRedesign,
-                })}
+                className={classNames(
+                  'col fs-6 content-redesign col-sm-10 mx-sm-auto'
+                )}
               >
                 {segment.content.edges?.map((edge) => {
                   if (!edge?.node) {
@@ -119,7 +115,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
           {segment.segmentType === 'source_statements' && (
             <div>
               <div className="row g-5 g-lg-10">
-                <div className="col col-12">
+                <div className="col-12 col-sm-10 offset-sm-1">
                   <h2 className="fs-2 text-bold">
                     Řečníci s&nbsp;počty výroků dle hodnocení
                   </h2>
@@ -128,7 +124,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                 {debateStats?.map((debateStat) => (
                   <div
                     key={debateStat.speaker?.id}
-                    className="col col-12 col-lg-4"
+                    className="col-12 col-lg-4 offset-sm-1"
                   >
                     <div className="speakers-overview-speaker">
                       <SpeakerWithStats data={debateStat} />
@@ -137,14 +133,16 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                 ))}
               </div>
 
-              <div className="mt-5 mt-lg-10">
-                {segment.statements.map((statement) => (
-                  <StatementItem
-                    key={statement.id}
-                    statement={statement}
-                    className="mb-10"
-                  />
-                ))}
+              <div className="col-12 col-sm-10 offset-sm-1">
+                <div className="mt-5 mt-lg-10">
+                  {segment.statements.map((statement) => (
+                    <StatementItem
+                      key={statement.id}
+                      statement={statement}
+                      className="mb-10"
+                    />
+                  ))}
+                </div>
               </div>
             </div>
           )}

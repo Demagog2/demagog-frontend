@@ -67,7 +67,7 @@ export default function StatementItem(props: {
       >
         <div
           className={classNames({
-            'col col-12 col-md-6 col-lg-7': !isVertical,
+            'col col-12 col-lg-7': !isVertical,
           })}
         >
           <div
@@ -169,7 +169,7 @@ export default function StatementItem(props: {
         </div>
         <div
           className={classNames('col', {
-            'col-12 col-md-6 col-lg-5': !isVertical,
+            'col-12 col-lg-5': !isVertical,
           })}
         >
           <StatementAssessment
