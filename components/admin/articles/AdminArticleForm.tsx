@@ -74,7 +74,7 @@ const items = [
   },
 ]
 
-export const AdminArticleFormFragment = gql(`
+const AdminArticleFormFragment = gql(`
   fragment AdminArticleForm on Query {
     articleTags {
       id
@@ -83,7 +83,7 @@ export const AdminArticleFormFragment = gql(`
   }
 `)
 
-export const AdminArticleFormFieldsFragment = gql(`
+const AdminArticleFormFieldsFragment = gql(`
   fragment AdminArticleFormFields on Article {
     title
     titleEn

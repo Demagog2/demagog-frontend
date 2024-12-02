@@ -34,7 +34,7 @@ const AdminArticleSingleStatementFormFragment = gql(`
       segmentType
       statementId
     }
-    ...ArticleIllustration
+    ...AdminArticleIllustration
   }
 `)
 
