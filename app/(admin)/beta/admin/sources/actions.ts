@@ -7,9 +7,14 @@ import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 import {
   CreateSourceMutation,
   CreateSourceMutationVariables,
+  CreateStatementInput,
   UpdateSourceMutation,
   UpdateSourceMutationVariables,
+  CreateStatementMutation,
+  CreateStatementMutationVariables,
+  StatementType,
 } from '@/__generated__/graphql'
+import { statementSchema } from '@/libs/sources/statement-schema'
 
 const adminCreateSourceMutation = gql(`
   mutation CreateSource($sourceInput: SourceInput!) {
@@ -35,6 +40,49 @@ export const createSource = new CreateActionBuilder<
   .withRedirectUrl((data) => {
     if (data?.createSource?.source) {
       return `/beta/admin/sources/${data?.createSource?.source.id}`
+    }
+
+    return null
+  })
+  .build()
+
+const adminCreateStatementMutation = gql(`
+  mutation CreateStatement($statementInput: CreateStatementInput!) {
+    createStatement(statementInput: $statementInput) {
+      statement {
+        id
+        source {
+          id
+        }
+      }
+    }
+  }
+`)
+
+export const createStatement = new CreateActionBuilder<
+  typeof statementSchema,
+  CreateStatementMutation,
+  CreateStatementMutationVariables,
+  typeof adminCreateStatementMutation
+>(statementSchema)
+  .withMutation(adminCreateStatementMutation, (data) => ({
+    statementInput: {
+      content: data.content,
+      sourceSpeakerId: data.sourceSpeakerId,
+      assessment: {
+        evaluatorId: data.evaluatorId,
+      },
+      sourceId: data.sourceId,
+      statementType: data.statementType as StatementType,
+
+      excerptedAt: new Date().toISOString(),
+      important: false,
+      published: false,
+    },
+  }))
+  .withRedirectUrl((data) => {
+    if (data?.createStatement?.statement.source?.id) {
+      return `/beta/admin/sources/${data.createStatement.statement.source.id}`
     }
 
     return null
