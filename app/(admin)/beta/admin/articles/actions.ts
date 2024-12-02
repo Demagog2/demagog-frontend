@@ -106,9 +106,11 @@ export async function updateArticle(
     })
 
     if (data?.updateArticle?.article) {
-      redirect(
-        `/beta/admin/articles/${data?.updateArticle?.article.id}/edit?success=true`
-      )
+      return {
+        state: 'success',
+        message: `Článek "${data?.updateArticle.article.title}" úspěšně uložen.`,
+        fields: {},
+      }
     }
   }
 
