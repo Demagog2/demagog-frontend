@@ -167,8 +167,6 @@ export default async function Statement(props: { params: { slug: string } }) {
             className="p-3 fs-6 bg-dark text-white rounded-m mb-2 position-relative min-h-50px"
             data-target="statement--detail.blockquote"
           >
-            <span className="popover-arrow arrow-east d-none d-md-block"></span>
-            <span className="popover-arrow arrow-north d-block d-md-none"></span>
             <span
               className="fs-6 position-relative"
               dangerouslySetInnerHTML={{ __html: statement.content }}
