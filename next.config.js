@@ -9,10 +9,6 @@ const nextConfig = {
         // and before all files including _next/public files which
         // allows overriding page files
         { source: '/diskuze/:slug', destination: '/articles/:slug' },
-        {
-          source: '/diskuze/:slug/redesign',
-          destination: '/articles/:slug/redesign',
-        },
         { source: '/o-nas', destination: '/about-us' },
         { source: '/politici/:id', destination: '/speakers/:id' },
         { source: '/sliby/:slug', destination: '/promises/:slug' },
@@ -32,6 +28,10 @@ const nextConfig = {
           destination: '/search/search-articles',
         },
         { source: '/vypis-recniku', destination: '/speakers' },
+        {
+          source: '/vyrok/:slug/redesign',
+          destination: '/statements/:slug/redesign',
+        },
         { source: '/vyrok/:slug', destination: '/statements/:slug' },
         { source: '/vyroky', destination: '/statements' },
         { source: '/workshopy', destination: '/workshops' },
