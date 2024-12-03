@@ -1,5 +1,7 @@
 .article-redesign {
-  text-align: justify;
+  .text-align-start {
+    text-align: start;
+  }
 
   a {
     color: $dark;
@@ -76,6 +78,10 @@
 
     .fs-md-20px {
       font-size: 20px;
+    }
+
+    .text-md-justify {
+      text-align: justify;
     }
   }
 
