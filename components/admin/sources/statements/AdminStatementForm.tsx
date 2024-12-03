@@ -21,7 +21,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { FormAction } from '@/libs/forms/form-action'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { statementSchema } from '@/libs/sources/statement-schema'
-import { AdminExpertSelect } from './AdminExpertSelect'
+import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminStatementTypeSelect } from './AdminStatementTypeSelect'
 import { AdminSourceSpeakerSelect } from './AdminSourceSpeakerSelect'
 
@@ -68,6 +68,8 @@ export function AdminStatementForm(props: {
     defaultValues: {
       statementType: 'factual',
       sourceId: source.id,
+      sourceSpeakerId: '',
+      evaluatorId: '',
       ...(state.state === 'initial' ? {} : state.fields),
     },
   })
@@ -164,9 +166,7 @@ export function AdminStatementForm(props: {
             </Legend>
 
             <Field>
-              <Label htmlFor="statementType" isOptional>
-                Ověřovatel
-              </Label>
+              <Label htmlFor="statementType">Ověřovatel</Label>
 
               <Controller
                 control={control}
@@ -174,7 +174,7 @@ export function AdminStatementForm(props: {
                 render={({ field }) => (
                   <>
                     <input type="hidden" {...field} />
-                    <AdminExpertSelect
+                    <AdminEvaluatorSelector
                       id="evaluatorId"
                       data={data}
                       onChange={field.onChange}
@@ -184,7 +184,7 @@ export function AdminStatementForm(props: {
                 )}
               />
 
-              <ErrorMessage message={errors.statementType?.message} />
+              <ErrorMessage message={errors.evaluatorId?.message} />
             </Field>
 
             <Field>

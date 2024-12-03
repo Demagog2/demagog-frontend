@@ -6,14 +6,14 @@ import { useCallback, useMemo } from 'react'
 
 const AdminExpertSelectFragment = gql(`
   fragment AdminExpertSelect on Query {
-    users(limit: 200, roles: ["expert", "admin"]) {
+    users(limit: 200) {
       id
       fullName
     }
   }
 `)
 
-export function AdminExpertSelect(props: {
+export function AdminEvaluatorSelector(props: {
   id?: string
   data: FragmentType<typeof AdminExpertSelectFragment>
   defaultValue?: string
@@ -43,7 +43,7 @@ export function AdminExpertSelect(props: {
       items={items}
       onChange={handleChange}
       defaultValue={props.defaultValue}
-      placeholder="Vyberte experta"
+      placeholder="Vyberte ověřovatele"
     />
   )
 }
