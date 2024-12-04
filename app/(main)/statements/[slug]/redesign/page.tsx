@@ -135,31 +135,35 @@ export default async function Statement(props: { params: { slug: string } }) {
   return (
     <div className="container">
       <div className="row g-10">
-        <div className="col col-4 col-md-2">
-          <SpeakerLink
-            speaker={statement.sourceSpeaker?.speaker}
-            className="d-block position-relative"
-          >
-            <span className="symbol symbol-square symbol-circle">
-              {statement.sourceSpeaker.speaker.avatar && (
-                <Image
-                  src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
-                  alt={statement.sourceSpeaker.fullName}
-                  width={127}
-                  height={127}
-                />
+        <div className="col col-4 col-md-2 d-flex justify-content-center">
+          <div className="w-85px">
+            <SpeakerLink
+              speaker={statement.sourceSpeaker?.speaker}
+              className="d-block position-relative"
+            >
+              <span className="symbol symbol-square symbol-circle">
+                {statement.sourceSpeaker.speaker.avatar && (
+                  <Image
+                    src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
+                    alt={statement.sourceSpeaker.fullName}
+                    width={85}
+                    height={85}
+                  />
+                )}
+              </span>
+              {statement.sourceSpeaker.body?.shortName && (
+                <div className="symbol-label d-flex align-items-center justify-content-center w-50px h-50px rounded-circle bg-dark">
+                  <span className="smallest text-white lh-1 text-center p-2">
+                    {statement.sourceSpeaker.body.shortName}
+                  </span>
+                </div>
               )}
-            </span>
-            {statement.sourceSpeaker.body?.shortName && (
-              <div className="symbol-label d-flex align-items-center justify-content-center w-50px h-50px rounded-circle bg-dark">
-                <span className="smallest text-white lh-1 text-center p-2">
-                  {statement.sourceSpeaker.body.shortName}
-                </span>
-              </div>
-            )}
-          </SpeakerLink>
-          <div className="mt-2 text-center w-100">
-            <h3 className="fs-6 fs-bold">{statement.sourceSpeaker.fullName}</h3>
+            </SpeakerLink>
+            <div className="mt-2 text-center w-100">
+              <h3 className="fs-6 fs-bold">
+                {statement.sourceSpeaker.fullName}
+              </h3>
+            </div>
           </div>
         </div>
         <div className="col col-12 col-md-8">
