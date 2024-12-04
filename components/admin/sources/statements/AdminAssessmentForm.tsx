@@ -11,7 +11,7 @@ import { FormAction } from '@/libs/forms/form-action'
 import { z } from 'zod'
 import { assessmentSchema } from '@/libs/sources/statement-schema'
 import { useFormToasts } from '../../forms/hooks/use-form-toasts'
-import { Controller, useForm } from 'react-hook-form'
+import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AdminFormHeader } from '../../layout/AdminFormHeader'
 import { AdminPageTitle } from '../../layout/AdminPageTitle'
@@ -21,9 +21,7 @@ import { SubmitButton } from '../../forms/SubmitButton'
 import { AdminFormContent } from '../../layout/AdminFormContent'
 import { Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '../../forms/Label'
-import { AdminSourceSpeakerSelect } from './AdminSourceSpeakerSelect'
 import { ErrorMessage } from '../../forms/ErrorMessage'
-import { statementEditableMachine } from '@/libs/sources/machines/statement-editable-machine'
 import { AdminSourceSpeakerControl } from './controls/AdminSourceSpeakerControl'
 
 const AdminAssessmentFormFragment = gql(`
@@ -67,20 +65,15 @@ export function AdminAssessmentForm(props: {
     props.statement
   )
 
-  const { isAuthorized } = useAuthorization(data.currentUser)
+  const authorization = useAuthorization(data.currentUser)
 
-  const [state] = useMachine(statementEditableMachine, {
+  const [state] = useMachine(machine, {
     input: {
+      authorization,
       state: statement.assessment.evaluationStatus,
-      isAuthorized,
-      userId: data.currentUser.id,
       evaluatorId: statement.assessment.evaluator?.id,
     },
   })
-
-  // const [state, send] = useMachine(machine, {
-  //   input: { state: 'approval_needed', isAuthorized },
-  // })
 
   // if (state.matches('Being evaluated')) {
   //   return (
@@ -186,7 +179,11 @@ export function AdminAssessmentForm(props: {
 
               <AdminSourceSpeakerControl
                 name="sourceSpeakerId"
-                disabled={state.matches('disabled')}
+                disabled={
+                  state.matches({ being_evaluated: 'disabled' }) ||
+                  state.matches({ approval_needed: 'disabled' }) ||
+                  state.matches({ proofreading_needed: 'disabled' })
+                }
                 control={control}
                 data={statement.source}
               />

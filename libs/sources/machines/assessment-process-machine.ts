@@ -1,45 +1,74 @@
 import { setup, assign } from 'xstate'
+import {
+  ASSESSMENT_STATUS_APPROVAL_NEEDED,
+  ASSESSMENT_STATUS_APPROVED,
+  ASSESSMENT_STATUS_BEING_EVALUATED,
+  ASSESSMENT_STATUS_PROOFREADING_NEEDED,
+} from '@/libs/constants/assessment'
+
+type ContextType = {
+  state: string
+  evaluatorId?: string
+  authorization: {
+    canEditStatement(): boolean
+    canEditStatementAsProofreader(): boolean
+    canEditStatementAsEvaluator(evaluatorId: string): boolean
+  }
+}
+
+const statementEditable = {
+  initial: 'check_enabled' as const,
+  states: {
+    check_enabled: {
+      always: [
+        {
+          target: 'enabled' as const,
+          guard: { type: 'isStatementEditable' as const },
+        },
+        { target: 'disabled' as const },
+      ],
+    },
+    enabled: {},
+    disabled: {},
+  },
+}
 
 export const machine = setup({
   types: {
-    context: {} as {
-      state: string
-      isAuthorized(permissions: string[]): boolean
-    },
+    context: {} as ContextType,
+    input: {} as ContextType,
     events: {} as
       | { type: 'Request approval' }
       | { type: 'Back to evaluation' }
       | { type: 'Request proofreading' }
       | { type: 'Approve' },
-    input: {} as {
-      state: string
-      isAuthorized(permissions: string[]): boolean
-    },
-  },
-  actions: {
-    updateState: function ({ context, event }, params) {
-      // Add your action code here
-      // ...
-    },
   },
   guards: {
-    isAprovalNeeded: function ({ context, event }, params) {
-      return context.state === 'approval_needed'
+    isStatementEditable: ({ context }): boolean => {
+      const isBeingEvaluated =
+        context.state === ASSESSMENT_STATUS_BEING_EVALUATED
+
+      return (
+        context.authorization.canEditStatement() ||
+        context.authorization.canEditStatementAsProofreader() ||
+        (context.authorization.canEditStatementAsEvaluator(
+          context.evaluatorId ?? ''
+        ) &&
+          isBeingEvaluated)
+      )
     },
-    isProofreadingNeeded: function ({ context, event }, params) {
-      return context.state === 'proofreading_needed'
-    },
-    isApproved: function ({ context, event }, params) {
-      return context.state === 'approved'
-    },
-    canApprove: function ({ context }) {
-      return context.isAuthorized(['statements:edit'])
-    },
+    isAprovalNeeded: ({ context }) =>
+      context.state === ASSESSMENT_STATUS_APPROVAL_NEEDED,
+    isProofreadingNeeded: ({ context }) =>
+      context.state === ASSESSMENT_STATUS_PROOFREADING_NEEDED,
+    isApproved: ({ context }) => context.state === ASSESSMENT_STATUS_APPROVED,
+    canApprove: ({ context }) => context.authorization.canEditStatement(),
   },
 }).createMachine({
   context: ({ input }) => ({
     state: input.state,
-    isAuthorized: input.isAuthorized,
+    evaluatorId: input.evaluatorId,
+    authorization: input.authorization,
   }),
   id: 'Statement evaluation',
   initial: 'Initial',
@@ -47,68 +76,65 @@ export const machine = setup({
     Initial: {
       always: [
         {
-          target: 'Approval needed',
-          guard: {
-            type: 'isAprovalNeeded',
-          },
+          target: 'approval_needed',
+          guard: 'isAprovalNeeded',
         },
         {
-          target: 'Proofreading needed',
-          guard: {
-            type: 'isProofreadingNeeded',
-          },
+          target: 'proofreading_needed',
+          guard: 'isProofreadingNeeded',
         },
         {
-          target: 'Approved',
-          guard: {
-            type: 'isApproved',
-          },
+          target: 'approved',
+          guard: 'isApproved',
         },
         {
-          target: 'Being evaluated',
+          target: 'being_evaluated',
         },
       ],
     },
-    'Approval needed': {
+    approval_needed: {
+      ...statementEditable,
       on: {
         'Back to evaluation': {
-          target: 'Being evaluated',
-          actions: assign({ state: 'being_evaluated' }),
+          target: 'being_evaluated',
+          actions: assign({ state: ASSESSMENT_STATUS_BEING_EVALUATED }),
         },
         'Request proofreading': {
-          target: 'Proofreading needed',
-          actions: assign({ state: 'proofreading_needed' }),
+          target: 'proofreading_needed',
+          actions: assign({ state: ASSESSMENT_STATUS_PROOFREADING_NEEDED }),
           guard: {
             type: 'canApprove',
           },
         },
       },
     },
-    'Proofreading needed': {
+    proofreading_needed: {
+      ...statementEditable,
       on: {
         Approve: {
-          target: 'Approved',
-          actions: assign({ state: 'approved' }),
+          target: 'approved',
+          actions: assign({ state: ASSESSMENT_STATUS_APPROVED }),
         },
         'Back to evaluation': {
-          target: 'Being evaluated',
-          actions: assign({ state: 'being_evaluated' }),
+          target: 'being_evaluated',
+          actions: assign({ state: ASSESSMENT_STATUS_BEING_EVALUATED }),
         },
       },
     },
-    Approved: {
+    approved: {
       on: {
         'Back to evaluation': {
-          target: 'Being evaluated',
-          actions: assign({ state: 'being_evaluated' }),
+          target: 'being_evaluated',
+          actions: assign({ state: ASSESSMENT_STATUS_BEING_EVALUATED }),
         },
       },
     },
-    'Being evaluated': {
+    being_evaluated: {
+      ...statementEditable,
       on: {
         'Request approval': {
-          target: 'Approval needed',
-          actions: assign({ state: 'approval_needed' }),
+          target: 'approval_needed',
+          actions: assign({ state: ASSESSMENT_STATUS_APPROVAL_NEEDED }),
         },
       },
     },
