@@ -13,8 +13,13 @@ import {
   CreateStatementMutation,
   CreateStatementMutationVariables,
   StatementType,
+  UpdateStatementMutation,
+  UpdateStatementMutationVariables,
 } from '@/__generated__/graphql'
-import { statementSchema } from '@/libs/sources/statement-schema'
+import {
+  assessmentSchema,
+  statementSchema,
+} from '@/libs/sources/statement-schema'
 
 const adminCreateSourceMutation = gql(`
   mutation CreateSource($sourceInput: SourceInput!) {
@@ -115,6 +120,31 @@ export const updateSource = new UpdateActionBuilder<
           ...sourceSpeaker,
         })) ?? [],
       experts: input.experts ?? [],
+    },
+  }))
+  .build()
+
+const adminUpdateStatementMutation = gql(`
+  mutation UpdateStatement($id: Int!, $statementInput: UpdateStatementInput!) {
+    updateStatement(id: $id, statementInput: $statementInput) {
+      statement {
+        id
+      }
+    }
+  }
+`)
+
+export const updateStatementAssessment = new UpdateActionBuilder<
+  typeof assessmentSchema,
+  UpdateStatementMutation,
+  UpdateStatementMutationVariables,
+  typeof adminUpdateStatementMutation
+>(assessmentSchema)
+  .withMutation(adminUpdateStatementMutation, (id, input) => ({
+    id: parseInt(id, 10),
+    statementInput: {
+      ...input,
+      sourceSpeakerId: input.sourceSpeakerId,
     },
   }))
   .build()

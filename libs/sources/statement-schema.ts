@@ -8,3 +8,7 @@ export const statementSchema = z.object({
   statementType: z.string(),
   firstCommentContent: z.string().optional(),
 })
+
+export const assessmentSchema = z.object({
+  sourceSpeakerId: z.string().trim().min(1, 'Vyberte řečníka výroku.'),
+})

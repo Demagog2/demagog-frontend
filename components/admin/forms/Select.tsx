@@ -18,6 +18,7 @@ export type Item<T = string> = {
 export function Select<T>(props: {
   id?: string
   items: Item<T>[]
+  disabled?: boolean
   defaultValue?: T
   placeholder?: string
   onChange(item: Item<T>): void
@@ -51,6 +52,7 @@ export function Select<T>(props: {
       as="div"
       value={selectedItem}
       onChange={handleChange}
+      disabled={props.disabled}
     >
       <div className="relative mt-2">
         <ComboboxInput<Item>
@@ -59,8 +61,12 @@ export function Select<T>(props: {
           onBlur={() => setQuery('')}
           displayValue={(item) => item?.label}
           placeholder={props.placeholder}
+          disabled={props.disabled}
         />
-        <ComboboxButton className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+        <ComboboxButton
+          disabled={props.disabled}
+          className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+        >
           <ChevronUpDownIcon
             className="h-5 w-5 text-gray-400"
             aria-hidden="true"
@@ -68,11 +74,15 @@ export function Select<T>(props: {
         </ComboboxButton>
 
         {filteredItems.length > 0 && (
-          <ComboboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+          <ComboboxOptions
+            aria-disabled={props.disabled}
+            className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+          >
             {filteredItems.map((person, i) => (
               <ComboboxOption
                 key={i}
                 value={person}
+                disabled={props.disabled}
                 className="group relative cursor-default select-none py-2 pl-8 pr-4 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
               >
                 <span className="block truncate group-data-[selected]:font-semibold">

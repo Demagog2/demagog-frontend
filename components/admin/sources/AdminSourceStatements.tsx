@@ -5,6 +5,7 @@ import { AdminUserAvatar } from '../users/AdminUserAvatar'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
+    id
     statements(includeUnpublished: true) {
       id
       title
@@ -121,12 +122,13 @@ export function AdminSourceStatements(props: {
                         <dt className="font-medium text-gray-900">Komentáře</dt>
                         <dd className="mt-3 space-y-3 text-gray-500">
                           <p>Počet komentářů: {statement.commentsCount}</p>
-                          <button
+                          <a
+                            href={`/beta/admin/sources/${source.id}/statements/${statement.id}`}
                             type="button"
                             className="font-medium text-indigo-600 hover:text-indigo-500"
                           >
                             Upravit
-                          </button>
+                          </a>
                         </dd>
                       </div>
                     </dl>
