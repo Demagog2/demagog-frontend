@@ -218,14 +218,12 @@ export default async function Statement(props: { params: { slug: string } }) {
           </div>
           {statement.assessment.shortExplanation && (
             <>
-              <div className="separator bg-gray mb-10"></div>
               <div className="mb-10">
                 <h3 className="display-5 fw-bold mb-5">Zkrácené odůvodnění</h3>
                 <p className="fs-5">{statement.assessment.shortExplanation}</p>
               </div>
             </>
           )}
-          <div className="separator bg-gray mb-10"></div>
           <div className="mb-10">
             <h3 className="display-5 fw-bold mb-5">Plné odůvodnění</h3>
             <div
@@ -235,7 +233,6 @@ export default async function Statement(props: { params: { slug: string } }) {
               }}
             ></div>
           </div>
-          <div className="separator bg-gray mb-10"></div>
           <div>
             {statement.mentioningArticles?.map((article) => (
               <>
