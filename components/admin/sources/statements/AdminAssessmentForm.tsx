@@ -351,7 +351,7 @@ export function AdminAssessmentForm(props: {
                   />
                 )}
 
-                <ErrorMessage message={errors.promiseRatingId?.message} />
+                <ErrorMessage message={errors.veracityId?.message} />
               </Field>
             )}
           </Fieldset>
