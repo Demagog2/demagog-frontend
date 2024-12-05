@@ -29,6 +29,7 @@ import { Textarea } from '../../forms/Textarea'
 import { StatementType } from '@/__generated__/graphql'
 import { AdminPromiseRatingSelect } from './controls/AdminPromiseRatingSelect'
 import classNames from 'classnames'
+import { AdminVeracitySelect } from './controls/AdminVeracitySelect'
 
 const PROMISE_RATING_COLORS = {
   fulfilled: 'text-green-700',
@@ -39,6 +40,13 @@ const PROMISE_RATING_COLORS = {
   not_yet_evaluated: 'text-amber-500',
 }
 
+const VERACITY_COLORS: Record<string, string> = {
+  true: 'text-green-700',
+  untrue: 'text-red-500',
+  misleading: 'text-amber-500',
+  unverifiable: 'text-blue-400',
+}
+
 const AdminAssessmentFormFragment = gql(`
   fragment AdminAssessmentForm on Query {
     currentUser {
@@ -47,6 +55,7 @@ const AdminAssessmentFormFragment = gql(`
     }
     ...AdminStatementTags
     ...AdminPromiseRatingSelect
+    ...AdminVeracitySelect
   }  
 `)
 
@@ -69,6 +78,11 @@ const AdminStatementAssessmentFragment = gql(`
       }
       evaluationStatus
       promiseRating {
+        id
+        key
+        name
+      }
+      veracity {
         id
         key
         name
@@ -131,7 +145,9 @@ export function AdminAssessmentForm(props: {
         ? {
             promiseRatingId: statement.assessment.promiseRating?.id,
           }
-        : {}),
+        : {
+            veracityId: statement.assessment.veracity?.id,
+          }),
     },
   })
 
@@ -139,25 +155,25 @@ export function AdminAssessmentForm(props: {
 
   const isStatementFieldDisabled =
     state.matches({
-      status: { being_evaluated: { statementDetailsEditable: 'disabled' } },
+      status: { being_evaluated: { statementDetailsEditable: 'readOnly' } },
     }) ||
     state.matches({
-      status: { approval_needed: { statementDetailsEditable: 'disabled' } },
+      status: { approval_needed: { statementDetailsEditable: 'readOnly' } },
     }) ||
     state.matches({
-      status: { proofreading_needed: { statementDetailsEditable: 'disabled' } },
+      status: { proofreading_needed: { statementDetailsEditable: 'readOnly' } },
     }) ||
     state.matches({ status: 'approved' })
 
-  const isPromiseRatingDisabled =
+  const isStatementRatingDisabled =
     state.matches({
-      status: { being_evaluated: { promiseRatingEditable: 'read_only' } },
+      status: { being_evaluated: { statementRatingEditable: 'readOnly' } },
     }) ||
     state.matches({
-      status: { approval_needed: { promiseRatingEditable: 'read_only' } },
+      status: { approval_needed: { statementRatingEditable: 'readOnly' } },
     }) ||
     state.matches({
-      status: { proofreading_needed: { promiseRatingEditable: 'read_only' } },
+      status: { proofreading_needed: { statementRatingEditable: 'readOnly' } },
     }) ||
     state.matches({ status: 'approved' })
 
@@ -273,7 +289,7 @@ export function AdminAssessmentForm(props: {
               <Field>
                 <Label htmlFor="promiseRatingId">Hodnocení slibu</Label>
 
-                {isPromiseRatingDisabled ? (
+                {isStatementRatingDisabled ? (
                   <p>
                     {!statement.assessment.promiseRating && 'Zatím nehodnoceno'}
 
@@ -303,6 +319,39 @@ export function AdminAssessmentForm(props: {
                 )}
 
                 <ErrorMessage message={errors.promiseRatingId?.message} />
+              </Field>
+            )}
+
+            {(state.matches({ type: 'factual' }) ||
+              state.matches({ type: 'newyears' })) && (
+              <Field>
+                <Label htmlFor="veracityId">Hodnocení výroku</Label>
+
+                {isStatementRatingDisabled ? (
+                  <p>
+                    {!statement.assessment.veracity && 'Zatím nehodnoceno'}
+
+                    {statement.assessment.veracity && (
+                      <span
+                        className={classNames(
+                          'text-lg font-bold',
+                          VERACITY_COLORS[statement.assessment.veracity.key]
+                        )}
+                      >
+                        {statement.assessment.veracity.name}
+                      </span>
+                    )}
+                  </p>
+                ) : (
+                  <AdminVeracitySelect
+                    control={control}
+                    name="veracityId"
+                    data={data}
+                    disabled={!state.matches({ status: 'approved' })}
+                  />
+                )}
+
+                <ErrorMessage message={errors.veracityId?.message} />
               </Field>
             )}
           </Fieldset>

@@ -17,37 +17,37 @@ type ContextType = {
   }
 }
 
-const promiseRatingEditable = {
-  initial: 'check_enabled' as const,
+const statementRatingEditable = {
+  initial: 'checkEnabled' as const,
   states: {
-    check_enabled: {
+    checkEnabled: {
       always: [
         {
           target: 'editable' as const,
           guard: { type: 'isPromiseRatingEditable' as const },
         },
-        { target: 'read_only' as const },
+        { target: 'readOnly' as const },
       ],
     },
     editable: {},
-    read_only: {},
+    readOnly: {},
   },
 }
 
 const statementDetailsEditable = {
-  initial: 'check_enabled' as const,
+  initial: 'checkEnabled' as const,
   states: {
-    check_enabled: {
+    checkEnabled: {
       always: [
         {
-          target: 'enabled' as const,
+          target: 'editable' as const,
           guard: { type: 'isStatementEditable' as const },
         },
-        { target: 'disabled' as const },
+        { target: 'readOnly' as const },
       ],
     },
-    enabled: {},
-    disabled: {},
+    editable: {},
+    readOnly: {},
   },
 }
 
@@ -161,7 +161,7 @@ export const machine = setup({
           type: 'parallel',
           states: {
             statementDetailsEditable,
-            promiseRatingEditable,
+            statementRatingEditable,
           },
           on: {
             'Back to evaluation': {
@@ -181,7 +181,7 @@ export const machine = setup({
           type: 'parallel',
           states: {
             statementDetailsEditable,
-            promiseRatingEditable,
+            statementRatingEditable,
           },
           on: {
             Approve: {
@@ -206,7 +206,7 @@ export const machine = setup({
           type: 'parallel',
           states: {
             statementDetailsEditable,
-            promiseRatingEditable,
+            statementRatingEditable,
           },
           on: {
             'Request approval': {
