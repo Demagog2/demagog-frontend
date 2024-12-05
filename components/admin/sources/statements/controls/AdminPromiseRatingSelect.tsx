@@ -23,20 +23,20 @@ export function AdminPromiseRatingSelect(props: {
   defaultValue?: string
   disabled?: boolean
 }) {
+  const { allowedKeys } = props
+
   const data = useFragment(AdminPromiseRatingSelectFragment, props.data)
 
   const items = useMemo(() => {
     return (
       data.promiseRatings
-        ?.filter((promiseRating) =>
-          props.allowedKeys.includes(promiseRating.key)
-        )
+        ?.filter((promiseRating) => allowedKeys.includes(promiseRating.key))
         .map((promiseRating) => ({
           value: promiseRating.id,
           label: promiseRating.name,
         })) ?? []
     )
-  }, [data])
+  }, [data, allowedKeys])
 
   return (
     <Controller
