@@ -25,6 +25,7 @@ import { ErrorMessage } from '../../forms/ErrorMessage'
 import { AdminSourceSpeakerControl } from './controls/AdminSourceSpeakerControl'
 import { Input } from '../../forms/Input'
 import { AdminStatementTagsMultiselect } from './controls/AdminTagsMultiselect'
+import { Textarea } from '../../forms/Textarea'
 
 const AdminAssessmentFormFragment = gql(`
   fragment AdminAssessmentForm on Query {
@@ -40,6 +41,7 @@ const AdminStatementAssessmentFragment = gql(`
   fragment AdminStatementAssessment on Statement {
     statementType
     title
+    content
     sourceSpeaker {
       id
       fullName
@@ -102,6 +104,7 @@ export function AdminAssessmentForm(props: {
       sourceSpeakerId: statement.sourceSpeaker.id,
       title: statement.title ?? '',
       tags: statement.tags.map((tag) => tag.id),
+      content: statement.content,
     },
   })
 
@@ -204,6 +207,20 @@ export function AdminAssessmentForm(props: {
                 <ErrorMessage message={errors.tags?.message} />
               </Field>
             )}
+
+            <Field>
+              <Label htmlFor="content">Text výroku</Label>
+
+              <Textarea
+                id="content"
+                {...register('content')}
+                rows={5}
+                placeholder={`Zadejte text ${state.matches({ type: 'promise' }) ? 'slibu' : 'výroku'}...`}
+                disabled={isStatementFieldDisabled}
+              />
+
+              <ErrorMessage message={errors.content?.message} />
+            </Field>
           </Fieldset>
         </AdminFormContent>
       </div>
