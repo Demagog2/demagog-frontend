@@ -378,10 +378,10 @@ export function AdminAssessmentForm(props: {
                     maxLength={SHORT_EXPLANATION_LIMIT}
                   />
 
-                  <span className="text-small text-gray-600">
+                  <div className="text-sm text-gray-600 mt-2">
                     Maximálně na dlouhý tweet, tj. {SHORT_EXPLANATION_LIMIT}{' '}
                     znaků. Aktuálně {shortExplanation?.length} znaků.
-                  </span>
+                  </div>
                 </>
               )}
 
