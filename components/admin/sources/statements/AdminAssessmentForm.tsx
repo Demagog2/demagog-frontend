@@ -26,6 +26,18 @@ import { AdminSourceSpeakerControl } from './controls/AdminSourceSpeakerControl'
 import { Input } from '../../forms/Input'
 import { AdminStatementTagsMultiselect } from './controls/AdminTagsMultiselect'
 import { Textarea } from '../../forms/Textarea'
+import { StatementType } from '@/__generated__/graphql'
+import { AdminPromiseRatingSelect } from './controls/AdminPromiseRatingSelect'
+import classNames from 'classnames'
+
+const PROMISE_RATING_COLORS = {
+  fulfilled: 'text-green-700',
+  broken: 'text-red-500',
+  in_progress: 'text-yellow-500',
+  partially_fulfilled: 'text-blue-400',
+  stalled: 'text-amber-500',
+  not_yet_evaluated: 'text-amber-500',
+}
 
 const AdminAssessmentFormFragment = gql(`
   fragment AdminAssessmentForm on Query {
@@ -34,6 +46,7 @@ const AdminAssessmentFormFragment = gql(`
       ...Authorization
     }
     ...AdminStatementTags
+    ...AdminPromiseRatingSelect
   }  
 `)
 
@@ -55,6 +68,14 @@ const AdminStatementAssessmentFragment = gql(`
         id
       }
       evaluationStatus
+      promiseRating {
+        id
+        key
+        name
+      }
+      assessmentMethodology {
+        ratingKeys
+      }
     }
     tags {
       id
@@ -101,10 +122,16 @@ export function AdminAssessmentForm(props: {
   } = useForm<FieldValues>({
     resolver: zodResolver(assessmentSchema),
     defaultValues: {
+      statementType: statement.statementType,
       sourceSpeakerId: statement.sourceSpeaker.id,
       title: statement.title ?? '',
       tags: statement.tags.map((tag) => tag.id),
       content: statement.content,
+      ...(statement.statementType === StatementType.Promise
+        ? {
+            promiseRatingId: statement.assessment.promiseRating?.id,
+          }
+        : {}),
     },
   })
 
@@ -112,13 +139,25 @@ export function AdminAssessmentForm(props: {
 
   const isStatementFieldDisabled =
     state.matches({
-      status: { being_evaluated: 'disabled' },
+      status: { being_evaluated: { statementDetailsEditable: 'disabled' } },
     }) ||
     state.matches({
-      status: { approval_needed: 'disabled' },
+      status: { approval_needed: { statementDetailsEditable: 'disabled' } },
     }) ||
     state.matches({
-      status: { proofreading_needed: 'disabled' },
+      status: { proofreading_needed: { statementDetailsEditable: 'disabled' } },
+    }) ||
+    state.matches({ status: 'approved' })
+
+  const isPromiseRatingDisabled =
+    state.matches({
+      status: { being_evaluated: { promiseRatingEditable: 'read_only' } },
+    }) ||
+    state.matches({
+      status: { approval_needed: { promiseRatingEditable: 'read_only' } },
+    }) ||
+    state.matches({
+      status: { proofreading_needed: { promiseRatingEditable: 'read_only' } },
     }) ||
     state.matches({ status: 'approved' })
 
@@ -144,6 +183,8 @@ export function AdminAssessmentForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
+      <input type="hidden" {...register('statementType')} />
+
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={title} description={description} />
@@ -221,6 +262,49 @@ export function AdminAssessmentForm(props: {
 
               <ErrorMessage message={errors.content?.message} />
             </Field>
+          </Fieldset>
+
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Ověřování
+            </Legend>
+
+            {state.matches({ type: 'promise' }) && (
+              <Field>
+                <Label htmlFor="promiseRatingId">Hodnocení slibu</Label>
+
+                {isPromiseRatingDisabled ? (
+                  <p>
+                    {!statement.assessment.promiseRating && 'Zatím nehodnoceno'}
+
+                    {statement.assessment.promiseRating && (
+                      <span
+                        className={classNames(
+                          'text-lg font-bold',
+                          PROMISE_RATING_COLORS[
+                            statement.assessment.promiseRating.key
+                          ]
+                        )}
+                      >
+                        {statement.assessment.promiseRating.name}
+                      </span>
+                    )}
+                  </p>
+                ) : (
+                  <AdminPromiseRatingSelect
+                    control={control}
+                    name="promiseRatingId"
+                    data={data}
+                    allowedKeys={
+                      statement.assessment.assessmentMethodology.ratingKeys
+                    }
+                    disabled={!state.matches({ status: 'approved' })}
+                  />
+                )}
+
+                <ErrorMessage message={errors.promiseRatingId?.message} />
+              </Field>
+            )}
           </Fieldset>
         </AdminFormContent>
       </div>
