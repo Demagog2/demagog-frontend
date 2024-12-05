@@ -4,9 +4,9 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
 import { machine } from '@/libs/sources/machines/assessment-process-machine'
 import { useMachine } from '@xstate/react'
-import { useRef } from 'react'
+import React, { useMemo } from 'react'
 import { useFormState } from 'react-dom'
-import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
 import { z } from 'zod'
 import { assessmentSchema } from '@/libs/sources/statement-schema'
@@ -23,6 +23,7 @@ import { Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '../../forms/Label'
 import { ErrorMessage } from '../../forms/ErrorMessage'
 import { AdminSourceSpeakerControl } from './controls/AdminSourceSpeakerControl'
+import { Input } from '../../forms/Input'
 
 const AdminAssessmentFormFragment = gql(`
   fragment AdminAssessmentForm on Query {
@@ -35,6 +36,8 @@ const AdminAssessmentFormFragment = gql(`
 
 const AdminStatementAssessmentFragment = gql(`
   fragment AdminStatementAssessment on Statement {
+    statementType
+    title
     sourceSpeaker {
       id
       fullName
@@ -72,6 +75,7 @@ export function AdminAssessmentForm(props: {
       authorization,
       state: statement.assessment.evaluationStatus,
       evaluatorId: statement.assessment.evaluator?.id,
+      statementType: statement.statementType,
     },
   })
 
@@ -134,38 +138,63 @@ export function AdminAssessmentForm(props: {
 
   const {
     control,
-    handleSubmit,
-    formState: { isSubmitting, errors },
+    register,
+    formState: { errors, isValid },
+    trigger,
   } = useForm<FieldValues>({
     resolver: zodResolver(assessmentSchema),
     defaultValues: {
       sourceSpeakerId: statement.sourceSpeaker.id,
+      title: statement.title ?? '',
     },
   })
 
-  const formRef = useRef<HTMLFormElement>(null)
+  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
 
-  const { handleSubmitForm } = useFormSubmit<FieldValues>(
-    handleSubmit,
-    formAction,
-    formRef
-  )
+  const isStatementFieldDisabled =
+    state.matches({
+      status: { being_evaluated: 'disabled' },
+    }) ||
+    state.matches({
+      status: { approval_needed: 'disabled' },
+    }) ||
+    state.matches({
+      status: { proofreading_needed: 'disabled' },
+    }) ||
+    state.matches({ status: 'approved' })
+
+  const title = useMemo(() => {
+    if (state.matches({ type: 'promise' })) {
+      return `Detail slibu`
+    }
+
+    return `Detail výroku`
+  }, [state])
+
+  const description = useMemo(() => {
+    if (state.matches({ type: 'factual' })) {
+      return `Ověřování faktického výroku ${statement.sourceSpeaker.fullName}`
+    }
+
+    if (state.matches({ type: 'promise' })) {
+      return `Ověřování slibu ${statement.sourceSpeaker.fullName}`
+    }
+
+    return `Ověřování silvestrovského výroku ${statement.sourceSpeaker.fullName}`
+  }, [state])
 
   return (
-    <form ref={formRef} onSubmit={handleSubmitForm}>
+    <form action={formAction} onSubmit={handleSubmitForm}>
       <div className="container">
         <AdminFormHeader>
-          <AdminPageTitle
-            title="Detail výroku"
-            description={`Ověřování výroku ${statement.sourceSpeaker.fullName}`}
-          />
+          <AdminPageTitle title={title} description={description} />
 
           <AdminFormActions>
             <LinkButton href={`/beta/admin/sources/${statement.source.id}`}>
               Zpět
             </LinkButton>
 
-            <SubmitButton isSubmitting={isSubmitting} />
+            <SubmitButton />
           </AdminFormActions>
         </AdminFormHeader>
         <AdminFormContent className="flex-col">
@@ -179,17 +208,34 @@ export function AdminAssessmentForm(props: {
 
               <AdminSourceSpeakerControl
                 name="sourceSpeakerId"
-                disabled={
-                  state.matches({ being_evaluated: 'disabled' }) ||
-                  state.matches({ approval_needed: 'disabled' }) ||
-                  state.matches({ proofreading_needed: 'disabled' })
-                }
+                disabled={isStatementFieldDisabled}
                 control={control}
                 data={statement.source}
               />
 
               <ErrorMessage message={errors.sourceSpeakerId?.message} />
             </Field>
+
+            {state.matches({ type: 'promise' }) && (
+              <Field>
+                <Label htmlFor="title">Titulek</Label>
+
+                <Input
+                  id="title"
+                  disabled={isStatementFieldDisabled}
+                  {...register('title')}
+                />
+
+                <ErrorMessage message={errors.title?.message} />
+              </Field>
+            )}
+
+            {(state.matches({ type: 'promise' }) ||
+              state.matches({ type: 'factual' })) && (
+              <Field>
+                <Label htmlFor="tags">Štítky</Label>
+              </Field>
+            )}
           </Fieldset>
         </AdminFormContent>
       </div>

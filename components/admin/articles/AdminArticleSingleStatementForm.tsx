@@ -55,7 +55,7 @@ export function AdminArticleSingleStatementForm(props: {
     props.article
   )
 
-  const { register, handleSubmit, control, setValue, formState } = useForm<
+  const { register, handleSubmit, control, setValue } = useForm<
     z.output<typeof singleStatementArticleSchema>
   >({
     resolver: zodResolver(singleStatementArticleSchema),
@@ -88,7 +88,7 @@ export function AdminArticleSingleStatementForm(props: {
             <AdminFormActions>
               <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
-              <SubmitButton isSubmitting={formState.isSubmitting} />
+              <SubmitButton />
             </AdminFormActions>
           </AdminFormHeader>
 

@@ -91,7 +91,7 @@ export function AdminSourceForm(props: {
   const {
     control,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { errors },
     register,
   } = useForm<FieldValues>({
     resolver: zodResolver(sourceSchema),
@@ -144,7 +144,7 @@ export function AdminSourceForm(props: {
           <AdminFormActions>
             <LinkButton href="/beta/admin/sources">Zpět</LinkButton>
 
-            <SubmitButton isSubmitting={isSubmitting} />
+            <SubmitButton />
           </AdminFormActions>
         </AdminFormHeader>
 

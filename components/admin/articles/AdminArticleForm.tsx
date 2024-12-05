@@ -246,7 +246,7 @@ export function AdminArticleForm(props: {
           <AdminFormActions>
             <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
-            <SubmitButton isSubmitting={isSubmitting} />
+            <SubmitButton />
           </AdminFormActions>
         </AdminFormHeader>
 
