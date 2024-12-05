@@ -181,7 +181,7 @@ export function AdminAssessmentForm(props: {
     }
 
     return `Ověřování silvestrovského výroku ${statement.sourceSpeaker.fullName}`
-  }, [state])
+  }, [state, statement.sourceSpeaker.fullName])
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
