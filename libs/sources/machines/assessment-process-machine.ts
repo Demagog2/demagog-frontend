@@ -1,4 +1,4 @@
-import { setup, assign } from 'xstate'
+import { setup, assign, or } from 'xstate'
 import {
   ASSESSMENT_STATUS_APPROVAL_NEEDED,
   ASSESSMENT_STATUS_APPROVED,
@@ -17,7 +17,24 @@ type ContextType = {
   }
 }
 
-const statementEditable = {
+const promiseRatingEditable = {
+  initial: 'check_enabled' as const,
+  states: {
+    check_enabled: {
+      always: [
+        {
+          target: 'editable' as const,
+          guard: { type: 'isPromiseRatingEditable' as const },
+        },
+        { target: 'read_only' as const },
+      ],
+    },
+    editable: {},
+    read_only: {},
+  },
+}
+
+const statementDetailsEditable = {
   initial: 'check_enabled' as const,
   states: {
     check_enabled: {
@@ -70,21 +87,36 @@ export const machine = setup({
       | { type: 'Approve' },
   },
   guards: {
-    isStatementFactual: ({ context }) => context.statementType === 'factual',
-    isStatementPromise: ({ context }) => context.statementType === 'promise',
-    isStatementEditable: ({ context }): boolean => {
+    isPromiseRatingEditable: or([
+      '_canEditAsAdmin',
+      '_canEditStatementAsProofreader',
+    ]),
+
+    isStatementEditable: or([
+      '_canEditAsAdmin',
+      '_canEditStatementAsProofreader',
+      '_canEditStatementAsProofreader',
+    ]),
+
+    _canEditAsAnEvaluator: ({ context }) => {
       const isBeingEvaluated =
         context.state === ASSESSMENT_STATUS_BEING_EVALUATED
 
-      return (
-        context.authorization.canEditStatement() ||
-        context.authorization.canEditStatementAsProofreader() ||
-        (context.authorization.canEditStatementAsEvaluator(
+      const isUserAssignedAsEvaluator =
+        context.authorization.canEditStatementAsEvaluator(
           context.evaluatorId ?? ''
-        ) &&
-          isBeingEvaluated)
-      )
+        )
+
+      return isBeingEvaluated && isUserAssignedAsEvaluator
     },
+
+    _canEditAsAdmin: ({ context }) => context.authorization.canEditStatement(),
+
+    _canEditStatementAsProofreader: ({ context }) =>
+      context.authorization.canEditStatementAsProofreader(),
+
+    isStatementFactual: ({ context }) => context.statementType === 'factual',
+    isStatementPromise: ({ context }) => context.statementType === 'promise',
     isAprovalNeeded: ({ context }) =>
       context.state === ASSESSMENT_STATUS_APPROVAL_NEEDED,
     isProofreadingNeeded: ({ context }) =>
@@ -126,7 +158,11 @@ export const machine = setup({
           ],
         },
         approval_needed: {
-          ...statementEditable,
+          type: 'parallel',
+          states: {
+            statementDetailsEditable,
+            promiseRatingEditable,
+          },
           on: {
             'Back to evaluation': {
               target: 'being_evaluated',
@@ -142,7 +178,11 @@ export const machine = setup({
           },
         },
         proofreading_needed: {
-          ...statementEditable,
+          type: 'parallel',
+          states: {
+            statementDetailsEditable,
+            promiseRatingEditable,
+          },
           on: {
             Approve: {
               target: 'approved',
@@ -163,7 +203,11 @@ export const machine = setup({
           },
         },
         being_evaluated: {
-          ...statementEditable,
+          type: 'parallel',
+          states: {
+            statementDetailsEditable,
+            promiseRatingEditable,
+          },
           on: {
             'Request approval': {
               target: 'approval_needed',

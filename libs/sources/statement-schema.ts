@@ -10,8 +10,10 @@ export const statementSchema = z.object({
 })
 
 export const assessmentSchema = z.object({
+  statementType: z.string(),
   sourceSpeakerId: z.string().trim().min(1, 'Vyberte řečníka výroku.'),
   title: z.string().trim().min(1, 'Zadejte nazev'),
-  tags: z.array(z.string()).optional(),
   content: z.string(),
+  tags: z.array(z.string()).optional(),
+  promiseRatingId: z.string().optional(),
 })
