@@ -17,6 +17,7 @@ export function AdminSourceSpeakerSelect(props: {
   id?: string
   data: FragmentType<typeof AdminSourceSpeakerSelectFragment>
   defaultValue?: string
+  disabled?: boolean
   onChange: (id: string) => void
 }) {
   const { onChange } = props
@@ -42,6 +43,7 @@ export function AdminSourceSpeakerSelect(props: {
       id={props.id}
       items={items}
       onChange={handleChange}
+      disabled={props.disabled}
       defaultValue={props.defaultValue}
       placeholder="Vyberte řečníka"
     />
