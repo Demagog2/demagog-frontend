@@ -49,7 +49,7 @@ export function AdminStatementTagsMultiselect<T extends FieldValues>(props: {
           : []
       ) ?? []
     )
-  }, [data])
+  }, [data, statement.statementType])
 
   return (
     <Multiselect
