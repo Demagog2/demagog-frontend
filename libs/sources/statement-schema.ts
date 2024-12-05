@@ -12,4 +12,5 @@ export const statementSchema = z.object({
 export const assessmentSchema = z.object({
   sourceSpeakerId: z.string().trim().min(1, 'Vyberte řečníka výroku.'),
   title: z.string().trim().min(1, 'Zadejte nazev'),
+  tags: z.array(z.string()).optional(),
 })

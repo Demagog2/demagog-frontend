@@ -24,6 +24,7 @@ import { Label } from '../../forms/Label'
 import { ErrorMessage } from '../../forms/ErrorMessage'
 import { AdminSourceSpeakerControl } from './controls/AdminSourceSpeakerControl'
 import { Input } from '../../forms/Input'
+import { AdminStatementTagsMultiselect } from './controls/AdminTagsMultiselect'
 
 const AdminAssessmentFormFragment = gql(`
   fragment AdminAssessmentForm on Query {
@@ -31,6 +32,7 @@ const AdminAssessmentFormFragment = gql(`
       id
       ...Authorization
     }
+    ...AdminStatementTags
   }  
 `)
 
@@ -52,6 +54,10 @@ const AdminStatementAssessmentFragment = gql(`
       }
       evaluationStatus
     }
+    tags {
+      id
+    }
+    ...AdminStatementForTags
   }  
 `)
 
@@ -79,57 +85,6 @@ export function AdminAssessmentForm(props: {
     },
   })
 
-  // if (state.matches('Being evaluated')) {
-  //   return (
-  //     <div>
-  //       Being evaluated
-  //       <button onClick={() => send({ type: 'Request approval' })}>
-  //         Request approval
-  //       </button>
-  //     </div>
-  //   )
-  // }
-
-  // if (state.matches('Approval needed')) {
-  //   return (
-  //     <div>
-  //       Approval needed
-  //       <button
-  //         disabled={state.can({ type: 'Request proofreading' })}
-  //         onClick={() => send({ type: 'Request proofreading' })}
-  //       >
-  //         Request proofreading
-  //       </button>
-  //       <button onClick={() => send({ type: 'Back to evaluation' })}>
-  //         Back to evaluation
-  //       </button>
-  //     </div>
-  //   )
-  // }
-
-  // if (state.matches('Proofreading needed')) {
-  //   return (
-  //     <div>
-  //       Proofreading needed
-  //       <button onClick={() => send({ type: 'Approve' })}>Aprove</button>
-  //       <button onClick={() => send({ type: 'Back to evaluation' })}>
-  //         Back to evaluation
-  //       </button>
-  //     </div>
-  //   )
-  // }
-
-  // if (state.matches('Approved')) {
-  //   return (
-  //     <div>
-  //       Approved{' '}
-  //       <button onClick={() => send({ type: 'Back to evaluation' })}>
-  //         Back to evaluation
-  //       </button>
-  //     </div>
-  //   )
-  // }
-
   const [formState, formAction] = useFormState(props.action, {
     state: 'initial',
   })
@@ -146,6 +101,7 @@ export function AdminAssessmentForm(props: {
     defaultValues: {
       sourceSpeakerId: statement.sourceSpeaker.id,
       title: statement.title ?? '',
+      tags: statement.tags.map((tag) => tag.id),
     },
   })
 
@@ -233,7 +189,19 @@ export function AdminAssessmentForm(props: {
             {(state.matches({ type: 'promise' }) ||
               state.matches({ type: 'factual' })) && (
               <Field>
-                <Label htmlFor="tags">Štítky</Label>
+                <Label htmlFor="tags" isOptional>
+                  Štítky
+                </Label>
+
+                <AdminStatementTagsMultiselect
+                  disabled={isStatementFieldDisabled}
+                  control={control}
+                  name="tags"
+                  data={data}
+                  statement={statement}
+                />
+
+                <ErrorMessage message={errors.tags?.message} />
               </Field>
             )}
           </Fieldset>
