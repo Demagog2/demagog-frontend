@@ -141,7 +141,13 @@ export const updateStatementAssessment = new UpdateActionBuilder<
   typeof adminUpdateStatementMutation
 >(assessmentSchema)
   .withMutation(adminUpdateStatementMutation, (id, input) => {
-    const { statementType, promiseRatingId, veracityId, ...rest } = input
+    const {
+      statementType,
+      promiseRatingId,
+      veracityId,
+      shortExplanation,
+      ...rest
+    } = input
 
     return {
       id: parseInt(id, 10),
@@ -151,12 +157,14 @@ export const updateStatementAssessment = new UpdateActionBuilder<
               ...rest,
               assessment: {
                 promiseRatingId,
+                shortExplanation,
               },
             }
           : {
               ...rest,
               assessment: {
                 veracityId,
+                shortExplanation,
               },
             },
     }
