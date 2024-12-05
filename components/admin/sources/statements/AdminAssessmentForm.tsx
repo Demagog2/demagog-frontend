@@ -31,6 +31,8 @@ import { AdminPromiseRatingSelect } from './controls/AdminPromiseRatingSelect'
 import classNames from 'classnames'
 import { AdminVeracitySelect } from './controls/AdminVeracitySelect'
 
+const SHORT_EXPLANATION_LIMIT = 280
+
 const PROMISE_RATING_COLORS = {
   fulfilled: 'text-green-700',
   broken: 'text-red-500',
@@ -77,6 +79,7 @@ const AdminStatementAssessmentFragment = gql(`
         id
       }
       evaluationStatus
+      shortExplanation
       promiseRating {
         id
         key
@@ -129,6 +132,7 @@ export function AdminAssessmentForm(props: {
   useFormToasts(formState)
 
   const {
+    watch,
     control,
     register,
     formState: { errors, isValid },
@@ -141,6 +145,7 @@ export function AdminAssessmentForm(props: {
       title: statement.title ?? '',
       tags: statement.tags.map((tag) => tag.id),
       content: statement.content,
+      shortExplanation: statement.assessment.shortExplanation ?? undefined,
       ...(statement.statementType === StatementType.Promise
         ? {
             promiseRatingId: statement.assessment.promiseRating?.id,
@@ -150,6 +155,8 @@ export function AdminAssessmentForm(props: {
           }),
     },
   })
+
+  const shortExplanation = watch('shortExplanation')
 
   const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
 
@@ -354,6 +361,32 @@ export function AdminAssessmentForm(props: {
                 <ErrorMessage message={errors.veracityId?.message} />
               </Field>
             )}
+
+            <Field>
+              <Label htmlFor="shortExplanation">Odůvodnění zkráceně</Label>
+
+              {isStatementFieldDisabled ? (
+                <p className="mt-4">{shortExplanation}</p>
+              ) : (
+                <>
+                  <Textarea
+                    id="shortExplanation"
+                    {...register('shortExplanation')}
+                    rows={3}
+                    placeholder={`Zadejte zkráceně odůvodnění ${state.matches({ type: 'promise' }) ? 'slibu' : 'výroku'}...`}
+                    disabled={isStatementFieldDisabled}
+                    maxLength={SHORT_EXPLANATION_LIMIT}
+                  />
+
+                  <div className="text-sm text-gray-600 mt-2">
+                    Maximálně na dlouhý tweet, tj. {SHORT_EXPLANATION_LIMIT}{' '}
+                    znaků. Aktuálně {shortExplanation?.length} znaků.
+                  </div>
+                </>
+              )}
+
+              <ErrorMessage message={errors.shortExplanation?.message} />
+            </Field>
           </Fieldset>
         </AdminFormContent>
       </div>
