@@ -21,6 +21,7 @@ export function Multiselect<T extends FieldValues>(props: {
   name: keyof T
   items: Item[]
   placeholder?: string
+  disabled?: boolean
 }) {
   const [query, setQuery] = useState('')
 
@@ -33,6 +34,7 @@ export function Multiselect<T extends FieldValues>(props: {
 
   return (
     <Controller
+      disabled={props.disabled}
       control={props.control}
       name={props.name as any}
       render={({ field }) => (
@@ -46,6 +48,7 @@ export function Multiselect<T extends FieldValues>(props: {
             }}
             multiple
             name={field.name}
+            disabled={field.disabled}
           >
             <div className="relative mt-2">
               <ComboboxInput<Array<Item['value']>>
@@ -60,14 +63,17 @@ export function Multiselect<T extends FieldValues>(props: {
                 }
                 defaultValue={field.value}
                 placeholder={props.placeholder}
+                disabled={field.disabled}
               />
-              <ComboboxButton className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none">
+              <ComboboxButton
+                disabled={field.disabled}
+                className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
+              >
                 <ChevronUpDownIcon
                   className="h-5 w-5 text-gray-400"
                   aria-hidden="true"
                 />
               </ComboboxButton>
-
               {filteredItems.length > 0 && (
                 <ComboboxOptions className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                   {filteredItems.map((person) => (
@@ -75,6 +81,7 @@ export function Multiselect<T extends FieldValues>(props: {
                       key={person.value}
                       value={person.value}
                       className="group relative cursor-default select-none py-2 pl-8 pr-4 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
+                      disabled={field.disabled}
                     >
                       <span className="block truncate group-data-[selected]:font-semibold">
                         {person.label}
