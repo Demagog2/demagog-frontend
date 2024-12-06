@@ -133,7 +133,7 @@ export default async function Statement(props: { params: { slug: string } }) {
   }
 
   return (
-    <div className="container">
+    <div className="container statement-redesign">
       <div className="row g-10">
         <div className="col col-4 col-md-2 d-flex justify-content-center">
           <div className="w-85px">
@@ -152,7 +152,7 @@ export default async function Statement(props: { params: { slug: string } }) {
                 )}
               </span>
               {statement.sourceSpeaker.body?.shortName && (
-                <div className="symbol-label d-flex align-items-center justify-content-center w-50px h-50px rounded-circle bg-dark">
+                <div className="symbol-label d-flex align-items-center justify-content-center w-35px h-35px rounded-circle bg-dark">
                   <span className="smallest text-white lh-1 text-center p-2">
                     {statement.sourceSpeaker.body.shortName}
                   </span>
@@ -223,8 +223,9 @@ export default async function Statement(props: { params: { slug: string } }) {
           {statement.assessment.shortExplanation && (
             <>
               <div className="mb-10">
-                <h3 className="display-5 fw-bold mb-5">Zkrácené odůvodnění</h3>
-                <p className="fs-5">{statement.assessment.shortExplanation}</p>
+                <p className="shortExplanation">
+                  {statement.assessment.shortExplanation}
+                </p>
               </div>
             </>
           )}
