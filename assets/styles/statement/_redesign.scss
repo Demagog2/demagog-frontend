@@ -6,11 +6,19 @@
     font-weight: 500;
   }
 
+  .fs-h1 {
+    font-size: 1.5rem;
+  }
+
   @media (min-width: 768px) {
     .shortExplanation {
       font-size: 1.25rem;
       line-height: 30px;
       text-align: justify;
+    }
+
+    .fs-h1 {
+      font-size: 2rem;
     }
   }
 }
