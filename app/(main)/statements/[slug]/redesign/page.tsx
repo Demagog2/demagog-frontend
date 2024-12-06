@@ -211,13 +211,19 @@ export default async function Statement(props: { params: { slug: string } }) {
               </div>
             )}
           </div>
-          <div className="d-flex flex-wrap align-items-center mb-10">
-            <h1 className="display-5 fw-bold me-3">
+          <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-md-start mb-10">
+            <h1 className="fs-h1 fw-bold me-md-6 flex-shrink-0">
               Tento výrok byl ověřen jako
             </h1>
-            <div className="d-flex align-items-center">
-              <AssessmentVeracityIcon assessment={statement.assessment} />
-              <AssessmentVeracityLabel assessment={statement.assessment} />
+            <div className="d-flex align-items-center mt-5 mt-md-0">
+              <AssessmentVeracityIcon
+                assessment={statement.assessment}
+                isRedesign
+              />
+              <AssessmentVeracityLabel
+                assessment={statement.assessment}
+                isRedesign
+              />
             </div>
           </div>
           {statement.assessment.shortExplanation && (
