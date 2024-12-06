@@ -26,7 +26,7 @@ export function AssessmentVeracityLabel(props: {
         'text-secondary fs-2': assessment.veracity?.key === 'misleading',
         'text-red fs-2': assessment.veracity?.key === 'untrue',
         'text-gray fs-2': assessment.veracity?.key === 'unverifiable',
-        'fs-5': props.isRedesign,
+        'fs-6': props.isRedesign,
       })}
     >
       {assessment.veracity?.name}

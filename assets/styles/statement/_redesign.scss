@@ -10,6 +10,32 @@
     font-size: 1.5rem;
   }
 
+  .bg-lightgrey {
+    background-color: #e5e7eb;
+  }
+
+  .radius-22px {
+    border-radius: 22px;
+  }
+
+  a {
+    color: $dark;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .fs-13px {
+    font-size: 13px;
+  }
+
+  .rounded-4 {
+    border-radius: 0.5rem;
+  }
+
+  .text-gray {
+    color: #9b9b9b;
+  }
+
   @media (min-width: 768px) {
     .shortExplanation {
       font-size: 1.25rem;
