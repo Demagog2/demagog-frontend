@@ -1,22 +1,39 @@
+@import '../mixins/rich_text';
+
 .statement-redesign {
-  .shortExplanation {
-    font-size: 1rem;
-    line-height: 24px;
-    text-align: start;
-    font-weight: 500;
-  }
+  @include perex;
 
   .fs-h1 {
     font-size: 1.5rem;
   }
 
-  @media (min-width: 768px) {
-    .shortExplanation {
-      font-size: 1.25rem;
-      line-height: 30px;
-      text-align: justify;
-    }
+  .bg-lightgrey {
+    background-color: #e5e7eb;
+  }
 
+  .radius-22px {
+    border-radius: 22px;
+  }
+
+  a {
+    color: $dark;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .fs-13px {
+    font-size: 13px;
+  }
+
+  .rounded-4 {
+    border-radius: 0.5rem;
+  }
+
+  .text-gray {
+    color: #9b9b9b;
+  }
+
+  @media (min-width: 768px) {
     .fs-h1 {
       font-size: 2rem;
     }

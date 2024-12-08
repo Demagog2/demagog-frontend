@@ -1,4 +1,8 @@
+@import '../mixins/rich_text';
+
 .article-redesign {
+  @include perex;
+
   .text-align-start {
     text-align: start;
   }
@@ -11,10 +15,6 @@
 
   .fs-16px {
     font-size: 16px;
-  }
-
-  .fw-medium {
-    font-weight: 500;
   }
 
   .custom-list {
@@ -74,10 +74,6 @@
 
     .fs-md-18px {
       font-size: 18px;
-    }
-
-    .fs-md-20px {
-      font-size: 20px;
     }
 
     .text-md-justify {
