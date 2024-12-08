@@ -12,6 +12,7 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { notFound } from 'next/navigation'
+import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -82,18 +83,9 @@ export default async function Statement(props: { params: { slug: string } }) {
     data: { statementV2: statement },
   } = await query({
     query: gql(`
-      query StatementDetail($id: Int!) {
+      query StatementDetailRedesign($id: Int!) {
         statementV2(id: $id) {
-          sourceSpeaker {
-            fullName
-            speaker {
-              avatar(size: detail)
-              ...SpeakerLink
-            }
-            body {
-              shortName
-            }
-          }
+          ...SourceSpeakerAvatar
           assessment {
             shortExplanation
             explanationHtml
@@ -135,35 +127,9 @@ export default async function Statement(props: { params: { slug: string } }) {
   return (
     <div className="container statement-redesign">
       <div className="row g-10">
-        <div className="col col-4 col-md-2 d-flex justify-content-center">
+        <div className="col col-4 col-md-2 d-flex flex-column align-items-center">
           <div className="w-85px">
-            <SpeakerLink
-              speaker={statement.sourceSpeaker?.speaker}
-              className="d-block position-relative"
-            >
-              <span className="symbol symbol-square symbol-circle">
-                {statement.sourceSpeaker.speaker.avatar && (
-                  <Image
-                    src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
-                    alt={statement.sourceSpeaker.fullName}
-                    width={85}
-                    height={85}
-                  />
-                )}
-              </span>
-              {statement.sourceSpeaker.body?.shortName && (
-                <div className="symbol-label d-flex align-items-center justify-content-center w-35px h-35px rounded-circle bg-dark">
-                  <span className="smallest text-white lh-1 text-center p-2">
-                    {statement.sourceSpeaker.body.shortName}
-                  </span>
-                </div>
-              )}
-            </SpeakerLink>
-            <div className="mt-2 text-center w-100">
-              <h3 className="fs-6 fs-bold">
-                {statement.sourceSpeaker.fullName}
-              </h3>
-            </div>
+            <SourceSpeakerAvatar statement={statement} />
           </div>
         </div>
         <div className="col col-12 col-md-8">
@@ -239,33 +205,7 @@ export default async function Statement(props: { params: { slug: string } }) {
             <div className="row justify-content-center justify-content-md-start g-4 g-md-6">
               {/* Avatar Section */}
               <div className="col-3 d-flex flex-column align-items-center mt-4 mt-md-7 mb-2 mb-md-3">
-                <SpeakerLink
-                  speaker={statement.sourceSpeaker?.speaker}
-                  className="d-block position-relative"
-                >
-                  <div className="symbol symbol-square symbol-circle w-60px h-60px w-md-80px h-md-80px">
-                    {statement.sourceSpeaker.speaker.avatar && (
-                      <Image
-                        src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
-                        alt={statement.sourceSpeaker.fullName}
-                        width={60}
-                        height={60}
-                      />
-                    )}
-                  </div>
-                  {statement.sourceSpeaker.body?.shortName && (
-                    <div className="symbol-label d-flex align-items-center justify-content-center w-25px h-25px w-md-35px h-md-35px rounded-circle bg-dark position-absolute bottom-0 end-0">
-                      <span className="smallest text-white lh-1 text-center p-1">
-                        {statement.sourceSpeaker.body.shortName}
-                      </span>
-                    </div>
-                  )}
-                </SpeakerLink>
-                <div className="mt-2 text-center w-100">
-                  <h3 className="fs-6 fw-bold">
-                    {statement.sourceSpeaker.fullName}
-                  </h3>
-                </div>
+                <SourceSpeakerAvatar statement={statement} isEmbedded={true} />
               </div>
 
               {/* Quote Section */}
