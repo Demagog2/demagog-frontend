@@ -256,7 +256,7 @@ export default async function Statement(props: { params: { slug: string } }) {
                     )}
                   </div>
                   {statement.sourceSpeaker.body?.shortName && (
-                    <div className="symbol-label d-flex align-items-center justify-content-center w-25px h-25px rounded-circle bg-dark position-absolute bottom-0 end-0">
+                    <div className="symbol-label d-flex align-items-center justify-content-center w-25px h-25px w-md-35px h-md-35px rounded-circle bg-dark position-absolute bottom-0 end-0">
                       <span className="smallest text-white lh-1 text-center p-1">
                         {statement.sourceSpeaker.body.shortName}
                       </span>
