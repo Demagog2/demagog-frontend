@@ -1,0 +1,14 @@
+@mixin perex {
+  font-size: 1rem;
+  line-height: 24px;
+  text-align: start;
+  font-weight: 500;
+
+  @media (min-width: 768px) {
+    .perex {
+      font-size: 1.25rem;
+      line-height: 30px;
+      text-align: justify;
+    }
+  }
+}

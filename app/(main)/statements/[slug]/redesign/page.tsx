@@ -229,9 +229,7 @@ export default async function Statement(props: { params: { slug: string } }) {
           {statement.assessment.shortExplanation && (
             <>
               <div className="mb-10">
-                <p className="shortExplanation">
-                  {statement.assessment.shortExplanation}
-                </p>
+                <p className="perex">{statement.assessment.shortExplanation}</p>
               </div>
             </>
           )}

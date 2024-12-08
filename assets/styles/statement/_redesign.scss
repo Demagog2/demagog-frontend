@@ -1,10 +1,7 @@
+@import '../mixins/rich_text';
+
 .statement-redesign {
-  .shortExplanation {
-    font-size: 1rem;
-    line-height: 24px;
-    text-align: start;
-    font-weight: 500;
-  }
+  @include perex;
 
   .fs-h1 {
     font-size: 1.5rem;
@@ -37,12 +34,6 @@
   }
 
   @media (min-width: 768px) {
-    .shortExplanation {
-      font-size: 1.25rem;
-      line-height: 30px;
-      text-align: justify;
-    }
-
     .fs-h1 {
       font-size: 2rem;
     }
