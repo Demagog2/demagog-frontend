@@ -19,6 +19,7 @@ export const assessmentSchema = z
     promiseRatingId: z.string().optional(),
     veracityId: z.string().optional(),
     shortExplanation: z.string().optional(),
+    explanation: z.string().optional(),
   })
   .refine((data) => data.statementType !== 'promise' || data.title?.length, {
     message: 'Zadejte název.',

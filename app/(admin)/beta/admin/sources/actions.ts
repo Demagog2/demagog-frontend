@@ -146,6 +146,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
       promiseRatingId,
       veracityId,
       shortExplanation,
+      explanation,
       ...rest
     } = input
 
@@ -157,6 +158,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
               ...rest,
               assessment: {
                 promiseRatingId,
+                explanationHtml: explanation,
                 shortExplanation,
               },
             }
@@ -164,6 +166,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
               ...rest,
               assessment: {
                 veracityId,
+                explanationHtml: explanation,
                 shortExplanation,
               },
             },

@@ -1,5 +1,6 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
 import { machine } from '@/libs/sources/machines/assessment-process-machine'
@@ -11,7 +12,7 @@ import { FormAction } from '@/libs/forms/form-action'
 import { z } from 'zod'
 import { assessmentSchema } from '@/libs/sources/statement-schema'
 import { useFormToasts } from '../../forms/hooks/use-form-toasts'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { AdminFormHeader } from '../../layout/AdminFormHeader'
 import { AdminPageTitle } from '../../layout/AdminPageTitle'
@@ -30,6 +31,14 @@ import { StatementType } from '@/__generated__/graphql'
 import { AdminPromiseRatingSelect } from './controls/AdminPromiseRatingSelect'
 import classNames from 'classnames'
 import { AdminVeracitySelect } from './controls/AdminVeracitySelect'
+import { AdminStatement } from '../../articles/segments/AdminStatement'
+import { AdminArticleQuote } from '../../articles/segments/AdminArticleQuote'
+import { AdminArticleV2Preview } from '../../articles/AdminArticlePreview'
+
+const RichTextEditor = dynamic(
+  () => import('@/components/admin/forms/RichTextEditor'),
+  { ssr: false }
+)
 
 const SHORT_EXPLANATION_LIMIT = 280
 
@@ -79,6 +88,7 @@ const AdminStatementAssessmentFragment = gql(`
         id
       }
       evaluationStatus
+      explanation
       shortExplanation
       promiseRating {
         id
@@ -92,6 +102,29 @@ const AdminStatementAssessmentFragment = gql(`
       }
       assessmentMethodology {
         ratingKeys
+      }
+      explanationContent {
+        edges {
+          node {
+            ... on ArticleNode {
+              article {
+                ...AdminArticleV2Preview
+              }
+            }
+            ... on TextNode {
+              text
+            }
+            ... on BlockQuoteNode {
+              ...AdminArticleQuote
+            }
+            ... on StatementNode {
+              statement {
+                ...AdminStatement
+              }
+            }
+          }
+          cursor
+        }
       }
     }
     tags {
@@ -145,6 +178,7 @@ export function AdminAssessmentForm(props: {
       title: statement.title ?? '',
       tags: statement.tags.map((tag) => tag.id),
       content: statement.content,
+      explanation: statement.assessment.explanation ?? undefined,
       shortExplanation: statement.assessment.shortExplanation ?? undefined,
       ...(statement.statementType === StatementType.Promise
         ? {
@@ -386,6 +420,79 @@ export function AdminAssessmentForm(props: {
               )}
 
               <ErrorMessage message={errors.shortExplanation?.message} />
+            </Field>
+
+            <Field>
+              <Label htmlFor="explanation">Odůvodnění</Label>
+
+              {isStatementFieldDisabled ? (
+                <div className="mt-10 max-w-3xl article-content">
+                  {statement.assessment.explanationContent.edges?.map(
+                    (edge) => {
+                      if (!edge?.node) {
+                        return null
+                      }
+
+                      const { node, cursor } = edge
+
+                      if (node.__typename === 'TextNode') {
+                        return (
+                          <div
+                            key={cursor}
+                            dangerouslySetInnerHTML={{ __html: node.text }}
+                          />
+                        )
+                      }
+
+                      if (
+                        node.__typename === 'StatementNode' &&
+                        node.statement
+                      ) {
+                        return (
+                          <AdminStatement
+                            className="mt-8"
+                            key={cursor}
+                            statement={node.statement}
+                          />
+                        )
+                      }
+
+                      if (node.__typename === 'BlockQuoteNode') {
+                        return <AdminArticleQuote key={cursor} node={node} />
+                      }
+
+                      if (node.__typename === 'ArticleNode' && node.article) {
+                        return (
+                          <AdminArticleV2Preview
+                            isRedesign={true}
+                            key={cursor}
+                            article={node.article}
+                          />
+                        )
+                      }
+                    }
+                  )}
+                </div>
+              ) : (
+                <Controller
+                  control={control}
+                  name={'explanation'}
+                  render={({ field }) => (
+                    <div className="mt-2">
+                      <input
+                        type="hidden"
+                        name={field.name}
+                        value={field.value}
+                      />
+                      <RichTextEditor
+                        includeHeadings
+                        value={field.value ?? ''}
+                        onChange={field.onChange}
+                      />
+                    </div>
+                  )}
+                />
+              )}
             </Field>
           </Fieldset>
         </AdminFormContent>
