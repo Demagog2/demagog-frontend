@@ -12,6 +12,8 @@ import { Metadata } from 'next'
 import Image from 'next/image'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { notFound } from 'next/navigation'
+import { ArticleQuoteRedesign } from '@/components/article/ArticleQuoteRedesign'
+import StatementItem from '@/components/statement/Item'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -82,7 +84,7 @@ export default async function Statement(props: { params: { slug: string } }) {
     data: { statementV2: statement },
   } = await query({
     query: gql(`
-      query StatementDetail($id: Int!) {
+      query StatementDetailRedesign($id: Int!) {
         statementV2(id: $id) {
           sourceSpeaker {
             fullName
@@ -97,6 +99,29 @@ export default async function Statement(props: { params: { slug: string } }) {
           assessment {
             shortExplanation
             explanationHtml
+            explanationContent {
+              edges {
+                node {
+                  ... on ArticleNode {
+                    article {
+                      ...ArticleV2PreviewFragment
+                    }
+                  }
+                  ... on StatementNode {
+                    statement {
+                      ...StatementDetail
+                    }
+                  }
+                  ... on TextNode {
+                    text
+                  }
+                  ... on BlockQuoteNode {
+                    ...ArticleQuoteRedesign
+                  }
+                }
+                cursor
+              }
+            }
             ...AssessmentVeracityIcon
             ...AssessmentVeracityLabel
           }
@@ -237,12 +262,50 @@ export default async function Statement(props: { params: { slug: string } }) {
           )}
           <div className="mb-10">
             <h3 className="display-5 fw-bold mb-5">Plné odůvodnění</h3>
-            <div
-              className="content fs-5"
-              dangerouslySetInnerHTML={{
-                __html: statement.assessment.explanationHtml ?? '',
-              }}
-            ></div>
+            <div className="content fs-5">
+              {statement.assessment.explanationContent.edges?.map((edge) => {
+                if (!edge?.node) {
+                  return null
+                }
+
+                const { node, cursor } = edge
+
+                if (node.__typename === 'TextNode') {
+                  return (
+                    <div
+                      className={'content-text-node mt-6'}
+                      key={cursor}
+                      dangerouslySetInnerHTML={{ __html: node.text }}
+                    />
+                  )
+                }
+
+                if (node.__typename === 'BlockQuoteNode') {
+                  return <ArticleQuoteRedesign key={cursor} node={node} />
+                }
+
+                if (node.__typename === 'ArticleNode' && node.article) {
+                  return (
+                    <ArticleV2Preview
+                      isEmbedded
+                      key={cursor}
+                      article={node.article}
+                    />
+                  )
+                }
+
+                if (node.__typename === 'StatementNode' && node.statement) {
+                  return (
+                    <StatementItem
+                      className="mt-10"
+                      key={cursor}
+                      statement={node.statement}
+                      isVertical
+                    />
+                  )
+                }
+              })}
+            </div>
           </div>
           <div>
             {statement.mentioningArticles?.map((article) => (
