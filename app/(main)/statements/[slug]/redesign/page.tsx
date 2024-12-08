@@ -245,14 +245,13 @@ export default async function Statement(props: { params: { slug: string } }) {
                   speaker={statement.sourceSpeaker?.speaker}
                   className="d-block position-relative"
                 >
-                  <div className="symbol symbol-square symbol-circle w-60px h-60px">
+                  <div className="symbol symbol-square symbol-circle w-60px h-60px w-md-80px h-md-80px">
                     {statement.sourceSpeaker.speaker.avatar && (
                       <Image
                         src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
                         alt={statement.sourceSpeaker.fullName}
                         width={60}
                         height={60}
-                        className="rounded-circle"
                       />
                     )}
                   </div>
