@@ -1,13 +1,22 @@
 import classNames from 'classnames'
 import truncate from '@/libs/truncate'
+import { FragmentType, gql, useFragment } from '@/__generated__'
+
+export const ArticlePerexFragment = gql(`
+  fragment ArticlePerex on Article {
+    perex
+  }
+`)
 
 export function ArticleResponsivePerex(props: {
+  article: FragmentType<typeof ArticlePerexFragment>
   isEmbedded?: boolean
-  perex?: string | null
 }) {
-  const perexSmall = truncate(props.perex ?? '', 190)
-  const perexLarge = truncate(props.perex ?? '', 290)
-  const perexXLarge = truncate(props.perex ?? '', 450)
+  const article = useFragment(ArticlePerexFragment, props.article)
+
+  const perexSmall = truncate(article.perex ?? '', 190)
+  const perexLarge = truncate(article.perex ?? '', 290)
+  const perexXLarge = truncate(article.perex ?? '', 450)
 
   return (
     <div
