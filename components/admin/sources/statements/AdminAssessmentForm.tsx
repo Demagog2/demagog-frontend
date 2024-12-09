@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
 import { machine } from '@/libs/sources/machines/assessment-process-machine'
-import { useMachine } from '@xstate/react'
+import { useActorRef, useMachine, useSelector } from '@xstate/react'
 import React, { useMemo } from 'react'
 import { useFormState } from 'react-dom'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
@@ -34,6 +34,7 @@ import { AdminVeracitySelect } from './controls/AdminVeracitySelect'
 import { AdminStatement } from '../../articles/segments/AdminStatement'
 import { AdminArticleQuote } from '../../articles/segments/AdminArticleQuote'
 import { AdminArticleV2Preview } from '../../articles/AdminArticlePreview'
+import { useStatementEvaluationMachine } from './hooks/statement-evaluation-machine'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -60,10 +61,7 @@ const VERACITY_COLORS: Record<string, string> = {
 
 const AdminAssessmentFormFragment = gql(`
   fragment AdminAssessmentForm on Query {
-    currentUser {
-      id
-      ...Authorization
-    }
+    ...StatementEvaluationMachineQueryData
     ...AdminStatementTags
     ...AdminPromiseRatingSelect
     ...AdminVeracitySelect
@@ -72,6 +70,7 @@ const AdminAssessmentFormFragment = gql(`
 
 const AdminStatementAssessmentFragment = gql(`
   fragment AdminStatementAssessment on Statement {
+    ...StatementEvaluationMachine
     statementType
     title
     content
@@ -147,15 +146,14 @@ export function AdminAssessmentForm(props: {
     props.statement
   )
 
-  const authorization = useAuthorization(data.currentUser)
-
-  const [state] = useMachine(machine, {
-    input: {
-      authorization,
-      state: statement.assessment.evaluationStatus,
-      evaluatorId: statement.assessment.evaluator?.id,
-      statementType: statement.statementType,
-    },
+  const {
+    isFactual,
+    isPromise,
+    isStatementFieldDisabled,
+    isStatementRatingDisabled,
+  } = useStatementEvaluationMachine({
+    data,
+    statement,
   })
 
   const [formState, formAction] = useFormState(props.action, {
@@ -194,52 +192,25 @@ export function AdminAssessmentForm(props: {
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
-  const isStatementFieldDisabled =
-    state.matches({
-      status: { being_evaluated: { statementDetailsEditable: 'readOnly' } },
-    }) ||
-    state.matches({
-      status: { approval_needed: { statementDetailsEditable: 'readOnly' } },
-    }) ||
-    state.matches({
-      status: { proofreading_needed: { statementDetailsEditable: 'readOnly' } },
-    }) ||
-    state.matches({ status: 'approved' })
-
-  const isStatementRatingDisabled =
-    state.matches({
-      status: { being_evaluated: { statementRatingEditable: 'readOnly' } },
-    }) ||
-    state.matches({
-      status: { approval_needed: { statementRatingEditable: 'readOnly' } },
-    }) ||
-    state.matches({
-      status: { proofreading_needed: { statementRatingEditable: 'readOnly' } },
-    }) ||
-    state.matches({ status: 'approved' })
-
-  const title = useMemo(() => {
-    if (state.matches({ type: 'promise' })) {
-      return `Detail slibu`
-    }
-
-    return `Detail výroku`
-  }, [state])
+  const title = useMemo(
+    () => (isPromise ? 'Detail slibu' : 'Detail výroku'),
+    [isPromise]
+  )
 
   const description = useMemo(() => {
-    if (state.matches({ type: 'factual' })) {
+    if (isFactual) {
       return `Ověřování faktického výroku ${statement.sourceSpeaker.fullName}`
     }
 
-    if (state.matches({ type: 'promise' })) {
+    if (isPromise) {
       return `Ověřování slibu ${statement.sourceSpeaker.fullName}`
     }
 
     return `Ověřování silvestrovského výroku ${statement.sourceSpeaker.fullName}`
-  }, [state, statement.sourceSpeaker.fullName])
+  }, [isPromise, isFactual, statement.sourceSpeaker.fullName])
 
   return (
-    <form onSubmit={handleSubmitForm}>
+    <form action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('statementType')} />
 
       <div className="container">
@@ -273,7 +244,7 @@ export function AdminAssessmentForm(props: {
               <ErrorMessage message={errors.sourceSpeakerId?.message} />
             </Field>
 
-            {state.matches({ type: 'promise' }) && (
+            {isPromise && (
               <Field>
                 <Label htmlFor="title">Titulek</Label>
 
@@ -287,8 +258,7 @@ export function AdminAssessmentForm(props: {
               </Field>
             )}
 
-            {(state.matches({ type: 'promise' }) ||
-              state.matches({ type: 'factual' })) && (
+            {(isPromise || isFactual) && (
               <Field>
                 <Label htmlFor="tags" isOptional>
                   Štítky
@@ -313,7 +283,7 @@ export function AdminAssessmentForm(props: {
                 id="content"
                 {...register('content')}
                 rows={5}
-                placeholder={`Zadejte text ${state.matches({ type: 'promise' }) ? 'slibu' : 'výroku'}...`}
+                placeholder={`Zadejte text ${isPromise ? 'slibu' : 'výroku'}...`}
                 disabled={isStatementFieldDisabled}
               />
 
@@ -326,7 +296,7 @@ export function AdminAssessmentForm(props: {
               Ověřování
             </Legend>
 
-            {state.matches({ type: 'promise' }) && (
+            {isPromise && (
               <Field>
                 <Label htmlFor="promiseRatingId">Hodnocení slibu</Label>
 
@@ -355,7 +325,6 @@ export function AdminAssessmentForm(props: {
                     allowedKeys={
                       statement.assessment.assessmentMethodology.ratingKeys
                     }
-                    disabled={!state.matches({ status: 'approved' })}
                   />
                 )}
 
@@ -363,8 +332,7 @@ export function AdminAssessmentForm(props: {
               </Field>
             )}
 
-            {(state.matches({ type: 'factual' }) ||
-              state.matches({ type: 'newyears' })) && (
+            {!isPromise && (
               <Field>
                 <Label htmlFor="veracityId">Hodnocení výroku</Label>
 
@@ -388,7 +356,6 @@ export function AdminAssessmentForm(props: {
                     control={control}
                     name="veracityId"
                     data={data}
-                    disabled={!state.matches({ status: 'approved' })}
                   />
                 )}
 
@@ -407,7 +374,7 @@ export function AdminAssessmentForm(props: {
                     id="shortExplanation"
                     {...register('shortExplanation')}
                     rows={3}
-                    placeholder={`Zadejte zkráceně odůvodnění ${state.matches({ type: 'promise' }) ? 'slibu' : 'výroku'}...`}
+                    placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
                     disabled={isStatementFieldDisabled}
                     maxLength={SHORT_EXPLANATION_LIMIT}
                   />

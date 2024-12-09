@@ -3,10 +3,12 @@ import { intersection } from 'lodash'
 import { useCallback } from 'react'
 
 const AuthorizationFragment = gql(`
-  fragment Authorization on User {
-    id
-    role {
-      permissions
+  fragment Authorization on Query {
+    currentUser {
+      id
+      role {
+        permissions
+      }
     }
   }
 `)
@@ -14,7 +16,9 @@ const AuthorizationFragment = gql(`
 export function useAuthorization(
   user: FragmentType<typeof AuthorizationFragment>
 ) {
-  const { role, id } = useFragment(AuthorizationFragment, user)
+  const {
+    currentUser: { role, id },
+  } = useFragment(AuthorizationFragment, user)
 
   const isAuthorized = useCallback(
     (permissionsNeeded: string[]) => {
@@ -27,8 +31,14 @@ export function useAuthorization(
     () => isAuthorized(['statements:edit']),
     [isAuthorized]
   )
+
   const canEditStatementAsProofreader = useCallback(
     () => isAuthorized(['statements:edit-as-proofreader']),
+    [isAuthorized]
+  )
+
+  const canViewUnapprovedEvaluation = useCallback(
+    () => isAuthorized(['statements:view-unapproved-evaluation']),
     [isAuthorized]
   )
 
@@ -43,5 +53,6 @@ export function useAuthorization(
     canEditStatement,
     canEditStatementAsEvaluator,
     canEditStatementAsProofreader,
+    canViewUnapprovedEvaluation,
   }
 }
