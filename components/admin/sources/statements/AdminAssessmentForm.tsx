@@ -39,6 +39,7 @@ import { AdminFormSidebar } from '../../layout/AdminFormSidebar'
 import { SwitchField } from '../../forms/SwitchField'
 import { Switch } from '../../forms/Switch'
 import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
+import { AdminExpertsField } from './AdminExpertsList'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -141,6 +142,7 @@ const AdminStatementAssessmentFragment = gql(`
       id
     }
     ...AdminStatementForTags
+    ...AdminExpertsField
   }  
 `)
 
@@ -535,7 +537,7 @@ export function AdminAssessmentForm(props: {
               </Field>
 
               <Field>
-                <Label htmlFor="experts">Editoři</Label>
+                <AdminExpertsField statement={statement} />
               </Field>
 
               <Field>
