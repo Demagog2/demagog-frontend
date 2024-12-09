@@ -6,10 +6,11 @@ import { Article } from './Article'
 import classNames from 'classnames'
 import { ArticleResponsivePerex } from './ArticleResponsivePerex'
 
+// FIXME: Rename the spread of ArticlePerex to ArticleResponsivePerex
+
 export const ArticleDetailFragment = gql(`
   fragment ArticleDetail on Article {
     id
-    perex
     slug
     illustration(size: medium)
     title
@@ -27,6 +28,7 @@ export const ArticleDetailFragment = gql(`
       }
     }
     publishedAt
+    ...ArticlePerex
     ...ArticleLink
   }
 `)
@@ -142,10 +144,7 @@ export default function ArticleItem(props: {
               </>
             )}
           </div>
-          <ArticleResponsivePerex
-            isEmbedded={isEmbedded}
-            perex={article.perex}
-          />
+          <ArticleResponsivePerex isEmbedded={isEmbedded} article={article} />
           {isEmbedded ? null : (
             <div className="mt-4">
               <ArticleLink
