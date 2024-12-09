@@ -47,42 +47,19 @@ export function useStatementEvaluationMachine(props: {
     },
   })
 
-  const isStatementEvaluationVisible = useSelector(actorRef, (snapshot) => {
-    return (
-      snapshot.matches({
-        status: {
-          being_evaluated: { statementEvaluationVisibility: 'visible' },
-        },
-      }) &&
-      snapshot.matches({
-        status: {
-          approval_needed: { statementEvaluationVisibility: 'visible' },
-        },
-      }) &&
-      snapshot.matches({
-        status: {
-          proofreading_needed: { statementEvaluationVisibility: 'visible' },
-        },
-      }) &&
-      snapshot.matches({
-        status: {
-          approved: { statementEvaluationVisibility: 'visible' },
-        },
-      })
-    )
-  })
-
   const isStatementFieldDisabled = useSelector(actorRef, (snapshot) => {
+    const readOnly = { statementDetailsEditable: 'readOnly' as const }
+
     return (
       snapshot.matches({
-        status: { being_evaluated: { statementDetailsEditable: 'readOnly' } },
+        status: { being_evaluated: readOnly },
       }) ||
       snapshot.matches({
-        status: { approval_needed: { statementDetailsEditable: 'readOnly' } },
+        status: { approval_needed: readOnly },
       }) ||
       snapshot.matches({
         status: {
-          proofreading_needed: { statementDetailsEditable: 'readOnly' },
+          proofreading_needed: readOnly,
         },
       }) ||
       snapshot.matches({ status: 'approved' })
@@ -90,19 +67,48 @@ export function useStatementEvaluationMachine(props: {
   })
 
   const isStatementRatingDisabled = useSelector(actorRef, (snapshot) => {
+    const readOnly = { statementRatingEditable: 'readOnly' as const }
+
     return (
       snapshot.matches({
-        status: { being_evaluated: { statementRatingEditable: 'readOnly' } },
+        status: { being_evaluated: readOnly },
       }) ||
       snapshot.matches({
-        status: { approval_needed: { statementRatingEditable: 'readOnly' } },
+        status: { approval_needed: readOnly },
       }) ||
       snapshot.matches({
         status: {
-          proofreading_needed: { statementRatingEditable: 'readOnly' },
+          proofreading_needed: readOnly,
         },
       }) ||
       snapshot.matches({ status: 'approved' })
+    )
+  })
+
+  const isStatementEvaluationVisible = useSelector(actorRef, (snapshot) => {
+    const visible = { statementEvaluationVisibility: 'visible' as const }
+
+    return (
+      snapshot.matches({
+        status: {
+          being_evaluated: visible,
+        },
+      }) &&
+      snapshot.matches({
+        status: {
+          approval_needed: visible,
+        },
+      }) &&
+      snapshot.matches({
+        status: {
+          proofreading_needed: visible,
+        },
+      }) &&
+      snapshot.matches({
+        status: {
+          approved: visible,
+        },
+      })
     )
   })
 

@@ -33,6 +33,7 @@ import { AdminStatement } from '../../articles/segments/AdminStatement'
 import { AdminArticleQuote } from '../../articles/segments/AdminArticleQuote'
 import { AdminArticleV2Preview } from '../../articles/AdminArticlePreview'
 import { useStatementEvaluationMachine } from './hooks/statement-evaluation-machine'
+import { AdminEvaluationHidden } from './AdminEvaluationHidden'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -154,6 +155,7 @@ export function AdminAssessmentForm(props: {
     isPromise,
     isStatementFieldDisabled,
     isStatementRatingDisabled,
+    isStatementEvaluationVisible,
   } = useStatementEvaluationMachine({
     data,
     statement,
@@ -300,171 +302,187 @@ export function AdminAssessmentForm(props: {
               Ověřování
             </Legend>
 
-            {isPromise && (
-              <Field>
-                <Label htmlFor="promiseRatingId">Hodnocení slibu</Label>
+            {!isStatementFieldDisabled ||
+            !isStatementRatingDisabled ||
+            isStatementEvaluationVisible ? (
+              <>
+                {isPromise && (
+                  <Field>
+                    <Label htmlFor="promiseRatingId">Hodnocení slibu</Label>
 
-                {isStatementRatingDisabled ? (
-                  <p>
-                    {!statement.assessment.promiseRating && 'Zatím nehodnoceno'}
+                    {isStatementRatingDisabled ? (
+                      <p>
+                        {!statement.assessment.promiseRating &&
+                          'Zatím nehodnoceno'}
 
-                    {statement.assessment.promiseRating && (
-                      <span
-                        className={classNames(
-                          'text-lg font-bold',
-                          PROMISE_RATING_COLORS[
-                            statement.assessment.promiseRating.key
-                          ]
+                        {statement.assessment.promiseRating && (
+                          <span
+                            className={classNames(
+                              'text-lg font-bold',
+                              PROMISE_RATING_COLORS[
+                                statement.assessment.promiseRating.key
+                              ]
+                            )}
+                          >
+                            {statement.assessment.promiseRating.name}
+                          </span>
                         )}
-                      >
-                        {statement.assessment.promiseRating.name}
-                      </span>
+                      </p>
+                    ) : (
+                      <AdminPromiseRatingSelect
+                        control={control}
+                        name="promiseRatingId"
+                        data={data}
+                        allowedKeys={
+                          statement.assessment.assessmentMethodology.ratingKeys
+                        }
+                      />
                     )}
-                  </p>
-                ) : (
-                  <AdminPromiseRatingSelect
-                    control={control}
-                    name="promiseRatingId"
-                    data={data}
-                    allowedKeys={
-                      statement.assessment.assessmentMethodology.ratingKeys
-                    }
-                  />
+
+                    <ErrorMessage message={errors.promiseRatingId?.message} />
+                  </Field>
                 )}
 
-                <ErrorMessage message={errors.promiseRatingId?.message} />
-              </Field>
-            )}
+                {!isPromise && (
+                  <Field>
+                    <Label htmlFor="veracityId">Hodnocení výroku</Label>
 
-            {!isPromise && (
-              <Field>
-                <Label htmlFor="veracityId">Hodnocení výroku</Label>
+                    {isStatementRatingDisabled ? (
+                      <p>
+                        {!statement.assessment.veracity && 'Zatím nehodnoceno'}
 
-                {isStatementRatingDisabled ? (
-                  <p>
-                    {!statement.assessment.veracity && 'Zatím nehodnoceno'}
-
-                    {statement.assessment.veracity && (
-                      <span
-                        className={classNames(
-                          'text-lg font-bold',
-                          VERACITY_COLORS[statement.assessment.veracity.key]
+                        {statement.assessment.veracity && (
+                          <span
+                            className={classNames(
+                              'text-lg font-bold',
+                              VERACITY_COLORS[statement.assessment.veracity.key]
+                            )}
+                          >
+                            {statement.assessment.veracity.name}
+                          </span>
                         )}
-                      >
-                        {statement.assessment.veracity.name}
-                      </span>
+                      </p>
+                    ) : (
+                      <AdminVeracitySelect
+                        control={control}
+                        name="veracityId"
+                        data={data}
+                      />
                     )}
-                  </p>
-                ) : (
-                  <AdminVeracitySelect
-                    control={control}
-                    name="veracityId"
-                    data={data}
-                  />
+
+                    <ErrorMessage message={errors.veracityId?.message} />
+                  </Field>
                 )}
 
-                <ErrorMessage message={errors.veracityId?.message} />
-              </Field>
-            )}
+                <Field>
+                  <Label htmlFor="shortExplanation">Odůvodnění zkráceně</Label>
 
-            <Field>
-              <Label htmlFor="shortExplanation">Odůvodnění zkráceně</Label>
+                  {isStatementFieldDisabled ? (
+                    <p className="mt-4">{shortExplanation}</p>
+                  ) : (
+                    <>
+                      <Textarea
+                        id="shortExplanation"
+                        {...register('shortExplanation')}
+                        rows={3}
+                        placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
+                        disabled={isStatementFieldDisabled}
+                        maxLength={SHORT_EXPLANATION_LIMIT}
+                      />
 
-              {isStatementFieldDisabled ? (
-                <p className="mt-4">{shortExplanation}</p>
-              ) : (
-                <>
-                  <Textarea
-                    id="shortExplanation"
-                    {...register('shortExplanation')}
-                    rows={3}
-                    placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
-                    disabled={isStatementFieldDisabled}
-                    maxLength={SHORT_EXPLANATION_LIMIT}
-                  />
-
-                  <div className="text-sm text-gray-600 mt-2">
-                    Maximálně na dlouhý tweet, tj. {SHORT_EXPLANATION_LIMIT}{' '}
-                    znaků. Aktuálně {shortExplanation?.length} znaků.
-                  </div>
-                </>
-              )}
-
-              <ErrorMessage message={errors.shortExplanation?.message} />
-            </Field>
-
-            <Field>
-              <Label htmlFor="explanation">Odůvodnění</Label>
-
-              {isStatementFieldDisabled ? (
-                <div className="mt-10 max-w-3xl article-content">
-                  {statement.assessment.explanationContent.edges?.map(
-                    (edge) => {
-                      if (!edge?.node) {
-                        return null
-                      }
-
-                      const { node, cursor } = edge
-
-                      if (node.__typename === 'TextNode') {
-                        return (
-                          <div
-                            key={cursor}
-                            dangerouslySetInnerHTML={{ __html: node.text }}
-                          />
-                        )
-                      }
-
-                      if (
-                        node.__typename === 'StatementNode' &&
-                        node.statement
-                      ) {
-                        return (
-                          <AdminStatement
-                            className="mt-8"
-                            key={cursor}
-                            statement={node.statement}
-                          />
-                        )
-                      }
-
-                      if (node.__typename === 'BlockQuoteNode') {
-                        return <AdminArticleQuote key={cursor} node={node} />
-                      }
-
-                      if (node.__typename === 'ArticleNode' && node.article) {
-                        return (
-                          <AdminArticleV2Preview
-                            isRedesign={true}
-                            key={cursor}
-                            article={node.article}
-                          />
-                        )
-                      }
-                    }
+                      <div className="text-sm text-gray-600 mt-2">
+                        Maximálně na dlouhý tweet, tj. {SHORT_EXPLANATION_LIMIT}{' '}
+                        znaků. Aktuálně {shortExplanation?.length} znaků.
+                      </div>
+                    </>
                   )}
-                </div>
-              ) : (
-                <Controller
-                  control={control}
-                  name={'explanation'}
-                  render={({ field }) => (
-                    <div className="mt-2">
-                      <input
-                        type="hidden"
-                        name={field.name}
-                        value={field.value}
-                      />
-                      <RichTextEditor
-                        includeHeadings
-                        value={field.value ?? ''}
-                        onChange={field.onChange}
-                      />
+
+                  <ErrorMessage message={errors.shortExplanation?.message} />
+                </Field>
+
+                <Field>
+                  <Label htmlFor="explanation">Odůvodnění</Label>
+
+                  {isStatementFieldDisabled ? (
+                    <div className="mt-10 max-w-3xl article-content">
+                      {statement.assessment.explanationContent.edges?.map(
+                        (edge) => {
+                          if (!edge?.node) {
+                            return null
+                          }
+
+                          const { node, cursor } = edge
+
+                          if (node.__typename === 'TextNode') {
+                            return (
+                              <div
+                                key={cursor}
+                                dangerouslySetInnerHTML={{
+                                  __html: node.text,
+                                }}
+                              />
+                            )
+                          }
+
+                          if (
+                            node.__typename === 'StatementNode' &&
+                            node.statement
+                          ) {
+                            return (
+                              <AdminStatement
+                                className="mt-8"
+                                key={cursor}
+                                statement={node.statement}
+                              />
+                            )
+                          }
+
+                          if (node.__typename === 'BlockQuoteNode') {
+                            return (
+                              <AdminArticleQuote key={cursor} node={node} />
+                            )
+                          }
+
+                          if (
+                            node.__typename === 'ArticleNode' &&
+                            node.article
+                          ) {
+                            return (
+                              <AdminArticleV2Preview
+                                isRedesign={true}
+                                key={cursor}
+                                article={node.article}
+                              />
+                            )
+                          }
+                        }
+                      )}
                     </div>
+                  ) : (
+                    <Controller
+                      control={control}
+                      name={'explanation'}
+                      render={({ field }) => (
+                        <div className="mt-2">
+                          <input
+                            type="hidden"
+                            name={field.name}
+                            value={field.value}
+                          />
+                          <RichTextEditor
+                            includeHeadings
+                            value={field.value ?? ''}
+                            onChange={field.onChange}
+                          />
+                        </div>
+                      )}
+                    />
                   )}
-                />
-              )}
-            </Field>
+                </Field>
+              </>
+            ) : (
+              <AdminEvaluationHidden />
+            )}
 
             <Field>
               <Label htmlFor="articleTags" isOptional>
@@ -479,7 +497,6 @@ export function AdminAssessmentForm(props: {
                 </p>
               ) : (
                 <AdminStatementArticleTagsMultiselect
-                  disabled={isStatementFieldDisabled}
                   control={control}
                   name="articleTags"
                   data={data}
