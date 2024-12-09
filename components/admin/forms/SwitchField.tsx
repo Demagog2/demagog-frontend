@@ -19,7 +19,7 @@ export function SwitchField(
         </Description>
       </span>
 
-      {props.children}
+      <div className="ml-4">{props.children}</div>
     </Field>
   )
 }
