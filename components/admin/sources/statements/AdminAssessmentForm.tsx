@@ -474,6 +474,8 @@ export function AdminAssessmentForm(props: {
               {isStatementFieldDisabled ? (
                 <p>
                   {statement.articleTags.map((tag) => tag.title).join(', ')}
+
+                  {statement.articleTags.length === 0 ? 'Žádné' : null}
                 </p>
               ) : (
                 <AdminStatementArticleTagsMultiselect
