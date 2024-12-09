@@ -12,6 +12,7 @@ export const assessmentSchema = z
     veracityId: z.string().optional(),
     shortExplanation: z.string().optional(),
     explanation: z.string().optional(),
+    evaluatorId: z.string().optional(),
     published: z.preprocess((value) => value === 'on', z.boolean()).optional(),
   })
   .refine((data) => data.statementType !== 'promise' || data.title?.length, {

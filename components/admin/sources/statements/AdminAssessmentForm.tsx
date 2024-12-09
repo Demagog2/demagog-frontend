@@ -38,6 +38,7 @@ import { AdminFormMain } from '../../layout/AdminFormMain'
 import { AdminFormSidebar } from '../../layout/AdminFormSidebar'
 import { SwitchField } from '../../forms/SwitchField'
 import { Switch } from '../../forms/Switch'
+import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -69,6 +70,7 @@ const AdminAssessmentFormFragment = gql(`
     ...AdminStatementArticleTags
     ...AdminPromiseRatingSelect
     ...AdminVeracitySelect
+    ...AdminExpertSelect
   }  
 `)
 
@@ -161,6 +163,7 @@ export function AdminAssessmentForm(props: {
     isStatementFieldDisabled,
     isStatementRatingDisabled,
     isStatementEvaluationVisible,
+    canEditEvaluator,
     canBePublished,
   } = useStatementEvaluationMachine({
     data,
@@ -191,6 +194,7 @@ export function AdminAssessmentForm(props: {
       explanation: statement.assessment.explanation ?? undefined,
       shortExplanation: statement.assessment.shortExplanation ?? undefined,
       published: statement.published,
+      evaluatorId: statement.assessment.evaluator?.id,
       ...(statement.statementType === StatementType.Promise
         ? {
             promiseRatingId: statement.assessment.promiseRating?.id,
@@ -536,6 +540,24 @@ export function AdminAssessmentForm(props: {
 
               <Field>
                 <Label htmlFor="evaluator">Ověřovatel/ka</Label>
+
+                <Controller
+                  control={control}
+                  name="evaluatorId"
+                  disabled={!canEditEvaluator}
+                  render={({ field }) => (
+                    <>
+                      <input type="hidden" {...field} />
+                      <AdminEvaluatorSelector
+                        id="evaluatorId"
+                        data={data}
+                        onChange={field.onChange}
+                        disabled={field.disabled}
+                        defaultValue={field.value}
+                      />
+                    </>
+                  )}
+                />
               </Field>
             </Fieldset>
 

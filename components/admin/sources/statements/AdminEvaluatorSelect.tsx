@@ -17,6 +17,7 @@ export function AdminEvaluatorSelector(props: {
   id?: string
   data: FragmentType<typeof AdminExpertSelectFragment>
   defaultValue?: string
+  disabled?: boolean
   onChange: (id: string) => void
 }) {
   const { onChange } = props
@@ -43,6 +44,7 @@ export function AdminEvaluatorSelector(props: {
       items={items}
       onChange={handleChange}
       defaultValue={props.defaultValue}
+      disabled={props.disabled}
       placeholder="Vyberte ověřovatele"
     />
   )
