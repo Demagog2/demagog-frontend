@@ -14,6 +14,7 @@ type ContextType = {
     canEditStatement(): boolean
     canEditStatementAsProofreader(): boolean
     canEditStatementAsEvaluator(evaluatorId: string): boolean
+    canViewUnapprovedEvaluation(): boolean
   }
 }
 
@@ -48,6 +49,23 @@ const statementDetailsEditable = {
     },
     editable: {},
     readOnly: {},
+  },
+}
+
+const statementEvaluationVisibility = {
+  initial: 'checkVisibility' as const,
+  states: {
+    checkVisibility: {
+      always: [
+        {
+          target: 'visible' as const,
+          guard: 'isStatementAssessmentVisible' as const,
+        },
+        { target: 'invisible' as const },
+      ],
+    },
+    visible: {},
+    invisible: {},
   },
 }
 
@@ -94,8 +112,14 @@ export const machine = setup({
 
     isStatementEditable: or([
       '_canEditAsAdmin',
+      '_canEditAsAnEvaluator',
       '_canEditStatementAsProofreader',
-      '_canEditStatementAsProofreader',
+    ]),
+
+    isStatementAssessmentVisible: or([
+      '_canEditAsAnEvaluator',
+      '_canViewUnapprovedEvaluation',
+      'isApproved',
     ]),
 
     _canEditAsAnEvaluator: ({ context }) => {
@@ -114,6 +138,9 @@ export const machine = setup({
 
     _canEditStatementAsProofreader: ({ context }) =>
       context.authorization.canEditStatementAsProofreader(),
+
+    _canViewUnapprovedEvaluation: ({ context }) =>
+      context.authorization.canViewUnapprovedEvaluation(),
 
     isStatementFactual: ({ context }) => context.statementType === 'factual',
     isStatementPromise: ({ context }) => context.statementType === 'promise',
@@ -162,6 +189,7 @@ export const machine = setup({
           states: {
             statementDetailsEditable,
             statementRatingEditable,
+            statementEvaluationVisibility,
           },
           on: {
             'Back to evaluation': {
@@ -182,6 +210,7 @@ export const machine = setup({
           states: {
             statementDetailsEditable,
             statementRatingEditable,
+            statementEvaluationVisibility,
           },
           on: {
             Approve: {
@@ -195,6 +224,10 @@ export const machine = setup({
           },
         },
         approved: {
+          type: 'parallel',
+          states: {
+            statementEvaluationVisibility,
+          },
           on: {
             'Back to evaluation': {
               target: 'being_evaluated',
@@ -207,6 +240,7 @@ export const machine = setup({
           states: {
             statementDetailsEditable,
             statementRatingEditable,
+            statementEvaluationVisibility,
           },
           on: {
             'Request approval': {

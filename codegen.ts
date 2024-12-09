@@ -6,6 +6,7 @@ const config: CodegenConfig = {
     'pages/**/*.tsx',
     'app/**/*.tsx',
     'app/**/*.ts',
+    'components/**/*.ts',
     'components/**/*.tsx',
     'libs/**/*.ts',
     'libs/**/*.tsx',
