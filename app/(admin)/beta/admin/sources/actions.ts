@@ -7,7 +7,6 @@ import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 import {
   CreateSourceMutation,
   CreateSourceMutationVariables,
-  CreateStatementInput,
   UpdateSourceMutation,
   UpdateSourceMutationVariables,
   CreateStatementMutation,
@@ -16,10 +15,8 @@ import {
   UpdateStatementMutation,
   UpdateStatementMutationVariables,
 } from '@/__generated__/graphql'
-import {
-  assessmentSchema,
-  statementSchema,
-} from '@/libs/sources/statement-schema'
+import { assessmentSchema } from '@/libs/sources/assessment-schema'
+import { statementSchema } from '@/libs/sources/statement-schema'
 
 const adminCreateSourceMutation = gql(`
   mutation CreateSource($sourceInput: SourceInput!) {

@@ -2,15 +2,12 @@
 
 import dynamic from 'next/dynamic'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { useAuthorization } from '@/libs/authorization/use-authorization'
-import { machine } from '@/libs/sources/machines/assessment-process-machine'
-import { useActorRef, useMachine, useSelector } from '@xstate/react'
 import React, { useMemo } from 'react'
 import { useFormState } from 'react-dom'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
 import { z } from 'zod'
-import { assessmentSchema } from '@/libs/sources/statement-schema'
+import { assessmentSchema } from '@/libs/sources/assessment-schema'
 import { useFormToasts } from '../../forms/hooks/use-form-toasts'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -26,6 +23,7 @@ import { ErrorMessage } from '../../forms/ErrorMessage'
 import { AdminSourceSpeakerControl } from './controls/AdminSourceSpeakerControl'
 import { Input } from '../../forms/Input'
 import { AdminStatementTagsMultiselect } from './controls/AdminTagsMultiselect'
+import { AdminStatementArticleTagsMultiselect } from './controls/AdminArticleTagsMultiselect'
 import { Textarea } from '../../forms/Textarea'
 import { StatementType } from '@/__generated__/graphql'
 import { AdminPromiseRatingSelect } from './controls/AdminPromiseRatingSelect'
@@ -63,6 +61,7 @@ const AdminAssessmentFormFragment = gql(`
   fragment AdminAssessmentForm on Query {
     ...StatementEvaluationMachineQueryData
     ...AdminStatementTags
+    ...AdminStatementArticleTags
     ...AdminPromiseRatingSelect
     ...AdminVeracitySelect
   }  
@@ -81,6 +80,10 @@ const AdminStatementAssessmentFragment = gql(`
     source {
       id
       ...AdminSourceSpeakerControl
+    }
+    articleTags {
+      id
+      title
     }
     assessment {
       evaluator {
@@ -175,6 +178,7 @@ export function AdminAssessmentForm(props: {
       sourceSpeakerId: statement.sourceSpeaker.id,
       title: statement.title ?? '',
       tags: statement.tags.map((tag) => tag.id),
+      articleTags: statement.articleTags.map((tag) => tag.id),
       content: statement.content,
       explanation: statement.assessment.explanation ?? undefined,
       shortExplanation: statement.assessment.shortExplanation ?? undefined,
@@ -460,6 +464,29 @@ export function AdminAssessmentForm(props: {
                   )}
                 />
               )}
+            </Field>
+
+            <Field>
+              <Label htmlFor="articleTags" isOptional>
+                Tagy
+              </Label>
+
+              {isStatementFieldDisabled ? (
+                <p>
+                  {statement.articleTags.map((tag) => tag.title).join(', ')}
+
+                  {statement.articleTags.length === 0 ? 'Žádné' : null}
+                </p>
+              ) : (
+                <AdminStatementArticleTagsMultiselect
+                  disabled={isStatementFieldDisabled}
+                  control={control}
+                  name="articleTags"
+                  data={data}
+                />
+              )}
+
+              <ErrorMessage message={errors.articleTags?.message} />
             </Field>
           </Fieldset>
         </AdminFormContent>
