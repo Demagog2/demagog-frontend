@@ -118,6 +118,14 @@ export function useStatementEvaluationMachine(props: {
     })
   )
 
+  const canEditEvaluator = useSelector(actorRef, (snapshot) =>
+    snapshot.matches({
+      status: {
+        being_evaluated: { statementEvaluatorEditable: 'editable' },
+      },
+    })
+  )
+
   const isFactual = useSelector(actorRef, (snapshot) =>
     snapshot.matches({ type: 'factual' })
   )
@@ -131,6 +139,7 @@ export function useStatementEvaluationMachine(props: {
       isStatementEvaluationVisible,
       isStatementFieldDisabled,
       isStatementRatingDisabled,
+      canEditEvaluator,
       canBePublished,
       isFactual,
       isPromise,
@@ -139,6 +148,7 @@ export function useStatementEvaluationMachine(props: {
       isStatementEvaluationVisible,
       isStatementFieldDisabled,
       isStatementRatingDisabled,
+      canEditEvaluator,
       canBePublished,
       isFactual,
       isPromise,

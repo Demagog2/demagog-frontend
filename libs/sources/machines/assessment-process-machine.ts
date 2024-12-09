@@ -18,6 +18,23 @@ type ContextType = {
   }
 }
 
+const statementEvaluatorEditable = {
+  initial: 'checkEnabled' as const,
+  states: {
+    checkEnabled: {
+      always: [
+        {
+          target: 'editable' as const,
+          guard: { type: 'isStatementEvaluatorEditable' as const },
+        },
+        { target: 'readOnly' as const },
+      ],
+    },
+    editable: {},
+    readOnly: {},
+  },
+}
+
 const statementPublishable = {
   initial: 'checkEnabled' as const,
   states: {
@@ -139,6 +156,8 @@ export const machine = setup({
 
     isStatementPublishable: and(['_canEditAsAdmin', 'isApproved']),
 
+    isStatementEvaluatorEditable: and(['_canEditAsAdmin', 'isBeingEvaluated']),
+
     _canEditAsAnEvaluator: ({ context }) => {
       const isBeingEvaluated =
         context.state === ASSESSMENT_STATUS_BEING_EVALUATED
@@ -165,6 +184,8 @@ export const machine = setup({
       context.state === ASSESSMENT_STATUS_APPROVAL_NEEDED,
     isProofreadingNeeded: ({ context }) =>
       context.state === ASSESSMENT_STATUS_PROOFREADING_NEEDED,
+    isBeingEvaluated: ({ context }) =>
+      context.state === ASSESSMENT_STATUS_BEING_EVALUATED,
     isApproved: ({ context }) => context.state === ASSESSMENT_STATUS_APPROVED,
     canApprove: ({ context }) => context.authorization.canEditStatement(),
   },
@@ -259,6 +280,7 @@ export const machine = setup({
             statementDetailsEditable,
             statementRatingEditable,
             statementEvaluationVisibility,
+            statementEvaluatorEditable,
           },
           on: {
             'Request approval': {
