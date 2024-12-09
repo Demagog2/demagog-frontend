@@ -1,6 +1,5 @@
 'use client'
 
-import { useRef } from 'react'
 import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
@@ -29,9 +28,9 @@ export default function AdminMediaPersonalitiesForm(props: {
   })
 
   const {
-    handleSubmit,
+    trigger,
     register,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<z.output<typeof mediaPersonalitySchema>>({
     resolver: zodResolver(mediaPersonalitySchema),
     defaultValues: {},
@@ -39,11 +38,7 @@ export default function AdminMediaPersonalitiesForm(props: {
 
   useFormToasts(state)
 
-  const formRef = useRef<HTMLFormElement>(null)
-
-  const { handleSubmitForm } = useFormSubmit<
-    z.output<typeof mediaPersonalitySchema>
-  >(handleSubmit, formAction, formRef)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>

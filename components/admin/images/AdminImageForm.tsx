@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import React, { useRef } from 'react'
 import { useFormState } from 'react-dom'
 import { useForm } from 'react-hook-form'
-import { z } from 'zod'
+import { isValid, z } from 'zod'
 import { LinkButton } from '../forms/LinkButton'
 import { SubmitButton } from '../forms/SubmitButton'
 import { contentImageSchema } from '@/libs/images/schema'
@@ -26,8 +26,8 @@ export function AdminImageForm(props: {
 
   const {
     control,
-    handleSubmit,
-    formState: { errors },
+    trigger,
+    formState: { errors, isValid },
   } = useForm<z.output<typeof contentImageSchema>>({
     resolver: zodResolver(contentImageSchema),
     defaultValues: {},
@@ -35,12 +35,10 @@ export function AdminImageForm(props: {
 
   const formRef = useRef<HTMLFormElement>(null)
 
-  const { handleSubmitForm } = useFormSubmit<
-    z.output<typeof contentImageSchema>
-  >(handleSubmit, formAction, formRef)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
-    <form ref={formRef} onSubmit={handleSubmitForm}>
+    <form action={formAction} onSubmit={handleSubmitForm}>
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import { useFormState } from 'react-dom'
 import { singleStatementArticleSchema } from '@/libs/articles/schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -55,9 +55,13 @@ export function AdminArticleSingleStatementForm(props: {
     props.article
   )
 
-  const { register, handleSubmit, control, setValue } = useForm<
-    z.output<typeof singleStatementArticleSchema>
-  >({
+  const {
+    register,
+    trigger,
+    control,
+    setValue,
+    formState: { isValid },
+  } = useForm<z.output<typeof singleStatementArticleSchema>>({
     resolver: zodResolver(singleStatementArticleSchema),
     defaultValues: {
       title: article?.title ?? '',
@@ -69,15 +73,11 @@ export function AdminArticleSingleStatementForm(props: {
     },
   })
 
-  const formRef = useRef<HTMLFormElement>(null)
-
-  const { handleSubmitForm } = useFormSubmit<
-    z.output<typeof singleStatementArticleSchema>
-  >(handleSubmit, formAction, formRef)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <>
-      <form ref={formRef} onSubmit={handleSubmitForm}>
+      <form action={formAction} onSubmit={handleSubmitForm}>
         <div className="container">
           <AdminFormHeader>
             <AdminPageTitle

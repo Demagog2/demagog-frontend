@@ -3,7 +3,6 @@
 import { schema } from '@/libs/tags/schema'
 import { Field, Select } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef } from 'react'
 import { useFormState } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -41,8 +40,8 @@ export function AdminTagForm(props: {
 
   const {
     register,
-    handleSubmit,
-    formState: { errors },
+    trigger,
+    formState: { isValid, errors },
   } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -52,16 +51,10 @@ export function AdminTagForm(props: {
     },
   })
 
-  const formRef = useRef<HTMLFormElement>(null)
-
-  const { handleSubmitForm } = useFormSubmit<z.output<typeof schema>>(
-    handleSubmit,
-    formAction,
-    formRef
-  )
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
-    <form ref={formRef} onSubmit={handleSubmitForm}>
+    <form action={formAction} onSubmit={handleSubmitForm}>
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />
