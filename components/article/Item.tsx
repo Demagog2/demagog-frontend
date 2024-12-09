@@ -1,10 +1,10 @@
-import truncate from '@/libs/truncate'
 import formatDate from '@/libs/format-date'
 import Speaker from './SpeakerDetail'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ArticleLink } from './ArticleLink'
 import { Article } from './Article'
 import classNames from 'classnames'
+import { ArticleResponsivePerex } from './ArticleResponsivePerex'
 
 export const ArticleDetailFragment = gql(`
   fragment ArticleDetail on Article {
@@ -38,10 +38,6 @@ export default function ArticleItem(props: {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
   const article = useFragment(ArticleDetailFragment, props.article)
-
-  const perexSmall = truncate(article.perex ?? '', 190)
-  const perexLarge = truncate(article.perex ?? '', 290)
-  const perexXLarge = truncate(article.perex ?? '', 450)
 
   const { isEmbedded = false } = props
 
@@ -146,36 +142,10 @@ export default function ArticleItem(props: {
               </>
             )}
           </div>
-          <div
-            className={classNames({ 'lh-1': isEmbedded, 'lh-sm': !isEmbedded })}
-          >
-            <span
-              className={classNames({
-                'fs-12px fs-md-14px lh-md-base small-screen': isEmbedded,
-                'fs-6': !isEmbedded,
-              })}
-            >
-              {perexSmall}
-            </span>
-            {isEmbedded && (
-              <span
-                className={classNames({
-                  'fs-12px fs-md-14px lh-md-base large-screen': isEmbedded,
-                })}
-              >
-                {perexLarge}
-              </span>
-            )}
-            {isEmbedded && (
-              <span
-                className={classNames({
-                  'fs-12px fs-md-14px lh-md-base xlarge-screen': isEmbedded,
-                })}
-              >
-                {perexXLarge}
-              </span>
-            )}
-          </div>
+          <ArticleResponsivePerex
+            isEmbedded={isEmbedded}
+            perex={article.perex}
+          />
           {isEmbedded ? null : (
             <div className="mt-4">
               <ArticleLink
