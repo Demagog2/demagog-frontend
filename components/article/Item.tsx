@@ -39,7 +39,9 @@ export default function ArticleItem(props: {
 
   const article = useFragment(ArticleDetailFragment, props.article)
 
-  const perex = truncate(article.perex ?? '', 190)
+  const perexSmall = truncate(article.perex ?? '', 190)
+  const perexLarge = truncate(article.perex ?? '', 290)
+  const perexXLarge = truncate(article.perex ?? '', 450)
 
   const { isEmbedded = false } = props
 
@@ -149,12 +151,30 @@ export default function ArticleItem(props: {
           >
             <span
               className={classNames({
-                'fs-12px fs-md-14px lh-md-base': isEmbedded,
+                'fs-12px fs-md-14px lh-md-base small-screen': isEmbedded,
                 'fs-6': !isEmbedded,
               })}
             >
-              {perex}
+              {perexSmall}
             </span>
+            {isEmbedded && (
+              <span
+                className={classNames({
+                  'fs-12px fs-md-14px lh-md-base large-screen': isEmbedded,
+                })}
+              >
+                {perexLarge}
+              </span>
+            )}
+            {isEmbedded && (
+              <span
+                className={classNames({
+                  'fs-12px fs-md-14px lh-md-base xlarge-screen': isEmbedded,
+                })}
+              >
+                {perexXLarge}
+              </span>
+            )}
           </div>
           {isEmbedded ? null : (
             <div className="mt-4">
