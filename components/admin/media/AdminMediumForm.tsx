@@ -15,7 +15,7 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { mediumSchema } from '@/libs/media/medium-schema'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
-import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 
 export default function AdminMediumForm(props: {
@@ -38,7 +38,7 @@ export default function AdminMediumForm(props: {
 
   useFormToasts(state)
 
-  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>

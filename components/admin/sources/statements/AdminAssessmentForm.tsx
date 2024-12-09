@@ -7,7 +7,7 @@ import { machine } from '@/libs/sources/machines/assessment-process-machine'
 import { useMachine } from '@xstate/react'
 import React, { useMemo } from 'react'
 import { useFormState } from 'react-dom'
-import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
 import { z } from 'zod'
 import { assessmentSchema } from '@/libs/sources/statement-schema'
@@ -192,7 +192,7 @@ export function AdminAssessmentForm(props: {
 
   const shortExplanation = watch('shortExplanation')
 
-  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   const isStatementFieldDisabled =
     state.matches({

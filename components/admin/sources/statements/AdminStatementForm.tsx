@@ -11,7 +11,7 @@ import { useFormState } from 'react-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '@/components/admin/forms/Label'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
@@ -73,7 +73,7 @@ export function AdminStatementForm(props: {
     },
   })
 
-  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>

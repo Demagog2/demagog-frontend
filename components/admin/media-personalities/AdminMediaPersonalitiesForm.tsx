@@ -11,7 +11,7 @@ import { FormAction } from '@/libs/forms/form-action'
 import { useFormState } from 'react-dom'
 import type { FormState } from '@/libs/forms/form-state'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
-import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { z } from 'zod'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -38,7 +38,7 @@ export default function AdminMediaPersonalitiesForm(props: {
 
   useFormToasts(state)
 
-  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>

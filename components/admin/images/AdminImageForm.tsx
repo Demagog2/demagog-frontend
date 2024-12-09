@@ -13,7 +13,7 @@ import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { AdminFormContent } from '../layout/AdminFormContent'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormState } from '@/libs/forms/form-state'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 
@@ -35,7 +35,7 @@ export function AdminImageForm(props: {
 
   const formRef = useRef<HTMLFormElement>(null)
 
-  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>

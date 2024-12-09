@@ -11,7 +11,7 @@ import { useFormState } from 'react-dom'
 import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { sourceSchema } from '@/libs/sources/source-schema'
 import { Button, Description, Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '@/components/admin/forms/Label'
@@ -126,7 +126,7 @@ export function AdminSourceForm(props: {
     name: 'sourceSpeakers',
   })
 
-  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>

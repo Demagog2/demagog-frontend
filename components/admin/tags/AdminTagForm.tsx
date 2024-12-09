@@ -15,7 +15,7 @@ import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { AdminFormContent } from '../layout/AdminFormContent'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
@@ -51,7 +51,7 @@ export function AdminTagForm(props: {
     },
   })
 
-  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>

@@ -2,7 +2,7 @@
 
 import React, { useCallback } from 'react'
 
-export function useFormSubmitV2(
+export function useFormSubmit(
   isValid: boolean,
   trigger: () => Promise<boolean>
 ) {

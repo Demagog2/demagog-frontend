@@ -19,7 +19,7 @@ import { LinkButton } from '@/components/admin/forms/LinkButton'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { dateInputFormat } from '@/libs/date-time'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { FormAction } from '@/libs/forms/form-action'
@@ -73,7 +73,7 @@ export function AdminArticleSingleStatementForm(props: {
     },
   })
 
-  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <>
