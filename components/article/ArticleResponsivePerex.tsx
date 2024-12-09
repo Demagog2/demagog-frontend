@@ -28,19 +28,19 @@ export function ArticleResponsivePerex(props: {
     >
       <span
         className={classNames({
-          'fs-12px fs-md-14px lh-md-base small-screen': props.isEmbedded,
+          'fs-12px fs-md-14px lh-md-base d-xl-none': props.isEmbedded,
           'fs-6': !props.isEmbedded,
         })}
       >
         {perexSmall}
       </span>
       {props.isEmbedded && (
-        <span className="fs-12px fs-md-14px lh-md-base large-screen">
+        <span className="fs-12px fs-md-14px lh-md-base d-none d-xl-block d-xxl-none">
           {perexLarge}
         </span>
       )}
       {props.isEmbedded && (
-        <span className="fs-12px fs-md-14px lh-md-base xlarge-screen">
+        <span className="fs-12px fs-md-14px lh-md-base d-none d-xxl-block">
           {perexXLarge}
         </span>
       )}
