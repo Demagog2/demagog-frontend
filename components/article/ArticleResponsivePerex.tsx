@@ -2,7 +2,6 @@ import classNames from 'classnames'
 import truncate from '@/libs/truncate'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 
-// FIXME: Rename ArticlePerex to ArticleResponsivePerex
 export const ArticleResponsivePerexFragment = gql(`
   fragment ArticleResponsivePerex on Article {
     perex
