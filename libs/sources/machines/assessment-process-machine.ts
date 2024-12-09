@@ -1,4 +1,4 @@
-import { setup, assign, or } from 'xstate'
+import { setup, assign, or, and } from 'xstate'
 import {
   ASSESSMENT_STATUS_APPROVAL_NEEDED,
   ASSESSMENT_STATUS_APPROVED,
@@ -16,6 +16,23 @@ type ContextType = {
     canEditStatementAsEvaluator(evaluatorId: string): boolean
     canViewUnapprovedEvaluation(): boolean
   }
+}
+
+const statementPublishable = {
+  initial: 'checkEnabled' as const,
+  states: {
+    checkEnabled: {
+      always: [
+        {
+          target: 'canBePublished' as const,
+          guard: { type: 'isStatementPublishable' as const },
+        },
+        { target: 'cannotBePublished' as const },
+      ],
+    },
+    canBePublished: {},
+    cannotBePublished: {},
+  },
 }
 
 const statementRatingEditable = {
@@ -97,8 +114,6 @@ export const machine = setup({
     context: {} as ContextType,
     input: {} as ContextType,
     events: {} as
-      | { type: 'Submit started' }
-      | { type: 'Submit ended' }
       | { type: 'Request approval' }
       | { type: 'Back to evaluation' }
       | { type: 'Request proofreading' }
@@ -121,6 +136,8 @@ export const machine = setup({
       '_canViewUnapprovedEvaluation',
       'isApproved',
     ]),
+
+    isStatementPublishable: and(['_canEditAsAdmin', 'isApproved']),
 
     _canEditAsAnEvaluator: ({ context }) => {
       const isBeingEvaluated =
@@ -227,6 +244,7 @@ export const machine = setup({
           type: 'parallel',
           states: {
             statementEvaluationVisibility,
+            statementPublishable,
           },
           on: {
             'Back to evaluation': {

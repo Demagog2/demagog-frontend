@@ -112,6 +112,12 @@ export function useStatementEvaluationMachine(props: {
     )
   })
 
+  const canBePublished = useSelector(actorRef, (snapshot) =>
+    snapshot.matches({
+      status: { approved: { statementPublishable: 'canBePublished' } },
+    })
+  )
+
   const isFactual = useSelector(actorRef, (snapshot) =>
     snapshot.matches({ type: 'factual' })
   )
@@ -125,6 +131,7 @@ export function useStatementEvaluationMachine(props: {
       isStatementEvaluationVisible,
       isStatementFieldDisabled,
       isStatementRatingDisabled,
+      canBePublished,
       isFactual,
       isPromise,
     }),
@@ -132,6 +139,7 @@ export function useStatementEvaluationMachine(props: {
       isStatementEvaluationVisible,
       isStatementFieldDisabled,
       isStatementRatingDisabled,
+      canBePublished,
       isFactual,
       isPromise,
     ]

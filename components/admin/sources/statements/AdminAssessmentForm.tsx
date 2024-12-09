@@ -34,6 +34,10 @@ import { AdminArticleQuote } from '../../articles/segments/AdminArticleQuote'
 import { AdminArticleV2Preview } from '../../articles/AdminArticlePreview'
 import { useStatementEvaluationMachine } from './hooks/statement-evaluation-machine'
 import { AdminEvaluationHidden } from './AdminEvaluationHidden'
+import { AdminFormMain } from '../../layout/AdminFormMain'
+import { AdminFormSidebar } from '../../layout/AdminFormSidebar'
+import { SwitchField } from '../../forms/SwitchField'
+import { Switch } from '../../forms/Switch'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -74,6 +78,7 @@ const AdminStatementAssessmentFragment = gql(`
     statementType
     title
     content
+    published
     sourceSpeaker {
       id
       fullName
@@ -156,6 +161,7 @@ export function AdminAssessmentForm(props: {
     isStatementFieldDisabled,
     isStatementRatingDisabled,
     isStatementEvaluationVisible,
+    canBePublished,
   } = useStatementEvaluationMachine({
     data,
     statement,
@@ -184,6 +190,7 @@ export function AdminAssessmentForm(props: {
       content: statement.content,
       explanation: statement.assessment.explanation ?? undefined,
       shortExplanation: statement.assessment.shortExplanation ?? undefined,
+      published: statement.published,
       ...(statement.statementType === StatementType.Promise
         ? {
             promiseRatingId: statement.assessment.promiseRating?.id,
@@ -231,281 +238,337 @@ export function AdminAssessmentForm(props: {
             <SubmitButton />
           </AdminFormActions>
         </AdminFormHeader>
-        <AdminFormContent className="flex-col">
-          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-            <Legend className="text-base font-semibold leading-7 text-gray-900">
-              Výrok
-            </Legend>
 
-            <Field>
-              <Label htmlFor="sourceSpeakerId">Řečník</Label>
+        <AdminFormContent>
+          <AdminFormMain>
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Výrok
+              </Legend>
 
-              <AdminSourceSpeakerControl
-                name="sourceSpeakerId"
-                disabled={isStatementFieldDisabled}
-                control={control}
-                data={statement.source}
-              />
-
-              <ErrorMessage message={errors.sourceSpeakerId?.message} />
-            </Field>
-
-            {isPromise && (
               <Field>
-                <Label htmlFor="title">Titulek</Label>
+                <Label htmlFor="sourceSpeakerId">Řečník</Label>
 
-                <Input
-                  id="title"
-                  disabled={isStatementFieldDisabled}
-                  {...register('title')}
-                />
-
-                <ErrorMessage message={errors.title?.message} />
-              </Field>
-            )}
-
-            {(isPromise || isFactual) && (
-              <Field>
-                <Label htmlFor="tags" isOptional>
-                  Štítky
-                </Label>
-
-                <AdminStatementTagsMultiselect
+                <AdminSourceSpeakerControl
+                  name="sourceSpeakerId"
                   disabled={isStatementFieldDisabled}
                   control={control}
-                  name="tags"
-                  data={data}
-                  statement={statement}
+                  data={statement.source}
                 />
 
-                <ErrorMessage message={errors.tags?.message} />
+                <ErrorMessage message={errors.sourceSpeakerId?.message} />
               </Field>
-            )}
 
-            <Field>
-              <Label htmlFor="content">Text výroku</Label>
-
-              <Textarea
-                id="content"
-                {...register('content')}
-                rows={5}
-                placeholder={`Zadejte text ${isPromise ? 'slibu' : 'výroku'}...`}
-                disabled={isStatementFieldDisabled}
-              />
-
-              <ErrorMessage message={errors.content?.message} />
-            </Field>
-          </Fieldset>
-
-          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-            <Legend className="text-base font-semibold leading-7 text-gray-900">
-              Ověřování
-            </Legend>
-
-            {!isStatementFieldDisabled ||
-            !isStatementRatingDisabled ||
-            isStatementEvaluationVisible ? (
-              <>
-                {isPromise && (
-                  <Field>
-                    <Label htmlFor="promiseRatingId">Hodnocení slibu</Label>
-
-                    {isStatementRatingDisabled ? (
-                      <p>
-                        {!statement.assessment.promiseRating &&
-                          'Zatím nehodnoceno'}
-
-                        {statement.assessment.promiseRating && (
-                          <span
-                            className={classNames(
-                              'text-lg font-bold',
-                              PROMISE_RATING_COLORS[
-                                statement.assessment.promiseRating.key
-                              ]
-                            )}
-                          >
-                            {statement.assessment.promiseRating.name}
-                          </span>
-                        )}
-                      </p>
-                    ) : (
-                      <AdminPromiseRatingSelect
-                        control={control}
-                        name="promiseRatingId"
-                        data={data}
-                        allowedKeys={
-                          statement.assessment.assessmentMethodology.ratingKeys
-                        }
-                      />
-                    )}
-
-                    <ErrorMessage message={errors.promiseRatingId?.message} />
-                  </Field>
-                )}
-
-                {!isPromise && (
-                  <Field>
-                    <Label htmlFor="veracityId">Hodnocení výroku</Label>
-
-                    {isStatementRatingDisabled ? (
-                      <p>
-                        {!statement.assessment.veracity && 'Zatím nehodnoceno'}
-
-                        {statement.assessment.veracity && (
-                          <span
-                            className={classNames(
-                              'text-lg font-bold',
-                              VERACITY_COLORS[statement.assessment.veracity.key]
-                            )}
-                          >
-                            {statement.assessment.veracity.name}
-                          </span>
-                        )}
-                      </p>
-                    ) : (
-                      <AdminVeracitySelect
-                        control={control}
-                        name="veracityId"
-                        data={data}
-                      />
-                    )}
-
-                    <ErrorMessage message={errors.veracityId?.message} />
-                  </Field>
-                )}
-
+              {isPromise && (
                 <Field>
-                  <Label htmlFor="shortExplanation">Odůvodnění zkráceně</Label>
+                  <Label htmlFor="title">Titulek</Label>
 
-                  {isStatementFieldDisabled ? (
-                    <p className="mt-4">{shortExplanation}</p>
-                  ) : (
-                    <>
-                      <Textarea
-                        id="shortExplanation"
-                        {...register('shortExplanation')}
-                        rows={3}
-                        placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
-                        disabled={isStatementFieldDisabled}
-                        maxLength={SHORT_EXPLANATION_LIMIT}
-                      />
+                  <Input
+                    id="title"
+                    disabled={isStatementFieldDisabled}
+                    {...register('title')}
+                  />
 
-                      <div className="text-sm text-gray-600 mt-2">
-                        Maximálně na dlouhý tweet, tj. {SHORT_EXPLANATION_LIMIT}{' '}
-                        znaků. Aktuálně {shortExplanation?.length} znaků.
-                      </div>
-                    </>
-                  )}
-
-                  <ErrorMessage message={errors.shortExplanation?.message} />
+                  <ErrorMessage message={errors.title?.message} />
                 </Field>
-
-                <Field>
-                  <Label htmlFor="explanation">Odůvodnění</Label>
-
-                  {isStatementFieldDisabled ? (
-                    <div className="mt-10 max-w-3xl article-content">
-                      {statement.assessment.explanationContent.edges?.map(
-                        (edge) => {
-                          if (!edge?.node) {
-                            return null
-                          }
-
-                          const { node, cursor } = edge
-
-                          if (node.__typename === 'TextNode') {
-                            return (
-                              <div
-                                key={cursor}
-                                dangerouslySetInnerHTML={{
-                                  __html: node.text,
-                                }}
-                              />
-                            )
-                          }
-
-                          if (
-                            node.__typename === 'StatementNode' &&
-                            node.statement
-                          ) {
-                            return (
-                              <AdminStatement
-                                className="mt-8"
-                                key={cursor}
-                                statement={node.statement}
-                              />
-                            )
-                          }
-
-                          if (node.__typename === 'BlockQuoteNode') {
-                            return (
-                              <AdminArticleQuote key={cursor} node={node} />
-                            )
-                          }
-
-                          if (
-                            node.__typename === 'ArticleNode' &&
-                            node.article
-                          ) {
-                            return (
-                              <AdminArticleV2Preview
-                                isRedesign={true}
-                                key={cursor}
-                                article={node.article}
-                              />
-                            )
-                          }
-                        }
-                      )}
-                    </div>
-                  ) : (
-                    <Controller
-                      control={control}
-                      name={'explanation'}
-                      render={({ field }) => (
-                        <div className="mt-2">
-                          <input
-                            type="hidden"
-                            name={field.name}
-                            value={field.value}
-                          />
-                          <RichTextEditor
-                            includeHeadings
-                            value={field.value ?? ''}
-                            onChange={field.onChange}
-                          />
-                        </div>
-                      )}
-                    />
-                  )}
-                </Field>
-              </>
-            ) : (
-              <AdminEvaluationHidden />
-            )}
-
-            <Field>
-              <Label htmlFor="articleTags" isOptional>
-                Tagy
-              </Label>
-
-              {isStatementFieldDisabled ? (
-                <p>
-                  {statement.articleTags.map((tag) => tag.title).join(', ')}
-
-                  {statement.articleTags.length === 0 ? 'Žádné' : null}
-                </p>
-              ) : (
-                <AdminStatementArticleTagsMultiselect
-                  control={control}
-                  name="articleTags"
-                  data={data}
-                />
               )}
 
-              <ErrorMessage message={errors.articleTags?.message} />
-            </Field>
-          </Fieldset>
+              {(isPromise || isFactual) && (
+                <Field>
+                  <Label htmlFor="tags" isOptional>
+                    Štítky
+                  </Label>
+
+                  <AdminStatementTagsMultiselect
+                    disabled={isStatementFieldDisabled}
+                    control={control}
+                    name="tags"
+                    data={data}
+                    statement={statement}
+                  />
+
+                  <ErrorMessage message={errors.tags?.message} />
+                </Field>
+              )}
+
+              <Field>
+                <Label htmlFor="content">Text výroku</Label>
+
+                <Textarea
+                  id="content"
+                  {...register('content')}
+                  rows={5}
+                  placeholder={`Zadejte text ${isPromise ? 'slibu' : 'výroku'}...`}
+                  disabled={isStatementFieldDisabled}
+                />
+
+                <ErrorMessage message={errors.content?.message} />
+              </Field>
+            </Fieldset>
+
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+                Ověřování
+              </Legend>
+
+              {!isStatementFieldDisabled ||
+              !isStatementRatingDisabled ||
+              isStatementEvaluationVisible ? (
+                <>
+                  {isPromise && (
+                    <Field>
+                      <Label htmlFor="promiseRatingId">Hodnocení slibu</Label>
+
+                      {isStatementRatingDisabled ? (
+                        <p>
+                          {!statement.assessment.promiseRating &&
+                            'Zatím nehodnoceno'}
+
+                          {statement.assessment.promiseRating && (
+                            <span
+                              className={classNames(
+                                'text-lg font-bold',
+                                PROMISE_RATING_COLORS[
+                                  statement.assessment.promiseRating.key
+                                ]
+                              )}
+                            >
+                              {statement.assessment.promiseRating.name}
+                            </span>
+                          )}
+                        </p>
+                      ) : (
+                        <AdminPromiseRatingSelect
+                          control={control}
+                          name="promiseRatingId"
+                          data={data}
+                          allowedKeys={
+                            statement.assessment.assessmentMethodology
+                              .ratingKeys
+                          }
+                        />
+                      )}
+
+                      <ErrorMessage message={errors.promiseRatingId?.message} />
+                    </Field>
+                  )}
+
+                  {!isPromise && (
+                    <Field>
+                      <Label htmlFor="veracityId">Hodnocení výroku</Label>
+
+                      {isStatementRatingDisabled ? (
+                        <p>
+                          {!statement.assessment.veracity &&
+                            'Zatím nehodnoceno'}
+
+                          {statement.assessment.veracity && (
+                            <span
+                              className={classNames(
+                                'text-lg font-bold',
+                                VERACITY_COLORS[
+                                  statement.assessment.veracity.key
+                                ]
+                              )}
+                            >
+                              {statement.assessment.veracity.name}
+                            </span>
+                          )}
+                        </p>
+                      ) : (
+                        <AdminVeracitySelect
+                          control={control}
+                          name="veracityId"
+                          data={data}
+                        />
+                      )}
+
+                      <ErrorMessage message={errors.veracityId?.message} />
+                    </Field>
+                  )}
+
+                  <Field>
+                    <Label htmlFor="shortExplanation">
+                      Odůvodnění zkráceně
+                    </Label>
+
+                    {isStatementFieldDisabled ? (
+                      <p className="mt-4">{shortExplanation}</p>
+                    ) : (
+                      <>
+                        <Textarea
+                          id="shortExplanation"
+                          {...register('shortExplanation')}
+                          rows={3}
+                          placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
+                          disabled={isStatementFieldDisabled}
+                          maxLength={SHORT_EXPLANATION_LIMIT}
+                        />
+
+                        <div className="text-sm text-gray-600 mt-2">
+                          Maximálně na dlouhý tweet, tj.{' '}
+                          {SHORT_EXPLANATION_LIMIT} znaků. Aktuálně{' '}
+                          {shortExplanation?.length} znaků.
+                        </div>
+                      </>
+                    )}
+
+                    <ErrorMessage message={errors.shortExplanation?.message} />
+                  </Field>
+
+                  <Field>
+                    <Label htmlFor="explanation">Odůvodnění</Label>
+
+                    {isStatementFieldDisabled ? (
+                      <div className="mt-10 max-w-3xl article-content">
+                        {statement.assessment.explanationContent.edges?.map(
+                          (edge) => {
+                            if (!edge?.node) {
+                              return null
+                            }
+
+                            const { node, cursor } = edge
+
+                            if (node.__typename === 'TextNode') {
+                              return (
+                                <div
+                                  key={cursor}
+                                  dangerouslySetInnerHTML={{
+                                    __html: node.text,
+                                  }}
+                                />
+                              )
+                            }
+
+                            if (
+                              node.__typename === 'StatementNode' &&
+                              node.statement
+                            ) {
+                              return (
+                                <AdminStatement
+                                  className="mt-8"
+                                  key={cursor}
+                                  statement={node.statement}
+                                />
+                              )
+                            }
+
+                            if (node.__typename === 'BlockQuoteNode') {
+                              return (
+                                <AdminArticleQuote key={cursor} node={node} />
+                              )
+                            }
+
+                            if (
+                              node.__typename === 'ArticleNode' &&
+                              node.article
+                            ) {
+                              return (
+                                <AdminArticleV2Preview
+                                  isRedesign={true}
+                                  key={cursor}
+                                  article={node.article}
+                                />
+                              )
+                            }
+                          }
+                        )}
+                      </div>
+                    ) : (
+                      <Controller
+                        control={control}
+                        name={'explanation'}
+                        render={({ field }) => (
+                          <div className="mt-2">
+                            <input
+                              type="hidden"
+                              name={field.name}
+                              value={field.value}
+                            />
+                            <RichTextEditor
+                              includeHeadings
+                              value={field.value ?? ''}
+                              onChange={field.onChange}
+                            />
+                          </div>
+                        )}
+                      />
+                    )}
+                  </Field>
+                </>
+              ) : (
+                <AdminEvaluationHidden />
+              )}
+
+              <Field>
+                <Label htmlFor="articleTags" isOptional>
+                  Tagy
+                </Label>
+
+                {isStatementFieldDisabled ? (
+                  <p>
+                    {statement.articleTags.map((tag) => tag.title).join(', ')}
+
+                    {statement.articleTags.length === 0 ? 'Žádné' : null}
+                  </p>
+                ) : (
+                  <AdminStatementArticleTagsMultiselect
+                    control={control}
+                    name="articleTags"
+                    data={data}
+                  />
+                )}
+
+                <ErrorMessage message={errors.articleTags?.message} />
+              </Field>
+            </Fieldset>
+          </AdminFormMain>
+
+          <AdminFormSidebar>
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Field>
+                <Label htmlFor="evaluationStatus">Stav</Label>
+              </Field>
+
+              <Field>
+                <Label htmlFor="experts">Editoři</Label>
+              </Field>
+
+              <Field>
+                <Label htmlFor="evaluator">Ověřovatel/ka</Label>
+              </Field>
+            </Fieldset>
+
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Field className="mt-8">
+                <SwitchField
+                  htmlFor="published"
+                  label="Zveřejnit"
+                  description={
+                    canBePublished
+                      ? 'Výrok bude k dostupný na webu a počítaný do statistik'
+                      : 'Aby šel výrok zveřejnit, musí být ve schváleném stavu'
+                  }
+                >
+                  <Controller
+                    name="published"
+                    control={control}
+                    disabled={!canBePublished}
+                    render={({ field }) => (
+                      <Switch
+                        id={field.name}
+                        name={field.name}
+                        checked={field.value}
+                        disabled={field.disabled}
+                        onBlur={field.onBlur}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+                </SwitchField>
+              </Field>
+            </Fieldset>
+          </AdminFormSidebar>
         </AdminFormContent>
       </div>
     </form>

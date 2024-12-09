@@ -49,6 +49,8 @@ import { Textarea } from '@/components/admin/forms/Textarea'
 import { dateInputFormat } from '@/libs/date-time'
 import { FormAction } from '@/libs/forms/form-action'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
+import { AdminFormMain } from '../layout/AdminFormMain'
+import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -243,7 +245,7 @@ export function AdminArticleForm(props: {
         </AdminFormHeader>
 
         <AdminFormContent>
-          <div className="grow gap-y-5 grid grid-cols-1">
+          <AdminFormMain className="gap-y-5 grid grid-cols-1">
             <Field>
               <Label htmlFor="title">Název článku</Label>
 
@@ -408,8 +410,9 @@ export function AdminArticleForm(props: {
                 )}
               />
             </Field>
-          </div>
-          <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
+          </AdminFormMain>
+
+          <AdminFormSidebar className="gap-y-5 grid grid-cols-1">
             <div>
               <Label htmlFor="articleType">Typ článku</Label>
               <select
@@ -504,7 +507,7 @@ export function AdminArticleForm(props: {
                 ))}
               </select>
             </div>
-          </div>
+          </AdminFormSidebar>
         </AdminFormContent>
       </div>
     </form>
