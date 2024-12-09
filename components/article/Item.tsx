@@ -9,7 +9,6 @@ import { ArticleResponsivePerex } from './ArticleResponsivePerex'
 export const ArticleDetailFragment = gql(`
   fragment ArticleDetail on Article {
     id
-    perex
     slug
     illustration(size: medium)
     title
@@ -27,6 +26,7 @@ export const ArticleDetailFragment = gql(`
       }
     }
     publishedAt
+    ...ArticleResponsivePerex
     ...ArticleLink
   }
 `)
@@ -142,10 +142,7 @@ export default function ArticleItem(props: {
               </>
             )}
           </div>
-          <ArticleResponsivePerex
-            isEmbedded={isEmbedded}
-            perex={article.perex}
-          />
+          <ArticleResponsivePerex isEmbedded={isEmbedded} article={article} />
           {isEmbedded ? null : (
             <div className="mt-4">
               <ArticleLink
