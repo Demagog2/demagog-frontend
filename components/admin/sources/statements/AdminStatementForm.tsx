@@ -11,8 +11,7 @@ import { useFormState } from 'react-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef } from 'react'
-import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
 import { Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '@/components/admin/forms/Label'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
@@ -60,8 +59,8 @@ export function AdminStatementForm(props: {
 
   const {
     control,
-    handleSubmit,
-    formState: { errors },
+    trigger,
+    formState: { errors, isValid },
     register,
   } = useForm<FieldValues>({
     resolver: zodResolver(statementSchema),
@@ -74,16 +73,10 @@ export function AdminStatementForm(props: {
     },
   })
 
-  const formRef = useRef<HTMLFormElement>(null)
-
-  const { handleSubmitForm } = useFormSubmit<FieldValues>(
-    handleSubmit,
-    formAction,
-    formRef
-  )
+  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
 
   return (
-    <form ref={formRef} onSubmit={handleSubmitForm}>
+    <form action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('sourceId')} />
 
       <div className="container">

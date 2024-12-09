@@ -1,6 +1,5 @@
 'use client'
 
-import { useRef } from 'react'
 import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
@@ -13,11 +12,10 @@ import { useFormState } from 'react-dom'
 import type { FormState } from '@/libs/forms/form-state'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { mediaPersonalitySchema } from '@/libs/media-personality/media-personality-schema'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { mediumSchema } from '@/libs/media/medium-schema'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
-import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 
 export default function AdminMediumForm(props: {
@@ -30,9 +28,9 @@ export default function AdminMediumForm(props: {
   })
 
   const {
-    handleSubmit,
+    trigger,
     register,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<z.output<typeof mediumSchema>>({
     resolver: zodResolver(mediumSchema),
     defaultValues: {},
@@ -40,11 +38,7 @@ export default function AdminMediumForm(props: {
 
   useFormToasts(state)
 
-  const formRef = useRef<HTMLFormElement>(null)
-
-  const { handleSubmitForm } = useFormSubmit<
-    z.output<typeof mediaPersonalitySchema>
-  >(handleSubmit, formAction, formRef)
+  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>

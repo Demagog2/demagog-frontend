@@ -26,7 +26,6 @@ import { Input } from '@/components/admin/forms/Input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import { schema } from '@/libs/articles/schema'
-import { useRef } from 'react'
 import { useFormState } from 'react-dom'
 import { AdminSourcesList } from '@/components/admin/articles/AdminSourcesList'
 import { ApolloProvider } from '@apollo/client'
@@ -45,12 +44,11 @@ import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminFormHeader } from '@/components/admin/layout/AdminFormHeader'
 import { AdminFormActions } from '../layout/AdminFormActions'
 import { AdminFormContent } from '@/components/admin/layout/AdminFormContent'
-import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
 import { Textarea } from '@/components/admin/forms/Textarea'
 import { dateInputFormat } from '@/libs/date-time'
 import { FormAction } from '@/libs/forms/form-action'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
-import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -208,9 +206,9 @@ export function AdminArticleForm(props: {
   const {
     register,
     watch,
-    handleSubmit,
+    trigger,
     control,
-    formState: { isSubmitting },
+    formState: { isValid },
   } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -224,21 +222,15 @@ export function AdminArticleForm(props: {
     name: 'segments',
   })
 
-  const formRef = useRef<HTMLFormElement>(null)
-
   const selectedArticleType = watch(
     'articleType',
     article ? toArticleTypeEnum(article.articleType) : ArticleTypeEnum.Default
   )
 
-  const { handleSubmitForm } = useFormSubmit<z.output<typeof schema>>(
-    handleSubmit,
-    formAction,
-    formRef
-  )
+  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
 
   return (
-    <form ref={formRef} onSubmit={handleSubmitForm}>
+    <form action={formAction} onSubmit={handleSubmitForm}>
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />

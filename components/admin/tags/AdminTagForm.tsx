@@ -3,7 +3,6 @@
 import { schema } from '@/libs/tags/schema'
 import { Field, Select } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useRef } from 'react'
 import { useFormState } from 'react-dom'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
@@ -16,7 +15,7 @@ import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { AdminFormContent } from '../layout/AdminFormContent'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormSubmitV2 } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
@@ -41,8 +40,8 @@ export function AdminTagForm(props: {
 
   const {
     register,
-    handleSubmit,
-    formState: { errors },
+    trigger,
+    formState: { isValid, errors },
   } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -52,16 +51,10 @@ export function AdminTagForm(props: {
     },
   })
 
-  const formRef = useRef<HTMLFormElement>(null)
-
-  const { handleSubmitForm } = useFormSubmit<z.output<typeof schema>>(
-    handleSubmit,
-    formAction,
-    formRef
-  )
+  const { handleSubmitForm } = useFormSubmitV2(isValid, trigger)
 
   return (
-    <form ref={formRef} onSubmit={handleSubmitForm}>
+    <form action={formAction} onSubmit={handleSubmitForm}>
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />

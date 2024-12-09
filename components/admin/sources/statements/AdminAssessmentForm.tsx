@@ -239,7 +239,7 @@ export function AdminAssessmentForm(props: {
   }, [state, statement.sourceSpeaker.fullName])
 
   return (
-    <form action={formAction} onSubmit={handleSubmitForm}>
+    <form onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('statementType')} />
 
       <div className="container">
