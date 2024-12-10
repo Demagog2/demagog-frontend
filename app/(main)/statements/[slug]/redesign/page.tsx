@@ -225,7 +225,7 @@ export default async function Statement(props: { params: { slug: string } }) {
           )}
 
           <div className="mt-10">
-            <h3 className="display-5 fw-bold">Plné odůvodnění</h3>
+            <h3 className="display-2 fw-bold">Plné odůvodnění</h3>
             {/* ASSESSMENT EXPLANATION FRAME */}
             <div className="mt-6 bg-lightgrey radius-22px text-start px-4 px-md-6">
               {/* First Part */}

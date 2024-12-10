@@ -52,13 +52,3 @@ p {
 .text-red {
   color: $red;
 }
-
-.display-5 {
-  font-size: calc(1.305rem + 0.66vw);
-}
-
-@media (min-width: 1200px) {
-  .display-5 {
-    font-size: 1.8rem;
-  }
-}
