@@ -3,8 +3,18 @@
 .statement-redesign {
   @include perex;
 
-  .fs-h1 {
-    font-size: 1.5rem;
+  p {
+    font-size: 0.875rem;
+  }
+
+  .h2 {
+    font-size: 1.25rem;
+    font-weight: 800px;
+  }
+
+  .h3 {
+    font-size: 1rem;
+    font-weight: 700;
   }
 
   .bg-lightgrey {
@@ -33,9 +43,44 @@
     color: #9b9b9b;
   }
 
+  blockquote {
+    margin: 0;
+  }
+
+  article {
+    @extend .mt-6;
+  }
+
+  .content-text-node {
+    h2 {
+      @extend .mt-8;
+    }
+
+    h3 {
+      @extend .mt-8, .mb-0;
+    }
+
+    p {
+      @extend .mt-6, .mb-0;
+    }
+
+    figure.image,
+    figure.embed {
+      @extend .mt-6;
+    }
+  }
+
   @media (min-width: 768px) {
-    .fs-h1 {
+    p {
+      font-size: 1rem;
+    }
+
+    h2 {
       font-size: 2rem;
+    }
+
+    h3 {
+      font-size: 1.5rem;
     }
   }
 }
