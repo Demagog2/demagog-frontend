@@ -3,6 +3,7 @@ import { z } from 'zod'
 export const assessmentSchema = z
   .object({
     statementType: z.string(),
+    evaluationStatus: z.string(),
     sourceSpeakerId: z.string().trim().min(1, 'Vyberte řečníka výroku.'),
     title: z.string().optional(),
     content: z.string(),
