@@ -193,7 +193,7 @@ export default async function Speaker(
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-primary rounded-circle me-2">
                   <TrueIcon width={17} height={13} />
                 </span>
-                <span className="display-4 fs-bold">{speaker.stats?.true}</span>
+                <span className="display-1 fs-bold">{speaker.stats?.true}</span>
               </SpeakerLink>
 
               <SpeakerLink
@@ -214,7 +214,7 @@ export default async function Speaker(
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-gray rounded-circle me-2">
                   <UnverifiableIcon width={12} height={22} />
                 </span>
-                <span className="display-4 fs-bold">
+                <span className="display-1 fs-bold">
                   {speaker.stats?.unverifiable}
                 </span>
               </SpeakerLink>
@@ -238,7 +238,7 @@ export default async function Speaker(
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-red rounded-circle me-2">
                   <UntrueIcon width={13} height={13} />
                 </span>
-                <span className="display-4 fs-bold">
+                <span className="display-1 fs-bold">
                   {speaker.stats?.untrue}
                 </span>
               </SpeakerLink>
@@ -260,7 +260,7 @@ export default async function Speaker(
                 <span className="w-40px h-40px d-flex align-items-center justify-content-center bg-secondary rounded-circle me-2">
                   <MisleadingIcon width={4} height={22} />
                 </span>
-                <span className="display-4 fs-bold">
+                <span className="display-1 fs-bold">
                   {speaker.stats?.misleading}
                 </span>
               </SpeakerLink>

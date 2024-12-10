@@ -169,7 +169,7 @@ export default async function Statements(props: PropsWithSearchParams) {
             <div className="me-2">
               <TitleIcon className="h-35px" />
             </div>
-            <h1 className="display-4 fw-bold m-0 p-0">
+            <h1 className="display-1 fw-bold m-0 p-0">
               Přehled ověřených výroků
             </h1>
           </div>
