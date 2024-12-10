@@ -14,6 +14,14 @@ const StatementEvaluationMachineFragment = gql(`
   fragment StatementEvaluationMachine on Statement {
     statementType
     assessment {
+      veracity {
+        id
+      }
+      promiseRating {
+        id
+      }
+      explanation
+      shortExplanation
       evaluationStatus
       evaluator {
         id
@@ -44,6 +52,10 @@ export function useStatementEvaluationMachine(props: {
       state: statement.assessment.evaluationStatus,
       evaluatorId: statement.assessment.evaluator?.id,
       statementType: statement.statementType,
+      shortExplanation: statement.assessment.shortExplanation ?? '',
+      longExplanation: statement.assessment.explanation ?? '',
+      veracity: statement.assessment.veracity?.id,
+      promiseRating: statement.assessment.promiseRating?.id,
     },
   })
 
@@ -134,22 +146,36 @@ export function useStatementEvaluationMachine(props: {
     snapshot.matches({ type: 'promise' })
   )
 
+  const isBeingEvaluated = useSelector(actorRef, (snapshot) =>
+    snapshot.matches({ status: 'being_evaluated' })
+  )
+
+  const canRequestApproval = useSelector(actorRef, (snapshot) =>
+    snapshot.can({ type: 'Request approval' })
+  )
+
   return useMemo(
     () => ({
+      actorRef,
       isStatementEvaluationVisible,
       isStatementFieldDisabled,
       isStatementRatingDisabled,
+      isBeingEvaluated,
       canEditEvaluator,
       canBePublished,
+      canRequestApproval,
       isFactual,
       isPromise,
     }),
     [
+      actorRef,
       isStatementEvaluationVisible,
       isStatementFieldDisabled,
       isStatementRatingDisabled,
       canEditEvaluator,
       canBePublished,
+      canRequestApproval,
+      isBeingEvaluated,
       isFactual,
       isPromise,
     ]

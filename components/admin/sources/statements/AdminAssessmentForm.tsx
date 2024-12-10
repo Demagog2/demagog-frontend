@@ -17,7 +17,7 @@ import { AdminFormActions } from '../../layout/AdminFormActions'
 import { LinkButton } from '../../forms/LinkButton'
 import { SubmitButton } from '../../forms/SubmitButton'
 import { AdminFormContent } from '../../layout/AdminFormContent'
-import { Field, Fieldset, Legend } from '@headlessui/react'
+import { Button, Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '../../forms/Label'
 import { ErrorMessage } from '../../forms/ErrorMessage'
 import { AdminSourceSpeakerControl } from './controls/AdminSourceSpeakerControl'
@@ -159,19 +159,6 @@ export function AdminAssessmentForm(props: {
     props.statement
   )
 
-  const {
-    isFactual,
-    isPromise,
-    isStatementFieldDisabled,
-    isStatementRatingDisabled,
-    isStatementEvaluationVisible,
-    canEditEvaluator,
-    canBePublished,
-  } = useStatementEvaluationMachine({
-    data,
-    statement,
-  })
-
   const [formState, formAction] = useFormState(props.action, {
     state: 'initial',
   })
@@ -210,6 +197,22 @@ export function AdminAssessmentForm(props: {
   const shortExplanation = watch('shortExplanation')
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
+
+  const {
+    isFactual,
+    isPromise,
+    isBeingEvaluated,
+    isStatementFieldDisabled,
+    isStatementRatingDisabled,
+    isStatementEvaluationVisible,
+    canRequestApproval,
+    canEditEvaluator,
+    canBePublished,
+    actorRef,
+  } = useStatementEvaluationMachine({
+    data,
+    statement,
+  })
 
   const title = useMemo(
     () => (isPromise ? 'Detail slibu' : 'Detail výroku'),
@@ -352,6 +355,14 @@ export function AdminAssessmentForm(props: {
                             statement.assessment.assessmentMethodology
                               .ratingKeys
                           }
+                          onChange={(promiseRating) =>
+                            actorRef.send({
+                              type: 'Update promise rating',
+                              data: {
+                                promiseRating,
+                              },
+                            })
+                          }
                         />
                       )}
 
@@ -386,6 +397,14 @@ export function AdminAssessmentForm(props: {
                           control={control}
                           name="veracityId"
                           data={data}
+                          onChange={(veracity) =>
+                            actorRef.send({
+                              type: 'Update veracity',
+                              data: {
+                                veracity,
+                              },
+                            })
+                          }
                         />
                       )}
 
@@ -402,13 +421,30 @@ export function AdminAssessmentForm(props: {
                       <p className="mt-4">{shortExplanation}</p>
                     ) : (
                       <>
-                        <Textarea
-                          id="shortExplanation"
-                          {...register('shortExplanation')}
-                          rows={3}
-                          placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
-                          disabled={isStatementFieldDisabled}
-                          maxLength={SHORT_EXPLANATION_LIMIT}
+                        <Controller
+                          name="shortExplanation"
+                          control={control}
+                          render={({ field }) => (
+                            <Textarea
+                              id={field.name}
+                              name={field.name}
+                              value={field.value}
+                              onChange={(evt) => {
+                                field.onChange(evt.currentTarget.value)
+
+                                actorRef.send({
+                                  type: 'Update short explanation',
+                                  data: {
+                                    shortExplanation: evt.currentTarget.value,
+                                  },
+                                })
+                              }}
+                              rows={3}
+                              placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
+                              disabled={isStatementFieldDisabled}
+                              maxLength={SHORT_EXPLANATION_LIMIT}
+                            />
+                          )}
                         />
 
                         <div className="text-sm text-gray-600 mt-2">
@@ -494,7 +530,16 @@ export function AdminAssessmentForm(props: {
                             <RichTextEditor
                               includeHeadings
                               value={field.value ?? ''}
-                              onChange={field.onChange}
+                              onChange={(value) => {
+                                field.onChange(value)
+
+                                actorRef.send({
+                                  type: 'Update long explanation',
+                                  data: {
+                                    longExplanation: value,
+                                  },
+                                })
+                              }}
                             />
                           </div>
                         )}
@@ -534,6 +579,28 @@ export function AdminAssessmentForm(props: {
             <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
               <Field>
                 <Label htmlFor="evaluationStatus">Stav</Label>
+
+                <div className="mt-4">
+                  {isBeingEvaluated && (
+                    <>
+                      <Button
+                        className="rounded-md bg-white disabled:text-gray-600 disabled:cursor-not-allowed disabled:bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                        disabled={!canRequestApproval}
+                      >
+                        Posunout ke kontrole
+                      </Button>
+
+                      {!canRequestApproval && (
+                        <div className="mt-2">
+                          <small className="text-gray-600">
+                            Aby šel výrok posunout ke kontrole, musí být
+                            vyplněné hodnocení a odůvodnění, včetně zkráceného.
+                          </small>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
               </Field>
 
               <Field>

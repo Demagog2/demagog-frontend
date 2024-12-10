@@ -22,8 +22,9 @@ export function AdminPromiseRatingSelect(props: {
   allowedKeys: string[]
   defaultValue?: string
   disabled?: boolean
+  onChange(promiseRatingId: string): void
 }) {
-  const { allowedKeys } = props
+  const { allowedKeys, onChange } = props
 
   const data = useFragment(AdminPromiseRatingSelectFragment, props.data)
 
@@ -49,7 +50,14 @@ export function AdminPromiseRatingSelect(props: {
           <Select
             id={field.name}
             items={items}
-            onChange={(item) => item && field.onChange(item.value)}
+            onChange={(item) => {
+              if (!item) {
+                return
+              }
+
+              onChange(item.value)
+              field.onChange(item.value)
+            }}
             defaultValue={field.value}
             placeholder="Vyberte hodnocení"
           />

@@ -16,6 +16,11 @@ type ContextType = {
     canEditStatementAsEvaluator(evaluatorId: string): boolean
     canViewUnapprovedEvaluation(): boolean
   }
+  // Data from the form
+  longExplanation?: string
+  shortExplanation?: string
+  veracity?: string
+  promiseRating?: string
 }
 
 const statementEvaluatorEditable = {
@@ -134,7 +139,23 @@ export const machine = setup({
       | { type: 'Request approval' }
       | { type: 'Back to evaluation' }
       | { type: 'Request proofreading' }
-      | { type: 'Approve' },
+      | { type: 'Approve' }
+      | {
+          type: 'Update veracity'
+          data: { veracity: string }
+        }
+      | {
+          type: 'Update promise rating'
+          data: { promiseRating: string }
+        }
+      | {
+          type: 'Update short explanation'
+          data: { shortExplanation: string }
+        }
+      | {
+          type: 'Update long explanation'
+          data: { longExplanation: string }
+        },
   },
   guards: {
     isPromiseRatingEditable: or([
@@ -170,6 +191,22 @@ export const machine = setup({
       return isBeingEvaluated && isUserAssignedAsEvaluator
     },
 
+    _hasVeracity: ({ context }) => !!context.veracity,
+    _hasPromiseRating: ({ context }) => !!context.promiseRating,
+
+    _hasShortExplanation: ({ context }) => !!context.shortExplanation?.length,
+    _hasLongExplanation: ({ context }) => !!context.longExplanation?.length,
+
+    canRequestApproval: and([
+      '_hasShortExplanation',
+      '_hasLongExplanation',
+      or([
+        and(['isStatementFactual', '_hasVeracity']),
+        and(['isStatementPromise', '_hasPromiseRating']),
+      ]),
+      or(['_canEditAsAnEvaluator', '_canEditAsAdmin']),
+    ]),
+
     _canEditAsAdmin: ({ context }) => context.authorization.canEditStatement(),
 
     _canEditStatementAsProofreader: ({ context }) =>
@@ -190,12 +227,7 @@ export const machine = setup({
     canApprove: ({ context }) => context.authorization.canEditStatement(),
   },
 }).createMachine({
-  context: ({ input }) => ({
-    state: input.state,
-    evaluatorId: input.evaluatorId,
-    authorization: input.authorization,
-    statementType: input.statementType,
-  }),
+  context: ({ input }) => input,
   id: 'Statement evaluation',
   type: 'parallel',
   states: {
@@ -283,9 +315,32 @@ export const machine = setup({
             statementEvaluatorEditable,
           },
           on: {
+            'Update short explanation': {
+              actions: assign({
+                shortExplanation: ({ event }) => event.data.shortExplanation,
+              }),
+            },
+            'Update long explanation': {
+              actions: assign({
+                longExplanation: ({ event }) => event.data.longExplanation,
+              }),
+            },
+            'Update veracity': {
+              actions: assign({
+                veracity: ({ event }) => event.data.veracity,
+              }),
+            },
+            'Update promise rating': {
+              actions: assign({
+                promiseRating: ({ event }) => event.data.promiseRating,
+              }),
+            },
             'Request approval': {
               target: 'approval_needed',
               actions: assign({ state: ASSESSMENT_STATUS_APPROVAL_NEEDED }),
+              guard: {
+                type: 'canRequestApproval',
+              },
             },
           },
         },

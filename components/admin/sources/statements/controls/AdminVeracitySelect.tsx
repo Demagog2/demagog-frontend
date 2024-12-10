@@ -19,7 +19,10 @@ export function AdminVeracitySelect(props: {
   name: string
   data: FragmentType<typeof AdminVeracitySelectFragment>
   disabled?: boolean
+  onChange(veracityId: string): void
 }) {
+  const { onChange } = props
+
   const data = useFragment(AdminVeracitySelectFragment, props.data)
 
   const items = useMemo(() => {
@@ -42,7 +45,14 @@ export function AdminVeracitySelect(props: {
           <Select
             id={field.name}
             items={items}
-            onChange={(item) => item && field.onChange(item.value)}
+            onChange={(item) => {
+              if (!item) {
+                return
+              }
+
+              onChange(item.value)
+              field.onChange(item.value)
+            }}
             defaultValue={field.value}
             placeholder="Vyberte hodnocení"
           />
