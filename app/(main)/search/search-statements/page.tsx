@@ -72,7 +72,7 @@ export default async function SearchStatements(props: PropsWithSearchParams) {
         <div className="col col-12">
           <div className="d-flex align-items-center justify-content-between mb-5 mb-lg-10">
             <div className="my-5">
-              <h2 className="display-5 fw-bold">Nalezené výsledky</h2>
+              <h2 className="display-2 fw-bold">Nalezené výsledky</h2>
             </div>
             <div className="my-5">
               <a

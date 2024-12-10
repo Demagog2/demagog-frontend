@@ -8,7 +8,7 @@ export default function HomeSidebar() {
   return (
     <Expander className="bg-dark-light text-white p-5 p-lg-8 rounded mb-10">
       <div className="w-100 position-relative">
-        <h2 className="display-5 fw-bold mb-4">Co je Demagog.cz?</h2>
+        <h2 className="display-2 fw-bold mb-4">Co je Demagog.cz?</h2>
         <div className="fs-6 mb-10 dark-content">
           <p className="mb-2">
             Demagog.cz kontroluje pravdivost tvrzení českých politiků

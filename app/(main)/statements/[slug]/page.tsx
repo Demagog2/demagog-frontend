@@ -210,7 +210,7 @@ export default async function Statement(props: { params: { slug: string } }) {
             )}
           </div>
           <div className="d-flex flex-wrap align-items-center mb-10">
-            <h1 className="display-5 fw-bold me-3">
+            <h1 className="display-2 fw-bold me-3">
               Tento výrok byl ověřen jako
             </h1>
             <div className="d-flex align-items-center">
@@ -222,14 +222,14 @@ export default async function Statement(props: { params: { slug: string } }) {
             <>
               <div className="separator bg-gray mb-10"></div>
               <div className="mb-10">
-                <h3 className="display-5 fw-bold mb-5">Zkrácené odůvodnění</h3>
+                <h3 className="display-2 fw-bold mb-5">Zkrácené odůvodnění</h3>
                 <p className="fs-5">{statement.assessment.shortExplanation}</p>
               </div>
             </>
           )}
           <div className="separator bg-gray mb-10"></div>
           <div className="mb-10">
-            <h3 className="display-5 fw-bold mb-5">Plné odůvodnění</h3>
+            <h3 className="display-2 fw-bold mb-5">Plné odůvodnění</h3>
             <div
               className="content fs-5"
               dangerouslySetInnerHTML={{
@@ -239,7 +239,7 @@ export default async function Statement(props: { params: { slug: string } }) {
           </div>
           <div className="separator bg-gray mb-10"></div>
           <div>
-            <h3 className="display-5 fw-bold mb-5">Výrok jsme zmínili</h3>
+            <h3 className="display-2 fw-bold mb-5">Výrok jsme zmínili</h3>
             {statement.mentioningArticles?.map((article) => (
               <ArticleV2Preview article={article} key={article?.id} />
             ))}

@@ -5,7 +5,7 @@ import TwitterIcon from '@/assets/icons/twitter.svg'
 export default function SiteSocial() {
   return (
     <div className="bg-primary min-h-100 rounded-l p-5 p-lg-10">
-      <h3 className="display-5 fw-bold mb-5 text-white">Sociální sítě</h3>
+      <h3 className="display-2 fw-bold mb-5 text-white">Sociální sítě</h3>
       <div className="mb-4">
         <span className="fs-4">
           Nenechte si ujít nejnovější události z&nbsp;Demagog.cz. Sdílením

@@ -1,7 +1,7 @@
 export default function SiteNewsletter() {
   return (
     <div className="bg-secondary min-h-100 rounded-l p-5 p-lg-10">
-      <h3 className="display-5 fw-bold mb-5">Zůstaňte v kontaktu</h3>
+      <h3 className="display-2 fw-bold mb-5">Zůstaňte v kontaktu</h3>
       <p className="fs-2 mb-4">
         Každý týden posíláme našim odběratelům shrnutí toho nejdůležitějšího na
         našem whatsappovém kanálu. Začněte ho odebírat, a mějte tak přehled o

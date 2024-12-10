@@ -162,7 +162,7 @@ export default async function Speaker(
               )}
             </div>
             <div>
-              <h1 className="display-5 fw-600 mb-1">{speaker.fullName}</h1>
+              <h1 className="display-2 fw-600 mb-1">{speaker.fullName}</h1>
               <div className="mb-1">
                 <span className="fs-4 fw-500">{speaker.role}</span>
               </div>

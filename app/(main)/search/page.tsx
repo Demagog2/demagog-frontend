@@ -113,7 +113,7 @@ export default async function Search(props: PropsWithSearchParams) {
                 <span className="d-flex align-items-center me-2">
                   <TitleIcon />
                 </span>
-                <h2 className="display-5 fw-bold m-0 p-0">Nalezení politici</h2>
+                <h2 className="display-2 fw-bold m-0 p-0">Nalezení politici</h2>
               </div>
               <div className="row row-cols-2 row-cols-lg-6 g-5">
                 {data.searchSpeakers.speakers.map((speaker) => (
@@ -139,7 +139,7 @@ export default async function Search(props: PropsWithSearchParams) {
               <span className="d-flex align-items-center me-2">
                 <TitleIcon />
               </span>
-              <h2 className="display-5 fw-bold m-0 p-0">Nalezené výstupy</h2>
+              <h2 className="display-2 fw-bold m-0 p-0">Nalezené výstupy</h2>
             </div>
             <div className="row row-cols-1 row-cols-lg-2 g-5 g-lg-10">
               {data.searchArticles.articles.map((article) => (
@@ -164,7 +164,7 @@ export default async function Search(props: PropsWithSearchParams) {
               <span className="d-flex align-items-center me-2">
                 <TitleIcon />
               </span>
-              <h2 className="display-5 fw-bold m-0 p-0">Nalezené výroky</h2>
+              <h2 className="display-2 fw-bold m-0 p-0">Nalezené výroky</h2>
             </div>
             <div className="w-100">
               {data.searchStatements.statements.map((statement) => (

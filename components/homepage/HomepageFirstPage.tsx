@@ -55,7 +55,7 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
       <div className="bg-light text-dark p-5 p-lg-10 rounded-l mt-10">
         <div className="row g-10 justify-content-between">
           <div className="col col-12 col-lg-5">
-            <h2 className="display-5 mb-5 fw-bold">Workshopy</h2>
+            <h2 className="display-2 mb-5 fw-bold">Workshopy</h2>
             <p className="fs-5 mb-5">
               V rámci 90 minut interaktivních seminářů pomůžeme nejen studentům
               středních škol v základní orientaci v mediální oblasti, předáme
