@@ -25,7 +25,7 @@ export default function StatementAssessment({ type, name, size }: any) {
       </span>
       {name && (
         <span
-          className={'text-' + currentColor + ' fs-5 text-uppercase fs-600'}
+          className={'text-' + currentColor + ' fs-5 text-uppercase fw-600'}
         >
           {name}
         </span>

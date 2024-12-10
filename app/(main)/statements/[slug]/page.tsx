@@ -159,7 +159,7 @@ export default async function Statement(props: { params: { slug: string } }) {
             )}
           </SpeakerLink>
           <div className="mt-2 text-center w-100">
-            <h3 className="fs-6 fs-bold">{statement.sourceSpeaker.fullName}</h3>
+            <h3 className="fs-6 fw-bold">{statement.sourceSpeaker.fullName}</h3>
           </div>
         </div>
         <div className="col col-12 col-md-8">
