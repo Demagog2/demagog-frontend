@@ -158,7 +158,7 @@ export default async function Statement(props: { params: { slug: string } }) {
         </div>
         <div className="col col-12 col-md-8 justify-self-center">
           <blockquote
-            className="p-3 fs-6 bg-dark text-white rounded-m position-relative min-h-50px"
+            className="p-3 fs-6 bg-dark text-white rounded-m position-relative min-h-50px mt-2 mt-md-0"
             data-target="statement--detail.blockquote"
           >
             <span
@@ -201,7 +201,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               </div>
             )}
           </div>
-          <div className="assessment-veracity d-flex flex-column flex-md-row align-items-md-center justify-content-md-start mt-10">
+          <div className="assessment-veracity d-flex flex-column flex-md-row align-items-md-center justify-content-md-start mt-6 mt-md-10">
             <h2 className="me-md-6 flex-shrink-0">
               Tento výrok byl ověřen jako
             </h2>
@@ -218,7 +218,7 @@ export default async function Statement(props: { params: { slug: string } }) {
           </div>
           {statement.assessment.shortExplanation && (
             <>
-              <div className="mt-10">
+              <div className="mt-6 mt-md-10">
                 <p className="perex">{statement.assessment.shortExplanation}</p>
               </div>
             </>

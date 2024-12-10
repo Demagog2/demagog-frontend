@@ -2,7 +2,6 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerWithStats } from '@/components/speaker/SpeakerWithStats'
 import StatementItem from '../statement/Item'
 import { ArticleV2Preview } from './ArticleV2Preview'
-import classNames from 'classnames'
 import { ArticleQuoteRedesign } from '@/components/article/ArticleQuoteRedesign'
 
 const ArticleSegmentsFragment = gql(`
@@ -62,11 +61,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
         <div key={segment.id}>
           {segment.segmentType === 'text' && (
             <div className="row justify-content-center">
-              <div
-                className={classNames(
-                  'col fs-6 content-redesign col-sm-10 mx-sm-auto'
-                )}
-              >
+              <div className="col fs-6 content-redesign">
                 {segment.content.edges?.map((edge) => {
                   if (!edge?.node) {
                     return null
