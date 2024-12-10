@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import { useFormState } from 'react-dom'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
@@ -40,6 +40,7 @@ import { SwitchField } from '../../forms/SwitchField'
 import { Switch } from '../../forms/Switch'
 import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminExpertsField } from './AdminExpertsList'
+import { ASSESSMENT_STATUS_APPROVAL_NEEDED } from '@/libs/constants/assessment'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -175,6 +176,7 @@ export function AdminAssessmentForm(props: {
     resolver: zodResolver(assessmentSchema),
     defaultValues: {
       statementType: statement.statementType,
+      evaluationStatus: statement.assessment.evaluationStatus,
       sourceSpeakerId: statement.sourceSpeaker.id,
       title: statement.title ?? '',
       tags: statement.tags.map((tag) => tag.id),
@@ -191,6 +193,7 @@ export function AdminAssessmentForm(props: {
         : {
             veracityId: statement.assessment.veracity?.id,
           }),
+      ...(formState.state === 'initial' ? {} : formState.fields),
     },
   })
 
@@ -231,8 +234,10 @@ export function AdminAssessmentForm(props: {
     return `Ověřování silvestrovského výroku ${statement.sourceSpeaker.fullName}`
   }, [isPromise, isFactual, statement.sourceSpeaker.fullName])
 
+  const formRef = useRef<HTMLFormElement>(null)
+
   return (
-    <form action={formAction} onSubmit={handleSubmitForm}>
+    <form ref={formRef} action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('statementType')} />
 
       <div className="container">
@@ -580,27 +585,51 @@ export function AdminAssessmentForm(props: {
               <Field>
                 <Label htmlFor="evaluationStatus">Stav</Label>
 
-                <div className="mt-4">
-                  {isBeingEvaluated && (
-                    <>
-                      <Button
-                        className="rounded-md bg-white disabled:text-gray-600 disabled:cursor-not-allowed disabled:bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                        disabled={!canRequestApproval}
-                      >
-                        Posunout ke kontrole
-                      </Button>
+                <Controller
+                  control={control}
+                  name="evaluationStatus"
+                  render={({ field }) => (
+                    <div className="mt-4">
+                      <input
+                        type="hidden"
+                        name={field.name}
+                        value={field.value}
+                      />
 
-                      {!canRequestApproval && (
-                        <div className="mt-2">
-                          <small className="text-gray-600">
-                            Aby šel výrok posunout ke kontrole, musí být
-                            vyplněné hodnocení a odůvodnění, včetně zkráceného.
-                          </small>
-                        </div>
+                      {isBeingEvaluated && (
+                        <>
+                          <Button
+                            className="rounded-md bg-white disabled:text-gray-600 disabled:cursor-not-allowed disabled:bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                            disabled={!canRequestApproval}
+                            onClick={async () => {
+                              actorRef.send({
+                                type: 'Request approval',
+                              })
+
+                              field.onChange(ASSESSMENT_STATUS_APPROVAL_NEEDED)
+
+                              await trigger().then(() => {
+                                formRef.current?.requestSubmit()
+                              })
+                            }}
+                          >
+                            Posunout ke kontrole
+                          </Button>
+
+                          {!canRequestApproval && (
+                            <div className="mt-2">
+                              <small className="text-gray-600">
+                                Aby šel výrok posunout ke kontrole, musí být
+                                vyplněné hodnocení a odůvodnění, včetně
+                                zkráceného.
+                              </small>
+                            </div>
+                          )}
+                        </>
                       )}
-                    </>
+                    </div>
                   )}
-                </div>
+                />
               </Field>
 
               <Field>

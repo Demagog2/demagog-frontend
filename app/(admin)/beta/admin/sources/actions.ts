@@ -145,6 +145,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
       shortExplanation,
       explanation,
       evaluatorId,
+      evaluationStatus,
       ...rest
     } = input
 
@@ -159,6 +160,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
                 explanationHtml: explanation,
                 shortExplanation,
                 evaluatorId,
+                evaluationStatus,
               },
             }
           : {
@@ -168,6 +170,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
                 explanationHtml: explanation,
                 shortExplanation,
                 evaluatorId,
+                evaluationStatus,
               },
             },
     }
