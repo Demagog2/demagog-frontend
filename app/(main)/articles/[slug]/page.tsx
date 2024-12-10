@@ -149,7 +149,7 @@ export default async function Article(props: { params: { slug: string } }) {
       <div className="row">
         <div className="col-sm-10 mx-sm-auto">
           <div>
-            <h1 className="display-4 fw-bold px-3 px-sm-0">{article.title}</h1>
+            <h1 className="display-1 fw-bold px-3 px-sm-0">{article.title}</h1>
             <ArticleIllustration article={article} />
             <div className="mt-4 mt-md-9 text-md-justify">
               <span className="perex">{article.perex}</span>

@@ -129,7 +129,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
             <div className="h-35px me-2">
               <PackmanIcon className="h-35px" />
             </div>
-            <h1 className="display-4 fw-bold m-0 p-0">
+            <h1 className="display-1 fw-bold m-0 p-0">
               Přehled politiků a političek
             </h1>
           </div>

@@ -118,7 +118,7 @@ export default async function Promises(
               <span className="d-flex align-items-center me-2">
                 <TitleIcon />
               </span>
-              <h1 className="display-4 fw-bold m-0 p-0">{article.title}</h1>
+              <h1 className="display-1 fw-bold m-0 p-0">{article.title}</h1>
             </div>
           </div>
           <div className="col col-12 col-lg-6">

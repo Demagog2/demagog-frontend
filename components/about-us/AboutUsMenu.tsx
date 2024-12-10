@@ -51,7 +51,7 @@ export function AboutUsMenu(props: {
 
   return (
     <nav className="side-nav w-100" data-target="components--sticky.sticky">
-      <h1 className="display-4 fw-bold mb-5 p-0">O nás</h1>
+      <h1 className="display-1 fw-bold mb-5 p-0">O nás</h1>
       <ul className="list">
         {data.accordionSections.edges?.map((edge, index) => {
           if (!edge?.node) {
