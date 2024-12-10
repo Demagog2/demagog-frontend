@@ -112,7 +112,7 @@ export default function StatementItem(props: {
               >
                 <h3
                   className={classNames('fw-600', {
-                    'fs-8': isVertical,
+                    'fs-3': isVertical,
                     'fs-6': !isVertical,
                   })}
                 >
