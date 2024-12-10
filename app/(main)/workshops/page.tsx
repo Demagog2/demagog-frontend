@@ -25,7 +25,7 @@ export default async function Workshops() {
   return (
     <div className="container">
       <div className="row g-5 mb-5">
-        <h1 className="display-4 fw-600">Workshopy</h1>
+        <h1 className="display-1 fw-bold">Workshopy</h1>
 
         <h2 className="fs-2 fw-bold">Nabízíme workshopy</h2>
       </div>

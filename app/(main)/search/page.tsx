@@ -192,7 +192,7 @@ export default async function Search(props: PropsWithSearchParams) {
           !data.searchSpeakers.totalCount &&
           !data.searchStatements.totalCount && (
             <div className="col col-12 min-h-25vh py-10 text-center">
-              <h1 className="display-4 fw-bold">
+              <h1 className="display-1 fw-bold">
                 Nenašli jsme nic, co by odpovídalo Vašemu hledanému výrazu.
               </h1>
             </div>
