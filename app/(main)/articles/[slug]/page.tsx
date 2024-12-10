@@ -145,9 +145,9 @@ export default async function Article(props: { params: { slug: string } }) {
   }
 
   return (
-    <div className="container px-3 article-redesign text-align-start col-sm-10 mx-sm-auto">
-      <div className="row">
-        <div className="col-sm-10 mx-sm-auto">
+    <div className="container px-3 article-redesign text-align-start col-sm-8 mx-sm-auto">
+      <div>
+        <div>
           <div>
             <h1 className="display-1 fw-bold px-3 px-sm-0">{article.title}</h1>
             <ArticleIllustration article={article} />
