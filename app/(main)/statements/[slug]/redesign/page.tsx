@@ -150,13 +150,13 @@ export default async function Statement(props: { params: { slug: string } }) {
 
   return (
     <div className="container statement-redesign">
-      <div className="row g-10">
+      <div className="row">
         <div className="col col-4 col-md-2 d-flex flex-column align-items-center">
           <div className="w-85px">
             <SourceSpeakerAvatar statement={statement} />
           </div>
         </div>
-        <div className="col col-12 col-md-8">
+        <div className="col col-12 col-md-8 justify-self-center">
           <blockquote
             className="p-3 fs-6 bg-dark text-white rounded-m mb-2 position-relative min-h-50px"
             data-target="statement--detail.blockquote"
@@ -205,7 +205,7 @@ export default async function Statement(props: { params: { slug: string } }) {
             <h1 className="fs-h1 fw-bold me-md-6 flex-shrink-0">
               Tento výrok byl ověřen jako
             </h1>
-            <div className="d-flex align-items-center mt-5 mt-md-0">
+            <div className="d-flex align-items-center mt-2 mt-md-0">
               <AssessmentVeracityIcon
                 assessment={statement.assessment}
                 isRedesign
