@@ -51,7 +51,7 @@ export function AdminSourceStatements(props: {
             .filter((statement) =>
               props.filteredStatementsIds.includes(statement.id)
             )
-            .map((statement, i) => (
+            .map((statement) => (
               <div
                 key={statement.id}
                 className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
@@ -135,7 +135,7 @@ export function AdminSourceStatements(props: {
                   </div>
                 </div>
 
-                <AdminSourceStatementStep statement={statement} step={i % 5} />
+                <AdminSourceStatementStep statement={statement} />
               </div>
             ))}
         </div>
