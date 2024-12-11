@@ -1,37 +1,48 @@
 import { gql, FragmentType, useFragment } from '@/__generated__'
 import classNames from 'classnames'
-import { random } from 'lodash'
-// import {
-//   ASSESSMENT_STATUS_APPROVAL_NEEDED,
-//   ASSESSMENT_STATUS_APPROVED,
-//   ASSESSMENT_STATUS_BEING_EVALUATED,
-//   ASSESSMENT_STATUS_PROOFREADING_NEEDED,
-// } from '@/libs/constants/assessment'
+import {
+  ASSESSMENT_STATUS_APPROVAL_NEEDED,
+  ASSESSMENT_STATUS_APPROVED,
+  ASSESSMENT_STATUS_BEING_EVALUATED,
+  ASSESSMENT_STATUS_PROOFREADING_NEEDED,
+} from '@/libs/constants/assessment'
 
 const SourceStatementStepFragment = gql(`
   fragment SourceStatementStep on Statement {
+    published
     assessment {
       evaluationStatus
     }
   } 
 `)
 
-// const EVALUATION_STATUS_STEP_MAP: Record<string, number> = {
-//   [ASSESSMENT_STATUS_BEING_EVALUATED]: 1,
-//   [ASSESSMENT_STATUS_APPROVAL_NEEDED]: 2,
-//   [ASSESSMENT_STATUS_PROOFREADING_NEEDED]: 3,
-//   [ASSESSMENT_STATUS_APPROVED]: 4,
-// }
+const EVALUATION_STATUS_STEP_MAP: Record<string, number> = {
+  [ASSESSMENT_STATUS_BEING_EVALUATED]: 0,
+  [ASSESSMENT_STATUS_APPROVAL_NEEDED]: 1,
+  [ASSESSMENT_STATUS_PROOFREADING_NEEDED]: 2,
+  [ASSESSMENT_STATUS_APPROVED]: 3,
+}
+
+function getEvaluationStep(
+  evaluationStatus: string,
+  published: boolean
+): number {
+  if (published && evaluationStatus === ASSESSMENT_STATUS_APPROVED) {
+    return EVALUATION_STATUS_STEP_MAP[ASSESSMENT_STATUS_APPROVED] + 1
+  }
+
+  return EVALUATION_STATUS_STEP_MAP[evaluationStatus] ?? 0
+}
 
 export function AdminSourceStatementStep(props: {
-  step: number
   statement: FragmentType<typeof SourceStatementStepFragment>
 }) {
-  const { step } = props
   const statement = useFragment(SourceStatementStepFragment, props.statement)
 
-  // const step =
-  //   EVALUATION_STATUS_STEP_MAP[statement.assessment.evaluationStatus] ?? 0
+  const step = getEvaluationStep(
+    statement.assessment.evaluationStatus,
+    statement.published
+  )
 
   return (
     <div className="border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8">
