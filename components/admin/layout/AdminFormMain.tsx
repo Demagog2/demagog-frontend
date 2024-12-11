@@ -5,6 +5,8 @@ export function AdminFormMain(
   props: PropsWithChildren<{ className?: string }>
 ) {
   return (
-    <div className={classNames('grow', props.className)}>{props.children}</div>
+    <div className={classNames('col-span-12 lg:col-span-9', props.className)}>
+      {props.children}
+    </div>
   )
 }

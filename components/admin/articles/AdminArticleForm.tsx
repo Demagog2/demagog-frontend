@@ -17,6 +17,7 @@ import { ARTICLE_VERACITY_OPTIONS } from '@/libs/constants/article-veracity'
 import {
   Button,
   Field,
+  Fieldset,
   Listbox,
   ListboxButton,
   ListboxOption,
@@ -412,101 +413,103 @@ export function AdminArticleForm(props: {
             </Field>
           </AdminFormMain>
 
-          <AdminFormSidebar className="gap-y-5 grid grid-cols-1">
-            <div>
-              <Label htmlFor="articleType">Typ článku</Label>
-              <select
-                id="articleType"
-                {...register('articleType', { required: true })}
-                defaultValue={ArticleTypeEnum.Default}
-                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          <AdminFormSidebar>
+            <Fieldset className="space-y-5 w-full border-b border-gray-900/10 pb-8">
+              <Field>
+                <Label htmlFor="articleType">Typ článku</Label>
+                <select
+                  id="articleType"
+                  {...register('articleType', { required: true })}
+                  defaultValue={ArticleTypeEnum.Default}
+                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                >
+                  {Object.entries(ARTICLE_TYPE_LABEL).map(([key, value]) => {
+                    if (HIDDEN_ARTICLE_TYPES.includes(key)) {
+                      return null
+                    }
+
+                    return (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    )
+                  })}
+                </select>
+              </Field>
+
+              <SwitchField
+                htmlFor="pinned"
+                label="Připnout článek"
+                description="Článek bude trvale zobrazen na hlavní stránce jako první."
               >
-                {Object.entries(ARTICLE_TYPE_LABEL).map(([key, value]) => {
-                  if (HIDDEN_ARTICLE_TYPES.includes(key)) {
-                    return null
+                <Controller
+                  name="pinned"
+                  control={control}
+                  render={({ field }) => (
+                    <Switch
+                      id={field.name}
+                      name={field.name}
+                      checked={field.value}
+                      disabled={field.disabled}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </SwitchField>
+
+              <SwitchField
+                htmlFor="published"
+                label="Zveřejněný článek"
+                description="Článek bude veřejně dostupný."
+              >
+                <Controller
+                  name="published"
+                  control={control}
+                  render={({ field }) => (
+                    <Switch
+                      id={field.name}
+                      name={field.name}
+                      checked={field.value}
+                      disabled={field.disabled}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </SwitchField>
+
+              <Field>
+                <Label htmlFor="publishedAt">Datum zveřejnění</Label>
+
+                <Input
+                  id="publishedAt"
+                  type="date"
+                  {...register('publishedAt')}
+                />
+              </Field>
+
+              <Field>
+                <Label htmlFor="articleVeracity">Pravdivost článku</Label>
+                <select
+                  disabled={
+                    selectedArticleType !== ArticleTypeEnum.FacebookFactcheck
                   }
-
-                  return (
-                    <option key={key} value={key}>
-                      {value}
+                  id="articleVeracity"
+                  {...register('articleVeracity', { required: true })}
+                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
+                >
+                  {ARTICLE_VERACITY_OPTIONS.map((articleVeracity) => (
+                    <option
+                      key={articleVeracity.value}
+                      value={articleVeracity.value}
+                    >
+                      {articleVeracity.label}
                     </option>
-                  )
-                })}
-              </select>
-            </div>
-
-            <SwitchField
-              htmlFor="pinned"
-              label="Připnout článek"
-              description="Článek bude trvale zobrazen na hlavní stránce jako první."
-            >
-              <Controller
-                name="pinned"
-                control={control}
-                render={({ field }) => (
-                  <Switch
-                    id={field.name}
-                    name={field.name}
-                    checked={field.value}
-                    disabled={field.disabled}
-                    onBlur={field.onBlur}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-            </SwitchField>
-
-            <SwitchField
-              htmlFor="published"
-              label="Zveřejněný článek"
-              description="Článek bude veřejně dostupný."
-            >
-              <Controller
-                name="published"
-                control={control}
-                render={({ field }) => (
-                  <Switch
-                    id={field.name}
-                    name={field.name}
-                    checked={field.value}
-                    disabled={field.disabled}
-                    onBlur={field.onBlur}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-            </SwitchField>
-
-            <Field>
-              <Label htmlFor="publishedAt">Datum zveřejnění</Label>
-
-              <Input
-                id="publishedAt"
-                type="date"
-                {...register('publishedAt')}
-              />
-            </Field>
-
-            <div>
-              <Label htmlFor="articleVeracity">Pravdivost článku</Label>
-              <select
-                disabled={
-                  selectedArticleType !== ArticleTypeEnum.FacebookFactcheck
-                }
-                id="articleVeracity"
-                {...register('articleVeracity', { required: true })}
-                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
-              >
-                {ARTICLE_VERACITY_OPTIONS.map((articleVeracity) => (
-                  <option
-                    key={articleVeracity.value}
-                    value={articleVeracity.value}
-                  >
-                    {articleVeracity.label}
-                  </option>
-                ))}
-              </select>
-            </div>
+                  ))}
+                </select>
+              </Field>
+            </Fieldset>
           </AdminFormSidebar>
         </AdminFormContent>
       </div>

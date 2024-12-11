@@ -158,15 +158,12 @@ export const machine = setup({
         },
   },
   guards: {
-    isPromiseRatingEditable: or([
-      '_canEditAsAdmin',
-      '_canEditStatementAsProofreader',
-    ]),
+    isPromiseRatingEditable: or(['_canEditAsAdmin', '_canEditAsProofreader']),
 
     isStatementEditable: or([
       '_canEditAsAdmin',
       '_canEditAsAnEvaluator',
-      '_canEditStatementAsProofreader',
+      '_canEditAsProofreader',
     ]),
 
     isStatementAssessmentVisible: or([
@@ -207,9 +204,32 @@ export const machine = setup({
       or(['_canEditAsAnEvaluator', '_canEditAsAdmin']),
     ]),
 
+    canRequestProofreading: and(['_canEditAsAdmin', 'isApprovalNeeded']),
+
+    canApprove: and([
+      'isProofreadingNeeded',
+      or(['_canEditAsProofreader', '_canEditAsAdmin']),
+    ]),
+
+    canReturnBackToEvaluation: or([
+      and([
+        'isApprovalNeeded',
+        or(['_canEditAsAdmin', '_canEditAsAnEvaluator']),
+      ]),
+      and([
+        'isProofreadingNeeded',
+        or([
+          '_canEditAsProofreader',
+          '_canEditAsAdmin',
+          '_canEditAsAnEvaluator',
+        ]),
+      ]),
+      and(['isApproved', or(['_canEditAsAdmin'])]),
+    ]),
+
     _canEditAsAdmin: ({ context }) => context.authorization.canEditStatement(),
 
-    _canEditStatementAsProofreader: ({ context }) =>
+    _canEditAsProofreader: ({ context }) =>
       context.authorization.canEditStatementAsProofreader(),
 
     _canViewUnapprovedEvaluation: ({ context }) =>
@@ -217,14 +237,17 @@ export const machine = setup({
 
     isStatementFactual: ({ context }) => context.statementType === 'factual',
     isStatementPromise: ({ context }) => context.statementType === 'promise',
-    isAprovalNeeded: ({ context }) =>
+    isApprovalNeeded: ({ context }) =>
       context.state === ASSESSMENT_STATUS_APPROVAL_NEEDED,
     isProofreadingNeeded: ({ context }) =>
       context.state === ASSESSMENT_STATUS_PROOFREADING_NEEDED,
     isBeingEvaluated: ({ context }) =>
       context.state === ASSESSMENT_STATUS_BEING_EVALUATED,
-    isApproved: ({ context }) => context.state === ASSESSMENT_STATUS_APPROVED,
-    canApprove: ({ context }) => context.authorization.canEditStatement(),
+    isApproved: ({ context }) => {
+      console.log(context.state === ASSESSMENT_STATUS_APPROVED)
+
+      return context.state === ASSESSMENT_STATUS_APPROVED
+    },
   },
 }).createMachine({
   context: ({ input }) => input,
@@ -239,7 +262,7 @@ export const machine = setup({
           always: [
             {
               target: 'approval_needed',
-              guard: 'isAprovalNeeded',
+              guard: 'isApprovalNeeded',
             },
             {
               target: 'proofreading_needed',
@@ -265,12 +288,15 @@ export const machine = setup({
             'Back to evaluation': {
               target: 'being_evaluated',
               actions: assign({ state: ASSESSMENT_STATUS_BEING_EVALUATED }),
+              guard: {
+                type: 'canReturnBackToEvaluation',
+              },
             },
             'Request proofreading': {
               target: 'proofreading_needed',
               actions: assign({ state: ASSESSMENT_STATUS_PROOFREADING_NEEDED }),
               guard: {
-                type: 'canApprove',
+                type: 'canRequestProofreading',
               },
             },
           },
@@ -287,9 +313,15 @@ export const machine = setup({
               target: 'approved',
               actions: assign({ state: ASSESSMENT_STATUS_APPROVED }),
             },
+            guard: {
+              type: 'canApprove',
+            },
             'Back to evaluation': {
               target: 'being_evaluated',
               actions: assign({ state: ASSESSMENT_STATUS_BEING_EVALUATED }),
+              guard: {
+                type: 'canReturnBackToEvaluation',
+              },
             },
           },
         },
@@ -303,6 +335,9 @@ export const machine = setup({
             'Back to evaluation': {
               target: 'being_evaluated',
               actions: assign({ state: ASSESSMENT_STATUS_BEING_EVALUATED }),
+              guard: {
+                type: 'canReturnBackToEvaluation',
+              },
             },
           },
         },

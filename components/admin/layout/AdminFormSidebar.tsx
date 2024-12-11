@@ -6,10 +6,7 @@ export function AdminFormSidebar(
 ) {
   return (
     <div
-      className={classNames(
-        'min-w-[25%] w-[25%] content-start',
-        props.className
-      )}
+      className={classNames('col-1 col-span-12 lg:col-span-3', props.className)}
     >
       {props.children}
     </div>
