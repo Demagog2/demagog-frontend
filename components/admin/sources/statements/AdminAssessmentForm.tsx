@@ -17,7 +17,7 @@ import { AdminFormActions } from '../../layout/AdminFormActions'
 import { LinkButton } from '../../forms/LinkButton'
 import { SubmitButton } from '../../forms/SubmitButton'
 import { AdminFormContent } from '../../layout/AdminFormContent'
-import { Button, Field, Fieldset, Legend } from '@headlessui/react'
+import { Field, Fieldset, Legend } from '@headlessui/react'
 import { Label } from '../../forms/Label'
 import { ErrorMessage } from '../../forms/ErrorMessage'
 import { AdminSourceSpeakerControl } from './controls/AdminSourceSpeakerControl'
@@ -40,7 +40,7 @@ import { SwitchField } from '../../forms/SwitchField'
 import { Switch } from '../../forms/Switch'
 import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminExpertsField } from './AdminExpertsList'
-import { ASSESSMENT_STATUS_APPROVAL_NEEDED } from '@/libs/constants/assessment'
+import { AdminEvaluationStatusControl } from './controls/AdminEvaluationStatusControl'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -204,11 +204,9 @@ export function AdminAssessmentForm(props: {
   const {
     isFactual,
     isPromise,
-    isBeingEvaluated,
     isStatementFieldDisabled,
     isStatementRatingDisabled,
     isStatementEvaluationVisible,
-    canRequestApproval,
     canEditEvaluator,
     canBePublished,
     actorRef,
@@ -313,7 +311,7 @@ export function AdminAssessmentForm(props: {
                   {...register('content')}
                   rows={5}
                   placeholder={`Zadejte text ${isPromise ? 'slibu' : 'výroku'}...`}
-                  disabled={isStatementFieldDisabled}
+                  readOnly={isStatementFieldDisabled}
                 />
 
                 <ErrorMessage message={errors.content?.message} />
@@ -585,50 +583,15 @@ export function AdminAssessmentForm(props: {
               <Field>
                 <Label htmlFor="evaluationStatus">Stav</Label>
 
-                <Controller
+                <AdminEvaluationStatusControl
+                  actorRef={actorRef}
                   control={control}
                   name="evaluationStatus"
-                  render={({ field }) => (
-                    <div className="mt-4">
-                      <input
-                        type="hidden"
-                        name={field.name}
-                        value={field.value}
-                      />
-
-                      {isBeingEvaluated && (
-                        <>
-                          <Button
-                            className="rounded-md bg-white disabled:text-gray-600 disabled:cursor-not-allowed disabled:bg-gray-100 px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                            disabled={!canRequestApproval}
-                            onClick={async () => {
-                              actorRef.send({
-                                type: 'Request approval',
-                              })
-
-                              field.onChange(ASSESSMENT_STATUS_APPROVAL_NEEDED)
-
-                              await trigger().then(() => {
-                                formRef.current?.requestSubmit()
-                              })
-                            }}
-                          >
-                            Posunout ke kontrole
-                          </Button>
-
-                          {!canRequestApproval && (
-                            <div className="mt-2">
-                              <small className="text-gray-600">
-                                Aby šel výrok posunout ke kontrole, musí být
-                                vyplněné hodnocení a odůvodnění, včetně
-                                zkráceného.
-                              </small>
-                            </div>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  )}
+                  submitForm={() =>
+                    trigger().then(() => {
+                      formRef.current?.requestSubmit()
+                    })
+                  }
                 />
               </Field>
 
@@ -659,7 +622,7 @@ export function AdminAssessmentForm(props: {
               </Field>
             </Fieldset>
 
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Fieldset className="space-y-4 w-full pb-8">
               <Field className="mt-8">
                 <SwitchField
                   htmlFor="published"

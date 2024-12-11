@@ -105,17 +105,17 @@ export function useStatementEvaluationMachine(props: {
         status: {
           being_evaluated: visible,
         },
-      }) &&
+      }) ||
       snapshot.matches({
         status: {
           approval_needed: visible,
         },
-      }) &&
+      }) ||
       snapshot.matches({
         status: {
           proofreading_needed: visible,
         },
-      }) &&
+      }) ||
       snapshot.matches({
         status: {
           approved: visible,
@@ -146,24 +146,14 @@ export function useStatementEvaluationMachine(props: {
     snapshot.matches({ type: 'promise' })
   )
 
-  const isBeingEvaluated = useSelector(actorRef, (snapshot) =>
-    snapshot.matches({ status: 'being_evaluated' })
-  )
-
-  const canRequestApproval = useSelector(actorRef, (snapshot) =>
-    snapshot.can({ type: 'Request approval' })
-  )
-
   return useMemo(
     () => ({
       actorRef,
       isStatementEvaluationVisible,
       isStatementFieldDisabled,
       isStatementRatingDisabled,
-      isBeingEvaluated,
       canEditEvaluator,
       canBePublished,
-      canRequestApproval,
       isFactual,
       isPromise,
     }),
@@ -174,8 +164,6 @@ export function useStatementEvaluationMachine(props: {
       isStatementRatingDisabled,
       canEditEvaluator,
       canBePublished,
-      canRequestApproval,
-      isBeingEvaluated,
       isFactual,
       isPromise,
     ]

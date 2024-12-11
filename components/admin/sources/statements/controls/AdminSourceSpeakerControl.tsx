@@ -22,12 +22,11 @@ export function AdminSourceSpeakerControl<T extends FieldValues>(props: {
     <Controller
       control={props.control}
       name={props.name as any}
-      disabled={props.disabled}
       render={({ field }) => (
         <>
           <input type="hidden" {...field} />
           <AdminSourceSpeakerSelect
-            disabled={field.disabled}
+            disabled={props.disabled}
             id={field.name}
             data={data}
             onChange={field.onChange}
