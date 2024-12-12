@@ -151,7 +151,7 @@ export default async function Article(props: { params: { slug: string } }) {
           <div>
             <h1 className="display-1 fw-bold px-3 px-sm-0">{article.title}</h1>
             <ArticleIllustration article={article} />
-            <div className="mt-4 mt-md-9 text-md-justify">
+            <div className="mt-4 mt-md-9">
               <span className="perex">{article.perex}</span>
             </div>
           </div>
