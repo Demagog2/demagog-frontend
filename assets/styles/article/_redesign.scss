@@ -130,7 +130,7 @@
     }
 
     .fs-16px {
-      font-size: 16px !important;
+      font-size: 16px;
     }
 
     .lh-110percent {
@@ -229,10 +229,6 @@
     text-underline-offset: 2px;
   }
 
-  .fs-16px {
-    font-size: 16px !important;
-  }
-
   .fs-12px {
     font-size: 12px;
   }
@@ -244,10 +240,6 @@
   @media (min-width: 768px) {
     .fs-14px {
       font-size: 14px;
-    }
-
-    .fs-26px {
-      font-size: 26px !important;
     }
 
     .lh-md-base {
