@@ -2,6 +2,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminSourceStatementStep } from './AdminSourceStatementStep'
 import { VeracityBadge } from '../veracity/VeracityBadge'
 import { AdminUserAvatar } from '../users/AdminUserAvatar'
+import { ASSESSMENT_STATUS_APPROVED } from '@/libs/constants/assessment'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -20,6 +21,7 @@ const SourceStatementsFragment = gql(`
       }
       assessment {
         ...VeracityBadge
+        evaluationStatus
         evaluator {
           avatar(size: small)
           fullName
@@ -79,10 +81,13 @@ export function AdminSourceStatements(props: {
                         </a>
                       </h3>
 
-                      <VeracityBadge
-                        className="mt-3"
-                        assessment={statement.assessment}
-                      />
+                      {statement.assessment.evaluationStatus ===
+                        ASSESSMENT_STATUS_APPROVED && (
+                        <VeracityBadge
+                          className="mt-3"
+                          assessment={statement.assessment}
+                        />
+                      )}
 
                       <p className="mt-3 text-sm text-gray-500">
                         &bdquo;{statement.content}&bdquo;
