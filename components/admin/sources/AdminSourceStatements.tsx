@@ -2,7 +2,6 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminSourceStatementStep } from './AdminSourceStatementStep'
 import { VeracityBadge } from '../veracity/VeracityBadge'
 import { AdminUserAvatar } from '../users/AdminUserAvatar'
-import { StatementCount } from '@/components/filtering/StatementCount'
 import { ASSESSMENT_STATUS_APPROVED } from '@/libs/constants/assessment'
 
 const SourceStatementsFragment = gql(`
