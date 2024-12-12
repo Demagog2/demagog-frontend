@@ -147,7 +147,7 @@ export default async function Speaker(
       <div className="row g-5 justify-content-between mb-10">
         <div className="col col-12 col-md-6 col-lg-8">
           <div className="d-flex flex-wrap">
-            <div className="w-125px position-relative me-md-5 me-lg-10 mb-5 mb-md-0">
+            <div className="w-125px position-relative me-5 me-lg-10 mb-5">
               {speaker.avatar && (
                 <span className="symbol symbol-square symbol-circle">
                   <img src={mediaUrl + speaker.avatar} alt={speaker.fullName} />
@@ -162,7 +162,7 @@ export default async function Speaker(
               )}
             </div>
             <div>
-              <h1 className="display-2 fw-600 mb-1">{speaker.fullName}</h1>
+              <h1 className="display-1 fw-600 mb-1">{speaker.fullName}</h1>
               <div className="mb-1">
                 <span className="fs-4 fw-500">{speaker.role}</span>
               </div>
