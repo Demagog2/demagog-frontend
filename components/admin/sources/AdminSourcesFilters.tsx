@@ -18,7 +18,6 @@ import { EMPTY_SOURCE, ISource } from '@/libs/sources/model/Source'
 import { createSourceFromQuery } from '@/libs/sources/data-mappers/SourceDataMapper'
 import { useStatementFilters } from '@/libs/sources/hooks/statement-filters'
 import { AdminSourceStatements } from '@/components/admin/sources/AdminSourceStatements'
-import { SecondaryButton } from '../layout/buttons/SecondaryButton'
 
 void gql(`
   fragment AdminSourcesFilterSegment on Statement {
