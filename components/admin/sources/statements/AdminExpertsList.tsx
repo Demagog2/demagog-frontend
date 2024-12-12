@@ -22,7 +22,7 @@ export function AdminExpertsField(props: {
         {statement.source.experts?.length === 1 ? 'Editor' : 'Editoři'}
       </Label>
 
-      <div className="mt-4 text-sm text-gray-600">
+      <div className="pt-4 pb-2 text-sm text-gray-600">
         {statement.source.experts?.map((expert) => expert.fullName).join(', ')}
 
         {statement.source.experts?.length === 0 && <span>Nepřiřazení</span>}

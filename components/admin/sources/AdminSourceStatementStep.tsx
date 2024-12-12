@@ -36,16 +36,24 @@ function getEvaluationStep(
 
 export function AdminSourceStatementStep(props: {
   statement: FragmentType<typeof SourceStatementStepFragment>
+  evaluationStep?: string
+  published?: boolean
+  className?: string
 }) {
   const statement = useFragment(SourceStatementStepFragment, props.statement)
 
   const step = getEvaluationStep(
-    statement.assessment.evaluationStatus,
-    statement.published
+    props.evaluationStep ?? statement.assessment.evaluationStatus,
+    props.published ?? statement.published
   )
 
   return (
-    <div className="border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8">
+    <div
+      className={classNames(
+        'border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8',
+        props.className
+      )}
+    >
       <h4 className="sr-only">Stav</h4>
       {/* <p className="text-sm font-medium text-gray-900"> */}
       {/*   {statement.status} on{' '} */}

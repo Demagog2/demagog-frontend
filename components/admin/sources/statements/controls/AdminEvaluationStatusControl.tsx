@@ -56,7 +56,7 @@ export function AdminEvaluationStatusControl<T extends FieldValues>(props: {
       control={props.control}
       name={props.name}
       render={({ field }) => (
-        <div className="mt-4">
+        <div className="mt-2">
           <input type="hidden" name={field.name} value={field.value} />
 
           {isBeingEvaluated && (

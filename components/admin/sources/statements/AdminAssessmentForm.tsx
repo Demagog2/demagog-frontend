@@ -41,6 +41,7 @@ import { Switch } from '../../forms/Switch'
 import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminExpertsField } from './AdminExpertsList'
 import { AdminEvaluationStatusControl } from './controls/AdminEvaluationStatusControl'
+import { AdminSourceStatementStep } from '../AdminSourceStatementStep'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -79,6 +80,7 @@ const AdminAssessmentFormFragment = gql(`
 const AdminStatementAssessmentFragment = gql(`
   fragment AdminStatementAssessment on Statement {
     ...StatementEvaluationMachine
+    ...SourceStatementStep
     statementType
     title
     content
@@ -198,6 +200,8 @@ export function AdminAssessmentForm(props: {
   })
 
   const shortExplanation = watch('shortExplanation')
+  const evaluationStatus = watch('evaluationStatus')
+  const published = watch('published')
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
@@ -250,6 +254,13 @@ export function AdminAssessmentForm(props: {
             <SubmitButton />
           </AdminFormActions>
         </AdminFormHeader>
+
+        <AdminSourceStatementStep
+          className="px-0 lg:p-0 border-none mt-8"
+          statement={statement}
+          evaluationStep={evaluationStatus}
+          published={published}
+        />
 
         <AdminFormContent>
           <AdminFormMain>
@@ -580,6 +591,10 @@ export function AdminAssessmentForm(props: {
 
           <AdminFormSidebar>
             <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Stav ověřování
+              </Legend>
+
               <Field>
                 <Label htmlFor="evaluationStatus">Stav</Label>
 
