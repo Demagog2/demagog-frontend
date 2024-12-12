@@ -22,7 +22,7 @@ export function FacebookFactcheckMetadata(props: {
             Meta fact-check
           </span>{' '}
           <i>
-            <span className={classNames('col col-auto fs16px fs-md-18px')}>
+            <span className={classNames('col col-auto fs-16px fs-md-18px')}>
               {formatDate(article.publishedAt)}
             </span>
           </i>
