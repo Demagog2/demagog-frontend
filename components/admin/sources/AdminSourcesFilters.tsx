@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from 'react'
 import {
+  Button,
   Dialog,
   DialogBackdrop,
   DialogPanel,
@@ -152,6 +153,14 @@ export function AdminSourcesFilters(props: {
 
               {/* Filters */}
               <form className="mt-4">
+                <Button
+                  className="text-sm text-gray-900 disabled:text-gray-500 mb-8 mt-4 px-4"
+                  disabled={!sourceViewModel.hasActiveFilter}
+                  onClick={onRemoveStatementsFilters}
+                >
+                  Všechny výroky ({sourceViewModel.statementsTotalCount})
+                </Button>
+
                 {sourceViewModel.filters.map((section) => {
                   if (section.type === 'filter') {
                     return (
@@ -233,6 +242,14 @@ export function AdminSourcesFilters(props: {
         <div className="pt-12 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
           <aside>
             <h2 className="sr-only">Filtry</h2>
+
+            <Button
+              className="hidden lg:block text-sm text-gray-900 disabled:text-gray-500 mb-8"
+              disabled={!sourceViewModel.hasActiveFilter}
+              onClick={onRemoveStatementsFilters}
+            >
+              Všechny výroky ({sourceViewModel.statementsTotalCount})
+            </Button>
 
             <button
               type="button"
