@@ -155,11 +155,23 @@
         font-weight: 700;
       }
 
+      .ck-editor_demagog-box-wrapper > p:first-of-type {
+        margin-top: 0 !important;
+      }
+
       .ck-editor_demagog-box-wrapper {
         @extend .border, .border-dark, .mt-6;
         border-radius: 31px;
-        padding: 25px 27px;
+        padding: 20px 25px;
         text-align: start;
+
+        h3 {
+          font-size: 1.125rem;
+        }
+
+        h2 {
+          font-size: 1.5rem;
+        }
 
         h3,
         h2 {
@@ -212,7 +224,7 @@
 
         .ck-editor_demagog-box-wrapper {
           margin-top: 40px;
-          padding: 25px 45px;
+          padding: 25px 30px;
           ul li,
           ol li {
             font-size: 16px;
