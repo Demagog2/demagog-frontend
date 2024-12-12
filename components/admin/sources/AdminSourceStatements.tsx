@@ -3,6 +3,7 @@ import { AdminSourceStatementStep } from './AdminSourceStatementStep'
 import { VeracityBadge } from '../veracity/VeracityBadge'
 import { AdminUserAvatar } from '../users/AdminUserAvatar'
 import { ASSESSMENT_STATUS_APPROVED } from '@/libs/constants/assessment'
+import { useRouter } from 'next/navigation'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -36,6 +37,7 @@ export function AdminSourceStatements(props: {
   source: FragmentType<typeof SourceStatementsFragment>
   filteredStatementsIds: string[]
 }) {
+  const router = useRouter()
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
   const source = useFragment(SourceStatementsFragment, props.source)
@@ -56,7 +58,12 @@ export function AdminSourceStatements(props: {
             .map((statement) => (
               <div
                 key={statement.id}
-                className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
+                onClick={() =>
+                  router.push(
+                    `/beta/admin/sources/${source.id}/statements/${statement.id}`
+                  )
+                }
+                className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border hover:border-indigo-600 cursor-pointer"
               >
                 <div className="px-4 py-6 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
                   <div className="sm:flex lg:col-span-12">
@@ -127,13 +134,6 @@ export function AdminSourceStatements(props: {
                         <dt className="font-medium text-gray-900">Komentáře</dt>
                         <dd className="mt-3 space-y-3 text-gray-500">
                           <p>Počet komentářů: {statement.commentsCount}</p>
-                          <a
-                            href={`/beta/admin/sources/${source.id}/statements/${statement.id}`}
-                            type="button"
-                            className="font-medium text-indigo-600 hover:text-indigo-500"
-                          >
-                            Upravit
-                          </a>
                         </dd>
                       </div>
                     </dl>
