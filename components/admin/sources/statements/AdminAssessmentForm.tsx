@@ -42,6 +42,7 @@ import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminExpertsField } from './AdminExpertsList'
 import { AdminEvaluationStatusControl } from './controls/AdminEvaluationStatusControl'
 import { AdminSourceStatementStep } from '../AdminSourceStatementStep'
+import { AdminStatementComments } from './AdminStatementComments'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -81,6 +82,7 @@ const AdminStatementAssessmentFragment = gql(`
   fragment AdminStatementAssessment on Statement {
     ...StatementEvaluationMachine
     ...SourceStatementStep
+    ...AdminStatementsComments
     statementType
     title
     content
@@ -637,7 +639,7 @@ export function AdminAssessmentForm(props: {
               </Field>
             </Fieldset>
 
-            <Fieldset className="space-y-4 w-full pb-8">
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
               <Field className="mt-8">
                 <SwitchField
                   htmlFor="published"
@@ -666,6 +668,12 @@ export function AdminAssessmentForm(props: {
                 </SwitchField>
               </Field>
             </Fieldset>
+
+            <div className="text-base font-semibold leading-7 text-gray-900 mb-5 mt-8">
+              Komentáře
+            </div>
+
+            <AdminStatementComments statement={statement} />
           </AdminFormSidebar>
         </AdminFormContent>
       </div>
