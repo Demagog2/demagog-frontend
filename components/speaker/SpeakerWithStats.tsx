@@ -78,7 +78,7 @@ export function SpeakerWithStats(props: {
                 data-url="?hodnoceni[]=true&recnici[]=<%= speaker.id %>"
                 data-count="<%= stats[:true] %>"
               >
-                <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-primary rounded-circle me-2">
+                <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-primary rounded-circle me-2 flex-shrink-0">
                   <svg
                     width="17"
                     height="13"
@@ -103,7 +103,7 @@ export function SpeakerWithStats(props: {
                 data-url="?hodnoceni[]=unverifiable&recnici[]=<%= speaker.id %>"
                 data-count="<%= stats[:unverifiable] %>"
               >
-                <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-gray rounded-circle me-2">
+                <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-gray rounded-circle me-2 flex-shrink-0">
                   <svg
                     width="12"
                     height="22"
@@ -130,7 +130,7 @@ export function SpeakerWithStats(props: {
                 data-url="?hodnoceni[]=untrue&recnici[]=<%= speaker.id %>"
                 data-count="<%= stats[:untrue] %>"
               >
-                <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-red rounded-circle me-2">
+                <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-red rounded-circle me-2 flex-shrink-0">
                   <svg
                     width="13"
                     height="13"
@@ -155,7 +155,7 @@ export function SpeakerWithStats(props: {
                 data-url="?hodnoceni[]=misleading&recnici[]=<%= speaker.id %>"
                 data-count="<%= stats[:misleading] %>"
               >
-                <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-secondary rounded-circle me-2">
+                <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-secondary rounded-circle me-2 flex-shrink-0">
                   <svg
                     width="4"
                     height="22"
