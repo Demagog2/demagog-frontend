@@ -248,7 +248,7 @@ export function AdminAssessmentForm(props: {
 
           <AdminFormActions>
             <LinkButton href={`/beta/admin/sources/${statement.source.id}`}>
-              Zpět
+              Zpět na diskuzi
             </LinkButton>
 
             <SubmitButton />
