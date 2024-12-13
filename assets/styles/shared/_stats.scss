@@ -1,6 +1,7 @@
 .container-shared-stats {
+  @extend .fs-4;
+
   font-weight: bold;
-  font-size: 20px;
   margin: 0;
   padding: 0;
   display: flex;

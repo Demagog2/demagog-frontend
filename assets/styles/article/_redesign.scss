@@ -124,8 +124,8 @@
 
       h2 {
         @extend .mt-8;
-        font-size: 20px;
-        font-weight: 800px;
+        font-size: $h4-font-size;
+        font-weight: 800;
       }
 
       h3 {
