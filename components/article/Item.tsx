@@ -86,8 +86,8 @@ export default function ArticleItem(props: {
         >
           <h2
             className={classNames('fw-bold', {
-              'fs-16px fs-md-26px mb-0 lh-110percent': isEmbedded,
-              'fs-2  mb-2': !isEmbedded,
+              'fs-16px fs-md-2 mb-0 lh-110percent': isEmbedded,
+              'fs-2 mb-2': !isEmbedded,
             })}
           >
             <ArticleLink
