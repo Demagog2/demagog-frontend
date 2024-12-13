@@ -54,13 +54,13 @@
     margin-top: 3px;
 
     blockquote {
+      @extend .fs-5;
+
       position: relative;
       border-radius: 5px;
       background: var(--statement-background);
       padding: 15px 25px 20px;
       margin: 0;
-
-      font-size: 18px;
 
       // CSS-only arrow pointing to the portrait
       &:after {

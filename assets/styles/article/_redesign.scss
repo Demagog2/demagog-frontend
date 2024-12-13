@@ -13,10 +13,6 @@
     text-underline-offset: 3px;
   }
 
-  .fs-16px {
-    font-size: 16px;
-  }
-
   .custom-list {
     border-radius: 31px;
     padding: 25px 27px;
@@ -72,10 +68,6 @@
       padding-right: 44px;
     }
 
-    .fs-md-18px {
-      font-size: 18px;
-    }
-
     .text-md-justify {
       text-align: justify;
     }
@@ -121,10 +113,6 @@
       text-underline-offset: 2px;
     }
 
-    .fs-16px {
-      font-size: 16px;
-    }
-
     .lh-110percent {
       line-height: 110%;
     }
@@ -142,7 +130,7 @@
 
       h3 {
         @extend .mt-8;
-        font-size: 18px;
+        font-size: $h5-font-size;
         font-weight: 700;
       }
 

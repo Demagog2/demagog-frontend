@@ -46,7 +46,8 @@
           flex: 2 0 240px;
 
           .stats-line-amount-number {
-            font-size: 18px;
+            @extend .fs-5;
+
             margin-right: 2px;
           }
         }

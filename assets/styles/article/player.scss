@@ -20,13 +20,14 @@
     align-items: center;
 
     .header-bar-close-button {
+      @extend .fs-5;
+
       display: block;
       margin: 0 15px 0 auto;
       padding: 0 15px;
       border: none;
       background: none;
       color: #111827;
-      font-size: 18px;
       line-height: 1.2;
       font-weight: bold;
       cursor: pointer;

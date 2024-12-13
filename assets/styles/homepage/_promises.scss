@@ -1,6 +1,6 @@
 .container-homepage-promises {
-  border-top: 2px solid #D8E1E8;
-  border-bottom: 2px solid #D8E1E8;
+  border-top: 2px solid #d8e1e8;
+  border-bottom: 2px solid #d8e1e8;
   margin: 3rem -2rem 0;
   padding: 0.5rem 2rem 0;
   display: flex;
@@ -25,7 +25,7 @@
       margin-bottom: 4px;
 
       .stats-line-number {
-        font-size: 18px;
+        @extend .fs-5;
         margin-right: 2px;
       }
     }

@@ -17,12 +17,12 @@ export function FacebookFactcheckMetadata(props: {
   return (
     <>
       {article.articleType === 'facebook_factcheck' && (
-        <p className={classNames('fs-16px fs-md-18px mt-8 mt-md-10')}>
+        <p className={classNames('fs-16px fs-md-5 mt-8 mt-md-10')}>
           <span className={classNames('text-primary fw-bold')}>
             Meta fact-check
           </span>{' '}
           <i>
-            <span className={classNames('col col-auto fs-16px fs-md-18px')}>
+            <span className={classNames('col col-auto')}>
               {formatDate(article.publishedAt)}
             </span>
           </i>
