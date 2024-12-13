@@ -1,6 +1,6 @@
 .container-shared-infobox {
   .infobox-button {
-    background-color: #E7EFF6;
+    background-color: #e7eff6;
     border: none;
     border-radius: 5px;
     margin: 0;
@@ -14,16 +14,17 @@
 
     .info-icon {
       flex: 0 0 24px;
-  
+
       img {
         display: block;
       }
     }
-  
+
     .info-text {
+      @extend .fs-7;
+
       flex: 1 0 0px;
       margin-left: 12px;
-      font-size: 14px;
       line-height: 1.5;
 
       &.info-text-veracities {
@@ -34,7 +35,8 @@
           margin: 2px 0;
         }
 
-        .veracity, .text-inner {
+        .veracity,
+        .text-inner {
           margin-right: 5px;
         }
       }
@@ -52,15 +54,18 @@
         }
       }
     }
-  
-    &:hover, &:focus {
-      background-color: #F3DBD3;
+
+    &:hover,
+    &:focus {
+      background-color: #f3dbd3;
     }
   }
 
   .infobox-modal {
     display: none;
-    &.is-open { display: block; }
+    &.is-open {
+      display: block;
+    }
 
     .infobox-modal-overlay {
       position: fixed;
@@ -68,7 +73,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.6);
       padding: 15px;
       display: flex;
       justify-content: center;
@@ -103,7 +108,8 @@
         color: #3c325c;
         outline: none;
 
-        &:hover, &:active {
+        &:hover,
+        &:active {
           color: #f26538;
         }
       }
@@ -122,7 +128,8 @@
       margin: 2px 0;
     }
 
-    .veracity, .text-inner {
+    .veracity,
+    .text-inner {
       margin-right: 5px;
     }
   }

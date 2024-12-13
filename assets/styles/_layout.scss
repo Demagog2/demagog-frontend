@@ -25,9 +25,9 @@
       margin: 0 0 1rem;
 
       > figcaption {
-        font-size: 14px;
+        font-size: $h7-font-size;
         color: #9a95ab;
-        margin: .3rem 0 0 0;
+        margin: 0.3rem 0 0 0;
       }
     }
 
@@ -71,7 +71,7 @@
           margin-left: 8px;
           margin-right: 12px;
           color: white;
-          font-size: 14px;
+          font-size: $h7-font-size;
           line-height: 1.25;
         }
       }
@@ -84,7 +84,8 @@
     }
   }
 
-  #twitter, #facebook {
+  #twitter,
+  #facebook {
     display: none;
   }
 
@@ -106,9 +107,9 @@
       margin: 0 0 1rem;
 
       > figcaption {
-        font-size: 14px;
+        font-size: $h7-font-size;
         color: #9a95ab;
-        margin: .3rem 0 0 0;
+        margin: 0.3rem 0 0 0;
       }
     }
 
@@ -154,7 +155,7 @@
           margin-left: 8px;
           margin-right: 12px;
           color: white;
-          font-size: 14px;
+          font-size: $h7-font-size;
           line-height: 1.25;
         }
       }
@@ -202,7 +203,8 @@
     margin-top: 3rem;
   }
 
-  #twitter, #facebook {
+  #twitter,
+  #facebook {
     flex: 1 0 50%;
     max-width: 50%; // for IE11 not respecting border-box with flex-basis
     box-sizing: border-box;

@@ -3,6 +3,8 @@
 @import 'custom_variables';
 @import 'vendor/bootstrap';
 
+@import 'responsive/font-size';
+
 @import './core/base';
 @import './core/header';
 @import './core/btn';
@@ -43,7 +45,8 @@
   }
 
   .widget-periodic-button {
-    font-size: 14px;
+    @extend .fs-7;
+
     padding: 10px 5px 9px 5px;
     text-align: center;
     letter-spacing: 0.3px;
@@ -57,7 +60,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
-    font-size: 14px;
+    @extend .fs-7;
   }
 
   .widget-custom-title {
@@ -77,7 +80,7 @@
   }
 
   .widget-custom-input {
-    font-size: 14px;
+    @extend .fs-7;
     padding: 10px 5px 9px 5px;
     margin-bottom: 2px;
     cursor: auto;
@@ -104,8 +107,8 @@
   }
 
   .widget-entries-button {
+    @extend .fs-7;
     width: 100%;
-    font-size: 14px;
     padding: 10px 5px 9px 5px;
     cursor: pointer;
     text-align: center;
@@ -119,7 +122,7 @@
   }
 
   .donate-submit {
-    font-size: 14px;
+    @extend .fs-7;
     padding: 10px 5px 9px 5px;
     letter-spacing: 0.3px;
     line-height: 1.2;

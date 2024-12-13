@@ -1,0 +1,16 @@
+// Responsive font-sizes
+
+// Needs to be defined before the responsive font-sizes
+.fs-12px {
+  font-size: 12px;
+}
+
+@each $breakpoint in map-keys($grid-breakpoints) {
+  @include media-breakpoint-up($breakpoint) {
+    $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
+
+    .fs#{$infix}-7 {
+      font-size: $h7-font-size;
+    }
+  }
+}

@@ -164,7 +164,7 @@ export function SingleStatementArticlePreview(props: {
           </h2>
           <div
             className={classNames('mb-2', {
-              'text-muted fs-12px fs-md-14px': isEmbedded,
+              'text-muted fs-12px fs-md-7': isEmbedded,
             })}
           >
             <i className={classNames({ 'text-muted': isEmbedded })}>
@@ -174,10 +174,10 @@ export function SingleStatementArticlePreview(props: {
             </i>
             {isEmbedded && article.statement?.source?.sourceUrl && (
               <>
-                <span className="col col-auto fs-12px fs-md-14px text-muted">
+                <span className="col col-auto fs-12px fs-md-7 text-muted">
                   ,{' '}
                 </span>
-                <span className="col col-auto fs-12px fs-md-14px text-decoration-underline underline-offset-2px">
+                <span className="col col-auto fs-12px fs-md-7 text-decoration-underline underline-offset-2px">
                   <i>
                     <a
                       href={article.statement.source.sourceUrl}
@@ -193,7 +193,7 @@ export function SingleStatementArticlePreview(props: {
 
           <p
             className={classNames({
-              'fs-12px fs-md-14px lh-md-base': isEmbedded,
+              'fs-12px fs-md-7 lh-md-base': isEmbedded,
               'fs-6 lh-sm': !isEmbedded,
             })}
           >
