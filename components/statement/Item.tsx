@@ -76,7 +76,7 @@ export default function StatementItem(props: {
       <div
         className={classNames('g-6', {
           'flex-column': isVertical,
-          row: !isVertical && !isEmbedded,
+          row: isDefault,
         })}
       >
         <div
@@ -122,7 +122,7 @@ export default function StatementItem(props: {
                       />
                     </span>
                   )}
-                  {statement.sourceSpeaker?.body?.shortName && (
+                  {!isVertical && statement.sourceSpeaker?.body?.shortName && (
                     <div
                       className={classNames(
                         'symbol-label d-flex align-items-center justify-content-center  rounded-circle bg-dark',
