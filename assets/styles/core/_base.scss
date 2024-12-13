@@ -61,7 +61,7 @@ main {
   }
 
   h2 {
-    font-size: 1.5rem !important;
+    @extend .fs-2;
     line-height: 1.5;
   }
 

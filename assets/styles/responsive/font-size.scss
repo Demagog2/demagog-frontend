@@ -9,6 +9,10 @@
   @include media-breakpoint-up($breakpoint) {
     $infix: breakpoint-infix($breakpoint, $grid-breakpoints);
 
+    .fs#{$infix}-2 {
+      font-size: $h2-font-size;
+    }
+
     .fs#{$infix}-7 {
       font-size: $h7-font-size;
     }

@@ -130,6 +130,7 @@
     }
 
     .close-button {
+      @extend .fs-2;
       align-self: flex-end;
       display: block;
       border: none;
@@ -137,7 +138,6 @@
       padding: 0;
       margin: 0 0 8px 0;
       font-family: var(--font-family);
-      font-size: 24px;
       font-weight: bold;
       line-height: 1;
       cursor: pointer;

@@ -584,12 +584,6 @@ ul {
     display: none;
   }
 
-  .playVideoText {
-    display: block;
-    font-size: 24px;
-    margin-left: 13.5px;
-  }
-
   .playVideoText:hover {
     color: #ffbf00;
   }

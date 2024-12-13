@@ -24,7 +24,7 @@ export function ArticleQuoteRedesign(props: {
           ”
         </span>
         <div>
-          <p className="mb-0 px-0 py-0 fw-semibold fs-lg-24px fst-italic">
+          <p className="mb-0 px-0 py-0 fw-semibold fs-lg-2 fst-italic">
             {data.text}
           </p>
           {data.speaker && (
