@@ -76,7 +76,7 @@ export default function StatementItem(props: {
       <div
         className={classNames('g-6', {
           'flex-column': isVertical,
-          row: !isVertical && !isEmbedded,
+          row: isDefault,
         })}
       >
         <div
