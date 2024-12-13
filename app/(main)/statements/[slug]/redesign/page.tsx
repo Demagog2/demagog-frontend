@@ -155,7 +155,7 @@ export default async function Statement(props: { params: { slug: string } }) {
       <div className="row">
         <div className="col col-4 col-md-2 d-flex flex-column align-items-center">
           <div className="w-85px">
-            <SourceSpeakerAvatar statement={statement} />
+            <SourceSpeakerAvatar statement={statement} isRole={true} />
           </div>
         </div>
         <div className="col col-12 col-md-8 justify-self-center">
