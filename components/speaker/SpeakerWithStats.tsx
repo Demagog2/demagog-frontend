@@ -38,7 +38,7 @@ export function SpeakerWithStats(props: {
   return (
     <div className="row">
       <div className="col col-6 col-md-5">
-        <div className="w-100 px-5">
+        <div className="w-100 px-5 px-lg-0">
           <SpeakerLink speaker={speaker} className="d-block position-relative">
             <span className="symbol symbol-square symbol-circle">
               {speaker.avatar && (
@@ -51,7 +51,7 @@ export function SpeakerWithStats(props: {
               )}
             </span>
             {speaker.body?.shortName && (
-              <div className="symbol-label d-flex align-items-center justify-content-center w-45px h-45px rounded-circle bg-dark">
+              <div className="symbol-label d-flex align-items-center justify-content-center w-45px h-45px w-lg-35px h-lg-35px w-xl-45px h-xl-45px rounded-circle bg-dark">
                 <span className="smallest text-white lh-1 text-center p-2">
                   {speaker.body.shortName}
                 </span>
