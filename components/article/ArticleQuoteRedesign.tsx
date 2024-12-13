@@ -20,7 +20,7 @@ export function ArticleQuoteRedesign(props: {
   return (
     <div className="quote align-items-start fw-semibold mt-10 mx-3 text-start mt-lg-20 mx-lg-0">
       <blockquote className="blockquote fs-6 lh-base d-flex align-items-center mb-0">
-        <span className="quote-mark fst-italic me-4 mt-minus-10px align-self-startme-lg-30px">
+        <span className="quote-mark fst-italic me-4 mt-minus-10px align-self-start me-lg-30px">
           ”
         </span>
         <div>
