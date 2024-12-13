@@ -125,10 +125,6 @@
       text-underline-offset: 2px;
     }
 
-    .fs-12px {
-      font-size: 12px;
-    }
-
     .fs-16px {
       font-size: 16px;
     }
@@ -139,8 +135,7 @@
 
     .content-text-node {
       p {
-        @extend .mt-6;
-        font-size: 14px;
+        @extend .mt-6, .fs-7;
       }
 
       h2 {
@@ -183,8 +178,7 @@
           @extend .mb-0;
 
           li {
-            @extend .li-item;
-            font-size: 14px;
+            @extend .li-item, .fs-7;
           }
 
           li.li-item:not(:last-child) {
@@ -198,10 +192,6 @@
     }
 
     @media (min-width: 768px) {
-      .fs-md-14px {
-        font-size: 14px;
-      }
-
       .fs-md-26px {
         font-size: 26px;
       }
@@ -212,8 +202,10 @@
 
       .content-text-node {
         p {
-          font-size: 16px;
+          // FIXME: Remove this once we have fs- for 1rem
+          font-size: 1rem !important;
         }
+
         h2 {
           font-size: 32px;
         }
@@ -241,19 +233,11 @@
     text-underline-offset: 2px;
   }
 
-  .fs-12px {
-    font-size: 12px;
-  }
-
   .lh-110percent {
     line-height: 110% !important;
   }
 
   @media (min-width: 768px) {
-    .fs-14px {
-      font-size: 14px;
-    }
-
     .lh-md-base {
       line-height: 1.5;
     }

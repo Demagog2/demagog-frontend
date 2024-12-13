@@ -55,7 +55,7 @@
           flex: 3 0 240px;
           height: 26px;
           position: relative;
-          background-color: #D7E5EF;
+          background-color: #d7e5ef;
           border-radius: 3px;
 
           .stats-line-bar-inner {
@@ -66,7 +66,8 @@
           &.fulfilled .stats-line-bar-inner {
             background-color: var(--true);
           }
-          &.partially-fulfilled .stats-line-bar-inner, &.in-progress .stats-line-bar-inner {
+          &.partially-fulfilled .stats-line-bar-inner,
+          &.in-progress .stats-line-bar-inner {
             background-color: var(--unverifiable);
           }
           &.broken .stats-line-bar-inner {
@@ -116,7 +117,8 @@
       margin-right: 0;
     }
 
-    .area-filter, .evaluation-filter {
+    .area-filter,
+    .evaluation-filter {
       margin-bottom: 30px;
 
       .filter-options-list {
@@ -127,15 +129,16 @@
         .filter-option-button {
           margin: 0 6px 6px 0;
           display: block;
-          border: 1px solid #C5BCE0;
+          border: 1px solid #c5bce0;
           border-radius: 3px;
           color: var(--violet);
 
           &.active {
-            background-color: #FFE0D6;
+            background-color: #ffe0d6;
           }
 
-          &:hover, &:active {
+          &:hover,
+          &:active {
             text-decoration: none;
             border-color: var(--orange);
           }
@@ -183,7 +186,7 @@
       border-collapse: collapse;
 
       thead th {
-        border-bottom: 1px solid #D7E5FB;
+        border-bottom: 1px solid #d7e5fb;
         text-align: left;
         padding: 12px 15px;
         text-transform: uppercase;
@@ -196,7 +199,7 @@
       tbody tr.summary {
         td {
           padding: 12px 15px;
-          border-bottom: 1px solid #D7E5FB;
+          border-bottom: 1px solid #d7e5fb;
           cursor: pointer;
 
           &.name-cell {
@@ -263,7 +266,7 @@
         }
 
         &.expanded td {
-          border-bottom: 1px solid #D7E5FB;
+          border-bottom: 1px solid #d7e5fb;
 
           .hiding-container {
             display: block;
@@ -272,7 +275,7 @@
       }
 
       @media (max-width: 599.9px) {
-        border-top: 1px solid #D7E5FB;
+        border-top: 1px solid #d7e5fb;
         display: block;
         margin: 0 -15px;
         width: auto;
@@ -281,13 +284,15 @@
           display: none;
         }
 
-        tbody, tbody tr, tbody tr td {
+        tbody,
+        tbody tr,
+        tbody tr td {
           display: block;
         }
 
         tbody tr.summary {
           padding: 10px 15px 15px 15px;
-          border-bottom: 1px solid #D7E5FB;
+          border-bottom: 1px solid #d7e5fb;
 
           td {
             padding: 5px 0;
@@ -332,7 +337,8 @@
         }
       }
 
-      tbody tr.summary.hidden, tbody tr.detail.hidden {
+      tbody tr.summary.hidden,
+      tbody tr.detail.hidden {
         display: none;
       }
     }
@@ -346,7 +352,7 @@
       flex: 2 2 200px;
       margin: 0 0 20px 0;
 
-      border: 1px solid #CAD9E6;
+      border: 1px solid #cad9e6;
       border-radius: 5px;
       background-color: white;
       padding: 10px 15px 15px 15px;
@@ -405,7 +411,8 @@
         font-size: var(--normal-typesize);
         cursor: pointer;
 
-        &:hover, &:active {
+        &:hover,
+        &:active {
           text-decoration: underline;
         }
       }
@@ -434,13 +441,18 @@
           margin-top: 7px;
 
           background:
-            linear-gradient(var(--white) 30%, hsla(0,0%,100%, 0)),
-            linear-gradient(hsla(0,0%,100%,0) 10px, var(--white) 70%) bottom,
-            radial-gradient(at top, rgba(0,0,0,0.3), transparent 70%),
-            radial-gradient(at bottom, rgba(0,0,0,0.3), transparent 70%) bottom;
-          background-repeat:no-repeat;
-          background-size: 100% 30px, 100% 30px, 100% 15px, 100% 15px;
-          background-attachment:local, local, scroll, scroll;
+            linear-gradient(var(--white) 30%, hsla(0, 0%, 100%, 0)),
+            linear-gradient(hsla(0, 0%, 100%, 0) 10px, var(--white) 70%) bottom,
+            radial-gradient(at top, rgba(0, 0, 0, 0.3), transparent 70%),
+            radial-gradient(at bottom, rgba(0, 0, 0, 0.3), transparent 70%)
+              bottom;
+          background-repeat: no-repeat;
+          background-size:
+            100% 30px,
+            100% 30px,
+            100% 15px,
+            100% 15px;
+          background-attachment: local, local, scroll, scroll;
 
           * {
             line-height: 25px;
@@ -456,8 +468,12 @@
 
         &.with-full-explanation {
           .toggle-full-explanation {
-            .show { display: none; }
-            .hide { display: inline; }
+            .show {
+              display: none;
+            }
+            .hide {
+              display: inline;
+            }
           }
 
           .full-explanation {
@@ -479,7 +495,8 @@
         margin-left: 0;
 
         .explanation-container {
-          .full-explanation, &.full-explanation-only .full-explanation {
+          .full-explanation,
+          &.full-explanation-only .full-explanation {
             max-height: 300px;
           }
         }
@@ -509,7 +526,9 @@
 
   .embed-modal {
     display: none;
-    &.is-open { display: block; }
+    &.is-open {
+      display: block;
+    }
 
     .embed-modal-overlay {
       position: fixed;
@@ -517,7 +536,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.6);
+      background: rgba(0, 0, 0, 0.6);
       display: flex;
       justify-content: center;
       align-items: center;
@@ -549,7 +568,8 @@
         color: #3c325c;
         outline: none;
 
-        &:hover, &:active {
+        &:hover,
+        &:active {
           color: #f26538;
         }
       }
@@ -560,31 +580,34 @@
         margin-top: 20px;
 
         button {
-          border: 1px solid #C5BCE0;
+          @extend .fs-7;
+
+          border: 1px solid #c5bce0;
           border-radius: 3px;
           margin: 0;
           padding: 5px 10px;
-          font-size: 14px;
           cursor: pointer;
           outline: none;
           color: #3c325c;
           font-family: Lato, sans-serif;
 
           &.active {
-            background-color: #FFE0D6;
+            background-color: #ffe0d6;
           }
 
-          &:hover, &:active {
+          &:hover,
+          &:active {
             border-color: #f26538;
           }
         }
       }
 
       .embed-code {
+        @extend .fs-7;
+
         box-sizing: border-box;
         width: 100%;
         padding: 5px;
-        font-size: 14px;
       }
 
       .embed-preview-container {
@@ -592,5 +615,4 @@
       }
     }
   }
-
 }

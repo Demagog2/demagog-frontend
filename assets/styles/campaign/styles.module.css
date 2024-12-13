@@ -44,7 +44,9 @@ ul {
 }
 
 .page1 {
-  background: url('../../images/campaign/obrazek-telka-small.png'), lightgray 50% / cover no-repeat;
+  background:
+    url('../../images/campaign/obrazek-telka-small.png'),
+    lightgray 50% / cover no-repeat;
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -65,7 +67,7 @@ ul {
 }
 
 .headerOrange {
-  color: #FFBF00;
+  color: #ffbf00;
   font-size: 32px;
   font-style: normal;
   font-weight: 800;
@@ -75,7 +77,7 @@ ul {
 }
 
 .headerWhite {
-  color: #FFF;
+  color: #fff;
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
@@ -99,7 +101,7 @@ ul {
 }
 
 .headerWhitePage2 {
-  color: #FFF;
+  color: #fff;
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
@@ -111,7 +113,7 @@ ul {
 }
 
 .headerPage3 {
-  color: #FFF;
+  color: #fff;
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
@@ -124,7 +126,7 @@ ul {
 }
 
 .headerOrangePage3 {
-  color: #FFBF00;
+  color: #ffbf00;
   font-weight: 900;
 }
 
@@ -153,10 +155,10 @@ ul {
   right: 0;
   left: 20px;
   bottom: 20px;
-  content: "";
+  content: '';
   position: absolute;
   border-radius: 22px;
-  background: rgba(0, 0, 0, 0.20);
+  background: rgba(0, 0, 0, 0.2);
   filter: blur(17.5px);
   backdrop-filter: blur(2px);
 }
@@ -172,7 +174,7 @@ ul {
 }
 
 .textWhite {
-  color: #FFF;
+  color: #fff;
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
@@ -184,7 +186,7 @@ ul {
 }
 
 .textOrange {
-  color: #FFBF00;
+  color: #ffbf00;
   font-size: 15px;
   font-style: normal;
   font-weight: 800;
@@ -192,14 +194,13 @@ ul {
 }
 
 .additionalInfo {
-  color: #FFF;
+  color: #fff;
   font-size: 12px;
   font-style: italic;
   font-weight: 400;
   line-height: 16px;
   margin-bottom: 30px;
   padding-right: 23px;
-
 }
 
 /*nachystany blur pozadi page3 mobile. Kdyby se pouzil, je treba jeste upravit rozmery*/
@@ -228,7 +229,7 @@ ul {
 }*/
 
 .textPage3 {
-  color: #FFF;
+  color: #fff;
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
@@ -240,18 +241,18 @@ ul {
 }
 
 .textOrangePage3 {
-  color: #FFBF00;
+  color: #ffbf00;
   font-weight: 800;
 }
 
 .linkOrange {
-  color: #FFBF00;
+  color: #ffbf00;
   text-decoration: underline;
 }
 
 .listPage3 {
   display: list-item;
-  color: #FFF;
+  color: #fff;
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
@@ -284,26 +285,6 @@ ul {
   width: 350px;
 }
 
-.buttonsPage3 {
-  color: #FFF;
-  text-align: center;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 38px;
-  height: 38px;
-  width: 100%;
-  border-radius: 32.5px;
-  background: rgba(0, 0, 0, 0.20);
-  backdrop-filter: blur(2px);
-  border-color: white;
-  border-style: solid;
-  border-width: 1px;
-  display: flex;
-  justify-content: center;
-  text-decoration: none;
-}
-
 .btnTop {
   margin-bottom: 16px;
 }
@@ -328,22 +309,8 @@ ul {
   margin-right: 8px;
 }
 
-.playVideoText {
-  color: #FFF;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 40px;
-  text-decoration-line: underline;
-  cursor: pointer;
-  margin: 0px;
-  margin-left: 8px;
-  background-color: inherit;
-  border-style: none;
-}
-
 .partnersP {
-  color: #E5E7EB;
+  color: #e5e7eb;
   font-size: 12px;
   font-style: italic;
   font-weight: 500;
@@ -378,7 +345,6 @@ ul {
   justify-content: center;
   align-items: center;
 }
-
 
 .logoCedmo {
   width: 90px;
@@ -586,10 +552,10 @@ ul {
   }
 
   .buttonsPage3:hover {
-    background-color: #FFBF00;
+    background-color: #ffbf00;
     color: black;
-    border-color: #FFBF00;
-    transition: all .4s ease;
+    border-color: #ffbf00;
+    transition: all 0.4s ease;
   }
 
   .btnTop {
@@ -625,7 +591,7 @@ ul {
   }
 
   .playVideoText:hover {
-    color: #FFBF00;
+    color: #ffbf00;
   }
 
   .arrowsContainer2 {
@@ -643,7 +609,7 @@ ul {
     width: 100%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
 
   .arrowFwdBtn {
@@ -704,10 +670,10 @@ ul {
   }
 
   .blurBg:before {
-    content: "";
+    content: '';
     position: absolute;
     border-radius: 22px;
-    background: rgba(0, 0, 0, 0.20);
+    background: rgba(0, 0, 0, 0.2);
     filter: blur(17.5px);
     backdrop-filter: blur(2px);
     top: 0;
@@ -723,7 +689,6 @@ ul {
     bottom: 28px;
   }
 }
-
 
 @media screen and (min-width: 1390px) {
   .partnersContainer1Page3 {

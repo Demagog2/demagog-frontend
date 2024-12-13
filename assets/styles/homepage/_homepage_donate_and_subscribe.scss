@@ -31,15 +31,17 @@
       padding: 0.4rem 0.9rem;
       cursor: pointer;
 
-      &:hover, &:active {
+      &:hover,
+      &:active {
         background-color: var(--orange);
         color: #ffffff;
       }
     }
 
     .accept-terms {
+      @extend .fs-7;
+
       margin-top: 15px;
-      font-size: 14px;
       line-height: 1.4;
     }
   }
