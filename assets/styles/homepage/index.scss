@@ -14,7 +14,7 @@
       margin-right: 25px;
 
       > p {
-        font-size: 20px;
+        @extend .fs-4;
 
         &:last-child {
           margin-bottom: 0;
@@ -22,7 +22,8 @@
       }
 
       > ul {
-        font-size: 20px;
+        @extend .fs-4;
+
         margin: 0 0 1rem 0;
         padding: 0 0 0 2rem;
 
@@ -52,6 +53,8 @@
         }
 
         > .button-label {
+          @extend .fs-4;
+
           position: absolute;
           top: 50%;
           left: 50%;
@@ -64,7 +67,6 @@
           background: rgba(0, 0, 0, 0.5);
           border-radius: 100px;
           color: white;
-          font-size: 20px;
           line-height: 1.4;
           font-weight: 700;
 

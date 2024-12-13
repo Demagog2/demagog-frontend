@@ -545,19 +545,6 @@ ul {
     width: 88vw;
   }
 
-  .buttonsPage3 {
-    font-size: 20px;
-    text-wrap: nowrap;
-    padding: 0 10px;
-  }
-
-  .buttonsPage3:hover {
-    background-color: #ffbf00;
-    color: black;
-    border-color: #ffbf00;
-    transition: all 0.4s ease;
-  }
-
   .btnTop {
     margin-bottom: 0px;
     margin-right: 42px;
