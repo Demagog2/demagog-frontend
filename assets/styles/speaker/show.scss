@@ -16,18 +16,18 @@
 
       .portrait-wrapper {
         margin-right: 22px;
-  
+
         .portrait {
           width: var(--large-portrait);
           height: var(--large-portrait);
         }
       }
-  
+
       .name-and-role {
         > h1 {
           margin: 0 0 6px 0;
         }
-  
+
         > p {
           min-height: 25px;
           margin: 0 0 4px 0;
@@ -45,7 +45,7 @@
 
       .profile-stats-item {
         margin: 0 35px 20px 0;
-          
+
         .veracity {
           @include veracity(1);
 
@@ -61,13 +61,13 @@
           font-size: 18px;
 
           .number {
-            font-size: 24px;
+            @extend .fs-2;
             font-weight: bold;
             margin-right: 2px;
           }
 
           &.zero {
-            color: #918AA8;
+            color: #918aa8;
           }
         }
       }

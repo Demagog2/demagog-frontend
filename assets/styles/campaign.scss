@@ -304,20 +304,6 @@ html {
   margin-right: 8px;
 }
 
-.playVideoText {
-  @extend .fs-7;
-  color: #fff;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 40px;
-  text-decoration-line: underline;
-  cursor: pointer;
-  margin: 0px;
-  margin-left: 8px;
-  background-color: inherit;
-  border-style: none;
-}
-
 .partnersP {
   color: #e5e7eb;
   font-size: 12px;
@@ -561,12 +547,6 @@ html {
 
   .playVideoTextMobile {
     display: none;
-  }
-
-  .playVideoText {
-    display: block;
-    font-size: 24px;
-    margin-left: 13.5px;
   }
 
   .playVideoText:hover {
