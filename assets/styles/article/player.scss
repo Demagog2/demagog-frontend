@@ -183,10 +183,10 @@
   }
 
   .open-player-button-overlay-text {
+    @extend .fs-7;
     margin-left: 15px;
     margin-right: 20px;
     color: white;
-    font-size: 14px;
     line-height: 1.25;
     font-family: Lato, sans-serif;
     font-weight: normal;

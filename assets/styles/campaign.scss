@@ -1,7 +1,7 @@
-@import "custom_variables";
-@import "vendor/mixins";
+@import 'custom_variables';
+@import 'vendor/mixins';
 
-$orange: #FFBF00;
+$orange: #ffbf00;
 
 /*
 
@@ -38,16 +38,18 @@ html {
   background-position: center;
   background-size: cover;
 
-  .blur-bg, .blur-bg p, .blur-bg h1 {
+  .blur-bg,
+  .blur-bg p,
+  .blur-bg h1 {
     position: relative;
     z-index: 1;
   }
 
   .blur-bg:before {
-    content: "";
+    content: '';
     position: absolute;
     border-radius: 22px;
-    background: rgba(0, 0, 0, 0.20);
+    background: rgba(0, 0, 0, 0.2);
     filter: blur(17.5px);
     backdrop-filter: blur(2px);
     top: 0;
@@ -83,7 +85,7 @@ html {
     width: 100%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
 }
 
@@ -99,7 +101,9 @@ html {
 }
 
 .page3 {
-  background-image: url(image_path('campaign/obrazek-sundana-maska-small.webp'));
+  background-image: url(image_path(
+    'campaign/obrazek-sundana-maska-small.webp'
+  ));
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
@@ -146,7 +150,7 @@ html {
 }
 
 .headerOrange {
-  color: #FFBF00;
+  color: #ffbf00;
   font-size: 32px;
   font-style: normal;
   font-weight: 800;
@@ -156,7 +160,7 @@ html {
 }
 
 .headerWhite {
-  color: #FFF;
+  color: #fff;
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
@@ -180,7 +184,7 @@ html {
 }
 
 .headerPage3 {
-  color: #FFF;
+  color: #fff;
   font-size: 32px;
   font-style: normal;
   font-weight: 600;
@@ -190,7 +194,7 @@ html {
 }
 
 .headerOrangePage3 {
-  color: #FFBF00;
+  color: #ffbf00;
   font-weight: 900;
 }
 
@@ -200,7 +204,7 @@ html {
 }
 
 .textWhite {
-  color: #FFF;
+  color: #fff;
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
@@ -212,7 +216,7 @@ html {
 }
 
 .textPage3 {
-  color: #FFF;
+  color: #fff;
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
@@ -220,13 +224,13 @@ html {
 }
 
 .linkOrange {
-  color: #FFBF00;
+  color: #ffbf00;
   text-decoration: underline;
 }
 
 .listPage3 {
   display: list-item;
-  color: #FFF;
+  color: #fff;
   font-size: 15px;
   font-style: normal;
   font-weight: 600;
@@ -260,16 +264,16 @@ html {
 }
 
 .buttonsPage3 {
-  color: #FFF;
+  @extend .fs-7;
+  color: #fff;
   text-align: center;
-  font-size: 14px;
   font-style: normal;
   font-weight: 600;
   line-height: 38px;
   height: 38px;
   width: 100%;
   border-radius: 32.5px;
-  background: rgba(0, 0, 0, 0.20);
+  background: rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(2px);
   border-color: white;
   border-style: solid;
@@ -278,7 +282,6 @@ html {
   justify-content: center;
   text-decoration: none;
 }
-
 
 .videoContainerPage3 {
   display: flex;
@@ -302,8 +305,8 @@ html {
 }
 
 .playVideoText {
-  color: #FFF;
-  font-size: 14px;
+  @extend .fs-7;
+  color: #fff;
   font-style: normal;
   font-weight: 600;
   line-height: 40px;
@@ -316,7 +319,7 @@ html {
 }
 
 .partnersP {
-  color: #E5E7EB;
+  color: #e5e7eb;
   font-size: 12px;
   font-style: italic;
   font-weight: 500;
@@ -348,7 +351,6 @@ html {
     margin: 20px;
   }
 }
-
 
 .footer > div {
   display: flex;
@@ -430,7 +432,9 @@ html {
   }
 
   .page3 {
-    background-image: url(image_path('campaign/obrazek-sundana-maska-big.webp'));
+    background-image: url(image_path(
+      'campaign/obrazek-sundana-maska-big.webp'
+    ));
   }
 
   .logoDemagog {
@@ -527,10 +531,10 @@ html {
   }
 
   .buttonsPage3:hover {
-    background-color: #FFBF00;
+    background-color: #ffbf00;
     color: black;
-    border-color: #FFBF00;
-    transition: all .4s ease;
+    border-color: #ffbf00;
+    transition: all 0.4s ease;
   }
 
   .btnTop {
@@ -566,7 +570,7 @@ html {
   }
 
   .playVideoText:hover {
-    color: #FFBF00;
+    color: #ffbf00;
   }
 
   .arrowsContainer2 {
@@ -584,7 +588,7 @@ html {
     width: 100%;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
 
   .arrowFwdBtn {
@@ -635,10 +639,10 @@ html {
   }
 
   .blurBg:before {
-    content: "";
+    content: '';
     position: absolute;
     border-radius: 22px;
-    background: rgba(0, 0, 0, 0.20);
+    background: rgba(0, 0, 0, 0.2);
     filter: blur(17.5px);
     backdrop-filter: blur(2px);
     top: 0;
@@ -663,17 +667,17 @@ html {
     padding: 50px 50px 40px;
   }
 
-  .page1, .page2 {
+  .page1,
+  .page2 {
     .footer {
       margin-top: 0;
     }
   }
 
-  .page3 .footer  {
+  .page3 .footer {
     padding-top: 0;
   }
 }
-
 
 @media screen and (min-height: 1029px) {
   .page {
@@ -692,12 +696,11 @@ html {
     margin: 0 auto;
   }
 
-  .page3 .footer  {
+  .page3 .footer {
     padding-top: 0;
     margin-top: -90px;
   }
 }
-
 
 @include media-breakpoint-up(xs) {
   .container {

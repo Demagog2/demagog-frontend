@@ -3,7 +3,6 @@
   flex-direction: row;
   flex-wrap: wrap;
 
-  
   > .intro {
     margin: 50px 0 0 0;
     display: flex;
@@ -79,7 +78,8 @@
           }
         }
 
-        &:hover, &:active {
+        &:hover,
+        &:active {
           > .button-label {
             background: rgba(0, 0, 0, 0.7);
           }
@@ -100,7 +100,9 @@
 
   .intro-video-modal {
     display: none;
-    &.is-open { display: block; }
+    &.is-open {
+      display: block;
+    }
 
     .intro-video-modal-overlay {
       position: fixed;
@@ -108,7 +110,7 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0,0,0,0.7);
+      background: rgba(0, 0, 0, 0.7);
       padding: 15px;
       display: flex;
       justify-content: center;
@@ -142,7 +144,8 @@
       color: #ffffff;
       outline: none;
 
-      &:hover, &:active {
+      &:hover,
+      &:active {
         color: #f26538;
       }
     }
@@ -153,7 +156,9 @@
       height: 0;
       overflow: hidden;
 
-      > iframe, > object, > embed {
+      > iframe,
+      > object,
+      > embed {
         position: absolute;
         top: 0;
         left: 0;
@@ -181,7 +186,7 @@
     > .sidebar {
       flex: 0 0 250px;
       padding: 25px 25px 20px 25px;
-      background: #E1EBF3;
+      background: #e1ebf3;
 
       > .donate-section {
         > h2 {
@@ -228,15 +233,17 @@
       padding: 0.4rem 0.9rem;
       cursor: pointer;
 
-      &:hover, &:active {
+      &:hover,
+      &:active {
         background-color: var(--orange);
         color: #ffffff;
       }
     }
 
     .accept-terms {
+      @extend .fs-7;
+
       margin-top: 15px;
-      font-size: 14px;
       line-height: 1.4;
     }
   }
