@@ -25,7 +25,7 @@ export function CookiesBanner() {
   return (
     <div className="cookies p-5 p-lg-8" data-controller="components--footer">
       <div className="cookies-wrap bg-white shadow-l p-5 mw-400px rounded-l">
-        <p className="fs-7">
+        <p className="fs-8">
           Abychom mohli měřit návštěvnost webu, potřebujeme Váš souhlas
           se&nbsp;zpracováním osobních údajů prostřednictvím cookies.
           <a

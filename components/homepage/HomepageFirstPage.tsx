@@ -16,7 +16,7 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
       <div className="row g-5 g-lg-10 flex-lg-row-reverse">
         <div className="col col-12 col-lg-4">
           <div className="d-flex flex-wrap align-items-center mb-10">
-            <span className="fs-7 fw-bold text-uppercase me-5 my-2">
+            <span className="fs-8 fw-bold text-uppercase me-5 my-2">
               Nejvyhledávanější
             </span>
             <MostSearchedSpeakers speakers={data} />

@@ -101,7 +101,7 @@ export default function ArticleItem(props: {
           </h2>
           <div
             className={classNames('mb-2', {
-              'text-muted fs-12px fs-md-7': isEmbedded,
+              'text-muted fs-12px fs-md-8': isEmbedded,
             })}
           >
             {article.articleType === 'default' && article.source && (
@@ -126,10 +126,10 @@ export default function ArticleItem(props: {
             )}
             {isEmbedded && article.source?.sourceUrl && (
               <>
-                <span className="col col-auto fs-12px fs-md-7 text-muted">
+                <span className="col col-auto fs-12px fs-md-8 text-muted">
                   ,{' '}
                 </span>
-                <span className="col col-auto fs-12px fs-md-7 text-decoration-underline underline-offset-2px">
+                <span className="col col-auto fs-12px fs-md-8 text-decoration-underline underline-offset-2px">
                   <i>
                     <a
                       href={article.source.sourceUrl}
@@ -147,9 +147,9 @@ export default function ArticleItem(props: {
             <div className="mt-4">
               <ArticleLink
                 article={article}
-                className="btn outline h-40px px-6 fw-bold fs-7"
+                className="btn outline h-40px px-6 fw-bold fs-8"
               >
-                <span className="fs-7">Číst dál</span>
+                <span className="fs-8">Číst dál</span>
               </ArticleLink>
             </div>
           )}

@@ -119,7 +119,7 @@
 
     .content-text-node {
       p {
-        @extend .mt-6, .fs-7;
+        @extend .mt-6, .fs-8;
       }
 
       h2 {
@@ -162,7 +162,7 @@
           @extend .mb-0;
 
           li {
-            @extend .li-item, .fs-7;
+            @extend .li-item, .fs-8;
           }
 
           li.li-item:not(:last-child) {
