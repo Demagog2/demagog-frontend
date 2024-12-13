@@ -4,7 +4,7 @@
   @include perex;
 
   p {
-    font-size: 0.875rem;
+    font-size: $h7-font-size;
   }
 
   .h2 {
@@ -80,7 +80,7 @@
     }
 
     h3 {
-      font-size: 1.5rem;
+      font-size: $h2-font-size;
     }
   }
 }
