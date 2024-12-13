@@ -8,6 +8,7 @@ import { orderBy } from 'lodash'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { VideoPlayer } from './players/VideoPlayer'
 import { YouTubeVideo } from './players/YouTubeVideo'
+import { StatementDisplayMode } from '@/libs/statements/display-mode'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -189,8 +190,8 @@ export function ArticleFullscreenPlayer(props: {
               <div className="statement-content-wrapper">
                 <StatementItem
                   statement={statement}
-                  isVertical
                   className="mb-10"
+                  displayMode={StatementDisplayMode.VERTICAL}
                 />
               </div>
             </div>

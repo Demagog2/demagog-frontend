@@ -14,6 +14,7 @@ import { ArticleQuoteRedesign } from '@/components/article/ArticleQuoteRedesign'
 import StatementItem from '@/components/statement/Item'
 import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
 import { PermanentLink } from '@/components/statement/PermanentLink'
+import { StatementDisplayMode } from '@/libs/statements/display-mode'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -87,6 +88,7 @@ export default async function Statement(props: { params: { slug: string } }) {
       query StatementDetailRedesign($id: Int!) {
         statementV2(id: $id) {
           ...SourceSpeakerAvatar
+          ...StatementDetail
           assessment {
             shortExplanation
             explanationHtml
@@ -320,6 +322,12 @@ export default async function Statement(props: { params: { slug: string } }) {
                 </div>
               </div>
             </div>
+
+            <StatementItem
+              statement={statement}
+              displayMode={StatementDisplayMode.EMBEDDED}
+            />
+
             <div className="content fs-5">
               {statement.assessment.explanationContent.edges?.map((edge) => {
                 if (!edge?.node) {
@@ -358,7 +366,7 @@ export default async function Statement(props: { params: { slug: string } }) {
                       className="mt-10"
                       key={cursor}
                       statement={node.statement}
-                      isVertical
+                      displayMode={StatementDisplayMode.VERTICAL}
                     />
                   )
                 }

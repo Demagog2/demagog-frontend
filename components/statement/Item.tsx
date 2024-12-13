@@ -45,9 +45,15 @@ const StatementItemFragment = gql(`
   }
 `)
 
+export enum StatementDisplayMode {
+  DEFAULT = 'default',
+  VERTICAL = 'vertical',
+  EMBEDDED = 'embedded',
+}
+
 export default function StatementItem(props: {
   statement: FragmentType<typeof StatementItemFragment>
-  isVertical?: boolean
+  displayMode?: StatementDisplayMode
   className?: string
 }) {
   const statement = useFragment(StatementItemFragment, props.statement)
@@ -55,7 +61,11 @@ export default function StatementItem(props: {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
-  const { isVertical = false } = props
+  const { displayMode = StatementDisplayMode.DEFAULT } = props
+
+  const isDefault = displayMode === StatementDisplayMode.DEFAULT
+  const isEmbedded = displayMode === StatementDisplayMode.EMBEDDED
+  const isVertical = displayMode === StatementDisplayMode.VERTICAL
 
   return (
     <div className={classNames('s-statement', props.className)}>
@@ -67,7 +77,8 @@ export default function StatementItem(props: {
       >
         <div
           className={classNames({
-            'col col-12 col-lg-7': !isVertical,
+            'col col-12 col-lg-7': isDefault,
+            'col col-12': isEmbedded,
           })}
         >
           <div
@@ -77,7 +88,8 @@ export default function StatementItem(props: {
           >
             <div
               className={classNames({
-                'w-100px min-w-100px': !isVertical,
+                'w-100px min-w-100px': isDefault,
+                'col-3': isEmbedded,
                 'd-flex': isVertical,
               })}
             >
@@ -120,7 +132,12 @@ export default function StatementItem(props: {
                 </h3>
               </div>
             </div>
-            <div className={classNames({ 'ps-5': !isVertical })}>
+            <div
+              className={classNames({
+                'ps-5': !isVertical,
+                'col-9': isEmbedded,
+              })}
+            >
               <blockquote
                 className={classNames(
                   'p-3 fs-6 bg-dark text-white rounded-m  position-relative min-h-50px',
@@ -169,7 +186,8 @@ export default function StatementItem(props: {
         </div>
         <div
           className={classNames('col', {
-            'col-12 col-lg-5': !isVertical,
+            'col-12 col-lg-5': isDefault,
+            'col-12 col-lg-9 offset-lg-3 ps-6': isEmbedded,
           })}
         >
           <StatementAssessment
