@@ -4,6 +4,7 @@ import StatementItem from '../statement/Item'
 import { ArticleV2Preview } from './ArticleV2Preview'
 import { ArticleQuoteRedesign } from '@/components/article/ArticleQuoteRedesign'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
+import classNames from 'classnames'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -44,6 +45,7 @@ const ArticleSegmentsFragment = gql(`
         id
       }
     }
+    showPlayer
   }
 `)
 
@@ -52,7 +54,7 @@ type ArticleStatementsProps = {
 }
 
 export function ArticleSegments(props: ArticleStatementsProps) {
-  const { segments, debateStats } = useFragment(
+  const { segments, debateStats, showPlayer } = useFragment(
     ArticleSegmentsFragment,
     props.data
   )
@@ -112,7 +114,11 @@ export function ArticleSegments(props: ArticleStatementsProps) {
             <div>
               <div className="row g-5 g-lg-10">
                 <div className="col-12 col-sm-10 offset-sm-1">
-                  <h2 className="fs-2 text-bold">
+                  <h2
+                    className={classNames('fs-2 text-bold', {
+                      'mt-6': showPlayer,
+                    })}
+                  >
                     Řečníci s&nbsp;počty výroků dle hodnocení
                   </h2>
                 </div>
