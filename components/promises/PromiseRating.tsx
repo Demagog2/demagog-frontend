@@ -28,7 +28,7 @@ export function PromiseRating(props: { promiseRating: any }) {
       >
         <PromiseRatingIcon promiseRatingKey={promiseRating.key} />
       </span>
-      <span className="fs-7 text-uppercase fw-600 text-<%= @promises_list_rating_classes[statement.assessment.promise_rating.key] %>">
+      <span className="fs-8 text-uppercase fw-600 text-<%= @promises_list_rating_classes[statement.assessment.promise_rating.key] %>">
         {PromiseRatings[promiseRating.key].label.singular}
       </span>
     </div>

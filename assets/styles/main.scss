@@ -45,7 +45,7 @@
   }
 
   .widget-periodic-button {
-    @extend .fs-7;
+    @extend .fs-8;
 
     padding: 10px 5px 9px 5px;
     text-align: center;
@@ -60,7 +60,7 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 8px;
-    @extend .fs-7;
+    @extend .fs-8;
   }
 
   .widget-custom-title {
@@ -80,7 +80,7 @@
   }
 
   .widget-custom-input {
-    @extend .fs-7;
+    @extend .fs-8;
     padding: 10px 5px 9px 5px;
     margin-bottom: 2px;
     cursor: auto;
@@ -107,7 +107,7 @@
   }
 
   .widget-entries-button {
-    @extend .fs-7;
+    @extend .fs-8;
     width: 100%;
     padding: 10px 5px 9px 5px;
     cursor: pointer;
@@ -122,7 +122,7 @@
   }
 
   .donate-submit {
-    @extend .fs-7;
+    @extend .fs-8;
     padding: 10px 5px 9px 5px;
     letter-spacing: 0.3px;
     line-height: 1.2;

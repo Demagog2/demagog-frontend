@@ -250,7 +250,7 @@ export default async function Statement(props: { params: { slug: string } }) {
                       dangerouslySetInnerHTML={{ __html: statement.content }}
                     />
                   </blockquote>
-                  <div className="fs-7">
+                  <div className="fs-8">
                     <cite className="fst-normal">
                       {statement.source.medium?.name},{' '}
                       <span className="date">

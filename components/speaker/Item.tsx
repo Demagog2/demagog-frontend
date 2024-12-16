@@ -46,7 +46,7 @@ export default function SpeakerItem(props: {
             <span className="fs-6 fw-bold">{speaker.role}</span>
           </div>
           <div className="text-center mt-4">
-            <SpeakerLink speaker={speaker} className="btn outline h-40x fs-7">
+            <SpeakerLink speaker={speaker} className="btn outline h-40x fs-8">
               Otevřít profil
             </SpeakerLink>
           </div>

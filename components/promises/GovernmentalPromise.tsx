@@ -56,7 +56,7 @@ export function GovernmentalPromise(props: {
               className="btn outline min-h-40px min-w-150px"
               onClick={() => setExpanded(!isExpanded)}
             >
-              <span className="accordion-label fs-7">
+              <span className="accordion-label fs-8">
                 {isExpanded ? 'Skrýt detail' : 'Zobrazit detail'}
               </span>
             </a>
@@ -78,7 +78,7 @@ export function GovernmentalPromise(props: {
                   <div>
                     <a
                       href={promise.source.url}
-                      className="text-white fs-7"
+                      className="text-white fs-8"
                       target="_blank"
                     >
                       {promise.source.label}
@@ -128,7 +128,7 @@ export function GovernmentalPromise(props: {
                         setFullExplanation(!isFullExplanationShown)
                       }
                     >
-                      <span className="accordion-label-detail fs-7">
+                      <span className="accordion-label-detail fs-8">
                         {isFullExplanationShown
                           ? 'skrýt celé odůvodnění'
                           : 'zobrazit celé odůvodnění'}

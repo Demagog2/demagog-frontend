@@ -56,7 +56,7 @@ export function SearchResultSpeaker(props: {
         </div>
         <div className="text-center mt-4">
           <SpeakerLink speaker={speaker} className="btn outline h-40x">
-            <span className="fs-7">Otevřít profil</span>
+            <span className="fs-8">Otevřít profil</span>
           </SpeakerLink>
         </div>
       </div>

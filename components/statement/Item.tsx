@@ -145,7 +145,7 @@ export default function StatementItem(props: {
               {!isVertical &&
                 statement.source.medium?.name &&
                 statement.source.releasedAt && (
-                  <cite className="mb-2 fs-7">
+                  <cite className="mb-2 fs-8">
                     {statement.source.medium.name}
                     <span>, </span>
                     {formatDate(statement.source.releasedAt)}
@@ -158,7 +158,7 @@ export default function StatementItem(props: {
                     <div key={tag.id} className="col col-auto">
                       <div className="d-flex align-items-center">
                         <TagIcon className="h-15px" />
-                        <span className="fs-7">{tag.name}</span>
+                        <span className="fs-8">{tag.name}</span>
                       </div>
                     </div>
                   ))}

@@ -4,7 +4,7 @@
   @include perex;
 
   p {
-    font-size: $h7-font-size;
+    font-size: $h8-font-size;
   }
 
   .h2 {
@@ -13,7 +13,7 @@
   }
 
   .h3 {
-    font-size: 1rem;
+    font-size: $h7-font-size;
     font-weight: 700;
   }
 
@@ -68,7 +68,7 @@
 
   @media (min-width: 768px) {
     p {
-      font-size: 1rem;
+      font-size: $h7-font-size;
     }
 
     h2 {
