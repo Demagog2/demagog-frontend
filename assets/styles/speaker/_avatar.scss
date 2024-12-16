@@ -6,6 +6,7 @@ $avatar-large: 85px;
 
   width: $avatar-small;
   height: $avatar-small;
+  object-fit: cover;
 
   @include media-breakpoint-up(md) {
     width: $avatar-large;

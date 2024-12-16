@@ -153,18 +153,18 @@ export default async function Statement(props: { params: { slug: string } }) {
   return (
     <div className="container statement-redesign">
       <div className="row">
-        <div className="col col-4 col-md-2 d-flex flex-column align-items-center">
-          <div className="w-85px">
+        <div className="col col-4 col-md-2 d-flex flex-column align-items-md-center">
+          <div className="d-flex flex-column align-items-center h-100 text-center">
             <SourceSpeakerAvatar
               statement={statement}
-              isRole={true}
+              hasRole={true}
               isEmbedded
             />
           </div>
         </div>
         <div className="col col-12 col-md-8 justify-self-center">
           <blockquote
-            className="p-3 fs-6 bg-dark text-white rounded-m position-relative min-h-50px mt-2 mt-md-0"
+            className="p-3 fs-6 bg-dark text-white rounded-m position-relative min-h-50px mt-4 mt-md-0"
             data-target="statement--detail.blockquote"
           >
             <span
@@ -172,7 +172,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               dangerouslySetInnerHTML={{ __html: statement.content }}
             />
           </blockquote>
-          <div className="mt-2">
+          <div className="mt-2 mt-md-4">
             <cite>
               {statement.source.medium?.name},{' '}
               <span className="date">
@@ -231,8 +231,6 @@ export default async function Statement(props: { params: { slug: string } }) {
           )}
 
           <div className="mt-10">
-            <h3 className="display-2 fw-bold">Plné odůvodnění</h3>
-
             <StatementItem
               statement={statement}
               displayMode={StatementDisplayMode.EMBEDDED}

@@ -19,6 +19,7 @@ const StatementItemFragment = gql(`
         ...SpeakerLink
       }
       fullName
+      role
       body {
         id
         shortName
@@ -86,8 +87,10 @@ export default function StatementItem(props: {
           })}
         >
           <div
-            className={classNames('d-flex', {
+            className={classNames({
               'flex-column': isVertical,
+              'd-flex': !isEmbedded,
+              row: isEmbedded,
             })}
           >
             <div
@@ -144,6 +147,11 @@ export default function StatementItem(props: {
                 >
                   {statement.sourceSpeaker.fullName}
                 </h3>
+                {isEmbedded && (
+                  <h3 className="fs-7 fw-bold fst-italic mt-1">
+                    {statement.sourceSpeaker.role}
+                  </h3>
+                )}
               </div>
             </div>
             <div
@@ -244,7 +252,14 @@ export default function StatementItem(props: {
                   }}
                 ></div>
               </div>
-              <div className="d-flex justify-content-between align-items-center w-100">
+              <div
+                className={classNames(
+                  'd-flex justify-content-between align-items-center w-100',
+                  {
+                    'mb-md-3': isEmbedded,
+                  }
+                )}
+              >
                 <a
                   className={classNames(
                     'accordion-link text-dark text-decoration-underline',
