@@ -96,7 +96,7 @@ export default function StatementItem(props: {
                       />
                     </span>
                   )}
-                  {statement.sourceSpeaker?.body?.shortName && (
+                  {!isVertical && statement.sourceSpeaker?.body?.shortName && (
                     <div className="symbol-label d-flex align-items-center justify-content-center w-45px h-45px rounded-circle bg-dark">
                       <span className="smallest text-white lh-1 text-center p-2">
                         {statement.sourceSpeaker.body.shortName}
