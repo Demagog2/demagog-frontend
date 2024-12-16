@@ -1,0 +1,14 @@
+$avatar-small: 60px;
+$avatar-large: 85px;
+
+.source-speaker-avatar {
+  @extend .symbol, .symbol-circle;
+
+  width: $avatar-small;
+  height: $avatar-small;
+
+  @include media-breakpoint-up(md) {
+    width: $avatar-large;
+    height: $avatar-large;
+  }
+}
