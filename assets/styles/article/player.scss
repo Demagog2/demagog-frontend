@@ -115,12 +115,13 @@
         position: relative;
 
         .time-button {
+          @extend .fs-7;
+
           display: block;
           padding: 9px 0;
           width: 100%;
           background: none;
           border: none;
-          font-size: 16px;
           font-weight: 600;
           color: #111827;
           cursor: pointer;

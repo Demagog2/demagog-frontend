@@ -182,8 +182,7 @@
 
       .content-text-node {
         p {
-          // FIXME: Remove this once we have fs- for 1rem
-          font-size: 1rem !important;
+          font-size: $h7-font-size !important;
         }
 
         h2 {
@@ -199,7 +198,7 @@
           padding: 25px 30px;
           ul li,
           ol li {
-            font-size: 16px;
+            font-size: $h7-font-size !important;
           }
         }
       }
