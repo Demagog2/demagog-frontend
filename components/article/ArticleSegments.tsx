@@ -3,6 +3,7 @@ import { SpeakerWithStats } from '@/components/speaker/SpeakerWithStats'
 import StatementItem from '../statement/Item'
 import { ArticleV2Preview } from './ArticleV2Preview'
 import { ArticleQuoteRedesign } from '@/components/article/ArticleQuoteRedesign'
+import { StatementDisplayMode } from '@/libs/statements/display-mode'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -99,7 +100,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                         className="mt-10"
                         key={cursor}
                         statement={node.statement}
-                        isVertical
+                        displayMode={StatementDisplayMode.VERTICAL}
                       />
                     )
                   }

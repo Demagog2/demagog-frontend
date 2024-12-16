@@ -19,6 +19,7 @@ const StatementItemFragment = gql(`
         ...SpeakerLink
       }
       fullName
+      role
       body {
         id
         shortName
@@ -45,9 +46,15 @@ const StatementItemFragment = gql(`
   }
 `)
 
+export enum StatementDisplayMode {
+  DEFAULT = 'default',
+  VERTICAL = 'vertical',
+  EMBEDDED = 'embedded',
+}
+
 export default function StatementItem(props: {
   statement: FragmentType<typeof StatementItemFragment>
-  isVertical?: boolean
+  displayMode?: StatementDisplayMode
   className?: string
 }) {
   const statement = useFragment(StatementItemFragment, props.statement)
@@ -55,33 +62,50 @@ export default function StatementItem(props: {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
-  const { isVertical = false } = props
+  const { displayMode = StatementDisplayMode.DEFAULT } = props
+
+  const isDefault = displayMode === StatementDisplayMode.DEFAULT
+  const isEmbedded = displayMode === StatementDisplayMode.EMBEDDED
+  const isVertical = displayMode === StatementDisplayMode.VERTICAL
 
   return (
-    <div className={classNames('s-statement', props.className)}>
+    <div
+      className={classNames('s-statement', props.className, {
+        'bg-lightgrey radius-22px mt-6 px-4 px-md-6': isEmbedded,
+      })}
+    >
       <div
         className={classNames('g-6', {
           'flex-column': isVertical,
-          row: !isVertical,
+          row: isDefault,
         })}
       >
         <div
           className={classNames({
-            'col col-12 col-lg-7': !isVertical,
+            'col col-12 col-lg-7': isDefault,
+            'col col-12': isEmbedded,
           })}
         >
           <div
-            className={classNames('d-flex', {
+            className={classNames({
               'flex-column': isVertical,
+              'd-flex': !isEmbedded,
+              row: isEmbedded,
             })}
           >
             <div
               className={classNames({
-                'w-100px min-w-100px': !isVertical,
+                'w-100px min-w-100px': isDefault,
+                'col-3 mt-4 mb-2 mb-md-3 d-flex flex-column align-items-center':
+                  isEmbedded,
                 'd-flex': isVertical,
               })}
             >
-              <div className={classNames('px-2', { 'w-50px': isVertical })}>
+              <div
+                className={classNames('px-2', {
+                  'w-50px': isVertical,
+                })}
+              >
                 <SpeakerLink
                   speaker={statement.sourceSpeaker.speaker}
                   className={classNames('d-block', {
@@ -89,7 +113,12 @@ export default function StatementItem(props: {
                   })}
                 >
                   {statement.sourceSpeaker.speaker.avatar && (
-                    <span className="symbol symbol-square symbol-circle">
+                    <span
+                      className={classNames(
+                        'symbol symbol-square symbol-circle',
+                        { 'w-60px h-60px w-md-80px h-md-80px': isEmbedded }
+                      )}
+                    >
                       <img
                         src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
                         alt={statement.sourceSpeaker.fullName}
@@ -118,9 +147,19 @@ export default function StatementItem(props: {
                 >
                   {statement.sourceSpeaker.fullName}
                 </h3>
+                {isEmbedded && (
+                  <h3 className="fs-7 fw-bold fst-italic mt-1">
+                    {statement.sourceSpeaker.role}
+                  </h3>
+                )}
               </div>
             </div>
-            <div className={classNames({ 'ps-5': !isVertical })}>
+            <div
+              className={classNames({
+                'ps-5': isDefault,
+                'col-9 mt-4 mt-md-7': isEmbedded,
+              })}
+            >
               <blockquote
                 className={classNames(
                   'p-3 fs-6 bg-dark text-white rounded-m  position-relative min-h-50px',
@@ -169,7 +208,8 @@ export default function StatementItem(props: {
         </div>
         <div
           className={classNames('col', {
-            'col-12 col-lg-5': !isVertical,
+            'col-12 col-lg-5': isDefault,
+            'col-12 col-md-9 offset-md-3 ms-md-auto mt-3 mt-md-6': isEmbedded,
           })}
         >
           <StatementAssessment
@@ -187,7 +227,9 @@ export default function StatementItem(props: {
               ></div>
             </div>
           ) : (
-            <div className="accordion">
+            <div
+              className={classNames('accordion', { 'pb-1 mt-3': isEmbedded })}
+            >
               <div
                 className="content fs-6"
                 dangerouslySetInnerHTML={{
@@ -210,9 +252,19 @@ export default function StatementItem(props: {
                   }}
                 ></div>
               </div>
-              <div className="d-flex justify-content-between align-items-center w-100">
+              <div
+                className={classNames(
+                  'd-flex justify-content-between align-items-center w-100',
+                  {
+                    'mb-md-3': isEmbedded,
+                  }
+                )}
+              >
                 <a
-                  className="accordion-link text-dark text-decoration-underline"
+                  className={classNames(
+                    'accordion-link text-dark text-decoration-underline',
+                    { 'fw-bold': isEmbedded }
+                  )}
                   onClick={() => setOpenExplanation(!openExplanation)}
                 >
                   {openExplanation ? (
@@ -222,7 +274,10 @@ export default function StatementItem(props: {
                   )}
                 </a>
                 <a
-                  className="d-flex text-gray align-items-center text-none"
+                  className={classNames(
+                    'd-flex text-gray align-items-center text-none',
+                    { 'text-decoration-none': isEmbedded }
+                  )}
                   href={'/vyrok/' + statement.id}
                 >
                   <LinkIcon className="h-15px" />
