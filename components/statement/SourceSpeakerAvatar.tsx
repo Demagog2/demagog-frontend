@@ -22,7 +22,7 @@ const SourceSpeakerAvatarFragment = gql(`
 export function SourceSpeakerAvatar(props: {
   statement: FragmentType<typeof SourceSpeakerAvatarFragment>
   isEmbedded?: boolean
-  isRole?: boolean
+  hasRole?: boolean
 }) {
   const statement = useFragment(SourceSpeakerAvatarFragment, props.statement)
 
@@ -52,8 +52,8 @@ export function SourceSpeakerAvatar(props: {
       </SpeakerLink>
       <div className="mt-2 text-center w-100">
         <h3 className="fs-6 fw-bold">{statement.sourceSpeaker.fullName}</h3>
-        {props.isRole && (
-          <h3 className="fs-6 fw-bold fst-italic">
+        {props.hasRole && (
+          <h3 className="fs-6 fw-bold fst-italic mt-1">
             {statement.sourceSpeaker.role}
           </h3>
         )}
