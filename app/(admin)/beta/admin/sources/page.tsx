@@ -47,8 +47,7 @@ export default async function AdminSources(props: PropsWithSearchParams) {
               sourceUrl
               experts {
                 id
-                fullName
-                avatar(size: small)
+                ...AdminUserAvatar
               }
               medium {
                 name
@@ -178,16 +177,11 @@ export default async function AdminSources(props: PropsWithSearchParams) {
                   <td className="max-w-[200px]">
                     <div className="flex -space-x-0.5">
                       <dt className="sr-only">Řečníci</dt>
-                      {source.experts?.map((expert) => {
-                        return (
-                          <span key={expert.id}>
-                            <AdminUserAvatar
-                              fullName={expert.fullName}
-                              avatar={expert.avatar}
-                            />
-                          </span>
-                        )
-                      })}
+                      {source.experts?.map((expert) => (
+                        <span key={expert.id}>
+                          <AdminUserAvatar user={expert} />
+                        </span>
+                      ))}
                     </div>
                   </td>
                   <td>

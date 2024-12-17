@@ -11,6 +11,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { pluralize } from '@/libs/pluralize'
 import { useState } from 'react'
 import { takeRight } from 'lodash'
+import { AdminUserAvatar } from '../../users/AdminUserAvatar'
 
 const SHOW_ALL_THRESHOLD = 3
 
@@ -28,6 +29,7 @@ export function AdminStatementComments(props: { statementId: string }) {
             content
             createdAt
             user {
+              ...AdminUserAvatar
               id
               fullName
               avatar(size: small)
@@ -107,13 +109,18 @@ export function AdminStatementComments(props: { statementId: string }) {
               <div className="relative flex items-start space-x-3">
                 <>
                   <div className="relative">
-                    {activityItem.user.avatar && (
+                    <AdminUserAvatar
+                      user={activityItem.user}
+                      size="extra-large"
+                    />
+
+                    {/* {activityItem.user.avatar && (
                       <img
                         alt={activityItem.user.fullName}
                         src={imagePath(activityItem.user.avatar)}
                         className="flex size-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
                       />
-                    )}
+                    )} */}
 
                     <span className="absolute -bottom-0.5 -right-1 rounded-tl bg-white px-0.5 py-px">
                       <ChatBubbleLeftEllipsisIcon

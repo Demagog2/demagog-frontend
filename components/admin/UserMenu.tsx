@@ -8,14 +8,11 @@ const userNavigation = [
   { name: 'Sign out', href: '#' },
 ]
 
-// TODO: @vaclavbohac Add initials to the API?
-
 const UserMenuFragment = gql(`
   fragment UserMenu on Query {
     currentUser {
-      id
+      ...AdminUserAvatar
       fullName
-      avatar(size: small)
     }
   }
 `)
@@ -31,11 +28,7 @@ export function UserMenu(props: {
       <MenuButton className="-m-1.5 flex items-center p-1.5">
         <span className="sr-only">Open user menu</span>
 
-        <AdminUserAvatar
-          fullName={data.currentUser.fullName}
-          avatar={data.currentUser.avatar}
-          size={'large'}
-        />
+        <AdminUserAvatar user={data.currentUser} size="large" />
 
         <span className="hidden lg:flex lg:items-center">
           <span
