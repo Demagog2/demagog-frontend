@@ -1,32 +1,58 @@
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/20/solid'
-import { FragmentType, gql, useFragment } from '@/__generated__'
+import { gql } from '@/__generated__'
 import { imagePath } from '@/libs/images/path'
 import { displayDateTime } from '@/libs/date-time'
 import {
   highlightMentions,
   newlinesToParagraphsAndBreaks,
 } from '@/libs/comments/text'
+import { AdminStatementCommentInput } from '../AdminStatementCommentInput'
+import { useMutation, useQuery } from '@apollo/client'
 
-const AdminStatementCommentsFragment = gql(`
-  fragment AdminStatementsComments on Statement {
-    commentsCount
-    comments {
-      id
-      content
-      createdAt
-      user {
-        id
-        fullName
-        avatar(size: small)
+export function AdminStatementComments(props: { statementId: string }) {
+  const { data, refetch, loading } = useQuery(
+    gql(`
+      query AdminStatementCommentsQuery($id: Int!) {
+        ...AdminStatementCommentInput
+        statementV2(id: $id, includeUnpublished: true) {
+          commentsCount
+          comments {
+            id
+            content
+            createdAt
+            user {
+              id
+              fullName
+              avatar(size: small)
+            }
+          }
+        }
       }
-    }
-  }
-`)
+    `),
+    { variables: { id: parseInt(props.statementId, 10) } }
+  )
 
-export function AdminStatementComments(props: {
-  statement: FragmentType<typeof AdminStatementCommentsFragment>
-}) {
-  const statement = useFragment(AdminStatementCommentsFragment, props.statement)
+  const [createComment, { loading: isPending }] = useMutation(
+    gql(`
+      mutation CreateComment($commentInput: CommentInput!) {
+          createComment(commentInput: $commentInput) {
+            comment {
+              id
+            }
+          }
+        }
+    `)
+  )
+
+  if (loading) {
+    return <div>Nahvrávám&hellip;</div>
+  }
+
+  const statement = data?.statementV2
+
+  if (!statement) {
+    return null
+  }
 
   return (
     <div className="flow-root">
@@ -90,6 +116,24 @@ export function AdminStatementComments(props: {
           </li>
         ))}
       </ul>
+
+      <AdminStatementCommentInput
+        data={data}
+        isPending={isPending}
+        onSubmit={(message) =>
+          createComment({
+            variables: {
+              commentInput: {
+                statementId: props.statementId,
+                content: message,
+              },
+            },
+            onCompleted() {
+              refetch()
+            },
+          })
+        }
+      />
     </div>
   )
 }
