@@ -24,7 +24,7 @@ const SourceStatementsFragment = gql(`
         ...VeracityBadge
         evaluationStatus
         evaluator {
-          avatar(size: small)
+          ...AdminUserAvatar
           fullName
         }
       }
@@ -117,10 +117,7 @@ export function AdminSourceStatements(props: {
                             <>
                               <span className="block lg:mr-2">
                                 <AdminUserAvatar
-                                  fullName={
-                                    statement.assessment.evaluator.fullName
-                                  }
-                                  avatar={statement.assessment.evaluator.avatar}
+                                  user={statement.assessment.evaluator}
                                 />
                               </span>
                               <span className="block mt-3 lg:mt-0">

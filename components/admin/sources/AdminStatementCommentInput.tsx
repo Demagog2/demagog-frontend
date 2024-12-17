@@ -3,11 +3,12 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { imagePath } from '@/libs/images/path'
 import { useState } from 'react'
+import { AdminUserAvatar } from '../users/AdminUserAvatar'
 
 const AdminStatementCommentInputFragment = gql(`
   fragment AdminStatementCommentInput on Query {
     currentUser {
-      avatar(size: small)
+      ...AdminUserAvatar
     }
   }   
 `)
@@ -25,13 +26,7 @@ export function AdminStatementCommentInput(props: {
     <>
       <div className="flex items-start space-x-4 mt-8">
         <div className="shrink-0">
-          {data.currentUser.avatar && (
-            <img
-              alt=""
-              src={imagePath(data.currentUser.avatar)}
-              className="inline-block size-10 rounded-full"
-            />
-          )}
+          <AdminUserAvatar user={data.currentUser} size="extra-large" />
         </div>
         <div className="min-w-0 flex-1">
           <div className="border-b border-gray-200 pb-px focus-within:border-b-2 focus-within:border-indigo-600 focus-within:pb-0">
