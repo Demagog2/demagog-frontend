@@ -260,7 +260,7 @@ export function AdminAssessmentForm(props: {
         </AdminFormHeader>
 
         <AdminSourceStatementStep
-          className="border-none mt-8"
+          className="border-none py-4"
           statement={statement}
           evaluationStep={evaluationStatus}
           published={published}
