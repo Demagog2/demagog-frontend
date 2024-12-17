@@ -43,6 +43,8 @@ import { AdminExpertsField } from './AdminExpertsList'
 import { AdminEvaluationStatusControl } from './controls/AdminEvaluationStatusControl'
 import { AdminSourceStatementStep } from '../AdminSourceStatementStep'
 import { AdminStatementComments } from './AdminStatementComments'
+import { ApolloProvider } from '@apollo/client'
+import { createClient } from '@/libs/apollo-client'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -82,7 +84,7 @@ const AdminStatementAssessmentFragment = gql(`
   fragment AdminStatementAssessment on Statement {
     ...StatementEvaluationMachine
     ...SourceStatementStep
-    ...AdminStatementsComments
+    id
     statementType
     title
     content
@@ -673,7 +675,9 @@ export function AdminAssessmentForm(props: {
               Komentáře
             </div>
 
-            <AdminStatementComments statement={statement} />
+            <ApolloProvider client={createClient()}>
+              <AdminStatementComments statementId={statement.id} />
+            </ApolloProvider>
           </AdminFormSidebar>
         </AdminFormContent>
       </div>
