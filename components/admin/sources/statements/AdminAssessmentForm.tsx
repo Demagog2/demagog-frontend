@@ -672,7 +672,7 @@ export function AdminAssessmentForm(props: {
               </Field>
             </Fieldset>
 
-            <div className="text-base font-semibold leading-7 text-gray-900 mb-5 mt-8">
+            <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
               Komentáře
             </div>
 
