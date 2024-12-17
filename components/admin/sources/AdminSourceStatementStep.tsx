@@ -38,6 +38,7 @@ export function AdminSourceStatementStep(props: {
   statement: FragmentType<typeof SourceStatementStepFragment>
   evaluationStep?: string
   published?: boolean
+  hasPadding?: boolean
   className?: string
 }) {
   const statement = useFragment(SourceStatementStepFragment, props.statement)
@@ -49,10 +50,9 @@ export function AdminSourceStatementStep(props: {
 
   return (
     <div
-      className={classNames(
-        'border-t border-gray-200 px-4 py-6 sm:px-6 lg:p-8',
-        props.className
-      )}
+      className={classNames('border-t border-gray-200', props.className, {
+        'px-4 py-6 sm:px-6 lg:p-8': props.hasPadding ?? true,
+      })}
     >
       <h4 className="sr-only">Stav</h4>
       {/* <p className="text-sm font-medium text-gray-900"> */}

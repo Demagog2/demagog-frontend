@@ -260,10 +260,11 @@ export function AdminAssessmentForm(props: {
         </AdminFormHeader>
 
         <AdminSourceStatementStep
-          className="px-0 lg:p-0 border-none mt-8"
+          className="border-none mt-8"
           statement={statement}
           evaluationStep={evaluationStatus}
           published={published}
+          hasPadding={false}
         />
 
         <AdminFormContent>
