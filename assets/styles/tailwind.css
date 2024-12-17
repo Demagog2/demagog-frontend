@@ -15,6 +15,25 @@
     }
   }
 
+  .admin-comment-input {
+    min-height: 120px;
+
+    .admin-comment-input-mention {
+      @apply bg-indigo-100;
+    }
+
+    .admin-comment-input__highlighter {
+      padding-top: 0.5rem;
+      padding-right: 0.75rem;
+      padding-bottom: 0.5rem;
+      padding-left: 0.75rem;
+    }
+
+    .admin-comment-input__input {
+      @apply block w-full border-none resize-none text-base text-gray-900 placeholder:text-gray-400 focus:outline focus:border-none focus:outline-0 sm:text-sm/6;
+    }
+  }
+
   /* CK Editor dialog styles */
   .ck-dialog .ck-list {
     @apply !mt-2 space-y-1;
