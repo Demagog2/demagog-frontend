@@ -8,8 +8,15 @@ import {
 } from '@/libs/comments/text'
 import { AdminStatementCommentInput } from '../AdminStatementCommentInput'
 import { useMutation, useQuery } from '@apollo/client'
+import { pluralize } from '@/libs/pluralize'
+import { useState } from 'react'
+import { takeRight } from 'lodash'
+
+const SHOW_ALL_THRESHOLD = 3
 
 export function AdminStatementComments(props: { statementId: string }) {
+  const [showAll, setShowAll] = useState(false)
+
   const { data, refetch, loading } = useQuery(
     gql(`
       query AdminStatementCommentsQuery($id: Int!) {
@@ -54,13 +61,43 @@ export function AdminStatementComments(props: { statementId: string }) {
     return null
   }
 
+  const comments = showAll
+    ? statement.comments
+    : takeRight(statement.comments, SHOW_ALL_THRESHOLD)
+
   return (
     <div className="flow-root">
-      <ul role="list" className="-mb-8">
-        {statement.comments.map((activityItem, activityItemIdx) => (
+      {statement.commentsCount > SHOW_ALL_THRESHOLD && (
+        <>
+          {showAll ? (
+            <a
+              className="text-sm text-indigo-600 cursor-pointer"
+              onClick={() => setShowAll(false)}
+            >
+              Zobrazit jen poslední {SHOW_ALL_THRESHOLD} komentáře
+            </a>
+          ) : (
+            <a
+              className="text-sm text-indigo-600 cursor-pointer"
+              onClick={() => setShowAll(true)}
+            >
+              Zobrazit 4{' '}
+              {pluralize(
+                statement.commentsCount - SHOW_ALL_THRESHOLD,
+                'předchozí komentář',
+                'předchozí komentáře',
+                'předchozích komentářů'
+              )}
+            </a>
+          )}
+        </>
+      )}
+
+      <ul role="list" className="mt-8 -mb-8">
+        {comments.map((activityItem, activityItemIdx) => (
           <li key={activityItem.id}>
             <div className="relative pb-8">
-              {activityItemIdx !== statement.commentsCount - 1 && (
+              {activityItemIdx !== comments.length - 1 && (
                 <span
                   aria-hidden="true"
                   className="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
