@@ -42,3 +42,24 @@ export async function markAsReadAndRedirect(notificationId: string) {
     message: 'Something went wrong',
   }
 }
+
+export async function markAsUnread(notificationId: string) {
+  const { data } = await serverMutation({
+    mutation: UpdateNotification,
+    variables: {
+      id: notificationId,
+      input: {
+        readAt: null,
+      },
+    },
+  })
+
+  if (data?.updateNotification?.notification) {
+    redirect(`/beta/admin/notifications?showAll=true`)
+  }
+
+  return {
+    type: 'error' as const,
+    message: 'Something went wrong',
+  }
+}
