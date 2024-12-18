@@ -62,8 +62,8 @@
     }
   }
 
-  .article-content > div > p,
-  .ck-content > p {
+  .article-content>div>p,
+  .ck-content>p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 

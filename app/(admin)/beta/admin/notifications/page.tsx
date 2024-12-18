@@ -11,11 +11,10 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import { getBooleanParam, getStringParam } from '@/libs/query-params'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
-import { Button } from '@headlessui/react'
 import { BellSlashIcon } from '@heroicons/react/24/outline'
 import formatDate from '@/libs/format-date'
-import { markAsReadAndRedirect } from './actions'
-import { MarkAsReadButton } from '@/components/notifications/MarkAsReadButton'
+import { MarkAsReadAndRedirect } from '@/components/notifications/MarkAsReadAndRedirect'
+import { ToggleReadButton } from '@/components/notifications/ToggleReadButton'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Notifikační centrum', 'Administrace'),
@@ -83,9 +82,9 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
           <table className="admin-content-table">
             <thead>
               <tr>
-                <th className="w-1/2"></th>
-                <th className="w-1/3"></th>
-                <th></th>
+                <th scope="col"></th>
+                <th scope="col" className="max-w-[200px]"></th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -99,16 +98,25 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
                     key={edge.node.id}
                     className="text-start hover:bg-gray-50 hover:text-indigo-600"
                   >
-                    <td className="w-1/2">
+                    <td>
                       {edge.node.fullText}
                       <p className="mt-2 text-sm text-gray-500">
                         Vytvořeno dne {formatDate(edge.node.createdAt)}
                       </p>
+                      {edge.node.readAt === null && (
+                        <MarkAsReadAndRedirect notificationId={edge.node.id} />
+                      )}
                     </td>
-                    <td className="w-1/2">{edge.node.statement.content}</td>
+
+                    <td className="max-w-[200px]">
+                      {edge.node.statement.content}
+                    </td>
 
                     <td>
-                      <MarkAsReadButton notificationId={edge.node.id} />
+                      <ToggleReadButton
+                        notificationId={edge.node.id}
+                        isRead={edge.node.readAt}
+                      />
                     </td>
                   </tr>
                 )
