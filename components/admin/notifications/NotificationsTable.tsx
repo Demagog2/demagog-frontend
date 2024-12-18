@@ -64,7 +64,7 @@ export function NotificationsTable(props: {
               </td>
               <td
                 className={classNames({
-                  '!whitespace-normal': !props.withToggleControl,
+                  '!whitespace-normal !text-left': !props.withToggleControl,
                 })}
               >
                 {props.withToggleControl ? (

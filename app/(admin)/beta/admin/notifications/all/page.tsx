@@ -12,7 +12,7 @@ import { getStringParam } from '@/libs/query-params'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { BellSlashIcon } from '@heroicons/react/24/outline'
-import { NotificationsTable } from '@/components/notifications/NotificationsTable'
+import { NotificationsTable } from '@/components/admin/notifications/NotificationsTable'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Všechny', 'Notifikační centrum', 'Administrace'),

@@ -7,7 +7,7 @@ import {
   markAsRead,
 } from '@/app/(admin)/beta/admin/notifications/actions'
 import { gql, FragmentType, useFragment } from '@/__generated__'
-import { SecondaryButton } from '../admin/layout/buttons/SecondaryButton'
+import { SecondaryButton } from '../layout/buttons/SecondaryButton'
 
 const ToggleReadButtonFragment = gql(`
   fragment ToggleReadButton on Notification {
