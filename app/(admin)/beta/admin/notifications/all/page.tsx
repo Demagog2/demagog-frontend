@@ -17,10 +17,12 @@ import { MarkAsReadAndRedirect } from '@/components/notifications/MarkAsReadAndR
 import { ToggleReadButton } from '@/components/notifications/ToggleReadButton'
 
 export const metadata: Metadata = {
-  title: getMetadataTitle('Nepřečtené', 'Notifikační centrum', 'Administrace'),
+  title: getMetadataTitle('Všechny', 'Notifikační centrum', 'Administrace'),
 }
 
-export default async function AdminNotifications(props: PropsWithSearchParams) {
+export default async function AdminNotificationsAll(
+  props: PropsWithSearchParams
+) {
   const before: string | null = getStringParam(props.searchParams.before)
   const after: string | null = getStringParam(props.searchParams.after)
 
@@ -48,7 +50,7 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
       }
     `),
     variables: {
-      includeRead: false,
+      includeRead: true,
       ...buildGraphQLVariables({ before, after, pageSize: 10 }),
     },
   })
@@ -57,12 +59,12 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
     {
       name: 'Nepřečtené',
       href: '/beta/admin/notifications',
-      current: true,
+      current: false,
     },
     {
       name: 'Všechny',
       href: '/beta/admin/notifications/all',
-      current: false,
+      current: true,
     },
   ]
 
@@ -71,7 +73,7 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
       <AdminPageHeader>
         <AdminPageTitle
           title="Notifikační centrum"
-          description="Nepřečtená upozornění"
+          description="Všechna upozornění"
         />
       </AdminPageHeader>
       <AdminPageContent>
@@ -85,7 +87,7 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
             />
 
             <h3 className="mt-2 text-sm font-semibold text-gray-900">
-              Nemáte žádná nepřečtená oznámení.
+              Nemáte žádná oznámení.
             </h3>
           </div>
         ) : (
@@ -93,7 +95,7 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
             <thead>
               <tr>
                 <th scope="col"></th>
-                <th scope="col" className="max-w-[200px]"></th>
+                <th scope="col"></th>
               </tr>
             </thead>
             <tbody>
@@ -116,8 +118,11 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
                         <MarkAsReadAndRedirect notificationId={edge.node.id} />
                       )}
                     </td>
-                    <td className="max-w-[200px] !whitespace-normal">
-                      {edge.node.statement.content}
+                    <td>
+                      <ToggleReadButton
+                        notificationId={edge.node.id}
+                        isRead={edge.node.readAt}
+                      />
                     </td>
                   </tr>
                 )
