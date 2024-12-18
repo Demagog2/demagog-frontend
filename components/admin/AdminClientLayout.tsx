@@ -39,7 +39,6 @@ import {
   SparklesIcon,
   // Default icons
   Bars3Icon,
-  BellIcon,
   Cog6ToothIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -49,6 +48,7 @@ import classNames from 'classnames'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { usePathname } from 'next/navigation'
 import { hideAdminBanner } from '@/app/(admin)/beta/admin/actions'
+import { NotificationIcon } from './notifications/NotificationIcon'
 
 const content = [
   {
@@ -109,6 +109,7 @@ const aboutUs = [
 const AdminClientLayoutFragment = gql(`
   fragment AdminClientLayout on Query {
     ...UserMenu
+    ...NotificationIcon
   }
 `)
 
@@ -441,13 +442,7 @@ export default function AdminClientLayout(
               />
             </form>
             <div className="flex items-center gap-x-4 lg:gap-x-6">
-              <button
-                type="button"
-                className="-m-2.5 p-2.5 text-gray-400 hover:text-gray-500"
-              >
-                <span className="sr-only">View notifications</span>
-                <BellIcon aria-hidden="true" className="h-6 w-6" />
-              </button>
+              <NotificationIcon data={data} />
 
               {/* Separator */}
               <div
