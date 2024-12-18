@@ -107,10 +107,11 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
                         <MarkAsReadAndRedirect notificationId={edge.node.id} />
                       )}
                     </td>
-
-                    <td className="max-w-[200px]">
-                      {edge.node.statement.content}
-                    </td>
+                    {!showAll && (
+                      <td className="max-w-[200px]">
+                        {edge.node.statement.content}
+                      </td>
+                    )}
 
                     <td>
                       <ToggleReadButton
