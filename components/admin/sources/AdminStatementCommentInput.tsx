@@ -24,9 +24,7 @@ export function AdminStatementCommentInput(props: {
 }) {
   const data = useFragment(AdminStatementCommentInputFragment, props.data)
 
-  const [message, setMessage] = useState(
-    'Ahoj, @[Zuzana Bělašková](387), jak se mas?'
-  )
+  const [message, setMessage] = useState('')
 
   const suggestions = useMemo(() => {
     return [
