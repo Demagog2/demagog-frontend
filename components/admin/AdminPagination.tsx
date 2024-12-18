@@ -38,6 +38,10 @@ export function AdminPagination(props: {
     return `${pathname}?${params.toString()}`
   }, [pathname, searchParams, endCursor])
 
+  if (!pageInfo.hasPreviousPage && !pageInfo.hasNextPage) {
+    return null
+  }
+
   return (
     <nav
       aria-label="Pagination"

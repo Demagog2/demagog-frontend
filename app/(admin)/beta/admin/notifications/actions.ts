@@ -44,18 +44,26 @@ export async function markAsReadAndRedirect(notificationId: string) {
 }
 
 export async function markAsUnread(notificationId: string) {
+  toggleReadState(notificationId, null)
+}
+
+export async function markAsRead(notificationId: string) {
+  toggleReadState(notificationId, new Date().toISOString())
+}
+
+async function toggleReadState(notificationId: string, readAt: string | null) {
   const { data } = await serverMutation({
     mutation: UpdateNotification,
     variables: {
       id: notificationId,
       input: {
-        readAt: null,
+        readAt,
       },
     },
   })
 
   if (data?.updateNotification?.notification) {
-    redirect(`/beta/admin/notifications?showAll=true`)
+    redirect(`/beta/admin/notifications/all`)
   }
 
   return {
