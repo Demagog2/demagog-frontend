@@ -666,7 +666,19 @@ export function AdminAssessmentForm(props: {
                         checked={field.value}
                         disabled={field.disabled}
                         onBlur={field.onBlur}
-                        onChange={field.onChange}
+                        onChange={(published) => {
+                          field.onChange(published)
+
+                          if (published) {
+                            actorRef.send({ type: 'Publish' })
+                          } else {
+                            actorRef.send({ type: 'Unpublish' })
+                          }
+
+                          trigger().then(() => {
+                            formRef.current?.requestSubmit()
+                          })
+                        }}
                       />
                     )}
                   />

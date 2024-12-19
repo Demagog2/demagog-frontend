@@ -35,6 +35,10 @@ export function AdminEvaluationStatusControl<T extends FieldValues>(props: {
     snapshot.matches({ status: 'approved' })
   )
 
+  const isPublished = useSelector(actorRef, (snapshot) =>
+    snapshot.matches({ status: 'published' })
+  )
+
   const canRequestApproval = useSelector(actorRef, (snapshot) =>
     snapshot.can({ type: 'Request approval' })
   )
@@ -174,7 +178,7 @@ export function AdminEvaluationStatusControl<T extends FieldValues>(props: {
             </>
           )}
 
-          {isApproved && (
+          {(isApproved || isPublished) && (
             <>
               <SecondaryButton
                 disabled={!canReturnBackToEvaluation}

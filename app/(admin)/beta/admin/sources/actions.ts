@@ -146,6 +146,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
       explanation,
       evaluatorId,
       evaluationStatus,
+      published = false,
       ...rest
     } = input
 
@@ -155,6 +156,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
         statementType === 'promise'
           ? {
               ...rest,
+              published,
               assessment: {
                 promiseRatingId,
                 explanationHtml: explanation,
@@ -165,6 +167,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
             }
           : {
               ...rest,
+              published,
               assessment: {
                 veracityId,
                 explanationHtml: explanation,

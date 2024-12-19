@@ -16,6 +16,7 @@ type ContextType = {
     canEditStatementAsEvaluator(evaluatorId: string): boolean
     canViewUnapprovedEvaluation(): boolean
   }
+  isPublished: boolean
   // Data from the form
   longExplanation?: string
   shortExplanation?: string
@@ -37,23 +38,6 @@ const statementEvaluatorEditable = {
     },
     editable: {},
     readOnly: {},
-  },
-}
-
-const statementPublishable = {
-  initial: 'checkEnabled' as const,
-  states: {
-    checkEnabled: {
-      always: [
-        {
-          target: 'canBePublished' as const,
-          guard: { type: 'isStatementPublishable' as const },
-        },
-        { target: 'cannotBePublished' as const },
-      ],
-    },
-    canBePublished: {},
-    cannotBePublished: {},
   },
 }
 
@@ -140,6 +124,8 @@ export const machine = setup({
       | { type: 'Back to evaluation' }
       | { type: 'Request proofreading' }
       | { type: 'Approve' }
+      | { type: 'Publish' }
+      | { type: 'Unpublish' }
       | {
           type: 'Update veracity'
           data: { veracity: string }
@@ -235,6 +221,8 @@ export const machine = setup({
     _canViewUnapprovedEvaluation: ({ context }) =>
       context.authorization.canViewUnapprovedEvaluation(),
 
+    _isStatementPublished: ({ context }) => context.isPublished,
+
     isStatementFactual: ({ context }) => context.statementType === 'factual',
     isStatementPromise: ({ context }) => context.statementType === 'promise',
     isApprovalNeeded: ({ context }) =>
@@ -243,11 +231,8 @@ export const machine = setup({
       context.state === ASSESSMENT_STATUS_PROOFREADING_NEEDED,
     isBeingEvaluated: ({ context }) =>
       context.state === ASSESSMENT_STATUS_BEING_EVALUATED,
-    isApproved: ({ context }) => {
-      console.log(context.state === ASSESSMENT_STATUS_APPROVED)
-
-      return context.state === ASSESSMENT_STATUS_APPROVED
-    },
+    isApproved: ({ context }) => context.state === ASSESSMENT_STATUS_APPROVED,
+    isPublished: and(['isApproved', '_isStatementPublished']),
   },
 }).createMachine({
   context: ({ input }) => input,
@@ -267,6 +252,10 @@ export const machine = setup({
             {
               target: 'proofreading_needed',
               guard: 'isProofreadingNeeded',
+            },
+            {
+              target: 'published',
+              guard: 'isPublished',
             },
             {
               target: 'approved',
@@ -325,13 +314,34 @@ export const machine = setup({
             },
           },
         },
+        published: {
+          type: 'parallel',
+          states: {
+            statementEvaluationVisibility,
+          },
+          on: {
+            Unpublish: {
+              target: 'approved',
+              actions: assign({ isPublished: false }),
+              guard: {
+                type: 'isStatementPublishable',
+              },
+            },
+          },
+        },
         approved: {
           type: 'parallel',
           states: {
             statementEvaluationVisibility,
-            statementPublishable,
           },
           on: {
+            Publish: {
+              target: 'published',
+              actions: assign({ isPublished: true }),
+              guard: {
+                type: 'isStatementPublishable',
+              },
+            },
             'Back to evaluation': {
               target: 'being_evaluated',
               actions: assign({ state: ASSESSMENT_STATUS_BEING_EVALUATED }),

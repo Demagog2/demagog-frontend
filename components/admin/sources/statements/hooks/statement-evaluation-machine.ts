@@ -13,6 +13,7 @@ const StatementEvaluationMachineQueryFragment = gql(`
 const StatementEvaluationMachineFragment = gql(`
   fragment StatementEvaluationMachine on Statement {
     statementType
+    published
     assessment {
       veracity {
         id
@@ -56,6 +57,7 @@ export function useStatementEvaluationMachine(props: {
       longExplanation: statement.assessment.explanation ?? '',
       veracity: statement.assessment.veracity?.id,
       promiseRating: statement.assessment.promiseRating?.id,
+      isPublished: statement.published,
     },
   })
 
@@ -74,7 +76,8 @@ export function useStatementEvaluationMachine(props: {
           proofreading_needed: readOnly,
         },
       }) ||
-      snapshot.matches({ status: 'approved' })
+      snapshot.matches({ status: 'approved' }) ||
+      snapshot.matches({ status: 'published' })
     )
   })
 
@@ -93,7 +96,8 @@ export function useStatementEvaluationMachine(props: {
           proofreading_needed: readOnly,
         },
       }) ||
-      snapshot.matches({ status: 'approved' })
+      snapshot.matches({ status: 'approved' }) ||
+      snapshot.matches({ status: 'published' })
     )
   })
 
@@ -120,14 +124,19 @@ export function useStatementEvaluationMachine(props: {
         status: {
           approved: visible,
         },
+      }) ||
+      snapshot.matches({
+        status: {
+          published: visible,
+        },
       })
     )
   })
 
-  const canBePublished = useSelector(actorRef, (snapshot) =>
-    snapshot.matches({
-      status: { approved: { statementPublishable: 'canBePublished' } },
-    })
+  const canBePublished = useSelector(
+    actorRef,
+    (snapshot) =>
+      snapshot.can({ type: 'Publish' }) || snapshot.can({ type: 'Unpublish' })
   )
 
   const canEditEvaluator = useSelector(actorRef, (snapshot) =>
