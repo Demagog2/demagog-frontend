@@ -66,7 +66,7 @@ export function AdminTagForm(props: {
         </AdminFormHeader>
 
         <AdminFormContent>
-          <div className="grow gap-y-5 grid grid-cols-1">
+          <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
             {errors.name && <ErrorMessage message={errors.name?.message} />}
 
             <Field>
