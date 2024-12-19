@@ -103,13 +103,8 @@
     border: 1px solid red;
   }
 
-  .article-content ul {
+  .article-content ul, .article-content ol {
     @apply !px-2;
-  }
-
-  .article-content ul li,
-  .ck-content ul li {
-    @apply !list-disc;
   }
 
   .article-content .ul-summary li {
@@ -122,6 +117,18 @@
 
   .article-content,
   .ck-content {
+    ul, ol {
+      @apply !mt-8 !max-w-xl !space-y-4 !text-gray-600 px-3;
+    }
+
+    ul li {
+      @apply list-disc;
+    }
+
+    ol li {
+      @apply list-decimal;
+    }
+
     h2 {
       @apply mt-16 text-2xl font-bold tracking-tight text-gray-900;
     }
