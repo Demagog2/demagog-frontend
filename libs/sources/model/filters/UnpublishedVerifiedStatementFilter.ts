@@ -20,4 +20,8 @@ export class UnpublishedVerifiedStatementFilter implements IStatementFilter {
         !statement.isPublished()
     )
   }
+
+  public getGroupLabel(): string {
+    return 'Filtrovat dle zveřejnění'
+  }
 }
