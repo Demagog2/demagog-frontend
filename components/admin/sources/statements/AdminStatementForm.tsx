@@ -91,110 +91,112 @@ export function AdminStatementForm(props: {
         </AdminFormHeader>
 
         <AdminFormContent className="flex-col">
-          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-            <Legend className="text-base font-semibold leading-7 text-gray-900">
-              Základní údaje
-            </Legend>
+          <div className="col-span-12">
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Základní údaje
+              </Legend>
 
-            <Field>
-              <Label htmlFor="content">Název diskuze</Label>
+              <Field>
+                <Label htmlFor="content">Název diskuze</Label>
 
-              <Textarea
-                id="content"
-                {...register('content', { required: true })}
-                rows={10}
-                placeholder="Vložte či vepište znění..."
-              />
+                <Textarea
+                  id="content"
+                  {...register('content', { required: true })}
+                  rows={10}
+                  placeholder="Vložte či vepište znění..."
+                />
 
-              <ErrorMessage message={errors.content?.message} />
-            </Field>
+                <ErrorMessage message={errors.content?.message} />
+              </Field>
 
-            <Field>
-              <Label htmlFor="sourceSpeakerId">Řečník</Label>
+              <Field>
+                <Label htmlFor="sourceSpeakerId">Řečník</Label>
 
-              <Controller
-                control={control}
-                name="sourceSpeakerId"
-                render={({ field }) => (
-                  <>
-                    <input type="hidden" {...field} />
-                    <AdminSourceSpeakerSelect
-                      id="sourceSpeakerId"
-                      data={source}
-                      onChange={field.onChange}
-                      defaultValue={field.value}
-                    />
-                  </>
-                )}
-              />
+                <Controller
+                  control={control}
+                  name="sourceSpeakerId"
+                  render={({ field }) => (
+                    <>
+                      <input type="hidden" {...field} />
+                      <AdminSourceSpeakerSelect
+                        id="sourceSpeakerId"
+                        data={source}
+                        onChange={field.onChange}
+                        defaultValue={field.value}
+                      />
+                    </>
+                  )}
+                />
 
-              <ErrorMessage message={errors.sourceSpeakerId?.message} />
-            </Field>
+                <ErrorMessage message={errors.sourceSpeakerId?.message} />
+              </Field>
 
-            <Field>
-              <Label htmlFor="statementType">Typ výroku</Label>
+              <Field>
+                <Label htmlFor="statementType">Typ výroku</Label>
 
-              <Controller
-                control={control}
-                name="statementType"
-                render={({ field }) => (
-                  <>
-                    <input type="hidden" {...field} />
-                    <AdminStatementTypeSelect
-                      id="statementType"
-                      onChange={field.onChange}
-                      defaultValue={field.value}
-                    />
-                  </>
-                )}
-              />
+                <Controller
+                  control={control}
+                  name="statementType"
+                  render={({ field }) => (
+                    <>
+                      <input type="hidden" {...field} />
+                      <AdminStatementTypeSelect
+                        id="statementType"
+                        onChange={field.onChange}
+                        defaultValue={field.value}
+                      />
+                    </>
+                  )}
+                />
 
-              <ErrorMessage message={errors.statementType?.message} />
-            </Field>
-          </Fieldset>
+                <ErrorMessage message={errors.statementType?.message} />
+              </Field>
+            </Fieldset>
 
-          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-            <Legend className="text-base font-semibold leading-7 text-gray-900">
-              Ověřování
-            </Legend>
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Ověřování
+              </Legend>
 
-            <Field>
-              <Label htmlFor="statementType">Ověřovatel</Label>
+              <Field>
+                <Label htmlFor="statementType">Ověřovatel</Label>
 
-              <Controller
-                control={control}
-                name="evaluatorId"
-                render={({ field }) => (
-                  <>
-                    <input type="hidden" {...field} />
-                    <AdminEvaluatorSelector
-                      id="evaluatorId"
-                      data={data}
-                      onChange={field.onChange}
-                      defaultValue={field.value}
-                    />
-                  </>
-                )}
-              />
+                <Controller
+                  control={control}
+                  name="evaluatorId"
+                  render={({ field }) => (
+                    <>
+                      <input type="hidden" {...field} />
+                      <AdminEvaluatorSelector
+                        id="evaluatorId"
+                        data={data}
+                        onChange={field.onChange}
+                        defaultValue={field.value}
+                      />
+                    </>
+                  )}
+                />
 
-              <ErrorMessage message={errors.evaluatorId?.message} />
-            </Field>
+                <ErrorMessage message={errors.evaluatorId?.message} />
+              </Field>
 
-            <Field>
-              <Label htmlFor="firstCommentContent" isOptional>
-                Poznámka pro ověřování
-              </Label>
+              <Field>
+                <Label htmlFor="firstCommentContent" isOptional>
+                  Poznámka pro ověřování
+                </Label>
 
-              <Textarea
-                id="firstCommentContent"
-                {...register('firstCommentContent', { required: true })}
-                rows={5}
-                placeholder="Vložte či vepište znění..."
-              />
+                <Textarea
+                  id="firstCommentContent"
+                  {...register('firstCommentContent', { required: true })}
+                  rows={5}
+                  placeholder="Vložte či vepište znění..."
+                />
 
-              <ErrorMessage message={errors.statementType?.message} />
-            </Field>
-          </Fieldset>
+                <ErrorMessage message={errors.statementType?.message} />
+              </Field>
+            </Fieldset>
+          </div>
         </AdminFormContent>
       </div>
     </form>
