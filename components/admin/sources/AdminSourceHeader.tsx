@@ -1,6 +1,14 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { PencilIcon } from '@heroicons/react/20/solid'
 import React from 'react'
+import { LinkButton } from '@/components/admin/forms/LinkButton'
+import { useAuthorization } from '@/libs/authorization/use-authorization'
+
+const AdminSourceHeaderDataFragment = gql(`
+  fragment AdminSourceHeaderData on Query {
+    ...Authorization
+  }
+`)
 
 const AdminSourceHeaderFragment = gql(`
   fragment AdminSourceHeader on Source {
@@ -10,9 +18,13 @@ const AdminSourceHeaderFragment = gql(`
 `)
 
 export function AdminSourceHeader(props: {
+  data: FragmentType<typeof AdminSourceHeaderDataFragment>
   source: FragmentType<typeof AdminSourceHeaderFragment>
 }) {
+  const data = useFragment(AdminSourceHeaderDataFragment, props.data)
   const source = useFragment(AdminSourceHeaderFragment, props.source)
+
+  const { isAuthorized } = useAuthorization(data)
 
   return (
     <div className="lg:flex lg:items-center lg:justify-between">
@@ -35,7 +47,16 @@ export function AdminSourceHeader(props: {
           {source.name}
         </h2>
       </div>
-      <div className="mt-5 flex lg:ml-4 lg:mt-0">
+      <div className="mt-5 flex lg:ml-4 lg:mt-0 space-x-2">
+        {isAuthorized(['statements:add']) && (
+          <a
+            href={`/beta/admin/sources/${source.id}/statements/new`}
+            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          >
+            Přidat výrok
+          </a>
+        )}
+
         <span className="hidden sm:block">
           <a
             href={`/beta/admin/sources/${source.id}/edit`}
