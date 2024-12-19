@@ -24,9 +24,7 @@ export function ArticleQuoteRedesign(props: {
           ”
         </span>
         <div>
-          <p className="mb-0 px-0 py-0 fw-semibold fs-lg-2 fst-italic">
-            {data.text}
-          </p>
+          <p className="mb-0 px-0 py-0 fw-semibold fst-italic">{data.text}</p>
           {data.speaker && (
             <div className="d-flex align-items-start mt-4 mt-lg-5">
               {data.speaker.avatar && (
@@ -38,8 +36,8 @@ export function ArticleQuoteRedesign(props: {
               )}
 
               <div className="mb-0 fs-8 fs-lg-5">
-                <p className="fw-semibold">{data.speaker.fullName}</p>
-                <p className="fw-normal">{data.speaker.role}</p>
+                <div className="fw-semibold">{data.speaker.fullName}</div>
+                <div className="fw-normal">{data.speaker.role}</div>
               </div>
             </div>
           )}

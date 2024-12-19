@@ -50,7 +50,7 @@ export function SourceSpeakerAvatar(props: {
           </div>
         )}
       </SpeakerLink>
-      <div className="mt-2 text-center w-100">
+      <div className="mt-3 text-center w-100">
         <h3 className="fs-6 fw-bold">{statement.sourceSpeaker.fullName}</h3>
         {props.hasRole && (
           <h3 className="fs-6 fw-bold fst-italic mt-1">
