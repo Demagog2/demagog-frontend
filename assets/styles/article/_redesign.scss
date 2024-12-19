@@ -50,7 +50,7 @@
   }
 
   .quote + * {
-    margin-top: 2.5rem;
+    margin-top: 2.5rem !important;
   }
 
   .symbol-size {
@@ -91,7 +91,7 @@
     }
 
     .quote + * {
-      margin-top: 5rem;
+      margin-top: 5rem !important;
     }
 
     .quote-mark {
@@ -119,18 +119,16 @@
 
     .content-text-node {
       p {
-        @extend .mt-6, .fs-8;
+        @extend .mt-6, .fs-8, .fs-md-7;
       }
 
       h2 {
-        @extend .mt-8;
-        font-size: $h4-font-size;
+        @extend .mt-8, .fs-5, .fs-md-2;
         font-weight: 800;
       }
 
       h3 {
-        @extend .mt-8;
-        font-size: $h5-font-size;
+        @extend .mt-8, .fs-7, .fs-md-4;
         font-weight: 700;
       }
 
@@ -143,14 +141,6 @@
         border-radius: 31px;
         padding: 20px 25px;
         text-align: start;
-
-        h3 {
-          font-size: 1.125rem;
-        }
-
-        h2 {
-          font-size: $h2-font-size;
-        }
 
         h3,
         h2 {
@@ -181,18 +171,6 @@
       }
 
       .content-text-node {
-        p {
-          font-size: $h7-font-size !important;
-        }
-
-        h2 {
-          font-size: 32px;
-        }
-
-        h3 {
-          font-size: $h2-font-size;
-        }
-
         .ck-editor_demagog-box-wrapper {
           margin-top: 40px;
           padding: 25px 30px;
