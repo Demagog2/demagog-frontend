@@ -45,6 +45,7 @@ import { AdminSourceStatementStep } from '../AdminSourceStatementStep'
 import { AdminStatementComments } from './AdminStatementComments'
 import { ApolloProvider } from '@apollo/client'
 import { createClient } from '@/libs/apollo-client'
+import { pluralize } from '@/libs/pluralize'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -467,9 +468,14 @@ export function AdminAssessmentForm(props: {
                         />
 
                         <div className="text-sm text-gray-600 mt-2">
-                          Maximálně na dlouhý tweet, tj.{' '}
-                          {SHORT_EXPLANATION_LIMIT} znaků. Aktuálně{' '}
-                          {shortExplanation?.length} znaků.
+                          Maximálně {SHORT_EXPLANATION_LIMIT} znaků. Aktuálně{' '}
+                          {pluralize(
+                            shortExplanation?.length ?? 0,
+                            'znak',
+                            'znaky',
+                            'znaků'
+                          )}
+                          .
                         </div>
                       </>
                     )}
