@@ -162,7 +162,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
                 promiseRatingId,
                 explanationHtml: explanation,
                 shortExplanation,
-                evaluatorId,
+                evaluatorId: evaluatorId === '' ? null : evaluatorId,
                 evaluationStatus,
               },
             }
@@ -173,7 +173,7 @@ export const updateStatementAssessment = new UpdateActionBuilder<
                 veracityId,
                 explanationHtml: explanation,
                 shortExplanation,
-                evaluatorId,
+                evaluatorId: evaluatorId === '' ? null : evaluatorId,
                 evaluationStatus,
               },
             },
