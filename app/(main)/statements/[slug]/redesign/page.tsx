@@ -172,7 +172,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               dangerouslySetInnerHTML={{ __html: statement.content }}
             />
           </blockquote>
-          <div className="mt-2 mt-md-4">
+          <div className="mt-2 mt-md-4 fs-8">
             <cite>
               {statement.source.medium?.name},{' '}
               <span className="date">
@@ -222,6 +222,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               />
             </div>
           </div>
+
           {statement.assessment.shortExplanation && (
             <>
               <div className="mt-6 mt-md-10">
@@ -231,11 +232,6 @@ export default async function Statement(props: { params: { slug: string } }) {
           )}
 
           <div className="mt-10">
-            <StatementItem
-              statement={statement}
-              displayMode={StatementDisplayMode.EMBEDDED}
-            />
-
             <div className="content fs-5">
               {statement.assessment.explanationContent.edges?.map((edge) => {
                 if (!edge?.node) {
@@ -274,7 +270,7 @@ export default async function Statement(props: { params: { slug: string } }) {
                       className="mt-10"
                       key={cursor}
                       statement={node.statement}
-                      displayMode={StatementDisplayMode.VERTICAL}
+                      displayMode={StatementDisplayMode.EMBEDDED}
                     />
                   )
                 }

@@ -126,7 +126,15 @@ export default function StatementItem(props: {
                     </span>
                   )}
                   {!isVertical && statement.sourceSpeaker?.body?.shortName && (
-                    <div className="symbol-label d-flex align-items-center justify-content-center w-45px h-45px rounded-circle bg-dark">
+                    <div
+                      className={classNames(
+                        'symbol-label d-flex align-items-center justify-content-center  rounded-circle bg-dark',
+                        {
+                          'w-35px h-35px w-md-45px h-md-45px': isEmbedded,
+                          'w-45px h-45px': !isEmbedded,
+                        }
+                      )}
+                    >
                       <span className="smallest text-white lh-1 text-center p-2">
                         {statement.sourceSpeaker.body.shortName}
                       </span>
@@ -143,12 +151,18 @@ export default function StatementItem(props: {
                   className={classNames('fw-600', {
                     'fs-3': isVertical,
                     'fs-6': !isVertical,
+                    'fs-8 fs-md-7': isEmbedded,
                   })}
                 >
                   {statement.sourceSpeaker.fullName}
                 </h3>
                 {isEmbedded && (
-                  <h3 className="fs-7 fw-bold fst-italic mt-1">
+                  <h3
+                    className={classNames('fw-bold fst-italic mt-1', {
+                      'fs-8 fs-md-7': isEmbedded,
+                      'fs-7': !isEmbedded,
+                    })}
+                  >
                     {statement.sourceSpeaker.role}
                   </h3>
                 )}
@@ -162,10 +176,12 @@ export default function StatementItem(props: {
             >
               <blockquote
                 className={classNames(
-                  'p-3 fs-6 bg-dark text-white rounded-m  position-relative min-h-50px',
+                  'p-3 bg-dark text-white rounded-m  position-relative min-h-50px',
                   {
                     'mb-2': !isVertical,
                     'mt-4 mb-4': isVertical,
+                    'fs-8 fs-md-7': isEmbedded,
+                    'fs-6': !isEmbedded,
                   }
                 )}
               >
@@ -176,7 +192,10 @@ export default function StatementItem(props: {
                   })}
                 ></span>
                 <span
-                  className="fs-6 position-relative"
+                  className={classNames('position-relative', {
+                    'fs-8 fs-md-7': isEmbedded,
+                    'fs-6': !isEmbedded,
+                  })}
                   dangerouslySetInnerHTML={{ __html: statement.content }}
                 ></span>
               </blockquote>
@@ -220,7 +239,10 @@ export default function StatementItem(props: {
           {statement.assessment.shortExplanation === null ? (
             <div className="d-block">
               <div
-                className="scroll-vertical mh-400px my-5 content fs-6"
+                className={classNames('scroll-vertical mh-400px my-5 content', {
+                  'fs-8 fs-md-7': isEmbedded,
+                  'fs-6': !isEmbedded,
+                })}
                 dangerouslySetInnerHTML={{
                   __html: statement.assessment.explanationHtml ?? '',
                 }}
@@ -228,10 +250,15 @@ export default function StatementItem(props: {
             </div>
           ) : (
             <div
-              className={classNames('accordion', { 'pb-1 mt-3': isEmbedded })}
+              className={classNames('accordion', {
+                'pb-1 mt-3 fs-8 fs-md-7': isEmbedded,
+              })}
             >
               <div
-                className="content fs-6"
+                className={classNames('content', {
+                  'fs-8 fs-md-7': isEmbedded,
+                  'fs-6': !isEmbedded,
+                })}
                 dangerouslySetInnerHTML={{
                   __html: statement.assessment.shortExplanation ?? '',
                 }}
