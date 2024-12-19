@@ -304,9 +304,7 @@ export function AdminAssessmentForm(props: {
 
               {(isPromise || isFactual) && (
                 <Field>
-                  <Label htmlFor="tags" isOptional>
-                    Štítky
-                  </Label>
+                  <Label htmlFor="tags">Štítky</Label>
 
                   <AdminStatementTagsMultiselect
                     disabled={isStatementFieldDisabled}
