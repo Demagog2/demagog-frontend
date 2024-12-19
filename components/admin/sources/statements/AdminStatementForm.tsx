@@ -23,6 +23,8 @@ import { statementSchema } from '@/libs/sources/statement-schema'
 import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminStatementTypeSelect } from './AdminStatementTypeSelect'
 import { AdminSourceSpeakerSelect } from './AdminSourceSpeakerSelect'
+import { AlertMessage } from '@/components/admin/layout/AlertMessage'
+import { hideAdminBanner } from '@/app/(admin)/beta/admin/actions'
 
 const AdminStatementFormFragment = gql(`
   fragment AdminStatementForm on Query {
@@ -80,6 +82,12 @@ export function AdminStatementForm(props: {
       <input type="hidden" {...register('sourceId')} />
 
       <div className="container">
+        <AlertMessage
+          className="my-4"
+          title="Vytváření výroku"
+          message="Vytváření výroků výběrem z přepisu ještě není naimplementováno."
+        />
+
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
 

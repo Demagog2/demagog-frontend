@@ -41,6 +41,8 @@ export default async function AdminSource(props: { params: { slug: string } }) {
           ...AdminSourceHeader
           ...AdminSourcesFilters
         }
+        
+        ...AdminSourceHeaderData
       }
     `),
     variables: {
@@ -50,7 +52,7 @@ export default async function AdminSource(props: { params: { slug: string } }) {
 
   return (
     <>
-      <AdminSourceHeader source={data.source} />
+      <AdminSourceHeader data={data} source={data.source} />
       <AdminSourcesFilters source={data.source} />
     </>
   )
