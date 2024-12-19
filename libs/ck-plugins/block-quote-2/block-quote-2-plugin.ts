@@ -55,9 +55,10 @@ export class BlockQuoteWithSpeaker extends Plugin {
       const view = new ButtonView(editor.locale)
 
       view.set({
-        label: editor.locale.t('Block Quote'),
+        label: editor.locale.t('Citát'),
         icon: icons.quote,
         isToggleable: true,
+        tooltip: true,
       })
 
       view.bind('isEnabled').to(command, 'isEnabled')
