@@ -43,6 +43,25 @@
     margin: 0;
   }
 
+  .quote-mark {
+    font-size: 4rem;
+    line-height: 1;
+  }
+
+  .quote + * {
+    margin-top: 2.5rem !important;
+  }
+  .fw-semibold {
+    font-weight: 600;
+  }
+  .mt-minus-10px {
+    margin-top: -10px;
+  }
+  .symbol-size {
+    width: 28px;
+    height: 28px;
+  }
+
   article {
     @extend .mt-6;
   }
@@ -77,6 +96,25 @@
 
     h3 {
       font-size: $h2-font-size;
+    }
+  }
+
+  @media (min-width: 992px) {
+    .quote + * {
+      margin-top: 5rem !important;
+    }
+
+    .quote-mark {
+      font-size: 6rem;
+    }
+
+    .me-lg-30px {
+      margin-right: 30px !important;
+    }
+
+    .symbol-size {
+      width: 45px;
+      height: 45px;
     }
   }
 }
