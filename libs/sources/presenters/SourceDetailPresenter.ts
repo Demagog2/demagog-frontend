@@ -1,12 +1,12 @@
 import type { ISource } from '../model/Source'
 import type { IStatementFilter } from '../model/filters/StatementFilter'
-// import type { IStatsReportViewModel } from '../speaker-stats-report/view/IStatsReportViewModel';
-// import { SpeakerStatsReportBuilder } from '../speaker-stats-report/SpeakerStatsReportBuilder';
-// import { StatsReportTranslator } from '../speaker-stats-report/translator/StatsReportTranslator';
 import type { Statement } from '../model/Statement'
 import type { IFilterGroup, IFilterViewModel } from './FiltersViewModelBuilder'
 import { FiltersViewModelBuilder } from './FiltersViewModelBuilder'
 import { FiltersFactory } from '../model/filters/FiltersFactory'
+import { StatsReportTranslator } from '@/libs/sources/speaker-stats-report/translator/StatsReportTranslator'
+import { IStatsReportViewModel } from '@/libs/sources/speaker-stats-report/view/IStatsReportViewModel'
+import { SpeakerStatsReportBuilder } from '@/libs/sources/speaker-stats-report/SpeakerStatsReportBuilder'
 
 export interface IStatementViewModel {
   id: string
@@ -40,7 +40,7 @@ export interface ISourceViewModel {
   hasActiveFilter: boolean
   filteredStatements: IStatementViewModel[]
   filters: Array<IFilterGroup | IFilterViewModel>
-  // speakerStats: IStatsReportViewModel[]
+  speakerStats: IStatsReportViewModel[]
 }
 
 export class SourceDetailPresenter {
@@ -72,7 +72,7 @@ export class SourceDetailPresenter {
         this.activeFilterKeys,
         this.source.statements
       ).buildViewModel(),
-      // speakerStats: this.buildSpeakerStats(),
+      speakerStats: this.buildSpeakerStats(),
     }
   }
 
@@ -132,22 +132,22 @@ export class SourceDetailPresenter {
     return this.source.experts.map((expert) => expert.getFullName())
   }
 
-  // private buildSpeakerStats() {
-  //   const statements = this.source.statements
-  //
-  //   return this.source.sourceSpeakers.map((sourceSpeaker) => {
-  //     const report = new SpeakerStatsReportBuilder(
-  //       sourceSpeaker,
-  //       statements
-  //     ).buildReport()
-  //
-  //     return {
-  //       id: report.id,
-  //       title: report.title,
-  //       stats: report.stats.map(({ key, count }) =>
-  //         new StatsReportTranslator().translate(key, count)
-  //       ),
-  //     }
-  //   })
-  // }
+  private buildSpeakerStats() {
+    const statements = this.source.statements
+
+    return this.source.sourceSpeakers.map((sourceSpeaker) => {
+      const report = new SpeakerStatsReportBuilder(
+        sourceSpeaker,
+        statements
+      ).buildReport()
+
+      return {
+        id: report.id,
+        title: report.title,
+        stats: report.stats.map(({ key, count }) =>
+          new StatsReportTranslator().translate(key, count)
+        ),
+      }
+    })
+  }
 }
