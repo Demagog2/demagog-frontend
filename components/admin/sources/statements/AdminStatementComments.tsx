@@ -1,7 +1,6 @@
 import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/20/solid'
 import { gql } from '@/__generated__'
-import { imagePath } from '@/libs/images/path'
-import { displayDateTime } from '@/libs/date-time'
+import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
 import {
   highlightMentions,
   newlinesToParagraphsAndBreaks,
@@ -139,9 +138,13 @@ export function AdminStatementComments(props: { statementId: string }) {
                           {activityItem.user.fullName}
                         </a>
                       </div>
-                      <p className="mt-0.5 text-sm text-gray-500">
-                        Komentováno {displayDateTime(activityItem.createdAt)}
-                      </p>
+                      <time
+                        className="mt-0.5 text-sm text-gray-500"
+                        dateTime={activityItem.createdAt}
+                        title={displayDateTime(activityItem.createdAt)}
+                      >
+                        {displayDateTimeRelative(activityItem.createdAt)}
+                      </time>
                     </div>
                     <div className="mt-2 text-sm text-gray-700">
                       <div

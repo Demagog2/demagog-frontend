@@ -15,6 +15,13 @@ export function displayDateTime(datetime: string): string {
     .toLocaleString(DateTime.DATETIME_MED)
 }
 
+export function displayDateTimeRelative(datetime: string): string | null {
+  return DateTime.fromISO(datetime)
+    .setLocale('cs')
+    .setZone('Europe/Prague')
+    .toRelative()
+}
+
 export function dateInputFormat(datetime: string): string {
   return DateTime.fromISO(datetime)
     .setLocale('cs')
