@@ -323,6 +323,33 @@ export function AdminSourcesFilters(props: {
                   )
                 })}
               </form>
+
+              <div className="mt-10 space-y-8">
+                {sourceViewModel.speakerStats.map((speakerStats) => {
+                  return (
+                    <div
+                      key={speakerStats.id}
+                      className="lg:col-start-3 lg:row-end-1"
+                    >
+                      <div className="rounded-lg bg-gray-50 shadow-sm ring-1 ring-gray-900/5 p-6">
+                        <h3 className="text-base font-medium text-gray-900">
+                          {speakerStats.title}
+                        </h3>
+
+                        <div>
+                          <ul className="mt-4 space-y-2">
+                            {speakerStats.stats.map((stat) => (
+                              <li key={stat} className="text-sm text-gray-600">
+                                {stat}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
             </div>
           </aside>
 
