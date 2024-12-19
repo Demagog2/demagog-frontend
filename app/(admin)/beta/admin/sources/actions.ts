@@ -116,6 +116,7 @@ export const updateSource = new UpdateActionBuilder<
           id: sourceSpeakerId,
           ...sourceSpeaker,
         })) ?? [],
+      mediaPersonalities: input.mediaPersonalities ?? [],
       experts: input.experts ?? [],
     },
   }))

@@ -5,6 +5,7 @@ import invariant from 'ts-invariant'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { FormMessage } from '@/libs/forms/form-message'
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
+import { ApolloError } from '@apollo/client'
 
 export class UpdateActionBuilder<
   T extends ZodType,
@@ -37,12 +38,32 @@ export class UpdateActionBuilder<
         invariant(this.mutation, 'Mutation was not defined')
         invariant(this.variables, 'Variables were not defined')
 
-        const { errors } = await serverMutation({
-          mutation: this.mutation,
-          variables: (await this.variables(id, parsedInput.data)) as any,
-        })
+        try {
+          const { errors } = await serverMutation({
+            mutation: this.mutation,
+            variables: (await this.variables(id, parsedInput.data)) as any,
+          })
 
-        if (errors?.length) {
+          if (errors?.length) {
+            return {
+              state: 'error',
+              message: FormMessage.error.unknown,
+              fields: {
+                ...parsedInput.data,
+              },
+            }
+          }
+        } catch (error) {
+          if (error instanceof ApolloError) {
+            return {
+              state: 'error',
+              message: error?.message,
+              fields: {
+                ...parsedInput.data,
+              },
+            }
+          }
+
           return {
             state: 'error',
             message: FormMessage.error.unknown,

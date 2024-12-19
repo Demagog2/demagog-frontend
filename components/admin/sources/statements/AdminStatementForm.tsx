@@ -106,7 +106,7 @@ export function AdminStatementForm(props: {
               </Legend>
 
               <Field>
-                <Label htmlFor="content">Název diskuze</Label>
+                <Label htmlFor="content">Text výroku</Label>
 
                 <Textarea
                   id="content"
