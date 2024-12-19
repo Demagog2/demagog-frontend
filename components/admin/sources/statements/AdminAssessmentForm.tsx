@@ -468,14 +468,12 @@ export function AdminAssessmentForm(props: {
                         />
 
                         <div className="text-sm text-gray-600 mt-2">
-                          Maximálně {SHORT_EXPLANATION_LIMIT} znaků. Aktuálně{' '}
-                          {pluralize(
+                          {`Maximálně ${SHORT_EXPLANATION_LIMIT} znaků. Aktuálně ${shortExplanation?.length ?? 0} ${pluralize(
                             shortExplanation?.length ?? 0,
                             'znak',
                             'znaky',
                             'znaků'
-                          )}
-                          .
+                          )}.`}
                         </div>
                       </>
                     )}
