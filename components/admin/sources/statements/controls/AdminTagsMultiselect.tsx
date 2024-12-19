@@ -53,7 +53,7 @@ export function AdminStatementTagsMultiselect<T extends FieldValues>(props: {
 
   return (
     <Multiselect
-      placeholder="Vyberte značky"
+      placeholder="Vyberte štítky"
       items={items}
       control={props.control}
       name={props.name}
