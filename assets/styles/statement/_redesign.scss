@@ -1,20 +1,10 @@
 @import '../mixins/rich_text';
 
-.statement-redesign {
+.statement-detail {
   @include perex;
 
   .radius-22px {
     border-radius: 22px;
-  }
-
-  a {
-    color: $dark;
-    text-decoration: underline;
-    text-underline-offset: 3px;
-  }
-
-  .rounded-4 {
-    border-radius: 0.5rem;
   }
 
   .text-gray {
@@ -67,6 +57,12 @@
 
     .lh-110percent {
       line-height: 110% !important;
+    }
+
+    a {
+      color: $dark;
+      text-decoration: underline;
+      text-underline-offset: 3px;
     }
 
     @media (min-width: 768px) {

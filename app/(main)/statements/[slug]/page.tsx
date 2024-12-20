@@ -84,7 +84,7 @@ export default async function Statement(props: { params: { slug: string } }) {
     data: { statementV2: statement },
   } = await query({
     query: gql(`
-      query StatementDetailRedesign($id: Int!) {
+      query StatementDetail($id: Int!) {
         statementV2(id: $id) {
           ...SourceSpeakerAvatar
           ...StatementDetail
@@ -150,7 +150,7 @@ export default async function Statement(props: { params: { slug: string } }) {
   }
 
   return (
-    <div className="container statement-redesign">
+    <div className="container statement-detail">
       <div className="row">
         <div className="col col-4 col-md-2 d-flex flex-column align-items-md-center">
           <div className="d-flex flex-column align-items-center h-100 text-center">
@@ -211,10 +211,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               Tento výrok byl ověřen jako
             </div>
             <div className="d-flex align-items-center mt-2 mt-md-0">
-              <AssessmentVeracityIcon
-                assessment={statement.assessment}
-                isStatementDetail
-              />
+              <AssessmentVeracityIcon assessment={statement.assessment} />
               <AssessmentVeracityLabel assessment={statement.assessment} />
             </div>
           </div>

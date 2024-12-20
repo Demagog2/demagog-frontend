@@ -12,14 +12,11 @@ const AssessmentVeracityIconFragment = gql(`
 
 export function AssessmentVeracityIcon(props: {
   assessment: FragmentType<typeof AssessmentVeracityIconFragment>
-  isRedesign?: boolean
 }) {
   const assessment = useFragment(
     AssessmentVeracityIconFragment,
     props.assessment
   )
-
-  const iconSize = props.isRedesign ? 13 : 20
 
   return (
     <span
@@ -33,7 +30,7 @@ export function AssessmentVeracityIcon(props: {
         }
       )}
     >
-      <VeracityIcon type={assessment.veracity?.key} iconSize={iconSize} />
+      <VeracityIcon type={assessment.veracity?.key} iconSize={11} />
     </span>
   )
 }
