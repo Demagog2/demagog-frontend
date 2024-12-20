@@ -1,6 +1,5 @@
 import { gql } from '@/__generated__'
 import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
-import { SpeakerLink } from '@/components/speaker/SpeakerLink'
 import { AssessmentVeracityIcon } from '@/components/statement/AssessmentVeracityIcon'
 import { AssessmentVeracityLabel } from '@/components/statement/AssessmentVeracityLabel'
 import { query } from '@/libs/apollo-client'
@@ -9,9 +8,12 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { parseParamId } from '@/libs/query-params'
 import truncate from '@/libs/truncate'
 import { Metadata } from 'next'
-import Image from 'next/image'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { notFound } from 'next/navigation'
+import { ArticleQuote } from '@/components/article/ArticleQuote'
+import StatementItem from '@/components/statement/Item'
+import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
+import { StatementDisplayMode } from '@/libs/statements/display-mode'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -82,21 +84,36 @@ export default async function Statement(props: { params: { slug: string } }) {
     data: { statementV2: statement },
   } = await query({
     query: gql(`
-      query StatementDetail($id: Int!) {
+      query StatementDetailRedesign($id: Int!) {
         statementV2(id: $id) {
-          sourceSpeaker {
-            fullName
-            speaker {
-              avatar(size: detail)
-              ...SpeakerLink
-            }
-            body {
-              shortName
-            }
-          }
+          ...SourceSpeakerAvatar
+          ...StatementDetail
           assessment {
             shortExplanation
             explanationHtml
+            explanationContent {
+              edges {
+                node {
+                  ... on ArticleNode {
+                    article {
+                      ...ArticleV2PreviewFragment
+                    }
+                  }
+                  ... on StatementNode {
+                    statement {
+                      ...StatementDetail
+                    }
+                  }
+                  ... on TextNode {
+                    text
+                  }
+                  ... on BlockQuoteNode {
+                    ...ArticleQuote
+                  }
+                }
+                cursor
+              }
+            }
             ...AssessmentVeracityIcon
             ...AssessmentVeracityLabel
           }
@@ -133,48 +150,28 @@ export default async function Statement(props: { params: { slug: string } }) {
   }
 
   return (
-    <div className="container">
-      <div className="row g-10">
-        <div className="col col-4 col-md-2">
-          <SpeakerLink
-            speaker={statement.sourceSpeaker?.speaker}
-            className="d-block position-relative"
-          >
-            <span className="symbol symbol-square symbol-circle">
-              {statement.sourceSpeaker.speaker.avatar && (
-                <Image
-                  src={mediaUrl + statement.sourceSpeaker.speaker.avatar}
-                  alt={statement.sourceSpeaker.fullName}
-                  width={127}
-                  height={127}
-                />
-              )}
-            </span>
-            {statement.sourceSpeaker.body?.shortName && (
-              <div className="symbol-label d-flex align-items-center justify-content-center w-50px h-50px rounded-circle bg-dark">
-                <span className="smallest text-white lh-1 text-center p-2">
-                  {statement.sourceSpeaker.body.shortName}
-                </span>
-              </div>
-            )}
-          </SpeakerLink>
-          <div className="mt-2 text-center w-100">
-            <h3 className="fs-6 fw-bold">{statement.sourceSpeaker.fullName}</h3>
+    <div className="container statement-redesign">
+      <div className="row">
+        <div className="col col-4 col-md-2 d-flex flex-column align-items-md-center">
+          <div className="d-flex flex-column align-items-center h-100 text-center">
+            <SourceSpeakerAvatar
+              statement={statement}
+              hasRole={true}
+              isEmbedded
+            />
           </div>
         </div>
-        <div className="col col-12 col-md-8">
+        <div className="col col-12 col-md-8 justify-self-center">
           <blockquote
-            className="p-3 fs-6 bg-dark text-white rounded-m mb-2 position-relative min-h-50px"
+            className="p-3 fs-6 bg-dark text-white rounded-m position-relative min-h-50px mt-4 mt-md-0"
             data-target="statement--detail.blockquote"
           >
-            <span className="popover-arrow arrow-east d-none d-md-block"></span>
-            <span className="popover-arrow arrow-north d-block d-md-none"></span>
             <span
               className="fs-6 position-relative"
               dangerouslySetInnerHTML={{ __html: statement.content }}
             />
           </blockquote>
-          <div className="mb-10">
+          <div className="mt-2 mt-md-4 fs-8">
             <cite>
               {statement.source.medium?.name},{' '}
               <span className="date">
@@ -209,39 +206,78 @@ export default async function Statement(props: { params: { slug: string } }) {
               </div>
             )}
           </div>
-          <div className="d-flex flex-wrap align-items-center mb-10">
-            <h1 className="display-2 fw-bold me-3">
+          <div className="assessment-veracity d-flex flex-column flex-md-row align-items-md-center justify-content-md-start mt-6 mt-md-10">
+            <div className="display-2 fw-bold me-md-6 flex-shrink-0">
               Tento výrok byl ověřen jako
-            </h1>
-            <div className="d-flex align-items-center">
-              <AssessmentVeracityIcon assessment={statement.assessment} />
+            </div>
+            <div className="d-flex align-items-center mt-2 mt-md-0">
+              <AssessmentVeracityIcon
+                assessment={statement.assessment}
+                isStatementDetail
+              />
               <AssessmentVeracityLabel assessment={statement.assessment} />
             </div>
           </div>
+
           {statement.assessment.shortExplanation && (
             <>
-              <div className="separator bg-gray mb-10"></div>
-              <div className="mb-10">
-                <h3 className="display-2 fw-bold mb-5">Zkrácené odůvodnění</h3>
-                <p className="fs-5">{statement.assessment.shortExplanation}</p>
+              <div className="mt-6 mt-md-10">
+                <p className="perex">{statement.assessment.shortExplanation}</p>
               </div>
             </>
           )}
-          <div className="separator bg-gray mb-10"></div>
-          <div className="mb-10">
-            <h3 className="display-2 fw-bold mb-5">Plné odůvodnění</h3>
-            <div
-              className="content fs-5"
-              dangerouslySetInnerHTML={{
-                __html: statement.assessment.explanationHtml ?? '',
-              }}
-            ></div>
+
+          <div className="content fs-5">
+            {statement.assessment.explanationContent.edges?.map((edge) => {
+              if (!edge?.node) {
+                return null
+              }
+
+              const { node, cursor } = edge
+
+              if (node.__typename === 'TextNode') {
+                return (
+                  <div
+                    className={'content-text-node mt-6'}
+                    key={cursor}
+                    dangerouslySetInnerHTML={{ __html: node.text }}
+                  />
+                )
+              }
+
+              if (node.__typename === 'BlockQuoteNode') {
+                return <ArticleQuote key={cursor} node={node} />
+              }
+
+              if (node.__typename === 'ArticleNode' && node.article) {
+                return (
+                  <ArticleV2Preview
+                    isEmbedded
+                    key={cursor}
+                    article={node.article}
+                  />
+                )
+              }
+
+              if (node.__typename === 'StatementNode' && node.statement) {
+                return (
+                  <StatementItem
+                    className="mt-10"
+                    key={cursor}
+                    statement={node.statement}
+                    displayMode={StatementDisplayMode.EMBEDDED}
+                  />
+                )
+              }
+            })}
           </div>
-          <div className="separator bg-gray mb-10"></div>
+
           <div>
-            <h3 className="display-2 fw-bold mb-5">Výrok jsme zmínili</h3>
             {statement.mentioningArticles?.map((article) => (
-              <ArticleV2Preview article={article} key={article?.id} />
+              <>
+                <h3 className="mt-8">Výrok jsme zmínili</h3>
+                <ArticleV2Preview article={article} key={article?.id} />
+              </>
             ))}
           </div>
         </div>
