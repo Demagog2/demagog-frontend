@@ -1,8 +1,8 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { imagePath } from '@/libs/images/path'
 
-const ArticleQuoteRedesignFragment = gql(`
-  fragment ArticleQuoteRedesign on BlockQuoteNode {
+const ArticleQuoteFragment = gql(`
+  fragment ArticleQuote on BlockQuoteNode {
     text
     speaker {
       avatar(size: small)
@@ -12,10 +12,10 @@ const ArticleQuoteRedesignFragment = gql(`
   }
 `)
 
-export function ArticleQuoteRedesign(props: {
-  node: FragmentType<typeof ArticleQuoteRedesignFragment>
+export function ArticleQuote(props: {
+  node: FragmentType<typeof ArticleQuoteFragment>
 }) {
-  const data = useFragment(ArticleQuoteRedesignFragment, props.node)
+  const data = useFragment(ArticleQuoteFragment, props.node)
 
   return (
     <div className="quote align-items-start fw-semibold mt-10 mx-3 text-start mt-lg-20 mx-lg-0">

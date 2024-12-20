@@ -2,7 +2,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerWithStats } from '@/components/speaker/SpeakerWithStats'
 import StatementItem from '../statement/Item'
 import { ArticleV2Preview } from './ArticleV2Preview'
-import { ArticleQuoteRedesign } from '@/components/article/ArticleQuoteRedesign'
+import { ArticleQuote } from './ArticleQuote'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import classNames from 'classnames'
 
@@ -32,7 +32,7 @@ const ArticleSegmentsFragment = gql(`
               text
             }
             ... on BlockQuoteNode {
-              ...ArticleQuoteRedesign
+              ...ArticleQuote
             }
           }
           cursor
@@ -83,7 +83,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                   }
 
                   if (node.__typename === 'BlockQuoteNode') {
-                    return <ArticleQuoteRedesign key={cursor} node={node} />
+                    return <ArticleQuote key={cursor} node={node} />
                   }
 
                   if (node.__typename === 'ArticleNode' && node.article) {

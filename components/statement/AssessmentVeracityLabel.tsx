@@ -12,7 +12,6 @@ const AssessmentVeracityLabelFragment = gql(`
 
 export function AssessmentVeracityLabel(props: {
   assessment: FragmentType<typeof AssessmentVeracityLabelFragment>
-  isRedesign?: boolean
 }) {
   const assessment = useFragment(
     AssessmentVeracityLabelFragment,
@@ -21,13 +20,11 @@ export function AssessmentVeracityLabel(props: {
 
   return (
     <span
-      className={classNames('lh-1 text-uppercase fw-bold', {
+      className={classNames('lh-1 text-uppercase fw-bold fs-6', {
         'text-primary': assessment.veracity?.key === 'true',
         'text-secondary': assessment.veracity?.key === 'misleading',
         'text-red': assessment.veracity?.key === 'untrue',
         'text-gray': assessment.veracity?.key === 'unverifiable',
-        'fs-2': !props.isRedesign,
-        'fs-6': props.isRedesign,
       })}
     >
       {assessment.veracity?.name}
