@@ -1,7 +1,5 @@
-import {
-  EvaluationStatusStatementFilter,
-  STATUS_FILTER_LABELS,
-} from './EvaluationStatusStatementFilter'
+import { STATUS_FILTER_LABELS } from '@/libs/sources/model/status/assessment-status'
+import { EvaluationStatusStatementFilter } from './EvaluationStatusStatementFilter'
 import { PublishedStateStatementFilter } from './PublishedStateStatementFilter'
 import { UnpublishedVerifiedStatementFilter } from './UnpublishedVerifiedStatementFilter'
 import { EvaluatorStatementFilter } from './EvaluatorStatementFilter'
