@@ -18,7 +18,7 @@ type Item = {
 
 export function Multiselect<T extends FieldValues>(props: {
   control: Control<T>
-  name: string
+  name: keyof T
   items: Item[]
   placeholder?: string
   disabled?: boolean
