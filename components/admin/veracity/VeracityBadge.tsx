@@ -1,5 +1,6 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import classNames from 'classnames'
+import { AdminBadge } from '@/components/admin/layout/AdminBadge'
 
 const VeracityBadgeFragment = gql(`
   fragment VeracityBadge on Assessment {
@@ -17,21 +18,17 @@ export function VeracityBadge(props: {
   const assessment = useFragment(VeracityBadgeFragment, props.assessment)
 
   return (
-    <span
-      className={classNames(
-        props.className,
-        'inline-flex items-center rounded-md px-2 py-1 text-xs font-medium',
-        {
-          'bg-green-100 text-green-700': assessment.veracity?.key === 'true',
-          'bg-red-100 text-red-700': assessment.veracity?.key === 'untrue',
-          'bg-yellow-100 text-yellow-800':
-            assessment.veracity?.key === 'misleading',
-          'bg-gray-100 text-gray-600':
-            assessment.veracity?.key === 'unverifiable',
-        }
-      )}
+    <AdminBadge
+      className={classNames(props.className, {
+        'bg-green-100 text-green-700': assessment.veracity?.key === 'true',
+        'bg-red-100 text-red-700': assessment.veracity?.key === 'untrue',
+        'bg-yellow-100 text-yellow-800':
+          assessment.veracity?.key === 'misleading',
+        'bg-gray-100 text-gray-600':
+          assessment.veracity?.key === 'unverifiable',
+      })}
     >
       {assessment?.veracity?.name}
-    </span>
+    </AdminBadge>
   )
 }
