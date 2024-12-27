@@ -70,7 +70,7 @@ export function BlockQuoteSpeakersView(
   const listView = new ListView(editor.locale)
 
   inputView.set({
-    placeholder: 'Jméno řečníka',
+    placeholder: 'Zadejte jméno řečníka',
     isReadOnly: false,
   })
 
