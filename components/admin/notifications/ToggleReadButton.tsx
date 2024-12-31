@@ -12,7 +12,7 @@ import { SecondaryButton } from '../layout/buttons/SecondaryButton'
 const ToggleReadButtonFragment = gql(`
   fragment ToggleReadButton on Notification {
     id
-    readAt
+    isRead
   }
 `)
 
@@ -21,7 +21,8 @@ export function ToggleReadButton(props: {
 }) {
   const notification = useFragment(ToggleReadButtonFragment, props.notification)
 
-  const isRead = notification.readAt !== null
+  const { isRead } = notification
+
   const router = useRouter() // Force refresh the page
 
   const handleToggle = async (evt: React.MouseEvent<HTMLButtonElement>) => {
