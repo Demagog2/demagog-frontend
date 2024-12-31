@@ -12,3 +12,9 @@
     }
   }
 }
+
+@mixin unsafe-data-wrapper {
+  [data-ck-unsafe-element="script"] {
+    display: none;
+  }
+}
