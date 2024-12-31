@@ -14,7 +14,7 @@ const NotificationsTableFragment = gql(`
         id
         fullText
         createdAt
-        readAt
+        isRead
         statement {
           content
           id
@@ -52,7 +52,7 @@ export function NotificationsTable(props: {
               key={edge.node.id}
               className={classNames(
                 'text-start hover:bg-gray-50 hover:text-indigo-600 cursor-pointer',
-                { 'bg-blue-100 hover:bg-gray-100': !edge.node.readAt }
+                { 'bg-blue-100 hover:bg-gray-100': !edge.node.isRead }
               )}
               onClick={() => edge.node && markAsReadAndRedirect(edge.node.id)}
             >
