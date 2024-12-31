@@ -2,6 +2,7 @@
 
 .article-redesign {
   @include perex;
+  @include unsafe-data-wrapper;
 
   .text-align-start {
     text-align: start;
