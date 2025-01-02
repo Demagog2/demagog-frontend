@@ -1,4 +1,7 @@
-export function AdminPageTitle(props: { title: string; description?: string }) {
+export function AdminPageTitle(props: {
+  title: string
+  description?: JSX.Element | string | null
+}) {
   return (
     <div>
       <h3 className="text-base font-semibold leading-6 text-gray-900">
