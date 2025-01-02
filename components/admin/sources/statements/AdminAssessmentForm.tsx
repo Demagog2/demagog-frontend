@@ -300,6 +300,7 @@ export function AdminAssessmentForm(props: {
     statement.source.sourceUrl,
     statement.source.id,
     statement.id,
+    statement.statementTranscriptPosition,
   ])
 
   const formRef = useRef<HTMLFormElement>(null)
