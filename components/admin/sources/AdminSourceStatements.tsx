@@ -7,6 +7,7 @@ import {
   ASSESSMENT_STATUS_BEING_EVALUATED,
 } from '@/libs/constants/assessment'
 import { useRouter } from 'next/navigation'
+import { pluralize } from '@/libs/pluralize'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -154,17 +155,30 @@ export function AdminSourceStatements(props: {
                           <>
                             {' '}
                             <p className="font-medium text-gray-500">
-                              Zkrácené odůvodnění:{' '}
-                              {
+                              Zkrácené odůvodnění:
+                              {` ${
                                 statement.assessment
                                   .shortExplanationCharactersLength
-                              }{' '}
-                              znaků
+                              } ${pluralize(
+                                statement.assessment
+                                  .shortExplanationCharactersLength,
+                                'znak',
+                                'znaky',
+                                'znaků'
+                              )}`}
                             </p>
                             <p className="text-gray-500">
-                              Celé odůvodnění:{' '}
-                              {statement.assessment.explanationCharactersLength}{' '}
-                              znaků
+                              Celé odůvodnění:
+                              {` ${
+                                statement.assessment.explanationCharactersLength
+                              } 
+                                ${pluralize(
+                                  statement.assessment
+                                    .explanationCharactersLength,
+                                  'znak',
+                                  'znaky',
+                                  'znaků'
+                                )}`}
                             </p>
                           </>
                         )}
