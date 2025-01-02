@@ -1,19 +1,20 @@
+import anchorme from 'anchorme'
+
 export const highlightMentions = (commentContent: string) =>
   commentContent.replace(
     /@\[([^\]]+)\]\([^\)]+\)/g,
     '<span class="highlight">$1</span>'
   )
 
-// const nicerLinks = (commentContent: string) =>
-//   anchorme(commentContent, {
-//     truncate: [30, 15],
-//     attributes: [{ name: 'target', value: '_blank' }],
-//     // Bugfix for percent being encoded twice, see https://github.com/alexcorvi/anchorme.js/issues/49
-//     exclude: (urlObj) => {
-//       urlObj.encoded = urlObj.encoded.replace(/%25/g, '%')
-//       return false
-//     },
-//   })
+export const nicerLinks = (commentContent: string) =>
+  anchorme({
+    input: commentContent,
+    options: {
+      truncate: 30,
+      middleTruncation: true,
+      attributes: { name: 'target', value: '_blank' },
+    },
+  })
 
 export const newlinesToParagraphsAndBreaks = (
   commentContent: string
