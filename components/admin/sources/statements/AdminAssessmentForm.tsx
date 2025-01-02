@@ -231,19 +231,19 @@ export function AdminAssessmentForm(props: {
     [isPromise]
   )
 
-  const sourceLink = statement.source.sourceUrl ? (
-    <>
-      ,{' '}
-      <a
-        href={statement.source.sourceUrl}
-        className="text-indigo-600 hover:text-indigo-900"
-      >
-        odkaz
-      </a>
-    </>
-  ) : null
-
   const description = useMemo(() => {
+    const sourceLink = statement.source.sourceUrl ? (
+      <>
+        ,{' '}
+        <a
+          href={statement.source.sourceUrl}
+          className="text-indigo-600 hover:text-indigo-900"
+        >
+          odkaz
+        </a>
+      </>
+    ) : null
+
     if (isFactual) {
       return (
         <>
@@ -266,7 +266,7 @@ export function AdminAssessmentForm(props: {
 
     return (
       <>
-        Ověřování silvestrovského výroku ${statement.sourceSpeaker.fullName} z
+        Ověřování silvestrovského výroku {statement.sourceSpeaker.fullName} z
         diskuze {statement.source.name}
         {sourceLink}
       </>
@@ -275,6 +275,7 @@ export function AdminAssessmentForm(props: {
     isPromise,
     isFactual,
     statement.sourceSpeaker.fullName,
+    statement.source.name,
     statement.source.sourceUrl,
   ])
 
