@@ -1,6 +1,6 @@
 export function AdminPageTitle(props: {
   title: string
-  description?: JSX.Element | string
+  description?: JSX.Element | string | null
 }) {
   return (
     <div>
