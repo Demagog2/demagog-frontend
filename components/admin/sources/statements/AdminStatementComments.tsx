@@ -4,6 +4,7 @@ import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
 import {
   highlightMentions,
   newlinesToParagraphsAndBreaks,
+  nicerLinks,
 } from '@/libs/comments/text'
 import { AdminStatementCommentInput } from '../AdminStatementCommentInput'
 import { useMutation, useQuery } from '@apollo/client'
@@ -151,7 +152,7 @@ export function AdminStatementComments(props: { statementId: string }) {
                         className="admin-comment"
                         dangerouslySetInnerHTML={{
                           __html: newlinesToParagraphsAndBreaks(
-                            highlightMentions(activityItem.content)
+                            highlightMentions(nicerLinks(activityItem.content))
                           ),
                         }}
                       />

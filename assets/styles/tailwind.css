@@ -10,7 +10,7 @@
       @apply mt-2;
     }
 
-    .highlight {
+    a, .highlight {
       @apply text-indigo-600;
     }
   }
