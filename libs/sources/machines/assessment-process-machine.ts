@@ -1,4 +1,4 @@
-import { setup, assign, or, and } from 'xstate'
+import { and, assign, or, setup } from 'xstate'
 import {
   ASSESSMENT_STATUS_APPROVAL_NEEDED,
   ASSESSMENT_STATUS_APPROVED,
@@ -144,12 +144,16 @@ export const machine = setup({
         },
   },
   guards: {
-    isPromiseRatingEditable: or(['_canEditAsAdmin', '_canEditAsProofreader']),
+    isPromiseRatingEditable: or([
+      '_canEditAsAdmin',
+      '_canEditAsProofreader',
+      and(['isBeingEvaluated', '_canEditAsAnEvaluator']),
+    ]),
 
     isStatementEditable: or([
       '_canEditAsAdmin',
-      '_canEditAsAnEvaluator',
       '_canEditAsProofreader',
+      and(['isBeingEvaluated', '_canEditAsAnEvaluator']),
     ]),
 
     isStatementAssessmentVisible: or([
@@ -162,17 +166,10 @@ export const machine = setup({
 
     isStatementEvaluatorEditable: and(['_canEditAsAdmin', 'isBeingEvaluated']),
 
-    _canEditAsAnEvaluator: ({ context }) => {
-      const isBeingEvaluated =
-        context.state === ASSESSMENT_STATUS_BEING_EVALUATED
-
-      const isUserAssignedAsEvaluator =
-        context.authorization.canEditStatementAsEvaluator(
-          context.evaluatorId ?? ''
-        )
-
-      return isBeingEvaluated && isUserAssignedAsEvaluator
-    },
+    _canEditAsAnEvaluator: ({ context }) =>
+      context.authorization.canEditStatementAsEvaluator(
+        context.evaluatorId ?? ''
+      ),
 
     _hasVeracity: ({ context }) => !!context.veracity,
     _hasPromiseRating: ({ context }) => !!context.promiseRating,
