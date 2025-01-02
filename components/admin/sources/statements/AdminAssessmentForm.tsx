@@ -87,6 +87,9 @@ const AdminStatementAssessmentFragment = gql(`
     ...SourceStatementStep
     id
     statementType
+    statementTranscriptPosition {
+      __typename
+      }
     title
     content
     published
@@ -244,7 +247,7 @@ export function AdminAssessmentForm(props: {
       </>
     ) : null
 
-    const highlightedStatementLink = (
+    const highlightedStatementLink = statement.statementTranscriptPosition ? (
       <>
         {' '}
         -{' '}
@@ -255,6 +258,8 @@ export function AdminAssessmentForm(props: {
           Ukázat výrok v kontextu přepisu
         </a>
       </>
+    ) : (
+      <> - Výrok nelze ukázat v kontextu přepisu, je vytvořený ručně</>
     )
 
     if (isFactual) {
