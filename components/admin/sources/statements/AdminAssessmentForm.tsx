@@ -244,12 +244,26 @@ export function AdminAssessmentForm(props: {
       </>
     ) : null
 
+    const highlightedStatementLink = (
+      <>
+        {' '}
+        -{' '}
+        <a
+          href={`https://demagog.cz/admin/sources/${statement.source.id}/statements-from-transcript?highlightStatementId=${statement.id}`}
+          className="text-indigo-600 hover:text-indigo-900"
+        >
+          Ukázat výrok v kontextu přepisu
+        </a>
+      </>
+    )
+
     if (isFactual) {
       return (
         <>
           Ověřování faktického výroku {statement.sourceSpeaker.fullName} z
           diskuze {statement.source.name}
           {sourceLink}
+          {highlightedStatementLink}
         </>
       )
     }
@@ -260,6 +274,7 @@ export function AdminAssessmentForm(props: {
           Ověřování slibu {statement.sourceSpeaker.fullName} z diskuze{' '}
           {statement.source.name}
           {sourceLink}
+          {highlightedStatementLink}
         </>
       )
     }
@@ -269,6 +284,7 @@ export function AdminAssessmentForm(props: {
         Ověřování silvestrovského výroku {statement.sourceSpeaker.fullName} z
         diskuze {statement.source.name}
         {sourceLink}
+        {highlightedStatementLink}
       </>
     )
   }, [
@@ -277,6 +293,8 @@ export function AdminAssessmentForm(props: {
     statement.sourceSpeaker.fullName,
     statement.source.name,
     statement.source.sourceUrl,
+    statement.source.id,
+    statement.id,
   ])
 
   const formRef = useRef<HTMLFormElement>(null)
