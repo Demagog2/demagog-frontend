@@ -2,8 +2,12 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminSourceStatementStep } from './AdminSourceStatementStep'
 import { VeracityBadge } from '../veracity/VeracityBadge'
 import { AdminUserAvatar } from '../users/AdminUserAvatar'
-import { ASSESSMENT_STATUS_APPROVED } from '@/libs/constants/assessment'
+import {
+  ASSESSMENT_STATUS_APPROVED,
+  ASSESSMENT_STATUS_BEING_EVALUATED,
+} from '@/libs/constants/assessment'
 import { useRouter } from 'next/navigation'
+import { pluralize } from '@/libs/pluralize'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -23,6 +27,8 @@ const SourceStatementsFragment = gql(`
       assessment {
         ...VeracityBadge
         evaluationStatus
+        shortExplanationCharactersLength
+        explanationCharactersLength
         evaluator {
           ...AdminUserAvatar
           fullName
@@ -134,6 +140,50 @@ export function AdminSourceStatements(props: {
                         </dd>
                       </div>
                     </dl>
+
+                    {statement.assessment.evaluationStatus ===
+                      ASSESSMENT_STATUS_BEING_EVALUATED && (
+                      <div className="mt-6 text-sm">
+                        {statement.assessment
+                          .shortExplanationCharactersLength === 0 &&
+                        statement.assessment.explanationCharactersLength ===
+                          0 ? (
+                          <p className="font-medium text-gray-500">
+                            Odůvodnění zatím prázdné
+                          </p>
+                        ) : (
+                          <>
+                            {' '}
+                            <p className="font-medium text-gray-500">
+                              Zkrácené odůvodnění:
+                              {` ${
+                                statement.assessment
+                                  .shortExplanationCharactersLength
+                              } ${pluralize(
+                                statement.assessment
+                                  .shortExplanationCharactersLength,
+                                'znak',
+                                'znaky',
+                                'znaků'
+                              )}`}
+                            </p>
+                            <p className="text-gray-500">
+                              Celé odůvodnění:
+                              {` ${
+                                statement.assessment.explanationCharactersLength
+                              } 
+                                ${pluralize(
+                                  statement.assessment
+                                    .explanationCharactersLength,
+                                  'znak',
+                                  'znaky',
+                                  'znaků'
+                                )}`}
+                            </p>
+                          </>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 
