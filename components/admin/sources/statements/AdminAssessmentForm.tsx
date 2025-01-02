@@ -97,6 +97,7 @@ const AdminStatementAssessmentFragment = gql(`
     source {
       id
       sourceUrl
+      name
       ...AdminSourceSpeakerControl
     }
     articleTags {
@@ -231,14 +232,23 @@ export function AdminAssessmentForm(props: {
   )
 
   const sourceLink = statement.source.sourceUrl ? (
-    <a href={statement.source.sourceUrl}>odkaz</a>
+    <>
+      ,{' '}
+      <a
+        href={statement.source.sourceUrl}
+        className="text-indigo-600 hover:text-indigo-900"
+      >
+        odkaz
+      </a>
+    </>
   ) : null
 
   const description = useMemo(() => {
     if (isFactual) {
       return (
         <>
-          Ověřování faktického výroku {statement.sourceSpeaker.fullName},{' '}
+          Ověřování faktického výroku {statement.sourceSpeaker.fullName} z
+          diskuze {statement.source.name}
           {sourceLink}
         </>
       )
@@ -247,14 +257,17 @@ export function AdminAssessmentForm(props: {
     if (isPromise) {
       return (
         <>
-          Ověřování slibu {statement.sourceSpeaker.fullName}, {sourceLink}
+          Ověřování slibu {statement.sourceSpeaker.fullName} z diskuze{' '}
+          {statement.source.name}
+          {sourceLink}
         </>
       )
     }
 
     return (
       <>
-        Ověřování silvestrovského výroku ${statement.sourceSpeaker.fullName},{' '}
+        Ověřování silvestrovského výroku ${statement.sourceSpeaker.fullName} z
+        diskuze {statement.source.name}
         {sourceLink}
       </>
     )
