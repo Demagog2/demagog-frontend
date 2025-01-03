@@ -168,6 +168,7 @@ export function AdminStatementComments(props: { statementId: string }) {
       <AdminStatementCommentInput
         data={data}
         isPending={isPending}
+        statementId={props.statementId}
         onSubmit={(message) =>
           createComment({
             variables: {
