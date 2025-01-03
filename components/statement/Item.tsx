@@ -82,7 +82,7 @@ export default function StatementItem(props: {
       >
         <div
           className={classNames({
-            'col col-12 col-lg-7': isDefault,
+            'col col-12 col-lg-6': isDefault,
             'col col-12': isEmbedded,
           })}
         >
@@ -227,7 +227,7 @@ export default function StatementItem(props: {
         </div>
         <div
           className={classNames('col', {
-            'col-12 col-lg-5': isDefault,
+            'col-12 col-lg-6': isDefault,
             'col-12 col-md-9 offset-md-3 ms-md-auto mt-3 mt-md-6': isEmbedded,
           })}
         >
