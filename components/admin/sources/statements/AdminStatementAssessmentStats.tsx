@@ -11,19 +11,19 @@ const AdminStatementAssessmentStatsFragment = gql(`
 `)
 
 export function AdminStatementAssessmentStats(props: {
-  statement: FragmentType<typeof AdminStatementAssessmentStatsFragment>
+  assessment: FragmentType<typeof AdminStatementAssessmentStatsFragment>
 }) {
-  const statement = useFragment(
+  const assessment = useFragment(
     AdminStatementAssessmentStatsFragment,
-    props.statement
+    props.assessment
   )
 
   return (
     <>
-      {statement.evaluationStatus === ASSESSMENT_STATUS_BEING_EVALUATED && (
+      {assessment.evaluationStatus === ASSESSMENT_STATUS_BEING_EVALUATED && (
         <div className="mt-6 text-sm">
-          {statement.shortExplanationCharactersLength === 0 &&
-          statement.explanationCharactersLength === 0 ? (
+          {assessment.shortExplanationCharactersLength === 0 &&
+          assessment.explanationCharactersLength === 0 ? (
             <p className="font-medium text-gray-500">
               Odůvodnění zatím prázdné
             </p>
@@ -32,8 +32,8 @@ export function AdminStatementAssessmentStats(props: {
               {' '}
               <p className="font-medium text-gray-500">
                 Zkrácené odůvodnění:
-                {` ${statement.shortExplanationCharactersLength} ${pluralize(
-                  statement.shortExplanationCharactersLength,
+                {` ${assessment.shortExplanationCharactersLength} ${pluralize(
+                  assessment.shortExplanationCharactersLength,
                   'znak',
                   'znaky',
                   'znaků'
@@ -41,9 +41,9 @@ export function AdminStatementAssessmentStats(props: {
               </p>
               <p className="text-gray-500">
                 Celé odůvodnění:
-                {` ${statement.explanationCharactersLength} 
+                {` ${assessment.explanationCharactersLength} 
                                 ${pluralize(
-                                  statement.explanationCharactersLength,
+                                  assessment.explanationCharactersLength,
                                   'znak',
                                   'znaky',
                                   'znaků'

@@ -138,7 +138,7 @@ export function AdminSourceStatements(props: {
                     </dl>
 
                     <AdminStatementAssessmentStats
-                      statement={statement.assessment}
+                      assessment={statement.assessment}
                     />
                   </div>
                 </div>
