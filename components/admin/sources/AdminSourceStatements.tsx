@@ -101,10 +101,11 @@ export function AdminSourceStatements(props: {
                           assessment={statement.assessment}
                         />
                       )}
-
-                      <p className="mt-3 text-sm text-gray-500">
-                        &bdquo;{statement.content}&bdquo;
-                      </p>
+                      {statement.content ? (
+                        <p className="mt-3 text-sm text-gray-500">
+                          &bdquo;{statement.content}&rdquo;
+                        </p>
+                      ) : null}
                     </div>
                   </div>
 
