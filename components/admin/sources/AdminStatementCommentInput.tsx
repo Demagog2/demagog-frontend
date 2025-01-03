@@ -20,11 +20,16 @@ const AdminStatementCommentInputFragment = gql(`
 export function AdminStatementCommentInput(props: {
   data: FragmentType<typeof AdminStatementCommentInputFragment>
   isPending?: boolean
+  statementId: string
   onSubmit(message: string): void
 }) {
+  const localStorageKey = `statement:comment-input${props.statementId}`
+
   const data = useFragment(AdminStatementCommentInputFragment, props.data)
 
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState(
+    localStorage.getItem(localStorageKey) ?? ''
+  )
 
   const suggestions = useMemo(() => {
     return [
@@ -66,6 +71,7 @@ export function AdminStatementCommentInput(props: {
               value={message}
               onChange={(_, value) => {
                 setMessage(value)
+                localStorage.setItem(localStorageKey, value)
               }}
               allowSpaceInQuery
               style={{
@@ -113,6 +119,7 @@ export function AdminStatementCommentInput(props: {
               props.onSubmit(message)
 
               setMessage('')
+              localStorage.removeItem(localStorageKey)
             }}
           >
             Odeslat
