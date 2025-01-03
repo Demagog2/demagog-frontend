@@ -5,6 +5,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { markAsReadAndRedirect } from '@/app/(admin)/beta/admin/notifications/actions'
 import classNames from 'classnames'
 import { ToggleReadButton } from './ToggleReadButton'
+import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
 
 const NotificationsTableFragment = gql(`
   fragment NotificationsTable on NotificationConnection {
@@ -59,7 +60,8 @@ export function NotificationsTable(props: {
               <td className="!whitespace-normal">
                 {edge.node.fullText}
                 <p className="mt-2 text-sm text-gray-500">
-                  Vytvořeno dne {formatDate(edge.node.createdAt)}
+                  Vytvořeno {displayDateTimeRelative(edge.node.createdAt)} -{' '}
+                  {displayDateTime(edge.node.createdAt)}
                 </p>
               </td>
               <td
