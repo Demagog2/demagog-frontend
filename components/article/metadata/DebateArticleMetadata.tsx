@@ -45,22 +45,21 @@ export function DebateArticleMetadata(props: {
             {(article.source.mediaPersonalities?.length ?? 0) > 0 && (
               <span className="col col-auto fs-5">
                 {(article.source.mediaPersonalities?.length ?? 0) > 1 ? (
-                  <>moderátoři</>
+                  <>(moderátoři</>
                 ) : (
-                  <>moderátor</>
+                  <>(moderátor</>
                 )}
               </span>
             )}
             {article.source.mediaPersonalities?.map((mediaPersonality: any) => (
               <span key={mediaPersonality.id} className="col col-auto fs-5">
-                {mediaPersonality.name}
+                {`${mediaPersonality.name},`}
               </span>
             ))}
-            <span className="col col-auto fs-5">,</span>
             {article.source.sourceUrl && (
               <span className="col col-auto fs-5">
                 <a href={article.source.sourceUrl} className="ext">
-                  záznam
+                  záznam)
                 </a>
               </span>
             )}
