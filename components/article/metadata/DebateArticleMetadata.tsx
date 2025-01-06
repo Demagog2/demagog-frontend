@@ -59,6 +59,7 @@ export function DebateArticleMetadata(props: {
             {article.source.sourceUrl && (
               <span className="col col-auto fs-5">
                 <a href={article.source.sourceUrl} className="ext">
+                  {article.source.mediaPersonalities?.length === 0 && '('}
                   záznam)
                 </a>
               </span>
