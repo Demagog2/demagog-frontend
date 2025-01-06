@@ -235,7 +235,8 @@ export default function Footer() {
           <div>
             <a
               className="text-dark small"
-              href="/zasady-zpracovani-osobnich-udaju"
+              href="/terms
+              "
             >
               Zásady zpracování osobních údajů
             </a>

@@ -35,6 +35,7 @@ const nextConfig = {
         { source: '/vyrok/:slug', destination: '/statements/:slug' },
         { source: '/vyroky', destination: '/statements' },
         { source: '/workshopy', destination: '/workshops' },
+        { source: '/zasady-zpracovani-osobnich-udaju', destination: '/terms' },
       ],
       afterFiles: [],
       fallback: [
