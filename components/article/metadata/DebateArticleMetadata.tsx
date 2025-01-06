@@ -42,28 +42,34 @@ export function DebateArticleMetadata(props: {
               </>
             )}
 
-            {(article.source.mediaPersonalities?.length ?? 0) > 0 && (
-              <span className="col col-auto fs-5">
-                {(article.source.mediaPersonalities?.length ?? 0) > 1 ? (
-                  <>(moderátoři</>
-                ) : (
-                  <>(moderátor</>
-                )}
-              </span>
-            )}
-            {article.source.mediaPersonalities?.map((mediaPersonality: any) => (
-              <span key={mediaPersonality.id} className="col col-auto fs-5">
-                {`${mediaPersonality.name},`}
-              </span>
-            ))}
-            {article.source.sourceUrl && (
-              <span className="col col-auto fs-5">
-                <a href={article.source.sourceUrl} className="ext">
-                  {article.source.mediaPersonalities?.length === 0 && '('}
-                  záznam)
-                </a>
-              </span>
-            )}
+            <div className="col fs-5">
+              {((article.source.mediaPersonalities?.length ?? 0) > 0 ||
+                article.source.sourceUrl) && (
+                <>
+                  (
+                  {(article.source.mediaPersonalities?.length ?? 0) > 0 && (
+                    <>
+                      {(article.source.mediaPersonalities?.length ?? 0) > 1 ? (
+                        <>moderátoři </>
+                      ) : (
+                        <>moderátor </>
+                      )}
+
+                      {article.source.mediaPersonalities
+                        ?.map((mediaPersonality: any) => mediaPersonality.name)
+                        .join(', ')}
+                      {article.source.sourceUrl && ', '}
+                    </>
+                  )}
+                  {article.source.sourceUrl && (
+                    <a href={article.source.sourceUrl} className="ext">
+                      záznam
+                    </a>
+                  )}
+                  )
+                </>
+              )}
+            </div>
           </div>
         </div>
       )}
