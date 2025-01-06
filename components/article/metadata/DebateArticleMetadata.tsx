@@ -39,15 +39,15 @@ export function DebateArticleMetadata(props: {
               <>
                 {' '}
                 (
-                {(article.source.mediaPersonalities?.length ?? 0) > 0 && (
+                {article.source.mediaPersonalities?.length && (
                   <>
-                    {(article.source.mediaPersonalities?.length ?? 0) > 1 ? (
+                    {article.source.mediaPersonalities.length ? (
                       <>moderátoři </>
                     ) : (
                       <>moderátor </>
                     )}
                     {article.source.mediaPersonalities
-                      ?.map((mediaPersonality: any) => mediaPersonality.name)
+                      ?.map((mediaPersonality) => mediaPersonality.name)
                       .join(', ')}
                     {article.source.sourceUrl && ', '}
                   </>
