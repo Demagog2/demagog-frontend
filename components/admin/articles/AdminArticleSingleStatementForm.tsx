@@ -34,6 +34,7 @@ const AdminArticleSingleStatementFormFragment = gql(`
       segmentType
       statementId
     }
+    illustrationCaption
     ...AdminArticleIllustration
   }
 `)
@@ -70,6 +71,7 @@ export function AdminArticleSingleStatementForm(props: {
         article?.publishedAt ?? new Date().toISOString()
       ),
       statementId: article?.segments?.[0]?.statementId ?? undefined,
+      illustrationCaption: article?.illustrationCaption ?? '',
     },
   })
 
@@ -113,6 +115,18 @@ export function AdminArticleSingleStatementForm(props: {
                     article={article}
                     control={control}
                     name="illustration"
+                  />
+                </Field>
+
+                <Field>
+                  <Label htmlFor="illustrationCaption" isOptional>
+                    Popisek obrázku
+                  </Label>
+
+                  <Input
+                    id="illustrationCaption"
+                    placeholder="Zadejte popisek obrázku..."
+                    {...register('illustrationCaption')}
                   />
                 </Field>
 
