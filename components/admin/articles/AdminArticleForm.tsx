@@ -106,6 +106,7 @@ const AdminArticleFormFieldsFragment = gql(`
     articleTags {
       id
     }
+    illustrationCaption
     ...AdminArticleIllustration
   }
 `)
@@ -139,6 +140,7 @@ function buildDefaultValues(
     published: article.pinned,
     publishedAt: dateInputFormat(article.publishedAt),
     articleTags: article.articleTags.map((tag) => tag.id),
+    illustrationCaption: article.illustrationCaption ?? '',
     segments: article.segments
       ?.map((segment) => {
         switch (segment.segmentType) {
@@ -276,6 +278,18 @@ export function AdminArticleForm(props: {
                 article={article}
                 control={control}
                 name="illustration"
+              />
+            </Field>
+
+            <Field>
+              <Label htmlFor="illustrationCaption" isOptional>
+                Popisek obrázku
+              </Label>
+
+              <Input
+                id="illustrationCaption"
+                placeholder="Zadejte popisek obrázku..."
+                {...register('illustrationCaption')}
               />
             </Field>
 
