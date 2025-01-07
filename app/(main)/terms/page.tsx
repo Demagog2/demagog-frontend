@@ -1,4 +1,3 @@
-import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
