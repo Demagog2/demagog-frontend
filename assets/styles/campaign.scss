@@ -271,8 +271,9 @@ html {
 }
 
 .partnersP {
+  @extend .fs-9;
+
   color: #e5e7eb;
-  font-size: 12px;
   font-style: italic;
   font-weight: 500;
   line-height: 20px;
