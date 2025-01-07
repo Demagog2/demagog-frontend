@@ -101,7 +101,7 @@ export default function ArticleItem(props: {
           </h2>
           <div
             className={classNames('mb-2', {
-              'text-muted fs-12px fs-md-8': isEmbedded,
+              'text-muted fs-9 fs-md-8': isEmbedded,
             })}
           >
             {article.articleType === 'default' && article.source && (
@@ -126,10 +126,8 @@ export default function ArticleItem(props: {
             )}
             {isEmbedded && article.source?.sourceUrl && (
               <>
-                <span className="col col-auto fs-12px fs-md-8 text-muted">
-                  ,{' '}
-                </span>
-                <span className="col col-auto fs-12px fs-md-8 text-decoration-underline underline-offset-2px">
+                <span className="col col-auto fs-9 fs-md-8 text-muted">, </span>
+                <span className="col col-auto fs-9 fs-md-8 text-decoration-underline underline-offset-2px">
                   <i>
                     <a
                       href={article.source.sourceUrl}

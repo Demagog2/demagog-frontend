@@ -38,6 +38,7 @@ $h5-font-size: $font-size-base * 1.125 !default;
 $h6-font-size: $font-size-base * 1.075 !default;
 $h7-font-size: $font-size-base * 1 !default;
 $h8-font-size: $font-size-base * 0.875 !default;
+$h9-font-size: $font-size-base * 0.75 !default;
 
 $font-sizes: (
   1: $h1-font-size,
@@ -48,6 +49,7 @@ $font-sizes: (
   6: $h6-font-size,
   7: $h7-font-size,
   8: $h8-font-size,
+  9: $h9-font-size,
 );
 
 $small-font-size: $font-size-base * 0.95 !default;
