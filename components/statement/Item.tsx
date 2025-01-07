@@ -211,15 +211,15 @@ export default function StatementItem(props: {
                 )}
 
               {!isVertical && statement.tags.length > 0 && (
-                <div className="row g-2">
-                  {statement.tags.map((tag: any) => (
-                    <div key={tag.id} className="col col-auto">
-                      <div className="d-flex align-items-center">
+                <div className="row">
+                  <div className="col col-auto">
+                    {statement.tags.map((tag: any) => (
+                      <div key={tag.id} className="d-inline-block me-2">
                         <TagIcon className="h-15px" />
                         <span className="fs-8">{tag.name}</span>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
