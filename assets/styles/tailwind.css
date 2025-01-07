@@ -10,7 +10,8 @@
       @apply mt-2;
     }
 
-    a, .highlight {
+    a,
+    .highlight {
       @apply text-indigo-600;
     }
   }
@@ -81,8 +82,8 @@
     }
   }
 
-  .article-content>div>p,
-  .ck-content>p {
+  .article-content > div > p,
+  .ck-content > p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 
@@ -103,7 +104,8 @@
     border: 1px solid red;
   }
 
-  .article-content ul, .article-content ol {
+  .article-content ul,
+  .article-content ol {
     @apply !px-2;
   }
 
@@ -117,7 +119,8 @@
 
   .article-content,
   .ck-content {
-    ul, ol {
+    ul,
+    ol {
       @apply !mt-8 !max-w-xl !space-y-4 !text-gray-600 px-3;
     }
 
@@ -135,6 +138,11 @@
 
     h3 {
       @apply mt-16 text-xl font-bold tracking-tight text-gray-900;
+    }
+
+    /* Hide code that CK editor doesn't handle */
+    [data-ck-unsafe-element='script'] {
+      @apply hidden;
     }
   }
 
