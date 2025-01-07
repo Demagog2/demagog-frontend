@@ -60,12 +60,7 @@ export function AdminSourceStatements(props: {
             .map((statement) => (
               <div
                 key={statement.id}
-                onClick={() =>
-                  router.push(
-                    `/beta/admin/sources/${source.id}/statements/${statement.id}`
-                  )
-                }
-                className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border hover:border-indigo-600 cursor-pointer"
+                className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
               >
                 <div className="px-4 py-6 sm:px-6 lg:grid lg:grid-cols-12 lg:gap-x-8 lg:p-8">
                   <div className="sm:flex lg:col-span-12">
@@ -81,14 +76,22 @@ export function AdminSourceStatements(props: {
                       )}
                     </div>
 
-                    <div className="mt-6 sm:ml-6 sm:mt-0">
-                      <h3 className="text-base font-medium text-gray-900">
+                    <div className="mt-6 sm:ml-6 sm:mt-0 w-full">
+                      <div className="flex justify-between gap-2">
+                        <h3 className="text-base font-medium text-gray-900 break-words flex-1">
+                          <a
+                            href={`/beta/admin/speakers/${statement.sourceSpeaker.speaker.id}`}
+                          >
+                            {statement.sourceSpeaker.fullName}
+                          </a>
+                        </h3>
                         <a
-                          href={`/beta/admin/speakers/${statement.sourceSpeaker.speaker.id}`}
+                          href={`/beta/admin/sources/${source.id}/statements/${statement.id}`}
+                          className="inline-flex text-indigo-600 hover:text-indigo-900"
                         >
-                          {statement.sourceSpeaker.fullName}
+                          Detail výroku
                         </a>
-                      </h3>
+                      </div>
 
                       {statement.assessment.evaluationStatus ===
                         ASSESSMENT_STATUS_APPROVED && (
@@ -143,7 +146,6 @@ export function AdminSourceStatements(props: {
                     />
                   </div>
                 </div>
-
                 <AdminSourceStatementStep statement={statement} />
               </div>
             ))}
