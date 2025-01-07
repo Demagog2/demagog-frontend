@@ -36,7 +36,7 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
     `),
     variables: {
       includeRead: false,
-      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
+      ...buildGraphQLVariables({ before, after, pageSize: 100 }),
     },
   })
 

@@ -38,7 +38,7 @@ export default async function AdminNotificationsAll(
     `),
     variables: {
       includeRead: true,
-      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
+      ...buildGraphQLVariables({ before, after, pageSize: 100 }),
     },
   })
 
