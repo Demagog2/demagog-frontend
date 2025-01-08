@@ -80,7 +80,6 @@ export default async function AdminNotificationsAll(
         ) : (
           <NotificationsTable
             notifications={data.notificationsV2}
-            withToggleControl={true}
             allNotifications={true}
           />
         )}

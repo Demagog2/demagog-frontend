@@ -34,8 +34,6 @@ const NotificationsTableFragment = gql(`
 
 export function NotificationsTable(props: {
   notifications: FragmentType<typeof NotificationsTableFragment>
-  // TODO: Do we still need withToggleControl? It's seems it's true whenever allNotifications are true, so we can remove it and use allNotifications instead
-  withToggleControl?: boolean
   allNotifications?: boolean
 }) {
   const notifications = useFragment(
@@ -113,10 +111,10 @@ export function NotificationsTable(props: {
                 </td>
                 <td
                   className={classNames({
-                    '!whitespace-normal !text-left': !props.withToggleControl,
+                    '!whitespace-normal !text-left': !props.allNotifications,
                   })}
                 >
-                  {props.withToggleControl || props.allNotifications ? (
+                  {props.allNotifications ? (
                     <ToggleReadButton notification={notification} />
                   ) : (
                     <>
