@@ -50,6 +50,7 @@ export function NotificationsTable(props: {
   const sortedStatementKeys = sortBy(
     Object.keys(notificationsByStatementId),
     (statementId) => {
+      // Take date of first notification for given statement (which is always the latest one)
       return -notificationsByStatementId[statementId]?.[0]?.createdAt
     }
   )
