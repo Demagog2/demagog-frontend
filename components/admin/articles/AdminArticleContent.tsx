@@ -72,7 +72,7 @@ export function AdminArticleContent(props: {
                 aria-hidden="true"
                 className="mt-0.5 h-5 w-5 flex-none text-gray-300"
               />
-              {!article.illustrationCaption
+              {article.illustrationCaption
                 ? article.illustrationCaption
                 : `Ilustrační obrázek k ${article.title}`}
             </figcaption>
