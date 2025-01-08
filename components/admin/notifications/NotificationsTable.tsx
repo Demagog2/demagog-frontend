@@ -1,11 +1,12 @@
 'use client'
 
-import formatDate from '@/libs/format-date'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { markAsReadAndRedirect } from '@/app/(admin)/beta/admin/notifications/actions'
 import classNames from 'classnames'
 import { ToggleReadButton } from './ToggleReadButton'
 import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
+import { groupBy, sortBy } from 'lodash'
+import { useMemo } from 'react'
 
 const NotificationsTableFragment = gql(`
   fragment NotificationsTable on NotificationConnection {
@@ -19,6 +20,12 @@ const NotificationsTableFragment = gql(`
         statement {
           content
           id
+          sourceSpeaker {
+            fullName
+          }
+          source {
+            name
+          }
         }
       }
     }
@@ -27,11 +34,29 @@ const NotificationsTableFragment = gql(`
 
 export function NotificationsTable(props: {
   notifications: FragmentType<typeof NotificationsTableFragment>
-  withToggleControl?: boolean
+  allNotifications?: boolean
 }) {
   const notifications = useFragment(
     NotificationsTableFragment,
     props.notifications
+  )
+
+  const notificationsByStatementId = useMemo(
+    () =>
+      groupBy(
+        notifications.edges?.map((edge) => edge?.node),
+        (node) => node?.statement.id
+      ),
+    [notifications]
+  )
+
+  const sortedStatementKeys = useMemo(
+    () =>
+      sortBy(Object.keys(notificationsByStatementId), (statementId) => {
+        const notifications = notificationsByStatementId[statementId]
+        return new Date(notifications?.[0]?.createdAt)
+      }).reverse(),
+    [notificationsByStatementId]
   )
 
   return (
@@ -43,40 +68,63 @@ export function NotificationsTable(props: {
         </tr>
       </thead>
       <tbody>
-        {notifications.edges?.map((edge) => {
-          if (!edge?.node) {
-            return null
-          }
+        {sortedStatementKeys.flatMap((statementId) => {
+          const notifications = notificationsByStatementId[statementId]
 
-          return (
-            <tr
-              key={edge.node.id}
-              className={classNames(
-                'text-start hover:bg-gray-50 hover:text-indigo-600 cursor-pointer',
-                { 'bg-blue-100 hover:bg-gray-100': !edge.node.isRead }
-              )}
-              onClick={() => edge.node && markAsReadAndRedirect(edge.node.id)}
-            >
-              <td className="!whitespace-normal">
-                {edge.node.fullText}
-                <p className="mt-2 text-sm text-gray-500">
-                  Vytvořeno {displayDateTimeRelative(edge.node.createdAt)} -{' '}
-                  {displayDateTime(edge.node.createdAt)}
-                </p>
-              </td>
-              <td
-                className={classNames({
-                  '!whitespace-normal !text-left': !props.withToggleControl,
-                })}
-              >
-                {props.withToggleControl ? (
-                  <ToggleReadButton notification={edge.node} />
-                ) : (
-                  edge.node.statement.content
+          return notifications.map((notification, i) => {
+            if (!notification) {
+              return null
+            }
+            return (
+              <tr
+                key={notification.id}
+                className={classNames(
+                  'text-start hover:bg-gray-50 hover:text-indigo-600 cursor-pointer',
+                  { 'bg-blue-100 hover:bg-gray-100': !notification.isRead }
                 )}
-              </td>
-            </tr>
-          )
+                onClick={() =>
+                  notification && markAsReadAndRedirect(notification.id)
+                }
+              >
+                <td className="!whitespace-normal">
+                  {props.allNotifications ? (
+                    <>
+                      {notification.fullText}
+
+                      <p className="mt-2 text-sm text-gray-500">
+                        {`Vytvořeno ${displayDateTimeRelative(notification.createdAt)} – ${displayDateTime(notification.createdAt)}`}
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      {i === 0 &&
+                        `${notification.statement.sourceSpeaker.fullName}: ${notification.statement.content}`}
+
+                      <p className="mt-2 text-sm text-gray-500">
+                        {i === 0 &&
+                          `Diskuze: ${notification.statement.source.name}`}
+                      </p>
+                    </>
+                  )}
+                </td>
+                <td
+                  className={classNames({
+                    '!whitespace-normal !text-left': !props.allNotifications,
+                  })}
+                >
+                  {props.allNotifications ? (
+                    <ToggleReadButton notification={notification} />
+                  ) : (
+                    <>
+                      {notification.fullText}
+                      <p className="mt-2 text-sm text-gray-500">{`Vytvořeno ${displayDateTimeRelative(notification.createdAt)}
+                    - ${displayDateTime(notification.createdAt)}`}</p>
+                    </>
+                  )}
+                </td>
+              </tr>
+            )
+          })
         })}
       </tbody>
     </table>
