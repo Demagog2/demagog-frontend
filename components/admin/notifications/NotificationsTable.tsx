@@ -54,10 +54,8 @@ export function NotificationsTable(props: {
     () =>
       sortBy(Object.keys(notificationsByStatementId), (statementId) => {
         const notifications = notificationsByStatementId[statementId]
-
-        // Sort by the date of first statement notification (the first one is the latest one)
         return new Date(notifications?.[0]?.createdAt)
-      }).reverse(), // #reverse() cause sortBy returns results in ascending order (oldest to the newest) and we need it other way around
+      }).reverse(),
     [notificationsByStatementId]
   )
 
