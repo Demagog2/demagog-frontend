@@ -6,6 +6,7 @@ import classNames from 'classnames'
 import { ToggleReadButton } from './ToggleReadButton'
 import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
 import { groupBy, sortBy } from 'lodash'
+import { useMemo } from 'react'
 
 const NotificationsTableFragment = gql(`
   fragment NotificationsTable on NotificationConnection {
@@ -42,17 +43,24 @@ export function NotificationsTable(props: {
     props.notifications
   )
 
-  const notificationsByStatementId = groupBy(
-    notifications.edges?.map((edge) => edge?.node),
-    (node) => node?.statement.id
+  const notificationsByStatementId = useMemo(
+    () =>
+      groupBy(
+        notifications.edges?.map((edge) => edge?.node),
+        (node) => node?.statement.id
+      ),
+    [notifications]
   )
 
-  const sortedStatementKeys = sortBy(
-    Object.keys(notificationsByStatementId),
-    (statementId) => {
-      // Take date of first notification for given statement (which is always the latest one)
-      return -notificationsByStatementId[statementId]?.[0]?.createdAt
-    }
+  const sortedStatementKeys = useMemo(
+    () =>
+      sortBy(Object.keys(notificationsByStatementId), (statementId) => {
+        const notifications = notificationsByStatementId[statementId]
+
+        // Sort by the date of first statement notification (the first one is the latest one)
+        return new Date(notifications?.[0]?.createdAt)
+      }).reverse(), // #reverse() cause sortBy returns results in ascending order (oldest to the newest) and we need it other way around
+    [notificationsByStatementId]
   )
 
   return (
@@ -66,6 +74,7 @@ export function NotificationsTable(props: {
       <tbody>
         {sortedStatementKeys.flatMap((statementId) => {
           const notifications = notificationsByStatementId[statementId]
+
           return notifications.map((notification, i) => {
             if (!notification) {
               return null
@@ -81,25 +90,27 @@ export function NotificationsTable(props: {
                   notification && markAsReadAndRedirect(notification.id)
                 }
               >
-                {props.allNotifications ? (
-                  <td className="!whitespace-normal">
-                    {notification.fullText}
+                <td className="!whitespace-normal">
+                  {props.allNotifications ? (
+                    <>
+                      {notification.fullText}
 
-                    <p className="mt-2 text-sm text-gray-500">
-                      {`Vytvořeno ${displayDateTimeRelative(notification.createdAt)} – ${displayDateTime(notification.createdAt)}`}
-                    </p>
-                  </td>
-                ) : (
-                  <td className="!whitespace-normal">
-                    {i === 0 &&
-                      `${notification.statement.sourceSpeaker.fullName}: ${notification.statement.content}`}
-
-                    <p className="mt-2 text-sm text-gray-500">
+                      <p className="mt-2 text-sm text-gray-500">
+                        {`Vytvořeno ${displayDateTimeRelative(notification.createdAt)} – ${displayDateTime(notification.createdAt)}`}
+                      </p>
+                    </>
+                  ) : (
+                    <>
                       {i === 0 &&
-                        `Diskuze: ${notification.statement.source.name}`}
-                    </p>
-                  </td>
-                )}
+                        `${notification.statement.sourceSpeaker.fullName}: ${notification.statement.content}`}
+
+                      <p className="mt-2 text-sm text-gray-500">
+                        {i === 0 &&
+                          `Diskuze: ${notification.statement.source.name}`}
+                      </p>
+                    </>
+                  )}
+                </td>
                 <td
                   className={classNames({
                     '!whitespace-normal !text-left': !props.withToggleControl,
