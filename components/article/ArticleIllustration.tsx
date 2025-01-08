@@ -23,7 +23,11 @@ export function ArticleIllustration(props: {
         alt="illustration"
         src={imagePath(article.image)}
       />
-      {article.caption && <figcaption>{article.caption}</figcaption>}
+      {article.caption && (
+        <figcaption className="mt-1 text-muted small">
+          {article.caption}
+        </figcaption>
+      )}
     </>
   )
 }
