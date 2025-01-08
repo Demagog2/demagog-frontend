@@ -17,9 +17,9 @@ export function ArticleIllustration(props: {
     return null
   }
   return (
-    <>
+    <figure className="illustration-img">
       <img
-        className="mt-md-7 mt-3 rounded-l"
+        className="mt-md-7 mt-3"
         alt="illustration"
         src={imagePath(article.image)}
       />
@@ -28,6 +28,6 @@ export function ArticleIllustration(props: {
           {article.caption}
         </figcaption>
       )}
-    </>
+    </figure>
   )
 }

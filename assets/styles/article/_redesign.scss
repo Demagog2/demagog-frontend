@@ -33,6 +33,10 @@
     border-radius: 31px;
   }
 
+  figure.illustration-img img {
+    @extend .rounded-l;
+  }
+
   .mt-minus-10px {
     margin-top: -10px;
   }
