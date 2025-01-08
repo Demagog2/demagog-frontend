@@ -36,7 +36,7 @@ export function NotificationsTable(props: {
   notifications: FragmentType<typeof NotificationsTableFragment>
   // TODO: Do we still need withToggleControl? It's seems it's true whenever allNotifications are true, so we can remove it and use allNotifications instead
   withToggleControl?: boolean
-  allNotifications: boolean
+  allNotifications?: boolean
 }) {
   const notifications = useFragment(
     NotificationsTableFragment,
