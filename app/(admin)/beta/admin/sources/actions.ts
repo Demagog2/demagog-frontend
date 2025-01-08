@@ -17,6 +17,8 @@ import {
 } from '@/__generated__/graphql'
 import { assessmentSchema } from '@/libs/sources/assessment-schema'
 import { statementSchema } from '@/libs/sources/statement-schema'
+import { serverMutation } from '@/libs/apollo-client-server'
+import { redirect } from 'next/navigation'
 
 const adminCreateSourceMutation = gql(`
   mutation CreateSource($sourceInput: SourceInput!) {
@@ -180,3 +182,24 @@ export const updateStatementAssessment = new UpdateActionBuilder<
     }
   })
   .build()
+
+const adminDeleteStatementMutation = gql(`
+  mutation AdminDeleteStatement($id: ID!) {
+    deleteStatement(id: $id) {
+      id
+    }
+  }
+`)
+
+export async function deleteArticle(sourceId: string, statementId: string) {
+  const { data } = await serverMutation({
+    mutation: adminDeleteStatementMutation,
+    variables: {
+      id: statementId,
+    },
+  })
+
+  if (data?.deleteStatement?.id) {
+    redirect(`/beta/admin/sources/${sourceId}`)
+  }
+}
