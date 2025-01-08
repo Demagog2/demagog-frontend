@@ -5,7 +5,7 @@ import { markAsReadAndRedirect } from '@/app/(admin)/beta/admin/notifications/ac
 import classNames from 'classnames'
 import { ToggleReadButton } from './ToggleReadButton'
 import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
-import { groupBy } from 'lodash'
+import { groupBy, sortBy } from 'lodash'
 
 const NotificationsTableFragment = gql(`
   fragment NotificationsTable on NotificationConnection {
@@ -19,11 +19,11 @@ const NotificationsTableFragment = gql(`
         statement {
           content
           id
-          sourceSpeaker{
+          sourceSpeaker {
             fullName
-            }
+          }
           source {
-          name
+            name
           }
         }
       }
@@ -33,6 +33,7 @@ const NotificationsTableFragment = gql(`
 
 export function NotificationsTable(props: {
   notifications: FragmentType<typeof NotificationsTableFragment>
+  // TODO: Do we still need withToggleControl? It's seems it's true whenever allNotifications are true, so we can remove it and use allNotifications instead
   withToggleControl?: boolean
   allNotifications: boolean
 }) {
@@ -46,6 +47,13 @@ export function NotificationsTable(props: {
     (node) => node?.statement.id
   )
 
+  const sortedStatementKeys = sortBy(
+    Object.keys(notificationsByStatementId),
+    (statementId) => {
+      return -notificationsByStatementId[statementId]?.[0]?.createdAt
+    }
+  )
+
   return (
     <table className="admin-content-table">
       <thead>
@@ -55,7 +63,7 @@ export function NotificationsTable(props: {
         </tr>
       </thead>
       <tbody>
-        {Object.keys(notificationsByStatementId).flatMap((statementId) => {
+        {sortedStatementKeys.flatMap((statementId) => {
           const notifications = notificationsByStatementId[statementId]
           return notifications.map((notification, i) => {
             if (!notification) {
@@ -72,21 +80,25 @@ export function NotificationsTable(props: {
                   notification && markAsReadAndRedirect(notification.id)
                 }
               >
-                <td className="!whitespace-normal">
-                  {props.allNotifications
-                    ? notification.fullText
-                    : i === 0
-                      ? `${notification.statement.sourceSpeaker.fullName}: ${notification.statement.content}`
-                      : ''}
-                  <p className="mt-2 text-sm text-gray-500">
-                    {props.allNotifications
-                      ? `Vytvořeno ${displayDateTimeRelative(notification.createdAt)}
-                    - ${displayDateTime(notification.createdAt)}`
-                      : i === 0
-                        ? `Diskuze: ${notification.statement.source.name}`
-                        : ''}
-                  </p>
-                </td>
+                {props.allNotifications ? (
+                  <td className="!whitespace-normal">
+                    {notification.fullText}
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      {`Vytvořeno ${displayDateTimeRelative(notification.createdAt)} – ${displayDateTime(notification.createdAt)}`}
+                    </p>
+                  </td>
+                ) : (
+                  <td className="!whitespace-normal">
+                    {i === 0 &&
+                      `${notification.statement.sourceSpeaker.fullName}: ${notification.statement.content}`}
+
+                    <p className="mt-2 text-sm text-gray-500">
+                      {i === 0 &&
+                        `Diskuze: ${notification.statement.source.name}`}
+                    </p>
+                  </td>
+                )}
                 <td
                   className={classNames({
                     '!whitespace-normal !text-left': !props.withToggleControl,
