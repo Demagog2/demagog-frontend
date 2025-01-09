@@ -24,19 +24,6 @@
     margin-bottom: 19px;
   }
 
-  figure.image,
-  figure.embed {
-    @extend .mt-6;
-  }
-
-  figure img {
-    border-radius: 31px;
-  }
-
-  figure.illustration-img img {
-    @extend .rounded-l;
-  }
-
   .mt-minus-10px {
     margin-top: -10px;
   }
@@ -135,6 +122,15 @@
       h3 {
         @extend .mt-8, .fs-7, .fs-md-4;
         font-weight: 700;
+      }
+
+      figure.image,
+      figure.embed {
+        @extend .mt-6;
+      }
+
+      figure img {
+        border-radius: 31px;
       }
 
       .ck-editor_demagog-box-wrapper > p:first-of-type {
