@@ -96,7 +96,7 @@ export default function StatementItem(props: {
             <div
               className={classNames({
                 'w-100px min-w-100px': isDefault,
-                'col-3 mt-4 mb-2 mb-md-3 d-flex flex-column align-items-center':
+                'col-3 col-xxl-2 mt-4 mb-2 mb-md-3 d-flex flex-column align-items-center':
                   isEmbedded,
                 'd-flex': isVertical,
               })}
@@ -116,7 +116,10 @@ export default function StatementItem(props: {
                     <span
                       className={classNames(
                         'symbol symbol-square symbol-circle',
-                        { 'w-60px h-60px w-md-80px h-md-80px': isEmbedded }
+                        {
+                          'w-60px h-60px w-md-80px h-md-80px w-lg-90px h-lg-90px':
+                            isEmbedded,
+                        }
                       )}
                     >
                       <img
@@ -171,7 +174,7 @@ export default function StatementItem(props: {
             <div
               className={classNames({
                 'ps-5': isDefault,
-                'col-9 mt-4 mt-md-7': isEmbedded,
+                'col-9 col-xxl-10 mt-4 mt-md-7': isEmbedded,
               })}
             >
               <blockquote
@@ -228,7 +231,8 @@ export default function StatementItem(props: {
         <div
           className={classNames('col', {
             'col-12 col-lg-6': isDefault,
-            'col-12 col-md-9 offset-md-3 ms-md-auto mt-3 mt-md-6': isEmbedded,
+            'col-12 col-md-9 col-xxl-10 offset-md-3 ms-md-auto mt-3':
+              isEmbedded,
           })}
         >
           <StatementAssessment
@@ -290,7 +294,7 @@ export default function StatementItem(props: {
                 <a
                   className={classNames(
                     'accordion-link text-dark text-decoration-underline',
-                    { 'fw-bold': isEmbedded }
+                    { 'fw-bold mt-md-2': isEmbedded }
                   )}
                   onClick={() => setOpenExplanation(!openExplanation)}
                 >
