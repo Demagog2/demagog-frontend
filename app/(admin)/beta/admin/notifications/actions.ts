@@ -43,6 +43,44 @@ export async function markAsReadAndRedirect(notificationId: string) {
   }
 }
 
+const MarkUnreadNotificationsAsRead = gql(`
+  mutation MarkUnreadNotificationsAsRead($statementId: ID) {
+    markUnreadNotificationsAsRead(statementId: $statementId) {
+      notifications {
+        id
+        readAt
+        statement {
+          source {
+            id
+          }
+        }
+      }
+    }
+  }
+`)
+
+export async function markStatementNotificationsAsReadAndRedirect(
+  statementId: string
+) {
+  const { data } = await serverMutation({
+    mutation: MarkUnreadNotificationsAsRead,
+    variables: {
+      statementId,
+    },
+  })
+
+  if (data?.markUnreadNotificationsAsRead?.notifications.length) {
+    redirect(
+      `/beta/admin/sources/${data.markUnreadNotificationsAsRead?.notifications?.[0].statement.source.id}/statements/${statementId}`
+    )
+  }
+
+  return {
+    type: 'error' as const,
+    message: 'Something went wrong',
+  }
+}
+
 export async function markAsUnread(notificationId: string) {
   toggleReadState(notificationId, null)
 }

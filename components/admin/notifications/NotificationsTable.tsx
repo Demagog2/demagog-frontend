@@ -1,7 +1,10 @@
 'use client'
 
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { markAsReadAndRedirect } from '@/app/(admin)/beta/admin/notifications/actions'
+import {
+  markAsReadAndRedirect,
+  markStatementNotificationsAsReadAndRedirect,
+} from '@/app/(admin)/beta/admin/notifications/actions'
 import classNames from 'classnames'
 import { ToggleReadButton } from './ToggleReadButton'
 import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
@@ -83,7 +86,9 @@ export function NotificationsTable(props: {
                   { 'bg-blue-100 hover:bg-gray-100': !notification.isRead }
                 )}
                 onClick={() =>
-                  notification && markAsReadAndRedirect(notification.id)
+                  props.allNotifications
+                    ? markAsReadAndRedirect(notification.id)
+                    : markStatementNotificationsAsReadAndRedirect(statementId)
                 }
               >
                 <td className="!whitespace-normal">
