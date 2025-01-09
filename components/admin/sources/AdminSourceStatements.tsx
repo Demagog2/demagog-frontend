@@ -4,7 +4,9 @@ import { VeracityBadge } from '../veracity/VeracityBadge'
 import { AdminUserAvatar } from '../users/AdminUserAvatar'
 import { ASSESSMENT_STATUS_APPROVED } from '@/libs/constants/assessment'
 import { useRouter } from 'next/navigation'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { AdminStatementAssessmentStats } from './statements/AdminStatementAssessmentStats'
+import AdminStatementDeleteDialog from './statements/AdminStatementDeleteDialog'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -21,6 +23,7 @@ const SourceStatementsFragment = gql(`
           avatar
         }
       }
+      ...AdminStatementDeleteDialog
       assessment {
         ...VeracityBadge
         evaluationStatus
@@ -88,9 +91,14 @@ export function AdminSourceStatements(props: {
                         <a
                           href={`/beta/admin/sources/${source.id}/statements/${statement.id}`}
                           className="inline-flex text-indigo-600 hover:text-indigo-900"
+                          title="Detail výroku"
                         >
-                          Detail výroku
+                          <ArrowTopRightOnSquareIcon className="h-6 w-6 text-gray-400 hover:text-indigo-900 ml-3 cursor-pointer" />
                         </a>
+                        <AdminStatementDeleteDialog
+                          statement={statement}
+                          source={source.id}
+                        />
                       </div>
 
                       {statement.assessment.evaluationStatus ===

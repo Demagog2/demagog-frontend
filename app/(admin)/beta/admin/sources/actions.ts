@@ -191,7 +191,7 @@ const adminDeleteStatementMutation = gql(`
   }
 `)
 
-export async function deleteArticle(sourceId: string, statementId: string) {
+export async function deleteStatement(sourceId: string, statementId: string) {
   const { data } = await serverMutation({
     mutation: adminDeleteStatementMutation,
     variables: {
