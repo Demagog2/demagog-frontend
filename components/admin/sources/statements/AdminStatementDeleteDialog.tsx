@@ -29,7 +29,7 @@ const AdminStatementDeleteDialogFragment = gql(`
 
 export default function AdminStatementDeleteDialog(props: {
   statement: FragmentType<typeof AdminStatementDeleteDialogFragment>
-  source: string
+  sourceId: string
   className?: string
 }) {
   const statement = useFragment(
@@ -40,7 +40,7 @@ export default function AdminStatementDeleteDialog(props: {
   const [open, setOpen] = useState(false)
 
   const handleDeleteStatement = useCallback(async () => {
-    await deleteStatement(statement.id, props.source)
+    await deleteStatement(props.sourceId, statement.id)
     setOpen(false)
   }, [statement, setOpen])
 

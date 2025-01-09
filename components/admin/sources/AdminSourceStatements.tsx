@@ -97,7 +97,7 @@ export function AdminSourceStatements(props: {
                         </a>
                         <AdminStatementDeleteDialog
                           statement={statement}
-                          source={source.id}
+                          sourceId={source.id}
                         />
                       </div>
 
