@@ -102,7 +102,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                         className="mt-10"
                         key={cursor}
                         statement={node.statement}
-                        displayMode={StatementDisplayMode.VERTICAL}
+                        displayMode={StatementDisplayMode.EMBEDDED}
                       />
                     )
                   }
