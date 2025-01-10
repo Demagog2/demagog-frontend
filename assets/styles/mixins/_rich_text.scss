@@ -17,3 +17,6 @@
     display: none;
   }
 }
+@mixin figcaption {
+  @extend .mt-1, .text-muted, .small;
+}

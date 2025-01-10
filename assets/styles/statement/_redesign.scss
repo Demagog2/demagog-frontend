@@ -97,6 +97,11 @@
       border-radius: 31px;
     }
 
+    figure.image figcaption,
+    figure.image figcaption a {
+      @include figcaption;
+    }
+
     .ck-editor_demagog-box-wrapper > p:first-of-type {
       margin-top: 0 !important;
     }
