@@ -42,7 +42,7 @@ export default function AdminStatementDeleteDialog(props: {
   const handleDeleteStatement = useCallback(async () => {
     await deleteStatement(props.sourceId, statement.id)
     setOpen(false)
-  }, [statement, setOpen])
+  }, [props.sourceId, statement, setOpen])
 
   return (
     <>
