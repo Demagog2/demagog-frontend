@@ -15,6 +15,7 @@ import StatementItem from '@/components/statement/Item'
 import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import TagIcon from '@/assets/icons/tag.svg'
+import { isStatefulPromise } from '@apollo/client/utilities'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -196,7 +197,7 @@ export default async function Statement(props: { params: { slug: string } }) {
             )}
           </div>
           <div className="assessment-veracity d-flex flex-column flex-md-row align-items-md-center justify-content-md-start mt-6 mt-md-10">
-            <div className="display-2 fw-bold me-md-6 flex-shrink-0">
+            <div className="fs-4 fw-bold me-md-6 flex-shrink-0">
               Tento výrok byl ověřen jako
             </div>
             <div className="d-flex align-items-center mt-2 mt-md-0">
