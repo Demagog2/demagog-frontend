@@ -20,7 +20,7 @@ export function AssessmentVeracityLabel(props: {
 
   return (
     <span
-      className={classNames('lh-1 text-uppercase fw-bold fs-6', {
+      className={classNames('lh-1 text-uppercase fw-bold fs-4', {
         'text-primary': assessment.veracity?.key === 'true',
         'text-secondary': assessment.veracity?.key === 'misleading',
         'text-red': assessment.veracity?.key === 'untrue',

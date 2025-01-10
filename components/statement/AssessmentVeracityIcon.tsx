@@ -30,7 +30,7 @@ export function AssessmentVeracityIcon(props: {
         }
       )}
     >
-      <VeracityIcon type={assessment.veracity?.key} iconSize={11} />
+      <VeracityIcon type={assessment.veracity?.key} iconSize={13} />
     </span>
   )
 }
