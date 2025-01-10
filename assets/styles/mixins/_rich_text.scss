@@ -8,13 +8,12 @@
     .perex {
       font-size: $h4-font-size;
       line-height: 30px;
-      text-align: justify;
     }
   }
 }
 
 @mixin unsafe-data-wrapper {
-  [data-ck-unsafe-element="script"] {
+  [data-ck-unsafe-element='script'] {
     display: none;
   }
 }
