@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { AdminStatementAssessmentStats } from './statements/AdminStatementAssessmentStats'
 import AdminStatementDeleteDialog from './statements/AdminStatementDeleteDialog'
+import { useAuthorization } from '@/libs/authorization/use-authorization'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -38,14 +39,23 @@ const SourceStatementsFragment = gql(`
   }
 `)
 
+const AdminSourceStatementsDataFragment = gql(`
+  fragment AdminSourceStatementsData on Query {
+    ...Authorization
+  }
+`)
+
 export function AdminSourceStatements(props: {
   source: FragmentType<typeof SourceStatementsFragment>
+  data: FragmentType<typeof AdminSourceStatementsDataFragment>
   filteredStatementsIds: string[]
 }) {
   const router = useRouter()
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
-
+  const data = useFragment(AdminSourceStatementsDataFragment, props.data)
   const source = useFragment(SourceStatementsFragment, props.source)
+
+  const { isAuthorized } = useAuthorization(data)
 
   return (
     <>
@@ -95,10 +105,12 @@ export function AdminSourceStatements(props: {
                         >
                           <ArrowTopRightOnSquareIcon className="h-6 w-6 text-gray-400 hover:text-indigo-900 ml-3 cursor-pointer" />
                         </a>
-                        <AdminStatementDeleteDialog
-                          statement={statement}
-                          sourceId={source.id}
-                        />
+                        {isAuthorized(['statements:edit']) && (
+                          <AdminStatementDeleteDialog
+                            statement={statement}
+                            sourceId={source.id}
+                          />
+                        )}
                       </div>
 
                       {statement.assessment.evaluationStatus ===

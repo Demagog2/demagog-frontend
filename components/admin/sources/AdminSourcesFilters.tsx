@@ -100,13 +100,24 @@ const AdminSourcesFilterFragment = gql(`
   }
 `)
 
+const AdminSourceFiltersDataFragment = gql(`
+  fragment AdminSourceFiltersData on Query {
+    ...AdminSourceStatementsData
+  }
+`)
+
 export function AdminSourcesFilters(props: {
   source: FragmentType<typeof AdminSourcesFilterFragment>
+  statementsData: FragmentType<typeof AdminSourceFiltersDataFragment>
 }) {
   const { state, onStatementsFilterUpdate, onRemoveStatementsFilters } =
     useStatementFilters()
 
   const data = useFragment(AdminSourcesFilterFragment, props.source)
+  const statementsData = useFragment(
+    AdminSourceFiltersDataFragment,
+    props.statementsData
+  )
 
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 
@@ -355,6 +366,7 @@ export function AdminSourcesFilters(props: {
 
           <div className="mt-6 lg:col-span-2 lg:mt-0 xl:col-span-3">
             <AdminSourceStatements
+              data={statementsData}
               source={data}
               filteredStatementsIds={sourceViewModel.filteredStatements.map(
                 (statement) => statement.id
