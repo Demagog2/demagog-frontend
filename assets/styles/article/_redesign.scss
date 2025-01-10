@@ -4,7 +4,7 @@
   @include perex;
   @include unsafe-data-wrapper;
 
-  .figcaption {
+  figure figcaption {
     @include figcaption;
   }
 
