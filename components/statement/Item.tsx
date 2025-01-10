@@ -291,29 +291,38 @@ export default function StatementItem(props: {
                   }
                 )}
               >
-                <a
-                  className={classNames(
-                    'accordion-link text-dark text-decoration-underline',
-                    { 'fw-bold mt-md-2': isEmbedded }
-                  )}
-                  onClick={() => setOpenExplanation(!openExplanation)}
-                >
-                  {openExplanation ? (
-                    <>skrýt celé odůvodnění</>
-                  ) : (
-                    <>zobrazit celé odůvodnění</>
-                  )}
-                </a>
-                <a
-                  className={classNames(
-                    'd-flex text-gray align-items-center text-none',
-                    { 'text-decoration-none': isEmbedded }
-                  )}
-                  href={'/vyrok/' + statement.id}
-                >
-                  <LinkIcon className="h-15px" />
-                  <span className="ms-1">trvalý odkaz</span>
-                </a>
+                {isEmbedded ? (
+                  <a
+                    className="accordion-link text-dark text-decoration-underline
+                     fw-bold mt-md-2"
+                    href={'/vyrok/' + statement.id}
+                  >
+                    přejít na celé odůvodnění
+                  </a>
+                ) : (
+                  <a
+                    className={classNames(
+                      'accordion-link text-dark text-decoration-underline',
+                      { 'fw-bold mt-md-2': isEmbedded }
+                    )}
+                    onClick={() => setOpenExplanation(!openExplanation)}
+                  >
+                    {openExplanation ? (
+                      <>skrýt celé odůvodnění</>
+                    ) : (
+                      <>zobrazit celé odůvodnění</>
+                    )}
+                  </a>
+                )}
+                {!isEmbedded && (
+                  <a
+                    className="d-flex text-gray align-items-center text-none"
+                    href={'/vyrok/' + statement.id}
+                  >
+                    <LinkIcon className="h-15px" />
+                    <span className="ms-1">trvalý odkaz</span>
+                  </a>
+                )}
               </div>
             </div>
           )}
