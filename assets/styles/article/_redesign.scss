@@ -4,6 +4,10 @@
   @include perex;
   @include unsafe-data-wrapper;
 
+  figure figcaption {
+    @include figcaption;
+  }
+
   .text-align-start {
     text-align: start;
   }
@@ -131,6 +135,11 @@
 
       figure img {
         border-radius: 31px;
+      }
+
+      figure.image figcaption,
+      figure.image figcaption a {
+        @include figcaption;
       }
 
       .ck-editor_demagog-box-wrapper > p:first-of-type {
