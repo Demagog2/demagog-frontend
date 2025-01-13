@@ -10,5 +10,5 @@ updates:
     open-pull-requests-limit: 10
     reviewers:
       - vaclavbohac
-    target-branch: main
+    target-branch: development
     versioning-strategy: lockfile-only
