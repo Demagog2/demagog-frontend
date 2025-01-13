@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import React, { useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { useFormState } from 'react-dom'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
@@ -213,7 +213,11 @@ export function AdminAssessmentForm(props: {
   const evaluationStatus = watch('evaluationStatus')
   const published = watch('published')
 
-  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(
+    isValid,
+    trigger,
+    deleteLocalStorage
+  )
 
   const {
     isFactual,
@@ -305,6 +309,38 @@ export function AdminAssessmentForm(props: {
 
   const formRef = useRef<HTMLFormElement>(null)
 
+  const localStorageShortExplanationKey = `statement:shortExplanation-input${statement.id}`
+
+  const [shortExplanationMessage, setShortExplanationMessage] = useState(
+    localStorage.getItem(localStorageShortExplanationKey) ?? ''
+  )
+
+  const handleShortExplanationChange = (newValue: string) => {
+    setShortExplanationMessage(newValue)
+    localStorage.setItem(localStorageShortExplanationKey, newValue)
+  }
+
+  const [isModified, setIsModified] = useState(false)
+
+  useEffect(() => {
+    if (statement.assessment.shortExplanation !== shortExplanationMessage) {
+      setIsModified(true)
+    }
+  }, [statement.assessment.shortExplanation, shortExplanationMessage])
+
+  useEffect(() => {
+    const storedValue = localStorage.getItem(localStorageShortExplanationKey)
+    if (storedValue) {
+      setShortExplanationMessage(storedValue)
+    }
+  }, [])
+
+  function deleteLocalStorage() {
+    localStorage.removeItem(localStorageShortExplanationKey)
+    setIsModified(false)
+  }
+
+  console.log(shortExplanationMessage)
   return (
     <form ref={formRef} action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('statementType')} />
@@ -494,7 +530,7 @@ export function AdminAssessmentForm(props: {
 
                   <Field>
                     <Label htmlFor="shortExplanation">
-                      Odůvodnění zkráceně
+                      Odůvodnění zkráceně {isModified && ' - upraveno'}
                     </Label>
 
                     {isStatementFieldDisabled ? (
@@ -508,14 +544,15 @@ export function AdminAssessmentForm(props: {
                             <Textarea
                               id={field.name}
                               name={field.name}
-                              value={field.value}
+                              value={shortExplanationMessage}
                               onChange={(evt) => {
-                                field.onChange(evt.currentTarget.value)
-
+                                const newValue = evt.currentTarget.value
+                                field.onChange(newValue)
+                                handleShortExplanationChange(newValue)
                                 actorRef.send({
                                   type: 'Update short explanation',
                                   data: {
-                                    shortExplanation: evt.currentTarget.value,
+                                    shortExplanation: newValue,
                                   },
                                 })
                               }}

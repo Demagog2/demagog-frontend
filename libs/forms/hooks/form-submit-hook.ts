@@ -4,7 +4,8 @@ import React, { useCallback } from 'react'
 
 export function useFormSubmit(
   isValid: boolean,
-  trigger: () => Promise<boolean>
+  trigger: () => Promise<boolean>,
+  deleteLocalStorage?: () => void
 ) {
   const handleSubmitForm = useCallback(
     async (e: React.SyntheticEvent<HTMLFormElement>) => {
@@ -14,6 +15,10 @@ export function useFormSubmit(
 
       await trigger().then(() => {
         e.currentTarget?.requestSubmit()
+
+        if (deleteLocalStorage) {
+          deleteLocalStorage()
+        }
       })
     },
     [trigger, isValid]
