@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import React, { useMemo, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 import { useFormState } from 'react-dom'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
@@ -78,7 +78,7 @@ const AdminAssessmentFormFragment = gql(`
     ...AdminPromiseRatingSelect
     ...AdminVeracitySelect
     ...AdminExpertSelect
-  }  
+  }
 `)
 
 const AdminStatementAssessmentFragment = gql(`
@@ -156,7 +156,7 @@ const AdminStatementAssessmentFragment = gql(`
     }
     ...AdminStatementForTags
     ...AdminExpertsField
-  }  
+  }
 `)
 
 type FieldValues = z.output<typeof assessmentSchema>
@@ -182,7 +182,16 @@ export function AdminAssessmentForm(props: {
     watch,
     control,
     register,
-    formState: { errors, isValid },
+    reset,
+    setValue,
+    formState: {
+      errors,
+      isValid,
+      dirtyFields: {
+        explanation: isExplanationDirty,
+        shortExplanation: isShortExplanationDirty,
+      },
+    },
     trigger,
   } = useForm<FieldValues>({
     resolver: zodResolver(assessmentSchema),
@@ -212,6 +221,39 @@ export function AdminAssessmentForm(props: {
   const shortExplanation = watch('shortExplanation')
   const evaluationStatus = watch('evaluationStatus')
   const published = watch('published')
+
+  // Memoize the key, so it doesn't render new string on every render
+  const localStorageKeys = useMemo(
+    () => ({
+      explanation: `statement:${statement.id}:explanation`,
+      shortExplanation: `statement:${statement.id}:shortExplanation`,
+    }),
+    [statement.id]
+  )
+
+  // Set explanation in react-hook-forms on first render
+  useEffect(() => {
+    Object.entries(localStorageKeys).forEach(([key, value]) => {
+      const storedValue = localStorage.getItem(value)
+
+      if (storedValue?.length) {
+        setValue(key as keyof typeof localStorageKeys, storedValue, {
+          shouldDirty: true,
+        })
+      }
+    })
+  }, [localStorageKeys, setValue])
+
+  // Clear the item from local storage and refresh "is dirty" on successfull submit
+  useEffect(() => {
+    if (formState.state === 'success') {
+      Object.values(localStorageKeys).forEach((key) => {
+        localStorage.removeItem(key)
+      })
+
+      reset({}, { keepValues: true })
+    }
+  }, [formState, localStorageKeys, reset])
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
@@ -304,6 +346,8 @@ export function AdminAssessmentForm(props: {
   ])
 
   const formRef = useRef<HTMLFormElement>(null)
+
+  const apolloClient = useMemo(() => createClient(), [])
 
   return (
     <form ref={formRef} action={formAction} onSubmit={handleSubmitForm}>
@@ -493,7 +537,10 @@ export function AdminAssessmentForm(props: {
                   )}
 
                   <Field>
-                    <Label htmlFor="shortExplanation">
+                    <Label
+                      htmlFor="shortExplanation"
+                      isDirty={isShortExplanationDirty}
+                    >
                       Odůvodnění zkráceně
                     </Label>
 
@@ -510,12 +557,19 @@ export function AdminAssessmentForm(props: {
                               name={field.name}
                               value={field.value}
                               onChange={(evt) => {
-                                field.onChange(evt.currentTarget.value)
+                                const newValue = evt.currentTarget.value
+
+                                field.onChange(newValue)
+
+                                localStorage.setItem(
+                                  localStorageKeys.shortExplanation,
+                                  newValue
+                                )
 
                                 actorRef.send({
                                   type: 'Update short explanation',
                                   data: {
-                                    shortExplanation: evt.currentTarget.value,
+                                    shortExplanation: newValue,
                                   },
                                 })
                               }}
@@ -542,7 +596,9 @@ export function AdminAssessmentForm(props: {
                   </Field>
 
                   <Field>
-                    <Label htmlFor="explanation">Odůvodnění</Label>
+                    <Label htmlFor="explanation" isDirty={isExplanationDirty}>
+                      Odůvodnění
+                    </Label>
 
                     {isStatementFieldDisabled ? (
                       <div className="mt-10 max-w-3xl article-content">
@@ -615,6 +671,11 @@ export function AdminAssessmentForm(props: {
                               value={field.value ?? ''}
                               onChange={(value) => {
                                 field.onChange(value)
+
+                                localStorage.setItem(
+                                  localStorageKeys.explanation,
+                                  value
+                                )
 
                                 actorRef.send({
                                   type: 'Update long explanation',
@@ -752,7 +813,7 @@ export function AdminAssessmentForm(props: {
               Komentáře
             </div>
 
-            <ApolloProvider client={createClient()}>
+            <ApolloProvider client={apolloClient}>
               <AdminStatementComments statementId={statement.id} />
             </ApolloProvider>
           </AdminFormSidebar>

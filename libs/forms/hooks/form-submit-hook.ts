@@ -16,7 +16,7 @@ export function useFormSubmit(
         e.currentTarget?.requestSubmit()
       })
     },
-    [trigger, isValid]
+    [isValid, trigger]
   )
 
   return {
