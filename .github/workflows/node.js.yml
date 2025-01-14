@@ -9,9 +9,9 @@ env:
 
 on:
   push:
-    branches: ['main']
+    branches: ['main', 'development']
   pull_request:
-    branches: ['main']
+    branches: ['main', 'development']
   merge_group:
     types: [checks_requested]
 
