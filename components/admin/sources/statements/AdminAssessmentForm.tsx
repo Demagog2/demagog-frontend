@@ -187,7 +187,10 @@ export function AdminAssessmentForm(props: {
     formState: {
       errors,
       isValid,
-      dirtyFields: { shortExplanation: isShortExplanationDirty },
+      dirtyFields: {
+        explanation: isExplanationDirty,
+        shortExplanation: isShortExplanationDirty,
+      },
     },
     trigger,
   } = useForm<FieldValues>({
@@ -220,28 +223,37 @@ export function AdminAssessmentForm(props: {
   const published = watch('published')
 
   // Memoize the key, so it doesn't render new string on every render
-  const localStorageShortExplanationKey = useMemo(
-    () => `statement:shortExplanation-input${statement.id}`,
+  const localStorageKeys = useMemo(
+    () => ({
+      explanation: `statement:${statement.id}:explanation`,
+      shortExplanation: `statement:${statement.id}:shortExplanation`,
+    }),
     [statement.id]
   )
 
-  // Set short explanation in react-hook-forms on first render
+  // Set explanation in react-hook-forms on first render
   useEffect(() => {
-    const value = localStorage.getItem(localStorageShortExplanationKey)
+    Object.entries(localStorageKeys).forEach(([key, value]) => {
+      const storedValue = localStorage.getItem(value)
 
-    if (value?.length) {
-      setValue('shortExplanation', value, { shouldDirty: true })
-    }
-  }, [localStorageShortExplanationKey, setValue])
+      if (storedValue?.length) {
+        setValue(key as keyof typeof localStorageKeys, storedValue, {
+          shouldDirty: true,
+        })
+      }
+    })
+  }, [localStorageKeys, setValue])
 
   // Clear the item from local storage and refresh "is dirty" on successfull submit
   useEffect(() => {
     if (formState.state === 'success') {
-      localStorage.removeItem(localStorageShortExplanationKey)
+      Object.values(localStorageKeys).forEach((key) => {
+        localStorage.removeItem(key)
+      })
 
       reset({}, { keepValues: true })
     }
-  }, [formState, localStorageShortExplanationKey, reset])
+  }, [formState, localStorageKeys, reset])
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
@@ -550,7 +562,7 @@ export function AdminAssessmentForm(props: {
                                 field.onChange(newValue)
 
                                 localStorage.setItem(
-                                  localStorageShortExplanationKey,
+                                  localStorageKeys.shortExplanation,
                                   newValue
                                 )
 
@@ -584,7 +596,9 @@ export function AdminAssessmentForm(props: {
                   </Field>
 
                   <Field>
-                    <Label htmlFor="explanation">Odůvodnění</Label>
+                    <Label htmlFor="explanation" isDirty={isExplanationDirty}>
+                      Odůvodnění
+                    </Label>
 
                     {isStatementFieldDisabled ? (
                       <div className="mt-10 max-w-3xl article-content">
@@ -657,6 +671,11 @@ export function AdminAssessmentForm(props: {
                               value={field.value ?? ''}
                               onChange={(value) => {
                                 field.onChange(value)
+
+                                localStorage.setItem(
+                                  localStorageKeys.explanation,
+                                  value
+                                )
 
                                 actorRef.send({
                                   type: 'Update long explanation',
