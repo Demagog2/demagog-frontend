@@ -5,6 +5,7 @@ import { ArticleV2Preview } from './ArticleV2Preview'
 import { ArticleQuote } from './ArticleQuote'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import classNames from 'classnames'
+import { nicerLinksNoTruncate } from '@/libs/comments/text'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -77,7 +78,9 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                       <div
                         className={'content-text-node mt-6'}
                         key={cursor}
-                        dangerouslySetInnerHTML={{ __html: node.text }}
+                        dangerouslySetInnerHTML={{
+                          __html: nicerLinksNoTruncate(node.text),
+                        }}
                       />
                     )
                   }
