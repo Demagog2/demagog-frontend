@@ -16,6 +16,7 @@ const DebateArticleMetadataFragment = gql(`
         name
       }
     }
+    showPlayer
   }
 `)
 
@@ -28,38 +29,25 @@ export function DebateArticleMetadata(props: {
     <>
       {article.articleType === 'default' && article.source && (
         <div className={classNames('mb-5 mb-lg-10 mt-8 mt-md-10')}>
-          <h2 className='"fs-2 text-uppercase text-primary'>Ověřili jsme</h2>
+          <h2 className='"fs-2 text-uppercase text-primary'>OVĚŘENO</h2>
           <div className="mt-4 fs-5">
-            {article.source.medium?.name}{' '}
-            {article.source?.releasedAt && (
-              <>ze dne {formatDate(article.source.releasedAt)}</>
-            )}
-            {((article.source.mediaPersonalities?.length ?? 0) > 0 ||
-              article.source.sourceUrl) && (
-              <>
-                {' '}
-                (
-                {article.source.mediaPersonalities?.length && (
-                  <>
-                    {article.source.mediaPersonalities.length ? (
-                      <>moderátoři </>
-                    ) : (
-                      <>moderátor </>
-                    )}
-                    {article.source.mediaPersonalities
-                      ?.map((mediaPersonality) => mediaPersonality.name)
-                      .join(', ')}
-                    {article.source.sourceUrl && ', '}
-                  </>
-                )}
-                {article.source.sourceUrl && (
-                  <a href={article.source.sourceUrl} className="ext">
-                    záznam
+            <h2 className="fs-2 text-bold">
+              <span className="text-decoration-underline">
+                {article.source.sourceUrl ? (
+                  <a href={article.source.sourceUrl}>
+                    {article.source.medium?.name}
                   </a>
+                ) : (
+                  article.source.medium?.name
                 )}
-                )
-              </>
-            )}
+              </span>
+
+              {article.source?.releasedAt && (
+                <span className="text-decoration-none">
+                  , {formatDate(article.source.releasedAt)}
+                </span>
+              )}
+            </h2>
           </div>
         </div>
       )}

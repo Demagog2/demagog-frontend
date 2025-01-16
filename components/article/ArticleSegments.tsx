@@ -115,21 +115,11 @@ export function ArticleSegments(props: ArticleStatementsProps) {
           )}
           {segment.segmentType === 'source_statements' && (
             <div>
-              <div className="row g-5 g-lg-10">
-                <div className="col-12">
-                  <h2
-                    className={classNames('fs-2 text-bold', {
-                      'mt-6': showPlayer,
-                    })}
-                  >
-                    {debateStats?.length ? (
-                      <>Řečníci s&nbsp;počty výroků dle hodnocení</>
-                    ) : (
-                      'Výroky'
-                    )}
-                  </h2>
-                </div>
-
+              <div
+                className={classNames('row g-5 g-lg-10', {
+                  'mt-1': showPlayer,
+                })}
+              >
                 {debateStats?.map((debateStat) => (
                   <div
                     key={debateStat.speaker?.id}
