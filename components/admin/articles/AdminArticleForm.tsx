@@ -52,6 +52,7 @@ import { FormAction } from '@/libs/forms/form-action'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { AdminFormMain } from '../layout/AdminFormMain'
 import { AdminFormSidebar } from '../layout/AdminFormSidebar'
+import { useEffect, useMemo } from 'react'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -86,6 +87,7 @@ const AdminArticleFormFragment = gql(`
 
 const AdminArticleFormFieldsFragment = gql(`
   fragment AdminArticleFormFields on Article {
+    id
     title
     titleEn
     perex
@@ -210,13 +212,19 @@ export function AdminArticleForm(props: {
 
   const {
     register,
+    reset,
     watch,
     trigger,
     control,
-    formState: { isValid },
+    setValue,
+    formState: {
+      isValid,
+      dirtyFields: { perex: isPerexDirty },
+    },
   } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
+      perex: article?.perex ?? undefined,
       ...buildDefaultValues(article),
       ...(state?.state === 'initial' ? {} : state.fields),
     },
@@ -231,8 +239,32 @@ export function AdminArticleForm(props: {
     'articleType',
     article ? toArticleTypeEnum(article.articleType) : ArticleTypeEnum.Default
   )
+  const perex = watch('perex')
+
+  const localStoragePerexKey = useMemo(
+    () => `article:perex-input${article?.id}`,
+    [article?.id]
+  )
+
+  useEffect(() => {
+    const value = localStorage.getItem(localStoragePerexKey)
+
+    if (value?.length) {
+      setValue('perex', value, { shouldDirty: true })
+      console.log(`local storage ${value} a is dirty je ${isPerexDirty}`)
+    }
+  }, [localStoragePerexKey, setValue])
+
+  useEffect(() => {
+    if (state.state === 'success') {
+      localStorage.removeItem(localStoragePerexKey)
+
+      reset({}, { keepValues: true })
+    }
+  }, [state, localStoragePerexKey, reset])
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
+  const apolloClient = useMemo(() => createClient(), [])
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
@@ -294,13 +326,21 @@ export function AdminArticleForm(props: {
             </Field>
 
             <Field>
-              <Label htmlFor="perex">Perex</Label>
-
+              <Label htmlFor="perex" isDirty={isPerexDirty}>
+                Perex
+              </Label>
               <Textarea
                 id="perex"
                 {...register('perex', { required: true })}
                 rows={4}
                 placeholder="Zadejte perex..."
+                onChange={(evt) => {
+                  const newValue = evt.currentTarget.value
+                  console.log(
+                    `setting value to local storage: ${newValue} a article id je ${article?.id} je perex dirty? ${isPerexDirty}`
+                  )
+                  localStorage.setItem(localStoragePerexKey, newValue)
+                }}
               />
             </Field>
 
@@ -348,7 +388,7 @@ export function AdminArticleForm(props: {
                     <Button onClick={() => remove(index)}>Odebrat</Button>
                   </>
                 ) : (
-                  <ApolloProvider client={createClient()}>
+                  <ApolloProvider client={apolloClient}>
                     <Controller
                       control={control}
                       name={`segments.${index}.sourceId`}
