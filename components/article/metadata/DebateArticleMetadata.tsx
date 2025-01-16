@@ -16,7 +16,6 @@ const DebateArticleMetadataFragment = gql(`
         name
       }
     }
-    showPlayer
   }
 `)
 
