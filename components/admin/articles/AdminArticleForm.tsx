@@ -59,6 +59,24 @@ const RichTextEditor = dynamic(
   { ssr: false }
 )
 
+type LocalStorageRecord = {
+  perex?: string
+  segments?: { key: string; value: string }[]
+}
+
+function buildLocalStorageRecord(
+  localStorageKey: string,
+  itemPatch: Partial<LocalStorageRecord> = {}
+): string {
+  const serializedItem = localStorage.getItem(localStorageKey)
+
+  const values: LocalStorageRecord = serializedItem?.length
+    ? JSON.parse(serializedItem)
+    : {}
+
+  return JSON.stringify({ ...values, ...itemPatch })
+}
+
 const items = [
   {
     segmentType: 'text' as const,
@@ -239,36 +257,40 @@ export function AdminArticleForm(props: {
     'articleType',
     article ? toArticleTypeEnum(article.articleType) : ArticleTypeEnum.Default
   )
-  const perex = watch('perex')
-
-  const localStoragePerexKey = useMemo(
-    () => `article:perex-input${article?.id}`,
-    [article?.id]
-  )
-
-  const localStorageTextKey = useMemo(
-    () => `article:text-segment-input${article?.id}`,
+  const localStorageKey = useMemo(
+    () => `article:form:${article?.id ?? 'new'}`,
     [article?.id]
   )
 
   useEffect(() => {
-    const value = localStorage.getItem(localStoragePerexKey)
+    const value = localStorage.getItem(localStorageKey)
 
-    if (value?.length) {
-      setValue('perex', value, { shouldDirty: true })
+    const values: LocalStorageRecord = value?.length ? JSON.parse(value) : {}
+
+    if (values.perex) {
+      setValue('perex', values.perex, { shouldDirty: true })
     }
-  }, [localStoragePerexKey, setValue])
+
+    if (values.segments) {
+      values.segments?.forEach((segment) => {
+        // TODO: Improve type safety (remove as any)
+        setValue(segment.key as any, segment.value, { shouldDirty: true })
+
+        console.table(segment)
+      })
+    }
+  }, [localStorageKey, setValue])
 
   useEffect(() => {
     if (state.state === 'success') {
-      localStorage.removeItem(localStoragePerexKey)
-      localStorage.removeItem(localStorageTextKey)
+      localStorage.removeItem(localStorageKey)
 
       reset({}, { keepValues: true })
     }
-  }, [state, localStoragePerexKey, localStorageTextKey, reset])
+  }, [state, localStorageKey, reset])
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
+
   const apolloClient = useMemo(() => createClient(), [])
 
   return (
@@ -338,10 +360,12 @@ export function AdminArticleForm(props: {
                 id="perex"
                 {...register('perex', {
                   required: true,
-                  onChange(event) {
+                  onChange(evt) {
                     localStorage.setItem(
-                      localStoragePerexKey,
-                      event.currentTarget.value
+                      localStorageKey,
+                      buildLocalStorageRecord(localStorageKey, {
+                        perex: evt.target.value,
+                      })
                     )
                   },
                 })}
@@ -388,7 +412,27 @@ export function AdminArticleForm(props: {
                             value={field.value}
                             onChange={(value) => {
                               field.onChange(value)
-                              localStorage.setItem(localStorageTextKey, value)
+
+                              localStorage.setItem(
+                                localStorageKey,
+                                buildLocalStorageRecord(localStorageKey, {
+                                  segments: fields.flatMap((segment, j) => {
+                                    if (segment.segmentType !== 'text') {
+                                      return []
+                                    }
+
+                                    return [
+                                      {
+                                        key: `segments.${j}.textHtml`,
+                                        value:
+                                          index === j
+                                            ? value
+                                            : segment.textHtml,
+                                      },
+                                    ]
+                                  }),
+                                })
+                              )
                             }}
                           />
                         </>
