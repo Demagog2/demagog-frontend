@@ -246,22 +246,27 @@ export function AdminArticleForm(props: {
     [article?.id]
   )
 
+  const localStorageTextKey = useMemo(
+    () => `article:text-segment-input${article?.id}`,
+    [article?.id]
+  )
+
   useEffect(() => {
     const value = localStorage.getItem(localStoragePerexKey)
 
     if (value?.length) {
       setValue('perex', value, { shouldDirty: true })
-      console.log(`local storage ${value} a is dirty je ${isPerexDirty}`)
     }
   }, [localStoragePerexKey, setValue])
 
   useEffect(() => {
     if (state.state === 'success') {
       localStorage.removeItem(localStoragePerexKey)
+      localStorage.removeItem(localStorageTextKey)
 
       reset({}, { keepValues: true })
     }
-  }, [state, localStoragePerexKey, reset])
+  }, [state, localStoragePerexKey, localStorageTextKey, reset])
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
   const apolloClient = useMemo(() => createClient(), [])
@@ -370,8 +375,9 @@ export function AdminArticleForm(props: {
                     <Controller
                       control={control}
                       name={`segments.${index}.textHtml`}
-                      render={({ field }) => (
+                      render={({ field, fieldState: { isDirty } }) => (
                         <>
+                          <Label htmlFor={field.name} isDirty={isDirty}></Label>
                           <input
                             type="hidden"
                             name={field.name}
@@ -380,7 +386,10 @@ export function AdminArticleForm(props: {
                           <RichTextEditor
                             includeHeadings
                             value={field.value}
-                            onChange={field.onChange}
+                            onChange={(value) => {
+                              field.onChange(value)
+                              localStorage.setItem(localStorageTextKey, value)
+                            }}
                           />
                         </>
                       )}
