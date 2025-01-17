@@ -331,16 +331,17 @@ export function AdminArticleForm(props: {
               </Label>
               <Textarea
                 id="perex"
-                {...register('perex', { required: true })}
+                {...register('perex', {
+                  required: true,
+                  onChange(event) {
+                    localStorage.setItem(
+                      localStoragePerexKey,
+                      event.currentTarget.value
+                    )
+                  },
+                })}
                 rows={4}
                 placeholder="Zadejte perex..."
-                onChange={(evt) => {
-                  const newValue = evt.currentTarget.value
-                  console.log(
-                    `setting value to local storage: ${newValue} a article id je ${article?.id} je perex dirty? ${isPerexDirty}`
-                  )
-                  localStorage.setItem(localStoragePerexKey, newValue)
-                }}
               />
             </Field>
 
