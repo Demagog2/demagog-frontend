@@ -29,8 +29,6 @@ import { z } from 'zod'
 import { schema } from '@/libs/articles/schema'
 import { useFormState } from 'react-dom'
 import { AdminSourcesList } from '@/components/admin/articles/AdminSourcesList'
-import { ApolloProvider } from '@apollo/client'
-import { createClient } from '@/libs/apollo-client'
 
 import {
   DocumentTextIcon,
@@ -52,11 +50,30 @@ import { FormAction } from '@/libs/forms/form-action'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { AdminFormMain } from '../layout/AdminFormMain'
 import { AdminFormSidebar } from '../layout/AdminFormSidebar'
+import { useEffect, useMemo } from 'react'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
   { ssr: false }
 )
+
+type LocalStorageRecord = {
+  perex?: string
+  segments?: { key: string; value: string }[]
+}
+
+function buildLocalStorageRecord(
+  localStorageKey: string,
+  itemPatch: Partial<LocalStorageRecord> = {}
+): string {
+  const serializedItem = localStorage.getItem(localStorageKey)
+
+  const values: LocalStorageRecord = serializedItem?.length
+    ? JSON.parse(serializedItem)
+    : {}
+
+  return JSON.stringify({ ...values, ...itemPatch })
+}
 
 const items = [
   {
@@ -86,6 +103,7 @@ const AdminArticleFormFragment = gql(`
 
 const AdminArticleFormFieldsFragment = gql(`
   fragment AdminArticleFormFields on Article {
+    id
     title
     titleEn
     perex
@@ -210,13 +228,19 @@ export function AdminArticleForm(props: {
 
   const {
     register,
+    reset,
     watch,
     trigger,
     control,
-    formState: { isValid },
+    setValue,
+    formState: {
+      isValid,
+      dirtyFields: { perex: isPerexDirty },
+    },
   } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
     defaultValues: {
+      perex: article?.perex ?? undefined,
       ...buildDefaultValues(article),
       ...(state?.state === 'initial' ? {} : state.fields),
     },
@@ -231,6 +255,37 @@ export function AdminArticleForm(props: {
     'articleType',
     article ? toArticleTypeEnum(article.articleType) : ArticleTypeEnum.Default
   )
+  const localStorageKey = useMemo(
+    () => `article:form:${article?.id ?? 'new'}`,
+    [article?.id]
+  )
+
+  useEffect(() => {
+    const value = localStorage.getItem(localStorageKey)
+
+    const values: LocalStorageRecord = value?.length ? JSON.parse(value) : {}
+
+    if (values.perex) {
+      setValue('perex', values.perex, { shouldDirty: true })
+    }
+
+    if (values.segments) {
+      values.segments?.forEach((segment) => {
+        // TODO: Improve type safety (remove as any)
+        setValue(segment.key as any, segment.value, { shouldDirty: true })
+
+        console.table(segment)
+      })
+    }
+  }, [localStorageKey, setValue])
+
+  useEffect(() => {
+    if (state.state === 'success') {
+      localStorage.removeItem(localStorageKey)
+
+      reset({}, { keepValues: true })
+    }
+  }, [state, localStorageKey, reset])
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
@@ -294,11 +349,22 @@ export function AdminArticleForm(props: {
             </Field>
 
             <Field>
-              <Label htmlFor="perex">Perex</Label>
-
+              <Label htmlFor="perex" isDirty={isPerexDirty}>
+                Perex
+              </Label>
               <Textarea
                 id="perex"
-                {...register('perex', { required: true })}
+                {...register('perex', {
+                  required: true,
+                  onChange(evt) {
+                    localStorage.setItem(
+                      localStorageKey,
+                      buildLocalStorageRecord(localStorageKey, {
+                        perex: evt.target.value,
+                      })
+                    )
+                  },
+                })}
                 rows={4}
                 placeholder="Zadejte perex..."
               />
@@ -329,8 +395,9 @@ export function AdminArticleForm(props: {
                     <Controller
                       control={control}
                       name={`segments.${index}.textHtml`}
-                      render={({ field }) => (
+                      render={({ field, fieldState: { isDirty } }) => (
                         <>
+                          <Label htmlFor={field.name} isDirty={isDirty}></Label>
                           <input
                             type="hidden"
                             name={field.name}
@@ -339,7 +406,30 @@ export function AdminArticleForm(props: {
                           <RichTextEditor
                             includeHeadings
                             value={field.value}
-                            onChange={field.onChange}
+                            onChange={(value) => {
+                              field.onChange(value)
+
+                              localStorage.setItem(
+                                localStorageKey,
+                                buildLocalStorageRecord(localStorageKey, {
+                                  segments: fields.flatMap((segment, j) => {
+                                    if (segment.segmentType !== 'text') {
+                                      return []
+                                    }
+
+                                    return [
+                                      {
+                                        key: `segments.${j}.textHtml`,
+                                        value:
+                                          index === j
+                                            ? value
+                                            : segment.textHtml,
+                                      },
+                                    ]
+                                  }),
+                                })
+                              )
+                            }}
                           />
                         </>
                       )}
@@ -348,22 +438,20 @@ export function AdminArticleForm(props: {
                     <Button onClick={() => remove(index)}>Odebrat</Button>
                   </>
                 ) : (
-                  <ApolloProvider client={createClient()}>
-                    <Controller
-                      control={control}
-                      name={`segments.${index}.sourceId`}
-                      render={({ field }) => (
-                        <>
-                          <input type="hidden" {...field} />
-                          <AdminSourcesList
-                            selectedSourceId={field.value}
-                            onRemoveSegment={() => remove(index)}
-                            onChange={(sourceId) => field.onChange(sourceId)}
-                          />
-                        </>
-                      )}
-                    ></Controller>
-                  </ApolloProvider>
+                  <Controller
+                    control={control}
+                    name={`segments.${index}.sourceId`}
+                    render={({ field }) => (
+                      <>
+                        <input type="hidden" {...field} />
+                        <AdminSourcesList
+                          selectedSourceId={field.value}
+                          onRemoveSegment={() => remove(index)}
+                          onChange={(sourceId) => field.onChange(sourceId)}
+                        />
+                      </>
+                    )}
+                  ></Controller>
                 )}
               </div>
             ))}

@@ -16,6 +16,12 @@ export const nicerLinks = (commentContent: string) =>
     },
   })
 
+export const nicerLinksNoTruncate = (text: string) =>
+  anchorme({
+    input: text,
+    options: { attributes: { name: 'target', value: '_blank' } },
+  })
+
 export const newlinesToParagraphsAndBreaks = (
   commentContent: string
 ): string => {

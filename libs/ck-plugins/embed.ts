@@ -1,4 +1,4 @@
-import { ButtonView, toWidget, type Editor } from 'ckeditor5'
+import { ButtonView, toWidget, type Editor, icons } from 'ckeditor5'
 
 import '@ckeditor/ckeditor5-media-embed/theme/mediaembed.css'
 
@@ -117,7 +117,7 @@ export function Embed(editor: Editor) {
 
     view.set({
       label: 'Insert embed',
-      icon: iconCode,
+      icon: icons.html,
       tooltip: true,
     })
 
@@ -147,9 +147,3 @@ export function Embed(editor: Editor) {
     return view
   })
 }
-
-const iconCode = `
-<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" style="width: 20px; height: 20px">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
-</svg>
-`

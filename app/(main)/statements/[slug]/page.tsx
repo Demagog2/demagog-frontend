@@ -15,7 +15,7 @@ import StatementItem from '@/components/statement/Item'
 import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import TagIcon from '@/assets/icons/tag.svg'
-import { isStatefulPromise } from '@apollo/client/utilities'
+import { nicerLinksNoTruncate } from '@/libs/comments/text'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -227,7 +227,9 @@ export default async function Statement(props: { params: { slug: string } }) {
                   <div
                     className={'content-text-node mt-6'}
                     key={cursor}
-                    dangerouslySetInnerHTML={{ __html: node.text }}
+                    dangerouslySetInnerHTML={{
+                      __html: nicerLinksNoTruncate(node.text),
+                    }}
                   />
                 )
               }

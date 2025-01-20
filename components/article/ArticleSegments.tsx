@@ -5,6 +5,7 @@ import { ArticleV2Preview } from './ArticleV2Preview'
 import { ArticleQuote } from './ArticleQuote'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import classNames from 'classnames'
+import { nicerLinksNoTruncate } from '@/libs/comments/text'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -77,7 +78,9 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                       <div
                         className={'content-text-node mt-6'}
                         key={cursor}
-                        dangerouslySetInnerHTML={{ __html: node.text }}
+                        dangerouslySetInnerHTML={{
+                          __html: nicerLinksNoTruncate(node.text),
+                        }}
                       />
                     )
                   }
@@ -112,21 +115,11 @@ export function ArticleSegments(props: ArticleStatementsProps) {
           )}
           {segment.segmentType === 'source_statements' && (
             <div>
-              <div className="row g-5 g-lg-10">
-                <div className="col-12">
-                  <h2
-                    className={classNames('fs-2 text-bold', {
-                      'mt-6': showPlayer,
-                    })}
-                  >
-                    {debateStats?.length ? (
-                      <>Řečníci s&nbsp;počty výroků dle hodnocení</>
-                    ) : (
-                      'Výroky'
-                    )}
-                  </h2>
-                </div>
-
+              <div
+                className={classNames('row g-5 g-lg-10', {
+                  'mt-1': showPlayer,
+                })}
+              >
                 {debateStats?.map((debateStat) => (
                   <div
                     key={debateStat.speaker?.id}
