@@ -7,8 +7,9 @@ import { ArticleTypeEnum } from '@/__generated__/graphql'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 import { PropsWithSearchParams } from '@/libs/params'
-import { getBooleanParam } from '@/libs/query-params'
 import { notFound } from 'next/navigation'
+import { ApolloClientProvider } from '@/components/util/ApolloClientProvider'
+import { getAuthorizationToken } from '@/libs/apollo-client'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -70,11 +71,13 @@ export default async function AdminArticleEdit(
   }
 
   return (
-    <AdminArticleForm
-      title="Upravit článek"
-      data={data}
-      article={data.article}
-      action={updateArticle.bind(null, data.article.id)}
-    />
+    <ApolloClientProvider authorizationToken={getAuthorizationToken()}>
+      <AdminArticleForm
+        title="Upravit článek"
+        data={data}
+        article={data.article}
+        action={updateArticle.bind(null, data.article.id)}
+      />
+    </ApolloClientProvider>
   )
 }
