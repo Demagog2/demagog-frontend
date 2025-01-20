@@ -29,8 +29,6 @@ import { z } from 'zod'
 import { schema } from '@/libs/articles/schema'
 import { useFormState } from 'react-dom'
 import { AdminSourcesList } from '@/components/admin/articles/AdminSourcesList'
-import { ApolloProvider } from '@apollo/client'
-import { createClient } from '@/libs/apollo-client'
 
 import {
   DocumentTextIcon,
@@ -291,8 +289,6 @@ export function AdminArticleForm(props: {
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
-  const apolloClient = useMemo(() => createClient(), [])
-
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
       <div className="container">
@@ -442,22 +438,20 @@ export function AdminArticleForm(props: {
                     <Button onClick={() => remove(index)}>Odebrat</Button>
                   </>
                 ) : (
-                  <ApolloProvider client={apolloClient}>
-                    <Controller
-                      control={control}
-                      name={`segments.${index}.sourceId`}
-                      render={({ field }) => (
-                        <>
-                          <input type="hidden" {...field} />
-                          <AdminSourcesList
-                            selectedSourceId={field.value}
-                            onRemoveSegment={() => remove(index)}
-                            onChange={(sourceId) => field.onChange(sourceId)}
-                          />
-                        </>
-                      )}
-                    ></Controller>
-                  </ApolloProvider>
+                  <Controller
+                    control={control}
+                    name={`segments.${index}.sourceId`}
+                    render={({ field }) => (
+                      <>
+                        <input type="hidden" {...field} />
+                        <AdminSourcesList
+                          selectedSourceId={field.value}
+                          onRemoveSegment={() => remove(index)}
+                          onChange={(sourceId) => field.onChange(sourceId)}
+                        />
+                      </>
+                    )}
+                  ></Controller>
                 )}
               </div>
             ))}
