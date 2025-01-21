@@ -36,14 +36,14 @@ export function makeGap(): Gap {
 
 export function paginate({
   currentPage,
-  totalCount,
+  totalPages,
 }: {
   currentPage: number
-  totalCount: number
+  totalPages: number
 }): (Page | Gap)[] {
   if (
     isGapBeforeNeeded(currentPage) &&
-    isGapAfterNeeded(currentPage, totalCount)
+    isGapAfterNeeded(currentPage, totalPages)
   ) {
     return [
       makePage(0),
@@ -52,7 +52,7 @@ export function paginate({
         (page) => makePage(page, page === currentPage)
       ),
       makeGap(),
-      makePage(totalCount - 1),
+      makePage(totalPages - 1),
     ]
   }
 
@@ -61,24 +61,24 @@ export function paginate({
     return [
       makePage(0),
       makeGap(),
-      ...range(currentPage - GAP_WINDOW + 1, totalCount).map((page) =>
+      ...range(currentPage - GAP_WINDOW + 1, totalPages).map((page) =>
         makePage(page, page === currentPage)
       ),
     ]
   }
 
   // If we need to generate a gap after the current page
-  if (isGapAfterNeeded(currentPage, totalCount)) {
+  if (isGapAfterNeeded(currentPage, totalPages)) {
     return [
       ...range(0, currentPage + GAP_WINDOW).map((page) =>
         makePage(page, page === currentPage)
       ),
       makeGap(),
-      makePage(totalCount - 1),
+      makePage(totalPages - 1),
     ]
   }
 
-  return range(0, totalCount).map((page) =>
+  return range(0, totalPages).map((page) =>
     makePage(page, page === currentPage)
   )
 }
