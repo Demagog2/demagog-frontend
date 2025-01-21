@@ -28,7 +28,6 @@ import {
 } from 'ckeditor5'
 import { Embed } from '@/libs/ck-plugins/embed'
 
-import 'ckeditor5/ckeditor5.css'
 import { EmbedStatement } from '@/libs/ck-plugins/embed-statement'
 import { EmbedArticle } from '@/libs/ck-plugins/embed-article'
 import { BlockQuoteWithSpeaker } from '@/libs/ck-plugins/block-quote-2/block-quote-2-plugin'
@@ -90,7 +89,7 @@ export default function RickTextEditor(props: {
           'undo',
           'redo',
         ],
-        shouldNotGroupWhenFull: false,
+        shouldNotGroupWhenFull: true,
       },
       plugins: [
         ContextualBalloon,
