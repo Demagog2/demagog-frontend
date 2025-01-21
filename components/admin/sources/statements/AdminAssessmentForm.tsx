@@ -272,7 +272,7 @@ function AdminAssessmentForm(props: {
         : {
             veracityId: statement.assessment.veracity?.id,
           }),
-      ...(formState.state === 'initial' ? {} : formState.fields),
+      ...(!formState || formState.state === 'initial' ? {} : formState.fields),
     },
   })
 
@@ -307,7 +307,7 @@ function AdminAssessmentForm(props: {
 
   // Clear the item from local storage and refresh "is dirty" on successfull submit
   useEffect(() => {
-    if (formState.state === 'success') {
+    if (formState?.state === 'success') {
       Object.values(localStorageKeys).forEach((key) => {
         localStorage.removeItem(key)
       })
