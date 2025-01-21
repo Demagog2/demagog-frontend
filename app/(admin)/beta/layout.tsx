@@ -1,5 +1,6 @@
 import '../../../assets/styles/tailwind.css'
 import 'react-toastify/dist/ReactToastify.css'
+import 'ckeditor5/ckeditor5.css'
 
 import AdminClientLayout from '@/components/admin/AdminClientLayout'
 import { serverQuery } from '@/libs/apollo-client-server'
