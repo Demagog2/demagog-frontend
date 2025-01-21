@@ -3,7 +3,7 @@ import { imagePath } from '@/libs/images/path'
 
 const ArticleIllustrationFragment = gql(`
   fragment ArticleIllustration on Article {
-    image : illustration
+    image : illustration(size: large)
     caption : illustrationCaption
   }
 `)
