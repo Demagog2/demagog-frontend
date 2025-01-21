@@ -34,8 +34,8 @@ export function Pagination({
   const isLastPage = currentPage === totalPages
 
   const pages = useMemo(
-    () => paginate({ currentPage: currentPage - 1, totalCount }),
-    [currentPage, totalCount]
+    () => paginate({ currentPage: currentPage - 1, totalPages }),
+    [currentPage, totalPages]
   )
 
   if (totalPages === 0 || totalPages === 1) {

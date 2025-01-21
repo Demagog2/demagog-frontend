@@ -2,11 +2,11 @@ import { makeGap, makePage, paginate } from '../pagination'
 
 describe('pagination', () => {
   it('handles an empty array', () => {
-    expect(paginate({ currentPage: 0, totalCount: 0 })).toEqual([])
+    expect(paginate({ currentPage: 0, totalPages: 0 })).toEqual([])
   })
 
   it('generates pages for small total count', () => {
-    expect(paginate({ currentPage: 0, totalCount: 5 })).toEqual([
+    expect(paginate({ currentPage: 0, totalPages: 5 })).toEqual([
       makePage(0, true),
       makePage(1),
       makePage(2),
@@ -16,10 +16,10 @@ describe('pagination', () => {
   })
 
   describe('for total count 20', () => {
-    const totalCount = 20
+    const totalPages = 20
 
     it('has gap after tree pages', () => {
-      expect(paginate({ currentPage: 0, totalCount })).toEqual([
+      expect(paginate({ currentPage: 0, totalPages })).toEqual([
         makePage(0, true),
         makePage(1),
         makePage(2),
@@ -30,7 +30,7 @@ describe('pagination', () => {
     })
 
     it('has gap before and after', () => {
-      expect(paginate({ currentPage: 10, totalCount })).toEqual([
+      expect(paginate({ currentPage: 10, totalPages })).toEqual([
         makePage(0),
         makeGap(),
         makePage(7),
@@ -46,7 +46,7 @@ describe('pagination', () => {
     })
 
     it('has gap before pages', () => {
-      expect(paginate({ currentPage: 19, totalCount })).toEqual([
+      expect(paginate({ currentPage: 19, totalPages })).toEqual([
         makePage(0),
         makeGap(),
         makePage(16),
