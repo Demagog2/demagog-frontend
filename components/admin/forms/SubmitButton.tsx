@@ -1,7 +1,7 @@
 import { useFormStatus } from 'react-dom'
 import { Spinner } from './Spinner'
 
-export function SubmitButton(props: { isPending: boolean }) {
+export function SubmitButton(props: { isPending?: boolean }) {
   const { pending: isFormBeingSubmitted } = useFormStatus()
 
   return (
