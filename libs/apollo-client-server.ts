@@ -22,7 +22,7 @@ export function createServerSideApolloClient() {
       createUploadLink({
         uri: process.env.NEXT_PUBLIC_GRAPHQL_URL,
         fetch,
-        credentials: 'include',
+        // credentials: 'include',
         headers: ssrMode
           ? process.env.NODE_ENV === 'production'
             ? {

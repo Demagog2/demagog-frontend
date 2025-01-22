@@ -195,7 +195,7 @@ export default async function Statements(props: PropsWithSearchParams) {
             <StatementItem
               key={statement.id}
               statement={statement}
-              className="mb-10"
+              className="article-redesign mb-10"
             />
           ))}
         </FilterForm>

@@ -4,6 +4,10 @@
   @include perex;
   @include unsafe-data-wrapper;
 
+  figure figcaption {
+    @include figcaption;
+  }
+
   .radius-22px {
     border-radius: 22px;
   }

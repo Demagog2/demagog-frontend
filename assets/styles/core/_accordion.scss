@@ -14,32 +14,91 @@
   .accordion-content,
   .accordion-detail {
     overflow: hidden;
-  	transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
     &.close {
       max-height: 0;
     }
   }
-}
-.expander {
-  position: relative;
-  overflow: hidden;
-  transition: 0.5s ease-in-out;
 
-  &::after {
-    position: absolute;
-    pointer-events: none;
-    content: "";
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgb(0,0,0);
-    background: linear-gradient(0deg, rgba($dark-light,1) 0%, rgba($dark-light,0.5) 20%, rgba($dark-light,0) 100%);
-    opacity: 0;
-    transition: opacity 0.5s ease-in-out;
+  .accordion-content {
+    h3,
+    h2 {
+      margin-top: 16px;
+      margin-bottom: 12px;
+    }
+
+    .ck-editor_demagog-box-wrapper > p:first-of-type {
+      margin-top: 0 !important;
+      margin-bottom: 0;
+    }
+
+    .ck-editor_demagog-box-wrapper > p:not(:first-of-type) {
+      @extend .mt-3, .mb-0;
+    }
+
+    .ck-editor_demagog-box-wrapper {
+      @extend .border, .border-dark, .mt-6, .mb-6;
+      border-radius: 31px;
+      padding: 20px 25px;
+      text-align: start;
+    }
+
+    .ck-editor_demagog-box-wrapper.bg-grey {
+      @extend .border-0, .bg-lightgrey;
+    }
+
+    .ck-editor_demagog-box-wrapper.float-right {
+      float: none;
+      width: auto;
+      max-width: 100%;
+      margin: 1.5rem 0;
+    }
+
+    @media (min-width: 768px) {
+      .ck-editor_demagog-box-wrapper.float-right {
+        width: 35%;
+        max-width: 280px;
+        float: right;
+        padding: 20px 25px;
+        margin: 30px 0px 30px 30px;
+      }
+    }
+
+    @media (min-width: 992px) and (max-width: 1400px) {
+      .ck-editor_demagog-box-wrapper.float-right {
+        float: none;
+        width: auto;
+        max-width: 100%;
+        margin: 1.5rem 0;
+      }
+    }
   }
+  .expander {
+    position: relative;
+    overflow: hidden;
+    transition: 0.5s ease-in-out;
 
-  &.is-hide::after {
-    opacity: 1;
+    &::after {
+      position: absolute;
+      pointer-events: none;
+      content: '';
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgb(0, 0, 0);
+      background: linear-gradient(
+        0deg,
+        rgba($dark-light, 1) 0%,
+        rgba($dark-light, 0.5) 20%,
+        rgba($dark-light, 0) 100%
+      );
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    &.is-hide::after {
+      opacity: 1;
+    }
   }
 }
