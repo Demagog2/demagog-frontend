@@ -123,7 +123,6 @@
 
   .article-content,
   .ck-content {
-
     ul,
     ol {
       @apply !mt-8 !max-w-xl !space-y-4 !text-gray-600 px-3;
