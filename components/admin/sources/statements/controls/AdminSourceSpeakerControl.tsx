@@ -15,6 +15,7 @@ export function AdminSourceSpeakerControl<T extends FieldValues>(props: {
   name: keyof T
   data: FragmentType<typeof AdminSourceSpeakerControlFragment>
   disabled: boolean
+  onChange?(): void
 }) {
   const data = useFragment(AdminSourceSpeakerControlFragment, props.data)
 
@@ -29,7 +30,10 @@ export function AdminSourceSpeakerControl<T extends FieldValues>(props: {
             disabled={props.disabled}
             id={field.name}
             data={data}
-            onChange={field.onChange}
+            onChange={(id) => {
+              field.onChange(id)
+              props.onChange?.()
+            }}
             defaultValue={field.value}
           />
         </>
