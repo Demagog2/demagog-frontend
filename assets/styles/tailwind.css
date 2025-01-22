@@ -55,6 +55,10 @@
   /* CK Editor content and admin article detail styles */
   .ck .ck-content,
   .article-content {
+    .ck-editor_demagog-box-wrapper>p:not(:first-of-type) {
+      @apply mt-3;
+    }
+
     .ck-editor_demagog-box-wrapper {
       @apply relative flex flex-col border-2 border-gray-200 rounded-3xl p-6 lg:px-8 mt-8;
 
@@ -82,8 +86,8 @@
     }
   }
 
-  .article-content > div > p,
-  .ck-content > p {
+  .article-content>div>p,
+  .ck-content>p {
     @apply !mt-8 !text-gray-700 !leading-7 !text-base;
   }
 
@@ -119,6 +123,7 @@
 
   .article-content,
   .ck-content {
+
     ul,
     ol {
       @apply !mt-8 !max-w-xl !space-y-4 !text-gray-600 px-3;
