@@ -28,6 +28,7 @@ export function AdminStatementTagsMultiselect<T extends FieldValues>(props: {
   name: keyof T
   data: FragmentType<typeof AdminStatementTagsMultiselectFragment>
   statement: FragmentType<typeof AdminStatementTagsStatementFragment>
+  onChange(): void
   disabled?: boolean
 }) {
   const data = useFragment(AdminStatementTagsMultiselectFragment, props.data)
@@ -57,6 +58,7 @@ export function AdminStatementTagsMultiselect<T extends FieldValues>(props: {
       items={items}
       control={props.control}
       name={props.name}
+      onChange={props.onChange}
       disabled={props.disabled}
     />
   )

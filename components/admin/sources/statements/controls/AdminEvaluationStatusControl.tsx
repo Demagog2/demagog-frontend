@@ -15,7 +15,7 @@ export function AdminEvaluationStatusControl<T extends FieldValues>(props: {
   control: Control<T>
   name: Path<T>
   actorRef: Actor<typeof machine>
-  submitForm(): Promise<void>
+  submitForm(): void
 }) {
   const { actorRef } = props
 

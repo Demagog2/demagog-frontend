@@ -21,6 +21,7 @@ export function Multiselect<T extends FieldValues>(props: {
   name: keyof T
   items: Item[]
   placeholder?: string
+  onChange?(): void
   disabled?: boolean
 }) {
   const [query, setQuery] = useState('')
@@ -50,6 +51,7 @@ export function Multiselect<T extends FieldValues>(props: {
               onChange={(ids: string[] | null) => {
                 setQuery('')
                 field.onChange(ids)
+                props.onChange?.()
               }}
               onClose={() => setQuery('')}
               multiple
@@ -83,6 +85,8 @@ export function Multiselect<T extends FieldValues>(props: {
                                       (value: string) => value !== item.value
                                     )
                                   )
+
+                                  props.onChange?.()
                                 }
                           }
                         >

@@ -21,6 +21,7 @@ export function AdminStatementArticleTagsMultiselect<
   name: keyof T
   data: FragmentType<typeof AdminStatementArticleTagsMultiselectFragment>
   disabled?: boolean
+  onChange?(): void
 }) {
   const data = useFragment(
     AdminStatementArticleTagsMultiselectFragment,
@@ -49,6 +50,7 @@ export function AdminStatementArticleTagsMultiselect<
       control={props.control}
       name={props.name}
       disabled={props.disabled}
+      onChange={props.onChange}
     />
   )
 }
