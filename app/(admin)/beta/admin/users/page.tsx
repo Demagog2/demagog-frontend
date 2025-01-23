@@ -8,7 +8,7 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import { imagePath } from '@/libs/images/path'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Button, Switch } from '@headlessui/react'
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Metadata } from 'next'
 import { gql } from '@/__generated__'
 import { PropsWithSearchParams } from '@/libs/params'
@@ -113,13 +113,19 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
                         </div>
 
                         <div className="flex-grow mt-6 sm:ml-6 sm:mt-0 lg:ml-8">
-                          <div className="flex justify-between">
+                          <div className="flex justify-between items-center">
                             <h3 className="text-base font-medium text-gray-900">
                               {user.fullName}
                             </h3>
-                            <Button>
-                              <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
-                            </Button>
+                            <div className="flex space-x-3">
+                              <a href={`/beta/admin/users/${user.id}/edit`} >
+                                
+                                <PencilIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer" />
+                              </a>
+                              <Button>
+                                <TrashIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600"></TrashIcon>
+                              </Button>
+                            </div>
                           </div>
 
                           <h4 className="text-base font-medium text-gray-900 mt-2">
