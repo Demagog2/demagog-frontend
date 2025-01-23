@@ -20,59 +20,6 @@
     }
   }
 
-  .accordion-content {
-    h3,
-    h2 {
-      margin-top: 16px;
-      margin-bottom: 12px;
-    }
-
-    .ck-editor_demagog-box-wrapper > p:first-of-type {
-      margin-top: 0 !important;
-      margin-bottom: 0;
-    }
-
-    .ck-editor_demagog-box-wrapper > p:not(:first-of-type) {
-      @extend .mt-3, .mb-0;
-    }
-
-    .ck-editor_demagog-box-wrapper {
-      @extend .border, .border-dark, .mt-6, .mb-6;
-      border-radius: 31px;
-      padding: 20px 25px;
-      text-align: start;
-    }
-
-    .ck-editor_demagog-box-wrapper.bg-grey {
-      @extend .border-0, .bg-lightgrey;
-    }
-
-    .ck-editor_demagog-box-wrapper.float-right {
-      float: none;
-      width: auto;
-      max-width: 100%;
-      margin: 1.5rem 0;
-    }
-
-    @media (min-width: 768px) {
-      .ck-editor_demagog-box-wrapper.float-right {
-        width: 35%;
-        max-width: 280px;
-        float: right;
-        padding: 20px 25px;
-        margin: 30px 0px 30px 30px;
-      }
-    }
-
-    @media (min-width: 992px) and (max-width: 1400px) {
-      .ck-editor_demagog-box-wrapper.float-right {
-        float: none;
-        width: auto;
-        max-width: 100%;
-        margin: 1.5rem 0;
-      }
-    }
-  }
   .expander {
     position: relative;
     overflow: hidden;
