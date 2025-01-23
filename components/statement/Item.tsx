@@ -8,6 +8,9 @@ import { useState, useRef } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerLink } from '../speaker/SpeakerLink'
 import classNames from 'classnames'
+import { ArticleV2Preview } from '../article/ArticleV2Preview'
+import { ArticleQuote } from '../article/ArticleQuote'
+import { nicerLinksNoTruncate } from '@/libs/comments/text'
 
 const StatementItemFragment = gql(`
   fragment StatementDetail on Statement {
@@ -42,6 +45,24 @@ const StatementItemFragment = gql(`
       }
       shortExplanation
       explanationHtml
+      explanationContent {
+        edges {
+          node {
+            ... on ArticleNode {
+              article {
+                ...ArticleV2PreviewFragment
+              }
+            }
+            ... on TextNode {
+              text
+            }
+            ... on BlockQuoteNode {
+              ...ArticleQuote
+            }
+          }
+          cursor
+        }
+      }
     }
   }
 `)
@@ -243,7 +264,7 @@ export default function StatementItem(props: {
           {statement.assessment.shortExplanation === null ? (
             <div className="d-block">
               <div
-                className={classNames('scroll-vertical mh-400px my-5 content', {
+                className={classNames('scroll-vertical mh-400px my-5', {
                   'fs-8 fs-md-7': isEmbedded,
                   'fs-6': !isEmbedded,
                 })}
@@ -276,12 +297,62 @@ export default function StatementItem(props: {
                     : { height: '0px' }
                 }
               >
-                <div
-                  className="scroll-vertical mh-400px my-5 content fs-6"
-                  dangerouslySetInnerHTML={{
-                    __html: statement.assessment.explanationHtml ?? '',
-                  }}
-                ></div>
+                <div className="scroll-vertical mh-400px my-5 fs-6">
+                  <div className="content">
+                    {statement.assessment.explanationContent.edges?.map(
+                      (edge) => {
+                        if (!edge?.node) {
+                          return null
+                        }
+
+                        const { node, cursor } = edge
+
+                        if (node.__typename === 'TextNode') {
+                          return (
+                            <div
+                              className={'content-text-node mt-6'}
+                              key={cursor}
+                              dangerouslySetInnerHTML={{
+                                __html: nicerLinksNoTruncate(node.text),
+                              }}
+                            />
+                          )
+                        }
+
+                        if (node.__typename === 'BlockQuoteNode') {
+                          return (
+                            <ArticleQuote
+                              key={cursor}
+                              node={node}
+                              className={'quote-in-accordion'}
+                            />
+                          )
+                        }
+
+                        if (node.__typename === 'ArticleNode' && node.article) {
+                          return (
+                            <ArticleV2Preview
+                              isEmbedded
+                              key={cursor}
+                              article={node.article}
+                            />
+                          )
+                        }
+
+                        /* if (node.__typename === 'StatementNode' && node) {
+                          return (
+                            <StatementItem
+                              className="mt-10"
+                              key={cursor}
+                              statement={node.statement}
+                              displayMode={StatementDisplayMode.EMBEDDED}
+                            />
+                          )
+                        }*/
+                      }
+                    )}
+                  </div>
+                </div>
               </div>
               <div
                 className={classNames(

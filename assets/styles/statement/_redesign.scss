@@ -1,5 +1,5 @@
 @import '../mixins/rich_text';
-
+.accordion-content,
 .statement-detail {
   @include perex;
   @include unsafe-data-wrapper;
@@ -48,10 +48,6 @@
 
   //Embedded single statement and single article item
   .content {
-    .quote p {
-      @extend .fs-7, .fs-lg-2;
-    }
-
     .bg-lightgrey {
       background-color: #e5e7eb;
     }
@@ -75,6 +71,14 @@
         line-height: 1.5;
       }
     }
+  }
+
+  .no-margin-top {
+    margin-top: 0 !important;
+  }
+
+  .scroll-vertical .content .content-text-node:first-child {
+    @extend .no-margin-top;
   }
 
   .content-text-node {
@@ -153,6 +157,13 @@
         }
       }
     }
+    .scroll-vertical .ck-editor_demagog-box-wrapper.float-right {
+      width: 35%;
+      max-width: 280px;
+      float: right;
+      padding: 20px 25px;
+      margin: 30px 0px 30px 30px;
+    }
   }
 
   @media (min-width: 992px) {
@@ -160,8 +171,20 @@
       margin-top: 5rem !important;
     }
 
+    .quote-in-accordion.quote + * {
+      margin-top: 2.5rem !important;
+    }
+
+    .quote-in-accordion.quote {
+      margin-top: 2.5rem !important;
+    }
+
     .quote-mark {
       font-size: 6rem;
+    }
+
+    .quote-in-accordion .quote-mark {
+      font-size: 4rem;
     }
 
     .me-lg-30px {
@@ -187,5 +210,22 @@
       padding: 25px 29px;
       margin: 60px 0px 60px 60px;
     }
+  }
+
+  @media (min-width: 992px) and (max-width: 1400px) {
+    .scroll-vertical .ck-editor_demagog-box-wrapper.float-right {
+      float: none;
+      width: auto;
+      max-width: 100%;
+      margin: 1.5rem 0;
+    }
+  }
+}
+
+.scroll-vertical {
+  a {
+    color: $dark;
+    text-decoration: underline;
+    text-underline-offset: 3px;
   }
 }
