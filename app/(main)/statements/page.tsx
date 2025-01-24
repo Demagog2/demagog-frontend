@@ -19,7 +19,6 @@ import { StatementCount } from '@/components/filtering/StatementCount'
 import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
-import { StatementHeader } from '@/components/statement/StatementHeader'
 import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
 const PAGE_SIZE = 10
