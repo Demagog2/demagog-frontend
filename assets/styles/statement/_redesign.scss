@@ -73,12 +73,15 @@
     }
   }
 
-  .no-margin-top {
-    margin-top: 0 !important;
-  }
+  .scroll-vertical .content-text-node {
+    p {
+      @extend .mt-3;
+    }
 
-  .scroll-vertical .content .content-text-node:first-child {
-    @extend .no-margin-top;
+    h2,
+    h3 {
+      @extend .mt-6;
+    }
   }
 
   .content-text-node {
