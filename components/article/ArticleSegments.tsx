@@ -6,6 +6,7 @@ import { ArticleQuote } from './ArticleQuote'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import classNames from 'classnames'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
+import { StatementFullExplanation } from '../statement/StatementFullExplanation'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -14,7 +15,7 @@ const ArticleSegmentsFragment = gql(`
       segmentType
       statements {
         id
-        ...StatementDetail
+        ...StatementFullExplanation
       }
       content {
         edges {
@@ -135,7 +136,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
               <div className="col-12">
                 <div className="mt-5 mt-lg-10">
                   {segment.statements.map((statement) => (
-                    <StatementItem
+                    <StatementFullExplanation
                       key={statement.id}
                       statement={statement}
                       className="mb-10"
