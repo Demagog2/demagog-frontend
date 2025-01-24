@@ -7,10 +7,10 @@ import { PropsWithChildren } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerLink } from '../speaker/SpeakerLink'
 import classNames from 'classnames'
-import { StatementFullExplanation } from './StatementFullExplanation'
 
-const StatementHeaderFragment = gql(` 
+const StatementHeaderFragment = gql(`
   fragment StatementHeader on Statement {
+    id
     content
     sourceSpeaker {
       speaker {
@@ -265,13 +265,32 @@ export function StatementHeader(
                       'fs-8 fs-md-7': isEmbedded,
                       'fs-6': !isEmbedded,
                     })}
-                    dangerouslySetInnerHTML={{
-                      __html: statement.assessment.shortExplanation ?? '',
-                    }}
-                  ></div>
+                  >
+                    {statement.assessment.shortExplanation}
+                  </div>
+
                   {props.children}
                 </div>
               )}
+
+              <div
+                className={classNames(
+                  'd-flex justify-content-between align-items-center w-100',
+                  {
+                    'mb-md-3': isEmbedded,
+                  }
+                )}
+              >
+                {isEmbedded && (
+                  <a
+                    className="accordion-link text-dark text-decoration-underline
+                     fw-bold mt-md-2 fs-md-7"
+                    href={'/vyrok/' + statement.id}
+                  >
+                    přejít na celé odůvodnění
+                  </a>
+                )}
+              </div>
             </div>
           </div>
         </div>

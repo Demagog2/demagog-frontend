@@ -1,6 +1,5 @@
 'use client'
 
-import LinkIcon from '@/assets/icons/link.svg'
 import { ArticleV2Preview } from '../article/ArticleV2Preview'
 import { ArticleQuote } from '../article/ArticleQuote'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
@@ -38,7 +37,7 @@ const StatementFullExplanationFragment = gql(`
           cursor
         }
       }
-    } 
+    }
   }
 `)
 
@@ -53,11 +52,6 @@ export function StatementFullExplanation(props: {
   )
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
-  const { displayMode = StatementDisplayMode.DEFAULT } = props
-
-  const isDefault = displayMode === StatementDisplayMode.DEFAULT
-  const isEmbedded = displayMode === StatementDisplayMode.EMBEDDED
-  const isVertical = displayMode === StatementDisplayMode.VERTICAL
 
   return (
     <StatementHeader
@@ -87,7 +81,7 @@ export function StatementFullExplanation(props: {
                 if (node.__typename === 'TextNode') {
                   return (
                     <div
-                      className={'content-text-node mt-6'}
+                      className={'content-text-node mt-4'}
                       key={cursor}
                       dangerouslySetInnerHTML={{
                         __html: nicerLinksNoTruncate(node.text),
@@ -119,6 +113,7 @@ export function StatementFullExplanation(props: {
                 if (node.__typename === 'StatementNode' && node.statement) {
                   return (
                     <StatementHeader
+                      key={cursor}
                       className="mt-10"
                       statement={node.statement}
                       displayMode={StatementDisplayMode.EMBEDDED}
@@ -131,44 +126,21 @@ export function StatementFullExplanation(props: {
         </div>
         <div
           className={classNames(
-            'd-flex justify-content-between align-items-center w-100',
-            {
-              'mb-md-3': isEmbedded,
-            }
+            'd-flex justify-content-between align-items-center w-100'
           )}
         >
-          {isEmbedded ? (
-            <a
-              className="accordion-link text-dark text-decoration-underline
-                     fw-bold mt-md-2"
-              href={'/vyrok/' + statement.id}
-            >
-              přejít na celé odůvodnění
-            </a>
-          ) : (
-            <a
-              className={classNames(
-                'accordion-link text-dark text-decoration-underline',
-                { 'fw-bold mt-md-2': isEmbedded }
-              )}
-              onClick={() => setOpenExplanation(!openExplanation)}
-            >
-              {openExplanation ? (
-                <>skrýt celé odůvodnění</>
-              ) : (
-                <>zobrazit celé odůvodnění</>
-              )}
-            </a>
-          )}
-          {!isEmbedded && (
-            <a
-              className="d-flex text-gray align-items-center text-none"
-              href={'/vyrok/' + statement.id}
-            >
-              <LinkIcon className="h-15px" />
-              <span className="ms-1">trvalý odkaz</span>
-            </a>
-          )}
+          <a
+            className={classNames(
+              'accordion-link text-dark text-decoration-underline'
+            )}
+            onClick={() => setOpenExplanation(!openExplanation)}
+          >
+            {openExplanation ? (
+              <>skrýt celé odůvodnění</>
+            ) : (
+              <>zobrazit celé odůvodnění</>
+            )}
+          </a>
         </div>
       </>
     </StatementHeader>

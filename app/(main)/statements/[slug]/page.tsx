@@ -15,7 +15,7 @@ import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import TagIcon from '@/assets/icons/tag.svg'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
-import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
+import { StatementHeader } from '@/components/statement/StatementHeader'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -80,8 +80,6 @@ export async function generateMetadata(props: {
 }
 
 export default async function Statement(props: { params: { slug: string } }) {
-  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
-
   const {
     data: { statementV2: statement },
   } = await query({
@@ -103,7 +101,7 @@ export default async function Statement(props: { params: { slug: string } }) {
                   }
                   ... on StatementNode {
                     statement {
-                      ...StatementFullExplanation
+                      ...StatementHeader
                     }
                   }
                   ... on TextNode {
@@ -250,7 +248,7 @@ export default async function Statement(props: { params: { slug: string } }) {
 
               if (node.__typename === 'StatementNode' && node.statement) {
                 return (
-                  <StatementFullExplanation
+                  <StatementHeader
                     className="mt-10"
                     key={cursor}
                     statement={node.statement}

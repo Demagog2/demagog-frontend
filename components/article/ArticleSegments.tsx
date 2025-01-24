@@ -6,6 +6,7 @@ import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import classNames from 'classnames'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementFullExplanation } from '../statement/StatementFullExplanation'
+import { StatementHeader } from '../statement/StatementHeader'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -26,7 +27,7 @@ const ArticleSegmentsFragment = gql(`
             }
             ... on StatementNode {
               statement {
-                ... StatementFullExplanation
+                ...StatementHeader
               }
             }
             ... on TextNode {
@@ -101,7 +102,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
 
                   if (node.__typename === 'StatementNode' && node.statement) {
                     return (
-                      <StatementFullExplanation
+                      <StatementHeader
                         className="mt-10"
                         key={cursor}
                         statement={node.statement}
