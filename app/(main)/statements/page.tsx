@@ -137,7 +137,6 @@ export default async function Statements(props: PropsWithSearchParams) {
           ) {
             statements {
               id
-              ...StatementDetail
               ...StatementFullExplanation
             }
             ...TagFilters
