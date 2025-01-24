@@ -4,7 +4,6 @@ import { gql } from '@/__generated__'
 import React from 'react'
 import { SearchResultSpeaker } from '@/components/SearchResultSpeaker'
 import ArticleItem from '@/components/article/Item'
-import StatementItem from '@/components/statement/Item'
 import { SearchButton } from '@/components/search/SearchButton'
 import type { SearchQuery } from '@/__generated__/graphql'
 import { PropsWithSearchParams } from '@/libs/params'
@@ -12,6 +11,7 @@ import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 import { permanentRedirect } from 'next/navigation'
+import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
 export async function generateMetadata(
   props: PropsWithSearchParams
@@ -74,7 +74,7 @@ export default async function Search(props: PropsWithSearchParams) {
         searchStatements(term: $term, limit: 4) {
           statements {
             id
-            ...StatementDetail
+            ...StatementFullExplanation
           }
           totalCount
         }
@@ -168,7 +168,7 @@ export default async function Search(props: PropsWithSearchParams) {
             </div>
             <div className="w-100">
               {data.searchStatements.statements.map((statement) => (
-                <StatementItem
+                <StatementFullExplanation
                   key={statement.id}
                   statement={statement}
                   className="mb-10"

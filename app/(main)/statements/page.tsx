@@ -1,6 +1,5 @@
 import TitleIcon from '@/assets/icons/statements.svg'
 import { query } from '@/libs/apollo-client'
-import StatementItem from '@/components/statement/Item'
 import {
   TAG_FILTER_INPUT_NAME,
   TagFilter,
@@ -196,11 +195,6 @@ export default async function Statements(props: PropsWithSearchParams) {
         >
           {searchStatements.statements.map((statement) => (
             <>
-              {/*<StatementItem
-                key={statement.id}
-                statement={statement}
-                className="article-redesign mb-10"
-              />*/}
               <StatementFullExplanation
                 statement={statement}
                 className="article-redesign mb-10"

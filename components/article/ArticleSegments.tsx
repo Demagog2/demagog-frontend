@@ -1,6 +1,5 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerWithStats } from '@/components/speaker/SpeakerWithStats'
-import StatementItem from '../statement/Item'
 import { ArticleV2Preview } from './ArticleV2Preview'
 import { ArticleQuote } from './ArticleQuote'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
@@ -27,7 +26,7 @@ const ArticleSegmentsFragment = gql(`
             }
             ... on StatementNode {
               statement {
-                ... StatementDetail
+                ... StatementFullExplanation
               }
             }
             ... on TextNode {
@@ -102,7 +101,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
 
                   if (node.__typename === 'StatementNode' && node.statement) {
                     return (
-                      <StatementItem
+                      <StatementFullExplanation
                         className="mt-10"
                         key={cursor}
                         statement={node.statement}

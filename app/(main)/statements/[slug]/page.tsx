@@ -11,11 +11,11 @@ import { Metadata } from 'next'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { notFound } from 'next/navigation'
 import { ArticleQuote } from '@/components/article/ArticleQuote'
-import StatementItem from '@/components/statement/Item'
 import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import TagIcon from '@/assets/icons/tag.svg'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
+import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -89,7 +89,7 @@ export default async function Statement(props: { params: { slug: string } }) {
       query StatementDetail($id: Int!) {
         statementV2(id: $id) {
           ...SourceSpeakerAvatar
-          ...StatementDetail
+          ...StatementFullExplanation
           assessment {
             shortExplanation
             explanationHtml
@@ -103,7 +103,7 @@ export default async function Statement(props: { params: { slug: string } }) {
                   }
                   ... on StatementNode {
                     statement {
-                      ...StatementDetail
+                      ...StatementFullExplanation
                     }
                   }
                   ... on TextNode {
@@ -250,7 +250,7 @@ export default async function Statement(props: { params: { slug: string } }) {
 
               if (node.__typename === 'StatementNode' && node.statement) {
                 return (
-                  <StatementItem
+                  <StatementFullExplanation
                     className="mt-10"
                     key={cursor}
                     statement={node.statement}
