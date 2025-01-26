@@ -159,7 +159,7 @@ export default function AdminClientLayout(
               </div>
             </TransitionChild>
             {/* Sidebar component, swap this element with another sidebar if you like */}
-            <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-4">
+            <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-black px-6 pb-4">
               <div className="flex h-16 shrink-0 items-center">
                 <TitleIcon
                   alt="Demagog.cz Administrace"
@@ -169,7 +169,7 @@ export default function AdminClientLayout(
               <nav className="flex flex-1 flex-col">
                 <ul role="list" className="flex flex-1 flex-col gap-y-7">
                   <li>
-                    <div className="text-xs font-semibold leading-6 text-gray-400">
+                    <div className="text-xs font-semibold leading-6 text-gray-400 dark:text-slate-400">
                       Výstupy
                     </div>
                     <ul role="list" className="-mx-2 space-y-1 mt-2">
@@ -180,7 +180,7 @@ export default function AdminClientLayout(
                             className={classNames(
                               pathname?.startsWith(item.href)
                                 ? 'bg-gray-50 text-indigo-600'
-                                : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
+                                : 'text-gray-700 dark:text-white hover:bg-gray-50 hover:text-indigo-600',
                               'group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6'
                             )}
                           >
@@ -288,7 +288,7 @@ export default function AdminClientLayout(
       {/* Static sidebar for desktop */}
       <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
         {/* Sidebar component, swap this element with another sidebar if you like */}
-        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6 pb-4">
+        <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white dark:bg-black px-6 pb-4">
           <div className="flex h-16 shrink-0 items-center">
             <TitleIcon
               alt="Demagog.cz Administrace"
@@ -412,7 +412,7 @@ export default function AdminClientLayout(
       </div>
 
       <div className="lg:pl-72">
-        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
+        <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white dark:bg-black px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
