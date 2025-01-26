@@ -10,7 +10,6 @@ import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
-import { AdminTagType } from '@/components/admin/tags/AdminTagType'
 import { AdminSearch } from '@/components/admin/AdminSearch'
 import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 
