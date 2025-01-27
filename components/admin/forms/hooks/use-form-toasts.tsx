@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 
 export function useFormToasts(state: FormState) {
   useEffect(() => {
-    switch (state.state) {
+    switch (state?.state) {
       case 'error':
         toast.error(state.message)
         return
