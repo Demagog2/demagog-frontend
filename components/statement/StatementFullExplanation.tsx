@@ -93,11 +93,7 @@ export function StatementFullExplanation(props: {
 
                 if (node.__typename === 'BlockQuoteNode') {
                   return (
-                    <ArticleQuote
-                      key={cursor}
-                      node={node}
-                      className={'quote-in-accordion'}
-                    />
+                    <ArticleQuote key={cursor} node={node} isQuoteInAccordion />
                   )
                 }
 

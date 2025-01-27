@@ -192,12 +192,11 @@ export default async function Statements(props: PropsWithSearchParams) {
           searchPlaceholder="Zadejte hledaný výrok"
         >
           {searchStatements.statements.map((statement) => (
-            <>
-              <StatementFullExplanation
-                statement={statement}
-                className="article-redesign mb-10"
-              />
-            </>
+            <StatementFullExplanation
+              key={statement.id}
+              statement={statement}
+              className="article-redesign mb-10"
+            />
           ))}
         </FilterForm>
       </div>

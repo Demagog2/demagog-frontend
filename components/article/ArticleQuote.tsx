@@ -15,19 +15,25 @@ const ArticleQuoteFragment = gql(`
 
 export function ArticleQuote(props: {
   node: FragmentType<typeof ArticleQuoteFragment>
-  className?: string
+  isQuoteInAccordion?: boolean
 }) {
   const data = useFragment(ArticleQuoteFragment, props.node)
 
   return (
     <div
-      className={`${props.className} quote align-items-start fw-semibold mt-10 mx-3 text-start mt-lg-20 mx-lg-0`}
+      className={classNames(
+        'quote align-items-start fw-semibold mt-10 mx-3 text-start mt-lg-20 mx-lg-0',
+        { 'quote-in-accordion': props.isQuoteInAccordion }
+      )}
     >
       <blockquote className="blockquote fs-6 lh-base d-flex align-items-center mb-0">
         <span
           className={classNames(
             'quote-mark fst-italic me-4 mt-minus-10px align-self-start',
-            { 'me-lg-30px': !props.className, 'me-lg-20px': props.className }
+            {
+              'me-lg-30px': !props.isQuoteInAccordion,
+              'me-lg-20px': props.isQuoteInAccordion,
+            }
           )}
         >
           ”
@@ -36,7 +42,7 @@ export function ArticleQuote(props: {
           <p
             className={classNames(
               'mb-0 px-0 py-0 fw-semibold fst-italic fs-7',
-              { 'fs-lg-2': !props.className }
+              { 'fs-lg-2': !props.isQuoteInAccordion }
             )}
           >
             {data.text}
@@ -53,7 +59,7 @@ export function ArticleQuote(props: {
 
               <div
                 className={classNames('mb-0 fs-8', {
-                  'fs-lg-5': !props.className,
+                  'fs-lg-5': !props.isQuoteInAccordion,
                 })}
               >
                 <div className="fw-semibold">{data.speaker.fullName}</div>
