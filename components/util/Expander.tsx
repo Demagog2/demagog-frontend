@@ -43,7 +43,7 @@ export function Expander(props: PropsWithChildren<{ className: string }>) {
     <div className={props.className}>
       <div
         className={classNames('expander expander-dark-light', {
-          'is-hide': isFolded,
+          'is-hidden': isFolded,
         })}
         style={isFolded ? { maxHeight: EXPANDER_FOLDED_HEIGHT } : {}}
       >

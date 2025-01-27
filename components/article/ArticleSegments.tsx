@@ -1,11 +1,12 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerWithStats } from '@/components/speaker/SpeakerWithStats'
-import StatementItem from '../statement/Item'
 import { ArticleV2Preview } from './ArticleV2Preview'
 import { ArticleQuote } from './ArticleQuote'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import classNames from 'classnames'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
+import { StatementFullExplanation } from '../statement/StatementFullExplanation'
+import { StatementHeader } from '../statement/StatementHeader'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -14,7 +15,7 @@ const ArticleSegmentsFragment = gql(`
       segmentType
       statements {
         id
-        ...StatementDetail
+        ...StatementFullExplanation
       }
       content {
         edges {
@@ -26,7 +27,7 @@ const ArticleSegmentsFragment = gql(`
             }
             ... on StatementNode {
               statement {
-                ... StatementDetail
+                ...StatementHeader
               }
             }
             ... on TextNode {
@@ -101,7 +102,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
 
                   if (node.__typename === 'StatementNode' && node.statement) {
                     return (
-                      <StatementItem
+                      <StatementHeader
                         className="mt-10"
                         key={cursor}
                         statement={node.statement}
@@ -135,7 +136,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
               <div className="col-12">
                 <div className="mt-5 mt-lg-10">
                   {segment.statements.map((statement) => (
-                    <StatementItem
+                    <StatementFullExplanation
                       key={statement.id}
                       statement={statement}
                       className="mb-10"

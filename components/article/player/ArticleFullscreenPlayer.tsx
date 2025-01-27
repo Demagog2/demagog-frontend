@@ -1,7 +1,6 @@
 'use client'
 
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import StatementItem from '@/components/statement/Item'
 import { displayTime } from '@/libs/date-time'
 import classNames from 'classnames'
 import { orderBy } from 'lodash'
@@ -9,6 +8,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { VideoPlayer } from './players/VideoPlayer'
 import { YouTubeVideo } from './players/YouTubeVideo'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
+import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
 const ArticleFullscrenPlayerFragment = gql(`
   fragment ArticleFullscrenPlayer on Article {
@@ -23,7 +23,7 @@ const ArticleFullscrenPlayerFragment = gql(`
           start
           stop
         }
-        ...StatementDetail
+        ...StatementFullExplanation
       }
     }
   }
@@ -188,7 +188,7 @@ export function ArticleFullscreenPlayer(props: {
               </div>
 
               <div className="statement-content-wrapper">
-                <StatementItem
+                <StatementFullExplanation
                   statement={statement}
                   className="mb-10"
                   displayMode={StatementDisplayMode.VERTICAL}
