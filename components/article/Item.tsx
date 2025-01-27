@@ -65,8 +65,8 @@ export default function ArticleItem(props: {
               />
             </ArticleLink>
           </div>
-          <div className="d-flex justify-content-between align-items-center mt-2">
-            <div className="symbol-group">
+          <div className="d-flex justify-content-between align-items-center mt-2 flex-wrap">
+            <div className="symbol-group me-1">
               {article.source?.sourceSpeakers?.map((speaker) => (
                 <Speaker key={speaker.id} speaker={speaker} />
               ))}

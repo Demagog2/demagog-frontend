@@ -1,6 +1,5 @@
 import TitleIcon from '@/assets/icons/statements.svg'
 import { query } from '@/libs/apollo-client'
-import StatementItem from '@/components/statement/Item'
 import {
   TAG_FILTER_INPUT_NAME,
   TagFilter,
@@ -20,6 +19,7 @@ import { StatementCount } from '@/components/filtering/StatementCount'
 import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
+import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
 const PAGE_SIZE = 10
 
@@ -137,7 +137,7 @@ export default async function Statements(props: PropsWithSearchParams) {
           ) {
             statements {
               id
-              ...StatementDetail
+              ...StatementFullExplanation
             }
             ...TagFilters
             ...VeracityFilters
@@ -192,10 +192,10 @@ export default async function Statements(props: PropsWithSearchParams) {
           searchPlaceholder="Zadejte hledaný výrok"
         >
           {searchStatements.statements.map((statement) => (
-            <StatementItem
+            <StatementFullExplanation
               key={statement.id}
               statement={statement}
-              className="mb-10"
+              className="article-redesign mb-10"
             />
           ))}
         </FilterForm>
