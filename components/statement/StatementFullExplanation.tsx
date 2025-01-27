@@ -8,6 +8,7 @@ import { useRef, useState } from 'react'
 import { StatementHeader } from './StatementHeader'
 import { StatementDisplayMode } from './StatementHeader'
 import classNames from 'classnames'
+import { LinkIcon } from '@heroicons/react/24/outline'
 
 const StatementFullExplanationFragment = gql(`
   fragment StatementFullExplanation on Statement {
@@ -114,7 +115,6 @@ export function StatementFullExplanation(props: {
                   return (
                     <StatementHeader
                       key={cursor}
-                      className="mt-10"
                       statement={node.statement}
                       displayMode={StatementDisplayMode.EMBEDDED}
                     />
@@ -140,6 +140,13 @@ export function StatementFullExplanation(props: {
             ) : (
               <>zobrazit celé odůvodnění</>
             )}
+          </a>
+          <a
+            className="d-flex text-gray align-items-center text-none"
+            href={'/vyrok/' + statement.id}
+          >
+            <LinkIcon className="h-15px" />
+            <span className="ms-1">trvalý odkaz</span>
           </a>
         </div>
       </>

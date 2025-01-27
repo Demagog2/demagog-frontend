@@ -89,13 +89,13 @@ export function StatementHeader(
                 className={classNames({
                   'flex-column': isVertical,
                   'd-flex': !isEmbedded,
-                  row: isEmbedded,
+                  'row custom-gap': isEmbedded,
                 })}
               >
                 <div
                   className={classNames({
                     'w-100px min-w-100px': isDefault,
-                    'col-3 col-xxl-2 mt-4 mb-2 mb-md-3 d-flex flex-column align-items-center':
+                    'col-3 custom-col-avatar col-xxl-2 mt-4 mb-2 mb-md-3 d-flex flex-column align-items-center':
                       isEmbedded,
                     'd-flex': isVertical,
                   })}
@@ -114,9 +114,9 @@ export function StatementHeader(
                       {statement.sourceSpeaker.speaker.avatar && (
                         <span
                           className={classNames(
-                            'symbol symbol-square symbol-circle',
+                            ' symbol symbol-square symbol-circle',
                             {
-                              'w-60px h-60px w-md-80px h-md-80px w-lg-90px h-lg-90px':
+                              'avatar w-60px h-60px w-md-80px h-md-80px w-lg-90px h-lg-90px':
                                 isEmbedded,
                             }
                           )}
@@ -164,7 +164,7 @@ export function StatementHeader(
                     {isEmbedded && (
                       <h3
                         className={classNames('fw-bold fst-italic mt-1', {
-                          'fs-8 fs-md-7': isEmbedded,
+                          'fs-8 fs-xl-7': isEmbedded,
                           'fs-7': !isEmbedded,
                         })}
                       >
@@ -176,7 +176,8 @@ export function StatementHeader(
                 <div
                   className={classNames({
                     'ps-5': isDefault,
-                    'col-9 col-xxl-10 mt-4 mt-md-7': isEmbedded,
+                    'col-9 col-xxl-10 mt-4 mt-md-7 custom-col-statement-content':
+                      isEmbedded,
                   })}
                 >
                   <blockquote
@@ -233,7 +234,7 @@ export function StatementHeader(
             <div
               className={classNames('col', {
                 'col-12 col-lg-6': isDefault,
-                'col-12 col-md-9 col-xxl-10 offset-md-3 ms-md-auto mt-3':
+                'col-12 col-md-9 col-xxl-10 offset-md-3 offset-xxl-2 mt-3 custom-offset custom-col-statement-assessment':
                   isEmbedded,
               })}
             >
@@ -284,7 +285,7 @@ export function StatementHeader(
                 {isEmbedded && (
                   <a
                     className="accordion-link text-dark text-decoration-underline
-                     fw-bold mt-md-2 fs-md-7"
+                     fw-bold mt-md-2 fs-md-7 mb-3"
                     href={'/vyrok/' + statement.id}
                   >
                     přejít na celé odůvodnění
