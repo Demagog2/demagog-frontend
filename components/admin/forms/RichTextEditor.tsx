@@ -33,6 +33,7 @@ import { EmbedArticle } from '@/libs/ck-plugins/embed-article'
 import { BlockQuoteWithSpeaker } from '@/libs/ck-plugins/block-quote-2/block-quote-2-plugin'
 import { Box } from '@/libs/ck-plugins/box/box'
 import { BoxToolbar } from '@/libs/ck-plugins/box/box-toolbar'
+import { MsWordPaste } from '@/libs/ck-plugins/ms-word-paste/ms-word-paste'
 
 export default function RickTextEditor(props: {
   includeHeadings?: boolean
@@ -92,6 +93,8 @@ export default function RickTextEditor(props: {
         shouldNotGroupWhenFull: true,
       },
       plugins: [
+        PasteFromOffice,
+        MsWordPaste,
         ContextualBalloon,
         Bold,
         BlockQuoteWithSpeaker,
@@ -113,7 +116,6 @@ export default function RickTextEditor(props: {
         Heading,
         Strikethrough,
         Undo,
-        PasteFromOffice,
         SpecialCharacters,
         SpecialCharactersEssentials,
         SpecialCharactersSpaces,
