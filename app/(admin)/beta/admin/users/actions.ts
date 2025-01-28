@@ -1,3 +1,4 @@
+'use server'
 import { gql } from '@/__generated__'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { redirect } from 'next/navigation'
