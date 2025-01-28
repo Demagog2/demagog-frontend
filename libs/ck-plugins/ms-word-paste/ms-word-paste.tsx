@@ -2,6 +2,8 @@ import {
   type ClipboardInputTransformationEvent,
   ClipboardPipeline,
   Plugin,
+  type ViewDocumentFragment,
+  type ViewNode,
 } from 'ckeditor5'
 
 export class MsWordPaste extends Plugin {
@@ -29,29 +31,30 @@ export class MsWordPaste extends Plugin {
             return
           }
 
-          for (const paragraph of data.content.getChildren()) {
-            if (!paragraph.is('element', 'p')) {
-              return
-            }
+          // Copied whole paragraph
+          if (this.isCopyPastedParagraph(data.content)) {
+            for (const paragraph of data.content.getChildren()) {
+              if (!paragraph.is('element', 'p')) {
+                return
+              }
 
-            for (const span of paragraph.getChildren()) {
-              if (span.is('element', 'span')) {
-                let linkVisited = false
-                for (const link of span.getChildren()) {
-                  if (link.is('element', 'a')) {
-                    if (linkVisited) {
-                      setTimeout(() => {
-                        this._scheduledRemoval()
-                      }, 1)
-
-                      return
-                    }
-
-                    linkVisited = true
-                  } else {
-                    linkVisited = false
-                  }
+              for (const span of paragraph.getChildren()) {
+                if (this.hasJoinedLinks(span)) {
+                  return setTimeout(() => {
+                    this._scheduledRemoval()
+                  }, 1)
                 }
+              }
+            }
+          }
+
+          // Copied only part of the paragraph -> span
+          if (this.isCopyPastedSpan(data.content)) {
+            for (const span of data.content.getChildren()) {
+              if (this.hasJoinedLinks(span)) {
+                return setTimeout(() => {
+                  this._scheduledRemoval()
+                }, 1)
               }
             }
           }
@@ -85,5 +88,39 @@ export class MsWordPaste extends Plugin {
         }
       }
     })
+  }
+
+  private isCopyPastedParagraph(document: ViewDocumentFragment) {
+    for (const node of document.getChildren()) {
+      if (node.is('element', 'p')) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  private isCopyPastedSpan(document: ViewDocumentFragment) {
+    for (const node of document.getChildren()) {
+      if (node.is('element', 'span')) {
+        return true
+      }
+    }
+
+    return false
+  }
+
+  private hasJoinedLinks(span: ViewNode) {
+    if (!span.is('element', 'span')) {
+      return false
+    }
+
+    for (const link of span.getChildren()) {
+      if (link.is('element', 'a') && link.nextSibling?.is('element', 'a')) {
+        return true
+      }
+    }
+
+    return false
   }
 }
