@@ -122,7 +122,7 @@
       @include figcaption;
     }
 
-    .ck-editor_demagog-box-wrapper > p:first-of-type {
+    .ck-editor_demagog-box-wrapper > :first-child {
       margin-top: 0 !important;
     }
 
