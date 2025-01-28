@@ -14,6 +14,7 @@ import { gql } from '@/__generated__'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getBooleanParam, getStringParam } from '@/libs/query-params'
 import { AdminPageTabs } from '@/components/admin/layout/AdminPageTabs'
+import AdminUserDeleteDialog from '@/components/admin/users/AdminUserDeleteDialog'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Tým', 'Administrace'),
@@ -29,6 +30,7 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
     query: gql(`
       query AdminUsers($includeInactive: Boolean, $limit: Int, $term: String) {
          users(includeInactive: $includeInactive, limit: $limit, name: $term) {
+          ...AdminUserDelete
           fullName
           id
           positionDescription
@@ -118,13 +120,13 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
                               {user.fullName}
                             </h3>
                             <div className="flex space-x-3">
-                              <a href={`/beta/admin/users/${user.id}/edit`} >
-                                
+                              <a href={`/beta/admin/users/${user.id}/edit`}>
                                 <PencilIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer" />
                               </a>
                               <Button>
                                 <TrashIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600"></TrashIcon>
                               </Button>
+                              <AdminUserDeleteDialog user={user} />
                             </div>
                           </div>
 
