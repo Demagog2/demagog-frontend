@@ -55,8 +55,12 @@
   /* CK Editor content and admin article detail styles */
   .ck .ck-content,
   .article-content {
+    .ck-editor_demagog-box-wrapper> :first-child {
+      @apply !mt-0;
+    }
+
     .ck-editor_demagog-box-wrapper>p:not(:first-of-type) {
-      @apply mt-3;
+      @apply mt-6;
     }
 
     .ck-editor_demagog-box-wrapper {
@@ -123,6 +127,7 @@
 
   .article-content,
   .ck-content {
+
     ul,
     ol {
       @apply !mt-8 !max-w-xl !space-y-4 !text-gray-600 px-3;
