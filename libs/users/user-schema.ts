@@ -10,7 +10,7 @@ export const userSchema = z.object({
     .trim()
     .min(1, 'Příjmení musí obsahovat alespoň jeden znak.'),
   email: z.string().email(),
-  roleId: z.string(),
+  roleId: z.string({ required_error: 'Vyberte oprávnění uživatele.' }),
   emailNotifications: z
     .preprocess((value) => value === 'on', z.boolean())
     .optional(),

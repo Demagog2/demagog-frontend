@@ -24,6 +24,8 @@ import {
   PhotoIcon,
   UserCircleIcon,
 } from '@heroicons/react/24/outline'
+import { userSchema } from '@/libs/users/user-schema'
+import { AdminUserRoleSelect } from './AdminUserRoleControl'
 
 /*const AdminUserFormFieldsFragment = gql(`
   fragment AdminUserFormFields on User {
@@ -34,7 +36,7 @@ import {
       id
       key
       name
-      permissions 
+      permissions
       }
     emailNotifications
     userPublic
@@ -44,52 +46,50 @@ import {
   }
 `)*/
 
-export const newUserSchema = z.object({
-  firstName: z.string().trim().min(1, 'Zadejte jméno uživatele.'),
-  lastName: z.string().trim().min(1, 'Zadejte příjmení uživatele.'),
-  email: z.string().email('Neplatný formát emailu.'),
-  permissions: z.enum([
-    'admin',
-    'expert',
-    'intern',
-    'proofreader',
-    'social_media_manager',
-  ]),
-  emailNotifications: z.boolean(),
-  userPublic: z.boolean(),
-  positionDescription: z.string().trim().optional(),
-  bio: z.string().trim().optional(),
-})
+const AdminUserFormFieldsDataFragment = gql(`
+  fragment AdminUserFormFieldsData on Query {
+    ...AdminUserRoleSelect
+  }
+`)
 
-//TODO remove conditional question mark from action props
-export function AdminUserForm(props: { title: string; action?: FormAction }) {
+export function AdminUserForm(props: {
+  title: string
+  action: FormAction
+  data: FragmentType<typeof AdminUserFormFieldsDataFragment>
+}) {
+  const data = useFragment(AdminUserFormFieldsDataFragment, props.data)
+
   const [state, formAction] = useFormState(props.action, { state: 'initial' })
 
   useFormToasts(state)
 
   const {
+    control,
     register,
     trigger,
     formState: { isValid, errors },
-  } = useForm<z.output<typeof newUserSchema>>({
+  } = useForm<z.output<typeof userSchema>>({
+    resolver: zodResolver(userSchema),
     defaultValues: {
       ...(state?.state === 'initial' ? {} : state.fields),
     },
   })
 
-  const { handleFormSubmit } = useFormSubmit(isValid, trigger)
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <>
-      <form action={formAction} onSubmit={handleFormSubmit}>
+      <form action={formAction} onSubmit={handleSubmitForm}>
         <div className="container">
           <AdminFormHeader>
             <AdminPageTitle title={props.title} />
             <AdminFormActions>
               <LinkButton href="/beta/admin/users">Zpět</LinkButton>
+
               <SubmitButton />
             </AdminFormActions>
           </AdminFormHeader>
+
           <div>
             <div className="space-y-12">
               <div className="border-b border-gray-900/10 pb-12">
@@ -102,6 +102,21 @@ export function AdminUserForm(props: { title: string; action?: FormAction }) {
                         placeholder="Zadejte jméno"
                         {...register('firstName', { required: true })}
                       />
+                    </Field>
+                  </div>
+
+                  <div className="sm:col-span-4">
+                    <Field>
+                      <Label htmlFor="roleId">Přístupová práva</Label>
+
+                      <AdminUserRoleSelect
+                        id="roleId"
+                        control={control}
+                        name="roleId"
+                        data={data}
+                      />
+
+                      <ErrorMessage message={errors.roleId?.message} />
                     </Field>
                   </div>
 
