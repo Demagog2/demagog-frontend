@@ -1,7 +1,6 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { PencilIcon } from '@heroicons/react/20/solid'
 import React from 'react'
-import { LinkButton } from '@/components/admin/forms/LinkButton'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
 
 const AdminSourceHeaderDataFragment = gql(`

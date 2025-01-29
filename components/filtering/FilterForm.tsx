@@ -7,7 +7,6 @@ import {
   ReactNode,
   useCallback,
   useMemo,
-  useState,
 } from 'react'
 import { debounceTime, Subject } from 'rxjs'
 import { usePathname, useRouter } from 'next/navigation'
@@ -26,7 +25,6 @@ type FilterFormProps = PropsWithChildren<{
 }>
 
 export function FilterForm(props: FilterFormProps) {
-  const [areFiltersOpen, setFiltersOpen] = useState(props.hasAnyFilters)
   const pathname = usePathname()
   const router = useRouter()
 
@@ -46,7 +44,6 @@ export function FilterForm(props: FilterFormProps) {
   )
 
   const handleReset = useCallback(() => {
-    setFiltersOpen(false)
     router.push(pathname ?? '')
   }, [pathname, router])
 

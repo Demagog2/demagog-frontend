@@ -14,7 +14,7 @@ export const revalidate = 60
 
 export const metadata = DefaultMetadata
 
-const inter = Inter({
+Inter({
   subsets: ['latin'],
   weight: ['400', '600', '800', '900'],
 })

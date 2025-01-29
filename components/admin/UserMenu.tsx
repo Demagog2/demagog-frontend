@@ -21,7 +21,6 @@ export function UserMenu(props: {
   data: FragmentType<typeof UserMenuFragment>
 }) {
   const data = useFragment(UserMenuFragment, props.data)
-  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
   return (
     <Menu as="div" className="relative">

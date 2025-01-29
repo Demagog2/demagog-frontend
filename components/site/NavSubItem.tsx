@@ -9,7 +9,7 @@ interface LinkProps {
 }
 
 export default function NavSubLink(props: LinkProps) {
-  const [isOpen, setIsOpen] = useState<Boolean | false>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const LinkRef = useRef<HTMLAnchorElement>(null)
 
   useEffect(() => {
@@ -17,8 +17,10 @@ export default function NavSubLink(props: LinkProps) {
     return () => window.removeEventListener('click', handleClick)
   })
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: MouseEvent) => {
     if (LinkRef && LinkRef.current) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       if (!LinkRef.current.contains(event.target) && isOpen) {
         setIsOpen(false)
       }
@@ -28,7 +30,7 @@ export default function NavSubLink(props: LinkProps) {
   return (
     <li className="menu-item me-10">
       <a
-        className="menu-link d-flex align-items-center text-white text-white text-none state-hover-color-secondary min-h-40px"
+        className="menu-link d-flex align-items-center text-white text-none state-hover-color-secondary min-h-40px"
         onClick={() => setIsOpen(!isOpen)}
         ref={LinkRef}
       >

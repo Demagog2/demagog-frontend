@@ -8,7 +8,12 @@ import {
 } from '@headlessui/react'
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
 import { useState } from 'react'
-import { Control, Controller, FieldValues } from 'react-hook-form'
+import {
+  type Control,
+  Controller,
+  type FieldValues,
+  type Path,
+} from 'react-hook-form'
 import { AdminBadge } from '@/components/admin/layout/AdminBadge'
 
 type Item = {
@@ -18,7 +23,7 @@ type Item = {
 
 export function Multiselect<T extends FieldValues>(props: {
   control: Control<T>
-  name: keyof T
+  name: Path<T>
   items: Item[]
   placeholder?: string
   onChange?(): void
@@ -37,7 +42,7 @@ export function Multiselect<T extends FieldValues>(props: {
     <Controller
       disabled={props.disabled}
       control={props.control}
-      name={props.name as any}
+      name={props.name}
       render={({ field }) => {
         const selectedItems = props.items.filter((item) =>
           field.value.includes(item.value)
@@ -48,7 +53,7 @@ export function Multiselect<T extends FieldValues>(props: {
             <Combobox
               as="div"
               value={field.value}
-              onChange={(ids: string[] | null) => {
+              onChange={(ids) => {
                 setQuery('')
                 field.onChange(ids)
                 props.onChange?.()

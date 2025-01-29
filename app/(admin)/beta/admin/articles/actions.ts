@@ -133,6 +133,7 @@ export async function updateArticleSingleStatement(
   const parsedInput = safeParse(singleStatementArticleSchema, formData)
 
   // Remove illustration which has a File value, otherwise we can't sent the fields back to the client
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { illustration, ...fields } = parsedInput.data ?? {}
 
   if (parsedInput.success) {

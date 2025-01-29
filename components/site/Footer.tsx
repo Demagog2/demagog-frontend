@@ -195,6 +195,7 @@ export default function Footer() {
                     </a>
                     <a title="elv.ai" href="https://elv.ai/">
                       <img
+                        alt="Elv.ai"
                         loading="lazy"
                         className="h-50px"
                         src="/images/elvai.svg"

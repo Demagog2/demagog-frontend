@@ -2,6 +2,7 @@ import { gql, useFragment } from '@/__generated__'
 import { PromiseRatingKey } from '@/__generated__/graphql'
 import classNames from 'classnames'
 import { PromiseRatings } from './PromiseRatingConf'
+import { FragmentType } from '@apollo/client'
 
 export const PromiseRatingFragment = gql(`
     fragment PromiseRatingDetail on PromiseRating {
@@ -15,7 +16,9 @@ function PromiseRatingIcon(props: { promiseRatingKey: PromiseRatingKey }) {
   return <Icon />
 }
 
-export function PromiseRating(props: { promiseRating: any }) {
+export function PromiseRating(props: {
+  promiseRating: FragmentType<typeof PromiseRatingFragment>
+}) {
   const promiseRating = useFragment(PromiseRatingFragment, props.promiseRating)
 
   return (
