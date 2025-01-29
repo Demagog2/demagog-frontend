@@ -256,11 +256,15 @@ export function AdminArticleForm(props: {
     article ? toArticleTypeEnum(article.articleType) : ArticleTypeEnum.Default
   )
   const localStorageKey = useMemo(
-    () => `article:form:${article?.id ?? 'new'}`,
+    () => `article:form:${article?.id}`,
     [article?.id]
   )
 
   useEffect(() => {
+    if (!article) {
+      return
+    }
+
     const value = localStorage.getItem(localStorageKey)
 
     const values: LocalStorageRecord = value?.length ? JSON.parse(value) : {}
@@ -277,15 +281,19 @@ export function AdminArticleForm(props: {
         console.table(segment)
       })
     }
-  }, [localStorageKey, setValue])
+  }, [article, localStorageKey, setValue])
 
   useEffect(() => {
+    if (!article) {
+      return
+    }
+
     if (state.state === 'success') {
       localStorage.removeItem(localStorageKey)
 
       reset({}, { keepValues: true })
     }
-  }, [state, localStorageKey, reset])
+  }, [article, state, localStorageKey, reset])
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
@@ -357,6 +365,10 @@ export function AdminArticleForm(props: {
                 {...register('perex', {
                   required: true,
                   onChange(evt) {
+                    if (!article) {
+                      return
+                    }
+
                     localStorage.setItem(
                       localStorageKey,
                       buildLocalStorageRecord(localStorageKey, {
@@ -408,6 +420,10 @@ export function AdminArticleForm(props: {
                             value={field.value}
                             onChange={(value) => {
                               field.onChange(value)
+
+                              if (!article) {
+                                return
+                              }
 
                               localStorage.setItem(
                                 localStorageKey,

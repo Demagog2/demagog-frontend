@@ -1,10 +1,11 @@
 'use client'
 
-import Link from 'next/link'
 import { Navigation, NavigationFragment } from './Navigation'
 import { FragmentType } from '@/__generated__'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import classNames from 'classnames'
+
+const THRESHOLD = 100
 
 export default function Header(props: {
   data: FragmentType<typeof NavigationFragment>
@@ -18,9 +19,9 @@ export default function Header(props: {
   const onScroll = useCallback(() => {
     let scrollTop = window.document.documentElement.scrollTop
 
-    setShowOnScroll(scrollTop > 100)
+    setShowOnScroll(scrollTop > THRESHOLD)
 
-    setIsHidden(scrollTop >= scrollTopRef.current)
+    setIsHidden(scrollTop > THRESHOLD && scrollTop >= scrollTopRef.current)
 
     scrollTopRef.current = scrollTop
   }, [])
