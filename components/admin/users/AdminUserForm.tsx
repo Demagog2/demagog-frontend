@@ -25,25 +25,6 @@ import { SwitchField } from '../forms/SwitchField'
 import { Textarea } from '../forms/Textarea'
 import { AdminImageInput } from '../images/AdminImageInput'
 
-/*const AdminUserFormFieldsFragment = gql(`
-  fragment AdminUserFormFields on User {
-    firstName
-    lastName
-    email
-    role {
-      id
-      key
-      name
-      permissions
-      }
-    emailNotifications
-    userPublic
-    avatar
-    positionDescription
-    bio
-  }
-`)*/
-
 const AdminUserFormFieldsDataFragment = gql(`
   fragment AdminUserFormFieldsData on Query {
     ...AdminUserRoleSelect
@@ -180,7 +161,8 @@ export function AdminUserForm(props: {
                       label="Zobrazit uživatele v sekci O nás?"
                     />
                   </div>
-                  <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
+                  {/*
+                 <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
                     <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
                       <Label htmlFor="avatar">
                         Vybrat obrázek
@@ -192,6 +174,7 @@ export function AdminUserForm(props: {
                       <AdminImageInput control={control} name="avatar" />
                     </div>
                   </div>
+                 */}
                   <div className="col-span-full">
                     <Field>
                       <Label htmlFor="positionDescription">

@@ -14,7 +14,6 @@ export const userSchema = z.object({
   emailNotifications: z
     .preprocess((value) => value === 'on', z.boolean())
     .optional(),
-  avatar: z.any(),
   userPublic: z.preprocess((value) => value === 'on', z.boolean()).optional(),
   bio: z.string().optional(),
   positionDescription: z.string().optional(),

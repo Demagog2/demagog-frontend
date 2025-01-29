@@ -123,13 +123,9 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
                               <a href={`/beta/admin/users/${user.id}/edit`}>
                                 <PencilIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer" />
                               </a>
-                              <Button>
-                                <TrashIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600"></TrashIcon>
-                              </Button>
                               <AdminUserDeleteDialog user={user} />
                             </div>
                           </div>
-
                           <h4 className="text-base font-medium text-gray-900 mt-2">
                             {user.positionDescription}
                           </h4>
