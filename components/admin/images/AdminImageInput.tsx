@@ -2,20 +2,24 @@
 
 import Dropzone from 'react-dropzone'
 import { useCallback, useState } from 'react'
-import { Control, Controller, useController } from 'react-hook-form'
+import {
+  type Control,
+  Controller,
+  type FieldValues,
+  type Path,
+  useController,
+} from 'react-hook-form'
 import { PhotoIcon } from '@heroicons/react/24/solid'
-import { FragmentType, gql, useFragment } from '@/__generated__'
-import { imagePath } from '@/libs/images/path'
 import { Button } from '@headlessui/react'
 import { TrashIcon } from '@heroicons/react/24/outline'
 
-export function AdminImageInput(props: {
-  control: Control<any>
-  name: string
+export function AdminImageInput<T extends FieldValues>(props: {
+  control: Control<T>
+  name: Path<T>
 }) {
   const controller = useController({
     control: props.control,
-    name: 'image',
+    name: props.name,
   })
 
   const [articlePreview, setArticlePreview] = useState<string | null>(null)
@@ -36,7 +40,9 @@ export function AdminImageInput(props: {
     const fileReader = new FileReader()
 
     fileReader.onload = () => {
-      fileReader.result && setArticlePreview(fileReader.result.toString())
+      if (fileReader.result) {
+        setArticlePreview(fileReader.result.toString())
+      }
     }
 
     fileReader.readAsDataURL(file)

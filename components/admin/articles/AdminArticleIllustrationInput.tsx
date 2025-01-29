@@ -2,7 +2,13 @@
 
 import Dropzone from 'react-dropzone'
 import { useCallback, useState } from 'react'
-import { Control, Controller, useController } from 'react-hook-form'
+import {
+  type Control,
+  Controller,
+  type FieldValues,
+  type Path,
+  useController,
+} from 'react-hook-form'
 import { PhotoIcon } from '@heroicons/react/24/solid'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { imagePath } from '@/libs/images/path'
@@ -16,14 +22,14 @@ const AdminArticleIllustrationFragment = gql(`
   }
 `)
 
-export function AdminArticleIllustrationInput(props: {
+export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
   article?: FragmentType<typeof AdminArticleIllustrationFragment>
-  control: Control<any>
-  name: string
+  control: Control<T>
+  name: Path<T>
 }) {
   const controller = useController({
     control: props.control,
-    name: 'illustration',
+    name: props.name,
   })
 
   const article = useFragment(AdminArticleIllustrationFragment, props.article)
@@ -48,7 +54,9 @@ export function AdminArticleIllustrationInput(props: {
     const fileReader = new FileReader()
 
     fileReader.onload = () => {
-      fileReader.result && setArticlePreview(fileReader.result.toString())
+      if (fileReader.result) {
+        setArticlePreview(fileReader.result.toString())
+      }
     }
 
     fileReader.readAsDataURL(file)

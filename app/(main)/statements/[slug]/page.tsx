@@ -183,7 +183,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               <>
                 <div className="row">
                   <div className="col col-auto">
-                    {statement.tags.map((tag: any) => (
+                    {statement.tags.map((tag) => (
                       <div key={tag.id} className="d-inline-block me-2">
                         <TagIcon className="h-15px" />
                         <span className="fs-8">{tag.name}</span>

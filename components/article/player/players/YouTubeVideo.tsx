@@ -12,50 +12,51 @@ const YouTubeVideoFragment = gql(`
   }
 `)
 
-export const YouTubeVideo = forwardRef(function YouTubeVideo(
-  props: {
-    source?: FragmentType<typeof YouTubeVideoFragment>
-  },
-  ref
-) {
-  const source = useFragment(YouTubeVideoFragment, props.source)
+type Props = {
+  source?: FragmentType<typeof YouTubeVideoFragment>
+}
 
-  const [videoPlayer, setVideoPlayer] = useState<YouTubePlayer | null>(null)
+export const YouTubeVideo = forwardRef<VideoPlayer, Props>(
+  function YouTubeVideo(props: Props, ref) {
+    const source = useFragment(YouTubeVideoFragment, props.source)
 
-  const handleVideoReady = useCallback(
-    (evt: YouTubeEvent) => setVideoPlayer(evt.target),
-    [setVideoPlayer]
-  )
+    const [videoPlayer, setVideoPlayer] = useState<YouTubePlayer | null>(null)
 
-  useImperativeHandle<any, VideoPlayer>(ref, () => {
-    return {
-      getTime() {
-        return videoPlayer?.getCurrentTime()
-      },
-      goToTime(time: number) {
-        videoPlayer?.seekTo(time, true)
-      },
+    const handleVideoReady = useCallback(
+      (evt: YouTubeEvent) => setVideoPlayer(evt.target),
+      [setVideoPlayer]
+    )
+
+    useImperativeHandle(ref, () => {
+      return {
+        getTime() {
+          return videoPlayer?.getCurrentTime()
+        },
+        goToTime(time: number) {
+          videoPlayer?.seekTo(time, true)
+        },
+      }
+    }, [videoPlayer])
+
+    if (source?.videoType !== 'youtube') {
+      return null
     }
-  }, [videoPlayer])
 
-  if (source?.videoType !== 'youtube') {
-    return null
+    return (
+      <div className="youtube-player-wrapper">
+        <YouTube
+          className="youtube-player"
+          videoId={source.videoId}
+          onReady={handleVideoReady}
+          opts={{
+            playerVars: {
+              autoplay: 1,
+              playsinline: 1,
+              rel: 0,
+            },
+          }}
+        />
+      </div>
+    )
   }
-
-  return (
-    <div className="youtube-player-wrapper">
-      <YouTube
-        className="youtube-player"
-        videoId={source.videoId}
-        onReady={handleVideoReady}
-        opts={{
-          playerVars: {
-            autoplay: 1,
-            playsinline: 1,
-            rel: 0,
-          },
-        }}
-      />
-    </div>
-  )
-})
+)

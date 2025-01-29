@@ -1,6 +1,5 @@
 import truncate from '@/libs/truncate'
 import formatDate from '@/libs/format-date'
-import Speaker from '@/components/article/SpeakerDetail'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { ArticleLink } from '@/components/article/ArticleLink'
 import classNames from 'classnames'

@@ -24,7 +24,6 @@ import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminStatementTypeSelect } from './AdminStatementTypeSelect'
 import { AdminSourceSpeakerSelect } from './AdminSourceSpeakerSelect'
 import { AlertMessage } from '@/components/admin/layout/AlertMessage'
-import { hideAdminBanner } from '@/app/(admin)/beta/admin/actions'
 
 const AdminStatementFormFragment = gql(`
   fragment AdminStatementForm on Query {

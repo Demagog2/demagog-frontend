@@ -4,8 +4,6 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 import AdminMediumForm from '@/components/admin/media/AdminMediumForm'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
-import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
-import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { updateMedium } from '../../actions'
 
 export async function generateMetadata(props: {

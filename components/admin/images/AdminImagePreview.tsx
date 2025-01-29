@@ -1,6 +1,4 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { ChevronDownIcon, PencilIcon } from '@heroicons/react/20/solid'
-import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import React from 'react'
 import { imagePath } from '@/libs/images/path'
 

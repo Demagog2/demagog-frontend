@@ -3,7 +3,7 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useMemo } from 'react'
 import { Multiselect } from '@/components/admin/forms/Multiselect'
-import { Control, FieldValues } from 'react-hook-form'
+import { Control, type FieldValues, type Path } from 'react-hook-form'
 
 const AdminMediaPersonalitiesSelectFragment = gql(`
   fragment AdminMediaPersonalitySelect on Query {
@@ -18,7 +18,7 @@ export function AdminMediaPersonalitiesMultiselect<
   T extends FieldValues,
 >(props: {
   control: Control<T>
-  name: keyof T
+  name: Path<T>
   data: FragmentType<typeof AdminMediaPersonalitiesSelectFragment>
 }) {
   const data = useFragment(AdminMediaPersonalitiesSelectFragment, props.data)

@@ -17,7 +17,7 @@ export default function Header(props: {
   const [isHidden, setIsHidden] = useState(false)
 
   const onScroll = useCallback(() => {
-    let scrollTop = window.document.documentElement.scrollTop
+    const scrollTop = window.document.documentElement.scrollTop
 
     setShowOnScroll(scrollTop > THRESHOLD)
 

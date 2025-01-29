@@ -1,8 +1,13 @@
 'use client'
 
-import { Control, Controller, FieldValues } from 'react-hook-form'
+import {
+  type Control,
+  Controller,
+  type FieldValues,
+  type Path,
+} from 'react-hook-form'
 import { AdminSourceSpeakerSelect } from '../AdminSourceSpeakerSelect'
-import { FragmentType, useFragment, gql } from '@/__generated__'
+import { type FragmentType, useFragment, gql } from '@/__generated__'
 
 const AdminSourceSpeakerControlFragment = gql(`
   fragment AdminSourceSpeakerControl on Source {
@@ -12,7 +17,7 @@ const AdminSourceSpeakerControlFragment = gql(`
 
 export function AdminSourceSpeakerControl<T extends FieldValues>(props: {
   control: Control<T>
-  name: keyof T
+  name: Path<T>
   data: FragmentType<typeof AdminSourceSpeakerControlFragment>
   disabled: boolean
   onChange?(): void
@@ -22,7 +27,7 @@ export function AdminSourceSpeakerControl<T extends FieldValues>(props: {
   return (
     <Controller
       control={props.control}
-      name={props.name as any}
+      name={props.name}
       render={({ field }) => (
         <>
           <input type="hidden" {...field} />

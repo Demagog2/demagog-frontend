@@ -3,7 +3,12 @@
 import { Select } from '@/components/admin/forms/Select'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useMemo } from 'react'
-import { Controller } from 'react-hook-form'
+import {
+  type Control,
+  Controller,
+  type FieldValues,
+  type Path,
+} from 'react-hook-form'
 
 const AdminVeracitySelectFragment = gql(`
   fragment AdminVeracitySelect on Query {
@@ -14,9 +19,9 @@ const AdminVeracitySelectFragment = gql(`
   }
 `)
 
-export function AdminVeracitySelect(props: {
-  control: any
-  name: string
+export function AdminVeracitySelect<T extends FieldValues>(props: {
+  control: Control<T>
+  name: Path<T>
   data: FragmentType<typeof AdminVeracitySelectFragment>
   disabled?: boolean
   onChange(veracityId: string): void
