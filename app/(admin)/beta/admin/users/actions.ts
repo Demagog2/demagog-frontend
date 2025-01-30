@@ -67,26 +67,15 @@ export const createUser = new CreateActionBuilder<
   })
   .build()
 
-const adminUpdateUserMutation = gql(` 
+const adminUpdateUserMutation = gql(`
   mutation UpdateUserMutation($id: Int!, $userInput: UserInput!) {
     updateUser(id: $id, userInput: $userInput) {
       user {
         id
-        firstName
-        lastName
-        email
-        emailNotifications
-        role {
-          name
-        }
-        userPublic
-        avatar
-        positionDescription
-        bio
       }
     }
   }
-  `)
+`)
 
 export const updateUser = new UpdateActionBuilder<
   typeof userSchema,
@@ -94,15 +83,12 @@ export const updateUser = new UpdateActionBuilder<
   UpdateUserMutationVariables,
   typeof adminUpdateUserMutation
 >(userSchema)
-  .withMutation(
-    adminUpdateUserMutation,
-    (data: UpdateUserMutationVariables) => {
-      return {
-        id: Number(data.id),
-        userInput: {
-          ...data.userInput,
-        },
-      }
+  .withMutation(adminUpdateUserMutation, (id, data) => {
+    return {
+      id: Number(id),
+      userInput: {
+        ...data,
+      },
     }
-  )
+  })
   .build()

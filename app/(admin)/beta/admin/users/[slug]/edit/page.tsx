@@ -13,10 +13,10 @@ export async function generateMetadata(props: {
   } = await serverQuery({
     query: gql(`
       query AdminUserEditMetadata($id: Int!) {
-       user(id: $id) {
-        fullName
-          } 
+        user(id: $id) {
+          fullName
         }
+      }
     `),
     variables: {
       id: Number(props.params.slug),
@@ -32,7 +32,7 @@ const AdminUserEditQuery = gql(`
     query AdminUserEdit($id: Int!) {
       ...AdminUserFormFieldsData
       user(id: $id) {
-        id  
+        id
         fullName
         ...AdminUserData
       }
@@ -51,12 +51,11 @@ export default async function AdminUserEdit(props: {
 
   return (
     <>
-      <p>Upravit profil uživatele: {data.user.fullName}</p>
-
       <AdminUserForm
         title={`Upravit profil uživatele: ${data.user.fullName}`}
-        data={data}
         action={updateUser.bind(null, data.user.id)}
+        data={data}
+        user={data.user}
       />
     </>
   )

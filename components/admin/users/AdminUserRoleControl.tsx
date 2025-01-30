@@ -48,7 +48,7 @@ export function AdminUserRoleSelect<T extends FieldValues>(props: {
             id={props.id}
             items={items}
             onChange={(item) => field.onChange(item.value)}
-            defaultValue={props.defaultValue}
+            defaultValue={field.value}
             placeholder="Vyberte..."
           />
         </>

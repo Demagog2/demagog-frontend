@@ -37,7 +37,7 @@ const AdminUserDataFragment = gql(`
     lastName
     email
     role {
-      name
+      id
     }
     emailNotifications
     userPublic
@@ -53,10 +53,10 @@ export function AdminUserForm(props: {
   title: string
   action: FormAction
   data: FragmentType<typeof AdminUserFormFieldsDataFragment>
-  source?: FragmentType<typeof AdminUserDataFragment>
+  user?: FragmentType<typeof AdminUserDataFragment>
 }) {
   const data = useFragment(AdminUserFormFieldsDataFragment, props.data)
-  const source = useFragment(AdminUserDataFragment, props.source)
+  const user = useFragment(AdminUserDataFragment, props.user)
   const [state, formAction] = useFormState(props.action, { state: 'initial' })
 
   useFormToasts(state)
@@ -69,14 +69,14 @@ export function AdminUserForm(props: {
   } = useForm<FieldValues>({
     resolver: zodResolver(userSchema),
     defaultValues: {
-      firstName: source?.firstName ?? '',
-      lastName: source?.lastName ?? '',
-      email: source?.email ?? '',
-      emailNotifications: source?.emailNotifications ?? false,
-      userPublic: source?.userPublic ?? false,
-      positionDescription: source?.positionDescription ?? '',
-      bio: source?.bio ?? '',
-      roleId: source?.role.name ?? '',
+      firstName: user?.firstName ?? '',
+      lastName: user?.lastName ?? '',
+      email: user?.email ?? '',
+      emailNotifications: user?.emailNotifications ?? false,
+      userPublic: user?.userPublic ?? false,
+      positionDescription: user?.positionDescription ?? '',
+      bio: user?.bio ?? '',
+      roleId: user?.role.id ?? '',
       ...(state?.state === 'initial' ? {} : state.fields),
     },
   })
