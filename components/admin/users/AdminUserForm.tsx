@@ -73,6 +73,8 @@ export function AdminUserForm(props: {
       firstName: source?.firstName ?? '',
       lastName: source?.lastName ?? '',
       email: source?.email ?? '',
+      emailNotifications: source?.emailNotifications ?? false,
+      userPublic: source?.userPublic ?? false,
       positionDescription: source?.positionDescription ?? '',
       bio: source?.bio ?? '',
       ...(state?.state === 'initial' ? {} : state.fields),
