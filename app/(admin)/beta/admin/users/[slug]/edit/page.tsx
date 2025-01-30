@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
-import { FragmentType, gql, useFragment } from '@/__generated__'
+import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
+import { AdminUserForm } from '@/components/admin/users/AdminUserForm'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -27,24 +28,35 @@ export async function generateMetadata(props: {
 }
 
 const AdminUserEditQuery = gql(`
-  fragment AdminUserEdit on User {
-    firstName
-    lastName
-    email
-    role {
-      id
-      key
-      name
-      permissions
+    query AdminUserEdit($id: Int!) {
+      ...AdminUserFormFieldsData
+      user(id: $id) {
+        fullName
+        ...AdminUserData
       }
-    emailNotifications
-    userPublic
-    avatar
-    positionDescription
-    bio
-  }
-`)
+    }
+  `)
 
-export default function EditUser() {
-  return <div>Upravit člena</div>
+export default async function AdminUserEdit(props: {
+  params: { slug: string }
+}) {
+  const { data } = await serverQuery({
+    query: AdminUserEditQuery,
+    variables: {
+      id: Number(props.params.slug),
+    },
+  })
+  return (
+    <>
+      <p>Upravit profil uživatele: {data.user.fullName}</p>
+      {/*
+      <AdminUserForm 
+    title={`Upravit profil uživatele: ${data.user.fullName}`}
+    data={data}
+    action={updateUser}
+     />
+  
+      */}
+    </>
+  )
 }

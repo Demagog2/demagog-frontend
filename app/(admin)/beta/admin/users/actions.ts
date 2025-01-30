@@ -63,3 +63,13 @@ export const createUser = new CreateActionBuilder<
     return null
   })
   .build()
+
+const adminUpdateUserMutation = gql(`
+    mutation UpdateUser($id: Int!, $userInput: UserInput!) {
+      updateUser(id: $id, userInput: $userInput) {
+        user {
+          id
+        }
+      }
+    }
+  `)
