@@ -3,9 +3,12 @@ import { gql } from '@/__generated__'
 import {
   CreateUserMutation,
   CreateUserMutationVariables,
+  UpdateUserMutation,
+  UpdateUserMutationVariables,
 } from '@/__generated__/graphql'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 import { userSchema } from '@/libs/users/user-schema'
 import { redirect } from 'next/navigation'
 
@@ -64,12 +67,42 @@ export const createUser = new CreateActionBuilder<
   })
   .build()
 
-const adminUpdateUserMutation = gql(`
-    mutation UpdateUser($id: Int!, $userInput: UserInput!) {
-      updateUser(id: $id, userInput: $userInput) {
-        user {
-          id
+const adminUpdateUserMutation = gql(` 
+  mutation UpdateUserMutation($id: Int!, $userInput: UserInput!) {
+    updateUser(id: $id, userInput: $userInput) {
+      user {
+        id
+        firstName
+        lastName
+        email
+        emailNotifications
+        role {
+          name
         }
+        userPublic
+        avatar
+        positionDescription
+        bio
       }
     }
+  }
   `)
+
+export const updateUser = new UpdateActionBuilder<
+  typeof userSchema,
+  UpdateUserMutation,
+  UpdateUserMutationVariables,
+  typeof adminUpdateUserMutation
+>(userSchema)
+  .withMutation(
+    adminUpdateUserMutation,
+    (data: UpdateUserMutationVariables) => {
+      return {
+        id: Number(data.id),
+        userInput: {
+          ...data.userInput,
+        },
+      }
+    }
+  )
+  .build()

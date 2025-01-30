@@ -3,6 +3,7 @@ import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { AdminUserForm } from '@/components/admin/users/AdminUserForm'
+import { updateUser } from '../../actions'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -31,6 +32,7 @@ const AdminUserEditQuery = gql(`
     query AdminUserEdit($id: Int!) {
       ...AdminUserFormFieldsData
       user(id: $id) {
+        id  
         fullName
         ...AdminUserData
       }
@@ -46,17 +48,16 @@ export default async function AdminUserEdit(props: {
       id: Number(props.params.slug),
     },
   })
+
   return (
     <>
       <p>Upravit profil uživatele: {data.user.fullName}</p>
-      {/*
-      <AdminUserForm 
-    title={`Upravit profil uživatele: ${data.user.fullName}`}
-    data={data}
-    action={updateUser}
-     />
-  
-      */}
+
+      <AdminUserForm
+        title={`Upravit profil uživatele: ${data.user.fullName}`}
+        data={data}
+        action={updateUser.bind(null, data.user.id)}
+      />
     </>
   )
 }
