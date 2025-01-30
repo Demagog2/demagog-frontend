@@ -76,6 +76,7 @@ export function AdminUserForm(props: {
       userPublic: source?.userPublic ?? false,
       positionDescription: source?.positionDescription ?? '',
       bio: source?.bio ?? '',
+      roleId: source?.role.name ?? '',
       ...(state?.state === 'initial' ? {} : state.fields),
     },
   })
