@@ -38,7 +38,6 @@ const AdminUserDataFragment = gql(`
     email
     role {
       name
-      permissions
     }
     emailNotifications
     userPublic
