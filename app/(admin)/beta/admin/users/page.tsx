@@ -84,7 +84,6 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
           <AdminPageTabs tabs={tabs}></AdminPageTabs>
           {data.users.map((user) => {
             if (!data.users) {
-              console.log('nejsou data')
               return null
             }
 

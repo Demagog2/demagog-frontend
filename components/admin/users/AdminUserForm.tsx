@@ -107,6 +107,7 @@ export function AdminUserForm(props: {
                         placeholder="Zadejte jméno"
                         {...register('firstName', { required: true })}
                       />
+                      <ErrorMessage message={errors.firstName?.message} />
                     </Field>
                   </div>
                   <div className="sm:col-span-3">
@@ -117,6 +118,7 @@ export function AdminUserForm(props: {
                         placeholder="Zadejte příjmení"
                         {...register('lastName', { required: true })}
                       />
+                      <ErrorMessage message={errors.lastName?.message} />
                     </Field>
                   </div>
                   <div className="sm:col-span-3">
@@ -127,6 +129,7 @@ export function AdminUserForm(props: {
                         placeholder="Zadejte email"
                         {...register('email', { required: true })}
                       />
+                      <ErrorMessage message={errors.email?.message} />
                       <p className="mt-1 text-sm/6 text-gray-600">
                         Uživatel musí mít Google účet s tímto emailem, aby se
                         dokázal do administrace přihlásit
