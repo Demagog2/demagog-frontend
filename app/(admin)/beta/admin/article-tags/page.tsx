@@ -55,7 +55,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
         <AdminPageTitle title="Tagy" description="Seznam tagů článků." />
 
         <div className="sm:flex">
-          <AdminSearch label="Hledat tag" defaultValue={title} />s
+          <AdminSearch label="Hledat tag" defaultValue={title} />
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
             <CreateButton href="/beta/admin/article-tags/new">
               Přidat Tag
