@@ -7,8 +7,7 @@ import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { imagePath } from '@/libs/images/path'
 import { getMetadataTitle } from '@/libs/metadata'
-import { Button, Switch } from '@headlessui/react'
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { PencilIcon } from '@heroicons/react/24/outline'
 import { Metadata } from 'next'
 import { gql } from '@/__generated__'
 import { PropsWithSearchParams } from '@/libs/params'
@@ -39,7 +38,7 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
           role {
             name
           }
-          avatar
+          avatar(size: thumbnail)
           email
           emailNotifications
           userPublic
