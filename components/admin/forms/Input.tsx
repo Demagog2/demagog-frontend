@@ -6,7 +6,10 @@ import classNames from 'classnames'
 
 export const Input = forwardRef<
   HTMLSelectElement,
-  ReturnType<UseFormRegister<{}>> & { hasError?: boolean; className?: string }
+  ReturnType<UseFormRegister<object>> & {
+    hasError?: boolean
+    className?: string
+  }
 >(function Input(props, ref) {
   const { hasError, className, ...htmlProps } = props
 

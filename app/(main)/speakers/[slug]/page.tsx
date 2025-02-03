@@ -1,5 +1,4 @@
 import { query } from '@/libs/apollo-client'
-import StatementItem from '@/components/statement/Item'
 import classNames from 'classnames'
 import TrueIcon from '@/assets/icons/true.svg'
 import UntrueIcon from '@/assets/icons/untrue.svg'
@@ -25,6 +24,7 @@ import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 import { pluralize } from '@/libs/pluralize'
 import { notFound } from 'next/navigation'
+import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
 const PAGE_SIZE = 10
 
@@ -109,7 +109,7 @@ export default async function Speaker(
             ) {
               statements {
                 id
-                ...StatementDetail
+                ...StatementFullExplanation
               }
               ...TagFilters
               ...VeracityFilters
@@ -287,7 +287,7 @@ export default async function Speaker(
         searchPlaceholder="Zadejte hledaný výrok"
       >
         {speaker.searchStatements.statements.map((statement) => (
-          <StatementItem
+          <StatementFullExplanation
             key={statement.id}
             statement={statement}
             className="mb-10"

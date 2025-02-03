@@ -14,6 +14,8 @@ export const revalidate = 60
 
 export const metadata = DefaultMetadata
 
+// The unused variable is required by next.js
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '600', '800', '900'],

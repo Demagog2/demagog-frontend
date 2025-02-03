@@ -1,6 +1,5 @@
 'use client'
 
-import PlayIcon from '@/assets/icons/play.svg'
 import { Expander } from '../util/Expander'
 import { VideoModal } from '@/components/modals/VideoModal'
 

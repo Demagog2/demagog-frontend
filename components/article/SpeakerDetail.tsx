@@ -1,4 +1,3 @@
-import Link from 'next/link'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerLink } from '../speaker/SpeakerLink'
 
@@ -24,7 +23,7 @@ export default function ArticleSpeaker(props: {
     <SpeakerLink
       speaker={sourceSpeaker.speaker}
       title={sourceSpeaker.fullName}
-      className="symbol symbol-40px rounded-circle bg-gray-500 overflow-hidden"
+      className="symbol symbol-40px rounded-circle bg-gray-500 overflow-hidden margin-bottom"
     >
       <img
         src={mediaUrl + sourceSpeaker.speaker.avatar}

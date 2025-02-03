@@ -308,7 +308,7 @@ export function AdminSourcesFilters(props: {
                           {section.label}
                         </legend>
                         <div className="space-y-3 pt-6">
-                          {section.filters.map((option, optionIdx) => (
+                          {section.filters.map((option) => (
                             <div key={option.key} className="flex items-center">
                               <input
                                 checked={option.active}

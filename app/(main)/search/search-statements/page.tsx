@@ -1,7 +1,6 @@
 import React from 'react'
 import { query } from '@/libs/apollo-client'
 import { Pagination } from '@/components/pagination'
-import StatementItem from '@/components/statement/Item'
 import { parsePage } from '@/libs/pagination'
 import { SearchButton } from '@/components/search/SearchButton'
 import { gql } from '@/__generated__'
@@ -9,6 +8,7 @@ import { getStringParam } from '@/libs/query-params'
 import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
+import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
 const SEARCH_PAGE_SIZE = 10
 
@@ -35,7 +35,7 @@ export default async function SearchStatements(props: PropsWithSearchParams) {
         searchStatements(term: $term, limit: $limit, offset: $offset) {
           statements {
             id
-            ...StatementDetail
+            ...StatementFullExplanation
           }
           totalCount
         }
@@ -87,7 +87,7 @@ export default async function SearchStatements(props: PropsWithSearchParams) {
           </div>
           <div className="row row-cols-1 g-5 g-lg-10">
             {data.searchStatements.statements.map((statement) => (
-              <StatementItem
+              <StatementFullExplanation
                 key={statement.id}
                 statement={statement}
                 className="mb-10"

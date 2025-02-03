@@ -39,7 +39,7 @@ export class FiltersFactory {
   }
 
   private getEvaluationStatusStatementFilters() {
-    return STATUS_FILTER_LABELS.keys().map(
+    return [...STATUS_FILTER_LABELS.keys()].map(
       (key) => new EvaluationStatusStatementFilter(key)
     )
   }

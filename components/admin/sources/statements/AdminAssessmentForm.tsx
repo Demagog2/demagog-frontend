@@ -25,12 +25,7 @@ import { Input } from '../../forms/Input'
 import { AdminStatementTagsMultiselect } from './controls/AdminTagsMultiselect'
 import { AdminStatementArticleTagsMultiselect } from './controls/AdminArticleTagsMultiselect'
 import { Textarea } from '../../forms/Textarea'
-import {
-  AdminStatementClientQueryQuery,
-  Exact,
-  Scalars,
-  StatementType,
-} from '@/__generated__/graphql'
+import { StatementType } from '@/__generated__/graphql'
 import { AdminPromiseRatingSelect } from './controls/AdminPromiseRatingSelect'
 import classNames from 'classnames'
 import { AdminVeracitySelect } from './controls/AdminVeracitySelect'
@@ -50,6 +45,9 @@ import { AdminSourceStatementStep } from '../AdminSourceStatementStep'
 import { AdminStatementComments } from './AdminStatementComments'
 import { useQuery } from '@apollo/client'
 import { pluralize } from '@/libs/pluralize'
+import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
+import { useSelector } from '@xstate/react'
+import { Spinner } from '../../forms/Spinner'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -186,26 +184,7 @@ export function AdminAssessmentFormController(props: {
     return (
       <div>
         <div className="inline-flex items-center px-4 py-2 leading-6 text-gray-700 transition ease-in-out duration-150">
-          <svg
-            className="animate-spin -ml-1 mr-3 h-5 w-5 text-indigo-600"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-          >
-            <circle
-              className="opacity-25"
-              cx="12"
-              cy="12"
-              r="10"
-              stroke="currentColor"
-              strokeWidth="4"
-            ></circle>
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-            ></path>
-          </svg>
+          <Spinner />
           Nahrávám výrok...
         </div>
       </div>
@@ -272,7 +251,7 @@ function AdminAssessmentForm(props: {
         : {
             veracityId: statement.assessment.veracity?.id,
           }),
-      ...(formState.state === 'initial' ? {} : formState.fields),
+      ...(!formState || formState.state === 'initial' ? {} : formState.fields),
     },
   })
 
@@ -307,7 +286,7 @@ function AdminAssessmentForm(props: {
 
   // Clear the item from local storage and refresh "is dirty" on successfull submit
   useEffect(() => {
-    if (formState.state === 'success') {
+    if (formState?.state === 'success') {
       Object.values(localStorageKeys).forEach((key) => {
         localStorage.removeItem(key)
       })
@@ -331,6 +310,16 @@ function AdminAssessmentForm(props: {
     data,
     statement,
   })
+
+  const autoSaveActorRef = useAutoSaveFormMachine(() =>
+    trigger().then(() => {
+      formRef.current?.requestSubmit()
+    })
+  )
+
+  const isAutomaticSavePending = useSelector(autoSaveActorRef, (snapshot) =>
+    snapshot.matches({ enabled: 'pending' })
+  )
 
   const isDirtyShortExplanation = useMemo(
     () => statement.assessment.shortExplanation !== shortExplanation,
@@ -431,7 +420,7 @@ function AdminAssessmentForm(props: {
               Zpět na diskuzi
             </LinkButton>
 
-            <SubmitButton />
+            <SubmitButton isPending={isAutomaticSavePending} />
           </AdminFormActions>
         </AdminFormHeader>
 
@@ -458,6 +447,11 @@ function AdminAssessmentForm(props: {
                   disabled={isStatementFieldDisabled}
                   control={control}
                   data={statement.source}
+                  onChange={() =>
+                    autoSaveActorRef.send({
+                      type: 'Form field updated',
+                    })
+                  }
                 />
 
                 <ErrorMessage message={errors.sourceSpeakerId?.message} />
@@ -470,7 +464,13 @@ function AdminAssessmentForm(props: {
                   <Input
                     id="title"
                     disabled={isStatementFieldDisabled}
-                    {...register('title')}
+                    {...register('title', {
+                      onChange() {
+                        autoSaveActorRef.send({
+                          type: 'Form field updated',
+                        })
+                      },
+                    })}
                   />
 
                   <ErrorMessage message={errors.title?.message} />
@@ -487,6 +487,11 @@ function AdminAssessmentForm(props: {
                     name="tags"
                     data={data}
                     statement={statement}
+                    onChange={() =>
+                      autoSaveActorRef.send({
+                        type: 'Form field updated',
+                      })
+                    }
                   />
 
                   <ErrorMessage message={errors.tags?.message} />
@@ -498,7 +503,11 @@ function AdminAssessmentForm(props: {
 
                 <Textarea
                   id="content"
-                  {...register('content')}
+                  {...register('content', {
+                    onChange() {
+                      autoSaveActorRef.send({ type: 'Form field updated' })
+                    },
+                  })}
                   rows={5}
                   placeholder={`Zadejte text ${isPromise ? 'slibu' : 'výroku'}...`}
                   readOnly={isStatementFieldDisabled}
@@ -548,14 +557,18 @@ function AdminAssessmentForm(props: {
                             statement.assessment.assessmentMethodology
                               .ratingKeys
                           }
-                          onChange={(promiseRating) =>
+                          onChange={(promiseRating) => {
                             actorRef.send({
                               type: 'Update promise rating',
                               data: {
                                 promiseRating,
                               },
                             })
-                          }
+
+                            autoSaveActorRef.send({
+                              type: 'Form field updated',
+                            })
+                          }}
                         />
                       )}
 
@@ -590,14 +603,18 @@ function AdminAssessmentForm(props: {
                           control={control}
                           name="veracityId"
                           data={data}
-                          onChange={(veracity) =>
+                          onChange={(veracity) => {
                             actorRef.send({
                               type: 'Update veracity',
                               data: {
                                 veracity,
                               },
                             })
-                          }
+
+                            autoSaveActorRef.send({
+                              type: 'Form field updated',
+                            })
+                          }}
                         />
                       )}
 
@@ -640,6 +657,10 @@ function AdminAssessmentForm(props: {
                                   data: {
                                     shortExplanation: newValue,
                                   },
+                                })
+
+                                autoSaveActorRef.send({
+                                  type: 'Form field updated',
                                 })
                               }}
                               rows={3}
@@ -752,6 +773,10 @@ function AdminAssessmentForm(props: {
                                     longExplanation: value,
                                   },
                                 })
+
+                                autoSaveActorRef.send({
+                                  type: 'Form field updated',
+                                })
                               }}
                             />
                           </div>
@@ -780,6 +805,11 @@ function AdminAssessmentForm(props: {
                     control={control}
                     name="articleTags"
                     data={data}
+                    onChange={() =>
+                      autoSaveActorRef.send({
+                        type: 'Form field updated',
+                      })
+                    }
                   />
                 )}
 
@@ -802,8 +832,8 @@ function AdminAssessmentForm(props: {
                   control={control}
                   name="evaluationStatus"
                   submitForm={() =>
-                    trigger().then(() => {
-                      formRef.current?.requestSubmit()
+                    autoSaveActorRef.send({
+                      type: 'Form field updated',
                     })
                   }
                 />
@@ -826,7 +856,13 @@ function AdminAssessmentForm(props: {
                       <AdminEvaluatorSelector
                         id="evaluatorId"
                         data={data}
-                        onChange={field.onChange}
+                        onChange={(id) => {
+                          field.onChange(id)
+
+                          autoSaveActorRef.send({
+                            type: 'Form field updated',
+                          })
+                        }}
                         disabled={field.disabled}
                         defaultValue={field.value}
                       />
@@ -867,8 +903,8 @@ function AdminAssessmentForm(props: {
                             actorRef.send({ type: 'Unpublish' })
                           }
 
-                          trigger().then(() => {
-                            formRef.current?.requestSubmit()
+                          autoSaveActorRef.send({
+                            type: 'Form field updated',
                           })
                         }}
                       />

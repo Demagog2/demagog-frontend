@@ -9,7 +9,7 @@ interface LinkProps {
 }
 
 export default function NavSearch(props: LinkProps) {
-  const [isOpen, setIsOpen] = useState<Boolean | false>(false)
+  const [isOpen, setIsOpen] = useState<boolean>(false)
   const WrapRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -17,8 +17,10 @@ export default function NavSearch(props: LinkProps) {
     return () => window.removeEventListener('click', handleClick)
   })
 
-  const handleClick = (event: any) => {
+  const handleClick = (event: MouseEvent) => {
     if (WrapRef && WrapRef.current) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
       if (!WrapRef.current.contains(event.target) && isOpen) {
         setIsOpen(false)
       }
@@ -28,7 +30,7 @@ export default function NavSearch(props: LinkProps) {
   return (
     <div className="menu-item d-none d-xl-flex">
       <a
-        className="menu-link d-flex align-items-center text-white text-white text-none state-hover-color-secondary min-h-40px"
+        className="menu-link d-flex align-items-center text-white text-none state-hover-color-secondary min-h-40px"
         onClick={() => setIsOpen(!isOpen)}
       >
         <span className="me-2">{props.title}</span>

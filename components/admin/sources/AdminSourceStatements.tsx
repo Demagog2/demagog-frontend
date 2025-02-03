@@ -3,7 +3,6 @@ import { AdminSourceStatementStep } from './AdminSourceStatementStep'
 import { VeracityBadge } from '../veracity/VeracityBadge'
 import { AdminUserAvatar } from '../users/AdminUserAvatar'
 import { ASSESSMENT_STATUS_APPROVED } from '@/libs/constants/assessment'
-import { useRouter } from 'next/navigation'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { AdminStatementAssessmentStats } from './statements/AdminStatementAssessmentStats'
 import AdminStatementDeleteDialog from './statements/AdminStatementDeleteDialog'
@@ -50,7 +49,6 @@ export function AdminSourceStatements(props: {
   data: FragmentType<typeof AdminSourceStatementsDataFragment>
   filteredStatementsIds: string[]
 }) {
-  const router = useRouter()
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
   const data = useFragment(AdminSourceStatementsDataFragment, props.data)
   const source = useFragment(SourceStatementsFragment, props.source)

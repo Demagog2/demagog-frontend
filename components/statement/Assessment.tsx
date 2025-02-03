@@ -1,14 +1,15 @@
 import { VeracityIcon } from '@/components/veracity/VeracityIcon'
 
-interface HomeProps {
-  assessment: any
-  type: string
+export default function StatementAssessment({
+  type,
+  name,
+  size,
+}: {
+  type: 'true' | 'untrue' | 'unverifiable' | 'misleading'
   name?: string
-  size: any
-}
-
-export default function StatementAssessment({ type, name, size }: any) {
-  const iconSize = size ? size : '30'
+  size: number
+}) {
+  const iconSize = size ? size : 30
   const colors: Record<string, string> = {
     true: 'primary',
     untrue: 'red',

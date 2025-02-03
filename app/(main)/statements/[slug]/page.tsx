@@ -11,11 +11,11 @@ import { Metadata } from 'next'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { notFound } from 'next/navigation'
 import { ArticleQuote } from '@/components/article/ArticleQuote'
-import StatementItem from '@/components/statement/Item'
 import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import TagIcon from '@/assets/icons/tag.svg'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
+import { StatementHeader } from '@/components/statement/StatementHeader'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -80,8 +80,6 @@ export async function generateMetadata(props: {
 }
 
 export default async function Statement(props: { params: { slug: string } }) {
-  const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
-
   const {
     data: { statementV2: statement },
   } = await query({
@@ -89,7 +87,7 @@ export default async function Statement(props: { params: { slug: string } }) {
       query StatementDetail($id: Int!) {
         statementV2(id: $id) {
           ...SourceSpeakerAvatar
-          ...StatementDetail
+          ...StatementFullExplanation
           assessment {
             shortExplanation
             explanationHtml
@@ -103,7 +101,7 @@ export default async function Statement(props: { params: { slug: string } }) {
                   }
                   ... on StatementNode {
                     statement {
-                      ...StatementDetail
+                      ...StatementHeader
                     }
                   }
                   ... on TextNode {
@@ -185,7 +183,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               <>
                 <div className="row">
                   <div className="col col-auto">
-                    {statement.tags.map((tag: any) => (
+                    {statement.tags.map((tag) => (
                       <div key={tag.id} className="d-inline-block me-2">
                         <TagIcon className="h-15px" />
                         <span className="fs-8">{tag.name}</span>
@@ -250,7 +248,7 @@ export default async function Statement(props: { params: { slug: string } }) {
 
               if (node.__typename === 'StatementNode' && node.statement) {
                 return (
-                  <StatementItem
+                  <StatementHeader
                     className="mt-10"
                     key={cursor}
                     statement={node.statement}
