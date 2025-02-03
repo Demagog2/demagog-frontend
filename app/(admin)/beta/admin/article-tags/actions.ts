@@ -4,10 +4,13 @@ import { gql } from '@/__generated__'
 import {
   AdminArticleTagNewMutationMutation,
   AdminArticleTagNewMutationMutationVariables,
+  UpdateArticleTagMutation,
+  UpdateArticleTagMutationVariables,
 } from '@/__generated__/graphql'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { schema } from '@/libs/article-tags/schema'
 import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 import { redirect } from 'next/navigation'
 
 const adminCreateArticleTagMutation = gql(`
@@ -36,7 +39,7 @@ export const createArticleTag = new CreateActionBuilder<
   })
   .withRedirectUrl((data) => {
     if (data?.createArticleTag?.articleTag) {
-      return `/beta/admin/article-tags/${data?.createArticleTag?.articleTag.id}`
+      return `/beta/admin/article-tags}`
     }
     return null
   })
@@ -62,3 +65,27 @@ export async function deleteArticleTag(id: string) {
     redirect(`/beta/admin/article-tags`)
   }
 }
+
+const adminUpdateArticleTagMutation = gql(`
+  mutation UpdateArticleTag($id: Int!, $input: ArticleTagInput!) {
+    updateArticleTag(id: $id, articleTagInput: $input) {
+      articleTag {
+        id
+      }
+    }
+  }
+`)
+
+export const updateArticleTag = new UpdateActionBuilder<
+  typeof schema,
+  UpdateArticleTagMutation,
+  UpdateArticleTagMutationVariables,
+  typeof adminUpdateArticleTagMutation
+>(schema)
+  .withMutation(adminUpdateArticleTagMutation, (id, data) => ({
+    id: Number(id),
+    input: {
+      ...data,
+    },
+  }))
+  .build()

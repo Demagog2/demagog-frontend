@@ -30,9 +30,12 @@ const AdminArticleTagDataFragment = gql(`
     description
     published
     order
+    icon
     stats
   }
 `)
+
+type FieldValues = z.output<typeof schema>
 
 export function AdminArticleTagForm(props: {
   title: string
@@ -61,6 +64,7 @@ export function AdminArticleTagForm(props: {
       description: articleTag?.description ?? '',
       published: articleTag?.published ?? false,
       order: articleTag?.order ?? '',
+      icon: articleTag?.icon ?? '',
       stats: articleTag?.stats ?? '',
       ...(state.state === 'initial' ? {} : state.fields),
     },
@@ -100,7 +104,7 @@ export function AdminArticleTagForm(props: {
                   <Input
                     id="slug"
                     placeholder="Zadejte url"
-                    {...(register('slug'), { required: true })}
+                    {...register('slug', { required: true })}
                   ></Input>
                   {errors.slug && (
                     <ErrorMessage message={errors.slug?.message} />
