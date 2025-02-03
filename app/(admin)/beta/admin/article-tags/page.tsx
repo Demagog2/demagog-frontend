@@ -12,6 +12,7 @@ import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
 import { AdminSearch } from '@/components/admin/AdminSearch'
 import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
+import AdminArticleTagDeleteDialog from '@/components/admin/article-tags/AdminArticleTagDeleteDialog'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam tagů', 'Administrace'),
@@ -33,6 +34,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
               slug
               published
               order
+              ...AdminArticleTagDeleteDialog
             }
           }
           pageInfo {
@@ -100,7 +102,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
                       Upravit
                     </a>
 
-                    {/* <AdminArticleDeleteDialog article={edge.node} /> */}
+                    <AdminArticleTagDeleteDialog articleTag={edge.node} />
                   </td>
                 </tr>
               )
