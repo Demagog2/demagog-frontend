@@ -24,7 +24,10 @@ export async function generateMetadata(props: {
   })
 
   return {
-    title: getMetadataTitle(`Upravit uživatele: ${user.fullName}`),
+    title: getMetadataTitle(
+      `Upravit uživatele: ${user.fullName}`,
+      'Administrace'
+    ),
   }
 }
 
