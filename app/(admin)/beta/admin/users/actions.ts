@@ -60,7 +60,7 @@ export const createUser = new CreateActionBuilder<
   })
   .withRedirectUrl((data) => {
     if (data?.createUser?.user) {
-      return `/beta/admin/users/${data?.createUser?.user.id}`
+      return `/beta/admin/users/}`
     }
 
     return null
