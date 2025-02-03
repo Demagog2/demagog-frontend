@@ -82,10 +82,15 @@ export const updateArticleTag = new UpdateActionBuilder<
   UpdateArticleTagMutationVariables,
   typeof adminUpdateArticleTagMutation
 >(schema)
-  .withMutation(adminUpdateArticleTagMutation, (id, data) => ({
-    id: Number(id),
-    input: {
-      ...data,
-    },
-  }))
+  .withMutation(adminUpdateArticleTagMutation, (id, data) => {
+    const { published = false, ...rest } = data
+
+    return {
+      id: Number(id),
+      input: {
+        ...rest,
+        published,
+      },
+    }
+  })
   .build()
