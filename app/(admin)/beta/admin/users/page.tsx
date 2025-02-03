@@ -15,6 +15,7 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getBooleanParam, getStringParam } from '@/libs/query-params'
 import { AdminPageTabs } from '@/components/admin/layout/AdminPageTabs'
 import AdminUserDeleteDialog from '@/components/admin/users/AdminUserDeleteDialog'
+import { Authorize } from '@/components/admin/Authorize'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Tým', 'Administrace'),
@@ -43,6 +44,7 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
           emailNotifications
           userPublic
         }
+        ...Authorize
       }
     `),
     variables: {
@@ -73,9 +75,11 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
           <div className="sm:flex">
             <AdminSearch label="Hledat dle jména" defaultValue={term} />
             <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
-              <CreateButton href={'/beta/admin/users/new'}>
-                Přidat nového člena týmu
-              </CreateButton>
+              <Authorize permissions={['users:edit']} data={data}>
+                <CreateButton href={'/beta/admin/users/new'}>
+                  Přidat nového člena týmu
+                </CreateButton>
+              </Authorize>
             </div>
           </div>
         </AdminPageHeader>
@@ -119,10 +123,15 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
                               {user.fullName}
                             </h3>
                             <div className="flex space-x-3">
-                              <a href={`/beta/admin/users/${user.id}/edit`}>
-                                <PencilIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer" />
-                              </a>
-                              <AdminUserDeleteDialog user={user} />
+                              <Authorize
+                                permissions={['users:edit']}
+                                data={data}
+                              >
+                                <a href={`/beta/admin/users/${user.id}/edit`}>
+                                  <PencilIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer" />
+                                </a>
+                                <AdminUserDeleteDialog user={user} />
+                              </Authorize>
                             </div>
                           </div>
                           <h4 className="text-base font-medium text-gray-900 mt-2">
