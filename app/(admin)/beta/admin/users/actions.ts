@@ -34,8 +34,8 @@ export async function deleteUser(userId: string) {
 }
 
 const adminCreateUserMutation = gql(`
-  mutation CreateUser($userInput: UserInput!) {
-    createUser(userInput: $userInput) {
+  mutation CreateUser($input: UserInput!) {
+    createUser(userInput: $input) {
       user {
         id
       }
@@ -51,8 +51,9 @@ export const createUser = new CreateActionBuilder<
 >(userSchema)
   .withMutation(adminCreateUserMutation, (data) => {
     const { emailNotifications = false, ...rest } = data
+
     return {
-      userInput: {
+      input: {
         ...rest,
         emailNotifications,
       },
@@ -68,8 +69,8 @@ export const createUser = new CreateActionBuilder<
   .build()
 
 const adminUpdateUserMutation = gql(`
-  mutation UpdateUserMutation($id: Int!, $userInput: UserInput!) {
-    updateUser(id: $id, userInput: $userInput) {
+  mutation UpdateUser($id: Int!, $input: UserInput!) {
+    updateUser(id: $id, userInput: $input) {
       user {
         id
       }
@@ -84,10 +85,13 @@ export const updateUser = new UpdateActionBuilder<
   typeof adminUpdateUserMutation
 >(userSchema)
   .withMutation(adminUpdateUserMutation, (id, data) => {
+    const { emailNotifications = false, ...rest } = data
+
     return {
       id: Number(id),
-      userInput: {
-        ...data,
+      input: {
+        ...rest,
+        emailNotifications,
       },
     }
   })
