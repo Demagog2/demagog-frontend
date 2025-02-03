@@ -1,6 +1,6 @@
 'use client'
 
-import { Field, Select } from '@headlessui/react'
+import { Field } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFormState } from 'react-dom'
 import { Controller, useForm } from 'react-hook-form'
@@ -17,13 +17,11 @@ import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
-import { UserCircleIcon } from '@heroicons/react/24/outline'
 import { userSchema } from '@/libs/users/user-schema'
 import { AdminUserRoleSelect } from './AdminUserRoleControl'
 import { Switch } from '../forms/Switch'
 import { SwitchField } from '../forms/SwitchField'
 import { Textarea } from '../forms/Textarea'
-import { AdminImageInput } from '../images/AdminImageInput'
 
 const AdminUserFormFieldsDataFragment = gql(`
   fragment AdminUserFormFieldsData on Query {
@@ -76,7 +74,7 @@ export function AdminUserForm(props: {
       userPublic: user?.userPublic ?? false,
       positionDescription: user?.positionDescription ?? '',
       bio: user?.bio ?? '',
-      roleId: user?.role.id ?? '',
+      roleId: user?.role.id,
       ...(state?.state === 'initial' ? {} : state.fields),
     },
   })
