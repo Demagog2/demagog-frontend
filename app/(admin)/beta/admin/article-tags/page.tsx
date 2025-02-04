@@ -89,7 +89,9 @@ export default async function AdminTags(props: PropsWithSearchParams) {
               return (
                 <tr key={node.id}>
                   <td>
-                    <a href={`/admin/article-tags/${node.id}`}>{node.title}</a>
+                    <a href={`/beta/admin/article-tags/${node.id}`}>
+                      {node.title}
+                    </a>
                   </td>
                   <td>/tag/{node.slug}</td>
                   <td>{node.published ? 'Veřejný' : 'Neveřejný'}</td>

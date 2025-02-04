@@ -39,7 +39,7 @@ export const createArticleTag = new CreateActionBuilder<
   })
   .withRedirectUrl((data) => {
     if (data?.createArticleTag?.articleTag) {
-      return `/beta/admin/article-tags}`
+      return `/beta/admin/article-tags/${data?.createArticleTag?.articleTag.id}}`
     }
     return null
   })
