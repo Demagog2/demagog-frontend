@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { ADMIN_BANNER_VISIBILITY_COOKIE } from '@/libs/constants/cookies'
 import { ToastContainer } from 'react-toastify'
+import { Analytics } from '@vercel/analytics/react'
 
 // Invalidate pages after n seconds
 // See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
@@ -49,6 +50,7 @@ export default async function AdminLayout({
           <AdminClientLayout isBannerVisible={isBannerVisible} data={adminData}>
             {children}
             <ToastContainer theme="light" />
+            <Analytics />
           </AdminClientLayout>
         )}
       </body>
