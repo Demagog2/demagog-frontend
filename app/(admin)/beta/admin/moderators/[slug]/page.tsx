@@ -6,7 +6,6 @@ import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
-import { AdminPageTabs } from '@/components/admin/layout/AdminPageTabs'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Detail moderátora'),

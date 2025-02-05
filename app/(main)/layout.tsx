@@ -7,6 +7,7 @@ import { Inter } from 'next/font/google'
 import { gql } from '@/__generated__'
 import { query } from '@/libs/apollo-client'
 import { DefaultMetadata } from '@/libs/constants/metadata'
+import { Analytics } from '@vercel/analytics/react'
 
 // Invalidate pages after n seconds
 // See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
@@ -14,6 +15,8 @@ export const revalidate = 60
 
 export const metadata = DefaultMetadata
 
+// The unused variable is required by next.js
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const inter = Inter({
   subsets: ['latin'],
   weight: ['400', '600', '800', '900'],
@@ -39,6 +42,7 @@ export default async function RootLayout({
         <Header data={data} />
         <main>{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   )

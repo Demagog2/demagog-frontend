@@ -2,7 +2,6 @@
 
 import React, { useCallback, useMemo } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
-import Link from 'next/link'
 import { paginate } from '@/libs/pagination'
 import classNames from 'classnames'
 

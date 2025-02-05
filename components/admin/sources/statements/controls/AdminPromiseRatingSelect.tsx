@@ -1,9 +1,14 @@
 'use client'
 
 import { Select } from '@/components/admin/forms/Select'
-import { FragmentType, gql, useFragment } from '@/__generated__'
+import { type FragmentType, gql, useFragment } from '@/__generated__'
 import { useMemo } from 'react'
-import { Controller } from 'react-hook-form'
+import {
+  type Control,
+  Controller,
+  type FieldValues,
+  type Path,
+} from 'react-hook-form'
 
 const AdminPromiseRatingSelectFragment = gql(`
   fragment AdminPromiseRatingSelect on Query {
@@ -15,9 +20,9 @@ const AdminPromiseRatingSelectFragment = gql(`
   }
 `)
 
-export function AdminPromiseRatingSelect(props: {
-  control: any
-  name: string
+export function AdminPromiseRatingSelect<T extends FieldValues>(props: {
+  control: Control<T>
+  name: Path<T>
   data: FragmentType<typeof AdminPromiseRatingSelectFragment>
   allowedKeys: string[]
   defaultValue?: string

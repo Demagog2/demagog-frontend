@@ -6,7 +6,7 @@ export function SwitchField(
   props: PropsWithChildren<{
     htmlFor: string
     label: string
-    description: string
+    description?: string
   }>
 ) {
   return (

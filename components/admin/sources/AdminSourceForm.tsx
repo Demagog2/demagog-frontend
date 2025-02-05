@@ -29,7 +29,6 @@ import { TrashIcon } from '@heroicons/react/24/outline'
 import { dateInputFormat } from '@/libs/date-time'
 import { FormAction } from '@/libs/forms/form-action'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
-import { AdminFormMain } from '@/components/admin/layout/AdminFormMain'
 
 const AdminSourceFormFragment = gql(`
   fragment AdminSourceForm on Query {

@@ -1,10 +1,10 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import React, { useRef } from 'react'
+import React from 'react'
 import { useFormState } from 'react-dom'
 import { useForm } from 'react-hook-form'
-import { isValid, z } from 'zod'
+import { z } from 'zod'
 import { LinkButton } from '../forms/LinkButton'
 import { SubmitButton } from '../forms/SubmitButton'
 import { contentImageSchema } from '@/libs/images/schema'
@@ -16,6 +16,7 @@ import { AdminFormActions } from '../layout/AdminFormActions'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormState } from '@/libs/forms/form-state'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
+import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 
 export function AdminImageForm(props: {
   title: string
@@ -23,6 +24,8 @@ export function AdminImageForm(props: {
   action(prevState: FormState, input: FormData): Promise<FormState>
 }) {
   const [state, formAction] = useFormState(props.action, { state: 'initial' })
+
+  useFormToasts(state)
 
   const {
     control,
@@ -32,8 +35,6 @@ export function AdminImageForm(props: {
     resolver: zodResolver(contentImageSchema),
     defaultValues: {},
   })
-
-  const formRef = useRef<HTMLFormElement>(null)
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 

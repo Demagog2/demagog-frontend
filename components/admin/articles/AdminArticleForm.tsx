@@ -276,6 +276,7 @@ export function AdminArticleForm(props: {
     if (values.segments) {
       values.segments?.forEach((segment) => {
         // TODO: Improve type safety (remove as any)
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         setValue(segment.key as any, segment.value, { shouldDirty: true })
 
         console.table(segment)
