@@ -18,8 +18,8 @@ const segmentSchema = z.discriminatedUnion('segmentType', [
 ])
 
 const sharedArticleSchema = z.object({
-  title: z.string().trim().min(1, 'Zadejte nazev clanku.'),
-  perex: z.string().trim().min(1, 'Zadejte perex clanku.'),
+  title: z.string().trim().min(1, 'Zadejte název článku.'),
+  perex: z.string().trim().min(1, 'Zadejte perex článku.'),
   pinned: z.preprocess((value) => value === 'on', z.boolean()).optional(),
   published: z.preprocess((value) => value === 'on', z.boolean()).optional(),
   publishedAt: z.string().date().optional(),
@@ -53,7 +53,7 @@ export const schema = z.discriminatedUnion('articleType', [
   z
     .object({
       articleType: z.literal(ArticleTypeEnum.FacebookFactcheck),
-      titleEn: z.string().trim().min(1, 'Zadejte anglicky nazev clanku'),
+      titleEn: z.string().trim().min(1, 'Zadejte anglický název článku.'),
       articleVeracity: z.string(),
       // articleVeracity: z.enum(ARTICLE_VERACITY_OPTIONS.map(({ value }) => value)),
     })
