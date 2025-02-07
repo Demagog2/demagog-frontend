@@ -63,7 +63,6 @@ export default async function ArticleTagDetail(props: {
     },
   })
   const { articleTag } = data
-  console.log(data)
   return (
     <AdminPage>
       <AdminPageHeader>
