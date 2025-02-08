@@ -2,6 +2,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { PencilIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
+import { getBetaAdminStatementReorderingEnabled } from '@/libs/flags'
 
 const AdminSourceHeaderDataFragment = gql(`
   fragment AdminSourceHeaderData on Query {
@@ -16,7 +17,7 @@ const AdminSourceHeaderFragment = gql(`
   }
 `)
 
-export function AdminSourceHeader(props: {
+export async function AdminSourceHeader(props: {
   data: FragmentType<typeof AdminSourceHeaderDataFragment>
   source: FragmentType<typeof AdminSourceHeaderFragment>
 }) {
@@ -24,6 +25,9 @@ export function AdminSourceHeader(props: {
   const source = useFragment(AdminSourceHeaderFragment, props.source)
 
   const { isAuthorized } = useAuthorization(data)
+
+  const isBetaAdminStatementReorderingEnabled =
+    await getBetaAdminStatementReorderingEnabled()
 
   return (
     <div className="lg:flex lg:items-center lg:justify-between">
@@ -55,6 +59,16 @@ export function AdminSourceHeader(props: {
             Přidat výrok
           </a>
         )}
+
+        {isBetaAdminStatementReorderingEnabled &&
+          isAuthorized(['statements:edit']) && (
+            <a
+              href={`/beta/admin/sources/${source.id}/statements/reorder`}
+              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              Seřadit výroky
+            </a>
+          )}
 
         <span className="hidden sm:block">
           <a
