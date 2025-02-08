@@ -49,7 +49,7 @@ export default async function AdminArticleTagEdit(props: {
       id: props.params.slug,
     },
   })
-  console.log(data.articleTag)
+
   return (
     <AdminPage>
       <AdminArticleTagForm

@@ -6,11 +6,6 @@ import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
-import {
-  CalendarDaysIcon,
-  CreditCardIcon,
-  UserCircleIcon,
-} from '@heroicons/react/24/outline'
 import classNames from 'classnames'
 import { Metadata } from 'next'
 
