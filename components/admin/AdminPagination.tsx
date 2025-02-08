@@ -45,13 +45,13 @@ export function AdminPagination(props: {
   return (
     <nav
       aria-label="Pagination"
-      className="flex items-center justify-between border-t border-gray-200 bg-white px-4 py-3 sm:px-6"
+      className="flex items-center justify-between border-t border-gray-200 bg-white dark:bg-black px-4 py-3 sm:px-6"
     >
       <div className="flex flex-1 justify-between sm:justify-end mt-2">
         {pageInfo.hasPreviousPage && (
           <a
             href={beforeLink}
-            className="relative inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+            className="relative inline-flex items-center rounded-md bg-white dark:bg-black px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
           >
             Předchozí
           </a>
@@ -59,7 +59,7 @@ export function AdminPagination(props: {
         {pageInfo.hasNextPage && (
           <a
             href={afterLink}
-            className="relative ml-3 inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
+            className="relative ml-3 inline-flex items-center rounded-md bg-white dark:bg-black px-3 py-2 text-sm font-semibold text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus-visible:outline-offset-0"
           >
             Další
           </a>
