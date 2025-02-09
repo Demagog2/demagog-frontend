@@ -19,7 +19,12 @@ export const nicerLinks = (commentContent: string) =>
 export const nicerLinksNoTruncate = (text: string) =>
   anchorme({
     input: text,
-    options: { attributes: { name: 'target', value: '_blank' } },
+    options: {
+      attributes: { name: 'target', value: '_blank' },
+      exclude(link) {
+        return link.startsWith('cdn.iframe.ly')
+      },
+    },
   })
 
 export const newlinesToParagraphsAndBreaks = (
