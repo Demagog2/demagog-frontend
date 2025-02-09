@@ -1,8 +1,13 @@
-import { PropsWithChildren } from 'react'
+import { type HTMLAttributeAnchorTarget, PropsWithChildren } from 'react'
 import classNames from 'classnames'
 
 export function LinkButton(
-  props: PropsWithChildren<{ href: string; className?: string }>
+  props: PropsWithChildren<{
+    href: string
+    className?: string
+    rel?: string
+    target?: HTMLAttributeAnchorTarget
+  }>
 ) {
   return (
     <a
@@ -11,6 +16,8 @@ export function LinkButton(
         'text-sm font-semibold leading-6 text-gray-900',
         props.className
       )}
+      rel={props.rel}
+      target={props.target}
     >
       {props.children}
     </a>

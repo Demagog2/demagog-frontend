@@ -23,6 +23,7 @@ import {
   ListboxOption,
   ListboxOptions,
 } from '@headlessui/react'
+import * as Sentry from '@sentry/nextjs'
 import { Input } from '@/components/admin/forms/Input'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
@@ -51,6 +52,8 @@ import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { AdminFormMain } from '../layout/AdminFormMain'
 import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 import { useEffect, useMemo } from 'react'
+import { ErrorMessage } from '../forms/ErrorMessage'
+import { isEmpty } from 'lodash'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -59,7 +62,6 @@ const RichTextEditor = dynamic(
 
 type LocalStorageRecord = {
   perex?: string
-  segments?: { key: string; value: string }[]
 }
 
 function buildLocalStorageRecord(
@@ -236,6 +238,7 @@ export function AdminArticleForm(props: {
     formState: {
       isValid,
       dirtyFields: { perex: isPerexDirty },
+      errors,
     },
   } = useForm<z.output<typeof schema>>({
     resolver: zodResolver(schema),
@@ -261,6 +264,17 @@ export function AdminArticleForm(props: {
   )
 
   useEffect(() => {
+    if (isEmpty(errors)) {
+      Sentry.captureMessage('There were errors in the article form.', {
+        level: 'warning',
+        extra: {
+          errors,
+        },
+      })
+    }
+  }, [errors])
+
+  useEffect(() => {
     if (!article) {
       return
     }
@@ -271,16 +285,6 @@ export function AdminArticleForm(props: {
 
     if (values.perex) {
       setValue('perex', values.perex, { shouldDirty: true })
-    }
-
-    if (values.segments) {
-      values.segments?.forEach((segment) => {
-        // TODO: Improve type safety (remove as any)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        setValue(segment.key as any, segment.value, { shouldDirty: true })
-
-        console.table(segment)
-      })
     }
   }, [article, localStorageKey, setValue])
 
@@ -321,6 +325,8 @@ export function AdminArticleForm(props: {
                 placeholder="Upravit název…"
                 {...register('title', { required: true })}
               />
+
+              <ErrorMessage message={errors.title?.message} />
             </Field>
 
             {selectedArticleType === ArticleTypeEnum.FacebookFactcheck && (
@@ -331,6 +337,14 @@ export function AdminArticleForm(props: {
                   id="titleEn"
                   placeholder="Upravit anglický název…"
                   {...register('titleEn', { required: true })}
+                />
+
+                <Controller
+                  control={control}
+                  name={'titleEn'}
+                  render={({ fieldState }) => (
+                    <ErrorMessage message={fieldState.error?.message} />
+                  )}
                 />
               </Field>
             )}
@@ -343,6 +357,8 @@ export function AdminArticleForm(props: {
                 control={control}
                 name="illustration"
               />
+
+              <ErrorMessage message={errors.illustration?.message} />
             </Field>
 
             <Field>
@@ -355,6 +371,8 @@ export function AdminArticleForm(props: {
                 placeholder="Zadejte popisek obrázku..."
                 {...register('illustrationCaption')}
               />
+
+              <ErrorMessage message={errors.illustrationCaption?.message} />
             </Field>
 
             <Field>
@@ -381,6 +399,8 @@ export function AdminArticleForm(props: {
                 rows={4}
                 placeholder="Zadejte perex..."
               />
+
+              <ErrorMessage message={errors.perex?.message} />
             </Field>
 
             <AdminSegmentSelector
@@ -421,31 +441,6 @@ export function AdminArticleForm(props: {
                             value={field.value}
                             onChange={(value) => {
                               field.onChange(value)
-
-                              if (!article) {
-                                return
-                              }
-
-                              localStorage.setItem(
-                                localStorageKey,
-                                buildLocalStorageRecord(localStorageKey, {
-                                  segments: fields.flatMap((segment, j) => {
-                                    if (segment.segmentType !== 'text') {
-                                      return []
-                                    }
-
-                                    return [
-                                      {
-                                        key: `segments.${j}.textHtml`,
-                                        value:
-                                          index === j
-                                            ? value
-                                            : segment.textHtml,
-                                      },
-                                    ]
-                                  }),
-                                })
-                              )
                             }}
                           />
                         </>
@@ -627,6 +622,14 @@ export function AdminArticleForm(props: {
                     </option>
                   ))}
                 </select>
+
+                <Controller
+                  control={control}
+                  name="articleVeracity"
+                  render={({ fieldState: { error } }) => (
+                    <ErrorMessage message={error?.message} />
+                  )}
+                />
               </Field>
             </Fieldset>
           </AdminFormSidebar>
