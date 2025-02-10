@@ -25,7 +25,7 @@ export async function generateMetadata(props: {
   })
 
   return {
-    title: getMetadataTitle(`Upravit tag: ${tag?.name}`, 'Administrace'),
+    title: getMetadataTitle(`Upravit štítek: ${tag?.name}`, 'Administrace'),
   }
 }
 

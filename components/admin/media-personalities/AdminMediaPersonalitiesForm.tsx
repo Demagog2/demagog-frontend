@@ -33,7 +33,9 @@ export default function AdminMediaPersonalitiesForm(props: {
     formState: { errors, isValid },
   } = useForm<z.output<typeof mediaPersonalitySchema>>({
     resolver: zodResolver(mediaPersonalitySchema),
-    defaultValues: {},
+    defaultValues: {
+      name: props.name ?? '',
+    },
   })
 
   useFormToasts(state)

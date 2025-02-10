@@ -12,6 +12,7 @@ import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
 import { AdminSearch } from '@/components/admin/AdminSearch'
 import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
+import AdminArticleTagDeleteDialog from '@/components/admin/article-tags/AdminArticleTagDeleteDialog'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam tagů', 'Administrace'),
@@ -33,6 +34,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
               slug
               published
               order
+              ...AdminArticleTagDeleteDialog
             }
           }
           pageInfo {
@@ -55,7 +57,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
         <AdminPageTitle title="Tagy" description="Seznam tagů článků." />
 
         <div className="sm:flex">
-          <AdminSearch label="Hledat tag" defaultValue={title} />s
+          <AdminSearch label="Hledat tag" defaultValue={title} />
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
             <CreateButton href="/beta/admin/article-tags/new">
               Přidat Tag
@@ -87,7 +89,9 @@ export default async function AdminTags(props: PropsWithSearchParams) {
               return (
                 <tr key={node.id}>
                   <td>
-                    <a href={`/admin/article-tags/${node.id}`}>{node.title}</a>
+                    <a href={`/beta/admin/article-tags/${node.id}`}>
+                      {node.title}
+                    </a>
                   </td>
                   <td>/tag/{node.slug}</td>
                   <td>{node.published ? 'Veřejný' : 'Neveřejný'}</td>
@@ -100,7 +104,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
                       Upravit
                     </a>
 
-                    {/* <AdminArticleDeleteDialog article={edge.node} /> */}
+                    <AdminArticleTagDeleteDialog articleTag={edge.node} />
                   </td>
                 </tr>
               )
