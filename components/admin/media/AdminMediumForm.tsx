@@ -33,7 +33,9 @@ export default function AdminMediumForm(props: {
     formState: { errors, isValid },
   } = useForm<z.output<typeof mediumSchema>>({
     resolver: zodResolver(mediumSchema),
-    defaultValues: {},
+    defaultValues: {
+      name: props.name ?? '',
+    },
   })
 
   useFormToasts(state)
