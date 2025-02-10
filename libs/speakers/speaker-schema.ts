@@ -5,6 +5,7 @@ const membershipSchema = z.object({
   since: z.string().optional(),
   until: z.string().optional(),
   bodyId: z.string(),
+  bodyName: z.string(),
 })
 
 export const speakerSchema = z.object({
@@ -20,13 +21,12 @@ export const speakerSchema = z.object({
   wikidataId: z.string().trim().optional(),
   websiteUrl: z.string().trim().optional(),
   memberships: z.array(membershipSchema).optional(),
+  osobaId: z.string().trim().optional(),
 })
 
 {
   /*
   TODO
-  osobaId - do we still need osobaId?
-  memberships / body / name - how?
   avatar
   */
 }
