@@ -3,7 +3,7 @@
 import { Field, Fieldset, Legend } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFormState } from 'react-dom'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { Label } from '../admin/forms/Label'
 import { Input } from '../admin/forms/Input'
@@ -20,6 +20,14 @@ import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { speakerSchema } from '@/libs/speakers/speaker-schema'
 import { AdminFormContent } from '../admin/layout/AdminFormContent'
 import { AdminFormMain } from '../admin/layout/AdminFormMain'
+import { AdminBodySelect } from '../admin/sources/AdminBodySelect'
+import { dateInputFormat } from '@/libs/date-time'
+
+const AdminSpeakerFormFragment = gql(`
+  fragment AdminSpeakerForm on Query {
+    ...AdminBodySelect
+  }
+`)
 
 const AdminSpeakerDataFragment = gql(`
   fragment AdminSpeakerData on Speaker {
@@ -36,9 +44,9 @@ const AdminSpeakerDataFragment = gql(`
       }
       id
       since
-      until  
+      until
     }
-  } 
+  }
 `)
 
 type FieldValues = z.output<typeof speakerSchema>
@@ -46,8 +54,10 @@ type FieldValues = z.output<typeof speakerSchema>
 export function AdminSpeakerForm(props: {
   title: string
   action: FormAction
+  data: FragmentType<typeof AdminSpeakerFormFragment>
   speaker?: FragmentType<typeof AdminSpeakerDataFragment>
 }) {
+  const data = useFragment(AdminSpeakerFormFragment, props.data)
   const speaker = useFragment(AdminSpeakerDataFragment, props.speaker)
   const [state, formAction] = useFormState(props.action, { state: 'initial' })
 
@@ -70,13 +80,18 @@ export function AdminSpeakerForm(props: {
       memberships:
         speaker?.memberships?.map((membership) => ({
           id: membership.id,
-          since: membership.since ?? '',
+          since: membership.since ? dateInputFormat(membership.since) : '',
           until: membership.until ?? '',
           body: membership.body.name ?? '',
           bodyId: membership.body.id,
         })) ?? [],
       ...(state?.state === 'initial' ? {} : state.fields),
     },
+  })
+
+  const { fields, append } = useFieldArray({
+    control,
+    name: 'memberships',
   })
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
@@ -183,6 +198,42 @@ export function AdminSpeakerForm(props: {
                 </Legend>
                 <Field>
                   <Label htmlFor="memberships">Strana/skupina</Label>
+
+                  <button
+                    onClick={() =>
+                      append({
+                        bodyId: '',
+                        bodyName: '',
+                      })
+                    }
+                  >
+                    Pridat stranu
+                  </button>
+
+                  {fields.map((field, index) => (
+                    <div key={field.id}>
+                      <Controller
+                        control={control}
+                        name={`memberships.${index}.bodyId`}
+                        render={({ field }) => (
+                          <>
+                            <input type="hidden" {...field} />
+                            <AdminBodySelect
+                              id={`memberships.${index}.bodyId`}
+                              data={data}
+                              onChange={field.onChange}
+                              defaultValue={field.value}
+                            />
+                          </>
+                        )}
+                      />
+
+                      <Input
+                        type="date"
+                        {...register(`memberships.${index}.since`)}
+                      />
+                    </div>
+                  ))}
                 </Field>
               </Fieldset>
             </AdminFormMain>
