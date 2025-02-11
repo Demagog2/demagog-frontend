@@ -112,6 +112,7 @@ export default async function Article(props: { params: { slug: string } }) {
             title
             articleType
             perex
+            showPlayer
             ...DebateAticleMetadata
             ...FacebookFactcheckMetadata
             ...StaticArticleMetadata
@@ -150,7 +151,11 @@ export default async function Article(props: { params: { slug: string } }) {
         <div>
           <div>
             <h1 className="display-1 fw-bold px-3 px-sm-0">{article.title}</h1>
-            <ArticleIllustration article={article} />
+            {article.showPlayer ? (
+              <ArticlePlayer article={article} />
+            ) : (
+              <ArticleIllustration article={article} />
+            )}
             <div className="mt-4 mt-md-9">
               <span className="perex">{article.perex}</span>
             </div>
@@ -158,7 +163,6 @@ export default async function Article(props: { params: { slug: string } }) {
           <DebateArticleMetadata article={article} />
           <FacebookFactcheckMetadata article={article} />
           <StaticArticleMetadata article={article} />
-          <ArticlePlayer article={article} />
         </div>
         <div>
           <ArticleSegments data={article} />
