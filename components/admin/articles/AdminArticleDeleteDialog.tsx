@@ -26,6 +26,7 @@ export default function AdminArticleDeleteDialog(props: {
   return (
     <AdminDeleteDialog
       title="Smazat článek"
+      className={props.className}
       description={
         <>
           Jste si opravdu jisti, že chcete smazat článek &quot;
