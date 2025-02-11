@@ -127,7 +127,10 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
                                 data={data}
                               >
                                 <a href={`/beta/admin/users/${user.id}/edit`}>
-                                  <PencilIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer" />
+                                  <PencilIcon
+                                    className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer"
+                                    title="Upravit"
+                                  />
                                 </a>
                                 <AdminUserDeleteDialog user={user} />
                               </Authorize>

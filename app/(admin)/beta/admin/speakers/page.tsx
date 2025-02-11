@@ -9,12 +9,11 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
-import { TrashIcon } from '@heroicons/react/24/outline'
-import { Button } from '@headlessui/react'
 import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { imagePath } from '@/libs/images/path'
+import AdminSpeakerDelete from '@/components/speaker/AdminSpeakerDeleteDialog'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Lidé', 'Administrace'),
@@ -48,6 +47,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
               osobaId
               websiteUrl
               wikidataId
+              ...AdminSpeakerDelete
             }
           }
           pageInfo {
@@ -112,9 +112,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
                           <h3 className="text-base font-medium text-gray-900">
                             {edge.node.fullName}
                           </h3>
-                          <Button>
-                            <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
-                          </Button>
+                          <AdminSpeakerDelete speaker={edge.node} />
                         </div>
 
                         <p className="mt-3 text-sm text-gray-500">
