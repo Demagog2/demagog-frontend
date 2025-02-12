@@ -5,7 +5,7 @@ const membershipSchema = z.object({
   since: z.string().optional(),
   until: z.string().optional(),
   bodyId: z.string(),
-  bodyName: z.string(),
+  bodyName: z.string().optional(),
 })
 
 export const speakerSchema = z.object({
@@ -24,9 +24,4 @@ export const speakerSchema = z.object({
   osobaId: z.string().trim().optional(),
 })
 
-{
-  /*
-  TODO
-  avatar
-  */
-}
+/* TODO: avatar */
