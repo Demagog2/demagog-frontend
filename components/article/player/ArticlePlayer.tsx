@@ -21,7 +21,7 @@ const ArticlePlayerFragment = gql(`
   fragment ArticlePlayer on Article {
     showPlayer
     title
-    illustration(size: medium)
+    illustration(size: large)
     ...ArticleFullscrenPlayer
   }
 `)
