@@ -12,7 +12,13 @@ import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
 import {
   AdminArticleNewMutationV2Mutation,
   AdminArticleNewMutationV2MutationVariables,
+  AdminEditArticleMutationMutation,
+  AdminEditArticleMutationMutationVariables,
+  UpdateMediaPersonalityMutation,
+  UpdateMediaPersonalityMutationVariables,
 } from '@/__generated__/graphql'
+import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
+import { mediaPersonalitySchema } from '@/libs/media-personality/media-personality-schema'
 
 const adminCreateArticleMutation = gql(`
   mutation AdminArticleNewMutationV2($input: ArticleInput!) {
@@ -84,46 +90,20 @@ const adminEditArticleMutation = gql(`
   }
 `)
 
-export async function updateArticle(
-  articleId: string,
-  _: FormState,
-  formData?: FormData
-): Promise<FormState> {
-  const parsedInput = safeParse(schema, formData)
-
-  if (parsedInput.success) {
-    const input = parsedInput.data
-
-    const { data } = await serverMutation({
-      mutation: adminEditArticleMutation,
-      variables: {
-        id: articleId,
-        input: {
-          ...input,
-          segments: input.segments ?? [],
-        },
-      },
-    })
-
-    if (data?.updateArticle?.article) {
-      return {
-        state: 'success',
-        message: `Článek "${data?.updateArticle.article.title}" úspěšně uložen.`,
-        fields: {},
-      }
-    }
-  }
-
-  Sentry.captureException(parsedInput.error)
-
-  return {
-    state: 'error',
-    message: parsedInput.error?.message ?? FormMessage.error.validation,
-    fields: {
-      ...parsedInput.data,
+export const updateArticle = new UpdateActionBuilder<
+  typeof schema,
+  AdminEditArticleMutationMutation,
+  AdminEditArticleMutationMutationVariables,
+  typeof adminEditArticleMutation
+>(schema)
+  .withMutation(adminEditArticleMutation, (id, data) => ({
+    id,
+    input: {
+      ...data,
+      segments: data.segments ?? [],
     },
-  }
-}
+  }))
+  .build()
 
 export async function updateArticleSingleStatement(
   articleId: string,
