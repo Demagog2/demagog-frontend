@@ -22,6 +22,7 @@ import { AdminFormContent } from '../admin/layout/AdminFormContent'
 import { AdminFormMain } from '../admin/layout/AdminFormMain'
 import { AdminBodySelect } from '../admin/sources/AdminBodySelect'
 import { dateInputFormat } from '@/libs/date-time'
+import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
 
 const AdminSpeakerFormFragment = gql(`
   fragment AdminSpeakerForm on Query {
@@ -89,7 +90,7 @@ export function AdminSpeakerForm(props: {
     },
   })
 
-  const { fields, append } = useFieldArray({
+  const { fields, append, remove } = useFieldArray({
     control,
     name: 'memberships',
   })
@@ -196,42 +197,76 @@ export function AdminSpeakerForm(props: {
                 <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
                   Příslušnost ke stranám/skupinám
                 </Legend>
+
+                <Label htmlFor="memberships">Strana/skupina</Label>
+
+                <button
+                  className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                  onClick={() =>
+                    append({
+                      bodyId: '',
+                      bodyName: '',
+                    })
+                  }
+                >
+                  <PlusCircleIcon
+                    aria-hidden="true"
+                    className="-ml-0.5 h-5 w-5"
+                  />
+                  Přidat stranu
+                </button>
                 <Field>
-                  <Label htmlFor="memberships">Strana/skupina</Label>
-
-                  <button
-                    onClick={() =>
-                      append({
-                        bodyId: '',
-                        bodyName: '',
-                      })
-                    }
-                  >
-                    Pridat stranu
-                  </button>
-
                   {fields.map((field, index) => (
-                    <div key={field.id}>
-                      <Controller
-                        control={control}
-                        name={`memberships.${index}.bodyId`}
-                        render={({ field }) => (
-                          <>
-                            <input type="hidden" {...field} />
-                            <AdminBodySelect
-                              id={`memberships.${index}.bodyId`}
-                              data={data}
-                              onChange={field.onChange}
-                              defaultValue={field.value}
-                            />
-                          </>
-                        )}
-                      />
+                    <div key={field.id} className="flex gap-4">
+                      <div className="flex flex-col flex-grow">
+                        <Label htmlFor="memberships">Strana/skupina</Label>
 
-                      <Input
-                        type="date"
-                        {...register(`memberships.${index}.since`)}
-                      />
+                        <Controller
+                          control={control}
+                          name={`memberships.${index}.bodyId`}
+                          render={({ field }) => (
+                            <>
+                              <input type="hidden" {...field} />
+                              <AdminBodySelect
+                                id={`memberships.${index}.bodyId`}
+                                data={data}
+                                onChange={field.onChange}
+                                defaultValue={field.value}
+                              />
+                            </>
+                          )}
+                        />
+                      </div>
+                      <div className="flex flex-col">
+                        <Label htmlFor="since" isOptional>
+                          Od
+                        </Label>
+                        <Input
+                          type="date"
+                          {...register(`memberships.${index}.since`)}
+                        />
+                      </div>
+                      <div
+                        className="flex flex-row 
+                      items-center gap-2"
+                      >
+                        <div className="flex flex-col">
+                          <Label htmlFor="until" isOptional>
+                            Do
+                          </Label>
+
+                          <Input
+                            type="date"
+                            className="mb-4"
+                            {...register(`memberships.${index}.until`)}
+                          />
+                        </div>
+                        <TrashIcon
+                          className="mt-4 h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer"
+                          onClick={() => remove(index)}
+                          title="Odstranit"
+                        />
+                      </div>
                     </div>
                   ))}
                 </Field>
