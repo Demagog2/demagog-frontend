@@ -264,7 +264,7 @@ export function AdminArticleForm(props: {
   )
 
   useEffect(() => {
-    if (isEmpty(errors)) {
+    if (!isEmpty(errors)) {
       Sentry.captureMessage('There were errors in the article form.', {
         level: 'warning',
         extra: {

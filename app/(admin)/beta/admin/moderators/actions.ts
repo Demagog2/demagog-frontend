@@ -76,7 +76,6 @@ const adminUpdateMediaPersonalityMutation = gql(`
   }
 `)
 
-// TODO: Use update moderator on the frontend
 export const updateModerator = new UpdateActionBuilder<
   typeof mediaPersonalitySchema,
   UpdateMediaPersonalityMutation,

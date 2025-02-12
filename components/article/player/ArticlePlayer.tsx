@@ -55,11 +55,11 @@ export function ArticlePlayer(props: {
         <ArticleFullscreenPlayer article={article} onClose={onClose} />
       )}
 
-      <div className="demagog-tv-player">
+      <div className="demagog-tv-player mt-md-7 mt-3">
         <div className="d-block">
           {article.illustration && (
             <img
-              className="w-100"
+              className="w-100 rounded-l"
               src={imagePath(article.illustration)}
               alt={`Ilustrační obrázek v výstupu ${article.title}`}
             />
