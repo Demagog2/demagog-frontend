@@ -92,7 +92,7 @@ export default async function AdminTags(props: PropsWithSearchParams) {
               return (
                 <tr key={node.id}>
                   <td>
-                    <a href={`/admin/tags/${node.id}`}>{node.name}</a>
+                    <a href={`/beta/admin/tags/${node.id}`}>{node.name}</a>
                   </td>
                   <td>
                     <AdminTagType statementType={node.forStatementType} />

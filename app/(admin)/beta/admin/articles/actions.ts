@@ -14,11 +14,8 @@ import {
   AdminArticleNewMutationV2MutationVariables,
   AdminEditArticleMutationMutation,
   AdminEditArticleMutationMutationVariables,
-  UpdateMediaPersonalityMutation,
-  UpdateMediaPersonalityMutationVariables,
 } from '@/__generated__/graphql'
 import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
-import { mediaPersonalitySchema } from '@/libs/media-personality/media-personality-schema'
 
 const adminCreateArticleMutation = gql(`
   mutation AdminArticleNewMutationV2($input: ArticleInput!) {

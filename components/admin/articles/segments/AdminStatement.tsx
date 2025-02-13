@@ -75,9 +75,11 @@ export function AdminStatement(props: {
 
         <VeracityBadge assessment={statement.assessment} />
 
-        <div className="text-sm text-gray-500">
-          {statement.assessment?.shortExplanation}
-        </div>
+        {statement.assessment.shortExplanation && (
+          <div className="text-sm text-gray-500">
+            {statement.assessment.shortExplanation}
+          </div>
+        )}
       </div>
     </div>
   )
