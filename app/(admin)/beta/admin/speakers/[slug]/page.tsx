@@ -131,7 +131,7 @@ export default async function AdminSpeakerDetail(props: {
                         <p className="font-semibold">Hlídač státu OsobaID:</p>
                         <p>{speaker.osobaId ?? 'Nevyplněno'}</p>
                       </div>
-                      <div>
+                      <div className="w-[60%]">
                         <p className="font-semibold">Respektovaný odkaz:</p>
                         {speaker.websiteUrl ? (
                           <a
