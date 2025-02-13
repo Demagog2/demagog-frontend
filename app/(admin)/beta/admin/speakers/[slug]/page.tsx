@@ -109,7 +109,7 @@ export default async function AdminSpeakerDetail(props: {
                       <img
                         alt={speaker.fullName}
                         src={imagePath(speaker.avatar)}
-                        className="h-full w-full rounded-full object-cover"
+                        className="w-auto h-auto object-contain rounded-full object-cover"
                       />
                     )}
                   </div>
@@ -131,7 +131,7 @@ export default async function AdminSpeakerDetail(props: {
                         <p className="font-semibold">Hlídač státu OsobaID:</p>
                         <p>{speaker.osobaId ?? 'Nevyplněno'}</p>
                       </div>
-                      <div className="w-[60%]">
+                      <div className="w-full lg:w-[80%]">
                         <p className="font-semibold">Respektovaný odkaz:</p>
                         {speaker.websiteUrl ? (
                           <a
@@ -148,7 +148,7 @@ export default async function AdminSpeakerDetail(props: {
                       </div>
 
                       {speaker.memberships && speaker.memberships.length > 0 ? (
-                        <table className="w-[60%] divide-y divide-gray-300 border-collapse border-spacing-0">
+                        <table className="w-full lg:w-[80%] divide-y divide-gray-300 border-collapse border-spacing-x-2">
                           <thead>
                             <tr className="border-b border-gray-300">
                               <th className="text-left py-2 font-semibold">
