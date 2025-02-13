@@ -14,11 +14,11 @@ const AuthorizationFragment = gql(`
 `)
 
 export function useAuthorization(
-  user: FragmentType<typeof AuthorizationFragment>
+  data: FragmentType<typeof AuthorizationFragment>
 ) {
   const {
     currentUser: { role, id },
-  } = useFragment(AuthorizationFragment, user)
+  } = useFragment(AuthorizationFragment, data)
 
   const isAuthorized = useCallback(
     (permissionsNeeded: string[]) => {

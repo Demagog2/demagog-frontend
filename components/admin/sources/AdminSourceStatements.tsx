@@ -7,6 +7,7 @@ import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
 import { AdminStatementAssessmentStats } from './statements/AdminStatementAssessmentStats'
 import AdminStatementDeleteDialog from './statements/AdminStatementDeleteDialog'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
+import { sortBy } from 'lodash'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -16,6 +17,7 @@ const SourceStatementsFragment = gql(`
       title
       commentsCount
       content
+      sourceOrder
       sourceSpeaker {
         fullName
         speaker {
@@ -64,7 +66,7 @@ export function AdminSourceStatements(props: {
         </h2>
 
         <div className="space-y-8">
-          {source.statements
+          {sortBy(source.statements, (statement) => statement.sourceOrder)
             .filter((statement) =>
               props.filteredStatementsIds.includes(statement.id)
             )

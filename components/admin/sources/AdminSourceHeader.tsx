@@ -61,7 +61,7 @@ export async function AdminSourceHeader(props: {
         )}
 
         {isBetaAdminStatementReorderingEnabled &&
-          isAuthorized(['statements:edit']) && (
+          isAuthorized(['statements:sort']) && (
             <a
               href={`/beta/admin/sources/${source.id}/statements/reorder`}
               className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
