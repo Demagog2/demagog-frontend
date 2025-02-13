@@ -5,6 +5,7 @@ import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { serverQuery } from '@/libs/apollo-client-server'
+import formatDate from '@/libs/format-date'
 import { imagePath } from '@/libs/images/path'
 import { getMetadataTitle } from '@/libs/metadata'
 import classNames from 'classnames'
@@ -89,7 +90,7 @@ export default async function AdminSpeakerDetail(props: {
             </div>
           </AdminPageHeader>
           <AdminPageContent>
-            <div className="border border-gray-200 bg-white shadow-sm rounded-2xl overflow-hidden">
+            <div className="border border-gray-200 bg-white shadow-sm rounded-2xl overflow-hidden text-sm">
               <div className="p-6 sm:p-8 lg:p-10">
                 <div className="flex flex-col gap-8 sm:flex-row">
                   {/* Avatar */}
@@ -117,33 +118,21 @@ export default async function AdminSpeakerDetail(props: {
                     <h3 className="text-2xl font-bold text-gray-800 mb-2">
                       {speaker.fullName}
                     </h3>
-                    <div className="space-y-4">
+                    <div className="space-y-6 text-gray-600">
                       <div>
-                        <p className="font-semibold text-gray-700">Funkce:</p>
-                        <p className="text-gray-600">
-                          {speaker.role ?? 'Nevyplněno'}
-                        </p>
+                        <p className="font-semibold">Funkce:</p>
+                        <p>{speaker.role ?? 'Nevyplněno'}</p>
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-700">
-                          Wikidata ID:
-                        </p>
-                        <p className="text-gray-600">
-                          {speaker.wikidataId ?? 'Nevyplněno'}
-                        </p>
+                        <p className="font-semibold">Wikidata ID:</p>
+                        <p>{speaker.wikidataId ?? 'Nevyplněno'}</p>
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-700">
-                          Hlídač státu OsobaID:
-                        </p>
-                        <p className="text-gray-600">
-                          {speaker.osobaId ?? 'Nevyplněno'}
-                        </p>
+                        <p className="font-semibold">Hlídač státu OsobaID:</p>
+                        <p>{speaker.osobaId ?? 'Nevyplněno'}</p>
                       </div>
                       <div>
-                        <p className="font-semibold text-gray-700">
-                          Respektovaný odkaz:
-                        </p>
+                        <p className="font-semibold">Respektovaný odkaz:</p>
                         {speaker.websiteUrl ? (
                           <a
                             href={speaker.websiteUrl}
@@ -154,37 +143,41 @@ export default async function AdminSpeakerDetail(props: {
                             {speaker.websiteUrl}
                           </a>
                         ) : (
-                          <p className="text-gray-600">Nevyplněno</p>
+                          <p>Nevyplněno</p>
                         )}
                       </div>
 
-                      {speaker.memberships &&
-                      speaker.memberships?.length > 0 ? (
-                        <div>
-                          <p className="font-semibold text-gray-700">
-                            Strana/skupina:
-                          </p>
-                          <ul className="space-y-2 text-gray-600">
+                      {speaker.memberships && speaker.memberships.length > 0 ? (
+                        <table className="w-[60%] divide-y divide-gray-300 border-collapse border-spacing-0">
+                          <thead>
+                            <tr className="border-b border-gray-300">
+                              <th className="text-left py-2 font-semibold">
+                                Strana / skupina
+                              </th>
+                              <th className="text-right py-2 font-semibold">
+                                Od / do
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-gray-200">
                             {speaker.memberships.map((membership) => (
-                              <li
-                                key={membership.id}
-                                className="border-b pb-2 flex items-center space-x-2"
-                              >
-                                <p>{membership.body.name}</p>
-                                {membership.since && (
-                                  <p className="text-sm text-gray-500">
-                                    Od: {membership.since}
-                                  </p>
-                                )}
-                                {membership.until && (
-                                  <p className="text-sm text-gray-500">
-                                    Do: {membership.until}
-                                  </p>
-                                )}
-                              </li>
+                              <tr key={membership.id}>
+                                <td className="py-1.5">
+                                  {membership.body.name}
+                                </td>
+                                <td className="py-1.5 text-right">
+                                  {membership.since
+                                    ? formatDate(membership.since)
+                                    : 'Nevyplněno'}{' '}
+                                  -{' '}
+                                  {membership.until
+                                    ? formatDate(membership.until)
+                                    : 'Nevyplněno'}
+                                </td>
+                              </tr>
                             ))}
-                          </ul>
-                        </div>
+                          </tbody>
+                        </table>
                       ) : (
                         <div>
                           <p className="font-semibold text-gray-700">
