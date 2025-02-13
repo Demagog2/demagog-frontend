@@ -17,6 +17,10 @@ export function VeracityBadge(props: {
 }) {
   const assessment = useFragment(VeracityBadgeFragment, props.assessment)
 
+  if (!assessment.veracity) {
+    return null
+  }
+
   return (
     <AdminBadge
       className={classNames(props.className, {
