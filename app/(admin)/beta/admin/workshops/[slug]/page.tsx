@@ -6,10 +6,7 @@ import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { serverQuery } from '@/libs/apollo-client-server'
-import formatDate from '@/libs/format-date'
-import { imagePath } from '@/libs/images/path'
 import { getMetadataTitle } from '@/libs/metadata'
-import classNames from 'classnames'
 import { notFound } from 'next/navigation'
 
 export async function generateMetadata(props: {
