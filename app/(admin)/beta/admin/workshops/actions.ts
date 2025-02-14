@@ -6,9 +6,11 @@ import {
   UpdateWorkshopMutation,
   UpdateWorkshopMutationVariables,
 } from '@/__generated__/graphql'
+import { serverMutation } from '@/libs/apollo-client-server'
 import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
 import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 import { workshopSchema } from '@/libs/workshops/workshop-schema'
+import { redirect } from 'next/navigation'
 
 const adminCreateWorkshopMutation = gql(`
   mutation CreateWorkshop($input: CreateWorkshopMutationInput!) {
@@ -72,3 +74,30 @@ export const updateWorkshop = new UpdateActionBuilder<
     },
   }))
   .build()
+
+const adminDeleteWorkshopMutation = gql(`
+      mutation AdminDeleteWorkshop($input: DeleteWorkshopMutationInput!) {
+        deleteWorkshop(input: $input) {
+          ... on DeleteWorkshopSuccess {
+              id
+          }
+          ... on DeleteWorkshopError {
+            message
+          }
+        }
+      }
+    `)
+
+export async function deleteWorkshop(workshopId: string) {
+  const { data } = await serverMutation({
+    mutation: adminDeleteWorkshopMutation,
+    variables: {
+      input: {
+        id: workshopId,
+      },
+    },
+  })
+
+  data?.deleteWorkshop?.__typename === 'DeleteWorkshopSuccess' &&
+    redirect(`/beta/admin/workshops`)
+}

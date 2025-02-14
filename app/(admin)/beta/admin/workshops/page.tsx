@@ -11,6 +11,7 @@ import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminSearch } from '@/components/admin/AdminSearch'
 import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 import { AdminPagination } from '@/components/admin/AdminPagination'
+import AdminWorkshopDeleteDialog from '@/components/admin/workshops/AdminWorkshopDeleteDialog'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Seznam workshopů', 'Administrace'),
@@ -29,6 +30,7 @@ export default async function AdminWorkshops(props: PropsWithSearchParams) {
             node {
               id
               name
+              ...AdminWorkshopDelete
             }
           }
           pageInfo {
@@ -84,6 +86,7 @@ export default async function AdminWorkshops(props: PropsWithSearchParams) {
                   >
                     Upravit
                   </a>
+                  <AdminWorkshopDeleteDialog workshop={edge.node} />
                 </td>
               </tr>
             )
