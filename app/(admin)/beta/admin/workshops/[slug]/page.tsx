@@ -71,7 +71,7 @@ export default async function AdminWorkshopDetail(props: {
             description="Detail workshopu"
           />
           <div className="flex items-center justify-end gap-x-6 flex-shrink-0">
-            <LinkButton href="/beta/admin/speakers">Zpět</LinkButton>
+            <LinkButton href="/beta/admin/workshops">Zpět</LinkButton>
             <LinkButton
               href={`/beta/admin/workshops/${props.params.slug}/edit`}
             >
