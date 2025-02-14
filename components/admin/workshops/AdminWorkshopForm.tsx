@@ -90,21 +90,23 @@ export function AdminWorkshopForm(props: {
             <Field>
               <Label htmlFor="description">Popis</Label>
               <Textarea
-                className="w-full"
+                className="w-full sm:text-sm text-gray-900 rounded-md shadow-sm w-full border-0 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
                 id="description"
                 {...register('description', { required: true })}
               />
               <ErrorMessage message={errors.description?.message} />
             </Field>
-
-            <Field>
-              <Label htmlFor="price">Cena</Label>
-              <Input
-                id="price"
-                type="number"
-                {...register('price', { required: true })}
-              />
-            </Field>
+            <div className="grid grid-cols-12 ">
+              <Field className="col-span-3">
+                <Label htmlFor="price">Cena</Label>
+                <Input
+                  id="price"
+                  type="number"
+                  {...register('price', { required: true })}
+                />
+                <ErrorMessage message={errors.price?.message} />
+              </Field>
+            </div>
           </Fieldset>
         </div>
       </AdminFormContent>

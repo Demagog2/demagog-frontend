@@ -3,8 +3,11 @@ import { gql } from '@/__generated__'
 import {
   CreateWorkshopMutation,
   CreateWorkshopMutationVariables,
+  UpdateWorkshopMutation,
+  UpdateWorkshopMutationVariables,
 } from '@/__generated__/graphql'
 import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 import { workshopSchema } from '@/libs/workshops/workshop-schema'
 
 const adminCreateWorkshopMutation = gql(`
@@ -39,4 +42,33 @@ export const createWorkshop = new CreateActionBuilder<
 
     return null
   })
+  .build()
+
+const adminUpdateWorkshopMutation = gql(`
+    mutation UpdateWorkshop($input: UpdateWorkshopMutationInput!) {
+      updateWorkshop(input: $input) {
+        ... on UpdateWorkshopSuccess {
+          workshop {
+            id
+          }
+        }
+        ... on UpdateWorkshopError {
+          message
+        }
+      }
+    }
+  `)
+
+export const updateWorkshop = new UpdateActionBuilder<
+  typeof workshopSchema,
+  UpdateWorkshopMutation,
+  UpdateWorkshopMutationVariables,
+  typeof adminUpdateWorkshopMutation
+>(workshopSchema)
+  .withMutation(adminUpdateWorkshopMutation, (id, data) => ({
+    input: {
+      id,
+      ...data,
+    },
+  }))
   .build()

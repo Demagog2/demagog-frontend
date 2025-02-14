@@ -6,7 +6,7 @@ export const workshopSchema = z.object({
     .string()
     .min(1, 'Popis workshopu musí mít alespoň jeden znak.'),
   price: z.preprocess(
-    (val) => (typeof val === 'string' ? parseFloat(val) : val), // Převod na číslo
-    z.number().min(0, 'Cena musí být alespoň 0.') // Validace, že je číslo a větší než 0
+    (val) => (typeof val === 'string' ? parseFloat(val) : val),
+    z.number().min(1, 'Cena musí být alespoň 1.')
   ),
 })
