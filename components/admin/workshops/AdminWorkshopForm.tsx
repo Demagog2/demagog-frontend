@@ -50,7 +50,7 @@ export function AdminWorkshopForm(props: {
     defaultValues: {
       name: workshop?.name ?? '',
       description: workshop?.description ?? '',
-      price: Number(workshop?.price) ?? '',
+      price: workshop ? workshop.price : 0,
       ...(state.state === 'initial' ? {} : state.fields),
     },
   })
