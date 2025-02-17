@@ -38,7 +38,7 @@ export default function AdminUserDelete(props: {
       onDelete={handleDeleteUser}
     >
       <TrashIcon
-        className="h-6 w-6 text-gray-400 hover:text-indigo-600"
+        className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer"
         onClick={() => dialogRef.current?.openDialog()}
         title="Odstranit"
       />
