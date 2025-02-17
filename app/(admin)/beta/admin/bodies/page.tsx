@@ -9,7 +9,7 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
-import { TrashIcon } from '@heroicons/react/24/outline'
+import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { Button } from '@headlessui/react'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { gql } from '@/__generated__'
@@ -104,9 +104,17 @@ export default async function Bodies(props: PropsWithSearchParams) {
                           <h3 className="text-base font-medium text-gray-900">
                             {edge.node.name}
                           </h3>
-                          <Button>
-                            <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
-                          </Button>
+                          <div className="flex space-x-3">
+                            <a
+                              href={`/beta/admin/bodies/${edge.node.id}/edit`}
+                              title="Upravit"
+                            >
+                              <PencilIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer" />
+                            </a>
+                            <Button>
+                              <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
+                            </Button>
+                          </div>
                         </div>
 
                         {edge.node.isParty ? (
