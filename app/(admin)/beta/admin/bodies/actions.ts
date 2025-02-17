@@ -6,7 +6,45 @@ import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 import {
   EditBodyMutation,
   EditBodyMutationVariables,
+  CreateBodyMutation,
+  CreateBodyMutationVariables,
 } from '@/__generated__/graphql'
+import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+
+const adminCreateBodyMutation = gql(`
+  mutation CreateBody($input: BodyInput!) {
+    createBody(bodyInput: $input) {
+      body {
+        id
+      }
+    }
+  }
+`)
+
+export const createBody = new CreateActionBuilder<
+  typeof schema,
+  CreateBodyMutation,
+  CreateBodyMutationVariables,
+  typeof adminCreateBodyMutation
+>(schema)
+  .withMutation(adminCreateBodyMutation, (data) => {
+    const { isParty = false, isInactive = false, ...rest } = data
+
+    return {
+      input: {
+        ...rest,
+        isParty,
+        isInactive,
+      },
+    }
+  })
+  .withRedirectUrl((data) => {
+    if (data?.createBody?.body) {
+      return `/beta/admin/bodies/${data?.createBody?.body.id}`
+    }
+    return null
+  })
+  .build()
 
 const adminEditBodyMutation = gql(`
     mutation EditBody($id: Int!, $bodyInput: BodyInput!) {
