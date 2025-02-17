@@ -10,6 +10,8 @@ import {
   CreateBodyMutationVariables,
 } from '@/__generated__/graphql'
 import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
+import { serverMutation } from '@/libs/apollo-client-server'
+import { redirect } from 'next/navigation'
 
 const adminCreateBodyMutation = gql(`
   mutation CreateBody($input: BodyInput!) {
@@ -75,3 +77,24 @@ export const editBody = new UpdateActionBuilder<
     }
   })
   .build()
+
+const adminDeleteBodyMutation = gql(`
+    mutation AdminDeleteBody($id: ID!) {
+      deleteBody(id: $id) {
+        id
+      }
+    }
+  `)
+
+export async function deleteBody(id: string) {
+  const { data } = await serverMutation({
+    mutation: adminDeleteBodyMutation,
+    variables: {
+      id,
+    },
+  })
+
+  if (data?.deleteBody?.id) {
+    redirect(`/beta/admin/bodies`)
+  }
+}
