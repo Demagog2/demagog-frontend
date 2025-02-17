@@ -3,6 +3,7 @@ import { PencilIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
 import { getBetaAdminStatementReorderingEnabled } from '@/libs/flags'
+import AdminSourceDeleteDialog from '@/components/admin/sources/AdminSourceDeleteDialog'
 
 const AdminSourceHeaderDataFragment = gql(`
   fragment AdminSourceHeaderData on Query {
@@ -14,6 +15,7 @@ const AdminSourceHeaderFragment = gql(`
   fragment AdminSourceHeader on Source {
     id
     name
+    ...AdminSourceDelete
   }
 `)
 
@@ -69,6 +71,10 @@ export async function AdminSourceHeader(props: {
               Seřadit výroky
             </a>
           )}
+
+        {isAuthorized(['sources:edit']) && (
+          <AdminSourceDeleteDialog source={source} />
+        )}
 
         <span className="hidden sm:block">
           <a
