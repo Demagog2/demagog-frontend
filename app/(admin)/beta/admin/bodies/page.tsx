@@ -15,6 +15,7 @@ import { buildGraphQLVariables } from '@/libs/pagination'
 import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import formatDate from '@/libs/format-date'
+import AdminBodyDelete from '@/components/admin/bodies/AdminBodyDeleteDialog'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Strany a skupiny', 'Administrace'),
@@ -38,6 +39,7 @@ export default async function Bodies(props: PropsWithSearchParams) {
               logo
               name
               terminatedAt
+              ...AdminBodyDelete
             }
           }
           pageInfo {
@@ -112,9 +114,7 @@ export default async function Bodies(props: PropsWithSearchParams) {
                             >
                               <PencilIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer" />
                             </a>
-                            <Button>
-                              <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
-                            </Button>
+                            <AdminBodyDelete body={edge.node} />
                           </div>
                         </div>
 
