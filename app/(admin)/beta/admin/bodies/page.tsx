@@ -37,6 +37,7 @@ export default async function Bodies(props: PropsWithSearchParams) {
               link
               logo
               name
+              terminatedAt
             }
           }
           pageInfo {
@@ -140,14 +141,30 @@ export default async function Bodies(props: PropsWithSearchParams) {
                             {edge.node.link}
                           </a>
                         )}
+                        <div className="flex gap-6">
+                          <div className="flex flex-col">
+                            <p className="mt-3 text-sm text-gray-500">Vznik:</p>
 
-                        <p className="mt-3 text-sm text-gray-500">Vznik:</p>
+                            <p className="text-sm text-gray-500">
+                              {!edge.node.foundedAt
+                                ? 'Nevyplněn'
+                                : formatDate(edge.node.foundedAt)}
+                            </p>
+                          </div>
+                          {edge.node.terminatedAt && (
+                            <div className="flex flex-col">
+                              <p className="mt-3 text-sm text-gray-500">
+                                Zánik:
+                              </p>
 
-                        <p className="text-sm text-gray-500">
-                          {!edge.node.foundedAt
-                            ? 'Nevyplněn'
-                            : formatDate(edge.node.foundedAt)}
-                        </p>
+                              <p className="text-sm text-gray-500">
+                                {!edge.node.terminatedAt
+                                  ? 'Nevyplněn'
+                                  : formatDate(edge.node.terminatedAt)}
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </div>
                     </div>
                   </div>
