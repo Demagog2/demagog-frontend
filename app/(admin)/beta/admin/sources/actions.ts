@@ -203,3 +203,24 @@ export async function deleteStatement(sourceId: string, statementId: string) {
     redirect(`/beta/admin/sources/${sourceId}`)
   }
 }
+
+const adminDeleteSourceMutation = gql(`
+  mutation AdminDeleteSource($id: ID!) {
+    deleteSource(id: $id) {
+      id
+    }
+  }
+`)
+
+export async function deleteSource(sourceId: string) {
+  const { data } = await serverMutation({
+    mutation: adminDeleteSourceMutation,
+    variables: {
+      id: sourceId,
+    },
+  })
+
+  if (data?.deleteSource?.id) {
+    redirect(`/beta/admin/sources`)
+  }
+}
