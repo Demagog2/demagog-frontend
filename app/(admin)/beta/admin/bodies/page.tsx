@@ -9,8 +9,7 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/outline'
-import { Button } from '@headlessui/react'
+import { PencilIcon } from '@heroicons/react/24/outline'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
@@ -82,31 +81,36 @@ export default async function Bodies(props: PropsWithSearchParams) {
                 <div className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
                   <div className="px-4 py-6 sm:px-6 lg:gap-x-8 lg:p-8">
                     <div className="sm:flex">
-                      <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
-                        {!edge.node.logo ? (
-                          <span className="inline-block overflow-hidden rounded-full bg-gray-100">
-                            <svg
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                              className="h-40 w-40 sm:h-full sm:w-full object-cover text-gray-300"
-                            >
-                              <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                          </span>
-                        ) : (
-                          <img
-                            alt="logo"
-                            src={edge.node.logo}
-                            className="h-40 w-40 object-contain object-center sm:h-full sm:w-full"
-                          />
-                        )}
-                      </div>
+                      <a href={`/beta/admin/bodies/${edge.node.id}`}>
+                        <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
+                          {!edge.node.logo ? (
+                            <span className="inline-block overflow-hidden rounded-full bg-gray-100">
+                              <svg
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                className="h-40 w-40 sm:h-full sm:w-full object-cover text-gray-300"
+                              >
+                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                              </svg>
+                            </span>
+                          ) : (
+                            <img
+                              alt="logo"
+                              src={edge.node.logo}
+                              className="h-40 w-40 object-contain object-center sm:h-full sm:w-full"
+                            />
+                          )}
+                        </div>
+                      </a>
 
                       <div className="flex-grow mt-6 sm:ml-8 sm:mt-0">
                         <div className="flex justify-between">
-                          <h3 className="text-base font-medium text-gray-900">
-                            {edge.node.name}
-                          </h3>
+                          <a href={`/beta/admin/bodies/${edge.node.id}`}>
+                            <h3 className="text-base font-medium text-gray-900">
+                              {edge.node.name}
+                            </h3>
+                          </a>
+
                           <div className="flex space-x-3">
                             <a
                               href={`/beta/admin/bodies/${edge.node.id}/edit`}
