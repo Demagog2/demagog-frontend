@@ -7,7 +7,6 @@ import { Inter } from 'next/font/google'
 import { gql } from '@/__generated__'
 import { query } from '@/libs/apollo-client'
 import { DefaultMetadata } from '@/libs/constants/metadata'
-import { Analytics } from '@vercel/analytics/react'
 
 // Invalidate pages after n seconds
 // See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
@@ -42,7 +41,6 @@ export default async function RootLayout({
         <Header data={data} />
         <main>{children}</main>
         <Footer />
-        <Analytics />
       </body>
     </html>
   )
