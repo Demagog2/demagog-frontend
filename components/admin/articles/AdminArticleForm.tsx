@@ -303,7 +303,11 @@ export function AdminArticleForm(props: {
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
-    <form action={formAction} onSubmit={handleSubmitForm}>
+    <form
+      action={formAction}
+      onSubmit={handleSubmitForm}
+      encType="multipart/form-data"
+    >
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
@@ -317,6 +321,8 @@ export function AdminArticleForm(props: {
 
         <AdminFormContent>
           <AdminFormMain className="gap-y-5 grid grid-cols-1">
+            <ErrorMessage message={errors.illustration?.message} />
+
             <Field>
               <Label htmlFor="title">Název článku</Label>
 
