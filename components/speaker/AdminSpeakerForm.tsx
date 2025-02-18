@@ -149,10 +149,10 @@ export function AdminSpeakerForm(props: {
                     {...register('role')}
                   />
                   <p className="mt-1 text-sm/6 text-gray-600">
-                    Současná funkce osoby, např. "Předseda vlády ČR" nebo
-                    "Ministryně práce a sociálních věcí". Pište s velkým
-                    písmenem na začátku. Funkce by neměla být delší než 40
-                    znaků.
+                    Současná funkce osoby, např. &quot;Předseda vlády ČR&qout;
+                    nebo &quot;Ministryně práce a sociálních věcí&quot;. Pište s
+                    velkým písmenem na začátku. Funkce by neměla být delší než
+                    40 znaků.
                   </p>
                 </Field>
                 <div className="grid grid-cols-2 gap-4">
@@ -165,8 +165,8 @@ export function AdminSpeakerForm(props: {
                       Používá se pro párování s jinými zdroji jako například
                       Hlídač státu, vyplňujte prosím. Wikidata ID získáte
                       najitím stránky politika na Wikipedii a kliknutím na
-                      "Položka Wikidat" vlevo. Je to ten kód začínající velkým Q
-                      a pokračující číslem, např. Q939539.
+                      &quot;Položka Wikidat&qout; vlevo. Je to ten kód
+                      začínající velkým Q a pokračující číslem, např. Q939539.
                     </p>
                   </Field>
                   <Field>
