@@ -111,7 +111,7 @@ export function AdminSourceForm(props: {
           lastName: sourceSpeaker.lastName,
           avatar: sourceSpeaker.speaker.avatar ?? undefined,
           bodyId: sourceSpeaker.body?.id,
-          role: sourceSpeaker.role ?? undefined,
+          role: sourceSpeaker.role ?? '',
         })) ?? [],
       releasedAt: dateInputFormat(
         source?.releasedAt ?? new Date().toISOString()
@@ -358,9 +358,10 @@ export function AdminSourceForm(props: {
                 <Label htmlFor="">Přidat řečníka</Label>
                 <AdminSpeakerSelect
                   data={data}
-                  onChange={({ id, ...speaker }) => {
+                  onChange={({ id, role, ...speaker }) => {
                     append({
                       speakerId: id,
+                      role: role ?? '',
                       ...speaker,
                     })
                   }}

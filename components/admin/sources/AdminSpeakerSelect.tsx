@@ -26,6 +26,7 @@ type SelectedValue = {
   firstName: string
   lastName: string
   avatar?: string
+  role?: string
 }
 
 export function AdminSpeakerSelect(props: {
@@ -44,6 +45,7 @@ export function AdminSpeakerSelect(props: {
           firstName: speaker.firstName,
           lastName: speaker.lastName,
           avatar: speaker.avatar ?? undefined,
+          role: speaker.role ?? '',
         },
         label: speaker.fullName,
       })) ?? []
