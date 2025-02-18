@@ -6,6 +6,7 @@ import { serverMutation } from '@/libs/apollo-client-server'
 import { FormMessage } from '@/libs/forms/form-message'
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { ApolloError } from '@apollo/client'
+import { omit } from 'lodash'
 
 export class UpdateActionBuilder<
   T extends ZodType,
@@ -17,6 +18,8 @@ export class UpdateActionBuilder<
 
   private variables?: (id: string, input: T['_output']) => V
 
+  private removedFormFields: Array<keyof T['_output']> = []
+
   constructor(private schema: T) {}
 
   withMutation(mutation: M, variables: (id: string, input: T['_output']) => V) {
@@ -24,6 +27,16 @@ export class UpdateActionBuilder<
     this.variables = variables
 
     return this
+  }
+
+  removeFormFields(...fields: Array<keyof T['_output']>) {
+    this.removedFormFields = fields
+
+    return this
+  }
+
+  getFormFields(data: T['_output']) {
+    return omit(data, this.removedFormFields)
   }
 
   build() {
@@ -48,9 +61,7 @@ export class UpdateActionBuilder<
             return {
               state: 'error',
               message: FormMessage.error.unknown,
-              fields: {
-                ...parsedInput.data,
-              },
+              fields: this.getFormFields(parsedInput.data),
             }
           }
         } catch (error) {
@@ -58,27 +69,21 @@ export class UpdateActionBuilder<
             return {
               state: 'error',
               message: error?.message,
-              fields: {
-                ...parsedInput.data,
-              },
+              fields: this.getFormFields(parsedInput.data),
             }
           }
 
           return {
             state: 'error',
             message: FormMessage.error.unknown,
-            fields: {
-              ...parsedInput.data,
-            },
+            fields: this.getFormFields(parsedInput.data),
           }
         }
 
         return {
           state: 'success',
           message: FormMessage.success,
-          fields: {
-            ...parsedInput.data,
-          },
+          fields: this.getFormFields(parsedInput.data),
         }
       }
 
