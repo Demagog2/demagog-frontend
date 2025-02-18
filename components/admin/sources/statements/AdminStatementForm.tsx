@@ -171,7 +171,9 @@ export function AdminStatementForm(props: {
               </Legend>
 
               <Field>
-                <Label htmlFor="statementType">Ověřovatel</Label>
+                <Label htmlFor="statementType" isOptional>
+                  Ověřovatel
+                </Label>
 
                 <Controller
                   control={control}
