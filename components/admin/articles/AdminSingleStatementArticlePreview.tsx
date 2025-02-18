@@ -1,6 +1,5 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import formatDate from '@/libs/format-date'
-import classNames from 'classnames'
 
 export const AdminSingleStatementArticlePreviewFragment = gql(`
     fragment AdminSingleStatementArticlePreview on SingleStatementArticle {
@@ -32,7 +31,6 @@ export const AdminSingleStatementArticlePreviewFragment = gql(`
 
 export function AdminSingleStatementArticlePreview(props: {
   article: FragmentType<typeof AdminSingleStatementArticlePreviewFragment>
-  isRedesign?: boolean
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
@@ -48,12 +46,7 @@ export function AdminSingleStatementArticlePreview(props: {
   const articlePath = `/vyroky/${article.statement?.id}`
 
   return (
-    <article
-      className={classNames(
-        'p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl clear-both',
-        { flex: props.isRedesign }
-      )}
-    >
+    <article className="p-6 max-w-screen-lg mt-8 bg-[#E5E7EA] rounded-3xl clear-both flex">
       <div className="flex flex-col md:flex-row items-start justify-center gap-4 lg:gap-8">
         <div className="w-full h-full md:w-5/12">
           <div className="w-full">
