@@ -1,9 +1,12 @@
+import { AdminWorkshopForm } from '@/components/admin/workshops/AdminWorkshopForm'
+import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
+import { createWorkshop } from '../actions'
 
 export const metadata: Metadata = {
-  title: 'Nový workshop',
+  title: getMetadataTitle('Nový workshop', 'Administrace'),
 }
 
-export default function NewWorkshop() {
-  return <div>Nový workshop</div>
+export default async function AdminWorkshopNew() {
+  return <AdminWorkshopForm action={createWorkshop} title="Nový workshop" />
 }

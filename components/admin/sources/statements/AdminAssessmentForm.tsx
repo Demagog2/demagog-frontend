@@ -736,7 +736,6 @@ function AdminAssessmentForm(props: {
                             ) {
                               return (
                                 <AdminArticleV2Preview
-                                  isRedesign={true}
                                   key={cursor}
                                   article={node.article}
                                 />

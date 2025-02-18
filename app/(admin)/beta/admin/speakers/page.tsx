@@ -9,12 +9,12 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
-import { TrashIcon } from '@heroicons/react/24/outline'
-import { Button } from '@headlessui/react'
 import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { imagePath } from '@/libs/images/path'
+import AdminSpeakerDelete from '@/components/speaker/AdminSpeakerDeleteDialog'
+import { PencilIcon } from '@heroicons/react/24/outline'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Lidé', 'Administrace'),
@@ -31,7 +31,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
         speakersV2(first: $first, last: $last, after: $after, before: $before, filter: { name: $term }) {
           edges {
             node {
-              avatar
+              avatar 
               body {
                 name
               }
@@ -48,6 +48,7 @@ export default async function Speakers(props: PropsWithSearchParams) {
               osobaId
               websiteUrl
               wikidataId
+              ...AdminSpeakerDelete
             }
           }
           pageInfo {
@@ -109,66 +110,72 @@ export default async function Speakers(props: PropsWithSearchParams) {
 
                       <div className="flex-grow mt-6 sm:ml-6 sm:mt-0 lg:ml-8">
                         <div className="flex justify-between">
-                          <h3 className="text-base font-medium text-gray-900">
-                            {edge.node.fullName}
-                          </h3>
-                          <Button>
-                            <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
-                          </Button>
-                        </div>
-
-                        <p className="mt-3 text-sm text-gray-500">
-                          Wikidata ID: {edge.node.wikidataId}
-                        </p>
-
-                        <p className="mt-3 text-sm text-gray-500">
-                          Hlídač státu OsobaID: {edge.node.osobaId}
-                        </p>
-                        <p className="mt-3 text-sm text-gray-500">
-                          Respektovaný odkaz:
-                        </p>
-                        {!edge.node.websiteUrl ? (
-                          <p className="text-sm text-gray-500">Nevyplněn</p>
-                        ) : (
-                          <a
-                            href={edge.node.websiteUrl}
-                            className="text-sm text-gray-500 hover:text-indigo-600"
-                          >
-                            {edge.node.websiteUrl}
+                          <a href={`/beta/admin/speakers/${edge.node.id}`}>
+                            <h3 className="text-base font-medium text-gray-900">
+                              {edge.node.fullName}
+                            </h3>
                           </a>
-                        )}
 
-                        <p className="mt-3 text-sm text-gray-500">
-                          Příslušnost ke skupinám/stranám:
-                        </p>
-
-                        {!edge.node.memberships?.length ? (
-                          <p className="text-sm text-gray-500">Nevyplněno</p>
-                        ) : (
-                          edge.node.memberships?.map((membership) => {
-                            return (
-                              <p
-                                key={membership.id}
-                                className="text-sm text-gray900"
+                          <div className="flex space-x-3">
+                            <a
+                              href={`/beta/admin/speakers/${edge.node.id}/edit`}
+                              title="Upravit"
+                            >
+                              <PencilIcon className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer" />
+                            </a>
+                            <AdminSpeakerDelete speaker={edge.node} />
+                          </div>
+                        </div>
+                        <div className="text-gray-600">
+                          <div className="flex flex-col mt-3 text-sm">
+                            <p>Wikidata ID:</p>
+                            <p>{edge.node.wikidataId ?? 'Nevyplněno'}</p>
+                          </div>
+                          <div className="flex flex-col mt-3 text-sm">
+                            <p>Hlídač státu OsobaID:</p>
+                            <p>{edge.node.osobaId ?? 'Nevyplněno'}</p>
+                          </div>
+                          <div className="flex flex-col mt-3 text-sm">
+                            <p>Respektovaný odkaz:</p>
+                            {!edge.node.websiteUrl ? (
+                              <p>Nevyplněno</p>
+                            ) : (
+                              <a
+                                href={edge.node.websiteUrl}
+                                className="text-sm hover:text-indigo-600"
                               >
-                                {membership.body.name} -{' '}
-                                <span>
-                                  od{' '}
-                                  {!membership.since
-                                    ? 'nevyplněno'
-                                    : membership.since}
-                                </span>
-                                <span>
-                                  {' '}
-                                  do{' '}
-                                  {!membership.until
-                                    ? 'nevyplněno'
-                                    : membership.until}
-                                </span>
-                              </p>
-                            )
-                          })
-                        )}
+                                {edge.node.websiteUrl}
+                              </a>
+                            )}
+                          </div>
+                          <div className="flex flex-col mt-3 text-sm">
+                            <p>Příslušnost ke stranám / skupinám:</p>
+                            {!edge.node.memberships?.length ? (
+                              <p>Nevyplněno</p>
+                            ) : (
+                              edge.node.memberships?.map((membership) => {
+                                return (
+                                  <p key={membership.id}>
+                                    {membership.body.name} -{' '}
+                                    <span>
+                                      od{' '}
+                                      {!membership.since
+                                        ? 'nevyplněno'
+                                        : membership.since}
+                                    </span>
+                                    <span>
+                                      {' '}
+                                      do{' '}
+                                      {!membership.until
+                                        ? 'nevyplněno'
+                                        : membership.until}
+                                    </span>
+                                  </p>
+                                )
+                              })
+                            )}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

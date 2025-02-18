@@ -10,17 +10,17 @@ export async function generateMetadata(props: {
   params: { slug: string }
 }): Promise<Metadata> {
   const {
-    data: { source },
+    data: { sourceV2: source },
   } = await serverQuery({
     query: gql(`
-      query AdminSourceMetadata($id: Int!) {
-        source(id: $id) {
+      query AdminSourceMetadata($id: ID!) {
+        sourceV2(id: $id) {
           name
         }
       }
     `),
     variables: {
-      id: parseInt(props.params.slug, 10),
+      id: props.params.slug,
     },
   })
 

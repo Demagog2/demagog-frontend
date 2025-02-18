@@ -100,6 +100,7 @@ export const updateArticle = new UpdateActionBuilder<
       segments: data.segments ?? [],
     },
   }))
+  .removeFormFields('illustration')
   .build()
 
 export async function updateArticleSingleStatement(

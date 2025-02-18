@@ -34,6 +34,9 @@ const AdminStatementFormFragment = gql(`
 const AdminStatementSourceDetailsFormFragment = gql(`
   fragment AdminStatementSourceDetailsForm on Source {
     id
+    sourceSpeakers {
+      id
+    }
     ...AdminSourceSpeakerSelect
   }
 `)
@@ -68,8 +71,9 @@ export function AdminStatementForm(props: {
     defaultValues: {
       statementType: 'factual',
       sourceId: source.id,
-      sourceSpeakerId: '',
+      sourceSpeakerId: source.sourceSpeakers?.[0]?.id ?? '',
       evaluatorId: '',
+
       ...(state.state === 'initial' ? {} : state.fields),
     },
   })
@@ -167,7 +171,9 @@ export function AdminStatementForm(props: {
               </Legend>
 
               <Field>
-                <Label htmlFor="statementType">Ověřovatel</Label>
+                <Label htmlFor="statementType" isOptional>
+                  Ověřovatel
+                </Label>
 
                 <Controller
                   control={control}
