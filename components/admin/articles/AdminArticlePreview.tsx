@@ -16,7 +16,6 @@ export const AdminArticleV2PreviewFragment = gql(`
 
 export function AdminArticleV2Preview(props: {
   article: FragmentType<typeof AdminArticleV2PreviewFragment>
-  isRedesign?: boolean
 }) {
   const article = useFragment(AdminArticleV2PreviewFragment, props.article)
 
@@ -26,16 +25,9 @@ export function AdminArticleV2Preview(props: {
 
   switch (article.__typename) {
     case 'SingleStatementArticle':
-      return (
-        <AdminSingleStatementArticlePreview
-          article={article}
-          isRedesign={props.isRedesign}
-        />
-      )
+      return <AdminSingleStatementArticlePreview article={article} />
     case 'Article':
-      return (
-        <AdminArticleItem article={article} isRedesign={props.isRedesign} />
-      )
+      return <AdminArticleItem article={article} />
     default:
       return null
   }

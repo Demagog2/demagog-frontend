@@ -49,7 +49,6 @@ const AdminArticleContentFragment = gql(`
 
 export function AdminArticleContent(props: {
   article: FragmentType<typeof AdminArticleContentFragment>
-  isRedesign?: boolean
 }) {
   const article = useFragment(AdminArticleContentFragment, props.article)
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
@@ -112,7 +111,6 @@ export function AdminArticleContent(props: {
                 if (node.__typename === 'ArticleNode' && node.article) {
                   return (
                     <AdminArticleV2Preview
-                      isRedesign={props.isRedesign}
                       key={cursor}
                       article={node.article}
                     />
