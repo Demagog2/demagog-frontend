@@ -8,7 +8,6 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import formatDate from '@/libs/format-date'
 import { imagePath } from '@/libs/images/path'
 import { getMetadataTitle } from '@/libs/metadata'
-import classNames from 'classnames'
 import { Metadata } from 'next'
 
 export async function generateMetadata(props: {

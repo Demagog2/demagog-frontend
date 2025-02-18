@@ -47,19 +47,19 @@ export const createWorkshop = new CreateActionBuilder<
   .build()
 
 const adminUpdateWorkshopMutation = gql(`
-    mutation UpdateWorkshop($input: UpdateWorkshopMutationInput!) {
-      updateWorkshop(input: $input) {
-        ... on UpdateWorkshopSuccess {
-          workshop {
-            id
-          }
-        }
-        ... on UpdateWorkshopError {
-          message
+  mutation UpdateWorkshop($input: UpdateWorkshopMutationInput!) {
+    updateWorkshop(input: $input) {
+      ... on UpdateWorkshopSuccess {
+        workshop {
+          id
         }
       }
+      ... on UpdateWorkshopError {
+        message
+      }
     }
-  `)
+  }
+`)
 
 export const updateWorkshop = new UpdateActionBuilder<
   typeof workshopSchema,
@@ -76,17 +76,17 @@ export const updateWorkshop = new UpdateActionBuilder<
   .build()
 
 const adminDeleteWorkshopMutation = gql(`
-      mutation AdminDeleteWorkshop($input: DeleteWorkshopMutationInput!) {
-        deleteWorkshop(input: $input) {
-          ... on DeleteWorkshopSuccess {
-              id
-          }
-          ... on DeleteWorkshopError {
-            message
-          }
-        }
+  mutation AdminDeleteWorkshop($input: DeleteWorkshopMutationInput!) {
+    deleteWorkshop(input: $input) {
+      ... on DeleteWorkshopSuccess {
+          id
       }
-    `)
+      ... on DeleteWorkshopError {
+        message
+      }
+    }
+  }
+`)
 
 export async function deleteWorkshop(workshopId: string) {
   const { data } = await serverMutation({
@@ -98,6 +98,7 @@ export async function deleteWorkshop(workshopId: string) {
     },
   })
 
-  data?.deleteWorkshop?.__typename === 'DeleteWorkshopSuccess' &&
+  if (data?.deleteWorkshop?.__typename === 'DeleteWorkshopSuccess') {
     redirect(`/beta/admin/workshops`)
+  }
 }
