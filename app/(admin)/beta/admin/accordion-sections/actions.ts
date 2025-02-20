@@ -8,7 +8,10 @@ import { redirect } from 'next/navigation'
 import {
   CreateAccordionSectionMutation,
   CreateAccordionSectionMutationVariables,
+  UpdateAccordionSectionMutation,
+  UpdateAccordionSectionMutationVariables,
 } from '@/__generated__/graphql'
+import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 
 const adminDeleteAccordionSectionMutation = gql(`
   mutation AdminDeleteAccordionSection($input: DeleteAccordionSectionMutationInput!) {
@@ -77,4 +80,33 @@ export const createAccordionSection = new CreateActionBuilder<
 
     return null
   })
+  .build()
+
+const adminUpdateAccordionSectionMutation = gql(`
+    mutation UpdateAccordionSection($input: UpdateAccordionSectionMutationInput!) {
+      updateAccordionSection(input: $input) {
+        ... on UpdateAccordionSectionSuccess {
+          accordionSection {
+            id
+          }
+        }
+        ... on UpdateAccordionSectionError {
+          message
+        }
+      }
+    }
+  `)
+
+export const updateAccordionSection = new UpdateActionBuilder<
+  typeof schema,
+  UpdateAccordionSectionMutation,
+  UpdateAccordionSectionMutationVariables,
+  typeof adminUpdateAccordionSectionMutation
+>(schema)
+  .withMutation(adminUpdateAccordionSectionMutation, (id, data) => ({
+    input: {
+      id,
+      ...data,
+    },
+  }))
   .build()

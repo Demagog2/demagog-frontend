@@ -1,9 +1,66 @@
 import { Metadata } from 'next'
+import { gql } from '@/__generated__'
+import { serverQuery } from '@/libs/apollo-client-server'
+import { getMetadataTitle } from '@/libs/metadata'
+import { notFound } from 'next/navigation'
+import { AdminAccordionSectionForm } from '@/components/admin/accordion-sections/AdminAccordionSectionForm'
+import { updateAccordionSection } from '../../actions'
 
-export const metadata: Metadata = {
-  title: 'Upravit sekci',
+export async function generateMetadata(props: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const {
+    data: { accordionSection },
+  } = await serverQuery({
+    query: gql(`
+      query AdminAccordionSectionEditMetadata($id: ID!) {
+        accordionSection(id: $id) {
+          title
+        }
+      }
+    `),
+    variables: {
+      id: props.params.slug,
+    },
+  })
+
+  return {
+    title: getMetadataTitle(
+      `Upravit sekci: ${accordionSection?.title}`,
+      'Administrace'
+    ),
+  }
 }
 
-export default function EditSection() {
-  return <div>Upravit sekci</div>
+const AdminAccordionSectionEditQuery = gql(`
+  query AdminAccordionSectionEdit($id: ID!) {
+    accordionSection(id: $id) {
+      id
+      title
+      ...AdminAccordionSectionData
+    }
+  }
+`)
+
+export default async function AdminAccordionSectionEdit(props: {
+  params: { slug: string }
+}) {
+  const { data } = await serverQuery({
+    query: AdminAccordionSectionEditQuery,
+    variables: {
+      id: props.params.slug,
+    },
+  })
+
+  if (!data.accordionSection) {
+    notFound()
+  }
+
+  return (
+    <AdminAccordionSectionForm
+      action={updateAccordionSection.bind(null, data.accordionSection.id)}
+      title={`Upravit sekci: ${data.accordionSection?.title}`}
+      accordionSection={data.accordionSection}
+    />
+  )
 }

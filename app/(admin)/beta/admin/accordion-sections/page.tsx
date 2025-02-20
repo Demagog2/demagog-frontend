@@ -86,7 +86,7 @@ export default async function AdminAccordionSection(
                     <td>
                       <a
                         title="Upravit"
-                        href={`beta/admin/accordion-sections/edit/${edge.node.id}`}
+                        href={`/beta/admin/accordion-sections/${edge.node.id}/edit`}
                         className="text-indigo-600 hover:text-indigo-900"
                       >
                         Upravit
