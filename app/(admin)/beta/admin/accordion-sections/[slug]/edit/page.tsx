@@ -5,6 +5,8 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { notFound } from 'next/navigation'
 import { AdminAccordionSectionForm } from '@/components/admin/accordion-sections/AdminAccordionSectionForm'
 import { updateAccordionSection } from '../../actions'
+import { Fieldset, Legend } from '@headlessui/react'
+import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -61,6 +63,8 @@ export default async function AdminAccordionSectionEdit(props: {
       action={updateAccordionSection.bind(null, data.accordionSection.id)}
       title={`Upravit sekci: ${data.accordionSection?.title}`}
       accordionSection={data.accordionSection}
+      isAccordionEdit
+      selectedId={data.accordionSection.id}
     />
   )
 }

@@ -24,6 +24,7 @@ import { Switch } from '../forms/Switch'
 import { AdminFormMain } from '../layout/AdminFormMain'
 import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
+import { PropsWithChildren } from 'react'
 
 const AdminAccordionSectionDataFragment = gql(`
   fragment AdminAccordionSectionData on AccordionSection {
@@ -40,6 +41,8 @@ export function AdminAccordionSectionForm(props: {
   title: string
   description?: string
   accordionSection?: FragmentType<typeof AdminAccordionSectionDataFragment>
+  isAccordionEdit?: boolean
+  selectedId?: string
 }) {
   const accordionSection = useFragment(
     AdminAccordionSectionDataFragment,
@@ -64,6 +67,8 @@ export function AdminAccordionSectionForm(props: {
   })
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
+
+  console.log(props.selectedId)
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
@@ -98,18 +103,27 @@ export function AdminAccordionSectionForm(props: {
               <ErrorMessage message={errors.title?.message} />
             </Field>
           </Fieldset>
-          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-            <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-              Položky sekce
-            </Legend>
-            <button
-              type="button"
-              className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-            >
-              <PlusCircleIcon aria-hidden="true" className="-ml-0.5 h-5 w-5" />
-              Přidat položku sekce
-            </button>
-          </Fieldset>
+          {props.isAccordionEdit && (
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+                Položky sekce
+              </Legend>
+              <a
+                href={`/beta/admin/accordion-sections/${props.selectedId}/items/new`}
+              >
+                <button
+                  type="button"
+                  className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                >
+                  <PlusCircleIcon
+                    aria-hidden="true"
+                    className="-ml-0.5 h-5 w-5"
+                  />
+                  Přidat položku sekce
+                </button>
+              </a>
+            </Fieldset>
+          )}
         </AdminFormMain>
         <AdminFormSidebar>
           <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
