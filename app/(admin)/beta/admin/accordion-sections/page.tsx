@@ -1,23 +1,33 @@
 import { gql } from '@/__generated__'
-import AdminAccordionSectionDeleteDialog from '@/components/admin/accordion-section/AdminAccordionSectionDeleteDialog'
+import AdminAccordionSectionDeleteDialog from '@/components/admin/accordion-sections/AdminAccordionSectionDeleteDialog'
+import { AdminPagination } from '@/components/admin/AdminPagination'
+import { AdminSearch } from '@/components/admin/AdminSearch'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
+import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
-import { ChatBubbleLeftIcon } from '@heroicons/react/24/outline'
+import { buildGraphQLVariables } from '@/libs/pagination'
+import { PropsWithSearchParams } from '@/libs/params'
+import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: getMetadataTitle('Správa stránky o nás', 'Administrace'),
+  title: getMetadataTitle('O nás', 'Administrace'),
 }
 
-export default async function AdminAccordionSection() {
+export default async function AdminAccordionSection(
+  props: PropsWithSearchParams
+) {
+  const before: string | null = getStringParam(props.searchParams.before)
+  const after: string | null = getStringParam(props.searchParams.after)
+
   const { data } = await serverQuery({
     query: gql(` 
-    query AdminAccordionSection {
-      accordionSections {
+    query AdminAccordionSection($first: Int, $last: Int, $after: String, $before: String) {
+      accordionSections(first: $first, last: $last, after: $after, before: $before) {
         edges {
           node {
             title
@@ -26,9 +36,15 @@ export default async function AdminAccordionSection() {
             ...AdminAccordionSectionDeleteDialog
           }
         }  
+        pageInfo {
+          ...AdminPagination
+        }
       }
     }
   `),
+    variables: {
+      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
+    },
   })
 
   return (
@@ -36,6 +52,13 @@ export default async function AdminAccordionSection() {
       <AdminPage>
         <AdminPageHeader>
           <AdminPageTitle title="O nás" description="Správa stránky o nás" />
+          <div className="sm:flex">
+            <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
+              <CreateButton href={'/beta/admin/accordion-sections/new'}>
+                Přidat sekci
+              </CreateButton>
+            </div>
+          </div>
         </AdminPageHeader>
         <AdminPageContent>
           <table className="admin-content-table">
@@ -78,6 +101,7 @@ export default async function AdminAccordionSection() {
             </tbody>
           </table>
         </AdminPageContent>
+        <AdminPagination pageInfo={data.accordionSections.pageInfo} />
       </AdminPage>
     </>
   )
