@@ -1,7 +1,6 @@
 import { gql } from '@/__generated__'
 import AdminAccordionSectionDeleteDialog from '@/components/admin/accordion-sections/AdminAccordionSectionDeleteDialog'
 import { AdminPagination } from '@/components/admin/AdminPagination'
-import { AdminSearch } from '@/components/admin/AdminSearch'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'

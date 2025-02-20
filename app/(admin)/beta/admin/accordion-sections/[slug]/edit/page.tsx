@@ -5,8 +5,6 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { notFound } from 'next/navigation'
 import { AdminAccordionSectionForm } from '@/components/admin/accordion-sections/AdminAccordionSectionForm'
 import { updateAccordionSection } from '../../actions'
-import { Fieldset, Legend } from '@headlessui/react'
-import { PlusCircleIcon } from '@heroicons/react/24/outline'
 
 export async function generateMetadata(props: {
   params: { slug: string }
