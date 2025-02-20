@@ -1,3 +1,3 @@
 export default function AccordionItemPage() {
-  return <p>Fungujuuu </p>
+  return <p>Accordion Item Page </p>
 }

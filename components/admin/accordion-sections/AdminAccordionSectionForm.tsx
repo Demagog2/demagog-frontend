@@ -24,10 +24,10 @@ import { Switch } from '../forms/Switch'
 import { AdminFormMain } from '../layout/AdminFormMain'
 import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
-import { PropsWithChildren } from 'react'
 
 const AdminAccordionSectionDataFragment = gql(`
   fragment AdminAccordionSectionData on AccordionSection {
+    id
     title
     order
     published
@@ -41,8 +41,6 @@ export function AdminAccordionSectionForm(props: {
   title: string
   description?: string
   accordionSection?: FragmentType<typeof AdminAccordionSectionDataFragment>
-  isAccordionEdit?: boolean
-  selectedId?: string
 }) {
   const accordionSection = useFragment(
     AdminAccordionSectionDataFragment,
@@ -67,9 +65,6 @@ export function AdminAccordionSectionForm(props: {
   })
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
-
-  console.log(props.selectedId)
-
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
       <AdminPageHeader>
@@ -103,13 +98,13 @@ export function AdminAccordionSectionForm(props: {
               <ErrorMessage message={errors.title?.message} />
             </Field>
           </Fieldset>
-          {props.isAccordionEdit && (
+          {accordionSection && (
             <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
               <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
                 Položky sekce
               </Legend>
               <a
-                href={`/beta/admin/accordion-sections/${props.selectedId}/items/new`}
+                href={`/beta/admin/accordion-sections/${accordionSection?.id}/items/new`}
               >
                 <button
                   type="button"

@@ -61,8 +61,6 @@ export default async function AdminAccordionSectionEdit(props: {
       action={updateAccordionSection.bind(null, data.accordionSection.id)}
       title={`Upravit sekci: ${data.accordionSection?.title}`}
       accordionSection={data.accordionSection}
-      isAccordionEdit
-      selectedId={data.accordionSection.id}
     />
   )
 }
