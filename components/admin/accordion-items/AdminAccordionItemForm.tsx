@@ -71,6 +71,7 @@ export function AdminAccordionItemForm(props: {
       order: accordionItem?.order ?? 0,
       published: accordionItem?.published ?? false,
       memberListing: accordionItem?.memberListing ?? false,
+      accordionSectionId: props.sectionId,
     },
   })
 
@@ -78,11 +79,12 @@ export function AdminAccordionItemForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
+      <input type="hidden" {...register('accordionSectionId')} />
       <AdminPageHeader>
         <AdminPageTitle title={props.title} description={props.description} />
         <AdminFormActions>
           <LinkButton
-            href={`/beta/admin/accordion-sections/edit/${props.sectionId}`}
+            href={`/beta/admin/accordion-sections/${props.sectionId}/edit/`}
             className="btn h-50px fs-6 s-back-link"
           >
             Zpět
@@ -149,11 +151,7 @@ export function AdminAccordionItemForm(props: {
               </Label>
               <Input id="order" type="number" {...register('order')} />
             </Field>
-            <SwitchField
-              htmlFor="published"
-              label="Zveřejněný tag"
-              description="Tag bude veřejně dostupný."
-            >
+            <SwitchField htmlFor="published" label="Zveřejněná položka">
               <Controller
                 name="published"
                 control={control}
@@ -169,11 +167,7 @@ export function AdminAccordionItemForm(props: {
                 )}
               />
             </SwitchField>
-            <SwitchField
-              htmlFor="memberListing"
-              label="Obsahuje seznam členů"
-              description="Obsahuje seznam členů"
-            >
+            <SwitchField htmlFor="memberListing" label="Obsahuje seznam členů">
               <Controller
                 name="memberListing"
                 control={control}

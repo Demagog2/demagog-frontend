@@ -124,6 +124,9 @@ const adminCreateAccordionItemMutation = gql(`
         ... on CreateAccordionItemSuccess {
           accordionItem {
             id
+            accordionSection {
+              id
+            }
           }
         }
         ... on CreateAccordionItemError {
@@ -143,14 +146,11 @@ export const createAccordionItem = new CreateActionBuilder<
     input: {
       ...data,
       order: data.order ? Number(data.order) : undefined,
-      memberListing: data.memberListing
-        ? Number(data.memberListing)
-        : undefined,
     },
   }))
   .withRedirectUrl((data) => {
     if (data.createAccordionItem?.__typename === 'CreateAccordionItemSuccess') {
-      return `/beta/admin/accordion-sections/${data.createAccordionItem.accordionItem.id}`
+      return `/beta/admin/accordion-sections/${data.createAccordionItem.accordionItem.accordionSection?.id}`
     }
 
     return null

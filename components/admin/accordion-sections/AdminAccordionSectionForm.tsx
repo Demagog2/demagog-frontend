@@ -24,6 +24,7 @@ import { Switch } from '../forms/Switch'
 import { AdminFormMain } from '../layout/AdminFormMain'
 import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
+import AdminAccordionItems from '../accordion-items/AdminAccordionItems'
 
 const AdminAccordionSectionDataFragment = gql(`
   fragment AdminAccordionSectionData on AccordionSection {
@@ -31,6 +32,7 @@ const AdminAccordionSectionDataFragment = gql(`
     title
     order
     published
+    ...AdminAccordionItems
   } 
 `)
 
@@ -103,6 +105,7 @@ export function AdminAccordionSectionForm(props: {
                 <label className="block text-sm font-medium leading-6 text-gray-900">
                   Položky sekce
                 </label>
+                <AdminAccordionItems accordionItem={accordionSection} />
                 <a
                   href={`/beta/admin/accordion-sections/${accordionSection?.id}/items/new`}
                 >
@@ -133,11 +136,7 @@ export function AdminAccordionSectionForm(props: {
 
               <Input id="order" type="number" {...register('order')} />
             </Field>
-            <SwitchField
-              htmlFor="published"
-              label="Zveřejněný tag"
-              description="Tag bude veřejně dostupný."
-            >
+            <SwitchField htmlFor="published" label="Zveřejněná sekce">
               <Controller
                 name="published"
                 control={control}
