@@ -18,7 +18,7 @@ import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { AdminFormContent } from '../layout/AdminFormContent'
 import { Field, Fieldset, Legend } from '@headlessui/react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { schema } from '@/libs/accordion-section/schema'
+import { accordionSectionSchema } from '@/libs/accordion-section/schema'
 import { SwitchField } from '../forms/SwitchField'
 import { Switch } from '../forms/Switch'
 import { AdminFormMain } from '../layout/AdminFormMain'
@@ -34,7 +34,7 @@ const AdminAccordionSectionDataFragment = gql(`
   } 
 `)
 
-type FieldValues = z.output<typeof schema>
+type FieldValues = z.output<typeof accordionSectionSchema>
 
 export function AdminAccordionSectionForm(props: {
   action: FormAction
@@ -56,7 +56,7 @@ export function AdminAccordionSectionForm(props: {
     control,
     formState: { errors, isValid },
   } = useForm<FieldValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(accordionSectionSchema),
     defaultValues: {
       title: accordionSection?.title ?? '',
       order: accordionSection?.order ?? 0,
@@ -97,28 +97,29 @@ export function AdminAccordionSectionForm(props: {
 
               <ErrorMessage message={errors.title?.message} />
             </Field>
-          </Fieldset>
-          {accordionSection && (
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                Položky sekce
-              </Legend>
-              <a
-                href={`/beta/admin/accordion-sections/${accordionSection?.id}/items/new`}
-              >
-                <button
-                  type="button"
-                  className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+
+            {accordionSection && (
+              <>
+                <label className="block text-sm font-medium leading-6 text-gray-900">
+                  Položky sekce
+                </label>
+                <a
+                  href={`/beta/admin/accordion-sections/${accordionSection?.id}/items/new`}
                 >
-                  <PlusCircleIcon
-                    aria-hidden="true"
-                    className="-ml-0.5 h-5 w-5"
-                  />
-                  Přidat položku sekce
-                </button>
-              </a>
-            </Fieldset>
-          )}
+                  <button
+                    type="button"
+                    className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mt-2"
+                  >
+                    <PlusCircleIcon
+                      aria-hidden="true"
+                      className="-ml-0.5 h-5 w-5"
+                    />
+                    Přidat položku sekce
+                  </button>
+                </a>
+              </>
+            )}
+          </Fieldset>
         </AdminFormMain>
         <AdminFormSidebar>
           <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
