@@ -1,7 +1,10 @@
 'use server'
 
 import { gql } from '@/__generated__'
-import { schema } from '@/libs/accordion-section/schema'
+import {
+  accordionItemSchema,
+  accordionSectionSchema,
+} from '@/libs/accordion-section/schema'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
 import { redirect } from 'next/navigation'
@@ -10,6 +13,10 @@ import {
   CreateAccordionSectionMutationVariables,
   UpdateAccordionSectionMutation,
   UpdateAccordionSectionMutationVariables,
+  UpdateAccordionItemMutation,
+  UpdateAccordionItemMutationVariables,
+  CreateAccordionItemMutation,
+  CreateAccordionItemMutationVariables,
 } from '@/__generated__/graphql'
 import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 
@@ -59,11 +66,11 @@ const adminCreateAccordionSectionMutation = gql(`
 `)
 
 export const createAccordionSection = new CreateActionBuilder<
-  typeof schema,
+  typeof accordionSectionSchema,
   CreateAccordionSectionMutation,
   CreateAccordionSectionMutationVariables,
   typeof adminCreateAccordionSectionMutation
->(schema)
+>(accordionSectionSchema)
   .withMutation(adminCreateAccordionSectionMutation, (data) => ({
     input: {
       ...data,
@@ -98,12 +105,80 @@ const adminUpdateAccordionSectionMutation = gql(`
   `)
 
 export const updateAccordionSection = new UpdateActionBuilder<
-  typeof schema,
+  typeof accordionSectionSchema,
   UpdateAccordionSectionMutation,
   UpdateAccordionSectionMutationVariables,
   typeof adminUpdateAccordionSectionMutation
->(schema)
+>(accordionSectionSchema)
   .withMutation(adminUpdateAccordionSectionMutation, (id, data) => ({
+    input: {
+      id,
+      ...data,
+    },
+  }))
+  .build()
+
+const adminCreateAccordionItemMutation = gql(`
+    mutation CreateAccordionItem($input: CreateAccordionItemMutationInput!) {
+      createAccordionItem(input: $input) {
+        ... on CreateAccordionItemSuccess {
+          accordionItem {
+            id
+          }
+        }
+        ... on CreateAccordionItemError {
+          message
+        }
+      }
+    }
+  `)
+
+export const createAccordionItem = new CreateActionBuilder<
+  typeof accordionItemSchema,
+  CreateAccordionItemMutation,
+  CreateAccordionItemMutationVariables,
+  typeof adminCreateAccordionItemMutation
+>(accordionItemSchema)
+  .withMutation(adminCreateAccordionItemMutation, (data) => ({
+    input: {
+      ...data,
+      order: data.order ? Number(data.order) : undefined,
+      memberListing: data.memberListing
+        ? Number(data.memberListing)
+        : undefined,
+    },
+  }))
+  .withRedirectUrl((data) => {
+    if (data.createAccordionItem?.__typename === 'CreateAccordionItemSuccess') {
+      return `/beta/admin/accordion-sections/${data.createAccordionItem.accordionItem.id}`
+    }
+
+    return null
+  })
+  .build()
+
+const adminUpdateAccordionItemMutation = gql(`
+  mutation UpdateAccordionItem($input: UpdateAccordionItemMutationInput!) {
+    updateAccordionItem(input: $input) {
+      ... on UpdateAccordionItemSuccess {
+        accordionItem {
+          id
+        }
+      }
+      ... on UpdateAccordionItemError {
+        message
+      }
+    } 
+  }
+`)
+
+export const updateAccordionItem = new UpdateActionBuilder<
+  typeof accordionItemSchema,
+  UpdateAccordionItemMutation,
+  UpdateAccordionItemMutationVariables,
+  typeof adminUpdateAccordionItemMutation
+>(accordionItemSchema)
+  .withMutation(adminUpdateAccordionItemMutation, (id, data) => ({
     input: {
       id,
       ...data,
