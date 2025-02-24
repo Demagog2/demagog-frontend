@@ -150,7 +150,7 @@ export const createAccordionItem = new CreateActionBuilder<
   }))
   .withRedirectUrl((data) => {
     if (data.createAccordionItem?.__typename === 'CreateAccordionItemSuccess') {
-      return `/beta/admin/accordion-sections/${data.createAccordionItem.accordionItem.accordionSection?.id}`
+      return `/beta/admin/accordion-sections/${data.createAccordionItem.accordionItem.accordionSection?.id}/edit`
     }
 
     return null
@@ -185,3 +185,34 @@ export const updateAccordionItem = new UpdateActionBuilder<
     },
   }))
   .build()
+
+const adminDeleteAccordionItemMutation = gql(`
+    mutation AdminDeleteAccordionItem($input: DeleteAccordionItemMutationInput!){
+      deleteAccordionItem(input: $input) {
+        ... on DeleteAccordionItemSuccess {
+          id
+        } 
+        ... on DeleteAccordionItemError {
+          message
+        }
+      }
+    }
+  `)
+
+export async function deleteAccordionItem(
+  accordionItemId: string,
+  accordionSectionId: string
+) {
+  const { data } = await serverMutation({
+    mutation: adminDeleteAccordionItemMutation,
+    variables: {
+      input: {
+        id: accordionItemId,
+      },
+    },
+  })
+
+  if (data?.deleteAccordionItem?.__typename === 'DeleteAccordionItemSuccess') {
+    redirect(`/beta/admin/accordion-sections/${accordionSectionId}/edit`)
+  }
+}
