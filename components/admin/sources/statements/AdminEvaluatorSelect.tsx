@@ -34,7 +34,7 @@ export function AdminEvaluatorSelector(props: {
   }, [data])
 
   const handleChange = useCallback(
-    (item: { value: string } | null) => item && onChange(item.value),
+    (item: { value: string } | null) => onChange(item?.value ?? ''),
     [onChange]
   )
 
@@ -45,6 +45,7 @@ export function AdminEvaluatorSelector(props: {
       onChange={handleChange}
       defaultValue={props.defaultValue}
       disabled={props.disabled}
+      canRemoveItem
       placeholder="Vyberte ověřovatele"
     />
   )

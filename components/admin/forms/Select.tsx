@@ -7,7 +7,12 @@ import {
   ComboboxOption,
   ComboboxOptions,
 } from '@headlessui/react'
-import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid'
+import {
+  CheckIcon,
+  ChevronUpDownIcon,
+  XMarkIcon,
+} from '@heroicons/react/20/solid'
+
 import { useCallback, useState } from 'react'
 
 export type Item<T = string> = {
@@ -21,7 +26,8 @@ export function Select<T>(props: {
   disabled?: boolean
   defaultValue?: T
   placeholder?: string
-  onChange(item: Item<T>): void
+  canRemoveItem?: boolean
+  onChange(item: Item<T> | null): void
 }) {
   const { onChange } = props
 
@@ -38,7 +44,7 @@ export function Select<T>(props: {
         )
 
   const handleChange = useCallback(
-    (item: Item<T>) => {
+    (item: Item<T> | null) => {
       setQuery('')
       onChange(item)
       setSelectedItem(item)
@@ -63,6 +69,15 @@ export function Select<T>(props: {
           placeholder={props.placeholder}
           disabled={props.disabled}
         />
+
+        {selectedItem && !props.disabled && props.canRemoveItem && (
+          <XMarkIcon
+            className="size-5 absolute right-7 top-2 text-gray-400"
+            cursor="pointer"
+            onClick={() => handleChange(null)}
+          />
+        )}
+
         <ComboboxButton
           disabled={props.disabled}
           className="absolute inset-y-0 right-0 flex items-center rounded-r-md px-2 focus:outline-none"
