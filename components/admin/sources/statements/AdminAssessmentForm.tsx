@@ -868,6 +868,8 @@ function AdminAssessmentForm(props: {
                     </>
                   )}
                 />
+
+                <ErrorMessage message={errors.evaluatorId?.message} />
               </Field>
             </Fieldset>
 
