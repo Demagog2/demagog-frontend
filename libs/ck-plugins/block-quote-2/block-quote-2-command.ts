@@ -37,9 +37,10 @@ export class BlockQuoteWithSpeakerCommmand extends Command {
    * @param options.speakerId If set, block quote will be created with data-speaker-id attribute.
    * @param options.link If set, block quote will be created with data-link attribute.
    * @param options.media If set, block quote will be created with data-media attribute.
+   * @param options.quotedAt If set, block quote will be created with data-quoted-at attribute.
    */
   public override execute(
-    options: { forceValue?: boolean; speakerId?: string; link?: string; media?: string } = {}
+    options: { forceValue?: boolean; speakerId?: string; link?: string; media?: string; quotedAt?: string } = {}
   ): void {
     const model = this.editor.model
     const selection = model.document.selection
@@ -62,6 +63,7 @@ export class BlockQuoteWithSpeakerCommmand extends Command {
             ...(options.speakerId ? { speakerId: options.speakerId } : {}),
             ...(options.link ? { link: options.link } : {}),
             ...(options.media ? { media: options.media } : {}),
+            ...(options.quotedAt ? { quotedAt: options.quotedAt } : {}),
           }
         )
       }

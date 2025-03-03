@@ -2,6 +2,7 @@ import { Plugin, Enter, Delete } from 'ckeditor5'
 import { BlockQuoteWithSpeakerCommmand as BlockQuoteWithSpeakerCommmand } from './block-quote-2-command'
 import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
+import { displayDate } from '@/libs/date-time'
 
 export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
   /**
@@ -40,7 +41,7 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
 
     schema.register('blockQuoteWithSpeaker', {
       inheritAllFrom: '$container',
-      allowAttributes: ['speakerId', 'link', 'media'],
+      allowAttributes: ['speakerId', 'link', 'media', 'quotedAt'],
     })
 
     // View -> Model
@@ -56,8 +57,9 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
 
           const speakerId = domElement.dataset.speakerId
           const media = domElement.dataset.media
+          const quotedAt = domElement.dataset.quotedAt
 
-          return writer.createElement('blockQuoteWithSpeaker', { speakerId, media })
+          return writer.createElement('blockQuoteWithSpeaker', { speakerId, media, quotedAt })
         },
       })
 
@@ -68,11 +70,13 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
         const speakerId = modelElement.getAttribute('speakerId')
         const media = modelElement.getAttribute('media')
         const link = modelElement.getAttribute('link')
+        const quotedAt = modelElement.getAttribute('quotedAt')
 
         return writer.createContainerElement('blockquote', {
           'data-speaker-id': speakerId,
           ...(media ? { 'data-media': media } : {}),
           ...(link ? { 'data-link': link } : {}),
+          ...(quotedAt ? { 'data-quoted-at': quotedAt } : {}),
         })
       },
     })
@@ -84,21 +88,27 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
         const speakerId = modelElement.getAttribute('speakerId')
         const link = modelElement.getAttribute('link')
         const media = modelElement.getAttribute('media')
+        const quotedAt = modelElement.getAttribute('quotedAt') as string | undefined
 
         if (!speakerId) {
           const container = writer.createContainerElement('blockquote', { cite: link })
 
-          if (link || media) {
+          if (link || media || quotedAt) {
             const quoteMetadata = writer.createUIElement(
               'span',
               { class: 'blockquote-author' },
               function (domDocument) {
                 const domElement = this.toDomElement(domDocument)
+                let content = '— '
                 if (link) {
-                  domElement.innerHTML = `— <a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
+                  content += `<a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
                 } else if (media) {
-                  domElement.innerHTML = `— ${media}`
+                  content += media
                 }
+                if (quotedAt) {
+                  content += ` (${displayDate(quotedAt)})`
+                }
+                domElement.innerHTML = content
                 return domElement
               }
             )
@@ -116,6 +126,7 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
           'data-speaker-id': speakerId,
           'data-link': link,
           ...(media ? { 'data-media': media } : {}),
+          ...(quotedAt ? { 'data-quoted-at': quotedAt } : {}),
         })
 
         const authorElement = writer.createUIElement(
@@ -152,12 +163,16 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
                 { class: 'blockquote-author' },
                 function (domDocument) {
                   const domElement = this.toDomElement(domDocument)
-                  domElement.innerHTML = `— ${payload.data.speakerV2?.fullName}`
+                  let content = `— ${payload.data.speakerV2?.fullName}`
                   if (link) {
-                    domElement.innerHTML += `, <a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
+                    content += `, <a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
                   } else if (media) {
-                    domElement.innerHTML += `, ${media}`
+                    content += `, ${media}`
                   }
+                  if (quotedAt) {
+                    content += ` (${displayDate(quotedAt)})`
+                  }
+                  domElement.innerHTML = content
                   return domElement
                 }
               )
