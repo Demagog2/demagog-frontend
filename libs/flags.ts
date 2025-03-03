@@ -13,3 +13,10 @@ export const getBetaAdminStatementBulkPublishingEnabled = flag<boolean>({
     return process.env.STATEMENT_BULK_PUBLISHING === 'true'
   },
 })
+
+export const getBetaAdminSourceStatsEnabled = flag<boolean>({
+  key: 'beta.admin.source-stats-enabled',
+  decide() {
+    return process.env.SOURCE_STATS === 'true'
+  },
+})
