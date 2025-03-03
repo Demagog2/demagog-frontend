@@ -75,4 +75,4 @@ export function AdminSourceBulkPublishButton({ sourceId }: AdminSourceBulkPublis
       </Transition>
     </>
   )
-} 
+}
