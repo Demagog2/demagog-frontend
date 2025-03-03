@@ -1,9 +1,42 @@
 import { gql } from '@/__generated__'
+import { LinkButton } from '@/components/admin/forms/LinkButton'
+import { AdminFormActions } from '@/components/admin/layout/AdminFormActions'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
+import { AdminSourceHostStatsChart } from '@/components/admin/sources/AdminSourceHostStatsChart'
 import { serverQuery } from '@/libs/apollo-client-server'
+import { getMetadataTitle } from '@/libs/metadata'
+import { Metadata } from 'next'
+import { notFound } from 'next/navigation'
+
+export async function generateMetadata(props: {
+  params: { slug: string }
+}): Promise<Metadata> {
+  const {
+    data: { sourceV2: source },
+  } = await serverQuery({
+    query: gql(`
+      query AdminSourceMetadata($id: ID!) {
+        sourceV2(id: $id) {
+          name
+        }
+      }
+    `),
+    variables: {
+      id: props.params.slug,
+    },
+  })
+
+  if (!source) {
+    notFound()
+  }
+
+  return {
+    title: getMetadataTitle('Statistiky', source.name, 'Administrace'),
+  }
+}
 
 interface PageProps {
   params: {
@@ -25,6 +58,10 @@ export default async function AdminSourceStatsPage({ params }: PageProps) {
     variables: { id: String(sourceId) },
   })
 
+  if (!data?.sourceV2) {
+    notFound()
+  }
+
   if (!data?.sourceV2?.internalStats) return <div>Žádna data</div>
 
   const stats = data.sourceV2.internalStats as {
@@ -45,8 +82,14 @@ export default async function AdminSourceStatsPage({ params }: PageProps) {
           title={`Statistiky zdroje ${data.sourceV2?.name}`}
           description="Přehled statistik pro diskuzi"
         />
+
+        <AdminFormActions>
+          <LinkButton href={`/beta/admin/sources/${sourceId}`}>Zpět</LinkButton>
+        </AdminFormActions>
       </AdminPageHeader>
       <AdminPageContent>
+        <AdminSourceHostStatsChart data={stats.grouped_by_host} />
+
         <div className="mt-8 grid grid-cols-1 gap-6 lg:grid-cols-2">
           <div className="overflow-hidden bg-white shadow sm:rounded-lg">
             <div className="px-4 py-5 sm:px-6">
