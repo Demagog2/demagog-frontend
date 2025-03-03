@@ -11,7 +11,7 @@ interface Speaker {
 }
 
 interface BlockQuoteDialogProps {
-  onSave: (speakerId?: string, link?: string) => void
+  onSave: (speakerId?: string, link?: string, media?: string) => void
   onClose: () => void
 }
 
@@ -21,6 +21,7 @@ export function BlockQuoteDialog({ onSave, onClose }: BlockQuoteDialogProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedSpeakerId, setSelectedSpeakerId] = useState<string>()
   const [link, setLink] = useState('')
+  const [media, setMedia] = useState('')
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchSpeakers = useCallback(
@@ -122,13 +123,24 @@ export function BlockQuoteDialog({ onSave, onClose }: BlockQuoteDialogProps) {
               }
             />
           </div>
+          <div className="ck-block-quote-dialog__section">
+            <Input
+              name="media"
+              type="text"
+              placeholder="Název zdroje citátu"
+              value={media}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setMedia(e.target.value)
+              }
+            />
+          </div>
         </Fieldset>
       </div>
 
       <div className="ck-block-quote-dialog__actions">
         <button
           className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          onClick={() => onSave(selectedSpeakerId, link)}
+          onClick={() => onSave(selectedSpeakerId, link, media)}
         >
           {selectedSpeakerId ? 'Vložit' : 'Vložit (bez řečníka)'}
         </button>

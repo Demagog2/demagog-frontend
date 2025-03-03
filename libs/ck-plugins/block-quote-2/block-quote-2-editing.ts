@@ -40,7 +40,7 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
 
     schema.register('blockQuoteWithSpeaker', {
       inheritAllFrom: '$container',
-      allowAttributes: ['speakerId', 'link'],
+      allowAttributes: ['speakerId', 'link', 'media'],
     })
 
     // View -> Model
@@ -55,8 +55,9 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
           const domElement = domConverter.viewToDom(viewFigure)
 
           const speakerId = domElement.dataset.speakerId
+          const media = domElement.dataset.media
 
-          return writer.createElement('blockQuoteWithSpeaker', { speakerId })
+          return writer.createElement('blockQuoteWithSpeaker', { speakerId, media })
         },
       })
 
@@ -65,9 +66,13 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
       model: 'blockQuoteWithSpeaker',
       view: (modelElement, { writer }) => {
         const speakerId = modelElement.getAttribute('speakerId')
+        const media = modelElement.getAttribute('media')
+        const link = modelElement.getAttribute('link')
 
         return writer.createContainerElement('blockquote', {
           'data-speaker-id': speakerId,
+          ...(media ? { 'data-media': media } : {}),
+          ...(link ? { 'data-link': link } : {}),
         })
       },
     })
@@ -78,17 +83,22 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
       view: (modelElement, { writer }) => {
         const speakerId = modelElement.getAttribute('speakerId')
         const link = modelElement.getAttribute('link')
+        const media = modelElement.getAttribute('media')
 
         if (!speakerId) {
           const container = writer.createContainerElement('blockquote', { cite: link })
 
-          if (link) {
+          if (link || media) {
             const quoteMetadata = writer.createUIElement(
               'span',
               { class: 'blockquote-author' },
               function (domDocument) {
                 const domElement = this.toDomElement(domDocument)
-                domElement.innerHTML = `— <a href="${link}" target="_blank">Odkaz</a>`
+                if (link) {
+                  domElement.innerHTML = `— <a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
+                } else if (media) {
+                  domElement.innerHTML = `— ${media}`
+                }
                 return domElement
               }
             )
@@ -105,6 +115,7 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
         const blockQuote = writer.createContainerElement('blockquote', {
           'data-speaker-id': speakerId,
           'data-link': link,
+          ...(media ? { 'data-media': media } : {}),
         })
 
         const authorElement = writer.createUIElement(
@@ -143,7 +154,9 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
                   const domElement = this.toDomElement(domDocument)
                   domElement.innerHTML = `— ${payload.data.speakerV2?.fullName}`
                   if (link) {
-                    domElement.innerHTML += `, <a href="${link}" target="_blank">Odkaz</a>`
+                    domElement.innerHTML += `, <a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
+                  } else if (media) {
+                    domElement.innerHTML += `, ${media}`
                   }
                   return domElement
                 }
