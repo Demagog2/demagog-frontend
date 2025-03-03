@@ -2,8 +2,12 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { PencilIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
-import { getBetaAdminStatementReorderingEnabled } from '@/libs/flags'
+import {
+  getBetaAdminStatementBulkPublishingEnabled,
+  getBetaAdminStatementReorderingEnabled,
+} from '@/libs/flags'
 import AdminSourceDeleteDialog from '@/components/admin/sources/AdminSourceDeleteDialog'
+import { AdminSourceBulkPublishButton } from '@/components/admin/sources/AdminSourceBulkPublishButton'
 
 const AdminSourceHeaderDataFragment = gql(`
   fragment AdminSourceHeaderData on Query {
@@ -30,6 +34,9 @@ export async function AdminSourceHeader(props: {
 
   const isBetaAdminStatementReorderingEnabled =
     await getBetaAdminStatementReorderingEnabled()
+
+  const isBetaAdminStatementBulkPublishingEnabled =
+    await getBetaAdminStatementBulkPublishingEnabled()
 
   return (
     <div className="lg:flex lg:items-center lg:justify-between">
@@ -70,6 +77,11 @@ export async function AdminSourceHeader(props: {
             >
               Seřadit výroky
             </a>
+          )}
+
+        {isBetaAdminStatementBulkPublishingEnabled &&
+          isAuthorized(['statements:edit']) && (
+            <AdminSourceBulkPublishButton sourceId={source.id} />
           )}
 
         {isAuthorized(['sources:edit']) && (

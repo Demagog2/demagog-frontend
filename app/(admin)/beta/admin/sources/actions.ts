@@ -224,3 +224,30 @@ export async function deleteSource(sourceId: string) {
     redirect(`/beta/admin/sources`)
   }
 }
+
+const adminBulkPublishStatementsMutation = gql(`
+  mutation PublishApprovedSourceStatements($id: ID!) {
+    publishApprovedSourceStatements(id: $id) {
+      source {
+        id
+        statements {
+          id
+          published
+        }
+      }
+    }
+  }
+`);
+
+export async function bulkPublishStatements(sourceId: string) {
+  const { data } = await serverMutation({
+    mutation: adminBulkPublishStatementsMutation,
+    variables: { id: sourceId },
+  })
+
+  if (data?.publishApprovedSourceStatements?.source?.id) {
+    redirect(`/beta/admin/sources/${sourceId}`)
+  }
+
+  return false
+}
