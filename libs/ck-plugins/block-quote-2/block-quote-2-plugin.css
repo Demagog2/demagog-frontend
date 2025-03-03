@@ -1,0 +1,65 @@
+.ck-block-quote-dialog {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ck-spacing-medium);
+  width: 640px;
+}
+
+.ck-block-quote-dialog__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ck-spacing-medium);
+}
+
+.ck-block-quote-dialog__section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ck-spacing-small);
+}
+
+.ck-block-quote-dialog__actions {
+  display: flex;
+  gap: var(--ck-spacing-small);
+  justify-content: flex-end;
+  margin-top: var(--ck-spacing-medium);
+}
+
+.ck-block-quote-dialog .ck-list {
+  max-height: 200px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.ck-block-quote-dialog .ck-list li {
+  padding: var(--ck-spacing-small) var(--ck-spacing-medium);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ck-block-quote-dialog .ck-list li:hover {
+  background: var(--ck-color-list-button-hover-background);
+}
+
+.ck-block-quote-dialog .ck-list li.ck-selected {
+  background: var(--ck-color-list-button-on-background);
+  color: var(--ck-color-list-button-on-text);
+}
+
+.ck-block-quote-dialog .ck-input-text {
+  width: 100%;
+  padding: var(--ck-spacing-small) var(--ck-spacing-medium);
+  border: 1px solid var(--ck-color-input-border);
+  border-radius: var(--ck-border-radius);
+  background: var(--ck-color-input-background);
+  color: var(--ck-color-input-text);
+}
+
+.ck-block-quote-dialog .ck-input-text:focus {
+  outline: none;
+  border-color: var(--ck-color-focus-border);
+  box-shadow: 0 0 0 2px var(--ck-color-focus-outer-shadow);
+} 

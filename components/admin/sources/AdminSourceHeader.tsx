@@ -2,8 +2,13 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { PencilIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
-import { getBetaAdminStatementReorderingEnabled } from '@/libs/flags'
+import {
+  getBetaAdminSourceStatsEnabled,
+  getBetaAdminStatementBulkPublishingEnabled,
+  getBetaAdminStatementReorderingEnabled,
+} from '@/libs/flags'
 import AdminSourceDeleteDialog from '@/components/admin/sources/AdminSourceDeleteDialog'
+import { AdminSourceBulkPublishButton } from '@/components/admin/sources/AdminSourceBulkPublishButton'
 
 const AdminSourceHeaderDataFragment = gql(`
   fragment AdminSourceHeaderData on Query {
@@ -30,6 +35,11 @@ export async function AdminSourceHeader(props: {
 
   const isBetaAdminStatementReorderingEnabled =
     await getBetaAdminStatementReorderingEnabled()
+
+  const isBetaAdminStatementBulkPublishingEnabled =
+    await getBetaAdminStatementBulkPublishingEnabled()
+
+  const isBetaAdminSourceStatsEnabled = await getBetaAdminSourceStatsEnabled()
 
   return (
     <div className="lg:flex lg:items-center lg:justify-between">
@@ -62,6 +72,15 @@ export async function AdminSourceHeader(props: {
           </a>
         )}
 
+        {isBetaAdminSourceStatsEnabled && (
+          <a
+            href={`/beta/admin/sources/${source.id}/stats`}
+            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          >
+            Statistiky
+          </a>
+        )}
+
         {isBetaAdminStatementReorderingEnabled &&
           isAuthorized(['statements:sort']) && (
             <a
@@ -70,6 +89,11 @@ export async function AdminSourceHeader(props: {
             >
               Seřadit výroky
             </a>
+          )}
+
+        {isBetaAdminStatementBulkPublishingEnabled &&
+          isAuthorized(['statements:edit']) && (
+            <AdminSourceBulkPublishButton sourceId={source.id} />
           )}
 
         {isAuthorized(['sources:edit']) && (

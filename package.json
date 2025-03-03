@@ -47,6 +47,7 @@
     "react-mentions": "^4.4.10",
     "react-toastify": "^10.0.6",
     "react-youtube": "^10.1.0",
+    "recharts": "^2.15.1",
     "rxjs": "^7.8.1",
     "sass": "^1.69.5",
     "xstate": "^5.19.0",

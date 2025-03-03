@@ -1,9 +1,8 @@
-import { Plugin } from 'ckeditor5'
-import { Enter, type ViewDocumentEnterEvent } from 'ckeditor5'
-import { Delete, type ViewDocumentDeleteEvent } from 'ckeditor5'
+import { Plugin, Enter, Delete } from 'ckeditor5'
 import { BlockQuoteWithSpeakerCommmand as BlockQuoteWithSpeakerCommmand } from './block-quote-2-command'
 import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
+import { displayDate } from '@/libs/date-time'
 
 export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
   /**
@@ -42,7 +41,7 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
 
     schema.register('blockQuoteWithSpeaker', {
       inheritAllFrom: '$container',
-      allowAttributes: ['speakerId'],
+      allowAttributes: ['speakerId', 'link', 'media', 'quotedAt'],
     })
 
     // View -> Model
@@ -57,8 +56,10 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
           const domElement = domConverter.viewToDom(viewFigure)
 
           const speakerId = domElement.dataset.speakerId
+          const media = domElement.dataset.media
+          const quotedAt = domElement.dataset.quotedAt
 
-          return writer.createElement('blockQuoteWithSpeaker', { speakerId })
+          return writer.createElement('blockQuoteWithSpeaker', { speakerId, media, quotedAt })
         },
       })
 
@@ -67,9 +68,15 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
       model: 'blockQuoteWithSpeaker',
       view: (modelElement, { writer }) => {
         const speakerId = modelElement.getAttribute('speakerId')
+        const media = modelElement.getAttribute('media')
+        const link = modelElement.getAttribute('link')
+        const quotedAt = modelElement.getAttribute('quotedAt')
 
         return writer.createContainerElement('blockquote', {
           'data-speaker-id': speakerId,
+          ...(media ? { 'data-media': media } : {}),
+          ...(link ? { 'data-link': link } : {}),
+          ...(quotedAt ? { 'data-quoted-at': quotedAt } : {}),
         })
       },
     })
@@ -79,13 +86,47 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
       model: 'blockQuoteWithSpeaker',
       view: (modelElement, { writer }) => {
         const speakerId = modelElement.getAttribute('speakerId')
+        const link = modelElement.getAttribute('link')
+        const media = modelElement.getAttribute('media')
+        const quotedAt = modelElement.getAttribute('quotedAt') as string | undefined
 
         if (!speakerId) {
-          return writer.createContainerElement('blockquote')
+          const container = writer.createContainerElement('blockquote', { cite: link })
+
+          if (link || media || quotedAt) {
+            const quoteMetadata = writer.createUIElement(
+              'span',
+              { class: 'blockquote-author' },
+              function (domDocument) {
+                const domElement = this.toDomElement(domDocument)
+                let content = '— '
+                if (link) {
+                  content += `<a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
+                } else if (media) {
+                  content += media
+                }
+                if (quotedAt) {
+                  content += ` (${displayDate(quotedAt)})`
+                }
+                domElement.innerHTML = content
+                return domElement
+              }
+            )
+
+            writer.insert(
+              writer.createPositionAt(container, 'end'),
+              quoteMetadata
+            )
+          }
+
+          return container
         }
 
         const blockQuote = writer.createContainerElement('blockquote', {
           'data-speaker-id': speakerId,
+          'data-link': link,
+          ...(media ? { 'data-media': media } : {}),
+          ...(quotedAt ? { 'data-quoted-at': quotedAt } : {}),
         })
 
         const authorElement = writer.createUIElement(
@@ -122,7 +163,16 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
                 { class: 'blockquote-author' },
                 function (domDocument) {
                   const domElement = this.toDomElement(domDocument)
-                  domElement.innerHTML = `— ${payload.data.speakerV2?.fullName}`
+                  let content = `— ${payload.data.speakerV2?.fullName}`
+                  if (link) {
+                    content += `, <a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
+                  } else if (media) {
+                    content += `, ${media}`
+                  }
+                  if (quotedAt) {
+                    content += ` (${displayDate(quotedAt)})`
+                  }
+                  domElement.innerHTML = content
                   return domElement
                 }
               )
