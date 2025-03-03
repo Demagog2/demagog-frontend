@@ -2,6 +2,7 @@ import { ButtonView, Dialog, Plugin, View, icons } from 'ckeditor5'
 import { BlockQuoteEditingWithSpeakerEditing } from './block-quote-2-editing'
 import { BlockQuoteWithSpeakerCommmand } from './block-quote-2-command'
 import { BlockQuoteSpeakersView } from './block-quote-2-view-speakers'
+import { BlockQuoteUrlView } from './block-quote-2-view-url'
 
 export class BlockQuoteWithSpeaker extends Plugin {
   /**
@@ -21,6 +22,8 @@ export class BlockQuoteWithSpeaker extends Plugin {
 
   public init(): void {
     const editor = this.editor
+    let link = ''
+    let selectedSpeakerId: string | undefined
 
     editor.ui.componentFactory.add('blockQuoteWithSpeaker', () => {
       const dialog = this.editor.plugins.get('Dialog')
@@ -41,8 +44,12 @@ export class BlockQuoteWithSpeaker extends Plugin {
         children: [
           BlockQuoteSpeakersView(editor, {
             onSelect(speakerId: string) {
-              editor.execute('blockQuoteWithSpeaker', { speakerId })
-              dialog.hide()
+              selectedSpeakerId = speakerId
+            },
+          }),
+          BlockQuoteUrlView(editor, {
+            onUrlChange(url: string) {
+              link = url
             },
           }),
         ],
@@ -78,11 +85,23 @@ export class BlockQuoteWithSpeaker extends Plugin {
           content: dialogContentView,
           actionButtons: [
             {
+              label: 'Uložit',
+              class: 'ck-button-action',
+              withText: true,
+              onExecute: () => {
+                editor.execute('blockQuoteWithSpeaker', { 
+                  speakerId: selectedSpeakerId,
+                  link 
+                })
+                dialog.hide()
+              },
+            },
+            {
               label: 'Citát bez řečníka',
               class: 'ck-button-action',
               withText: true,
               onExecute: () => {
-                editor.execute('blockQuoteWithSpeaker')
+                editor.execute('blockQuoteWithSpeaker', { link })
                 dialog.hide()
               },
             },
@@ -95,7 +114,10 @@ export class BlockQuoteWithSpeaker extends Plugin {
               },
             },
           ],
-          onHide() {},
+          onHide() {
+            selectedSpeakerId = undefined
+            link = ''
+          },
         })
 
         editor.editing.view.focus()

@@ -42,7 +42,7 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
 
     schema.register('blockQuoteWithSpeaker', {
       inheritAllFrom: '$container',
-      allowAttributes: ['speakerId'],
+      allowAttributes: ['speakerId', 'link'],
     })
 
     // View -> Model
