@@ -3,6 +3,7 @@ import { PencilIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
 import {
+  getBetaAdminSourceStatsEnabled,
   getBetaAdminStatementBulkPublishingEnabled,
   getBetaAdminStatementReorderingEnabled,
 } from '@/libs/flags'
@@ -38,6 +39,8 @@ export async function AdminSourceHeader(props: {
   const isBetaAdminStatementBulkPublishingEnabled =
     await getBetaAdminStatementBulkPublishingEnabled()
 
+  const isBetaAdminSourceStatsEnabled = await getBetaAdminSourceStatsEnabled()
+
   return (
     <div className="lg:flex lg:items-center lg:justify-between">
       <div className="min-w-0 flex-1">
@@ -66,6 +69,15 @@ export async function AdminSourceHeader(props: {
             className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
           >
             Přidat výrok
+          </a>
+        )}
+
+        {isBetaAdminSourceStatsEnabled && (
+          <a
+            href={`/beta/admin/sources/${source.id}/stats`}
+            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          >
+            Statistiky
           </a>
         )}
 
