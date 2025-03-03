@@ -1,8 +1,9 @@
 import { ButtonView, Dialog, Plugin, View, icons } from 'ckeditor5'
 import { BlockQuoteEditingWithSpeakerEditing } from './block-quote-2-editing'
 import { BlockQuoteWithSpeakerCommmand } from './block-quote-2-command'
-import { BlockQuoteSpeakersView } from './block-quote-2-view-speakers'
-import { BlockQuoteUrlView } from './block-quote-2-view-url'
+import { createRoot } from 'react-dom/client'
+import { BlockQuoteDialog } from './BlockQuoteDialog'
+import './block-quote-2-plugin.css'
 
 export class BlockQuoteWithSpeaker extends Plugin {
   /**
@@ -22,37 +23,24 @@ export class BlockQuoteWithSpeaker extends Plugin {
 
   public init(): void {
     const editor = this.editor
-    let link = ''
-    let selectedSpeakerId: string | undefined
 
     editor.ui.componentFactory.add('blockQuoteWithSpeaker', () => {
       const dialog = this.editor.plugins.get('Dialog')
+      let reactRoot: ReturnType<typeof createRoot> | undefined
 
       const dialogContentView = new View(editor.locale)
-
       dialogContentView.setTemplate({
         tag: 'div',
         attributes: {
           style: {
             padding: 'var(--ck-spacing-large)',
             whiteSpace: 'initial',
-            width: '100%',
-            maxWidth: '500px',
+            width: '350px',
+            maxWidth: '700px',
           },
           tabindex: -1,
         },
-        children: [
-          BlockQuoteSpeakersView(editor, {
-            onSelect(speakerId: string) {
-              selectedSpeakerId = speakerId
-            },
-          }),
-          BlockQuoteUrlView(editor, {
-            onUrlChange(url: string) {
-              link = url
-            },
-          }),
-        ],
+        children: [],
       })
 
       const command = editor.commands.get(
@@ -83,40 +71,27 @@ export class BlockQuoteWithSpeaker extends Plugin {
           id: '12345',
           title: 'Vyberte řečníka',
           content: dialogContentView,
-          actionButtons: [
-            {
-              label: 'Uložit',
-              class: 'ck-button-action',
-              withText: true,
-              onExecute: () => {
-                editor.execute('blockQuoteWithSpeaker', { 
-                  speakerId: selectedSpeakerId,
-                  link 
-                })
-                dialog.hide()
-              },
-            },
-            {
-              label: 'Citát bez řečníka',
-              class: 'ck-button-action',
-              withText: true,
-              onExecute: () => {
-                editor.execute('blockQuoteWithSpeaker', { link })
-                dialog.hide()
-              },
-            },
-            {
-              label: 'Zavřít',
-              class: 'ck-button-action ck-button-warning',
-              withText: true,
-              onExecute: () => {
-                dialog.hide()
-              },
-            },
-          ],
-          onHide() {
-            selectedSpeakerId = undefined
-            link = ''
+          actionButtons: [],
+          onShow: () => {
+            const domElement = dialogContentView.element
+            if (domElement) {
+              reactRoot = createRoot(domElement)
+              reactRoot.render(
+                <BlockQuoteDialog
+                  onSave={(speakerId, link) => {
+                    editor.execute('blockQuoteWithSpeaker', { speakerId, link })
+                    dialog.hide()
+                  }}
+                  onClose={() => dialog.hide()}
+                />
+              )
+            }
+          },
+          onHide: () => {
+            if (reactRoot) {
+              reactRoot.unmount()
+              reactRoot = undefined
+            }
           },
         })
 

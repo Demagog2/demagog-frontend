@@ -1,6 +1,4 @@
-import { Plugin } from 'ckeditor5'
-import { Enter, type ViewDocumentEnterEvent } from 'ckeditor5'
-import { Delete, type ViewDocumentDeleteEvent } from 'ckeditor5'
+import { Plugin, Enter, Delete } from 'ckeditor5'
 import { BlockQuoteWithSpeakerCommmand as BlockQuoteWithSpeakerCommmand } from './block-quote-2-command'
 import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
@@ -79,13 +77,34 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
       model: 'blockQuoteWithSpeaker',
       view: (modelElement, { writer }) => {
         const speakerId = modelElement.getAttribute('speakerId')
+        const link = modelElement.getAttribute('link')
 
         if (!speakerId) {
-          return writer.createContainerElement('blockquote')
+          const container = writer.createContainerElement('blockquote', { cite: link })
+
+          if (link) {
+            const quoteMetadata = writer.createUIElement(
+              'span',
+              { class: 'blockquote-author' },
+              function (domDocument) {
+                const domElement = this.toDomElement(domDocument)
+                domElement.innerHTML = `— <a href="${link}" target="_blank">Odkaz</a>`
+                return domElement
+              }
+            )
+
+            writer.insert(
+              writer.createPositionAt(container, 'end'),
+              quoteMetadata
+            )
+          }
+
+          return container
         }
 
         const blockQuote = writer.createContainerElement('blockquote', {
           'data-speaker-id': speakerId,
+          'data-link': link,
         })
 
         const authorElement = writer.createUIElement(
@@ -123,6 +142,9 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
                 function (domDocument) {
                   const domElement = this.toDomElement(domDocument)
                   domElement.innerHTML = `— ${payload.data.speakerV2?.fullName}`
+                  if (link) {
+                    domElement.innerHTML += `, <a href="${link}" target="_blank">Odkaz</a>`
+                  }
                   return domElement
                 }
               )
