@@ -6,3 +6,10 @@ export const getBetaAdminStatementReorderingEnabled = flag<boolean>({
     return process.env.STATEMENT_REORDERING === 'true'
   },
 })
+
+export const getBetaAdminStatementBulkPublishingEnabled = flag<boolean>({
+  key: 'beta.admin.statement-bulk-publishing-enabled',
+  decide() {
+    return process.env.STATEMENT_BULK_PUBLISHING === 'true'
+  },
+})
