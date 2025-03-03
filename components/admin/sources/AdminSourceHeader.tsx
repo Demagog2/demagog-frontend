@@ -2,7 +2,10 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { PencilIcon } from '@heroicons/react/20/solid'
 import React from 'react'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
-import { getBetaAdminStatementBulkPublishingEnabled, getBetaAdminStatementReorderingEnabled } from '@/libs/flags'
+import {
+  getBetaAdminStatementBulkPublishingEnabled,
+  getBetaAdminStatementReorderingEnabled,
+} from '@/libs/flags'
 import AdminSourceDeleteDialog from '@/components/admin/sources/AdminSourceDeleteDialog'
 import { AdminSourceBulkPublishButton } from '@/components/admin/sources/AdminSourceBulkPublishButton'
 
