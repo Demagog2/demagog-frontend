@@ -14,6 +14,7 @@ import { DefaultMetadata } from '@/libs/constants/metadata'
 import { truncate } from 'lodash'
 import { imagePath } from '@/libs/images/path'
 import { notFound } from 'next/navigation'
+import Script from 'next/script'
 
 export const revalidate = 180
 export const dynamic = 'force-static'
@@ -169,6 +170,11 @@ export default async function Article(props: { params: { slug: string } }) {
         </div>
       </div>
       <Iframely />
+      <Script
+        src="https://platform.twitter.com/widgets.js"
+        strategy="lazyOnload"
+        crossOrigin="anonymous"
+      />
     </div>
   )
 }
