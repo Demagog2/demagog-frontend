@@ -36,10 +36,10 @@ export function ArticleQuote(props: {
       <blockquote className="blockquote fs-6 lh-base d-flex align-items-start mb-0">
         <span
           className={classNames(
-            'quote-mark fst-italic me-4  align-self-start',
+            'quote-mark fst-italic me-4  align-self-start mt-minus-10px',
             {
-              'me-lg-30px mt-minus-10px': !props.isQuoteInAccordion,
-              'me-lg-20px mt-minus-10px': props.isQuoteInAccordion,
+              'me-lg-30px': !props.isQuoteInAccordion,
+              'me-lg-20px': props.isQuoteInAccordion,
             }
           )}
         >
@@ -65,43 +65,42 @@ export function ArticleQuote(props: {
                   alt={data.speaker.fullName}
                 />
               )}
-              {(data.speaker || data.quotedAt || data.medium || data.link) && (
-                <div
-                  className={classNames('mb-0 fs-8', {
-                    'fs-lg-5': !props.isQuoteInAccordion,
-                  })}
-                >
-                  {data.speaker?.fullName && (
-                    <div className="fw-semibold">{data.speaker?.fullName}</div>
-                  )}
 
-                  {(data.speaker?.role ||
-                    data.quotedAt ||
-                    data.medium ||
-                    data.link) && (
-                    <div className="fw-normal">
-                      {[
-                        data.speaker?.role,
-                        data.link && data.medium ? (
-                          <a href={data.link}>{data.medium}</a>
-                        ) : data.link ? (
-                          <a href={data.link}>odkaz</a>
-                        ) : (
-                          data.medium
-                        ),
-                        data.quotedAt && formatDate(data.quotedAt),
-                      ]
-                        .filter(Boolean)
-                        .map((item, index) => (
-                          <React.Fragment key={index}>
-                            {index > 0 && ', '}
-                            {item}
-                          </React.Fragment>
-                        ))}
-                    </div>
-                  )}
-                </div>
-              )}
+              <div
+                className={classNames('mb-0 fs-8', {
+                  'fs-lg-5': !props.isQuoteInAccordion,
+                })}
+              >
+                {data.speaker?.fullName && (
+                  <div className="fw-semibold">{data.speaker?.fullName}</div>
+                )}
+
+                {(data.speaker?.role ||
+                  data.quotedAt ||
+                  data.medium ||
+                  data.link) && (
+                  <div className="fw-normal">
+                    {[
+                      data.speaker?.role,
+                      data.link && data.medium ? (
+                        <a href={data.link}>{data.medium}</a>
+                      ) : data.link ? (
+                        <a href={data.link}>odkaz</a>
+                      ) : (
+                        data.medium
+                      ),
+                      data.quotedAt && formatDate(data.quotedAt),
+                    ]
+                      .filter(Boolean)
+                      .map((item, index) => (
+                        <React.Fragment key={index}>
+                          {index > 0 && ', '}
+                          {item}
+                        </React.Fragment>
+                      ))}
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
