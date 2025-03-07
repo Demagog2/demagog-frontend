@@ -53,7 +53,10 @@ function renderStatement(model: Element, writer: DowncastWriter) {
       } else {
         const root = createRoot(statementElem)
         root.render(
-          <AdminStatement className="mt-8" statement={data.statementV2} />
+          <AdminStatement
+            className="mt-8 bg-gray-200 rounded-2xl"
+            statement={data.statementV2}
+          />
         )
       }
     },
