@@ -37,44 +37,40 @@ export function AdminArticleQuote(props: {
               className="avatar size-12 bg-gray-50 me-1"
             />
           )}
-          {(data.speaker?.fullName ||
-            data.quotedAt ||
-            data.medium ||
-            data.link) && (
-            <div className="text-sm/6">
-              {data.speaker?.fullName && (
-                <div className="font-semibold text-gray-900">
-                  {data.speaker?.fullName}
-                </div>
-              )}
 
-              {(data.speaker?.role ||
-                data.quotedAt ||
-                data.medium ||
-                data.link) && (
-                <div className="mt-0.5 text-gray-600">
-                  {[
-                    data.speaker?.role,
-                    data.link && data.medium ? (
-                      <a href={data.link}>{data.medium}</a>
-                    ) : data.link ? (
-                      <a href={data.link}>odkaz</a>
-                    ) : (
-                      data.medium
-                    ),
-                    data.quotedAt && formatDate(data.quotedAt),
-                  ]
-                    .filter(Boolean)
-                    .map((item, index) => (
-                      <React.Fragment key={index}>
-                        {index > 0 && ', '}
-                        {item}
-                      </React.Fragment>
-                    ))}
-                </div>
-              )}
-            </div>
-          )}
+          <div className="text-sm/6">
+            {data.speaker?.fullName && (
+              <div className="font-semibold text-gray-900">
+                {data.speaker?.fullName}
+              </div>
+            )}
+
+            {(data.speaker?.role ||
+              data.quotedAt ||
+              data.medium ||
+              data.link) && (
+              <div className="mt-0.5 text-gray-600">
+                {[
+                  data.speaker?.role,
+                  data.link && data.medium ? (
+                    <a href={data.link}>{data.medium}</a>
+                  ) : data.link ? (
+                    <a href={data.link}>odkaz</a>
+                  ) : (
+                    data.medium
+                  ),
+                  data.quotedAt && formatDate(data.quotedAt),
+                ]
+                  .filter(Boolean)
+                  .map((item, index) => (
+                    <React.Fragment key={index}>
+                      {index > 0 && ', '}
+                      {item}
+                    </React.Fragment>
+                  ))}
+              </div>
+            )}
+          </div>
         </figcaption>
       )}
     </figure>
