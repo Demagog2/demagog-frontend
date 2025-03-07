@@ -717,7 +717,7 @@ function AdminAssessmentForm(props: {
                             ) {
                               return (
                                 <AdminStatement
-                                  className="mt-8"
+                                  className="mt-8 bg-gray-200 rounded-2xl"
                                   key={cursor}
                                   statement={node.statement}
                                 />
