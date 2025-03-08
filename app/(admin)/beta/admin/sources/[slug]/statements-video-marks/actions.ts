@@ -4,9 +4,15 @@ import { gql } from '@/__generated__'
 import {
   UpdateSourceVideoFieldsMutation,
   UpdateSourceVideoFieldsMutationVariables,
+  UpdateStatementVideoMarksMutation,
+  UpdateStatementVideoMarksMutationVariables,
 } from '@/__generated__/graphql'
+import { serverMutation } from '@/libs/apollo-client-server'
 import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
-import { sourceVideoSchema } from '@/libs/schemas/sourceVideo'
+import {
+  sourceVideoSchema,
+  statementVideoMarksSchema,
+} from '@/libs/schemas/sourceVideo'
 
 const updateSourceVideoFieldsMutation = gql(`
   mutation UpdateSourceVideoFields(
@@ -40,3 +46,40 @@ export const updateSourceVideoFields = new UpdateActionBuilder<
     },
   }))
   .build()
+
+const updateStatementVideoMarksMutation = gql(`
+  mutation UpdateStatementVideoMarks($id: ID!, $statementVideoMarksInput: [StatementsVideoMarksInput!]!) {
+    updateStatementsVideoMarks(id: $id, statementsVideoMarksInput: $statementVideoMarksInput) {
+      statements {
+        id
+      }
+    }
+  }
+`)
+
+export const updateStatementVideoMarks = new UpdateActionBuilder<
+  typeof statementVideoMarksSchema,
+  UpdateStatementVideoMarksMutation,
+  UpdateStatementVideoMarksMutationVariables,
+  typeof updateStatementVideoMarksMutation
+>(statementVideoMarksSchema)
+  .withMutation(updateStatementVideoMarksMutation, (id, input) => ({
+    id,
+    statementVideoMarksInput: input.marks,
+  }))
+  .build()
+
+export async function clearSourceVideoFields(sourceId: string) {
+  await serverMutation({
+    mutation: updateSourceVideoFieldsMutation,
+    variables: {
+      id: sourceId,
+      sourceVideoFieldsInput: {
+        videoType: '',
+        videoId: '',
+      },
+    },
+  })
+
+  return { state: 'success' as const }
+}

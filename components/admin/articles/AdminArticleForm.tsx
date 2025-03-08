@@ -320,7 +320,7 @@ export function AdminArticleForm(props: {
         </AdminFormHeader>
 
         <AdminFormContent>
-          <AdminFormMain className="gap-y-5 grid grid-cols-1">
+          <AdminFormMain className="col-span-12 lg:col-span-9 gap-y-5 grid grid-cols-1">
             <ErrorMessage message={errors.illustration?.message} />
 
             <Field>

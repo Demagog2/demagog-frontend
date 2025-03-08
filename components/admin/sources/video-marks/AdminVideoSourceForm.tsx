@@ -27,6 +27,7 @@ import { AdminFormActions } from '../../layout/AdminFormActions'
 import { SubmitButton } from '../../forms/SubmitButton'
 import { LinkButton } from '../../forms/LinkButton'
 import { AdminFormMain } from '../../layout/AdminFormMain'
+import { useEffect } from 'react'
 
 export const AdminVideoSourceFormFragment = gql(`
   fragment AdminVideoSourceForm on Source {
@@ -72,6 +73,12 @@ export function AdminVideoSourceForm(props: VideoFormProps) {
 
   useFormToasts(state)
 
+  useEffect(() => {
+    if (state.state === 'success') {
+      window.location.reload()
+    }
+  }, [state.state])
+
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
@@ -93,11 +100,7 @@ export function AdminVideoSourceForm(props: VideoFormProps) {
               <Field as="div">
                 <Label htmlFor="video_type">Typ videa</Label>
 
-                <input
-                  type="hidden"
-                  {...register('video_type')}
-                  value={videoType}
-                />
+                <input type="hidden" {...register('video_type')} />
 
                 <Select
                   id="video_type"

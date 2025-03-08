@@ -10,6 +10,8 @@ interface StatementInputProps {
   onGoToMark: (mark: number) => void
   startTime: number
   stopTime: number
+  startName?: string
+  stopName?: string
   statement: {
     sourceSpeaker: {
       firstName: string
@@ -20,18 +22,26 @@ interface StatementInputProps {
   videoTime: number
 }
 
-export const StatementInput = ({
+export function StatementInput({
   startTime,
   stopTime,
+  startName,
+  stopName,
   onStartTimeChange,
   onStopTimeChange,
   onGoToMark,
   statement,
   videoTime,
-}: StatementInputProps) => {
+}: StatementInputProps) {
   const hasMarksFilled = startTime > 0 && stopTime > 0
   const isVideoBetweenMarks =
     hasMarksFilled && videoTime >= startTime && videoTime <= stopTime
+
+  const bgColor = isVideoBetweenMarks
+    ? 'bg-blue-100'
+    : !hasMarksFilled
+      ? 'bg-yellow-50'
+      : 'bg-transparent'
 
   const handleStartChange = useCallback(
     (changedStart: number) => {
@@ -59,13 +69,7 @@ export const StatementInput = ({
   }, [stopTime, onGoToMark])
 
   return (
-    <div
-      className={classNames('p-4 border-b border-gray-300', {
-        'bg-blue-100': isVideoBetweenMarks,
-        'bg-yellow-50': !hasMarksFilled,
-        'bg-transparent': !isVideoBetweenMarks && hasMarksFilled,
-      })}
-    >
+    <div className={classNames('p-4 border-b border-gray-300', bgColor)}>
       <div>
         <strong className="font-semibold">
           {statement.sourceSpeaker.firstName} {statement.sourceSpeaker.lastName}
@@ -76,7 +80,11 @@ export const StatementInput = ({
       </div>
       <div className="flex items-center mt-3 gap-2">
         <div>
-          <AdminVideoMark onChange={handleStartChange} value={startTime} />
+          <AdminVideoMark
+            name={startName}
+            onChange={handleStartChange}
+            value={startTime}
+          />
         </div>
         <button
           type="button"
@@ -101,7 +109,11 @@ export const StatementInput = ({
         </button>
         <div className="mx-4">—</div>
         <div>
-          <AdminVideoMark onChange={handleStopChange} value={stopTime} />
+          <AdminVideoMark
+            name={stopName}
+            onChange={handleStopChange}
+            value={stopTime}
+          />
         </div>
         <button
           type="button"
