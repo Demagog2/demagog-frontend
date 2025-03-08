@@ -1,8 +1,8 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import formatDate from '@/libs/format-date'
 import { imagePath } from '@/libs/images/path'
 import classNames from 'classnames'
 import React from 'react'
+import { BlockQuoteMetadata } from './BlockQuoteMetadata'
 
 const ArticleQuoteFragment = gql(`
   fragment ArticleQuote on BlockQuoteNode {
@@ -15,6 +15,7 @@ const ArticleQuoteFragment = gql(`
     link
     medium
     quotedAt
+    ...BlockQuoteMetadata
   }
 `)
 
@@ -75,31 +76,7 @@ export function ArticleQuote(props: {
                   <div className="fw-semibold">{data.speaker?.fullName}</div>
                 )}
 
-                {(data.speaker?.role ||
-                  data.quotedAt ||
-                  data.medium ||
-                  data.link) && (
-                  <div className="fw-normal">
-                    {[
-                      data.speaker?.role,
-                      data.link && data.medium ? (
-                        <a href={data.link}>{data.medium}</a>
-                      ) : data.link ? (
-                        <a href={data.link}>odkaz</a>
-                      ) : (
-                        data.medium
-                      ),
-                      data.quotedAt && formatDate(data.quotedAt),
-                    ]
-                      .filter(Boolean)
-                      .map((item, index) => (
-                        <React.Fragment key={index}>
-                          {index > 0 && ', '}
-                          {item}
-                        </React.Fragment>
-                      ))}
-                  </div>
-                )}
+                <BlockQuoteMetadata data={data} className="fw-normal" />
               </div>
             </div>
           )}
