@@ -39,7 +39,11 @@ export function AdminImageForm(props: {
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
-    <form action={formAction} onSubmit={handleSubmitForm}>
+    <form
+      action={formAction}
+      onSubmit={handleSubmitForm}
+      encType="multipart/form-data"
+    >
       <div className="container">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
