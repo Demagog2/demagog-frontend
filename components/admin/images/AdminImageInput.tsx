@@ -54,7 +54,7 @@ export function AdminImageInput<T extends FieldValues>({
 
                 // Draw red cross
                 ctx.strokeStyle = 'red'
-                ctx.lineWidth = Math.max(img.width, img.height) * 0.02
+                ctx.lineWidth = 15 // Fixed 15px width
                 ctx.beginPath()
                 ctx.moveTo(0, 0)
                 ctx.lineTo(canvas.width, canvas.height)
