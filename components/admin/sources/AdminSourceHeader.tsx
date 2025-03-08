@@ -42,7 +42,7 @@ export async function AdminSourceHeader(props: {
   const isBetaAdminSourceStatsEnabled = await getBetaAdminSourceStatsEnabled()
 
   return (
-    <div className="lg:flex lg:items-center lg:justify-between">
+    <div>
       <div className="min-w-0 flex-1">
         <nav aria-label="Breadcrumb" className="flex">
           <ol role="list" className="flex items-center space-x-4">
@@ -62,7 +62,7 @@ export async function AdminSourceHeader(props: {
           {source.name}
         </h2>
       </div>
-      <div className="mt-5 flex lg:ml-4 lg:mt-0 space-x-2">
+      <div className="mt-5 flex space-x-2">
         {isAuthorized(['statements:add']) && (
           <a
             href={`/beta/admin/sources/${source.id}/statements/new`}
@@ -90,6 +90,15 @@ export async function AdminSourceHeader(props: {
               Seřadit výroky
             </a>
           )}
+
+        {isAuthorized(['statements:edit']) && (
+          <a
+            href={`/beta/admin/sources/${source.id}/statements-video-marks`}
+            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          >
+            Propojení s videozáznamem
+          </a>
+        )}
 
         {isBetaAdminStatementBulkPublishingEnabled &&
           isAuthorized(['statements:edit']) && (

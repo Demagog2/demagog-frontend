@@ -5,7 +5,8 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
-import { updateSourceVideoFields } from './actions'
+import { updateSourceVideoFields, updateStatementVideoMarks } from './actions'
+import { AdminVideoStatementMarksForm } from '@/components/admin/sources/video-marks/AdminVideoStatementMarksForm'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -55,6 +56,7 @@ export default async function AdminSourceStatementsVideoMarks({
           videoType
           videoId
           ...AdminVideoSourceForm
+          ...AdminVideoStatementMarksForm
         }
       }
     `),
@@ -71,7 +73,12 @@ export default async function AdminSourceStatementsVideoMarks({
 
   return (
     <AdminPage>
-      {!hasVideo && (
+      {hasVideo ? (
+        <AdminVideoStatementMarksForm
+          source={source}
+          action={updateStatementVideoMarks.bind(null, params.slug)}
+        />
+      ) : (
         <AdminVideoSourceForm
           source={source}
           action={updateSourceVideoFields.bind(null, params.slug)}

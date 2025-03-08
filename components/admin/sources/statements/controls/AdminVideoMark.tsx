@@ -1,14 +1,15 @@
 'use client'
 
 import { useCallback, useMemo } from 'react'
+import { Input } from '@/components/admin/forms/Input'
 
-export const AdminVideoMark = ({
-  onChange,
-  value,
-}: {
+interface AdminVideoMarkProps {
   onChange: (value: number) => void
   value: number
-}) => {
+  name?: string
+}
+
+export function AdminVideoMark({ onChange, value, name }: AdminVideoMarkProps) {
   const timeValue = useMemo(() => {
     let seconds = value
 
@@ -35,12 +36,13 @@ export const AdminVideoMark = ({
   )
 
   return (
-    <input
+    <Input
       type="time"
       step="1"
       value={timeValue}
+      name={name}
       onChange={handleTimeChange}
-      className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+      className="w-[120px]"
     />
   )
 }
