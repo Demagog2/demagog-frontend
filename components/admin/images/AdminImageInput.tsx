@@ -1,122 +1,178 @@
 'use client'
 
-import Dropzone from 'react-dropzone'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useEffect } from 'react'
+import { PhotoIcon } from '@heroicons/react/24/solid'
+import { SwitchField } from '@/components/admin/forms/SwitchField'
+import { Switch } from '@/components/admin/forms/Switch'
 import {
+  useController,
   type Control,
-  Controller,
   type FieldValues,
   type Path,
-  useController,
 } from 'react-hook-form'
-import { PhotoIcon } from '@heroicons/react/24/solid'
-import { Button } from '@headlessui/react'
-import { TrashIcon } from '@heroicons/react/24/outline'
 
-export function AdminImageInput<T extends FieldValues>(props: {
+interface AdminImageInputProps<T extends FieldValues> {
   control: Control<T>
   name: Path<T>
-}) {
-  const controller = useController({
-    control: props.control,
-    name: props.name,
+  required?: boolean
+}
+
+export function AdminImageInput<T extends FieldValues>({
+  control,
+  name,
+  required = true,
+}: AdminImageInputProps<T>) {
+  const { field } = useController({
+    control,
+    name,
+    rules: { required },
   })
 
-  const [articlePreview, setArticlePreview] = useState<string | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
+  const [addCross, setAddCross] = useState(false)
+  const [originalFile, setOriginalFile] = useState<File | null>(null)
 
-  const handleRemoveImage = useCallback(
-    (evt: React.MouseEvent<HTMLElement>) => {
-      evt.stopPropagation()
+  const processImage = useCallback(
+    (file: File, shouldAddCross: boolean) => {
+      const fileReader = new FileReader()
 
-      setArticlePreview(null)
+      fileReader.onload = () => {
+        if (fileReader.result) {
+          const imageUrl = fileReader.result.toString()
 
-      // Update form field value to null instructing server to remove the image
-      controller.field.onChange(null)
+          if (shouldAddCross) {
+            const img = new Image()
+            img.onload = () => {
+              const canvas = document.createElement('canvas')
+              canvas.width = img.width
+              canvas.height = img.height
+              const ctx = canvas.getContext('2d')
+
+              if (ctx) {
+                // Draw original image
+                ctx.drawImage(img, 0, 0)
+
+                // Draw red cross
+                ctx.strokeStyle = 'red'
+                ctx.lineWidth = Math.max(img.width, img.height) * 0.02
+                ctx.beginPath()
+                ctx.moveTo(0, 0)
+                ctx.lineTo(canvas.width, canvas.height)
+                ctx.moveTo(canvas.width, 0)
+                ctx.lineTo(0, canvas.height)
+                ctx.stroke()
+
+                // Convert back to data URL and update preview
+                canvas.toBlob((blob) => {
+                  if (blob) {
+                    // Create a new file with the modified image
+                    const modifiedFile = new File([blob], file.name, {
+                      type: file.type,
+                    })
+
+                    // Update both the form control and the file input
+                    field.onChange(modifiedFile)
+                    setImagePreview(canvas.toDataURL())
+
+                    // Create a new DataTransfer object and set it as the files for the input
+                    const dataTransfer = new DataTransfer()
+                    dataTransfer.items.add(modifiedFile)
+                    const fileInput = document.getElementById(
+                      field.name
+                    ) as HTMLInputElement
+                    if (fileInput) {
+                      fileInput.files = dataTransfer.files
+                    }
+                  }
+                }, file.type)
+              }
+            }
+            img.src = imageUrl
+          } else {
+            setImagePreview(imageUrl)
+            field.onChange(file)
+          }
+        }
+      }
+
+      fileReader.readAsDataURL(file)
     },
-    [controller]
+    [field]
   )
 
-  const handleDrop = useCallback((file: File) => {
-    const fileReader = new FileReader()
+  const handleDrop = useCallback(
+    (file: File) => {
+      setOriginalFile(file)
+      processImage(file, addCross)
+    },
+    [addCross, processImage]
+  )
 
-    fileReader.onload = () => {
-      if (fileReader.result) {
-        setArticlePreview(fileReader.result.toString())
-      }
+  // Re-process the image whenever addCross changes
+  useEffect(() => {
+    if (originalFile) {
+      processImage(originalFile, addCross)
     }
-
-    fileReader.readAsDataURL(file)
-  }, [])
+  }, [addCross, originalFile, processImage])
 
   return (
-    <Controller
-      name={props.name}
-      control={props.control}
-      render={({ field }) => (
-        <Dropzone
-          accept={{
-            'image/png': [],
-            'image/jpeg': [],
-            'image/webp': [],
-          }}
-          onDrop={(acceptedFiles) => {
-            field.onChange(acceptedFiles[0])
+    <div>
+      <SwitchField
+        htmlFor="addCross"
+        label="Přidat červený křížek přes obrázek"
+      >
+        <Switch
+          id="addCross"
+          name="addCross"
+          checked={addCross}
+          onChange={setAddCross}
+        />
+      </SwitchField>
 
-            handleDrop(acceptedFiles[0])
-          }}
-        >
-          {({ getRootProps, getInputProps }) => (
-            <section>
-              <div {...getRootProps()}>
-                <input name={field.name} {...getInputProps()} />
-
-                {articlePreview ? (
-                  <>
-                    <figure className="mt-2">
-                      <img
-                        className="aspect-video rounded-xl bg-gray-50 object-cover"
-                        src={articlePreview}
-                        alt={'Obrazek'}
-                      />
-                    </figure>
-                    <Button
-                      onClick={handleRemoveImage}
-                      className="mt-2 inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                    >
-                      <TrashIcon
-                        aria-hidden="true"
-                        className="-ml-0.5 h-5 w-5"
-                      />
-                      Smazat obrázek
-                    </Button>
-                  </>
-                ) : (
-                  <div className="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-                    <div className="text-center">
-                      <PhotoIcon
-                        aria-hidden="true"
-                        className="mx-auto h-12 w-12 text-gray-300"
-                      />
-                      <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
-                        <label
-                          htmlFor={field.name}
-                          className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-                        >
-                          <span>Vyberte soubor</span>
-                        </label>
-                        <p className="pl-1">nebo jej přetáhněte</p>
-                      </div>
-                      <p className="text-xs leading-5 text-gray-600">
-                        Formáty .png, .jpg, .jpeg nebo .gif. Velikost max 4 MB.
-                      </p>
-                    </div>
-                  </div>
-                )}
-              </div>
-            </section>
+      <div className="mt-6 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+        <div className="text-center">
+          {imagePreview ? (
+            <>
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="max-w-full h-auto rounded-lg"
+              />
+            </>
+          ) : (
+            <PhotoIcon
+              className="mx-auto h-12 w-12 text-gray-300"
+              aria-hidden="true"
+            />
           )}
-        </Dropzone>
-      )}
-    />
+
+          <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
+            <label
+              htmlFor={field.name}
+              className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+            >
+              <span>Vyberte soubor</span>
+              <input
+                ref={field.ref}
+                id={field.name}
+                name={field.name}
+                type="file"
+                className="sr-only"
+                accept="image/*"
+                onChange={(e) => {
+                  const file = e.target.files?.[0]
+                  if (file) {
+                    handleDrop(file)
+                  }
+                }}
+              />
+            </label>
+          </div>
+          <p className="text-xs leading-5 text-gray-600">
+            PNG, JPG, GIF až do velikosti 10MB
+          </p>
+        </div>
+      </div>
+    </div>
   )
 }
