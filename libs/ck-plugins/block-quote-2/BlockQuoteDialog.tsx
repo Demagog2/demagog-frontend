@@ -11,7 +11,12 @@ interface Speaker {
 }
 
 interface BlockQuoteDialogProps {
-  onSave: (speakerId?: string, link?: string, media?: string, quotedAt?: string) => void
+  onSave: (
+    speakerId?: string,
+    link?: string,
+    media?: string,
+    quotedAt?: string
+  ) => void
   onClose: () => void
 }
 
@@ -117,7 +122,7 @@ export function BlockQuoteDialog({ onSave, onClose }: BlockQuoteDialogProps) {
             <Input
               name="link"
               type="url"
-              placeholder="Zadejte URL citátu"
+              placeholder="Zadejte URL citátu ve formátu https://"
               value={link}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                 setLink(e.target.value)

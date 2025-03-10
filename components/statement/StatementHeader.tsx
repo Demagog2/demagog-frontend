@@ -285,7 +285,7 @@ export function StatementHeader(
                 {isEmbedded && (
                   <a
                     className="accordion-link text-dark text-decoration-underline
-                     fw-bold mt-md-2 fs-md-7 mb-3"
+                     fw-bold mt-md-2 fs-8 fs-md-7 mb-3"
                     href={'/vyrok/' + statement.id}
                   >
                     přejít na celé odůvodnění

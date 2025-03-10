@@ -1,5 +1,7 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { imagePath } from '@/libs/images/path'
+import React from 'react'
+import { BlockQuoteMetadata } from '@/components/article/BlockQuoteMetadata'
 
 const AdminArticleQuoteFragment = gql(`
   fragment AdminArticleQuote on BlockQuoteNode {
@@ -9,6 +11,10 @@ const AdminArticleQuoteFragment = gql(`
       fullName
       role
     }
+    link
+    medium
+    quotedAt
+    ...BlockQuoteMetadata
   }
 `)
 
@@ -23,9 +29,9 @@ export function AdminArticleQuote(props: {
         <p>{data.text}</p>
       </blockquote>
 
-      {data.speaker && (
+      {(data.speaker || data.quotedAt || data.medium || data.link) && (
         <figcaption className="mt-10 flex items-center gap-x-6">
-          {data.speaker.avatar && (
+          {data.speaker?.avatar && (
             <img
               alt={data.speaker.fullName}
               src={imagePath(data.speaker.avatar)}
@@ -34,12 +40,13 @@ export function AdminArticleQuote(props: {
           )}
 
           <div className="text-sm/6">
-            <div className="font-semibold text-gray-900">
-              {data.speaker.fullName}
-            </div>
-            {data.speaker.role && (
-              <div className="mt-0.5 text-gray-600">{data.speaker.role}</div>
+            {data.speaker?.fullName && (
+              <div className="font-semibold text-gray-900">
+                {data.speaker?.fullName}
+              </div>
             )}
+
+            <BlockQuoteMetadata data={data} className="mt-0.5 text-gray-600" />
           </div>
         </figcaption>
       )}
