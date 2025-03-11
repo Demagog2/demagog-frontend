@@ -19,7 +19,7 @@ export function ArticleIllustration(props: {
   return (
     <figure>
       <img
-        className="mt-md-7 mt-3 rounded-l"
+        className="mt-md-7 mt-3 rounded-l w-100"
         alt="illustration"
         src={imagePath(article.image)}
       />
