@@ -92,7 +92,7 @@
 
   .article-content>div>p,
   .ck-content>p {
-    @apply !mt-8 !text-gray-700 !leading-7 !text-base;
+    @apply !mt-6 !text-gray-700 !leading-7 !text-base;
   }
 
   .ck-content p:first-child {
@@ -142,11 +142,11 @@
     }
 
     h2 {
-      @apply mt-16 text-2xl font-bold tracking-tight text-gray-900;
+      @apply mt-8 text-2xl font-bold tracking-tight text-gray-900;
     }
 
     h3 {
-      @apply mt-16 text-xl font-bold tracking-tight text-gray-900;
+      @apply mt-8 text-xl font-bold tracking-tight text-gray-900;
     }
 
     /* Hide code that CK editor doesn't handle */
