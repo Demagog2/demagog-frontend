@@ -15,7 +15,8 @@ interface BlockQuoteDialogProps {
     speakerId?: string,
     link?: string,
     media?: string,
-    quotedAt?: string
+    quotedAt?: string,
+    speakerCustomName?: string
   ) => void
   onClose: () => void
 }
@@ -28,6 +29,7 @@ export function BlockQuoteDialog({ onSave, onClose }: BlockQuoteDialogProps) {
   const [link, setLink] = useState('')
   const [media, setMedia] = useState('')
   const [quotedAt, setQuotedAt] = useState('')
+  const [speakerCustomName, setSpeakerCustomName] = useState('')
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchSpeakers = useCallback(
@@ -78,7 +80,7 @@ export function BlockQuoteDialog({ onSave, onClose }: BlockQuoteDialogProps) {
 
             <div className="ck-block-quote-dialog__section">
               <Input
-                type="text"
+                type="search"
                 placeholder="Zadejte jméno řečníka"
                 value={searchTerm}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
@@ -86,31 +88,41 @@ export function BlockQuoteDialog({ onSave, onClose }: BlockQuoteDialogProps) {
                 }
               />
             </div>
-          </Fieldset>
 
-          <ul className="ck-list">
-            {loading ? (
-              <li>Načítání...</li>
-            ) : (
-              speakers.map((speaker) => (
-                <li
-                  key={speaker.id}
-                  className={
-                    selectedSpeakerId === speaker.id ? 'ck-selected' : ''
-                  }
-                  onClick={() => setSelectedSpeakerId(speaker.id)}
-                >
-                  <span>{speaker.fullName}</span>
-                  {selectedSpeakerId === speaker.id && (
-                    <span
-                      className="ck-icon ck-icon-check"
-                      style={{ marginLeft: '8px' }}
-                    />
-                  )}
-                </li>
-              ))
-            )}
-          </ul>
+            <ul className="ck-list">
+              {loading ? (
+                <li>Načítání...</li>
+              ) : (
+                speakers.map((speaker) => (
+                  <li
+                    key={speaker.id}
+                    className={
+                      selectedSpeakerId === speaker.id ? 'ck-selected' : ''
+                    }
+                    onClick={() => setSelectedSpeakerId(speaker.id)}
+                  >
+                    <span>{speaker.fullName}</span>
+                    {selectedSpeakerId === speaker.id && (
+                      <span
+                        className="ck-icon ck-icon-check"
+                        style={{ marginLeft: '8px' }}
+                      />
+                    )}
+                  </li>
+                ))
+              )}
+            </ul>
+
+            <Input
+              type="text"
+              placeholder="Řečník mimo databázi"
+              name="speakerCustomName"
+              value={speakerCustomName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                setSpeakerCustomName(e.target.value)
+              }
+            />
+          </Fieldset>
         </div>
 
         <Fieldset className="mt-4">
@@ -157,9 +169,13 @@ export function BlockQuoteDialog({ onSave, onClose }: BlockQuoteDialogProps) {
       <div className="ck-block-quote-dialog__actions">
         <button
           className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          onClick={() => onSave(selectedSpeakerId, link, media, quotedAt)}
+          onClick={() =>
+            onSave(selectedSpeakerId, link, media, quotedAt, speakerCustomName)
+          }
         >
-          {selectedSpeakerId ? 'Vložit' : 'Vložit (bez řečníka)'}
+          {selectedSpeakerId || speakerCustomName
+            ? 'Vložit'
+            : 'Vložit (bez řečníka)'}
         </button>
         <button
           type="button"
