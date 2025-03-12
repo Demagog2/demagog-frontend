@@ -5,12 +5,10 @@ import { VeracityBadge } from '../../veracity/VeracityBadge'
 import { useRef, useState } from 'react'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { LinkIcon } from '@heroicons/react/24/outline'
-import { ArticleQuote } from '@/components/article/ArticleQuote'
-import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
-import {
-  StatementHeader,
-  StatementDisplayMode,
-} from '@/components/statement/StatementHeader'
+
+import { AdminArticleQuote } from './AdminArticleQuote'
+import { AdminArticleV2Preview } from '../AdminArticlePreview'
+import { AdminStatement } from './AdminStatement'
 
 const AdminStatementWithExplanationFragment = gql(`
   fragment AdminStatementWithExplanation on Statement {
@@ -30,16 +28,16 @@ const AdminStatementWithExplanationFragment = gql(`
               text
             }
             ... on BlockQuoteNode {
-              ...ArticleQuote
+              ...AdminArticleQuote
             }
             ... on ArticleNode {
               article {
-                ...ArticleV2PreviewFragment
+                ...AdminArticleV2Preview
               }
             }
             ... on StatementNode {
               statement {
-                ...StatementHeader
+                ...AdminStatement
               }
             }
           }
@@ -68,7 +66,7 @@ export function AdminStatementWithExplanation(props: {
 
   return (
     <>
-      <div className="mt-6 pt-2 px-4 md:px-6">
+      <div className="mt-6 pt-2">
         {!statement.published && (
           <div className="relative">
             <div className="absolute left-0 top-0 transform -translate-y-3">
@@ -129,7 +127,7 @@ export function AdminStatementWithExplanation(props: {
               </div>
             ) : (
               <div className="pb-1 mt-3 text-sm md:text-base">
-                <div className="content text-sm md:text-base">
+                <div className="text-sm md:text-base">
                   {statement.assessment.shortExplanation}
                 </div>
               </div>
@@ -157,7 +155,7 @@ export function AdminStatementWithExplanation(props: {
                       if (node.__typename === 'TextNode') {
                         return (
                           <div
-                            className="mt-4 content-text-node"
+                            className="content-text-node"
                             key={cursor}
                             dangerouslySetInnerHTML={{
                               __html: nicerLinksNoTruncate(node.text),
@@ -167,19 +165,12 @@ export function AdminStatementWithExplanation(props: {
                       }
 
                       if (node.__typename === 'BlockQuoteNode') {
-                        return (
-                          <ArticleQuote
-                            key={cursor}
-                            node={node}
-                            isQuoteInAccordion
-                          />
-                        )
+                        return <AdminArticleQuote key={cursor} node={node} />
                       }
 
                       if (node.__typename === 'ArticleNode' && node.article) {
                         return (
-                          <ArticleV2Preview
-                            isEmbedded
+                          <AdminArticleV2Preview
                             key={cursor}
                             article={node.article}
                           />
@@ -191,10 +182,10 @@ export function AdminStatementWithExplanation(props: {
                         node.statement
                       ) {
                         return (
-                          <StatementHeader
+                          <AdminStatement
+                            className="mt-8 bg-gray-200 rounded-2xl"
                             key={cursor}
                             statement={node.statement}
-                            displayMode={StatementDisplayMode.EMBEDDED}
                           />
                         )
                       }

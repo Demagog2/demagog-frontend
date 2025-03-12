@@ -267,6 +267,21 @@
     figure.embed>span {
       display: none;
     }
+
+    .ck-editor_demagog-box-wrapper {
+      @apply md:mt-10 md:px-8 md:py-6;
+    }
+
+    @media (min-width: 1280px) {
+      .ck-editor_demagog-box-wrapper.float-right {
+        width: 40%;
+        max-width: 280px;
+        float: right;
+        padding: 25px 29px;
+        margin: 32px 0px 32px 32px;
+      }
+    }
+
   }
 
 
