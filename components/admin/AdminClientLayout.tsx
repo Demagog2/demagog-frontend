@@ -339,7 +339,7 @@ export default function AdminClientLayout(
         )}
 
         <main className="py-10">
-          <div className="px-4 sm:px-6 lg:px-8">{props.children}</div>
+          <div>{props.children}</div>
         </main>
       </div>
     </div>
