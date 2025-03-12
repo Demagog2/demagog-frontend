@@ -210,6 +210,66 @@
     }
   }
 
+  /* Statement with full explanation */
+  .content .content-text-node {
+
+    p {
+      @apply mt-4 text-sm md:text-base;
+    }
+
+    h2 {
+      @apply mt-6 text-xl md:text-2xl font-extrabold;
+    }
+
+    h3 {
+      @apply mt-6 text-lg md:text-xl font-bold;
+    }
+
+    figure.image,
+    figure.embed {
+      @apply mt-4;
+    }
+
+    figure img {
+      @apply rounded-[31px] h-auto;
+    }
+
+    .ck-editor_demagog-box-wrapper>p:first-of-type {
+      @apply mt-0 !important;
+    }
+
+    .ck-editor_demagog-box-wrapper {
+      @apply border border-gray-900 mt-6 rounded-[31px] p-[20px] px-[25px] text-start;
+
+      h3,
+      h2 {
+        @apply mt-0 mb-3;
+      }
+
+      ul,
+      ol {
+        @apply mb-0;
+
+        li {
+          @apply text-sm;
+        }
+
+        li:not(:last-child) {
+          @apply mb-[19px];
+        }
+      }
+    }
+
+    .ck-editor_demagog-box-wrapper.bg-grey {
+      @apply border-0 bg-gray-200;
+    }
+
+    figure.embed>span {
+      display: none;
+    }
+  }
+
+
   /* Styling of admin page table */
   .admin-content-table {
     @apply min-w-full divide-y divide-gray-300;

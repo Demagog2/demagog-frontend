@@ -5,6 +5,7 @@ import React from 'react'
 import { Iframely } from '@/components/site/Iframely'
 import { AdminArticleV2Preview } from './AdminArticlePreview'
 import { AdminArticleQuote } from './segments/AdminArticleQuote'
+import { AdminStatementWithExplanation } from './segments/AdminStatementWithExplanation'
 
 const AdminArticleContentFragment = gql(`
   fragment AdminArticleContent on Article {
@@ -42,6 +43,7 @@ const AdminArticleContentFragment = gql(`
       statements(includeUnpublished: true) {
         id
         ...AdminStatement
+        ...AdminStatementWithExplanation
       }
     }
   }
@@ -124,7 +126,10 @@ export function AdminArticleContent(props: {
               className="mt-10 divide-y divide-gray-100 px-4 py-5"
             >
               {segment.statements.map((statement) => (
-                <AdminStatement key={statement.id} statement={statement} />
+                <AdminStatementWithExplanation
+                  key={statement.id}
+                  statement={statement}
+                />
               ))}
             </div>
           )
