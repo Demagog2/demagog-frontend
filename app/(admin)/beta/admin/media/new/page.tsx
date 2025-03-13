@@ -1,7 +1,6 @@
 import { Metadata } from 'next'
 import AdminMediumForm from '@/components/admin/media/AdminMediumForm'
 import { createMedium } from '../actions'
-import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export const metadata: Metadata = {
   title: 'Nový pořad',
