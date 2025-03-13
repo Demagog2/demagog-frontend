@@ -66,14 +66,12 @@ export function AdminStatementWithExplanation(props: {
 
   return (
     <>
-      <div className="mt-6 pt-2">
+      <div className="mt-6 pt-2 relative">
         {!statement.published && (
-          <div className="relative">
-            <div className="absolute left-0 top-0 transform -translate-y-3">
-              <span className="inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
-                Nezveřejněno
-              </span>
-            </div>
+          <div className="absolute left-0 top-0 transform -translate-y-3 z-10">
+            <span className="inline-flex items-center rounded-md bg-pink-50 px-2 py-1 text-xs font-medium text-pink-700 ring-1 ring-inset ring-pink-700/10">
+              Nezveřejněno
+            </span>
           </div>
         )}
         <div className="flex flex-col gap-6 lg:flex-row py-3">
