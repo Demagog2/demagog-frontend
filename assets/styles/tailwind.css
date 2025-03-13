@@ -264,9 +264,11 @@
       @apply border-0 bg-gray-200;
     }
 
-    figure.embed>span {
-      display: none;
+
+    [data-ck-unsafe-element='script'] {
+      @apply hidden;
     }
+
 
     .ck-editor_demagog-box-wrapper {
       @apply md:mt-10 md:px-8 md:py-6;

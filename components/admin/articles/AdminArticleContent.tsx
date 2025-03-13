@@ -6,6 +6,7 @@ import { Iframely } from '@/components/site/Iframely'
 import { AdminArticleV2Preview } from './AdminArticlePreview'
 import { AdminArticleQuote } from './segments/AdminArticleQuote'
 import { AdminStatementWithExplanation } from './segments/AdminStatementWithExplanation'
+import { nicerLinksNoTruncate } from '@/libs/comments/text'
 
 const AdminArticleContentFragment = gql(`
   fragment AdminArticleContent on Article {
@@ -91,7 +92,9 @@ export function AdminArticleContent(props: {
                   return (
                     <div
                       key={cursor}
-                      dangerouslySetInnerHTML={{ __html: node.text }}
+                      dangerouslySetInnerHTML={{
+                        __html: nicerLinksNoTruncate(node.text),
+                      }}
                     />
                   )
                 }
