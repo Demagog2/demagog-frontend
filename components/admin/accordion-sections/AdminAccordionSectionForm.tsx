@@ -4,7 +4,6 @@ import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { AdminPageHeader } from '../layout/AdminPageHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { Label } from '../forms/Label'
 import { FormAction } from '@/libs/forms/form-action'
@@ -25,6 +24,7 @@ import { AdminFormMain } from '../layout/AdminFormMain'
 import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import AdminAccordionItems from '../accordion-items/AdminAccordionItems'
+import { AdminFormHeader } from '../layout/AdminFormHeader'
 
 const AdminAccordionSectionDataFragment = gql(`
   fragment AdminAccordionSectionData on AccordionSection {
@@ -69,92 +69,94 @@ export function AdminAccordionSectionForm(props: {
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <AdminPageHeader>
-        <AdminPageTitle title={props.title} description={props.description} />
-        <AdminFormActions>
-          <LinkButton
-            href={`/beta/admin/accordion-sections`}
-            className="btn h-50px fs-6 s-back-link"
-          >
-            Zpět
-          </LinkButton>
-          <SubmitButton />
-        </AdminFormActions>
-      </AdminPageHeader>
-      <AdminFormContent>
-        <AdminFormMain>
-          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-            <Legend className="text-base font-semibold leading-7 text-gray-900">
-              Základní informace
-            </Legend>
-            <Field>
-              <Label htmlFor="name">Název sekce</Label>
+      <div className="container mx-auto">
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} description={props.description} />
+          <AdminFormActions>
+            <LinkButton
+              href={`/beta/admin/accordion-sections`}
+              className="btn h-50px fs-6 s-back-link"
+            >
+              Zpět
+            </LinkButton>
+            <SubmitButton />
+          </AdminFormActions>
+        </AdminFormHeader>
+        <AdminFormContent>
+          <AdminFormMain>
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Základní informace
+              </Legend>
+              <Field>
+                <Label htmlFor="name">Název sekce</Label>
 
-              <Input
-                id="title"
-                placeholder="Zadejte název…"
-                hasError={!!errors?.title}
-                {...register('title', { required: true })}
-              />
+                <Input
+                  id="title"
+                  placeholder="Zadejte název…"
+                  hasError={!!errors?.title}
+                  {...register('title', { required: true })}
+                />
 
-              <ErrorMessage message={errors.title?.message} />
-            </Field>
+                <ErrorMessage message={errors.title?.message} />
+              </Field>
 
-            {accordionSection && (
-              <>
-                <label className="block text-sm font-medium leading-6 text-gray-900">
-                  Položky sekce
-                </label>
-                <AdminAccordionItems accordionItem={accordionSection} />
-                <a
-                  href={`/beta/admin/accordion-sections/${accordionSection?.id}/items/new`}
-                >
-                  <button
-                    type="button"
-                    className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mt-2"
+              {accordionSection && (
+                <>
+                  <label className="block text-sm font-medium leading-6 text-gray-900">
+                    Položky sekce
+                  </label>
+                  <AdminAccordionItems accordionItem={accordionSection} />
+                  <a
+                    href={`/beta/admin/accordion-sections/${accordionSection?.id}/items/new`}
                   >
-                    <PlusCircleIcon
-                      aria-hidden="true"
-                      className="-ml-0.5 h-5 w-5"
-                    />
-                    Přidat položku sekce
-                  </button>
-                </a>
-              </>
-            )}
-          </Fieldset>
-        </AdminFormMain>
-        <AdminFormSidebar>
-          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-            <Legend className="text-base font-semibold leading-7 text-gray-900">
-              Zveřejnění
-            </Legend>
-            <Field>
-              <Label htmlFor="order" isOptional>
-                Pozice
-              </Label>
+                    <button
+                      type="button"
+                      className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 mt-2"
+                    >
+                      <PlusCircleIcon
+                        aria-hidden="true"
+                        className="-ml-0.5 h-5 w-5"
+                      />
+                      Přidat položku sekce
+                    </button>
+                  </a>
+                </>
+              )}
+            </Fieldset>
+          </AdminFormMain>
+          <AdminFormSidebar>
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Zveřejnění
+              </Legend>
+              <Field>
+                <Label htmlFor="order" isOptional>
+                  Pozice
+                </Label>
 
-              <Input id="order" type="number" {...register('order')} />
-            </Field>
-            <SwitchField htmlFor="published" label="Zveřejněná sekce">
-              <Controller
-                name="published"
-                control={control}
-                render={({ field }) => (
-                  <Switch
-                    id={field.name}
-                    name={field.name}
-                    checked={field.value}
-                    disabled={field.disabled}
-                    onBlur={field.onBlur}
-                    onChange={field.onChange}
-                  />
-                )}
-              />
-            </SwitchField>
-          </Fieldset>
-        </AdminFormSidebar>
-      </AdminFormContent>
+                <Input id="order" type="number" {...register('order')} />
+              </Field>
+              <SwitchField htmlFor="published" label="Zveřejněná sekce">
+                <Controller
+                  name="published"
+                  control={control}
+                  render={({ field }) => (
+                    <Switch
+                      id={field.name}
+                      name={field.name}
+                      checked={field.value}
+                      disabled={field.disabled}
+                      onBlur={field.onBlur}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
+              </SwitchField>
+            </Fieldset>
+          </AdminFormSidebar>
+        </AdminFormContent>
+      </div>
     </form>
   )
 }

@@ -4,7 +4,6 @@ import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { AdminPageHeader } from '../layout/AdminPageHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { Label } from '../forms/Label'
 import { FormAction } from '@/libs/forms/form-action'
@@ -17,6 +16,9 @@ import { mediumSchema } from '@/libs/media/medium-schema'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
+import { AdminFormHeader } from '../layout/AdminFormHeader'
+import { AdminFormContent } from '../layout/AdminFormContent'
+import { Field, Fieldset } from '@headlessui/react'
 
 export default function AdminMediumForm(props: {
   action: FormAction
@@ -44,26 +46,33 @@ export default function AdminMediumForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <AdminPageHeader>
-        <AdminPageTitle title={props.title} />
-        <AdminFormActions>
-          <LinkButton
-            href={`/beta/admin/media`}
-            className="btn h-50px fs-6 s-back-link"
-          >
-            Zpět
-          </LinkButton>
-          <SubmitButton />
-        </AdminFormActions>
-      </AdminPageHeader>
-
-      <Label htmlFor="new-media-field">Název pořadu</Label>
-      <Input
-        id="new-media-field"
-        hasError={!!errors.name}
-        {...register('name', { required: true })}
-      />
-      <ErrorMessage message={errors.name?.message} />
+      <div className="container mx-auto">
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} />
+          <AdminFormActions>
+            <LinkButton
+              href={`/beta/admin/media`}
+              className="btn h-50px fs-6 s-back-link"
+            >
+              Zpět
+            </LinkButton>
+            <SubmitButton />
+          </AdminFormActions>
+        </AdminFormHeader>
+        <AdminFormContent>
+          <Fieldset className="col-span-12">
+            <Field>
+              <Label htmlFor="new-media-field">Název pořadu</Label>
+              <Input
+                id="new-media-field"
+                hasError={!!errors.name}
+                {...register('name', { required: true })}
+              />
+              <ErrorMessage message={errors.name?.message} />
+            </Field>
+          </Fieldset>
+        </AdminFormContent>
+      </div>
     </form>
   )
 }

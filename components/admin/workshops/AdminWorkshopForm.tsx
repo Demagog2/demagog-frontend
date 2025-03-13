@@ -4,7 +4,6 @@ import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { AdminPageHeader } from '../layout/AdminPageHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { Label } from '../forms/Label'
 import { FormAction } from '@/libs/forms/form-action'
@@ -19,6 +18,7 @@ import { workshopSchema } from '@/libs/workshops/workshop-schema'
 import { AdminFormContent } from '../layout/AdminFormContent'
 import { Field, Fieldset, Textarea } from '@headlessui/react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { AdminFormHeader } from '../layout/AdminFormHeader'
 
 const AdminWorkshopDataFragment = gql(`
     fragment AdminWorkshopData on Workshop {
@@ -59,57 +59,59 @@ export function AdminWorkshopForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <AdminPageHeader>
-        <AdminPageTitle title={props.title} description={props.description} />
-        <AdminFormActions>
-          <LinkButton
-            href={`/beta/admin/workshops`}
-            className="btn h-50px fs-6 s-back-link"
-          >
-            Zpět
-          </LinkButton>
-          <SubmitButton />
-        </AdminFormActions>
-      </AdminPageHeader>
-      <AdminFormContent>
-        <div className="col-span-12">
-          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-            <Field>
-              <Label htmlFor="name">Název workshopu</Label>
+      <div className="container mx-auto">
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} description={props.description} />
+          <AdminFormActions>
+            <LinkButton
+              href={`/beta/admin/workshops`}
+              className="btn h-50px fs-6 s-back-link"
+            >
+              Zpět
+            </LinkButton>
+            <SubmitButton />
+          </AdminFormActions>
+        </AdminFormHeader>
+        <AdminFormContent>
+          <div className="col-span-12">
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Field>
+                <Label htmlFor="name">Název workshopu</Label>
 
-              <Input
-                id="name"
-                placeholder="Zadejte název…"
-                hasError={!!errors?.name}
-                {...register('name', { required: true })}
-              />
-
-              <ErrorMessage message={errors.name?.message} />
-            </Field>
-
-            <Field>
-              <Label htmlFor="description">Popis</Label>
-              <Textarea
-                className="w-full sm:text-sm text-gray-900 rounded-md shadow-sm w-full border-0 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-                id="description"
-                {...register('description', { required: true })}
-              />
-              <ErrorMessage message={errors.description?.message} />
-            </Field>
-            <div className="grid grid-cols-12 ">
-              <Field className="col-span-3">
-                <Label htmlFor="price">Cena</Label>
                 <Input
-                  id="price"
-                  type="number"
-                  {...register('price', { required: true })}
+                  id="name"
+                  placeholder="Zadejte název…"
+                  hasError={!!errors?.name}
+                  {...register('name', { required: true })}
                 />
-                <ErrorMessage message={errors.price?.message} />
+
+                <ErrorMessage message={errors.name?.message} />
               </Field>
-            </div>
-          </Fieldset>
-        </div>
-      </AdminFormContent>
+
+              <Field>
+                <Label htmlFor="description">Popis</Label>
+                <Textarea
+                  className="w-full sm:text-sm text-gray-900 rounded-md shadow-sm w-full border-0 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+                  id="description"
+                  {...register('description', { required: true })}
+                />
+                <ErrorMessage message={errors.description?.message} />
+              </Field>
+              <div className="grid grid-cols-12 ">
+                <Field className="col-span-3">
+                  <Label htmlFor="price">Cena</Label>
+                  <Input
+                    id="price"
+                    type="number"
+                    {...register('price', { required: true })}
+                  />
+                  <ErrorMessage message={errors.price?.message} />
+                </Field>
+              </div>
+            </Fieldset>
+          </div>
+        </AdminFormContent>
+      </div>
     </form>
   )
 }

@@ -84,7 +84,7 @@ export function AdminStatementForm(props: {
     <form action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('sourceId')} />
 
-      <div className="container">
+      <div className="container mx-auto">
         <AlertMessage
           className="my-4"
           title="Vytváření výroku"

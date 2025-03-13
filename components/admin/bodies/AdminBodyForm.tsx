@@ -22,7 +22,6 @@ import { SwitchField } from '../forms/SwitchField'
 import { schema } from '@/libs/bodies/schema'
 import { dateInputFormat } from '@/libs/date-time'
 import { AdminFormContent } from '../layout/AdminFormContent'
-import { AdminFormMain } from '../layout/AdminFormMain'
 
 const AdminBodyDataFragment = gql(`
   fragment AdminBodyData on Body {
@@ -73,7 +72,7 @@ export function AdminBodyForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
-        <div className="container">
+        <div className="container mx-auto">
           <AdminFormHeader>
             <AdminPageTitle title={props.title} />
             <AdminFormActions>
@@ -82,7 +81,7 @@ export function AdminBodyForm(props: {
             </AdminFormActions>
           </AdminFormHeader>
           <AdminFormContent>
-            <AdminFormMain>
+            <div className="col-span-12 gap-y-5">
               <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
                 <Legend className="text-base font-semibold leading-7 text-gray-900">
                   Základní údaje
@@ -138,7 +137,7 @@ export function AdminBodyForm(props: {
                   Vznik a zánik
                 </Legend>
 
-                <div className="flex flex-row items-center gap-6">
+                <div className="flex flex-col sm:flex-row items-center gap-6">
                   <Field className="w-full">
                     <Label htmlFor="foundedAt" isOptional>
                       Datum vzniku
@@ -185,7 +184,7 @@ export function AdminBodyForm(props: {
                   </div>
                 </Field>
               </Fieldset>
-            </AdminFormMain>
+            </div>
           </AdminFormContent>
         </div>
       </form>

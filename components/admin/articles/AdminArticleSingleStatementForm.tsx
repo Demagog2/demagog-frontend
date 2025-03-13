@@ -23,6 +23,9 @@ import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { dateInputFormat } from '@/libs/date-time'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { FormAction } from '@/libs/forms/form-action'
+import { AdminFormContent } from '../layout/AdminFormContent'
+import { AdminFormMain } from '../layout/AdminFormMain'
+import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 
 const AdminArticleSingleStatementFormFragment = gql(`
   fragment AdminArticleSingleStatementFormFields on Article {
@@ -80,7 +83,7 @@ export function AdminArticleSingleStatementForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
-        <div className="container">
+        <div className="container mx-auto">
           <AdminFormHeader>
             <AdminPageTitle
               title={props.title}
@@ -93,99 +96,99 @@ export function AdminArticleSingleStatementForm(props: {
               <SubmitButton />
             </AdminFormActions>
           </AdminFormHeader>
+          <AdminFormContent>
+            <AdminFormMain className="col-span-12 lg:col-span-9 gap-y-5 grid grid-cols-1">
+              <div className="grow gap-y-5 grid grid-cols-1">
+                <Fieldset className="space-y-4">
+                  <Field>
+                    <Label htmlFor="title">Název článku</Label>
 
-          <div className="mt-6 flex gap-5 border-b border-gray-900/10 pb-12">
-            {/* Main panel */}
-            <div className="grow gap-y-5 grid grid-cols-1">
-              <Fieldset className="space-y-4">
-                <Field>
-                  <Label htmlFor="title">Název článku</Label>
+                    <Input
+                      id="title"
+                      placeholder="Upravit název…"
+                      {...register('title', { required: true })}
+                    />
+                  </Field>
 
-                  <Input
-                    id="title"
-                    placeholder="Upravit název…"
-                    {...register('title', { required: true })}
-                  />
-                </Field>
+                  <Field>
+                    <Label htmlFor="illustration">Ilustrační obrázek</Label>
 
-                <Field>
-                  <Label htmlFor="illustration">Ilustrační obrázek</Label>
+                    <AdminArticleIllustrationInput
+                      article={article}
+                      control={control}
+                      name="illustration"
+                    />
+                  </Field>
 
-                  <AdminArticleIllustrationInput
-                    article={article}
-                    control={control}
-                    name="illustration"
-                  />
-                </Field>
+                  <Field>
+                    <Label htmlFor="illustrationCaption" isOptional>
+                      Popisek obrázku
+                    </Label>
 
-                <Field>
-                  <Label htmlFor="illustrationCaption" isOptional>
-                    Popisek obrázku
-                  </Label>
+                    <Input
+                      id="illustrationCaption"
+                      placeholder="Zadejte popisek obrázku..."
+                      {...register('illustrationCaption')}
+                    />
+                  </Field>
 
-                  <Input
-                    id="illustrationCaption"
-                    placeholder="Zadejte popisek obrázku..."
-                    {...register('illustrationCaption')}
-                  />
-                </Field>
+                  <Field>
+                    <Label htmlFor="statementId">Výrok</Label>
+                    <Input
+                      type="number"
+                      id="statementId"
+                      {...register('statementId')}
+                    />
+                  </Field>
+                </Fieldset>
+              </div>
+            </AdminFormMain>
+            <AdminFormSidebar>
+              <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
+                <Fieldset className="space-y-4">
+                  <Field>
+                    <Button
+                      onClick={() => setDialogOpen(true)}
+                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto whitespace-nowrap"
+                    >
+                      Vygenerovat obrázek pro tweet
+                    </Button>
+                  </Field>
 
-                <Field>
-                  <Label htmlFor="statementId">Výrok</Label>
-                  <Input
-                    type="number"
-                    id="statementId"
-                    {...register('statementId')}
-                  />
-                </Field>
-              </Fieldset>
-            </div>
-
-            {/* Right panel */}
-            <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
-              <Fieldset className="space-y-4">
-                <Field>
-                  <Button
-                    onClick={() => setDialogOpen(true)}
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                  <SwitchField
+                    htmlFor="published"
+                    label="Zveřejněný článek"
+                    description="Článek bude veřejně dostupný."
                   >
-                    Vygenerovat obrázek pro tweet
-                  </Button>
-                </Field>
+                    <Controller
+                      name="published"
+                      control={control}
+                      render={({ field }) => (
+                        <Switch
+                          id={field.name}
+                          name={field.name}
+                          checked={field.value}
+                          disabled={field.disabled}
+                          onBlur={field.onBlur}
+                          onChange={field.onChange}
+                        />
+                      )}
+                    />
+                  </SwitchField>
 
-                <SwitchField
-                  htmlFor="published"
-                  label="Zveřejněný článek"
-                  description="Článek bude veřejně dostupný."
-                >
-                  <Controller
-                    name="published"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        id={field.name}
-                        name={field.name}
-                        checked={field.value}
-                        disabled={field.disabled}
-                        onBlur={field.onBlur}
-                        onChange={field.onChange}
-                      />
-                    )}
-                  />
-                </SwitchField>
+                  <Field>
+                    <Label htmlFor="publishedAt">Datum zveřejnění</Label>
 
-                <Field>
-                  <Label htmlFor="publishedAt">Datum zveřejnění</Label>
-
-                  <Input
-                    id="publishedAt"
-                    type="date"
-                    {...register('publishedAt')}
-                  />
-                </Field>
-              </Fieldset>
-            </div>
-          </div>
+                    <Input
+                      id="publishedAt"
+                      type="date"
+                      {...register('publishedAt')}
+                    />
+                  </Field>
+                </Fieldset>
+              </div>
+            </AdminFormSidebar>
+          </AdminFormContent>
         </div>
       </form>
 
