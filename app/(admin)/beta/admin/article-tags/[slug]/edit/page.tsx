@@ -51,12 +51,10 @@ export default async function AdminArticleTagEdit(props: {
   })
 
   return (
-    <AdminPage>
-      <AdminArticleTagForm
-        action={updateArticleTag.bind(null, data.articleTag.id)}
-        title={`Upravit tag ${data.articleTag.title}`}
-        articleTag={data.articleTag}
-      />
-    </AdminPage>
+    <AdminArticleTagForm
+      action={updateArticleTag.bind(null, data.articleTag.id)}
+      title={`Upravit tag ${data.articleTag.title}`}
+      articleTag={data.articleTag}
+    />
   )
 }
