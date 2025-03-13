@@ -78,8 +78,20 @@ export class BlockQuoteWithSpeaker extends Plugin {
               reactRoot = createRoot(domElement)
               reactRoot.render(
                 <BlockQuoteDialog
-                  onSave={(speakerId, link, media, quotedAt) => {
-                    editor.execute('blockQuoteWithSpeaker', { speakerId, link, media, quotedAt })
+                  onSave={(
+                    speakerId,
+                    link,
+                    media,
+                    quotedAt,
+                    speakerCustomName
+                  ) => {
+                    editor.execute('blockQuoteWithSpeaker', {
+                      speakerId,
+                      link,
+                      media,
+                      quotedAt,
+                      speakerCustomName,
+                    })
                     dialog.hide()
                   }}
                   onClose={() => dialog.hide()}
