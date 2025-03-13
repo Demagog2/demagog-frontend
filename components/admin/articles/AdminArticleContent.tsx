@@ -126,7 +126,7 @@ export function AdminArticleContent(props: {
           ) : (
             <div
               key={segment.id}
-              className="mt-10 divide-y divide-gray-100 px-4 py-5"
+              className="mt-10 divide-y divide-gray-100 px-4 pt-8 pb-5"
             >
               {segment.statements.map((statement) => (
                 <AdminStatementWithExplanation

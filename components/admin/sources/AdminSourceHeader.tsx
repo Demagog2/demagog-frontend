@@ -43,7 +43,7 @@ export async function AdminSourceHeader(props: {
 
   return (
     <div>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 px-4 sm:px-6 lg:px-8">
         <nav aria-label="Breadcrumb" className="flex">
           <ol role="list" className="flex items-center space-x-4">
             <li>
@@ -62,7 +62,7 @@ export async function AdminSourceHeader(props: {
           {source.name}
         </h2>
       </div>
-      <div className="mt-5 flex space-x-2">
+      <div className="mt-5 flex space-x-2  px-4 sm:px-6 lg:px-8">
         {isAuthorized(['statements:add']) && (
           <a
             href={`/beta/admin/sources/${source.id}/statements/new`}
