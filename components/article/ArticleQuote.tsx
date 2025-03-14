@@ -7,11 +7,16 @@ import { BlockQuoteMetadata } from './BlockQuoteMetadata'
 const ArticleQuoteFragment = gql(`
   fragment ArticleQuote on BlockQuoteNode {
     text
-    speaker {
-      avatar(size: small)
-      fullName
-      role
-    }
+    speakerV2 {
+      ... on Speaker {
+        avatar(size: small)
+          fullName
+          role
+      } 
+      ... on SpeakerWithCustomName {
+        name
+      }
+  }
     link
     medium
     quotedAt
@@ -57,23 +62,27 @@ export function ArticleQuote(props: {
           >
             {data.text}
           </p>
-          {(data.speaker || data.quotedAt || data.medium || data.link) && (
+          {(data.speakerV2 || data.quotedAt || data.medium || data.link) && (
             <div className="d-flex align-items-center mt-4 mt-lg-5">
-              {data.speaker?.avatar && (
-                <img
-                  className="me-4 me-lg-5 symbol-size rounded-circle bg-gray-500 overflow-hidden flex-shrink-0"
-                  src={imagePath(data.speaker.avatar)}
-                  alt={data.speaker.fullName}
-                />
-              )}
+              {data.speakerV2?.__typename === 'Speaker' &&
+                data.speakerV2.avatar && (
+                  <img
+                    className="me-4 me-lg-5 symbol-size rounded-circle bg-gray-500 overflow-hidden flex-shrink-0"
+                    src={imagePath(data.speakerV2.avatar)}
+                    alt={data.speakerV2.fullName}
+                  />
+                )}
 
               <div
                 className={classNames('mb-0 fs-8', {
                   'fs-lg-5': !props.isQuoteInAccordion,
                 })}
               >
-                {data.speaker?.fullName && (
-                  <div className="fw-semibold">{data.speaker?.fullName}</div>
+                {data.speakerV2?.__typename === 'Speaker' && (
+                  <div className="fw-semibold">{data.speakerV2.fullName}</div>
+                )}
+                {data.speakerV2?.__typename === 'SpeakerWithCustomName' && (
+                  <div className="fw-semibold">{data.speakerV2.name}</div>
                 )}
 
                 <BlockQuoteMetadata data={data} className="fw-normal" />

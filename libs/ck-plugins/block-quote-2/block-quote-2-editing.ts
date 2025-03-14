@@ -126,9 +126,9 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
                 const domElement = this.toDomElement(domDocument)
                 let content = `— ${speakerCustomName}`
                 if (link) {
-                  content += `<a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
+                  content += `, <a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
                 } else if (media) {
-                  content += media
+                  content += `, ${media}`
                 }
                 if (quotedAt) {
                   content += ` (${displayDate(quotedAt)})`
