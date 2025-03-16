@@ -44,7 +44,7 @@ export function AdminImageForm(props: {
       onSubmit={handleSubmitForm}
       encType="multipart/form-data"
     >
-      <div className="container">
+      <div className="container mx-auto">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
           <AdminFormActions>

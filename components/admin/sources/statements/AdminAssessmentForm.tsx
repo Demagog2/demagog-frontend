@@ -411,7 +411,7 @@ function AdminAssessmentForm(props: {
     <form ref={formRef} action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('statementType')} />
 
-      <div className="container">
+      <div className="container mx-auto">
         <AdminFormHeader>
           <AdminPageTitle title={title} description={description} />
 
@@ -425,7 +425,7 @@ function AdminAssessmentForm(props: {
         </AdminFormHeader>
 
         <AdminSourceStatementStep
-          className="border-none py-4"
+          className="border-none py-4 px-4 sm:px-6 lg:px-8"
           statement={statement}
           evaluationStep={evaluationStatus}
           published={published}

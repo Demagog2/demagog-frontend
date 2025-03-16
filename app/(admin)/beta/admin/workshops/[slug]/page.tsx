@@ -62,43 +62,45 @@ export default async function AdminWorkshopDetail(props: {
   return (
     <>
       <AdminPage>
-        <AdminPageHeader>
-          <AdminPageTitle
-            title={workshop.name ?? ''}
-            description="Detail workshopu"
-          />
-          <div className="flex items-center justify-end gap-x-6 flex-shrink-0">
-            <LinkButton href="/beta/admin/workshops">Zpět</LinkButton>
-            <LinkButton
-              href={`/beta/admin/workshops/${props.params.slug}/edit`}
-            >
-              Upravit
-            </LinkButton>
-          </div>
-        </AdminPageHeader>
-        <AdminPageContent>
-          <div className="border border-gray-200 bg-white shadow-sm rounded-2xl overflow-hidden text-sm">
-            <div className="p-6 sm:p-8 lg:p-10">
-              <div className="flex flex-col gap-8 sm:flex-row">
-                <div className="flex-auto">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-6">
-                    {workshop.name}
-                  </h3>
-                  <div className="space-y-6 text-gray-600">
-                    <div>
-                      <p className="font-semibold">Popis:</p>
-                      <p>{workshop.description ?? 'Nevyplněno'}</p>
-                    </div>
-                    <div>
-                      <p className="font-semibold">Cena:</p>
-                      <p>{workshop.priceFormatted ?? 'Nevyplněno'}</p>
+        <div className="container mx-auto">
+          <AdminPageHeader>
+            <AdminPageTitle
+              title={workshop.name ?? ''}
+              description="Detail workshopu"
+            />
+            <div className="flex items-center justify-end gap-x-6 flex-shrink-0">
+              <LinkButton href="/beta/admin/workshops">Zpět</LinkButton>
+              <LinkButton
+                href={`/beta/admin/workshops/${props.params.slug}/edit`}
+              >
+                Upravit
+              </LinkButton>
+            </div>
+          </AdminPageHeader>
+          <AdminPageContent>
+            <div className="border border-gray-200 bg-white shadow-sm rounded-2xl overflow-hidden text-sm mx-4 sm:mx-6 lg:mx-8">
+              <div className="p-4  sm:p-6">
+                <div className="flex flex-col gap-8 sm:flex-row">
+                  <div className="flex-auto">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-6">
+                      {workshop.name}
+                    </h3>
+                    <div className="space-y-6 text-gray-600">
+                      <div>
+                        <p className="font-semibold">Popis:</p>
+                        <p>{workshop.description ?? 'Nevyplněno'}</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold">Cena:</p>
+                        <p>{workshop.priceFormatted ?? 'Nevyplněno'}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </AdminPageContent>
+          </AdminPageContent>
+        </div>
       </AdminPage>
     </>
   )

@@ -19,7 +19,6 @@ import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { speakerSchema } from '@/libs/speakers/speaker-schema'
 import { AdminFormContent } from '../admin/layout/AdminFormContent'
-import { AdminFormMain } from '../admin/layout/AdminFormMain'
 import { AdminBodySelect } from '../admin/sources/AdminBodySelect'
 import { dateInputFormat } from '@/libs/date-time'
 import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
@@ -100,7 +99,7 @@ export function AdminSpeakerForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
-        <div className="container">
+        <div className="container mx-auto">
           <AdminFormHeader>
             <AdminPageTitle title={props.title} />
             <AdminFormActions>
@@ -109,7 +108,7 @@ export function AdminSpeakerForm(props: {
             </AdminFormActions>
           </AdminFormHeader>
           <AdminFormContent>
-            <AdminFormMain>
+            <div className="col-span-12 gap-y-5">
               <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
                 <Legend className="text-base font-semibold leading-7 text-gray-900">
                   Základní údaje
@@ -155,7 +154,7 @@ export function AdminSpeakerForm(props: {
                     40 znaků.
                   </p>
                 </Field>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid sm:grid-cols-2 gap-4">
                   <Field>
                     <Label htmlFor="wikidataId" isOptional>
                       Wikidata ID
@@ -270,7 +269,7 @@ export function AdminSpeakerForm(props: {
                   ))}
                 </Field>
               </Fieldset>
-            </AdminFormMain>
+            </div>
           </AdminFormContent>
         </div>
       </form>

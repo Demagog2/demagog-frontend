@@ -75,7 +75,7 @@ export function AdminArticleTagForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <div className="container">
+      <div className="container mx-auto">
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />
           <AdminFormActions>

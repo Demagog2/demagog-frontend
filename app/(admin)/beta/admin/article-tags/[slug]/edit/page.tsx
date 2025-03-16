@@ -1,6 +1,5 @@
 import { gql } from '@/__generated__'
 import { AdminArticleTagForm } from '@/components/admin/article-tags/AdminArticleTagForm'
-import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
@@ -51,12 +50,10 @@ export default async function AdminArticleTagEdit(props: {
   })
 
   return (
-    <AdminPage>
-      <AdminArticleTagForm
-        action={updateArticleTag.bind(null, data.articleTag.id)}
-        title={`Upravit tag ${data.articleTag.title}`}
-        articleTag={data.articleTag}
-      />
-    </AdminPage>
+    <AdminArticleTagForm
+      action={updateArticleTag.bind(null, data.articleTag.id)}
+      title={`Upravit tag ${data.articleTag.title}`}
+      articleTag={data.articleTag}
+    />
   )
 }

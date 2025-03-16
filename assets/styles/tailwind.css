@@ -92,7 +92,7 @@
 
   .article-content>div>p,
   .ck-content>p {
-    @apply !mt-8 !text-gray-700 !leading-7 !text-base;
+    @apply !mt-6 !text-gray-700 !leading-7 !text-base;
   }
 
   .ck-content p:first-child {
@@ -142,11 +142,11 @@
     }
 
     h2 {
-      @apply mt-16 text-2xl font-bold tracking-tight text-gray-900;
+      @apply mt-8 text-2xl font-bold tracking-tight text-gray-900;
     }
 
     h3 {
-      @apply mt-16 text-xl font-bold tracking-tight text-gray-900;
+      @apply mt-8 text-xl font-bold tracking-tight text-gray-900;
     }
 
     /* Hide code that CK editor doesn't handle */
@@ -209,6 +209,83 @@
       margin: 32px 0px 32px 32px;
     }
   }
+
+  /* Statement with full explanation */
+  .content .content-text-node {
+
+    p {
+      @apply mt-4 text-sm md:text-base;
+    }
+
+    h2 {
+      @apply mt-6 text-xl md:text-2xl font-extrabold;
+    }
+
+    h3 {
+      @apply mt-6 text-lg md:text-xl font-bold;
+    }
+
+    figure.image,
+    figure.embed {
+      @apply mt-4;
+    }
+
+    figure img {
+      @apply rounded-[31px] h-auto;
+    }
+
+    .ck-editor_demagog-box-wrapper>p:first-of-type {
+      @apply mt-0 !important;
+    }
+
+    .ck-editor_demagog-box-wrapper {
+      @apply border border-gray-900 mt-6 rounded-[31px] p-[20px] px-[25px] text-start;
+
+      h3,
+      h2 {
+        @apply mt-0 mb-3;
+      }
+
+      ul,
+      ol {
+        @apply mb-0;
+
+        li {
+          @apply text-sm;
+        }
+
+        li:not(:last-child) {
+          @apply mb-[19px];
+        }
+      }
+    }
+
+    .ck-editor_demagog-box-wrapper.bg-grey {
+      @apply border-0 bg-gray-200;
+    }
+
+
+    [data-ck-unsafe-element='script'] {
+      @apply hidden;
+    }
+
+
+    .ck-editor_demagog-box-wrapper {
+      @apply md:mt-10 md:px-8 md:py-6;
+    }
+
+    @media (min-width: 1280px) {
+      .ck-editor_demagog-box-wrapper.float-right {
+        width: 40%;
+        max-width: 280px;
+        float: right;
+        padding: 25px 29px;
+        margin: 32px 0px 32px 32px;
+      }
+    }
+
+  }
+
 
   /* Styling of admin page table */
   .admin-content-table {

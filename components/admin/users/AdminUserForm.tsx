@@ -1,6 +1,6 @@
 'use client'
 
-import { Field } from '@headlessui/react'
+import { Field, Fieldset, Legend } from '@headlessui/react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useFormState } from 'react-dom'
 import { Controller, useForm } from 'react-hook-form'
@@ -22,6 +22,7 @@ import { AdminUserRoleSelect } from './AdminUserRoleControl'
 import { Switch } from '../forms/Switch'
 import { SwitchField } from '../forms/SwitchField'
 import { Textarea } from '../forms/Textarea'
+import { AdminFormContent } from '../layout/AdminFormContent'
 
 const AdminUserFormFieldsDataFragment = gql(`
   fragment AdminUserFormFieldsData on Query {
@@ -84,7 +85,7 @@ export function AdminUserForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
-        <div className="container">
+        <div className="container mx-auto">
           <AdminFormHeader>
             <AdminPageTitle title={props.title} />
             <AdminFormActions>
@@ -92,50 +93,54 @@ export function AdminUserForm(props: {
               <SubmitButton />
             </AdminFormActions>
           </AdminFormHeader>
+          <AdminFormContent>
+            <div className="col-span-12 gap-y-8">
+              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+                <Legend className="text-base font-semibold leading-7 text-gray-900">
+                  Základní údaje
+                </Legend>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <Field>
+                    <Label htmlFor="firstName">Jméno</Label>
+                    <Input
+                      id="firstName"
+                      placeholder="Zadejte jméno"
+                      {...register('firstName', { required: true })}
+                    />
+                    <ErrorMessage message={errors.firstName?.message} />
+                  </Field>
 
-          <div>
-            <div className="space-y-12">
-              <div className="border-b border-gray-900/10 pb-12">
-                <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
-                    <Field>
-                      <Label htmlFor="firstName">Jméno</Label>
-                      <Input
-                        id="firstName"
-                        placeholder="Zadejte jméno"
-                        {...register('firstName', { required: true })}
-                      />
-                      <ErrorMessage message={errors.firstName?.message} />
-                    </Field>
-                  </div>
-                  <div className="sm:col-span-3">
-                    <Field>
-                      <Label htmlFor="lastName">Příjmení</Label>
-                      <Input
-                        id="lastName"
-                        placeholder="Zadejte příjmení"
-                        {...register('lastName', { required: true })}
-                      />
-                      <ErrorMessage message={errors.lastName?.message} />
-                    </Field>
-                  </div>
-                  <div className="sm:col-span-3">
-                    <Field>
-                      <Label htmlFor="email">Email</Label>
-                      <Input
-                        id="email"
-                        placeholder="Zadejte email"
-                        {...register('email', { required: true })}
-                      />
-                      <ErrorMessage message={errors.email?.message} />
-                      <p className="mt-1 text-sm/6 text-gray-600">
-                        Uživatel musí mít Google účet s tímto emailem, aby se
-                        dokázal do administrace přihlásit
-                      </p>
-                    </Field>
-                  </div>
+                  <Field>
+                    <Label htmlFor="lastName">Příjmení</Label>
+                    <Input
+                      id="lastName"
+                      placeholder="Zadejte příjmení"
+                      {...register('lastName', { required: true })}
+                    />
+                    <ErrorMessage message={errors.lastName?.message} />
+                  </Field>
+                  <Field>
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      placeholder="Zadejte email"
+                      {...register('email', { required: true })}
+                    />
+                    <ErrorMessage message={errors.email?.message} />
+                    <p className="mt-1 text-sm/6 text-gray-600">
+                      Uživatel musí mít Google účet s tímto emailem, aby se
+                      dokázal do administrace přihlásit
+                    </p>
+                  </Field>
+                </div>
+              </Fieldset>
+              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+                <Legend className="mt-6 text-base font-semibold leading-7 text-gray-900">
+                  Doplňující údaje
+                </Legend>
 
-                  <div className="sm:col-span-3 sm:col-start-1">
+                <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                  <div className="sm:col-span-3">
                     <Field>
                       <Label htmlFor="roleId">Přístupová práva</Label>
 
@@ -237,9 +242,9 @@ export function AdminUserForm(props: {
                     </Field>
                   </div>
                 </div>
-              </div>
+              </Fieldset>
             </div>
-          </div>
+          </AdminFormContent>
         </div>
       </form>
     </>
