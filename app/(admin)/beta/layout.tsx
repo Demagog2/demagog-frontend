@@ -44,7 +44,7 @@ export default async function AdminLayout({
 
   return (
     <html lang="cs" className="h-full">
-      <body className="h-full">
+      <body className="h-full bg-white dark:bg-black">
         {adminData && (
           <AdminClientLayout isBannerVisible={isBannerVisible} data={adminData}>
             {children}
