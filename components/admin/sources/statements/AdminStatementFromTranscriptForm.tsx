@@ -4,7 +4,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { Field, Fieldset, Legend, Textarea } from '@headlessui/react'
 import { z } from 'zod'
 import { Label } from '../../forms/Label'
-import { Controller, useForm, useFormState } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { AdminSourceSpeakerSelect } from './AdminSourceSpeakerSelect'
 import { ErrorMessage } from '../../forms/ErrorMessage'
 import { statementSchema } from '@/libs/sources/statement-schema'
@@ -15,31 +15,53 @@ import { AdminPageTitle } from '../../layout/AdminPageTitle'
 import { AdminFormActions } from '../../layout/AdminFormActions'
 import { AdminStatementTypeSelect } from './AdminStatementTypeSelect'
 import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
+import { useMutation } from '@apollo/client'
+import { useCallback } from 'react'
+import { StatementType } from '@/__generated__/graphql'
 
 const AdminStatementFromTranscriptFormFragment = gql(`
-    fragment AdminStatementFromTranscriptForm on Query {
-      ...AdminExpertSelect
-    }
-  `)
+  fragment AdminStatementFromTranscriptForm on Query {
+    ...AdminExpertSelect
+  }
+`)
 
 const AdminStatementFromTranscriptDataFragment = gql(`
-    fragment AdminStatementFromTranscriptData on Source {
+  fragment AdminStatementFromTranscriptData on Source {
+    id
+    sourceSpeakers {
       id
-      sourceSpeakers {
+    }
+    ...AdminSourceSpeakerSelect
+  }
+`)
+
+export const CreateStatementMutation = gql(`
+  mutation CreateStatementFromTranscript($statementInput: CreateStatementInput!) {
+    createStatement(statementInput: $statementInput) {
+      statement {
         id
       }
-      ...AdminSourceSpeakerSelect 
     }
-  `)
+  }
+`)
 
 type FieldValues = z.output<typeof statementSchema>
 
 export function AdminStatementFromTranscriptForm(props: {
-  statement: string
+  statementTranscriptPosition: {
+    startLine: number
+    startOffset: number
+    endLine: number
+    endOffset: number
+    text: string
+  }
   source: FragmentType<typeof AdminStatementFromTranscriptDataFragment>
   data: FragmentType<typeof AdminStatementFromTranscriptFormFragment>
   onCancel: () => void
+  onSuccess: () => void
 }) {
+  const { onSuccess, statementTranscriptPosition } = props
+
   const source = useFragment(
     AdminStatementFromTranscriptDataFragment,
     props.source
@@ -47,25 +69,73 @@ export function AdminStatementFromTranscriptForm(props: {
 
   const data = useFragment(AdminStatementFromTranscriptFormFragment, props.data)
 
+  const [createStatement, { loading }] = useMutation(CreateStatementMutation)
+
   const {
     control,
-    trigger,
-    formState: { errors, isValid },
+    formState: { errors },
+    handleSubmit,
     register,
   } = useForm<FieldValues>({
     resolver: zodResolver(statementSchema),
     defaultValues: {
+      sourceId: source.id,
       statementType: 'factual',
       sourceSpeakerId: source.sourceSpeakers?.[0]?.id ?? '',
       evaluatorId: '',
+      content: statementTranscriptPosition.text,
     },
   })
 
+  const onSubmit = useCallback(
+    async (data: FieldValues) => {
+      await createStatement({
+        variables: {
+          statementInput: {
+            content: data.content,
+            sourceSpeakerId: data.sourceSpeakerId,
+            assessment: {
+              evaluatorId: data.evaluatorId,
+            },
+            sourceId: data.sourceId,
+            statementType: StatementType.Factual,
+
+            excerptedAt: new Date().toISOString(),
+            important: false,
+            published: false,
+            statementTranscriptPosition: {
+              startLine: statementTranscriptPosition.startLine,
+              startOffset: statementTranscriptPosition.startOffset,
+              endLine: statementTranscriptPosition.endLine,
+              endOffset: statementTranscriptPosition.endOffset,
+            },
+          },
+        },
+        onCompleted: () => {
+          onSuccess()
+        },
+      })
+    },
+    [createStatement, onSuccess, statementTranscriptPosition]
+  )
+
   return (
-    <form className="mt-6 py-6 border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="mt-6 py-6 border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border"
+    >
+      <input type="hidden" {...register('sourceId')} />
+
       <AdminFormHeader>
         <AdminPageTitle title="Nový výrok" />
         <AdminFormActions>
+          <button
+            type="submit"
+            className="text-sm font-semibold leading-6 text-gray-900"
+            disabled={loading}
+          >
+            Vytvořit
+          </button>
           <a
             className="text-sm font-semibold leading-6 text-gray-900"
             href="#"
@@ -92,7 +162,6 @@ export function AdminStatementFromTranscriptForm(props: {
                 {...register('content', { required: true })}
                 rows={10}
                 placeholder="Vložte či vepište znění..."
-                defaultValue={props.statement}
               />
 
               <ErrorMessage message={errors.content?.message} />

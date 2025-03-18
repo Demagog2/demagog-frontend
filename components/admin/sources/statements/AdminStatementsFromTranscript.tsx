@@ -8,6 +8,7 @@ import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
 import { AdminSourceStatements } from '@/components/admin/sources/AdminSourceStatements'
 import { useState } from 'react'
 import { AdminStatementFromTranscriptForm } from './AdminStatementFromTranscriptForm'
+import { toast } from 'react-toastify'
 
 interface TranscriptPosition {
   startLine: number
@@ -53,7 +54,7 @@ export function AdminStatementsFromTranscript({
   const [newStatementTranscriptPosition, setNewStatementTranscriptPosition] =
     useState<TranscriptPosition | null>(null)
 
-  const { data, loading, error } =
+  const { data, loading, error, refetch } =
     useQuery<AdminSourceTranscriptStatementsFormQuery>(SOURCE_QUERY, {
       variables: { id: sourceId },
     })
@@ -101,10 +102,15 @@ export function AdminStatementsFromTranscript({
         </p>
         {newStatementTranscriptPosition ? (
           <AdminStatementFromTranscriptForm
-            statement={newStatementTranscriptPosition.text}
-            source={data.sourceV2}
             data={data}
+            source={data.sourceV2}
+            statementTranscriptPosition={newStatementTranscriptPosition}
             onCancel={() => setNewStatementTranscriptPosition(null)}
+            onSuccess={() => {
+              setNewStatementTranscriptPosition(null)
+              refetch()
+              toast.success('Výrok byl úspěšně vytvořen')
+            }}
           />
         ) : (
           <AdminSourceStatements
