@@ -4,6 +4,7 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 import { updateArticleTag } from '../../actions'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -50,10 +51,12 @@ export default async function AdminArticleTagEdit(props: {
   })
 
   return (
-    <AdminArticleTagForm
-      action={updateArticleTag.bind(null, data.articleTag.id)}
-      title={`Upravit tag ${data.articleTag.title}`}
-      articleTag={data.articleTag}
-    />
+    <AdminPage>
+      <AdminArticleTagForm
+        action={updateArticleTag.bind(null, data.articleTag.id)}
+        title={`Upravit tag ${data.articleTag.title}`}
+        articleTag={data.articleTag}
+      />
+    </AdminPage>
   )
 }

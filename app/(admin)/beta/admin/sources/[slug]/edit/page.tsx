@@ -4,6 +4,7 @@ import { Metadata } from 'next'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { gql } from '@/__generated__'
 import { updateSource } from '../../actions'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -49,12 +50,14 @@ export default async function AdminSourcEdit(props: {
   })
 
   return (
-    <AdminSourceForm
-      title={`Upravit diskuzi - ${data.source.name}`}
-      description={'Upravit diskuzi pro ověřování výroků.'}
-      data={data}
-      source={data.source}
-      action={updateSource.bind(null, props.params.slug)}
-    />
+    <AdminPage>
+      <AdminSourceForm
+        title={`Upravit diskuzi - ${data.source.name}`}
+        description={'Upravit diskuzi pro ověřování výroků.'}
+        data={data}
+        source={data.source}
+        action={updateSource.bind(null, props.params.slug)}
+      />
+    </AdminPage>
   )
 }

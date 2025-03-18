@@ -1,6 +1,7 @@
 import { Metadata } from 'next'
 import AdminMediaPersonalitiesForm from '@/components/admin/media-personalities/AdminMediaPersonalitiesForm'
 import { createModerator } from '../actions'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export const metadata: Metadata = {
   title: 'Nový moderátor',
@@ -8,9 +9,11 @@ export const metadata: Metadata = {
 
 export default function NewModerator() {
   return (
-    <AdminMediaPersonalitiesForm
-      action={createModerator}
-      title="Přidat nového moderátora"
-    />
+    <AdminPage>
+      <AdminMediaPersonalitiesForm
+        action={createModerator}
+        title="Přidat nového moderátora"
+      />
+    </AdminPage>
   )
 }

@@ -5,6 +5,7 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { notFound } from 'next/navigation'
 import { AdminAccordionItemForm } from '@/components/admin/accordion-items/AdminAccordionItemForm'
 import { updateAccordionItem } from '../../../../actions'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { id: string }
@@ -60,11 +61,13 @@ export default async function AdminAccordionItemEdit(props: {
   }
 
   return (
-    <AdminAccordionItemForm
-      action={updateAccordionItem.bind(null, data.accordionItem.id)}
-      title={`Upravit položku: ${data.accordionItem.title}`}
-      accordionItem={data.accordionItem}
-      sectionId={data.accordionItem?.accordionSection?.id}
-    />
+    <AdminPage>
+      <AdminAccordionItemForm
+        action={updateAccordionItem.bind(null, data.accordionItem.id)}
+        title={`Upravit položku: ${data.accordionItem.title}`}
+        accordionItem={data.accordionItem}
+        sectionId={data.accordionItem?.accordionSection?.id}
+      />
+    </AdminPage>
   )
 }

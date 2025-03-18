@@ -5,6 +5,7 @@ import { createAccordionItem } from '../../../actions'
 import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { notFound } from 'next/navigation'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Nová položka', 'Administrace'),
@@ -34,11 +35,13 @@ export default async function AddAccordionItemNew(props: {
   }
 
   return (
-    <AdminAccordionItemForm
-      action={createAccordionItem}
-      title="Nová položka"
-      description={`Přidání nové položky do sekce: ${data.accordionSection.title}`}
-      sectionId={data.accordionSection.id}
-    />
+    <AdminPage>
+      <AdminAccordionItemForm
+        action={createAccordionItem}
+        title="Nová položka"
+        description={`Přidání nové položky do sekce: ${data.accordionSection.title}`}
+        sectionId={data.accordionSection.id}
+      />
+    </AdminPage>
   )
 }

@@ -4,6 +4,7 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { AdminUserForm } from '@/components/admin/users/AdminUserForm'
 import { updateUser } from '../../actions'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -53,13 +54,13 @@ export default async function AdminUserEdit(props: {
   })
 
   return (
-    <>
+    <AdminPage>
       <AdminUserForm
         title={`Upravit profil uživatele: ${data.user.fullName}`}
         action={updateUser.bind(null, data.user.id)}
         data={data}
         user={data.user}
       />
-    </>
+    </AdminPage>
   )
 }

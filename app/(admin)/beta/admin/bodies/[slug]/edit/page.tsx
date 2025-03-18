@@ -4,6 +4,7 @@ import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { AdminBodyForm } from '@/components/admin/bodies/AdminBodyForm'
 import { editBody } from '../../actions'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -52,10 +53,12 @@ export default async function AdminBodyEdit(props: {
   })
 
   return (
-    <AdminBodyForm
-      title={`Upravit stranu / skupinu: ${data.body.name}`}
-      action={editBody.bind(null, data.body.id)}
-      body={data.body}
-    />
+    <AdminPage>
+      <AdminBodyForm
+        title={`Upravit stranu / skupinu: ${data.body.name}`}
+        action={editBody.bind(null, data.body.id)}
+        body={data.body}
+      />
+    </AdminPage>
   )
 }
