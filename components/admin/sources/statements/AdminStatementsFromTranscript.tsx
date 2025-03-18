@@ -79,7 +79,7 @@ export function AdminStatementsFromTranscript({
     : statements
 
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid md:grid-cols-2 gap-8">
       <div>
         <AdminSourceTranscript
           transcript={data.sourceV2.transcript ?? ''}

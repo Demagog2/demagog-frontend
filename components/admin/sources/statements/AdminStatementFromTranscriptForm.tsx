@@ -62,7 +62,7 @@ export function AdminStatementFromTranscriptForm(props: {
   })
 
   return (
-    <form className="mt-8">
+    <form className="mt-6 py-6 border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
       <AdminFormHeader>
         <AdminPageTitle title="Nový výrok" />
         <AdminFormActions>
@@ -139,7 +139,7 @@ export function AdminStatementFromTranscriptForm(props: {
               <ErrorMessage message={errors.statementType?.message} />
             </Field>
           </Fieldset>
-          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+          <Fieldset className="space-y-4 mt-2 w-full">
             <Legend className="text-base font-semibold leading-7 text-gray-900">
               Ověřování
             </Legend>
