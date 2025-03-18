@@ -47,7 +47,7 @@ import { useQuery } from '@apollo/client'
 import { pluralize } from '@/libs/pluralize'
 import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
 import { useSelector } from '@xstate/react'
-import { Spinner } from '../../forms/Spinner'
+import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -181,14 +181,7 @@ export function AdminAssessmentFormController(props: {
   })
 
   if (loading) {
-    return (
-      <div>
-        <div className="inline-flex items-center px-4 py-2 leading-6 text-gray-700 transition ease-in-out duration-150">
-          <Spinner />
-          Nahrávám výrok...
-        </div>
-      </div>
-    )
+    return <LoadingMessage message="Nahrávám výrok..." />
   }
 
   if (!data?.statementV2) {
