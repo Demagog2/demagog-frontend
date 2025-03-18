@@ -82,7 +82,7 @@ export const createAccordionSection = new CreateActionBuilder<
       data.createAccordionSection?.__typename ===
       'CreateAccordionSectionSuccess'
     ) {
-      return `/beta/admin/accordion-sections/${data.createAccordionSection.accordionSection.id}`
+      return `/beta/admin/accordion-sections/${data.createAccordionSection.accordionSection.id}/edit`
     }
 
     return null
