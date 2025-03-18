@@ -36,7 +36,7 @@ export default function NewStatementDropdown(props: { sourceId: string }) {
                 aria-hidden="true"
                 className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 grow-0"
               />
-              <div className="grow-0">Přidat výrok výběrem z přepisu</div>
+              <div className="grow-0">Výběrem z přepisu</div>
             </a>
           </MenuItem>
           <MenuItem>
@@ -48,7 +48,7 @@ export default function NewStatementDropdown(props: { sourceId: string }) {
                 aria-hidden="true"
                 className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 grow-0"
               />
-              <div className="grow-0">Přidat výrok ručně</div>
+              <div className="grow-0">Ručně</div>
             </a>
           </MenuItem>
         </div>
