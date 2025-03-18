@@ -7,6 +7,8 @@ import { useQuery } from '@apollo/client'
 import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
 import { AdminSourceStatements } from '@/components/admin/sources/AdminSourceStatements'
 import { useState } from 'react'
+import { AdminStatementFromTranscriptForm } from './AdminStatementFromTranscriptForm'
+import { toast } from 'react-toastify'
 
 interface TranscriptPosition {
   startLine: number
@@ -31,8 +33,11 @@ const SOURCE_QUERY = gql(`
         }
       }
       ...SourceStatements
+      ...AdminStatementFromTranscriptData
     }
     ...AdminSourceStatementsData
+    ...AdminStatementFromTranscriptForm
+    ...AdminExpertSelect
   }
 `)
 
@@ -49,7 +54,7 @@ export function AdminStatementsFromTranscript({
   const [newStatementTranscriptPosition, setNewStatementTranscriptPosition] =
     useState<TranscriptPosition | null>(null)
 
-  const { data, loading, error } =
+  const { data, loading, error, refetch } =
     useQuery<AdminSourceTranscriptStatementsFormQuery>(SOURCE_QUERY, {
       variables: { id: sourceId },
     })
@@ -75,7 +80,7 @@ export function AdminStatementsFromTranscript({
     : statements
 
   return (
-    <div className="grid grid-cols-2 gap-8">
+    <div className="grid md:grid-cols-2 gap-8">
       <div>
         <AdminSourceTranscript
           transcript={data.sourceV2.transcript ?? ''}
@@ -96,7 +101,17 @@ export function AdminStatementsFromTranscript({
           ze které jej chcete vytvořit.
         </p>
         {newStatementTranscriptPosition ? (
-          <div>Form</div>
+          <AdminStatementFromTranscriptForm
+            data={data}
+            source={data.sourceV2}
+            statementTranscriptPosition={newStatementTranscriptPosition}
+            onCancel={() => setNewStatementTranscriptPosition(null)}
+            onSuccess={() => {
+              setNewStatementTranscriptPosition(null)
+              refetch()
+              toast.success('Výrok byl úspěšně vytvořen')
+            }}
+          />
         ) : (
           <AdminSourceStatements
             source={data.sourceV2}
