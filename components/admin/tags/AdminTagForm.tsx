@@ -55,47 +55,45 @@ export function AdminTagForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <div className="container mx-auto">
-        <AdminFormHeader>
-          <AdminPageTitle title={props.title} />
-          <AdminFormActions>
-            <LinkButton href="/beta/admin/tags">Zpět</LinkButton>
+      <AdminFormHeader>
+        <AdminPageTitle title={props.title} />
+        <AdminFormActions>
+          <LinkButton href="/beta/admin/tags">Zpět</LinkButton>
 
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
 
-        <AdminFormContent>
-          <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
-            {errors.name && <ErrorMessage message={errors.name?.message} />}
+      <AdminFormContent>
+        <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
+          {errors.name && <ErrorMessage message={errors.name?.message} />}
 
-            <Field>
-              <Label htmlFor="title">Název štítku</Label>
+          <Field>
+            <Label htmlFor="title">Název štítku</Label>
 
-              <Input
-                id="title"
-                placeholder="Upravit název…"
-                {...register('name', { required: true })}
-              />
-            </Field>
+            <Input
+              id="title"
+              placeholder="Upravit název…"
+              {...register('name', { required: true })}
+            />
+          </Field>
 
-            <Field>
-              <Label htmlFor="forStatementType">Pro výroky typu</Label>
+          <Field>
+            <Label htmlFor="forStatementType">Pro výroky typu</Label>
 
-              <Select
-                id="forStatementType"
-                aria-label="Pro výroky typu"
-                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                {...register('forStatementType', { required: true })}
-              >
-                <option value="factual">Faktické výroky</option>
-                <option value="promise">Sliby politků</option>
-                <option value="newyears">Novoroční</option>
-              </Select>
-            </Field>
-          </div>
-        </AdminFormContent>
-      </div>
+            <Select
+              id="forStatementType"
+              aria-label="Pro výroky typu"
+              className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              {...register('forStatementType', { required: true })}
+            >
+              <option value="factual">Faktické výroky</option>
+              <option value="promise">Sliby politků</option>
+              <option value="newyears">Novoroční</option>
+            </Select>
+          </Field>
+        </div>
+      </AdminFormContent>
     </form>
   )
 }

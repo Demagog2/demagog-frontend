@@ -84,134 +84,132 @@ export function AdminStatementForm(props: {
     <form action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('sourceId')} />
 
-      <div className="container mx-auto">
-        <AlertMessage
-          className="my-4"
-          title="Vytváření výroku"
-          message="Vytváření výroků výběrem z přepisu ještě není naimplementováno."
-        />
+      <AlertMessage
+        className="my-4"
+        title="Vytváření výroku"
+        message="Vytváření výroků výběrem z přepisu ještě není naimplementováno."
+      />
 
-        <AdminFormHeader>
-          <AdminPageTitle title={props.title} description={props.description} />
+      <AdminFormHeader>
+        <AdminPageTitle title={props.title} description={props.description} />
 
-          <AdminFormActions>
-            <LinkButton href="/beta/admin/sources">Zpět</LinkButton>
+        <AdminFormActions>
+          <LinkButton href="/beta/admin/sources">Zpět</LinkButton>
 
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
 
-        <AdminFormContent className="flex-col">
-          <div className="col-span-12">
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Základní údaje
-              </Legend>
+      <AdminFormContent className="flex-col">
+        <div className="col-span-12">
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Základní údaje
+            </Legend>
 
-              <Field>
-                <Label htmlFor="content">Text výroku</Label>
+            <Field>
+              <Label htmlFor="content">Text výroku</Label>
 
-                <Textarea
-                  id="content"
-                  {...register('content', { required: true })}
-                  rows={10}
-                  placeholder="Vložte či vepište znění..."
-                />
+              <Textarea
+                id="content"
+                {...register('content', { required: true })}
+                rows={10}
+                placeholder="Vložte či vepište znění..."
+              />
 
-                <ErrorMessage message={errors.content?.message} />
-              </Field>
+              <ErrorMessage message={errors.content?.message} />
+            </Field>
 
-              <Field>
-                <Label htmlFor="sourceSpeakerId">Řečník</Label>
+            <Field>
+              <Label htmlFor="sourceSpeakerId">Řečník</Label>
 
-                <Controller
-                  control={control}
-                  name="sourceSpeakerId"
-                  render={({ field }) => (
-                    <>
-                      <input type="hidden" {...field} />
-                      <AdminSourceSpeakerSelect
-                        id="sourceSpeakerId"
-                        data={source}
-                        onChange={field.onChange}
-                        defaultValue={field.value}
-                      />
-                    </>
-                  )}
-                />
+              <Controller
+                control={control}
+                name="sourceSpeakerId"
+                render={({ field }) => (
+                  <>
+                    <input type="hidden" {...field} />
+                    <AdminSourceSpeakerSelect
+                      id="sourceSpeakerId"
+                      data={source}
+                      onChange={field.onChange}
+                      defaultValue={field.value}
+                    />
+                  </>
+                )}
+              />
 
-                <ErrorMessage message={errors.sourceSpeakerId?.message} />
-              </Field>
+              <ErrorMessage message={errors.sourceSpeakerId?.message} />
+            </Field>
 
-              <Field>
-                <Label htmlFor="statementType">Typ výroku</Label>
+            <Field>
+              <Label htmlFor="statementType">Typ výroku</Label>
 
-                <Controller
-                  control={control}
-                  name="statementType"
-                  render={({ field }) => (
-                    <>
-                      <input type="hidden" {...field} />
-                      <AdminStatementTypeSelect
-                        id="statementType"
-                        onChange={field.onChange}
-                        defaultValue={field.value}
-                      />
-                    </>
-                  )}
-                />
+              <Controller
+                control={control}
+                name="statementType"
+                render={({ field }) => (
+                  <>
+                    <input type="hidden" {...field} />
+                    <AdminStatementTypeSelect
+                      id="statementType"
+                      onChange={field.onChange}
+                      defaultValue={field.value}
+                    />
+                  </>
+                )}
+              />
 
-                <ErrorMessage message={errors.statementType?.message} />
-              </Field>
-            </Fieldset>
+              <ErrorMessage message={errors.statementType?.message} />
+            </Field>
+          </Fieldset>
 
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Ověřování
-              </Legend>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Ověřování
+            </Legend>
 
-              <Field>
-                <Label htmlFor="statementType" isOptional>
-                  Ověřovatel
-                </Label>
+            <Field>
+              <Label htmlFor="statementType" isOptional>
+                Ověřovatel
+              </Label>
 
-                <Controller
-                  control={control}
-                  name="evaluatorId"
-                  render={({ field }) => (
-                    <>
-                      <input type="hidden" {...field} />
-                      <AdminEvaluatorSelector
-                        id="evaluatorId"
-                        data={data}
-                        onChange={field.onChange}
-                        defaultValue={field.value}
-                      />
-                    </>
-                  )}
-                />
+              <Controller
+                control={control}
+                name="evaluatorId"
+                render={({ field }) => (
+                  <>
+                    <input type="hidden" {...field} />
+                    <AdminEvaluatorSelector
+                      id="evaluatorId"
+                      data={data}
+                      onChange={field.onChange}
+                      defaultValue={field.value}
+                    />
+                  </>
+                )}
+              />
 
-                <ErrorMessage message={errors.evaluatorId?.message} />
-              </Field>
+              <ErrorMessage message={errors.evaluatorId?.message} />
+            </Field>
 
-              <Field>
-                <Label htmlFor="firstCommentContent" isOptional>
-                  Poznámka pro ověřování
-                </Label>
+            <Field>
+              <Label htmlFor="firstCommentContent" isOptional>
+                Poznámka pro ověřování
+              </Label>
 
-                <Textarea
-                  id="firstCommentContent"
-                  {...register('firstCommentContent', { required: true })}
-                  rows={5}
-                  placeholder="Vložte či vepište znění..."
-                />
+              <Textarea
+                id="firstCommentContent"
+                {...register('firstCommentContent', { required: true })}
+                rows={5}
+                placeholder="Vložte či vepište znění..."
+              />
 
-                <ErrorMessage message={errors.statementType?.message} />
-              </Field>
-            </Fieldset>
-          </div>
-        </AdminFormContent>
-      </div>
+              <ErrorMessage message={errors.statementType?.message} />
+            </Field>
+          </Fieldset>
+        </div>
+      </AdminFormContent>
     </form>
   )
 }

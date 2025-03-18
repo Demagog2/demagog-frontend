@@ -75,130 +75,129 @@ export function AdminArticleTagForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <div className="container mx-auto">
-        <AdminFormHeader>
-          <AdminPageTitle title={props.title} />
-          <AdminFormActions>
-            <LinkButton href="/beta/admin/article-tags">Zpět</LinkButton>
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
-        <AdminFormContent>
-          <AdminFormMain>
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Základní informace
-              </Legend>
+      <AdminFormHeader>
+        <AdminPageTitle title={props.title} />
+        <AdminFormActions>
+          <LinkButton href="/beta/admin/article-tags">Zpět</LinkButton>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
 
-              <Field>
-                <Label htmlFor="title">Název tagu</Label>
-                <Input
-                  id="title"
-                  placeholder="Zadejte název tagu"
-                  {...register('title', { required: true })}
-                />
+      <AdminFormContent>
+        <AdminFormMain>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Základní informace
+            </Legend>
 
-                <ErrorMessage message={errors.title?.message} />
-              </Field>
-              <Field>
-                <Label htmlFor="slug">Url tagu (slug)</Label>
-                <Input
-                  id="slug"
-                  placeholder="Zadejte url"
-                  {...register('slug', { required: true })}
-                />
+            <Field>
+              <Label htmlFor="title">Název tagu</Label>
+              <Input
+                id="title"
+                placeholder="Zadejte název tagu"
+                {...register('title', { required: true })}
+              />
 
-                <ErrorMessage message={errors.slug?.message} />
-              </Field>
-            </Fieldset>
+              <ErrorMessage message={errors.title?.message} />
+            </Field>
+            <Field>
+              <Label htmlFor="slug">Url tagu (slug)</Label>
+              <Input
+                id="slug"
+                placeholder="Zadejte url"
+                {...register('slug', { required: true })}
+              />
 
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                Popis a zobrazení
-              </Legend>
+              <ErrorMessage message={errors.slug?.message} />
+            </Field>
+          </Fieldset>
 
-              <Field>
-                <Label htmlFor="description" isOptional>
-                  Popis
-                </Label>
-                <Textarea id="description" {...register('description')} />
-              </Field>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+              Popis a zobrazení
+            </Legend>
 
-              <Field>
-                <Label htmlFor="icon" isOptional>
-                  Ikona
-                </Label>
-                <Select
-                  id="icon"
-                  aria-label="Ikona"
-                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  {...register('icon')}
-                >
-                  <option value="0">Žádná</option>
-                  <option value="1">Základní</option>
-                  <option value="2">Prezidentská</option>
-                  <option value="3">Slovensko</option>
-                  <option value="4">Ukrajina</option>
-                </Select>
-              </Field>
-              <Field>
-                <Label htmlFor="stats" isOptional>
-                  Statistika
-                </Label>
-                <Select
-                  id="stats"
-                  aria-label="Statistika"
-                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  {...register('stats')}
-                >
-                  <option value="0">Žádná</option>
-                  <option value="1">Články</option>
-                  <option value="2">Výroky</option>
-                </Select>
-              </Field>
-            </Fieldset>
-          </AdminFormMain>
+            <Field>
+              <Label htmlFor="description" isOptional>
+                Popis
+              </Label>
+              <Textarea id="description" {...register('description')} />
+            </Field>
 
-          <AdminFormSidebar>
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Zveřejnění
-              </Legend>
-
-              <Field>
-                <Label htmlFor="order" isOptional>
-                  Pozice
-                </Label>
-
-                <Input id="order" type="number" {...register('order')} />
-
-                <ErrorMessage message={errors.order?.message} />
-              </Field>
-
-              <SwitchField
-                htmlFor="published"
-                label="Zveřejněný tag"
-                description="Tag bude veřejně dostupný."
+            <Field>
+              <Label htmlFor="icon" isOptional>
+                Ikona
+              </Label>
+              <Select
+                id="icon"
+                aria-label="Ikona"
+                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                {...register('icon')}
               >
-                <Controller
-                  name="published"
-                  control={control}
-                  render={({ field }) => (
-                    <Switch
-                      id={field.name}
-                      name={field.name}
-                      checked={field.value}
-                      disabled={field.disabled}
-                      onBlur={field.onBlur}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </SwitchField>
-            </Fieldset>
-          </AdminFormSidebar>
-        </AdminFormContent>
-      </div>
+                <option value="0">Žádná</option>
+                <option value="1">Základní</option>
+                <option value="2">Prezidentská</option>
+                <option value="3">Slovensko</option>
+                <option value="4">Ukrajina</option>
+              </Select>
+            </Field>
+            <Field>
+              <Label htmlFor="stats" isOptional>
+                Statistika
+              </Label>
+              <Select
+                id="stats"
+                aria-label="Statistika"
+                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                {...register('stats')}
+              >
+                <option value="0">Žádná</option>
+                <option value="1">Články</option>
+                <option value="2">Výroky</option>
+              </Select>
+            </Field>
+          </Fieldset>
+        </AdminFormMain>
+
+        <AdminFormSidebar>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Zveřejnění
+            </Legend>
+
+            <Field>
+              <Label htmlFor="order" isOptional>
+                Pozice
+              </Label>
+
+              <Input id="order" type="number" {...register('order')} />
+
+              <ErrorMessage message={errors.order?.message} />
+            </Field>
+
+            <SwitchField
+              htmlFor="published"
+              label="Zveřejněný tag"
+              description="Tag bude veřejně dostupný."
+            >
+              <Controller
+                name="published"
+                control={control}
+                render={({ field }) => (
+                  <Switch
+                    id={field.name}
+                    name={field.name}
+                    checked={field.value}
+                    disabled={field.disabled}
+                    onBlur={field.onBlur}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </SwitchField>
+          </Fieldset>
+        </AdminFormSidebar>
+      </AdminFormContent>
     </form>
   )
 }

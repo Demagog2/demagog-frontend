@@ -85,116 +85,116 @@ export function AdminUserForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
-        <div className="container mx-auto">
-          <AdminFormHeader>
-            <AdminPageTitle title={props.title} />
-            <AdminFormActions>
-              <LinkButton href="/beta/admin/users">Zpět</LinkButton>
-              <SubmitButton />
-            </AdminFormActions>
-          </AdminFormHeader>
-          <AdminFormContent>
-            <div className="col-span-12 gap-y-8">
-              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                <Legend className="text-base font-semibold leading-7 text-gray-900">
-                  Základní údaje
-                </Legend>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <Field>
-                    <Label htmlFor="firstName">Jméno</Label>
-                    <Input
-                      id="firstName"
-                      placeholder="Zadejte jméno"
-                      {...register('firstName', { required: true })}
-                    />
-                    <ErrorMessage message={errors.firstName?.message} />
-                  </Field>
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} />
+          <AdminFormActions>
+            <LinkButton href="/beta/admin/users">Zpět</LinkButton>
+            <SubmitButton />
+          </AdminFormActions>
+        </AdminFormHeader>
 
+        <AdminFormContent>
+          <div className="col-span-12 gap-y-8">
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Základní údaje
+              </Legend>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <Field>
+                  <Label htmlFor="firstName">Jméno</Label>
+                  <Input
+                    id="firstName"
+                    placeholder="Zadejte jméno"
+                    {...register('firstName', { required: true })}
+                  />
+                  <ErrorMessage message={errors.firstName?.message} />
+                </Field>
+
+                <Field>
+                  <Label htmlFor="lastName">Příjmení</Label>
+                  <Input
+                    id="lastName"
+                    placeholder="Zadejte příjmení"
+                    {...register('lastName', { required: true })}
+                  />
+                  <ErrorMessage message={errors.lastName?.message} />
+                </Field>
+                <Field>
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    placeholder="Zadejte email"
+                    {...register('email', { required: true })}
+                  />
+                  <ErrorMessage message={errors.email?.message} />
+                  <p className="mt-1 text-sm/6 text-gray-600">
+                    Uživatel musí mít Google účet s tímto emailem, aby se
+                    dokázal do administrace přihlásit
+                  </p>
+                </Field>
+              </div>
+            </Fieldset>
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="mt-6 text-base font-semibold leading-7 text-gray-900">
+                Doplňující údaje
+              </Legend>
+
+              <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
+                <div className="sm:col-span-3">
                   <Field>
-                    <Label htmlFor="lastName">Příjmení</Label>
-                    <Input
-                      id="lastName"
-                      placeholder="Zadejte příjmení"
-                      {...register('lastName', { required: true })}
+                    <Label htmlFor="roleId">Přístupová práva</Label>
+
+                    <AdminUserRoleSelect
+                      id="roleId"
+                      control={control}
+                      name="roleId"
+                      data={data}
                     />
-                    <ErrorMessage message={errors.lastName?.message} />
-                  </Field>
-                  <Field>
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      placeholder="Zadejte email"
-                      {...register('email', { required: true })}
-                    />
-                    <ErrorMessage message={errors.email?.message} />
-                    <p className="mt-1 text-sm/6 text-gray-600">
-                      Uživatel musí mít Google účet s tímto emailem, aby se
-                      dokázal do administrace přihlásit
-                    </p>
+
+                    <ErrorMessage message={errors.roleId?.message} />
                   </Field>
                 </div>
-              </Fieldset>
-              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                <Legend className="mt-6 text-base font-semibold leading-7 text-gray-900">
-                  Doplňující údaje
-                </Legend>
-
-                <div className="mt-8 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
-                    <Field>
-                      <Label htmlFor="roleId">Přístupová práva</Label>
-
-                      <AdminUserRoleSelect
-                        id="roleId"
-                        control={control}
-                        name="roleId"
-                        data={data}
+                <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
+                  <Controller
+                    name="emailNotifications"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        id={field.name}
+                        name={field.name}
+                        checked={field.value}
+                        disabled={field.disabled}
+                        onBlur={field.onBlur}
+                        onChange={field.onChange}
                       />
-
-                      <ErrorMessage message={errors.roleId?.message} />
-                    </Field>
-                  </div>
-                  <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
-                    <Controller
-                      name="emailNotifications"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          id={field.name}
-                          name={field.name}
-                          checked={field.value}
-                          disabled={field.disabled}
-                          onBlur={field.onBlur}
-                          onChange={field.onChange}
-                        />
-                      )}
-                    />
-                    <SwitchField
-                      htmlFor="emailNotifications"
-                      label="Posílat upozornění emailem?"
-                    />
-                  </div>
-                  <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
-                    <Controller
-                      name="userPublic"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          id={field.name}
-                          name={field.name}
-                          checked={field.value}
-                          disabled={field.disabled}
-                          onBlur={field.onBlur}
-                          onChange={field.onChange}
-                        />
-                      )}
-                    />
-                    <SwitchField
-                      htmlFor="userPublic"
-                      label="Zobrazit uživatele v sekci O nás?"
-                    />
-                  </div>
-                  {/*
+                    )}
+                  />
+                  <SwitchField
+                    htmlFor="emailNotifications"
+                    label="Posílat upozornění emailem?"
+                  />
+                </div>
+                <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
+                  <Controller
+                    name="userPublic"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        id={field.name}
+                        name={field.name}
+                        checked={field.value}
+                        disabled={field.disabled}
+                        onBlur={field.onBlur}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+                  <SwitchField
+                    htmlFor="userPublic"
+                    label="Zobrazit uživatele v sekci O nás?"
+                  />
+                </div>
+                {/*
                  <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
                     <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
                       <Label htmlFor="avatar">
@@ -208,44 +208,43 @@ export function AdminUserForm(props: {
                     </div>
                   </div>
                  */}
-                  <div className="col-span-full">
-                    <Field>
-                      <Label htmlFor="positionDescription">
-                        Popis pozice
-                        <span className="ml-3 text-sm/6 text-gray-600">
-                          nepovinné
-                        </span>
-                      </Label>
+                <div className="col-span-full">
+                  <Field>
+                    <Label htmlFor="positionDescription">
+                      Popis pozice
+                      <span className="ml-3 text-sm/6 text-gray-600">
+                        nepovinné
+                      </span>
+                    </Label>
 
-                      <Input
-                        id="positionDescription"
-                        placeholder="Popis pozice"
-                        {...register('positionDescription', {
-                          required: false,
-                        })}
-                      />
-                    </Field>
-                  </div>
-                  <div className="col-span-full">
-                    <Field>
-                      <Label htmlFor="bio">
-                        Bio
-                        <span className="ml-3 text-sm/6 text-gray-600">
-                          nepovinné
-                        </span>
-                      </Label>
-                      <Textarea
-                        id="bio"
-                        placeholder="Napište něco o sobě"
-                        {...register('bio', { required: false })}
-                      />
-                    </Field>
-                  </div>
+                    <Input
+                      id="positionDescription"
+                      placeholder="Popis pozice"
+                      {...register('positionDescription', {
+                        required: false,
+                      })}
+                    />
+                  </Field>
                 </div>
-              </Fieldset>
-            </div>
-          </AdminFormContent>
-        </div>
+                <div className="col-span-full">
+                  <Field>
+                    <Label htmlFor="bio">
+                      Bio
+                      <span className="ml-3 text-sm/6 text-gray-600">
+                        nepovinné
+                      </span>
+                    </Label>
+                    <Textarea
+                      id="bio"
+                      placeholder="Napište něco o sobě"
+                      {...register('bio', { required: false })}
+                    />
+                  </Field>
+                </div>
+              </div>
+            </Fieldset>
+          </div>
+        </AdminFormContent>
       </form>
     </>
   )

@@ -83,113 +83,109 @@ export function AdminArticleSingleStatementForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
-        <div className="container mx-auto">
-          <AdminFormHeader>
-            <AdminPageTitle
-              title={props.title}
-              description={props.description}
-            />
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} description={props.description} />
 
-            <AdminFormActions>
-              <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
+          <AdminFormActions>
+            <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
-              <SubmitButton />
-            </AdminFormActions>
-          </AdminFormHeader>
-          <AdminFormContent>
-            <AdminFormMain className="col-span-12 lg:col-span-9 gap-y-5 grid grid-cols-1">
-              <div className="grow gap-y-5 grid grid-cols-1">
-                <Fieldset className="space-y-4">
-                  <Field>
-                    <Label htmlFor="title">Název článku</Label>
+            <SubmitButton />
+          </AdminFormActions>
+        </AdminFormHeader>
 
-                    <Input
-                      id="title"
-                      placeholder="Upravit název…"
-                      {...register('title', { required: true })}
-                    />
-                  </Field>
+        <AdminFormContent>
+          <AdminFormMain className="col-span-12 lg:col-span-9 gap-y-5 grid grid-cols-1">
+            <div className="grow gap-y-5 grid grid-cols-1">
+              <Fieldset className="space-y-4">
+                <Field>
+                  <Label htmlFor="title">Název článku</Label>
 
-                  <Field>
-                    <Label htmlFor="illustration">Ilustrační obrázek</Label>
+                  <Input
+                    id="title"
+                    placeholder="Upravit název…"
+                    {...register('title', { required: true })}
+                  />
+                </Field>
 
-                    <AdminArticleIllustrationInput
-                      article={article}
-                      control={control}
-                      name="illustration"
-                    />
-                  </Field>
+                <Field>
+                  <Label htmlFor="illustration">Ilustrační obrázek</Label>
 
-                  <Field>
-                    <Label htmlFor="illustrationCaption" isOptional>
-                      Popisek obrázku
-                    </Label>
+                  <AdminArticleIllustrationInput
+                    article={article}
+                    control={control}
+                    name="illustration"
+                  />
+                </Field>
 
-                    <Input
-                      id="illustrationCaption"
-                      placeholder="Zadejte popisek obrázku..."
-                      {...register('illustrationCaption')}
-                    />
-                  </Field>
+                <Field>
+                  <Label htmlFor="illustrationCaption" isOptional>
+                    Popisek obrázku
+                  </Label>
 
-                  <Field>
-                    <Label htmlFor="statementId">Výrok</Label>
-                    <Input
-                      type="number"
-                      id="statementId"
-                      {...register('statementId')}
-                    />
-                  </Field>
-                </Fieldset>
-              </div>
-            </AdminFormMain>
-            <AdminFormSidebar>
-              <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
-                <Fieldset className="space-y-4">
-                  <Field>
-                    <Button
-                      onClick={() => setDialogOpen(true)}
-                      className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto whitespace-nowrap"
-                    >
-                      Vygenerovat obrázek pro tweet
-                    </Button>
-                  </Field>
+                  <Input
+                    id="illustrationCaption"
+                    placeholder="Zadejte popisek obrázku..."
+                    {...register('illustrationCaption')}
+                  />
+                </Field>
 
-                  <SwitchField
-                    htmlFor="published"
-                    label="Zveřejněný článek"
-                    description="Článek bude veřejně dostupný."
+                <Field>
+                  <Label htmlFor="statementId">Výrok</Label>
+                  <Input
+                    type="number"
+                    id="statementId"
+                    {...register('statementId')}
+                  />
+                </Field>
+              </Fieldset>
+            </div>
+          </AdminFormMain>
+          <AdminFormSidebar>
+            <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
+              <Fieldset className="space-y-4">
+                <Field>
+                  <Button
+                    onClick={() => setDialogOpen(true)}
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto whitespace-nowrap"
                   >
-                    <Controller
-                      name="published"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          id={field.name}
-                          name={field.name}
-                          checked={field.value}
-                          disabled={field.disabled}
-                          onBlur={field.onBlur}
-                          onChange={field.onChange}
-                        />
-                      )}
-                    />
-                  </SwitchField>
+                    Vygenerovat obrázek pro tweet
+                  </Button>
+                </Field>
 
-                  <Field>
-                    <Label htmlFor="publishedAt">Datum zveřejnění</Label>
+                <SwitchField
+                  htmlFor="published"
+                  label="Zveřejněný článek"
+                  description="Článek bude veřejně dostupný."
+                >
+                  <Controller
+                    name="published"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        id={field.name}
+                        name={field.name}
+                        checked={field.value}
+                        disabled={field.disabled}
+                        onBlur={field.onBlur}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+                </SwitchField>
 
-                    <Input
-                      id="publishedAt"
-                      type="date"
-                      {...register('publishedAt')}
-                    />
-                  </Field>
-                </Fieldset>
-              </div>
-            </AdminFormSidebar>
-          </AdminFormContent>
-        </div>
+                <Field>
+                  <Label htmlFor="publishedAt">Datum zveřejnění</Label>
+
+                  <Input
+                    id="publishedAt"
+                    type="date"
+                    {...register('publishedAt')}
+                  />
+                </Field>
+              </Fieldset>
+            </div>
+          </AdminFormSidebar>
+        </AdminFormContent>
       </form>
 
       <AdminArticleIllustrationDialog

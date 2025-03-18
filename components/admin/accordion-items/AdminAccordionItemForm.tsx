@@ -80,117 +80,114 @@ export function AdminAccordionItemForm(props: {
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('accordionSectionId')} />
-      <div className="container mx-auto">
-        <AdminFormHeader>
-          <AdminPageTitle title={props.title} description={props.description} />
-          <AdminFormActions>
-            <LinkButton
-              href={`/beta/admin/accordion-sections/${props.sectionId}/edit/`}
-              className="btn h-50px fs-6 s-back-link"
-            >
-              Zpět
-            </LinkButton>
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
-        <AdminFormContent>
-          <AdminFormMain>
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Základní informace
-              </Legend>
-              <Field>
-                <Label htmlFor="name">Název pložky</Label>
 
-                <Input
-                  id="title"
-                  placeholder="Zadejte název…"
-                  hasError={!!errors?.title}
-                  {...register('title', { required: true })}
+      <AdminFormHeader>
+        <AdminPageTitle title={props.title} description={props.description} />
+        <AdminFormActions>
+          <LinkButton
+            href={`/beta/admin/accordion-sections/${props.sectionId}/edit/`}
+            className="btn h-50px fs-6 s-back-link"
+          >
+            Zpět
+          </LinkButton>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
+
+      <AdminFormContent>
+        <AdminFormMain>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Základní informace
+            </Legend>
+            <Field>
+              <Label htmlFor="name">Název pložky</Label>
+
+              <Input
+                id="title"
+                placeholder="Zadejte název…"
+                hasError={!!errors?.title}
+                {...register('title', { required: true })}
+              />
+
+              <ErrorMessage message={errors.title?.message} />
+            </Field>
+            <Field>
+              <Label htmlFor="content" isOptional>
+                Obsah
+              </Label>
+              <div className="mt-2">
+                <Controller
+                  control={control}
+                  name="content"
+                  render={({ field, fieldState: { isDirty } }) => (
+                    <>
+                      <Label htmlFor={field.name} isDirty={isDirty}></Label>
+                      <input
+                        type="hidden"
+                        name={field.name}
+                        value={field.value}
+                      />
+                      <RichTextEditor
+                        includeHeadings
+                        value={field.value ?? ''}
+                        onChange={(value) => {
+                          field.onChange(value)
+                        }}
+                      />
+                    </>
+                  )}
                 />
-
-                <ErrorMessage message={errors.title?.message} />
-              </Field>
-              <Field>
-                <Label htmlFor="content" isOptional>
-                  Obsah
-                </Label>
-                <div className="mt-2">
-                  <Controller
-                    control={control}
-                    name="content"
-                    render={({ field, fieldState: { isDirty } }) => (
-                      <>
-                        <Label htmlFor={field.name} isDirty={isDirty}></Label>
-                        <input
-                          type="hidden"
-                          name={field.name}
-                          value={field.value}
-                        />
-                        <RichTextEditor
-                          includeHeadings
-                          value={field.value ?? ''}
-                          onChange={(value) => {
-                            field.onChange(value)
-                          }}
-                        />
-                      </>
-                    )}
+              </div>
+            </Field>
+          </Fieldset>
+        </AdminFormMain>
+        <AdminFormSidebar>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Zveřejnění
+            </Legend>
+            <Field>
+              <Label htmlFor="order" isOptional>
+                Pozice
+              </Label>
+              <Input id="order" type="number" {...register('order')} />
+            </Field>
+            <SwitchField htmlFor="published" label="Zveřejněná položka">
+              <Controller
+                name="published"
+                control={control}
+                render={({ field }) => (
+                  <Switch
+                    id={field.name}
+                    name={field.name}
+                    checked={field.value}
+                    disabled={field.disabled}
+                    onBlur={field.onBlur}
+                    onChange={field.onChange}
                   />
-                </div>
-              </Field>
-            </Fieldset>
-          </AdminFormMain>
-          <AdminFormSidebar>
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Zveřejnění
-              </Legend>
-              <Field>
-                <Label htmlFor="order" isOptional>
-                  Pozice
-                </Label>
-                <Input id="order" type="number" {...register('order')} />
-              </Field>
-              <SwitchField htmlFor="published" label="Zveřejněná položka">
-                <Controller
-                  name="published"
-                  control={control}
-                  render={({ field }) => (
-                    <Switch
-                      id={field.name}
-                      name={field.name}
-                      checked={field.value}
-                      disabled={field.disabled}
-                      onBlur={field.onBlur}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </SwitchField>
-              <SwitchField
-                htmlFor="memberListing"
-                label="Obsahuje seznam členů"
-              >
-                <Controller
-                  name="memberListing"
-                  control={control}
-                  render={({ field }) => (
-                    <Switch
-                      id={field.name}
-                      name={field.name}
-                      checked={field.value}
-                      disabled={field.disabled}
-                      onBlur={field.onBlur}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </SwitchField>
-            </Fieldset>
-          </AdminFormSidebar>
-        </AdminFormContent>
-      </div>
+                )}
+              />
+            </SwitchField>
+            <SwitchField htmlFor="memberListing" label="Obsahuje seznam členů">
+              <Controller
+                name="memberListing"
+                control={control}
+                render={({ field }) => (
+                  <Switch
+                    id={field.name}
+                    name={field.name}
+                    checked={field.value}
+                    disabled={field.disabled}
+                    onBlur={field.onBlur}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </SwitchField>
+          </Fieldset>
+        </AdminFormSidebar>
+      </AdminFormContent>
     </form>
   )
 }

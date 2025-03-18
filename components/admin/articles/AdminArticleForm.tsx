@@ -308,339 +308,334 @@ export function AdminArticleForm(props: {
       onSubmit={handleSubmitForm}
       encType="multipart/form-data"
     >
-      <div className="container mx-auto">
-        <AdminFormHeader>
-          <AdminPageTitle title={props.title} description={props.description} />
+      <AdminFormHeader>
+        <AdminPageTitle title={props.title} description={props.description} />
 
-          <AdminFormActions>
-            <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
+        <AdminFormActions>
+          <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
 
-        <AdminFormContent>
-          <AdminFormMain className="col-span-12 lg:col-span-9 gap-y-5 grid grid-cols-1">
-            <ErrorMessage message={errors.illustration?.message} />
+      <AdminFormContent>
+        <AdminFormMain className="col-span-12 lg:col-span-9 gap-y-5 grid grid-cols-1">
+          <ErrorMessage message={errors.illustration?.message} />
 
-            <Field>
-              <Label htmlFor="title">Název článku</Label>
+          <Field>
+            <Label htmlFor="title">Název článku</Label>
 
-              <Input
-                id="title"
-                placeholder="Upravit název…"
-                {...register('title', { required: true })}
-              />
-
-              <ErrorMessage message={errors.title?.message} />
-            </Field>
-
-            {selectedArticleType === ArticleTypeEnum.FacebookFactcheck && (
-              <Field>
-                <Label htmlFor="titleEn">Anglický název článku</Label>
-
-                <Input
-                  id="titleEn"
-                  placeholder="Upravit anglický název…"
-                  {...register('titleEn', { required: true })}
-                />
-
-                <Controller
-                  control={control}
-                  name={'titleEn'}
-                  render={({ fieldState }) => (
-                    <ErrorMessage message={fieldState.error?.message} />
-                  )}
-                />
-              </Field>
-            )}
-
-            <Field>
-              <Label htmlFor="illustration">Ilustrační obrázek</Label>
-
-              <AdminArticleIllustrationInput
-                article={article}
-                control={control}
-                name="illustration"
-              />
-
-              <ErrorMessage message={errors.illustration?.message} />
-            </Field>
-
-            <Field>
-              <Label htmlFor="illustrationCaption" isOptional>
-                Popisek obrázku
-              </Label>
-
-              <Input
-                id="illustrationCaption"
-                placeholder="Zadejte popisek obrázku..."
-                {...register('illustrationCaption')}
-              />
-
-              <ErrorMessage message={errors.illustrationCaption?.message} />
-            </Field>
-
-            <Field>
-              <Label htmlFor="perex" isDirty={isPerexDirty}>
-                Perex
-              </Label>
-              <Textarea
-                id="perex"
-                {...register('perex', {
-                  required: true,
-                  onChange(evt) {
-                    if (!article) {
-                      return
-                    }
-
-                    localStorage.setItem(
-                      localStorageKey,
-                      buildLocalStorageRecord(localStorageKey, {
-                        perex: evt.target.value,
-                      })
-                    )
-                  },
-                })}
-                rows={4}
-                placeholder="Zadejte perex..."
-              />
-
-              <ErrorMessage message={errors.perex?.message} />
-            </Field>
-
-            <AdminSegmentSelector
-              segments={items.map((item) => ({
-                ...item,
-                onClick: () => {
-                  if (item.segmentType === 'text') {
-                    append({ segmentType: item.segmentType, textHtml: '' })
-                  } else {
-                    append({ segmentType: item.segmentType, sourceId: '' })
-                  }
-                },
-              }))}
+            <Input
+              id="title"
+              placeholder="Upravit název…"
+              {...register('title', { required: true })}
             />
 
-            {fields.map((field, index) => (
-              <div key={field.id}>
-                <input
-                  type="hidden"
-                  {...register(`segments.${index}.segmentType`)}
-                />
+            <ErrorMessage message={errors.title?.message} />
+          </Field>
 
-                {field.segmentType === 'text' ? (
-                  <>
-                    <Controller
-                      control={control}
-                      name={`segments.${index}.textHtml`}
-                      render={({ field, fieldState: { isDirty } }) => (
-                        <>
-                          <Label htmlFor={field.name} isDirty={isDirty}></Label>
-                          <input
-                            type="hidden"
-                            name={field.name}
-                            value={field.value}
-                          />
-                          <RichTextEditor
-                            includeHeadings
-                            value={field.value}
-                            onChange={(value) => {
-                              field.onChange(value)
-                            }}
-                          />
-                        </>
-                      )}
-                    />
+          {selectedArticleType === ArticleTypeEnum.FacebookFactcheck && (
+            <Field>
+              <Label htmlFor="titleEn">Anglický název článku</Label>
 
-                    <Button onClick={() => remove(index)}>Odebrat</Button>
-                  </>
-                ) : (
+              <Input
+                id="titleEn"
+                placeholder="Upravit anglický název…"
+                {...register('titleEn', { required: true })}
+              />
+
+              <Controller
+                control={control}
+                name={'titleEn'}
+                render={({ fieldState }) => (
+                  <ErrorMessage message={fieldState.error?.message} />
+                )}
+              />
+            </Field>
+          )}
+
+          <Field>
+            <Label htmlFor="illustration">Ilustrační obrázek</Label>
+
+            <AdminArticleIllustrationInput
+              article={article}
+              control={control}
+              name="illustration"
+            />
+
+            <ErrorMessage message={errors.illustration?.message} />
+          </Field>
+
+          <Field>
+            <Label htmlFor="illustrationCaption" isOptional>
+              Popisek obrázku
+            </Label>
+
+            <Input
+              id="illustrationCaption"
+              placeholder="Zadejte popisek obrázku..."
+              {...register('illustrationCaption')}
+            />
+
+            <ErrorMessage message={errors.illustrationCaption?.message} />
+          </Field>
+
+          <Field>
+            <Label htmlFor="perex" isDirty={isPerexDirty}>
+              Perex
+            </Label>
+            <Textarea
+              id="perex"
+              {...register('perex', {
+                required: true,
+                onChange(evt) {
+                  if (!article) {
+                    return
+                  }
+
+                  localStorage.setItem(
+                    localStorageKey,
+                    buildLocalStorageRecord(localStorageKey, {
+                      perex: evt.target.value,
+                    })
+                  )
+                },
+              })}
+              rows={4}
+              placeholder="Zadejte perex..."
+            />
+
+            <ErrorMessage message={errors.perex?.message} />
+          </Field>
+
+          <AdminSegmentSelector
+            segments={items.map((item) => ({
+              ...item,
+              onClick: () => {
+                if (item.segmentType === 'text') {
+                  append({ segmentType: item.segmentType, textHtml: '' })
+                } else {
+                  append({ segmentType: item.segmentType, sourceId: '' })
+                }
+              },
+            }))}
+          />
+
+          {fields.map((field, index) => (
+            <div key={field.id}>
+              <input
+                type="hidden"
+                {...register(`segments.${index}.segmentType`)}
+              />
+
+              {field.segmentType === 'text' ? (
+                <>
                   <Controller
                     control={control}
-                    name={`segments.${index}.sourceId`}
-                    render={({ field }) => (
+                    name={`segments.${index}.textHtml`}
+                    render={({ field, fieldState: { isDirty } }) => (
                       <>
-                        <input type="hidden" {...field} />
-                        <AdminSourcesList
-                          selectedSourceId={field.value}
-                          onRemoveSegment={() => remove(index)}
-                          onChange={(sourceId) => field.onChange(sourceId)}
+                        <Label htmlFor={field.name} isDirty={isDirty}></Label>
+                        <input
+                          type="hidden"
+                          name={field.name}
+                          value={field.value}
+                        />
+                        <RichTextEditor
+                          includeHeadings
+                          value={field.value}
+                          onChange={(value) => {
+                            field.onChange(value)
+                          }}
                         />
                       </>
                     )}
-                  ></Controller>
+                  />
+
+                  <Button onClick={() => remove(index)}>Odebrat</Button>
+                </>
+              ) : (
+                <Controller
+                  control={control}
+                  name={`segments.${index}.sourceId`}
+                  render={({ field }) => (
+                    <>
+                      <input type="hidden" {...field} />
+                      <AdminSourcesList
+                        selectedSourceId={field.value}
+                        onRemoveSegment={() => remove(index)}
+                        onChange={(sourceId) => field.onChange(sourceId)}
+                      />
+                    </>
+                  )}
+                ></Controller>
+              )}
+            </div>
+          ))}
+
+          <Field>
+            <Controller
+              control={control}
+              name="articleTags"
+              render={({ field }) => (
+                <Listbox multiple name={field.name} onChange={field.onChange}>
+                  <Label htmlFor="articleTag">Tagy článku</Label>
+                  <div className="relative mt-2">
+                    <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                      <span className="block truncate">
+                        {(field.value?.length ?? 0) === 0
+                          ? 'Vyberte jeden nebo více tagů'
+                          : field.value
+                              ?.map(
+                                (value) =>
+                                  data.articleTags.find(
+                                    (tag) => tag.id === value
+                                  )?.title
+                              )
+                              .join(', ')}
+                      </span>
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                        <ChevronUpDownIcon
+                          aria-hidden="true"
+                          className="h-5 w-5 text-gray-400"
+                        />
+                      </span>
+                    </ListboxButton>
+
+                    <ListboxOptions
+                      transition
+                      className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
+                    >
+                      {data.articleTags.map((person) => (
+                        <ListboxOption
+                          key={person.id}
+                          value={person.id}
+                          className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
+                        >
+                          <span className="block truncate font-normal group-data-[selected]:font-semibold">
+                            {person.title}
+                          </span>
+
+                          <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden">
+                            <CheckIcon aria-hidden="true" className="h-5 w-5" />
+                          </span>
+                        </ListboxOption>
+                      ))}
+                    </ListboxOptions>
+                  </div>
+                </Listbox>
+              )}
+            />
+          </Field>
+        </AdminFormMain>
+
+        <AdminFormSidebar>
+          <Fieldset className="space-y-5 w-full border-b border-gray-900/10 pb-8">
+            <Field>
+              <Label htmlFor="articleType">Typ článku</Label>
+              <select
+                id="articleType"
+                {...register('articleType', { required: true })}
+                defaultValue={ArticleTypeEnum.Default}
+                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                {Object.entries(ARTICLE_TYPE_LABEL).map(([key, value]) => {
+                  if (HIDDEN_ARTICLE_TYPES.includes(key)) {
+                    return null
+                  }
+
+                  return (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  )
+                })}
+              </select>
+            </Field>
+
+            <SwitchField
+              htmlFor="pinned"
+              label="Připnout článek"
+              description="Článek bude trvale zobrazen na hlavní stránce jako první."
+            >
+              <Controller
+                name="pinned"
+                control={control}
+                render={({ field }) => (
+                  <Switch
+                    id={field.name}
+                    name={field.name}
+                    checked={field.value}
+                    disabled={field.disabled}
+                    onBlur={field.onBlur}
+                    onChange={field.onChange}
+                  />
                 )}
-              </div>
-            ))}
+              />
+            </SwitchField>
+
+            <SwitchField
+              htmlFor="published"
+              label="Zveřejněný článek"
+              description="Článek bude veřejně dostupný."
+            >
+              <Controller
+                name="published"
+                control={control}
+                render={({ field }) => (
+                  <Switch
+                    id={field.name}
+                    name={field.name}
+                    checked={field.value}
+                    disabled={field.disabled}
+                    onBlur={field.onBlur}
+                    onChange={field.onChange}
+                  />
+                )}
+              />
+            </SwitchField>
 
             <Field>
+              <Label htmlFor="publishedAt">Datum zveřejnění</Label>
+
+              <Input
+                id="publishedAt"
+                type="date"
+                {...register('publishedAt')}
+              />
+            </Field>
+
+            <Field>
+              <Label htmlFor="articleVeracity">Pravdivost článku</Label>
+              <select
+                disabled={
+                  selectedArticleType !== ArticleTypeEnum.FacebookFactcheck
+                }
+                id="articleVeracity"
+                {...register('articleVeracity', { required: true })}
+                className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
+              >
+                {ARTICLE_VERACITY_OPTIONS.map((articleVeracity) => (
+                  <option
+                    key={articleVeracity.value}
+                    value={articleVeracity.value}
+                  >
+                    {articleVeracity.label}
+                  </option>
+                ))}
+              </select>
+
               <Controller
                 control={control}
-                name="articleTags"
-                render={({ field }) => (
-                  <Listbox multiple name={field.name} onChange={field.onChange}>
-                    <Label htmlFor="articleTag">Tagy článku</Label>
-                    <div className="relative mt-2">
-                      <ListboxButton className="relative w-full cursor-default rounded-md bg-white py-1.5 pl-3 pr-10 text-left text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                        <span className="block truncate">
-                          {(field.value?.length ?? 0) === 0
-                            ? 'Vyberte jeden nebo více tagů'
-                            : field.value
-                                ?.map(
-                                  (value) =>
-                                    data.articleTags.find(
-                                      (tag) => tag.id === value
-                                    )?.title
-                                )
-                                .join(', ')}
-                        </span>
-                        <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                          <ChevronUpDownIcon
-                            aria-hidden="true"
-                            className="h-5 w-5 text-gray-400"
-                          />
-                        </span>
-                      </ListboxButton>
-
-                      <ListboxOptions
-                        transition
-                        className="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none data-[closed]:data-[leave]:opacity-0 data-[leave]:transition data-[leave]:duration-100 data-[leave]:ease-in sm:text-sm"
-                      >
-                        {data.articleTags.map((person) => (
-                          <ListboxOption
-                            key={person.id}
-                            value={person.id}
-                            className="group relative cursor-default select-none py-2 pl-3 pr-9 text-gray-900 data-[focus]:bg-indigo-600 data-[focus]:text-white"
-                          >
-                            <span className="block truncate font-normal group-data-[selected]:font-semibold">
-                              {person.title}
-                            </span>
-
-                            <span className="absolute inset-y-0 right-0 flex items-center pr-4 text-indigo-600 group-data-[focus]:text-white [.group:not([data-selected])_&]:hidden">
-                              <CheckIcon
-                                aria-hidden="true"
-                                className="h-5 w-5"
-                              />
-                            </span>
-                          </ListboxOption>
-                        ))}
-                      </ListboxOptions>
-                    </div>
-                  </Listbox>
+                name="articleVeracity"
+                render={({ fieldState: { error } }) => (
+                  <ErrorMessage message={error?.message} />
                 )}
               />
             </Field>
-          </AdminFormMain>
-
-          <AdminFormSidebar>
-            <Fieldset className="space-y-5 w-full border-b border-gray-900/10 pb-8">
-              <Field>
-                <Label htmlFor="articleType">Typ článku</Label>
-                <select
-                  id="articleType"
-                  {...register('articleType', { required: true })}
-                  defaultValue={ArticleTypeEnum.Default}
-                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                >
-                  {Object.entries(ARTICLE_TYPE_LABEL).map(([key, value]) => {
-                    if (HIDDEN_ARTICLE_TYPES.includes(key)) {
-                      return null
-                    }
-
-                    return (
-                      <option key={key} value={key}>
-                        {value}
-                      </option>
-                    )
-                  })}
-                </select>
-              </Field>
-
-              <SwitchField
-                htmlFor="pinned"
-                label="Připnout článek"
-                description="Článek bude trvale zobrazen na hlavní stránce jako první."
-              >
-                <Controller
-                  name="pinned"
-                  control={control}
-                  render={({ field }) => (
-                    <Switch
-                      id={field.name}
-                      name={field.name}
-                      checked={field.value}
-                      disabled={field.disabled}
-                      onBlur={field.onBlur}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </SwitchField>
-
-              <SwitchField
-                htmlFor="published"
-                label="Zveřejněný článek"
-                description="Článek bude veřejně dostupný."
-              >
-                <Controller
-                  name="published"
-                  control={control}
-                  render={({ field }) => (
-                    <Switch
-                      id={field.name}
-                      name={field.name}
-                      checked={field.value}
-                      disabled={field.disabled}
-                      onBlur={field.onBlur}
-                      onChange={field.onChange}
-                    />
-                  )}
-                />
-              </SwitchField>
-
-              <Field>
-                <Label htmlFor="publishedAt">Datum zveřejnění</Label>
-
-                <Input
-                  id="publishedAt"
-                  type="date"
-                  {...register('publishedAt')}
-                />
-              </Field>
-
-              <Field>
-                <Label htmlFor="articleVeracity">Pravdivost článku</Label>
-                <select
-                  disabled={
-                    selectedArticleType !== ArticleTypeEnum.FacebookFactcheck
-                  }
-                  id="articleVeracity"
-                  {...register('articleVeracity', { required: true })}
-                  className="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500 disabled:ring-gray-200 sm:text-sm sm:leading-6"
-                >
-                  {ARTICLE_VERACITY_OPTIONS.map((articleVeracity) => (
-                    <option
-                      key={articleVeracity.value}
-                      value={articleVeracity.value}
-                    >
-                      {articleVeracity.label}
-                    </option>
-                  ))}
-                </select>
-
-                <Controller
-                  control={control}
-                  name="articleVeracity"
-                  render={({ fieldState: { error } }) => (
-                    <ErrorMessage message={error?.message} />
-                  )}
-                />
-              </Field>
-            </Fieldset>
-          </AdminFormSidebar>
-        </AdminFormContent>
-      </div>
+          </Fieldset>
+        </AdminFormSidebar>
+      </AdminFormContent>
     </form>
   )
 }

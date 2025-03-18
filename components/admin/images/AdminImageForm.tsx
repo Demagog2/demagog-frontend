@@ -44,24 +44,22 @@ export function AdminImageForm(props: {
       onSubmit={handleSubmitForm}
       encType="multipart/form-data"
     >
-      <div className="container mx-auto">
-        <AdminFormHeader>
-          <AdminPageTitle title={props.title} description={props.description} />
-          <AdminFormActions>
-            <LinkButton href="/beta/admin/images">Zpět</LinkButton>
+      <AdminFormHeader>
+        <AdminPageTitle title={props.title} description={props.description} />
+        <AdminFormActions>
+          <LinkButton href="/beta/admin/images">Zpět</LinkButton>
 
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
 
-        <AdminFormContent>
-          <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
-            {errors.image && <ErrorMessage message={errors.image.message} />}
+      <AdminFormContent>
+        <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
+          {errors.image && <ErrorMessage message={errors.image.message} />}
 
-            <AdminImageInput control={control} name="image" />
-          </div>
-        </AdminFormContent>
-      </div>
+          <AdminImageInput control={control} name="image" />
+        </div>
+      </AdminFormContent>
     </form>
   )
 }
