@@ -12,6 +12,7 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { ApolloClientProvider } from '@/components/util/ApolloClientProvider'
 import { getAuthorizationToken } from '@/libs/apollo-client'
 import { AdminStatementsFromTranscript } from '@/components/admin/sources/statements/AdminStatementsFromTranscript'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 interface Props {
   params: {
@@ -48,7 +49,7 @@ export default async function AdminStatementsFromTranscriptPage({
   params,
 }: Props) {
   return (
-    <div className="container">
+    <AdminPage>
       <AdminFormHeader>
         <AdminPageTitle
           title="Výroky z přepisu"
@@ -66,6 +67,6 @@ export default async function AdminStatementsFromTranscriptPage({
           <AdminStatementsFromTranscript sourceId={params.slug} />
         </ApolloClientProvider>
       </div>
-    </div>
+    </AdminPage>
   )
 }

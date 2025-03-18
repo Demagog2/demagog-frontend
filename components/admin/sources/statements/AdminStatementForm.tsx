@@ -171,7 +171,7 @@ export function AdminStatementForm(props: {
               </Legend>
 
               <Field>
-                <Label htmlFor="statementType" isOptional>
+                <Label htmlFor="evaluatorId" isOptional>
                   Ověřovatel
                 </Label>
 

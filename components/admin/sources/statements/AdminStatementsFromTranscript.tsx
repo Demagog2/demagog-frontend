@@ -7,6 +7,7 @@ import { useQuery } from '@apollo/client'
 import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
 import { AdminSourceStatements } from '@/components/admin/sources/AdminSourceStatements'
 import { useState } from 'react'
+import { AdminStatementFromTranscriptForm } from './AdminStatementFromTranscriptForm'
 
 interface TranscriptPosition {
   startLine: number
@@ -31,8 +32,11 @@ const SOURCE_QUERY = gql(`
         }
       }
       ...SourceStatements
+      ...AdminStatementFromTranscriptData
     }
     ...AdminSourceStatementsData
+    ...AdminStatementFromTranscriptForm
+    ...AdminExpertSelect
   }
 `)
 
@@ -96,7 +100,12 @@ export function AdminStatementsFromTranscript({
           ze které jej chcete vytvořit.
         </p>
         {newStatementTranscriptPosition ? (
-          <div>Form</div>
+          <AdminStatementFromTranscriptForm
+            statement={newStatementTranscriptPosition.text}
+            source={data.sourceV2}
+            data={data}
+            onCancel={() => setNewStatementTranscriptPosition(null)}
+          />
         ) : (
           <AdminSourceStatements
             source={data.sourceV2}
