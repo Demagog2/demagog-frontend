@@ -4,6 +4,7 @@ import { AdminSpeakerForm } from '@/components/speaker/AdminSpeakerForm'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 import { createSpeaker } from '../actions'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 const AdminSpeakerNewQuery = gql(`
   query AdminSpeakerNew {
@@ -21,6 +22,8 @@ export default async function AdminSpeakerNew() {
   })
 
   return (
-    <AdminSpeakerForm title="Nová osoba" data={data} action={createSpeaker} />
+    <AdminPage>
+      <AdminSpeakerForm title="Nová osoba" data={data} action={createSpeaker} />
+    </AdminPage>
   )
 }

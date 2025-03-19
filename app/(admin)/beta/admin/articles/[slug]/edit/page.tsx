@@ -10,6 +10,7 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { notFound } from 'next/navigation'
 import { ApolloClientProvider } from '@/components/util/ApolloClientProvider'
 import { getAuthorizationToken } from '@/libs/apollo-client'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -72,12 +73,14 @@ export default async function AdminArticleEdit(
 
   return (
     <ApolloClientProvider authorizationToken={getAuthorizationToken()}>
-      <AdminArticleForm
-        title="Upravit článek"
-        data={data}
-        article={data.article}
-        action={updateArticle.bind(null, data.article.id)}
-      />
+      <AdminPage>
+        <AdminArticleForm
+          title="Upravit článek"
+          data={data}
+          article={data.article}
+          action={updateArticle.bind(null, data.article.id)}
+        />
+      </AdminPage>
     </ApolloClientProvider>
   )
 }

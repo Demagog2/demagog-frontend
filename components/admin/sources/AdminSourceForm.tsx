@@ -130,293 +130,291 @@ export function AdminSourceForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <div className="container mx-auto">
-        <AdminFormHeader>
-          <AdminPageTitle title={props.title} description={props.description} />
+      <AdminFormHeader>
+        <AdminPageTitle title={props.title} description={props.description} />
 
-          <AdminFormActions>
-            <LinkButton href="/beta/admin/sources">Zpět</LinkButton>
+        <AdminFormActions>
+          <LinkButton href="/beta/admin/sources">Zpět</LinkButton>
 
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
 
-        <AdminFormContent>
-          <div className="col-span-12">
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Základní údaje
-              </Legend>
+      <AdminFormContent>
+        <div className="col-span-12">
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Základní údaje
+            </Legend>
 
+            <Field>
+              <Label htmlFor="name">Název diskuze</Label>
+
+              <Input
+                id="name"
+                placeholder="Upravit název…"
+                hasError={!!errors?.name}
+                {...register('name', { required: true })}
+              />
+
+              <ErrorMessage message={errors.name?.message} />
+            </Field>
+
+            <Field>
+              <Label htmlFor="sourceUrl" isOptional>
+                URL zdroje diskuze
+              </Label>
+
+              <Input
+                id="sourceUrl"
+                placeholder="https://example.com"
+                type="url"
+                hasError={!!errors?.sourceUrl}
+                {...register('sourceUrl')}
+              />
+
+              <ErrorMessage message={errors.sourceUrl?.message} />
+            </Field>
+
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
               <Field>
-                <Label htmlFor="name">Název diskuze</Label>
-
-                <Input
-                  id="name"
-                  placeholder="Upravit název…"
-                  hasError={!!errors?.name}
-                  {...register('name', { required: true })}
-                />
-
-                <ErrorMessage message={errors.name?.message} />
-              </Field>
-
-              <Field>
-                <Label htmlFor="sourceUrl" isOptional>
-                  URL zdroje diskuze
+                <Label htmlFor="mediumId" isOptional>
+                  Pořad
                 </Label>
 
-                <Input
-                  id="sourceUrl"
-                  placeholder="https://example.com"
-                  type="url"
-                  hasError={!!errors?.sourceUrl}
-                  {...register('sourceUrl')}
+                <Controller
+                  control={control}
+                  name="mediumId"
+                  render={({ field }) => (
+                    <>
+                      <input type="hidden" {...field} />
+                      <AdminMediumSelect
+                        data={data}
+                        onChange={field.onChange}
+                        defaultValue={field.value}
+                      />
+                    </>
+                  )}
                 />
-
-                <ErrorMessage message={errors.sourceUrl?.message} />
+                <Description className="text-sm text-gray-500 mt-1">
+                  Chybí ti v seznamu pořad? Přidej si ho přes agendu{' '}
+                  <a
+                    href="https://demagog.cz/beta/admin/media"
+                    className="underline"
+                  >
+                    Pořady
+                  </a>
+                  .
+                </Description>
               </Field>
 
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <Field>
-                  <Label htmlFor="mediumId" isOptional>
-                    Pořad
-                  </Label>
-
-                  <Controller
-                    control={control}
-                    name="mediumId"
-                    render={({ field }) => (
-                      <>
-                        <input type="hidden" {...field} />
-                        <AdminMediumSelect
-                          data={data}
-                          onChange={field.onChange}
-                          defaultValue={field.value}
-                        />
-                      </>
-                    )}
-                  />
-                  <Description className="text-sm text-gray-500 mt-1">
-                    Chybí ti v seznamu pořad? Přidej si ho přes agendu{' '}
-                    <a
-                      href="https://demagog.cz/beta/admin/media"
-                      className="underline"
-                    >
-                      Pořady
-                    </a>
-                    .
-                  </Description>
-                </Field>
-
-                <Field>
-                  <Label htmlFor="mediaPersonalities" isOptional>
-                    Moderátoři
-                  </Label>
-
-                  <AdminMediaPersonalitiesMultiselect<FieldValues>
-                    name="mediaPersonalities"
-                    control={control}
-                    data={data}
-                  />
-
-                  <Description className="text-sm text-gray-500 mt-1">
-                    Chybí ti v seznamu moderátoři? Přidej si je přes agendu{' '}
-                    <a
-                      href="https://demagog.cz/beta/admin/moderators"
-                      className="underline"
-                    >
-                      Moderátoři
-                    </a>
-                    .
-                  </Description>
-                </Field>
-              </div>
-
               <Field>
-                <Label htmlFor="releasedAt" isOptional>
-                  Publikováno
+                <Label htmlFor="mediaPersonalities" isOptional>
+                  Moderátoři
                 </Label>
 
-                <div className="w-fit">
-                  <Input type="date" {...register('releasedAt')} />
-                </div>
-              </Field>
-            </Fieldset>
-
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <div>
-                <Legend className="text-base font-semibold leading-7 text-gray-900">
-                  Řečníci
-                </Legend>
-
-                <p className="mt-1 text-sm leading-6 text-gray-600">
-                  Výroky v rámci této diskuze půjde vytvořit jen pro osoby zde
-                  vybrané.
-                </p>
-
-                <p className="mt-1 text-sm leading-6 text-gray-600">
-                  Stranu/skupinu můžete vybrat specificky jen pro tuto diskuzi,
-                  například pokud je řečník součástí jiné na komunální a národní
-                  úrovni a hodí se pro tuto diskuzi vybrat spíše komunální
-                  příslušnost. Podobně lze upravovat i funkci jen pro tuto
-                  diskuzi.
-                </p>
-              </div>
-
-              <Label htmlFor="speakers">Řečníci</Label>
-
-              {fields.map((field, i) => (
-                <div
-                  key={field.id}
-                  className="sm:flex gap-x-4 border-b border-gray-900/10 pb-8"
-                >
-                  <div className="h-14 w-14">
-                    {!field.avatar ? (
-                      <span className="inline-block h-14 w-14 overflow-hidden rounded-full bg-gray-100">
-                        <svg
-                          fill="currentColor"
-                          viewBox="0 0 24 24"
-                          className="h-full w-full text-gray-300 object-cover object-center sm:h-full sm:w-full"
-                        >
-                          <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                        </svg>
-                      </span>
-                    ) : (
-                      <img
-                        src={imagePath(field.avatar)}
-                        alt={field.firstName + ' ' + field.lastName}
-                        className="h-full w-full object-cover object-center rounded-full"
-                      />
-                    )}
-                  </div>
-                  <div className="flex-grow">
-                    {field.sourceSpeakerId && (
-                      <input
-                        type="hidden"
-                        {...register(`sourceSpeakers.${i}.sourceSpeakerId`)}
-                      />
-                    )}
-
-                    <input
-                      type="hidden"
-                      {...register(`sourceSpeakers.${i}.speakerId`)}
-                    />
-                    <input
-                      type="hidden"
-                      {...register(`sourceSpeakers.${i}.firstName`)}
-                    />
-                    <input
-                      type="hidden"
-                      {...register(`sourceSpeakers.${i}.lastName`)}
-                    />
-
-                    <div className="flex justify-between">
-                      <p className="text-base font-semibold leading-7 text-gray-900">
-                        {field.firstName + ' ' + field.lastName}
-                      </p>
-
-                      <Button onClick={() => remove(i)}>
-                        <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
-                      </Button>
-                    </div>
-
-                    <Field>
-                      <Label htmlFor={`sourceSpeakers.${i}.bodyId`}>
-                        Strana/skupina
-                      </Label>
-
-                      <Controller
-                        control={control}
-                        name={`sourceSpeakers.${i}.bodyId`}
-                        render={({ field }) => (
-                          <>
-                            <input type="hidden" {...field} />
-                            <AdminBodySelect
-                              id={`sourceSpeakers.${i}.bodyId`}
-                              data={data}
-                              onChange={field.onChange}
-                              defaultValue={field.value}
-                            />
-                          </>
-                        )}
-                      />
-                    </Field>
-
-                    <Field>
-                      <Label htmlFor={`sourceSpeakers.${i}.role`}>Funkce</Label>
-                      <Input
-                        id={`sourceSpeakers.${i}.role`}
-                        type="text"
-                        {...register(`sourceSpeakers.${i}.role`)}
-                      />
-                    </Field>
-                  </div>
-                </div>
-              ))}
-              <Field>
-                <Label htmlFor="">Přidat řečníka</Label>
-                <AdminSpeakerSelect
+                <AdminMediaPersonalitiesMultiselect<FieldValues>
+                  name="mediaPersonalities"
+                  control={control}
                   data={data}
-                  onChange={({ id, role, bodyId, ...speaker }) => {
-                    append({
-                      speakerId: id,
-                      role: role ?? '',
-                      bodyId: bodyId ?? '',
-                      ...speaker,
-                    })
-                  }}
                 />
-              </Field>
-            </Fieldset>
 
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+                <Description className="text-sm text-gray-500 mt-1">
+                  Chybí ti v seznamu moderátoři? Přidej si je přes agendu{' '}
+                  <a
+                    href="https://demagog.cz/beta/admin/moderators"
+                    className="underline"
+                  >
+                    Moderátoři
+                  </a>
+                  .
+                </Description>
+              </Field>
+            </div>
+
+            <Field>
+              <Label htmlFor="releasedAt" isOptional>
+                Publikováno
+              </Label>
+
+              <div className="w-fit">
+                <Input type="date" {...register('releasedAt')} />
+              </div>
+            </Field>
+          </Fieldset>
+
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <div>
               <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Editoři
+                Řečníci
               </Legend>
 
               <p className="mt-1 text-sm leading-6 text-gray-600">
-                Vybraní editoři budou dostávat notifikace při změnách výroků v
-                rámci této diskuze.
+                Výroky v rámci této diskuze půjde vytvořit jen pro osoby zde
+                vybrané.
               </p>
 
-              <Field>
-                <AdminExpertsMultiselect
-                  control={control}
-                  name="experts"
-                  data={data}
-                />
-              </Field>
-            </Fieldset>
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Stranu/skupinu můžete vybrat specificky jen pro tuto diskuzi,
+                například pokud je řečník součástí jiné na komunální a národní
+                úrovni a hodí se pro tuto diskuzi vybrat spíše komunální
+                příslušnost. Podobně lze upravovat i funkci jen pro tuto
+                diskuzi.
+              </p>
+            </div>
 
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <div>
-                <Legend className="text-base font-semibold leading-7 text-gray-900">
-                  Přepis
-                </Legend>
+            <Label htmlFor="speakers">Řečníci</Label>
 
-                <p className="mt-1 text-sm leading-6 text-gray-600">
-                  Je-li dostupný, doporučujeme vyplnit, protože usnaďňuje
-                  vytváření výroků označováním v přepisu.
-                </p>
+            {fields.map((field, i) => (
+              <div
+                key={field.id}
+                className="sm:flex gap-x-4 border-b border-gray-900/10 pb-8"
+              >
+                <div className="h-14 w-14">
+                  {!field.avatar ? (
+                    <span className="inline-block h-14 w-14 overflow-hidden rounded-full bg-gray-100">
+                      <svg
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                        className="h-full w-full text-gray-300 object-cover object-center sm:h-full sm:w-full"
+                      >
+                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    </span>
+                  ) : (
+                    <img
+                      src={imagePath(field.avatar)}
+                      alt={field.firstName + ' ' + field.lastName}
+                      className="h-full w-full object-cover object-center rounded-full"
+                    />
+                  )}
+                </div>
+                <div className="flex-grow">
+                  {field.sourceSpeakerId && (
+                    <input
+                      type="hidden"
+                      {...register(`sourceSpeakers.${i}.sourceSpeakerId`)}
+                    />
+                  )}
+
+                  <input
+                    type="hidden"
+                    {...register(`sourceSpeakers.${i}.speakerId`)}
+                  />
+                  <input
+                    type="hidden"
+                    {...register(`sourceSpeakers.${i}.firstName`)}
+                  />
+                  <input
+                    type="hidden"
+                    {...register(`sourceSpeakers.${i}.lastName`)}
+                  />
+
+                  <div className="flex justify-between">
+                    <p className="text-base font-semibold leading-7 text-gray-900">
+                      {field.firstName + ' ' + field.lastName}
+                    </p>
+
+                    <Button onClick={() => remove(i)}>
+                      <TrashIcon className="h-6 w-6 text-gray-400  hover:text-indigo-600"></TrashIcon>
+                    </Button>
+                  </div>
+
+                  <Field>
+                    <Label htmlFor={`sourceSpeakers.${i}.bodyId`}>
+                      Strana/skupina
+                    </Label>
+
+                    <Controller
+                      control={control}
+                      name={`sourceSpeakers.${i}.bodyId`}
+                      render={({ field }) => (
+                        <>
+                          <input type="hidden" {...field} />
+                          <AdminBodySelect
+                            id={`sourceSpeakers.${i}.bodyId`}
+                            data={data}
+                            onChange={field.onChange}
+                            defaultValue={field.value}
+                          />
+                        </>
+                      )}
+                    />
+                  </Field>
+
+                  <Field>
+                    <Label htmlFor={`sourceSpeakers.${i}.role`}>Funkce</Label>
+                    <Input
+                      id={`sourceSpeakers.${i}.role`}
+                      type="text"
+                      {...register(`sourceSpeakers.${i}.role`)}
+                    />
+                  </Field>
+                </div>
               </div>
+            ))}
+            <Field>
+              <Label htmlFor="">Přidat řečníka</Label>
+              <AdminSpeakerSelect
+                data={data}
+                onChange={({ id, role, bodyId, ...speaker }) => {
+                  append({
+                    speakerId: id,
+                    role: role ?? '',
+                    bodyId: bodyId ?? '',
+                    ...speaker,
+                  })
+                }}
+              />
+            </Field>
+          </Fieldset>
 
-              <Field>
-                <Label isOptional htmlFor="transcript">
-                  Text přepisu
-                </Label>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Editoři
+            </Legend>
 
-                <Textarea
-                  id="transcript"
-                  {...register('transcript')}
-                  rows={10}
-                  placeholder="Zadejte text přepisu diskuze..."
-                />
-              </Field>
-            </Fieldset>
-          </div>
-        </AdminFormContent>
-      </div>
+            <p className="mt-1 text-sm leading-6 text-gray-600">
+              Vybraní editoři budou dostávat notifikace při změnách výroků v
+              rámci této diskuze.
+            </p>
+
+            <Field>
+              <AdminExpertsMultiselect
+                control={control}
+                name="experts"
+                data={data}
+              />
+            </Field>
+          </Fieldset>
+
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <div>
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Přepis
+              </Legend>
+
+              <p className="mt-1 text-sm leading-6 text-gray-600">
+                Je-li dostupný, doporučujeme vyplnit, protože usnaďňuje
+                vytváření výroků označováním v přepisu.
+              </p>
+            </div>
+
+            <Field>
+              <Label isOptional htmlFor="transcript">
+                Text přepisu
+              </Label>
+
+              <Textarea
+                id="transcript"
+                {...register('transcript')}
+                rows={10}
+                placeholder="Zadejte text přepisu diskuze..."
+              />
+            </Field>
+          </Fieldset>
+        </div>
+      </AdminFormContent>
     </form>
   )
 }

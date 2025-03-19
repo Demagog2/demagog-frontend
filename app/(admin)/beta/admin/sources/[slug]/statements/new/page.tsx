@@ -5,6 +5,7 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createStatement } from '../../../actions'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -57,12 +58,14 @@ export default async function AdminNewStatement(props: {
   }
 
   return (
-    <AdminStatementForm
-      title="Přidat nový výrok"
-      description="Ručně vložte či napište nový výrok"
-      data={data}
-      source={data.source}
-      action={createStatement}
-    />
+    <AdminPage>
+      <AdminStatementForm
+        title="Přidat nový výrok"
+        description="Ručně vložte či napište nový výrok"
+        data={data}
+        source={data.source}
+        action={createStatement}
+      />
+    </AdminPage>
   )
 }

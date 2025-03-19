@@ -83,61 +83,58 @@ export function AdminVideoSourceForm(props: VideoFormProps) {
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
-    <div className="container mx-auto">
-      <form action={formAction} onSubmit={handleSubmitForm}>
-        <AdminFormHeader>
-          <AdminPageTitle title={'Zadejte informace o video záznamu'} />
-          <AdminFormActions>
-            <LinkButton href={`/beta/admin/sources/${source.id}`}>
-              Zpět
-            </LinkButton>
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
-        <AdminFormContent>
-          <AdminFormMain>
-            <div className="p-4">
-              <div className="space-y-4">
-                <Field as="div">
-                  <Label htmlFor="video_type">Typ videa</Label>
+    <form action={formAction} onSubmit={handleSubmitForm}>
+      <AdminFormHeader>
+        <AdminPageTitle title={'Zadejte informace o video záznamu'} />
+        <AdminFormActions>
+          <LinkButton href={`/beta/admin/sources/${source.id}`}>
+            Zpět
+          </LinkButton>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
 
-                  <input type="hidden" {...register('video_type')} />
+      <AdminFormContent>
+        <AdminFormMain>
+          <div className="space-y-4">
+            <Field as="div">
+              <Label htmlFor="video_type">Typ videa</Label>
 
-                  <Select
-                    id="video_type"
-                    items={typeOptions}
-                    defaultValue={videoType}
-                    onChange={(item) => {
-                      const value = item?.value
-                      if (value && isValidVideoType(value)) {
-                        setValue('video_type', value)
-                      }
-                    }}
-                  />
+              <input type="hidden" {...register('video_type')} />
 
-                  <ErrorMessage message={errors.video_type?.message} />
-                </Field>
+              <Select
+                id="video_type"
+                items={typeOptions}
+                defaultValue={videoType}
+                onChange={(item) => {
+                  const value = item?.value
+                  if (value && isValidVideoType(value)) {
+                    setValue('video_type', value)
+                  }
+                }}
+              />
 
-                <Field as="div">
-                  <Label htmlFor="video_id">{getVideoIdLabel(videoType)}</Label>
+              <ErrorMessage message={errors.video_type?.message} />
+            </Field>
 
-                  <Input id="video_id" {...register('video_id')} />
+            <Field as="div">
+              <Label htmlFor="video_id">{getVideoIdLabel(videoType)}</Label>
 
-                  {errors.video_id ? (
-                    <ErrorMessage message={errors.video_id.message} />
-                  ) : (
-                    getVideoIdHelperText(videoType) && (
-                      <p className="mt-4 text-sm text-gray-500">
-                        {getVideoIdHelperText(videoType)}
-                      </p>
-                    )
-                  )}
-                </Field>
-              </div>
-            </div>
-          </AdminFormMain>
-        </AdminFormContent>
-      </form>
-    </div>
+              <Input id="video_id" {...register('video_id')} />
+
+              {errors.video_id ? (
+                <ErrorMessage message={errors.video_id.message} />
+              ) : (
+                getVideoIdHelperText(videoType) && (
+                  <p className="mt-4 text-sm text-gray-500">
+                    {getVideoIdHelperText(videoType)}
+                  </p>
+                )
+              )}
+            </Field>
+          </div>
+        </AdminFormMain>
+      </AdminFormContent>
+    </form>
   )
 }

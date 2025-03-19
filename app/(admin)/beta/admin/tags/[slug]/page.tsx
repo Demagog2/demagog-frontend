@@ -2,6 +2,7 @@ import { AdminTagHeader } from '@/components/admin/tags/AdminTagHeader'
 import { gql } from '@/__generated__'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { notFound } from 'next/navigation'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 const TagQuery = gql(`
   query AdminTag($id: ID!) {
@@ -26,5 +27,9 @@ export default async function AdminTagDetail(props: {
     notFound()
   }
 
-  return <AdminTagHeader tag={data.tag} />
+  return (
+    <AdminPage>
+      <AdminTagHeader tag={data.tag} />
+    </AdminPage>
+  )
 }

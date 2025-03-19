@@ -404,42 +404,81 @@ function AdminAssessmentForm(props: {
     <form ref={formRef} action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('statementType')} />
 
-      <div className="container mx-auto">
-        <AdminFormHeader>
-          <AdminPageTitle title={title} description={description} />
+      <AdminFormHeader>
+        <AdminPageTitle title={title} description={description} />
 
-          <AdminFormActions>
-            <LinkButton href={`/beta/admin/sources/${statement.source.id}`}>
-              Zpět na diskuzi
-            </LinkButton>
+        <AdminFormActions>
+          <LinkButton href={`/beta/admin/sources/${statement.source.id}`}>
+            Zpět na diskuzi
+          </LinkButton>
 
-            <SubmitButton isPending={isAutomaticSavePending} />
-          </AdminFormActions>
-        </AdminFormHeader>
+          <SubmitButton isPending={isAutomaticSavePending} />
+        </AdminFormActions>
+      </AdminFormHeader>
 
-        <AdminSourceStatementStep
-          className="border-none py-4 px-4 sm:px-6 lg:px-8"
-          statement={statement}
-          evaluationStep={evaluationStatus}
-          published={published}
-          hasPadding={false}
-        />
+      <AdminSourceStatementStep
+        className="border-none py-4 px-4 sm:px-6 lg:px-8"
+        statement={statement}
+        evaluationStep={evaluationStatus}
+        published={published}
+        hasPadding={false}
+      />
 
-        <AdminFormContent>
-          <AdminFormMain>
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Výrok
-              </Legend>
+      <AdminFormContent>
+        <AdminFormMain>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Výrok
+            </Legend>
 
+            <Field>
+              <Label htmlFor="sourceSpeakerId">Řečník</Label>
+
+              <AdminSourceSpeakerControl
+                name="sourceSpeakerId"
+                disabled={isStatementFieldDisabled}
+                control={control}
+                data={statement.source}
+                onChange={() =>
+                  autoSaveActorRef.send({
+                    type: 'Form field updated',
+                  })
+                }
+              />
+
+              <ErrorMessage message={errors.sourceSpeakerId?.message} />
+            </Field>
+
+            {isPromise && (
               <Field>
-                <Label htmlFor="sourceSpeakerId">Řečník</Label>
+                <Label htmlFor="title">Titulek</Label>
 
-                <AdminSourceSpeakerControl
-                  name="sourceSpeakerId"
+                <Input
+                  id="title"
+                  disabled={isStatementFieldDisabled}
+                  {...register('title', {
+                    onChange() {
+                      autoSaveActorRef.send({
+                        type: 'Form field updated',
+                      })
+                    },
+                  })}
+                />
+
+                <ErrorMessage message={errors.title?.message} />
+              </Field>
+            )}
+
+            {(isPromise || isFactual) && (
+              <Field>
+                <Label htmlFor="tags">Štítky</Label>
+
+                <AdminStatementTagsMultiselect
                   disabled={isStatementFieldDisabled}
                   control={control}
-                  data={statement.source}
+                  name="tags"
+                  data={data}
+                  statement={statement}
                   onChange={() =>
                     autoSaveActorRef.send({
                       type: 'Form field updated',
@@ -447,475 +486,430 @@ function AdminAssessmentForm(props: {
                   }
                 />
 
-                <ErrorMessage message={errors.sourceSpeakerId?.message} />
+                <ErrorMessage message={errors.tags?.message} />
               </Field>
+            )}
 
-              {isPromise && (
-                <Field>
-                  <Label htmlFor="title">Titulek</Label>
+            <Field>
+              <Label htmlFor="content">Text výroku</Label>
 
-                  <Input
-                    id="title"
-                    disabled={isStatementFieldDisabled}
-                    {...register('title', {
-                      onChange() {
-                        autoSaveActorRef.send({
-                          type: 'Form field updated',
-                        })
-                      },
-                    })}
-                  />
+              <Textarea
+                id="content"
+                {...register('content', {
+                  onChange() {
+                    autoSaveActorRef.send({ type: 'Form field updated' })
+                  },
+                })}
+                rows={5}
+                placeholder={`Zadejte text ${isPromise ? 'slibu' : 'výroku'}...`}
+                readOnly={isStatementFieldDisabled}
+              />
 
-                  <ErrorMessage message={errors.title?.message} />
-                </Field>
-              )}
+              <ErrorMessage message={errors.content?.message} />
+            </Field>
+          </Fieldset>
 
-              {(isPromise || isFactual) && (
-                <Field>
-                  <Label htmlFor="tags">Štítky</Label>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+              Ověřování
+            </Legend>
 
-                  <AdminStatementTagsMultiselect
-                    disabled={isStatementFieldDisabled}
-                    control={control}
-                    name="tags"
-                    data={data}
-                    statement={statement}
-                    onChange={() =>
-                      autoSaveActorRef.send({
-                        type: 'Form field updated',
-                      })
-                    }
-                  />
-
-                  <ErrorMessage message={errors.tags?.message} />
-                </Field>
-              )}
-
-              <Field>
-                <Label htmlFor="content">Text výroku</Label>
-
-                <Textarea
-                  id="content"
-                  {...register('content', {
-                    onChange() {
-                      autoSaveActorRef.send({ type: 'Form field updated' })
-                    },
-                  })}
-                  rows={5}
-                  placeholder={`Zadejte text ${isPromise ? 'slibu' : 'výroku'}...`}
-                  readOnly={isStatementFieldDisabled}
-                />
-
-                <ErrorMessage message={errors.content?.message} />
-              </Field>
-            </Fieldset>
-
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                Ověřování
-              </Legend>
-
-              {!isStatementFieldDisabled ||
-              !isStatementRatingDisabled ||
-              isStatementEvaluationVisible ? (
-                <>
-                  {isPromise && (
-                    <Field>
-                      <Label htmlFor="promiseRatingId">Hodnocení slibu</Label>
-
-                      {isStatementRatingDisabled ? (
-                        <p>
-                          {!statement.assessment.promiseRating &&
-                            'Zatím nehodnoceno'}
-
-                          {statement.assessment.promiseRating && (
-                            <span
-                              className={classNames(
-                                'text-lg font-bold',
-                                PROMISE_RATING_COLORS[
-                                  statement.assessment.promiseRating.key
-                                ]
-                              )}
-                            >
-                              {statement.assessment.promiseRating.name}
-                            </span>
-                          )}
-                        </p>
-                      ) : (
-                        <AdminPromiseRatingSelect
-                          control={control}
-                          name="promiseRatingId"
-                          data={data}
-                          allowedKeys={
-                            statement.assessment.assessmentMethodology
-                              .ratingKeys
-                          }
-                          onChange={(promiseRating) => {
-                            actorRef.send({
-                              type: 'Update promise rating',
-                              data: {
-                                promiseRating,
-                              },
-                            })
-
-                            autoSaveActorRef.send({
-                              type: 'Form field updated',
-                            })
-                          }}
-                        />
-                      )}
-
-                      <ErrorMessage message={errors.promiseRatingId?.message} />
-                    </Field>
-                  )}
-
-                  {!isPromise && (
-                    <Field>
-                      <Label htmlFor="veracityId">Hodnocení výroku</Label>
-
-                      {isStatementRatingDisabled ? (
-                        <p>
-                          {!statement.assessment.veracity &&
-                            'Zatím nehodnoceno'}
-
-                          {statement.assessment.veracity && (
-                            <span
-                              className={classNames(
-                                'text-lg font-bold',
-                                VERACITY_COLORS[
-                                  statement.assessment.veracity.key
-                                ]
-                              )}
-                            >
-                              {statement.assessment.veracity.name}
-                            </span>
-                          )}
-                        </p>
-                      ) : (
-                        <AdminVeracitySelect
-                          control={control}
-                          name="veracityId"
-                          data={data}
-                          onChange={(veracity) => {
-                            actorRef.send({
-                              type: 'Update veracity',
-                              data: {
-                                veracity,
-                              },
-                            })
-
-                            autoSaveActorRef.send({
-                              type: 'Form field updated',
-                            })
-                          }}
-                        />
-                      )}
-
-                      <ErrorMessage message={errors.veracityId?.message} />
-                    </Field>
-                  )}
-
+            {!isStatementFieldDisabled ||
+            !isStatementRatingDisabled ||
+            isStatementEvaluationVisible ? (
+              <>
+                {isPromise && (
                   <Field>
-                    <Label
-                      htmlFor="shortExplanation"
-                      isDirty={isDirtyShortExplanation}
-                    >
-                      Odůvodnění zkráceně
-                    </Label>
+                    <Label htmlFor="promiseRatingId">Hodnocení slibu</Label>
 
-                    {isStatementFieldDisabled ? (
-                      <p className="mt-4">{shortExplanation}</p>
-                    ) : (
-                      <>
-                        <Controller
-                          name="shortExplanation"
-                          control={control}
-                          render={({ field }) => (
-                            <Textarea
-                              id={field.name}
-                              name={field.name}
-                              value={field.value}
-                              onChange={(evt) => {
-                                const newValue = evt.currentTarget.value
+                    {isStatementRatingDisabled ? (
+                      <p>
+                        {!statement.assessment.promiseRating &&
+                          'Zatím nehodnoceno'}
 
-                                field.onChange(newValue)
-
-                                localStorage.setItem(
-                                  localStorageKeys.shortExplanation,
-                                  newValue
-                                )
-
-                                actorRef.send({
-                                  type: 'Update short explanation',
-                                  data: {
-                                    shortExplanation: newValue,
-                                  },
-                                })
-
-                                autoSaveActorRef.send({
-                                  type: 'Form field updated',
-                                })
-                              }}
-                              rows={3}
-                              placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
-                              disabled={isStatementFieldDisabled}
-                              maxLength={SHORT_EXPLANATION_LIMIT}
-                            />
-                          )}
-                        />
-
-                        <div className="text-sm text-gray-600 mt-2">
-                          {`Maximálně ${SHORT_EXPLANATION_LIMIT} znaků. Aktuálně ${shortExplanation?.length ?? 0} ${pluralize(
-                            shortExplanation?.length ?? 0,
-                            'znak',
-                            'znaky',
-                            'znaků'
-                          )}.`}
-                        </div>
-                      </>
-                    )}
-
-                    <ErrorMessage message={errors.shortExplanation?.message} />
-                  </Field>
-
-                  <Field>
-                    <Label htmlFor="explanation" isDirty={isDirtyExplanation}>
-                      Odůvodnění
-                    </Label>
-
-                    {isStatementFieldDisabled ? (
-                      <div className="mt-10 max-w-3xl article-content">
-                        {statement.assessment.explanationContent.edges?.map(
-                          (edge) => {
-                            if (!edge?.node) {
-                              return null
-                            }
-
-                            const { node, cursor } = edge
-
-                            if (node.__typename === 'TextNode') {
-                              return (
-                                <div
-                                  key={cursor}
-                                  dangerouslySetInnerHTML={{
-                                    __html: node.text,
-                                  }}
-                                />
-                              )
-                            }
-
-                            if (
-                              node.__typename === 'StatementNode' &&
-                              node.statement
-                            ) {
-                              return (
-                                <AdminStatement
-                                  className="mt-8 bg-gray-200 rounded-2xl"
-                                  key={cursor}
-                                  statement={node.statement}
-                                />
-                              )
-                            }
-
-                            if (node.__typename === 'BlockQuoteNode') {
-                              return (
-                                <AdminArticleQuote key={cursor} node={node} />
-                              )
-                            }
-
-                            if (
-                              node.__typename === 'ArticleNode' &&
-                              node.article
-                            ) {
-                              return (
-                                <AdminArticleV2Preview
-                                  key={cursor}
-                                  article={node.article}
-                                />
-                              )
-                            }
-                          }
+                        {statement.assessment.promiseRating && (
+                          <span
+                            className={classNames(
+                              'text-lg font-bold',
+                              PROMISE_RATING_COLORS[
+                                statement.assessment.promiseRating.key
+                              ]
+                            )}
+                          >
+                            {statement.assessment.promiseRating.name}
+                          </span>
                         )}
-                      </div>
+                      </p>
                     ) : (
-                      <Controller
+                      <AdminPromiseRatingSelect
                         control={control}
-                        name={'explanation'}
-                        render={({ field }) => (
-                          <div className="mt-2">
-                            <input
-                              type="hidden"
-                              name={field.name}
-                              value={field.value}
-                            />
-                            <RichTextEditor
-                              includeHeadings
-                              value={field.value ?? ''}
-                              onChange={(value) => {
-                                field.onChange(value)
+                        name="promiseRatingId"
+                        data={data}
+                        allowedKeys={
+                          statement.assessment.assessmentMethodology.ratingKeys
+                        }
+                        onChange={(promiseRating) => {
+                          actorRef.send({
+                            type: 'Update promise rating',
+                            data: {
+                              promiseRating,
+                            },
+                          })
 
-                                localStorage.setItem(
-                                  localStorageKeys.explanation,
-                                  value
-                                )
-
-                                actorRef.send({
-                                  type: 'Update long explanation',
-                                  data: {
-                                    longExplanation: value,
-                                  },
-                                })
-
-                                autoSaveActorRef.send({
-                                  type: 'Form field updated',
-                                })
-                              }}
-                            />
-                          </div>
-                        )}
+                          autoSaveActorRef.send({
+                            type: 'Form field updated',
+                          })
+                        }}
                       />
                     )}
+
+                    <ErrorMessage message={errors.promiseRatingId?.message} />
                   </Field>
-                </>
-              ) : (
-                <AdminEvaluationHidden />
-              )}
-
-              <Field>
-                <Label htmlFor="articleTags" isOptional>
-                  Tagy
-                </Label>
-
-                {isStatementFieldDisabled ? (
-                  <p>
-                    {statement.articleTags.map((tag) => tag.title).join(', ')}
-
-                    {statement.articleTags.length === 0 ? 'Žádné' : null}
-                  </p>
-                ) : (
-                  <AdminStatementArticleTagsMultiselect
-                    control={control}
-                    name="articleTags"
-                    data={data}
-                    onChange={() =>
-                      autoSaveActorRef.send({
-                        type: 'Form field updated',
-                      })
-                    }
-                  />
                 )}
 
-                <ErrorMessage message={errors.articleTags?.message} />
-              </Field>
-            </Fieldset>
-          </AdminFormMain>
+                {!isPromise && (
+                  <Field>
+                    <Label htmlFor="veracityId">Hodnocení výroku</Label>
 
-          <AdminFormSidebar>
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Legend className="text-base font-semibold leading-7 text-gray-900">
-                Stav ověřování
-              </Legend>
+                    {isStatementRatingDisabled ? (
+                      <p>
+                        {!statement.assessment.veracity && 'Zatím nehodnoceno'}
 
-              <Field>
-                <Label htmlFor="evaluationStatus">Stav</Label>
+                        {statement.assessment.veracity && (
+                          <span
+                            className={classNames(
+                              'text-lg font-bold',
+                              VERACITY_COLORS[statement.assessment.veracity.key]
+                            )}
+                          >
+                            {statement.assessment.veracity.name}
+                          </span>
+                        )}
+                      </p>
+                    ) : (
+                      <AdminVeracitySelect
+                        control={control}
+                        name="veracityId"
+                        data={data}
+                        onChange={(veracity) => {
+                          actorRef.send({
+                            type: 'Update veracity',
+                            data: {
+                              veracity,
+                            },
+                          })
 
-                <AdminEvaluationStatusControl
-                  actorRef={actorRef}
+                          autoSaveActorRef.send({
+                            type: 'Form field updated',
+                          })
+                        }}
+                      />
+                    )}
+
+                    <ErrorMessage message={errors.veracityId?.message} />
+                  </Field>
+                )}
+
+                <Field>
+                  <Label
+                    htmlFor="shortExplanation"
+                    isDirty={isDirtyShortExplanation}
+                  >
+                    Odůvodnění zkráceně
+                  </Label>
+
+                  {isStatementFieldDisabled ? (
+                    <p className="mt-4">{shortExplanation}</p>
+                  ) : (
+                    <>
+                      <Controller
+                        name="shortExplanation"
+                        control={control}
+                        render={({ field }) => (
+                          <Textarea
+                            id={field.name}
+                            name={field.name}
+                            value={field.value}
+                            onChange={(evt) => {
+                              const newValue = evt.currentTarget.value
+
+                              field.onChange(newValue)
+
+                              localStorage.setItem(
+                                localStorageKeys.shortExplanation,
+                                newValue
+                              )
+
+                              actorRef.send({
+                                type: 'Update short explanation',
+                                data: {
+                                  shortExplanation: newValue,
+                                },
+                              })
+
+                              autoSaveActorRef.send({
+                                type: 'Form field updated',
+                              })
+                            }}
+                            rows={3}
+                            placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
+                            disabled={isStatementFieldDisabled}
+                            maxLength={SHORT_EXPLANATION_LIMIT}
+                          />
+                        )}
+                      />
+
+                      <div className="text-sm text-gray-600 mt-2">
+                        {`Maximálně ${SHORT_EXPLANATION_LIMIT} znaků. Aktuálně ${shortExplanation?.length ?? 0} ${pluralize(
+                          shortExplanation?.length ?? 0,
+                          'znak',
+                          'znaky',
+                          'znaků'
+                        )}.`}
+                      </div>
+                    </>
+                  )}
+
+                  <ErrorMessage message={errors.shortExplanation?.message} />
+                </Field>
+
+                <Field>
+                  <Label htmlFor="explanation" isDirty={isDirtyExplanation}>
+                    Odůvodnění
+                  </Label>
+
+                  {isStatementFieldDisabled ? (
+                    <div className="mt-10 max-w-3xl article-content">
+                      {statement.assessment.explanationContent.edges?.map(
+                        (edge) => {
+                          if (!edge?.node) {
+                            return null
+                          }
+
+                          const { node, cursor } = edge
+
+                          if (node.__typename === 'TextNode') {
+                            return (
+                              <div
+                                key={cursor}
+                                dangerouslySetInnerHTML={{
+                                  __html: node.text,
+                                }}
+                              />
+                            )
+                          }
+
+                          if (
+                            node.__typename === 'StatementNode' &&
+                            node.statement
+                          ) {
+                            return (
+                              <AdminStatement
+                                className="mt-8 bg-gray-200 rounded-2xl"
+                                key={cursor}
+                                statement={node.statement}
+                              />
+                            )
+                          }
+
+                          if (node.__typename === 'BlockQuoteNode') {
+                            return (
+                              <AdminArticleQuote key={cursor} node={node} />
+                            )
+                          }
+
+                          if (
+                            node.__typename === 'ArticleNode' &&
+                            node.article
+                          ) {
+                            return (
+                              <AdminArticleV2Preview
+                                key={cursor}
+                                article={node.article}
+                              />
+                            )
+                          }
+                        }
+                      )}
+                    </div>
+                  ) : (
+                    <Controller
+                      control={control}
+                      name={'explanation'}
+                      render={({ field }) => (
+                        <div className="mt-2">
+                          <input
+                            type="hidden"
+                            name={field.name}
+                            value={field.value}
+                          />
+                          <RichTextEditor
+                            includeHeadings
+                            value={field.value ?? ''}
+                            onChange={(value) => {
+                              field.onChange(value)
+
+                              localStorage.setItem(
+                                localStorageKeys.explanation,
+                                value
+                              )
+
+                              actorRef.send({
+                                type: 'Update long explanation',
+                                data: {
+                                  longExplanation: value,
+                                },
+                              })
+
+                              autoSaveActorRef.send({
+                                type: 'Form field updated',
+                              })
+                            }}
+                          />
+                        </div>
+                      )}
+                    />
+                  )}
+                </Field>
+              </>
+            ) : (
+              <AdminEvaluationHidden />
+            )}
+
+            <Field>
+              <Label htmlFor="articleTags" isOptional>
+                Tagy
+              </Label>
+
+              {isStatementFieldDisabled ? (
+                <p>
+                  {statement.articleTags.map((tag) => tag.title).join(', ')}
+
+                  {statement.articleTags.length === 0 ? 'Žádné' : null}
+                </p>
+              ) : (
+                <AdminStatementArticleTagsMultiselect
                   control={control}
-                  name="evaluationStatus"
-                  submitForm={() =>
+                  name="articleTags"
+                  data={data}
+                  onChange={() =>
                     autoSaveActorRef.send({
                       type: 'Form field updated',
                     })
                   }
                 />
-              </Field>
+              )}
 
-              <Field>
-                <AdminExpertsField statement={statement} />
-              </Field>
+              <ErrorMessage message={errors.articleTags?.message} />
+            </Field>
+          </Fieldset>
+        </AdminFormMain>
 
-              <Field>
-                <Label htmlFor="evaluator">Ověřovatel/ka</Label>
+        <AdminFormSidebar>
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Legend className="text-base font-semibold leading-7 text-gray-900">
+              Stav ověřování
+            </Legend>
 
+            <Field>
+              <Label htmlFor="evaluationStatus">Stav</Label>
+
+              <AdminEvaluationStatusControl
+                actorRef={actorRef}
+                control={control}
+                name="evaluationStatus"
+                submitForm={() =>
+                  autoSaveActorRef.send({
+                    type: 'Form field updated',
+                  })
+                }
+              />
+            </Field>
+
+            <Field>
+              <AdminExpertsField statement={statement} />
+            </Field>
+
+            <Field>
+              <Label htmlFor="evaluator">Ověřovatel/ka</Label>
+
+              <Controller
+                control={control}
+                name="evaluatorId"
+                disabled={!canEditEvaluator}
+                render={({ field }) => (
+                  <>
+                    <input type="hidden" {...field} />
+                    <AdminEvaluatorSelector
+                      id="evaluatorId"
+                      data={data}
+                      onChange={(id) => {
+                        field.onChange(id)
+
+                        autoSaveActorRef.send({
+                          type: 'Form field updated',
+                        })
+                      }}
+                      disabled={field.disabled}
+                      defaultValue={field.value}
+                    />
+                  </>
+                )}
+              />
+
+              <ErrorMessage message={errors.evaluatorId?.message} />
+            </Field>
+          </Fieldset>
+
+          <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+            <Field className="mt-8">
+              <SwitchField
+                htmlFor="published"
+                label="Zveřejnit"
+                description={
+                  canBePublished
+                    ? 'Výrok bude k dostupný na webu a počítaný do statistik'
+                    : 'Aby šel výrok zveřejnit, musí být ve schváleném stavu'
+                }
+              >
                 <Controller
+                  name="published"
                   control={control}
-                  name="evaluatorId"
-                  disabled={!canEditEvaluator}
+                  disabled={!canBePublished}
                   render={({ field }) => (
-                    <>
-                      <input type="hidden" {...field} />
-                      <AdminEvaluatorSelector
-                        id="evaluatorId"
-                        data={data}
-                        onChange={(id) => {
-                          field.onChange(id)
+                    <Switch
+                      id={field.name}
+                      name={field.name}
+                      checked={field.value}
+                      disabled={field.disabled}
+                      onBlur={field.onBlur}
+                      onChange={(published) => {
+                        field.onChange(published)
 
-                          autoSaveActorRef.send({
-                            type: 'Form field updated',
-                          })
-                        }}
-                        disabled={field.disabled}
-                        defaultValue={field.value}
-                      />
-                    </>
+                        if (published) {
+                          actorRef.send({ type: 'Publish' })
+                        } else {
+                          actorRef.send({ type: 'Unpublish' })
+                        }
+
+                        autoSaveActorRef.send({
+                          type: 'Form field updated',
+                        })
+                      }}
+                    />
                   )}
                 />
+              </SwitchField>
+            </Field>
+          </Fieldset>
 
-                <ErrorMessage message={errors.evaluatorId?.message} />
-              </Field>
-            </Fieldset>
+          <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
+            Komentáře
+          </div>
 
-            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-              <Field className="mt-8">
-                <SwitchField
-                  htmlFor="published"
-                  label="Zveřejnit"
-                  description={
-                    canBePublished
-                      ? 'Výrok bude k dostupný na webu a počítaný do statistik'
-                      : 'Aby šel výrok zveřejnit, musí být ve schváleném stavu'
-                  }
-                >
-                  <Controller
-                    name="published"
-                    control={control}
-                    disabled={!canBePublished}
-                    render={({ field }) => (
-                      <Switch
-                        id={field.name}
-                        name={field.name}
-                        checked={field.value}
-                        disabled={field.disabled}
-                        onBlur={field.onBlur}
-                        onChange={(published) => {
-                          field.onChange(published)
-
-                          if (published) {
-                            actorRef.send({ type: 'Publish' })
-                          } else {
-                            actorRef.send({ type: 'Unpublish' })
-                          }
-
-                          autoSaveActorRef.send({
-                            type: 'Form field updated',
-                          })
-                        }}
-                      />
-                    )}
-                  />
-                </SwitchField>
-              </Field>
-            </Fieldset>
-
-            <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
-              Komentáře
-            </div>
-
-            <AdminStatementComments statementId={statement.id} />
-          </AdminFormSidebar>
-        </AdminFormContent>
-      </div>
+          <AdminStatementComments statementId={statement.id} />
+        </AdminFormSidebar>
+      </AdminFormContent>
     </form>
   )
 }

@@ -46,33 +46,32 @@ export default function AdminMediumForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <div className="container mx-auto">
-        <AdminFormHeader>
-          <AdminPageTitle title={props.title} />
-          <AdminFormActions>
-            <LinkButton
-              href={`/beta/admin/media`}
-              className="btn h-50px fs-6 s-back-link"
-            >
-              Zpět
-            </LinkButton>
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
-        <AdminFormContent>
-          <Fieldset className="col-span-12">
-            <Field>
-              <Label htmlFor="new-media-field">Název pořadu</Label>
-              <Input
-                id="new-media-field"
-                hasError={!!errors.name}
-                {...register('name', { required: true })}
-              />
-              <ErrorMessage message={errors.name?.message} />
-            </Field>
-          </Fieldset>
-        </AdminFormContent>
-      </div>
+      <AdminFormHeader>
+        <AdminPageTitle title={props.title} />
+        <AdminFormActions>
+          <LinkButton
+            href={`/beta/admin/media`}
+            className="btn h-50px fs-6 s-back-link"
+          >
+            Zpět
+          </LinkButton>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
+
+      <AdminFormContent>
+        <Fieldset className="col-span-12">
+          <Field>
+            <Label htmlFor="new-media-field">Název pořadu</Label>
+            <Input
+              id="new-media-field"
+              hasError={!!errors.name}
+              {...register('name', { required: true })}
+            />
+            <ErrorMessage message={errors.name?.message} />
+          </Field>
+        </Fieldset>
+      </AdminFormContent>
     </form>
   )
 }

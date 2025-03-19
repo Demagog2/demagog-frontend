@@ -7,6 +7,7 @@ import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 import { ApolloClientProvider } from '@/components/util/ApolloClientProvider'
 import { getAuthorizationToken } from '@/libs/apollo-client'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -61,11 +62,13 @@ export default async function AdminStatementDetail(props: {
 
   return (
     <ApolloClientProvider authorizationToken={getAuthorizationToken()}>
-      <AdminAssessmentFormController
-        data={data}
-        statementId={parseInt(data.statementV2.id, 10)}
-        action={updateStatementAssessment.bind(null, props.params.id)}
-      />
+      <AdminPage>
+        <AdminAssessmentFormController
+          data={data}
+          statementId={parseInt(data.statementV2.id, 10)}
+          action={updateStatementAssessment.bind(null, props.params.id)}
+        />
+      </AdminPage>
     </ApolloClientProvider>
   )
 }
