@@ -4,7 +4,6 @@ import { MostSearchedSpeakers } from '@/components/speaker/MostSearchedSpeakers'
 import { Pagination } from '@/components/article/Pagination'
 import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
 import { drop, take } from 'lodash'
-import ArticleTags from '../article/Tags'
 import { HomepageDataQuery } from '@/__generated__/graphql'
 
 export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
