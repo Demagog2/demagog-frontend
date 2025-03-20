@@ -82,22 +82,24 @@ export function AdminSourceSortableStatements(props: {
   )
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-    >
-      <SortableContext
-        items={statements}
-        strategy={verticalListSortingStrategy}
+    <div className="px-4 sm:px-6 lg:px-8">
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
       >
-        {statements.map((statement) => (
-          <AdminSourceSortableStatement
-            key={statement.id}
-            statement={statement}
-          />
-        ))}
-      </SortableContext>
-    </DndContext>
+        <SortableContext
+          items={statements}
+          strategy={verticalListSortingStrategy}
+        >
+          {statements.map((statement) => (
+            <AdminSourceSortableStatement
+              key={statement.id}
+              statement={statement}
+            />
+          ))}
+        </SortableContext>
+      </DndContext>
+    </div>
   )
 }

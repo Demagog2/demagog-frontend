@@ -1,4 +1,5 @@
 import { LinkButton } from '@/components/admin/forms/LinkButton'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
@@ -15,12 +16,12 @@ export default function Availability() {
   }
 
   return (
-    <div>
+    <AdminPage>
       <LinkButton href={link} target="_blank" rel="noreferrer">
         Otevřít spreadsheet v novém okně
       </LinkButton>
 
       <iframe className="mt-8 border-0" height="620" width="100%" src={link} />
-    </div>
+    </AdminPage>
   )
 }
