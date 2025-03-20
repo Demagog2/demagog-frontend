@@ -84,7 +84,7 @@ export default async function Bodies(props: PropsWithSearchParams) {
                       <a href={`/beta/admin/bodies/${edge.node.id}`}>
                         <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
                           {!edge.node.logo ? (
-                            <span className="inline-block overflow-hidden rounded-full bg-gray-100">
+                            <span className="inline-block overflow-hidden rounded-lg bg-gray-100">
                               <svg
                                 fill="currentColor"
                                 viewBox="0 0 24 24"
@@ -103,7 +103,7 @@ export default async function Bodies(props: PropsWithSearchParams) {
                         </div>
                       </a>
 
-                      <div className="flex-grow mt-6 sm:ml-8 sm:mt-0">
+                      <div className="flex-grow mt-6 sm:ml-6 sm:mt-0 lg:ml-8">
                         <div className="flex justify-between">
                           <a href={`/beta/admin/bodies/${edge.node.id}`}>
                             <h3 className="text-base font-medium text-gray-900">
@@ -131,43 +131,40 @@ export default async function Bodies(props: PropsWithSearchParams) {
                             Skupina
                           </p>
                         )}
-
-                        <p className="mt-3 text-sm text-gray-500">
-                          Respektovaný odkaz:
-                        </p>
-                        {!edge.node.link ? (
-                          <p className="text-sm text-gray-500">Nevyplněn</p>
-                        ) : (
-                          <a
-                            href={edge.node.link}
-                            className="text-gray-500 hover:text-indigo-600"
-                          >
-                            {edge.node.link}
-                          </a>
-                        )}
-                        <div className="flex gap-6">
-                          <div className="flex flex-col">
-                            <p className="mt-3 text-sm text-gray-500">Vznik:</p>
-
-                            <p className="text-sm text-gray-500">
-                              {!edge.node.foundedAt
-                                ? 'Nevyplněn'
-                                : formatDate(edge.node.foundedAt)}
-                            </p>
-                          </div>
-                          {edge.node.terminatedAt && (
+                        <div className="text-gray-600 text-sm">
+                          <p className="mt-3">Respektovaný odkaz:</p>
+                          {!edge.node.link ? (
+                            <p>Nevyplněn</p>
+                          ) : (
+                            <a
+                              href={edge.node.link}
+                              className="hover:text-indigo-600"
+                            >
+                              {edge.node.link}
+                            </a>
+                          )}
+                          <div className="flex gap-6 text-sm text-gray-600">
                             <div className="flex flex-col">
-                              <p className="mt-3 text-sm text-gray-500">
-                                Zánik:
-                              </p>
+                              <p className="mt-3">Vznik:</p>
 
-                              <p className="text-sm text-gray-500">
-                                {!edge.node.terminatedAt
+                              <p>
+                                {!edge.node.foundedAt
                                   ? 'Nevyplněn'
-                                  : formatDate(edge.node.terminatedAt)}
+                                  : formatDate(edge.node.foundedAt)}
                               </p>
                             </div>
-                          )}
+                            {edge.node.terminatedAt && (
+                              <div className="flex flex-col">
+                                <p className="mt-3">Zánik:</p>
+
+                                <p>
+                                  {!edge.node.terminatedAt
+                                    ? 'Nevyplněn'
+                                    : formatDate(edge.node.terminatedAt)}
+                                </p>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>

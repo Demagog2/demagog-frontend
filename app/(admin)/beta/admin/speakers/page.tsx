@@ -15,6 +15,7 @@ import { buildGraphQLVariables } from '@/libs/pagination'
 import { imagePath } from '@/libs/images/path'
 import AdminSpeakerDelete from '@/components/speaker/AdminSpeakerDeleteDialog'
 import { PencilIcon } from '@heroicons/react/24/outline'
+import formatDate from '@/libs/format-date'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Lidé', 'Administrace'),
@@ -88,25 +89,27 @@ export default async function Speakers(props: PropsWithSearchParams) {
                 <div className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
                   <div className="px-4 py-6 sm:px-6 lg:gap-x-8 lg:p-8">
                     <div className="sm:flex">
-                      <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
-                        {!edge.node.avatar ? (
-                          <span className="inline-block overflow-hidden rounded-lg bg-gray-100">
-                            <svg
-                              fill="currentColor"
-                              viewBox="0 0 24 24"
-                              className="h-full w-full object-cover text-gray-300"
-                            >
-                              <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                            </svg>
-                          </span>
-                        ) : (
-                          <img
-                            alt={edge.node.fullName}
-                            src={imagePath(edge.node.avatar)}
-                            className="h-full w-full rounded-lg object-cover"
-                          />
-                        )}
-                      </div>
+                      <a href={`/beta/admin/speakers/${edge.node.id}`}>
+                        <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
+                          {!edge.node.avatar ? (
+                            <span className="inline-block overflow-hidden rounded-lg bg-gray-100">
+                              <svg
+                                fill="currentColor"
+                                viewBox="0 0 24 24"
+                                className="h-full w-full object-cover text-gray-300"
+                              >
+                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                              </svg>
+                            </span>
+                          ) : (
+                            <img
+                              alt={edge.node.fullName}
+                              src={imagePath(edge.node.avatar)}
+                              className="h-full w-full rounded-lg object-cover"
+                            />
+                          )}
+                        </div>
+                      </a>
 
                       <div className="flex-grow mt-6 sm:ml-6 sm:mt-0 lg:ml-8">
                         <div className="flex justify-between">
@@ -161,14 +164,14 @@ export default async function Speakers(props: PropsWithSearchParams) {
                                       od{' '}
                                       {!membership.since
                                         ? 'nevyplněno'
-                                        : membership.since}
+                                        : formatDate(membership.since)}
                                     </span>
                                     <span>
                                       {' '}
                                       do{' '}
                                       {!membership.until
                                         ? 'nevyplněno'
-                                        : membership.until}
+                                        : formatDate(membership.until)}
                                     </span>
                                   </p>
                                 )
