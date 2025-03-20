@@ -1,6 +1,6 @@
 import FacebookIcon from '@/assets/icons/facebook.svg'
 import InstagramIcon from '@/assets/icons/instagram.svg'
-import TwitterIcon from '@/assets/icons/twitter.svg'
+import XIcon from '@/assets/icons/x.svg'
 
 export default function SiteSocial() {
   return (
@@ -31,14 +31,11 @@ export default function SiteSocial() {
           </span>
           <span className="fw-bolder">Instagram</span>
         </a>
-        <a
-          className="btn white me-2 mb-2 ps-2"
-          href="https://twitter.com/DemagogCZ"
-        >
-          <span className="w-30px h-30px me-2">
-            <TwitterIcon />
+        <a className="btn white me-2 mb-2" href="https://twitter.com/DemagogCZ">
+          <span className="w-20px h-30px me-2 d-flex align-items-center">
+            <XIcon />
           </span>
-          <span className="fw-bolder">Twitter</span>
+          <span className="fw-bolder">X</span>
         </a>
       </div>
     </div>
