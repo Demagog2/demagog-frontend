@@ -84,7 +84,7 @@ export default async function Bodies(props: PropsWithSearchParams) {
                       <a href={`/beta/admin/bodies/${edge.node.id}`}>
                         <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
                           {!edge.node.logo ? (
-                            <span className="inline-block overflow-hidden rounded-full bg-gray-100">
+                            <span className="inline-block overflow-hidden rounded-lg bg-gray-100">
                               <svg
                                 fill="currentColor"
                                 viewBox="0 0 24 24"
