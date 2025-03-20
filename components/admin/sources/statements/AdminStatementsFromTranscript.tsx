@@ -93,13 +93,15 @@ export function AdminStatementsFromTranscript({
         />
       </div>
       <div className="h-[calc(100vh-12rem)] overflow-y-auto">
-        <h3>{filteredStatements.length} výroků</h3>
+        <div className="pr-4 sm:pr-6 lg:pr-8">
+          <h3>{filteredStatements.length} výroků</h3>
 
-        <p className="text-gray-500">
-          Klikněte do označené části v přepisu k zobrazení pouze výroku k ní se
-          vztahujícího. Pokud chcete vytvořit nový výrok, označte část přepisu,
-          ze které jej chcete vytvořit.
-        </p>
+          <p className="text-gray-500">
+            Klikněte do označené části v přepisu k zobrazení pouze výroku k ní
+            se vztahujícího. Pokud chcete vytvořit nový výrok, označte část
+            přepisu, ze které jej chcete vytvořit.
+          </p>
+        </div>
         {newStatementTranscriptPosition ? (
           <AdminStatementFromTranscriptForm
             data={data}

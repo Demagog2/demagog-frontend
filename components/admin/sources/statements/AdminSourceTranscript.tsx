@@ -174,7 +174,7 @@ export function AdminSourceTranscript({
 
   return (
     <pre
-      className="whitespace-pre-wrap font-sans text-base leading-relaxed p-4 bg-white rounded-lg shadow"
+      className="whitespace-pre-wrap font-sans text-base leading-relaxed p-4 sm:ml-2 lg:ml-4 bg-white rounded-lg shadow"
       onMouseUp={handleSelectionChange}
       onMouseDown={() => onStatementClick?.(null)}
     >
