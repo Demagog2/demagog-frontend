@@ -32,7 +32,7 @@ export default function SiteSocial() {
           <span className="fw-bolder">Instagram</span>
         </a>
         <a className="btn white me-2 mb-2" href="https://twitter.com/DemagogCZ">
-          <span className="w-20px h-30px me-2 d-flex align-items-center text-dark">
+          <span className="w-30px h-30px me-2 d-inline-flex align-items-center justify-content-center text-dark">
             <XIcon />
           </span>
           <span className="fw-bolder">X</span>
