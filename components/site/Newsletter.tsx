@@ -8,7 +8,7 @@ export default function SiteNewsletter() {
         nás odebírat, a mějte tak přehled o tom, jaké dezinformace a nepravdy se
         zrovna v Česku šíří.
       </p>
-      <div className="mt-5 mt-lg-0 d-flex justify-content-lg-center gap-lg-4">
+      <div className="mt-5 mt-lg-0 d-flex justify-content-lg-center flex-wrap gap-lg-4">
         <a
           href={'-- TODO add correct url for newsletters --'}
           className="btn h-44px mb-2 ps-2 me-2 me-lg-0"

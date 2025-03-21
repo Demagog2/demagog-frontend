@@ -99,7 +99,7 @@ export default async function AdminBodyDetail(props: {
                   <img
                     alt={body.name}
                     src={imagePath(body.logo)}
-                    className="w-full h-full object-cover rounded-lg"
+                    className="w-full h-full object-contain object-center rounded-lg"
                   />
                 )}
               </div>
