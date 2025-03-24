@@ -19,17 +19,32 @@ interface BlockQuoteDialogProps {
     speakerCustomName?: string
   ) => void
   onClose: () => void
+  defaultValues?: {
+    speakerId?: string
+    link?: string
+    media?: string
+    quotedAt?: string
+    speakerCustomName?: string
+  }
 }
 
-export function BlockQuoteDialog({ onSave, onClose }: BlockQuoteDialogProps) {
+export function BlockQuoteDialog({
+  onSave,
+  onClose,
+  defaultValues,
+}: BlockQuoteDialogProps) {
   const [speakers, setSpeakers] = useState<Speaker[]>([])
   const [loading, setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
-  const [selectedSpeakerId, setSelectedSpeakerId] = useState<string>()
-  const [link, setLink] = useState('')
-  const [media, setMedia] = useState('')
-  const [quotedAt, setQuotedAt] = useState('')
-  const [speakerCustomName, setSpeakerCustomName] = useState('')
+  const [selectedSpeakerId, setSelectedSpeakerId] = useState<string>(
+    defaultValues?.speakerId || ''
+  )
+  const [link, setLink] = useState(defaultValues?.link || '')
+  const [media, setMedia] = useState(defaultValues?.media || '')
+  const [quotedAt, setQuotedAt] = useState(defaultValues?.quotedAt || '')
+  const [speakerCustomName, setSpeakerCustomName] = useState(
+    defaultValues?.speakerCustomName || ''
+  )
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
   const fetchSpeakers = useCallback(
