@@ -9,23 +9,25 @@ export default function SiteNewsletter() {
         zrovna v Česku šíří.
       </p>
       <div className="mt-5 mt-lg-0 d-flex justify-content-lg-center flex-wrap gap-lg-4">
-        <a
-          href={'-- TODO add correct url for newsletters --'}
-          className="btn h-44px mb-2 ps-2 me-2 me-lg-0"
-        >
-          <span className="w-30px h-30px me-2">
-            <svg
-              fill="#fff"
-              height="30px"
-              width="30px"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path d="M2 4c0-1.1.9-2 2-2h16a2 2 0 012 2v16c0 1.1-.9 2-2 2H4a2 2 0 01-2-2V4zm2 0v16h16V4H4zm8 7l8-5v2l-8 5-8-5V6l8 5z" />
-            </svg>
-          </span>
-          <span className="fw-bolder">Newsletter</span>
-        </a>
+        {process.env.NEWSLETTER_URL && (
+          <a
+            href={process.env.NEWSLETTER_URL}
+            className="btn h-44px mb-2 ps-2 me-2 me-lg-0"
+          >
+            <span className="w-30px h-30px me-2">
+              <svg
+                fill="#fff"
+                height="30px"
+                width="30px"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path d="M2 4c0-1.1.9-2 2-2h16a2 2 0 012 2v16c0 1.1-.9 2-2 2H4a2 2 0 01-2-2V4zm2 0v16h16V4H4zm8 7l8-5v2l-8 5-8-5V6l8 5z" />
+              </svg>
+            </span>
+            <span className="fw-bolder">Newsletter</span>
+          </a>
+        )}
         <a
           href="https://bit.ly/odebirat_whatsapp"
           className="btn h-44px mb-2 ps-2"
