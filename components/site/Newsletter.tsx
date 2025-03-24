@@ -3,10 +3,11 @@ export default function SiteNewsletter() {
     <div className="bg-secondary min-h-100 rounded-l p-5 p-lg-10">
       <h3 className="display-2 fw-bold mb-5">Zůstaňme v kontaktu</h3>
       <p className="fs-4 mb-4">
-        Přihlaste se k odběru našeho whatsappového kanálu, kde pravidelně
-        přinášíme shrnutí nejzajímavějších článků a analýz. Začněte nás
-        odebírat, a mějte tak přehled o tom, jaké dezinformace a nepravdy se
-        zrovna v Česku šíří.
+        Přihlaste se k odběru našeho
+        {process.env.NEWSLETTER_URL && ` newsletteru nebo`} whatsappového
+        kanálu, kde pravidelně přinášíme shrnutí nejzajímavějších článků a
+        analýz. Začněte nás odebírat, a mějte tak přehled o tom, jaké
+        dezinformace a nepravdy se zrovna v Česku šíří.
       </p>
       <div className="mt-5 mt-lg-0 d-flex justify-content-lg-center flex-wrap gap-lg-4">
         {process.env.NEWSLETTER_URL && (
