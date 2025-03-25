@@ -20,3 +20,10 @@ export const getBetaAdminSourceStatsEnabled = flag<boolean>({
     return process.env.SOURCE_STATS === 'true'
   },
 })
+
+export const getBetaAdminEducationEnabled = flag<boolean>({
+  key: 'beta.admin.education-enabled',
+  decide() {
+    return process.env.EDUCATION === 'true'
+  },
+})

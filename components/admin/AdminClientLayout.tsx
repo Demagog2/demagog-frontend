@@ -41,6 +41,7 @@ import {
   Bars3Icon,
   Cog6ToothIcon,
   XMarkIcon,
+  AcademicCapIcon,
 } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { UserMenu } from '@/components/admin/UserMenu'
@@ -117,6 +118,7 @@ const AdminClientLayoutFragment = gql(`
 export default function AdminClientLayout(
   props: PropsWithChildren<{
     isBannerVisible: boolean
+    isEducationSectionEnabled: boolean
     data: FragmentType<typeof AdminClientLayoutFragment>
   }>
 ) {
@@ -125,6 +127,19 @@ export default function AdminClientLayout(
   const pathname = usePathname()
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const navigationContent = [
+    ...content,
+    ...(props.isEducationSectionEnabled
+      ? [
+          {
+            name: 'Vzdělání',
+            href: '/beta/admin/education',
+            icon: AcademicCapIcon,
+          },
+        ]
+      : []),
+  ]
 
   return (
     <div>
@@ -173,7 +188,7 @@ export default function AdminClientLayout(
                       Výstupy
                     </div>
                     <ul role="list" className="-mx-2 space-y-1 mt-2">
-                      {content.map((item) => (
+                      {navigationContent.map((item) => (
                         <li key={item.name}>
                           <a
                             href={item.href}
