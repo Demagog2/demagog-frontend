@@ -4,7 +4,6 @@ import { MostSearchedSpeakers } from '@/components/speaker/MostSearchedSpeakers'
 import { Pagination } from '@/components/article/Pagination'
 import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
 import { drop, take } from 'lodash'
-import ArticleTags from '../article/Tags'
 import { HomepageDataQuery } from '@/__generated__/graphql'
 
 export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
@@ -25,9 +24,6 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
           <DonateWidget />
         </div>
         <div className="col col-12 col-lg-8 mb-0 mb-lg-10">
-          <div className="mb-5 mb-lg-10">
-            <ArticleTags tags={data.articleTags} />
-          </div>
           <div className="row row-cols-1 g-5 g-lg-10">
             {topArticles?.flatMap((article) => {
               if (!article) {

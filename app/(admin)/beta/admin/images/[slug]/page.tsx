@@ -5,6 +5,7 @@ import { AdminImageHeader } from '@/components/admin/images/AdminImageHeader'
 import { AdminImagePreview } from '@/components/admin/images/AdminImagePreview'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -59,9 +60,9 @@ export default async function AdminTagDetail(props: {
   }
 
   return (
-    <>
+    <AdminPage>
       <AdminImageHeader image={data.contentImage} />
       <AdminImagePreview image={data.contentImage} />
-    </>
+    </AdminPage>
   )
 }

@@ -4,7 +4,6 @@ import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { AdminPageHeader } from '../layout/AdminPageHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { Label } from '../forms/Label'
 import { FormAction } from '@/libs/forms/form-action'
@@ -25,6 +24,7 @@ import { AdminFormMain } from '../layout/AdminFormMain'
 import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 import { PlusCircleIcon } from '@heroicons/react/24/outline'
 import AdminAccordionItems from '../accordion-items/AdminAccordionItems'
+import { AdminFormHeader } from '../layout/AdminFormHeader'
 
 const AdminAccordionSectionDataFragment = gql(`
   fragment AdminAccordionSectionData on AccordionSection {
@@ -69,7 +69,7 @@ export function AdminAccordionSectionForm(props: {
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <AdminPageHeader>
+      <AdminFormHeader>
         <AdminPageTitle title={props.title} description={props.description} />
         <AdminFormActions>
           <LinkButton
@@ -80,7 +80,8 @@ export function AdminAccordionSectionForm(props: {
           </LinkButton>
           <SubmitButton />
         </AdminFormActions>
-      </AdminPageHeader>
+      </AdminFormHeader>
+
       <AdminFormContent>
         <AdminFormMain>
           <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">

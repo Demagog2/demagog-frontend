@@ -6,10 +6,15 @@ import { BlockQuoteMetadata } from '@/components/article/BlockQuoteMetadata'
 const AdminArticleQuoteFragment = gql(`
   fragment AdminArticleQuote on BlockQuoteNode {
     text
-    speaker {
-      avatar(size: small)
-      fullName
-      role
+    speakerV2 {
+      ... on Speaker {
+        avatar(size: small)
+        fullName
+        role
+      }
+      ... on SpeakerWithCustomName {
+        name
+      }
     }
     link
     medium
@@ -29,20 +34,26 @@ export function AdminArticleQuote(props: {
         <p>{data.text}</p>
       </blockquote>
 
-      {(data.speaker || data.quotedAt || data.medium || data.link) && (
+      {(data.speakerV2 || data.quotedAt || data.medium || data.link) && (
         <figcaption className="mt-10 flex items-center gap-x-6">
-          {data.speaker?.avatar && (
-            <img
-              alt={data.speaker.fullName}
-              src={imagePath(data.speaker.avatar)}
-              className="avatar size-12 bg-gray-50 me-1"
-            />
-          )}
+          {data.speakerV2?.__typename === 'Speaker' &&
+            data.speakerV2.avatar && (
+              <img
+                alt={data.speakerV2.fullName}
+                src={imagePath(data.speakerV2.avatar)}
+                className="avatar size-12 bg-gray-50 me-1"
+              />
+            )}
 
           <div className="text-sm/6">
-            {data.speaker?.fullName && (
+            {data.speakerV2?.__typename === 'Speaker' && (
               <div className="font-semibold text-gray-900">
-                {data.speaker?.fullName}
+                {data.speakerV2.fullName}
+              </div>
+            )}
+            {data.speakerV2?.__typename === 'SpeakerWithCustomName' && (
+              <div className="font-semibold text-gray-900">
+                {data.speakerV2.name}
               </div>
             )}
 

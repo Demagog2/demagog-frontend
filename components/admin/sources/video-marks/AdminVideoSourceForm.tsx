@@ -28,6 +28,7 @@ import { SubmitButton } from '../../forms/SubmitButton'
 import { LinkButton } from '../../forms/LinkButton'
 import { AdminFormMain } from '../../layout/AdminFormMain'
 import { useEffect } from 'react'
+import { AdminFormContent } from '../../layout/AdminFormContent'
 
 export const AdminVideoSourceFormFragment = gql(`
   fragment AdminVideoSourceForm on Source {
@@ -82,60 +83,58 @@ export function AdminVideoSourceForm(props: VideoFormProps) {
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
-    <div className="container">
-      <form action={formAction} onSubmit={handleSubmitForm}>
-        <AdminFormHeader>
-          <AdminPageTitle title={'Zadejte informace o video záznamu'} />
-          <AdminFormActions>
-            <LinkButton href={`/beta/admin/sources/${source.id}`}>
-              Zpět
-            </LinkButton>
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
+    <form action={formAction} onSubmit={handleSubmitForm}>
+      <AdminFormHeader>
+        <AdminPageTitle title={'Zadejte informace o video záznamu'} />
+        <AdminFormActions>
+          <LinkButton href={`/beta/admin/sources/${source.id}`}>
+            Zpět
+          </LinkButton>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
 
+      <AdminFormContent>
         <AdminFormMain>
-          <div className="p-4">
-            <div className="space-y-4">
-              <Field as="div">
-                <Label htmlFor="video_type">Typ videa</Label>
+          <div className="space-y-4">
+            <Field as="div">
+              <Label htmlFor="video_type">Typ videa</Label>
 
-                <input type="hidden" {...register('video_type')} />
+              <input type="hidden" {...register('video_type')} />
 
-                <Select
-                  id="video_type"
-                  items={typeOptions}
-                  defaultValue={videoType}
-                  onChange={(item) => {
-                    const value = item?.value
-                    if (value && isValidVideoType(value)) {
-                      setValue('video_type', value)
-                    }
-                  }}
-                />
+              <Select
+                id="video_type"
+                items={typeOptions}
+                defaultValue={videoType}
+                onChange={(item) => {
+                  const value = item?.value
+                  if (value && isValidVideoType(value)) {
+                    setValue('video_type', value)
+                  }
+                }}
+              />
 
-                <ErrorMessage message={errors.video_type?.message} />
-              </Field>
+              <ErrorMessage message={errors.video_type?.message} />
+            </Field>
 
-              <Field as="div">
-                <Label htmlFor="video_id">{getVideoIdLabel(videoType)}</Label>
+            <Field as="div">
+              <Label htmlFor="video_id">{getVideoIdLabel(videoType)}</Label>
 
-                <Input id="video_id" {...register('video_id')} />
+              <Input id="video_id" {...register('video_id')} />
 
-                {errors.video_id ? (
-                  <ErrorMessage message={errors.video_id.message} />
-                ) : (
-                  getVideoIdHelperText(videoType) && (
-                    <p className="mt-4 text-sm text-gray-500">
-                      {getVideoIdHelperText(videoType)}
-                    </p>
-                  )
-                )}
-              </Field>
-            </div>
+              {errors.video_id ? (
+                <ErrorMessage message={errors.video_id.message} />
+              ) : (
+                getVideoIdHelperText(videoType) && (
+                  <p className="mt-4 text-sm text-gray-500">
+                    {getVideoIdHelperText(videoType)}
+                  </p>
+                )
+              )}
+            </Field>
           </div>
         </AdminFormMain>
-      </form>
-    </div>
+      </AdminFormContent>
+    </form>
   )
 }

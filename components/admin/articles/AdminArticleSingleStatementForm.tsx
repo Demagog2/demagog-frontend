@@ -23,6 +23,9 @@ import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { dateInputFormat } from '@/libs/date-time'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { FormAction } from '@/libs/forms/form-action'
+import { AdminFormContent } from '../layout/AdminFormContent'
+import { AdminFormMain } from '../layout/AdminFormMain'
+import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 
 const AdminArticleSingleStatementFormFragment = gql(`
   fragment AdminArticleSingleStatementFormFields on Article {
@@ -80,22 +83,18 @@ export function AdminArticleSingleStatementForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
-        <div className="container">
-          <AdminFormHeader>
-            <AdminPageTitle
-              title={props.title}
-              description={props.description}
-            />
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} description={props.description} />
 
-            <AdminFormActions>
-              <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
+          <AdminFormActions>
+            <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
-              <SubmitButton />
-            </AdminFormActions>
-          </AdminFormHeader>
+            <SubmitButton />
+          </AdminFormActions>
+        </AdminFormHeader>
 
-          <div className="mt-6 flex gap-5 border-b border-gray-900/10 pb-12">
-            {/* Main panel */}
+        <AdminFormContent>
+          <AdminFormMain className="col-span-12 lg:col-span-9 gap-y-5 grid grid-cols-1">
             <div className="grow gap-y-5 grid grid-cols-1">
               <Fieldset className="space-y-4">
                 <Field>
@@ -140,14 +139,14 @@ export function AdminArticleSingleStatementForm(props: {
                 </Field>
               </Fieldset>
             </div>
-
-            {/* Right panel */}
+          </AdminFormMain>
+          <AdminFormSidebar>
             <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
               <Fieldset className="space-y-4">
                 <Field>
                   <Button
                     onClick={() => setDialogOpen(true)}
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto whitespace-nowrap"
                   >
                     Vygenerovat obrázek pro tweet
                   </Button>
@@ -185,8 +184,8 @@ export function AdminArticleSingleStatementForm(props: {
                 </Field>
               </Fieldset>
             </div>
-          </div>
-        </div>
+          </AdminFormSidebar>
+        </AdminFormContent>
       </form>
 
       <AdminArticleIllustrationDialog

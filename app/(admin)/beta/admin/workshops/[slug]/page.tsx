@@ -77,23 +77,19 @@ export default async function AdminWorkshopDetail(props: {
           </div>
         </AdminPageHeader>
         <AdminPageContent>
-          <div className="border border-gray-200 bg-white shadow-sm rounded-2xl overflow-hidden text-sm">
-            <div className="p-6 sm:p-8 lg:p-10">
-              <div className="flex flex-col gap-8 sm:flex-row">
-                <div className="flex-auto">
-                  <h3 className="text-2xl font-bold text-gray-800 mb-6">
-                    {workshop.name}
-                  </h3>
-                  <div className="space-y-6 text-gray-600">
-                    <div>
-                      <p className="font-semibold">Popis:</p>
-                      <p>{workshop.description ?? 'Nevyplněno'}</p>
-                    </div>
-                    <div>
-                      <p className="font-semibold">Cena:</p>
-                      <p>{workshop.priceFormatted ?? 'Nevyplněno'}</p>
-                    </div>
-                  </div>
+          <div className="px-4 sm:px-6 lg:px-8 text-sm">
+            <div className="flex flex-col">
+              <h3 className="text-2xl font-bold text-gray-800 mb-4">
+                {workshop.name}
+              </h3>
+              <div className="space-y-4 text-gray-600">
+                <div>
+                  <p className="font-semibold">Popis:</p>
+                  <p>{workshop.description ?? 'Nevyplněno'}</p>
+                </div>
+                <div>
+                  <p className="font-semibold">Cena:</p>
+                  <p>{workshop.priceFormatted ?? 'Nevyplněno'}</p>
                 </div>
               </div>
             </div>

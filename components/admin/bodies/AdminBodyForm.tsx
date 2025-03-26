@@ -22,7 +22,6 @@ import { SwitchField } from '../forms/SwitchField'
 import { schema } from '@/libs/bodies/schema'
 import { dateInputFormat } from '@/libs/date-time'
 import { AdminFormContent } from '../layout/AdminFormContent'
-import { AdminFormMain } from '../layout/AdminFormMain'
 
 const AdminBodyDataFragment = gql(`
   fragment AdminBodyData on Body {
@@ -73,121 +72,120 @@ export function AdminBodyForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
-        <div className="container">
-          <AdminFormHeader>
-            <AdminPageTitle title={props.title} />
-            <AdminFormActions>
-              <LinkButton href="/beta/admin/bodies">Zpět</LinkButton>
-              <SubmitButton />
-            </AdminFormActions>
-          </AdminFormHeader>
-          <AdminFormContent>
-            <AdminFormMain>
-              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                <Legend className="text-base font-semibold leading-7 text-gray-900">
-                  Základní údaje
-                </Legend>
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} />
+          <AdminFormActions>
+            <LinkButton href="/beta/admin/bodies">Zpět</LinkButton>
+            <SubmitButton />
+          </AdminFormActions>
+        </AdminFormHeader>
 
-                <Field>
-                  <Label htmlFor="name">Název</Label>
-                  <Input
-                    id="name"
-                    placeholder="Zadejte název"
-                    {...register('name', { required: true })}
+        <AdminFormContent>
+          <div className="col-span-12 gap-y-5">
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Základní údaje
+              </Legend>
+
+              <Field>
+                <Label htmlFor="name">Název</Label>
+                <Input
+                  id="name"
+                  placeholder="Zadejte název"
+                  {...register('name', { required: true })}
+                />
+                <ErrorMessage message={errors.name?.message} />
+              </Field>
+              <Field>
+                <Label htmlFor="shortName" isOptional>
+                  Zkrácený název
+                </Label>
+                <Input id="shortName" {...register('shortName')} />
+              </Field>
+              <Field>
+                <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
+                  <Controller
+                    name="isParty"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        id={field.name}
+                        name={field.name}
+                        checked={field.value}
+                        disabled={field.disabled}
+                        onBlur={field.onBlur}
+                        onChange={field.onChange}
+                      />
+                    )}
                   />
-                  <ErrorMessage message={errors.name?.message} />
-                </Field>
-                <Field>
-                  <Label htmlFor="shortName" isOptional>
-                    Zkrácený název
-                  </Label>
-                  <Input id="shortName" {...register('shortName')} />
-                </Field>
-                <Field>
-                  <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
-                    <Controller
-                      name="isParty"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          id={field.name}
-                          name={field.name}
-                          checked={field.value}
-                          disabled={field.disabled}
-                          onBlur={field.onBlur}
-                          onChange={field.onChange}
-                        />
-                      )}
-                    />
-                    <SwitchField
-                      htmlFor="isParty"
-                      label="Jde o politickou stranu"
-                    />
-                  </div>
-                </Field>
-                <Field>
-                  <Label htmlFor="link" isOptional>
-                    Respekovaný odkaz obsahující popis (wikipedia, nasipolitici,
-                    atp.)
-                  </Label>
-                  <Input id="link" {...register('link')} />
-                </Field>
-              </Fieldset>
-              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                  Vznik a zánik
-                </Legend>
-
-                <div className="flex flex-row items-center gap-6">
-                  <Field className="w-full">
-                    <Label htmlFor="foundedAt" isOptional>
-                      Datum vzniku
-                    </Label>
-                    <Input
-                      id="foundedAt"
-                      type="date"
-                      className="w-full"
-                      {...register('foundedAt')}
-                    />
-                  </Field>
-                  <Field className="w-full">
-                    <Label htmlFor="terminatedAt" isOptional>
-                      Datum zániku
-                    </Label>
-                    <Input
-                      id="terminatedAt"
-                      type="date"
-                      className="w-full"
-                      {...register('terminatedAt')}
-                    />
-                  </Field>
+                  <SwitchField
+                    htmlFor="isParty"
+                    label="Jde o politickou stranu"
+                  />
                 </div>
-                <Field>
-                  <div className="flex items-center gap-2">
-                    <Controller
-                      name="isInactive"
-                      control={control}
-                      render={({ field }) => (
-                        <Switch
-                          id={field.name}
-                          name={field.name}
-                          checked={field.value}
-                          disabled={field.disabled}
-                          onBlur={field.onBlur}
-                          onChange={field.onChange}
-                        />
-                      )}
-                    />
-                    <SwitchField
-                      htmlFor="isInactive"
-                      label="Skupina zanikla / není aktivní"
-                    />
-                  </div>
+              </Field>
+              <Field>
+                <Label htmlFor="link" isOptional>
+                  Respekovaný odkaz obsahující popis (wikipedia, nasipolitici,
+                  atp.)
+                </Label>
+                <Input id="link" {...register('link')} />
+              </Field>
+            </Fieldset>
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+                Vznik a zánik
+              </Legend>
+
+              <div className="flex flex-col sm:flex-row items-center gap-6">
+                <Field className="w-full">
+                  <Label htmlFor="foundedAt" isOptional>
+                    Datum vzniku
+                  </Label>
+                  <Input
+                    id="foundedAt"
+                    type="date"
+                    className="w-full"
+                    {...register('foundedAt')}
+                  />
                 </Field>
-              </Fieldset>
-            </AdminFormMain>
-          </AdminFormContent>
-        </div>
+                <Field className="w-full">
+                  <Label htmlFor="terminatedAt" isOptional>
+                    Datum zániku
+                  </Label>
+                  <Input
+                    id="terminatedAt"
+                    type="date"
+                    className="w-full"
+                    {...register('terminatedAt')}
+                  />
+                </Field>
+              </div>
+              <Field>
+                <div className="flex items-center gap-2">
+                  <Controller
+                    name="isInactive"
+                    control={control}
+                    render={({ field }) => (
+                      <Switch
+                        id={field.name}
+                        name={field.name}
+                        checked={field.value}
+                        disabled={field.disabled}
+                        onBlur={field.onBlur}
+                        onChange={field.onChange}
+                      />
+                    )}
+                  />
+                  <SwitchField
+                    htmlFor="isInactive"
+                    label="Skupina zanikla / není aktivní"
+                  />
+                </div>
+              </Field>
+            </Fieldset>
+          </div>
+        </AdminFormContent>
       </form>
     </>
   )

@@ -1,4 +1,5 @@
 import { gql } from '@/__generated__'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { AdminSourceHeader } from '@/components/admin/sources/AdminSourceHeader'
 import { AdminSourcesFilters } from '@/components/admin/sources/AdminSourcesFilters'
 import { serverQuery } from '@/libs/apollo-client-server'
@@ -52,9 +53,9 @@ export default async function AdminSource(props: { params: { slug: string } }) {
   })
 
   return (
-    <>
+    <AdminPage>
       <AdminSourceHeader data={data} source={data.source} />
       <AdminSourcesFilters source={data.source} statementsData={data} />
-    </>
+    </AdminPage>
   )
 }

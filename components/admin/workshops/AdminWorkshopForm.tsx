@@ -4,7 +4,6 @@ import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { AdminPageHeader } from '../layout/AdminPageHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { Label } from '../forms/Label'
 import { FormAction } from '@/libs/forms/form-action'
@@ -19,6 +18,7 @@ import { workshopSchema } from '@/libs/workshops/workshop-schema'
 import { AdminFormContent } from '../layout/AdminFormContent'
 import { Field, Fieldset, Textarea } from '@headlessui/react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { AdminFormHeader } from '../layout/AdminFormHeader'
 
 const AdminWorkshopDataFragment = gql(`
     fragment AdminWorkshopData on Workshop {
@@ -59,7 +59,7 @@ export function AdminWorkshopForm(props: {
 
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
-      <AdminPageHeader>
+      <AdminFormHeader>
         <AdminPageTitle title={props.title} description={props.description} />
         <AdminFormActions>
           <LinkButton
@@ -70,7 +70,8 @@ export function AdminWorkshopForm(props: {
           </LinkButton>
           <SubmitButton />
         </AdminFormActions>
-      </AdminPageHeader>
+      </AdminFormHeader>
+
       <AdminFormContent>
         <div className="col-span-12">
           <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">

@@ -119,32 +119,31 @@ export function AdminVideoStatementMarksForm(props: FormProps) {
   }, [source.id])
 
   return (
-    <div className="container">
-      <form action={formAction} onSubmit={handleSubmitForm}>
-        <AdminFormHeader>
-          <AdminPageTitle title={'Propojte výroky s video záznamem'} />
-          <AdminFormActions>
-            <button
-              type="button"
-              onClick={handleClearVideo}
-              className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-            >
-              Odstranit video
-            </button>
-            <LinkButton href={`/beta/admin/sources/${source.id}`}>
-              Zpět
-            </LinkButton>
-            <SubmitButton />
-          </AdminFormActions>
-        </AdminFormHeader>
+    <form action={formAction} onSubmit={handleSubmitForm}>
+      <AdminFormHeader>
+        <AdminPageTitle title={'Propojte výroky s video záznamem'} />
+        <AdminFormActions>
+          <button
+            type="button"
+            onClick={handleClearVideo}
+            className="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-red-600 border border-transparent rounded-md hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            Odstranit video
+          </button>
+          <LinkButton href={`/beta/admin/sources/${source.id}`}>
+            Zpět
+          </LinkButton>
+          <SubmitButton />
+        </AdminFormActions>
+      </AdminFormHeader>
 
-        <AdminFormContent>
-          <AdminFormMain className="col-span-12 lg:col-span-7">
-            <>
-              {source.videoType === 'youtube' && (
-                <YouTubeVideo ref={videoRef} source={source} />
-              )}
-              {/* {videoType === 'audio' && (
+      <AdminFormContent>
+        <AdminFormMain className="col-span-12 lg:col-span-7">
+          <>
+            {source.videoType === 'youtube' && (
+              <YouTubeVideo ref={videoRef} source={source} />
+            )}
+            {/* {videoType === 'audio' && (
               <AudioOnlyVideo
                 onReady={handleVideoReady}
                 videoId={videoId || ''}
@@ -156,43 +155,42 @@ export function AdminVideoStatementMarksForm(props: FormProps) {
                 videoId={videoId || ''}
               />
             )} */}
-            </>
-          </AdminFormMain>
+          </>
+        </AdminFormMain>
 
-          <AdminFormSidebar className="col-1 col-span-12 lg:col-span-5">
-            {fields.map((field, index) => (
-              <Fragment key={field.id}>
-                <StatementInput
-                  onStartTimeChange={(value) =>
-                    setValue(`marks.${index}.start`, value, {
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    })
-                  }
-                  onStopTimeChange={(value) =>
-                    setValue(`marks.${index}.stop`, value, {
-                      shouldDirty: true,
-                      shouldTouch: true,
-                    })
-                  }
-                  onGoToMark={handleGoToMark}
-                  startTime={watch(`marks.${index}.start`)}
-                  stopTime={watch(`marks.${index}.stop`)}
-                  startName={`marks.${index}.start`}
-                  stopName={`marks.${index}.stop`}
-                  statement={source.statements[index]}
-                  videoTime={videoTime}
-                />
+        <AdminFormSidebar className="col-1 col-span-12 lg:col-span-5">
+          {fields.map((field, index) => (
+            <Fragment key={field.id}>
+              <StatementInput
+                onStartTimeChange={(value) =>
+                  setValue(`marks.${index}.start`, value, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  })
+                }
+                onStopTimeChange={(value) =>
+                  setValue(`marks.${index}.stop`, value, {
+                    shouldDirty: true,
+                    shouldTouch: true,
+                  })
+                }
+                onGoToMark={handleGoToMark}
+                startTime={watch(`marks.${index}.start`)}
+                stopTime={watch(`marks.${index}.stop`)}
+                startName={`marks.${index}.start`}
+                stopName={`marks.${index}.stop`}
+                statement={source.statements[index]}
+                videoTime={videoTime}
+              />
 
-                <input
-                  type="hidden"
-                  {...register(`marks.${index}.statementId`)}
-                />
-              </Fragment>
-            ))}
-          </AdminFormSidebar>
-        </AdminFormContent>
-      </form>
-    </div>
+              <input
+                type="hidden"
+                {...register(`marks.${index}.statementId`)}
+              />
+            </Fragment>
+          ))}
+        </AdminFormSidebar>
+      </AdminFormContent>
+    </form>
   )
 }

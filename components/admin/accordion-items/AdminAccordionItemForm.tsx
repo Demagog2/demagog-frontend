@@ -13,7 +13,6 @@ import { Input } from '../forms/Input'
 import { SubmitButton } from '../forms/SubmitButton'
 import { LinkButton } from '../forms/LinkButton'
 import { AdminFormActions } from '../layout/AdminFormActions'
-import { AdminPageHeader } from '../layout/AdminPageHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
 import { Label } from '../forms/Label'
 import { SwitchField } from '../forms/SwitchField'
@@ -24,6 +23,7 @@ import { AdminFormContent } from '../layout/AdminFormContent'
 import { Field, Fieldset, Legend } from '@headlessui/react'
 import { ErrorMessage } from '../forms/ErrorMessage'
 import dynamic from 'next/dynamic'
+import { AdminFormHeader } from '../layout/AdminFormHeader'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -80,7 +80,8 @@ export function AdminAccordionItemForm(props: {
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
       <input type="hidden" {...register('accordionSectionId')} />
-      <AdminPageHeader>
+
+      <AdminFormHeader>
         <AdminPageTitle title={props.title} description={props.description} />
         <AdminFormActions>
           <LinkButton
@@ -91,7 +92,8 @@ export function AdminAccordionItemForm(props: {
           </LinkButton>
           <SubmitButton />
         </AdminFormActions>
-      </AdminPageHeader>
+      </AdminFormHeader>
+
       <AdminFormContent>
         <AdminFormMain>
           <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">

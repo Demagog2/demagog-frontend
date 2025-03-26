@@ -1,10 +1,10 @@
 import { gql } from '@/__generated__'
 import { AdminArticleTagForm } from '@/components/admin/article-tags/AdminArticleTagForm'
-import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
 import { updateArticleTag } from '../../actions'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }

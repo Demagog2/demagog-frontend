@@ -132,7 +132,7 @@ export function AdminSourcesFilters(props: {
   ).buildViewModel()
 
   return (
-    <div className="bg-white">
+    <div className="bg-white px-4 sm:px-6 lg:px-8">
       <div>
         {/* Mobile filter dialog */}
         <Dialog

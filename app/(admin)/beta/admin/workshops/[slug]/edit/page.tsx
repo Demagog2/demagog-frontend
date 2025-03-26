@@ -5,6 +5,7 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { AdminWorkshopForm } from '@/components/admin/workshops/AdminWorkshopForm'
 import { updateWorkshop } from '../../actions'
 import { notFound } from 'next/navigation'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -57,10 +58,12 @@ export default async function AdminWorkshopEdit(props: {
   }
 
   return (
-    <AdminWorkshopForm
-      action={updateWorkshop.bind(null, data.workshop.id)}
-      title={`Upravit workshop: ${data.workshop?.name}`}
-      workshop={data.workshop}
-    />
+    <AdminPage>
+      <AdminWorkshopForm
+        action={updateWorkshop.bind(null, data.workshop.id)}
+        title={`Upravit workshop: ${data.workshop?.name}`}
+        workshop={data.workshop}
+      />
+    </AdminPage>
   )
 }

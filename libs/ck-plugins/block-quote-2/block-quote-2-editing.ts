@@ -41,7 +41,13 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
 
     schema.register('blockQuoteWithSpeaker', {
       inheritAllFrom: '$container',
-      allowAttributes: ['speakerId', 'link', 'media', 'quotedAt'],
+      allowAttributes: [
+        'speakerId',
+        'link',
+        'media',
+        'quotedAt',
+        'speakerCustomName',
+      ],
     })
 
     // View -> Model
@@ -59,12 +65,14 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
           const link = domElement.dataset.link
           const media = domElement.dataset.media
           const quotedAt = domElement.dataset.quotedAt
+          const speakerCustomName = domElement.dataset.speakerCustomName
 
           return writer.createElement('blockQuoteWithSpeaker', {
             speakerId,
             media,
             quotedAt,
             link,
+            speakerCustomName,
           })
         },
       })
@@ -77,12 +85,16 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
         const media = modelElement.getAttribute('media')
         const link = modelElement.getAttribute('link')
         const quotedAt = modelElement.getAttribute('quotedAt')
+        const speakerCustomName = modelElement.getAttribute('speakerCustomName')
 
         return writer.createContainerElement('blockquote', {
           ...(speakerId ? { 'data-speaker-id': speakerId } : {}),
           ...(media ? { 'data-media': media } : {}),
           ...(link ? { 'data-link': link } : {}),
           ...(quotedAt ? { 'data-quoted-at': quotedAt } : {}),
+          ...(speakerCustomName
+            ? { 'data-speaker-custom-name': speakerCustomName }
+            : {}),
         })
       },
     })
@@ -97,23 +109,26 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
         const quotedAt = modelElement.getAttribute('quotedAt') as
           | string
           | undefined
+        const speakerCustomName = modelElement.getAttribute(
+          'speakerCustomName'
+        ) as string | undefined
 
         if (!speakerId) {
           const container = writer.createContainerElement('blockquote', {
             cite: link,
           })
 
-          if (link || media || quotedAt) {
+          if (link || media || quotedAt || speakerCustomName) {
             const quoteMetadata = writer.createUIElement(
               'span',
               { class: 'blockquote-author' },
               function (domDocument) {
                 const domElement = this.toDomElement(domDocument)
-                let content = '— '
+                let content = `— ${speakerCustomName}`
                 if (link) {
-                  content += `<a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
+                  content += `, <a href="${link}" target="_blank">${media || 'Odkaz'}</a>`
                 } else if (media) {
-                  content += media
+                  content += `, ${media}`
                 }
                 if (quotedAt) {
                   content += ` (${displayDate(quotedAt)})`

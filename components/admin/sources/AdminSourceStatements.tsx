@@ -8,6 +8,7 @@ import { AdminStatementAssessmentStats } from './statements/AdminStatementAssess
 import AdminStatementDeleteDialog from './statements/AdminStatementDeleteDialog'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
 import { sortBy } from 'lodash'
+import classNames from 'classnames'
 
 const SourceStatementsFragment = gql(`
   fragment SourceStatements on Source {
@@ -46,14 +47,22 @@ const AdminSourceStatementsDataFragment = gql(`
   }
 `)
 
-export function AdminSourceStatements(props: {
+interface AdminSourceStatementsProps {
   source: FragmentType<typeof SourceStatementsFragment>
   data: FragmentType<typeof AdminSourceStatementsDataFragment>
   filteredStatementsIds: string[]
-}) {
+  isCondensed?: boolean
+}
+
+export function AdminSourceStatements({
+  source: sourceFragment,
+  data: dataFragment,
+  filteredStatementsIds,
+  isCondensed = false,
+}: AdminSourceStatementsProps) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
-  const data = useFragment(AdminSourceStatementsDataFragment, props.data)
-  const source = useFragment(SourceStatementsFragment, props.source)
+  const data = useFragment(AdminSourceStatementsDataFragment, dataFragment)
+  const source = useFragment(SourceStatementsFragment, sourceFragment)
 
   const { isAuthorized } = useAuthorization(data)
 
@@ -67,9 +76,7 @@ export function AdminSourceStatements(props: {
 
         <div className="space-y-8">
           {sortBy(source.statements, (statement) => statement.sourceOrder)
-            .filter((statement) =>
-              props.filteredStatementsIds.includes(statement.id)
-            )
+            .filter((statement) => filteredStatementsIds.includes(statement.id))
             .map((statement) => (
               <div
                 key={statement.id}
@@ -129,7 +136,12 @@ export function AdminSourceStatements(props: {
                   </div>
 
                   <div className="mt-6 lg:col-span-5">
-                    <dl className="grid grid-cols-2 gap-x-6 text-sm">
+                    <dl
+                      className={classNames('grid gap-x-6 text-sm', {
+                        'grid-cols-1': isCondensed,
+                        'grid-cols-2': !isCondensed,
+                      })}
+                    >
                       <div>
                         <dt className="font-medium text-gray-900">
                           Ověřovatel
@@ -153,20 +165,28 @@ export function AdminSourceStatements(props: {
                           )}
                         </dd>
                       </div>
-                      <div>
-                        <dt className="font-medium text-gray-900">Komentáře</dt>
-                        <dd className="mt-3 space-y-3 text-gray-500">
-                          <p>Počet komentářů: {statement.commentsCount}</p>
-                        </dd>
-                      </div>
+                      {!isCondensed && (
+                        <div>
+                          <dt className="font-medium text-gray-900">
+                            Komentáře
+                          </dt>
+                          <dd className="mt-3 space-y-3 text-gray-500">
+                            <p>Počet komentářů: {statement.commentsCount}</p>
+                          </dd>
+                        </div>
+                      )}
                     </dl>
 
-                    <AdminStatementAssessmentStats
-                      assessment={statement.assessment}
-                    />
+                    {!isCondensed && (
+                      <AdminStatementAssessmentStats
+                        assessment={statement.assessment}
+                      />
+                    )}
                   </div>
                 </div>
-                <AdminSourceStatementStep statement={statement} />
+                {!isCondensed && (
+                  <AdminSourceStatementStep statement={statement} />
+                )}
               </div>
             ))}
         </div>

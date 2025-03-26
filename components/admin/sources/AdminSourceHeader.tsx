@@ -9,6 +9,7 @@ import {
 } from '@/libs/flags'
 import AdminSourceDeleteDialog from '@/components/admin/sources/AdminSourceDeleteDialog'
 import { AdminSourceBulkPublishButton } from '@/components/admin/sources/AdminSourceBulkPublishButton'
+import NewStatementDropdown from './statements/controls/NewStatementDropdown'
 
 const AdminSourceHeaderDataFragment = gql(`
   fragment AdminSourceHeaderData on Query {
@@ -43,7 +44,7 @@ export async function AdminSourceHeader(props: {
 
   return (
     <div>
-      <div className="min-w-0 flex-1">
+      <div className="min-w-0 flex-1 px-4 sm:px-6 lg:px-8">
         <nav aria-label="Breadcrumb" className="flex">
           <ol role="list" className="flex items-center space-x-4">
             <li>
@@ -62,65 +63,63 @@ export async function AdminSourceHeader(props: {
           {source.name}
         </h2>
       </div>
-      <div className="mt-5 flex space-x-2">
-        {isAuthorized(['statements:add']) && (
-          <a
-            href={`/beta/admin/sources/${source.id}/statements/new`}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            Přidat výrok
-          </a>
-        )}
+      <div className="flex justify-between">
+        <div className="mt-5 flex space-x-2  px-4 sm:px-6 lg:px-8">
+          {isAuthorized(['statements:add']) && (
+            <NewStatementDropdown sourceId={source.id} />
+          )}
 
-        {isBetaAdminSourceStatsEnabled && (
-          <a
-            href={`/beta/admin/sources/${source.id}/stats`}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            Statistiky
-          </a>
-        )}
-
-        {isBetaAdminStatementReorderingEnabled &&
-          isAuthorized(['statements:sort']) && (
+          {isBetaAdminSourceStatsEnabled && (
             <a
-              href={`/beta/admin/sources/${source.id}/statements/reorder`}
+              href={`/beta/admin/sources/${source.id}/stats`}
               className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
-              Seřadit výroky
+              Statistiky
             </a>
           )}
 
-        {isAuthorized(['statements:edit']) && (
-          <a
-            href={`/beta/admin/sources/${source.id}/statements-video-marks`}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            Propojení s videozáznamem
-          </a>
-        )}
+          {isBetaAdminStatementReorderingEnabled &&
+            isAuthorized(['statements:sort']) && (
+              <a
+                href={`/beta/admin/sources/${source.id}/statements/reorder`}
+                className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                Seřadit výroky
+              </a>
+            )}
 
-        {isBetaAdminStatementBulkPublishingEnabled &&
-          isAuthorized(['statements:edit']) && (
-            <AdminSourceBulkPublishButton sourceId={source.id} />
+          {isAuthorized(['statements:edit']) && (
+            <a
+              href={`/beta/admin/sources/${source.id}/statements-video-marks`}
+              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              Propojení s videozáznamem
+            </a>
           )}
 
-        {isAuthorized(['sources:edit']) && (
-          <AdminSourceDeleteDialog source={source} />
-        )}
+          {isBetaAdminStatementBulkPublishingEnabled &&
+            isAuthorized(['statements:edit']) && (
+              <AdminSourceBulkPublishButton sourceId={source.id} />
+            )}
+        </div>
+        <div className="mt-5 flex space-x-2  px-4 sm:px-6 lg:px-8">
+          {isAuthorized(['sources:edit']) && (
+            <AdminSourceDeleteDialog source={source} />
+          )}
 
-        <span className="hidden sm:block">
-          <a
-            href={`/beta/admin/sources/${source.id}/edit`}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            <PencilIcon
-              aria-hidden="true"
-              className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-            />
-            Upravit
-          </a>
-        </span>
+          <span className="hidden sm:block">
+            <a
+              href={`/beta/admin/sources/${source.id}/edit`}
+              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              <PencilIcon
+                aria-hidden="true"
+                className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
+              />
+              Upravit
+            </a>
+          </span>
+        </div>
       </div>
     </div>
   )

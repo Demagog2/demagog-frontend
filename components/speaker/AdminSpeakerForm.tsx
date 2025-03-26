@@ -19,7 +19,6 @@ import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { speakerSchema } from '@/libs/speakers/speaker-schema'
 import { AdminFormContent } from '../admin/layout/AdminFormContent'
-import { AdminFormMain } from '../admin/layout/AdminFormMain'
 import { AdminBodySelect } from '../admin/sources/AdminBodySelect'
 import { dateInputFormat } from '@/libs/date-time'
 import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
@@ -100,179 +99,178 @@ export function AdminSpeakerForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
-        <div className="container">
-          <AdminFormHeader>
-            <AdminPageTitle title={props.title} />
-            <AdminFormActions>
-              <LinkButton href="/beta/admin/speakers">Zpět</LinkButton>
-              <SubmitButton />
-            </AdminFormActions>
-          </AdminFormHeader>
-          <AdminFormContent>
-            <AdminFormMain>
-              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                <Legend className="text-base font-semibold leading-7 text-gray-900">
-                  Základní údaje
-                </Legend>
+        <AdminFormHeader>
+          <AdminPageTitle title={props.title} />
+          <AdminFormActions>
+            <LinkButton href="/beta/admin/speakers">Zpět</LinkButton>
+            <SubmitButton />
+          </AdminFormActions>
+        </AdminFormHeader>
 
-                <Field>
-                  <Label htmlFor="firstName">Jméno</Label>
-                  <Input
-                    id="firstName"
-                    placeholder="Zadejte jméno"
-                    {...register('firstName', { required: true })}
-                  />
-                  <ErrorMessage message={errors.firstName?.message} />
-                </Field>
-                <Field>
-                  <Label htmlFor="lastName">Příjmení</Label>
-                  <Input
-                    id="lastName"
-                    placeholder="Zadejte příjmení"
-                    {...register('lastName', { required: true })}
-                  />{' '}
-                  <ErrorMessage message={errors.lastName?.message} />
-                </Field>
-              </Fieldset>
-              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                  Doplňující údaje
-                </Legend>
+        <AdminFormContent>
+          <div className="col-span-12 gap-y-5">
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="text-base font-semibold leading-7 text-gray-900">
+                Základní údaje
+              </Legend>
 
+              <Field>
+                <Label htmlFor="firstName">Jméno</Label>
+                <Input
+                  id="firstName"
+                  placeholder="Zadejte jméno"
+                  {...register('firstName', { required: true })}
+                />
+                <ErrorMessage message={errors.firstName?.message} />
+              </Field>
+              <Field>
+                <Label htmlFor="lastName">Příjmení</Label>
+                <Input
+                  id="lastName"
+                  placeholder="Zadejte příjmení"
+                  {...register('lastName', { required: true })}
+                />{' '}
+                <ErrorMessage message={errors.lastName?.message} />
+              </Field>
+            </Fieldset>
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+                Doplňující údaje
+              </Legend>
+
+              <Field>
+                <Label htmlFor="role" isOptional>
+                  Funkce
+                </Label>
+                <Input
+                  id="role"
+                  placeholder="Zadejte funkci"
+                  {...register('role')}
+                />
+                <p className="mt-1 text-sm/6 text-gray-600">
+                  Současná funkce osoby, např. &quot;Předseda vlády ČR&qout;
+                  nebo &quot;Ministryně práce a sociálních věcí&quot;. Pište s
+                  velkým písmenem na začátku. Funkce by neměla být delší než 40
+                  znaků.
+                </p>
+              </Field>
+              <div className="grid sm:grid-cols-2 gap-4">
                 <Field>
-                  <Label htmlFor="role" isOptional>
-                    Funkce
+                  <Label htmlFor="wikidataId" isOptional>
+                    Wikidata ID
                   </Label>
-                  <Input
-                    id="role"
-                    placeholder="Zadejte funkci"
-                    {...register('role')}
-                  />
+                  <Input id="wikidataId" {...register('wikidataId')} />
                   <p className="mt-1 text-sm/6 text-gray-600">
-                    Současná funkce osoby, např. &quot;Předseda vlády ČR&qout;
-                    nebo &quot;Ministryně práce a sociálních věcí&quot;. Pište s
-                    velkým písmenem na začátku. Funkce by neměla být delší než
-                    40 znaků.
+                    Používá se pro párování s jinými zdroji jako například
+                    Hlídač státu, vyplňujte prosím. Wikidata ID získáte najitím
+                    stránky politika na Wikipedii a kliknutím na &quot;Položka
+                    Wikidat&qout; vlevo. Je to ten kód začínající velkým Q a
+                    pokračující číslem, např. Q939539.
                   </p>
                 </Field>
-                <div className="grid grid-cols-2 gap-4">
-                  <Field>
-                    <Label htmlFor="wikidataId" isOptional>
-                      Wikidata ID
-                    </Label>
-                    <Input id="wikidataId" {...register('wikidataId')} />
-                    <p className="mt-1 text-sm/6 text-gray-600">
-                      Používá se pro párování s jinými zdroji jako například
-                      Hlídač státu, vyplňujte prosím. Wikidata ID získáte
-                      najitím stránky politika na Wikipedii a kliknutím na
-                      &quot;Položka Wikidat&qout; vlevo. Je to ten kód
-                      začínající velkým Q a pokračující číslem, např. Q939539.
-                    </p>
-                  </Field>
-                  <Field>
-                    <Label htmlFor="osobaId" isOptional>
-                      Hlídač státu OsobaID
-                    </Label>
-                    <Input id="osobaId" {...register('osobaId')} />
-                    <p className="mt-1 text-sm/6 text-gray-600">
-                      Dřív se OsobaID používalo pro párování s osobami na
-                      Hlídači státu. Od října 2020 se graduálně posouváme k
-                      párování přes Wikidata ID, tím pádem již toto pole není
-                      třeba pro nové osoby vyplňovat.
-                    </p>
-                  </Field>
-                </div>
                 <Field>
-                  <Label htmlFor="websiteUrl" isOptional>
-                    Respektovaný odkaz (wiki, nasipolitici)
+                  <Label htmlFor="osobaId" isOptional>
+                    Hlídač státu OsobaID
                   </Label>
-                  <Input
-                    id="websiteUrl"
-                    placeholder="http://www..."
-                    {...register('websiteUrl')}
-                  />
+                  <Input id="osobaId" {...register('osobaId')} />
+                  <p className="mt-1 text-sm/6 text-gray-600">
+                    Dřív se OsobaID používalo pro párování s osobami na Hlídači
+                    státu. Od října 2020 se graduálně posouváme k párování přes
+                    Wikidata ID, tím pádem již toto pole není třeba pro nové
+                    osoby vyplňovat.
+                  </p>
                 </Field>
-              </Fieldset>
-              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                  Příslušnost ke stranám/skupinám
-                </Legend>
+              </div>
+              <Field>
+                <Label htmlFor="websiteUrl" isOptional>
+                  Respektovaný odkaz (wiki, nasipolitici)
+                </Label>
+                <Input
+                  id="websiteUrl"
+                  placeholder="http://www..."
+                  {...register('websiteUrl')}
+                />
+              </Field>
+            </Fieldset>
+            <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+              <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+                Příslušnost ke stranám/skupinám
+              </Legend>
 
-                <button
-                  type="button"
-                  className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  onClick={() =>
-                    append({
-                      bodyId: '',
-                      bodyName: '',
-                    })
-                  }
-                >
-                  <PlusCircleIcon
-                    aria-hidden="true"
-                    className="-ml-0.5 h-5 w-5"
-                  />
-                  Přidat stranu
-                </button>
-                <Field>
-                  {fields.map((field, index) => (
-                    <div key={field.id} className="flex gap-4">
-                      <div className="flex flex-col flex-grow">
-                        <Label htmlFor="memberships">Strana/skupina</Label>
+              <button
+                type="button"
+                className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                onClick={() =>
+                  append({
+                    bodyId: '',
+                    bodyName: '',
+                  })
+                }
+              >
+                <PlusCircleIcon
+                  aria-hidden="true"
+                  className="-ml-0.5 h-5 w-5"
+                />
+                Přidat stranu
+              </button>
+              <Field>
+                {fields.map((field, index) => (
+                  <div key={field.id} className="flex gap-4">
+                    <div className="flex flex-col flex-grow">
+                      <Label htmlFor="memberships">Strana/skupina</Label>
 
-                        <Controller
-                          control={control}
-                          name={`memberships.${index}.bodyId`}
-                          render={({ field }) => (
-                            <>
-                              <input type="hidden" {...field} />
-                              <AdminBodySelect
-                                id={`memberships.${index}.bodyId`}
-                                data={data}
-                                onChange={field.onChange}
-                                defaultValue={field.value}
-                              />
-                            </>
-                          )}
-                        />
-                      </div>
+                      <Controller
+                        control={control}
+                        name={`memberships.${index}.bodyId`}
+                        render={({ field }) => (
+                          <>
+                            <input type="hidden" {...field} />
+                            <AdminBodySelect
+                              id={`memberships.${index}.bodyId`}
+                              data={data}
+                              onChange={field.onChange}
+                              defaultValue={field.value}
+                            />
+                          </>
+                        )}
+                      />
+                    </div>
+                    <div className="flex flex-col">
+                      <Label htmlFor="since" isOptional>
+                        Od
+                      </Label>
+                      <Input
+                        type="date"
+                        {...register(`memberships.${index}.since`)}
+                      />
+                    </div>
+                    <div
+                      className="flex flex-row 
+                      items-center gap-2"
+                    >
                       <div className="flex flex-col">
-                        <Label htmlFor="since" isOptional>
-                          Od
+                        <Label htmlFor="until" isOptional>
+                          Do
                         </Label>
+
                         <Input
                           type="date"
-                          {...register(`memberships.${index}.since`)}
+                          className="mb-4"
+                          {...register(`memberships.${index}.until`)}
                         />
                       </div>
-                      <div
-                        className="flex flex-row 
-                      items-center gap-2"
-                      >
-                        <div className="flex flex-col">
-                          <Label htmlFor="until" isOptional>
-                            Do
-                          </Label>
-
-                          <Input
-                            type="date"
-                            className="mb-4"
-                            {...register(`memberships.${index}.until`)}
-                          />
-                        </div>
-                        <TrashIcon
-                          className="mt-4 h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer"
-                          onClick={() => remove(index)}
-                          title="Odstranit"
-                        />
-                      </div>
+                      <TrashIcon
+                        className="mt-4 h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer"
+                        onClick={() => remove(index)}
+                        title="Odstranit"
+                      />
                     </div>
-                  ))}
-                </Field>
-              </Fieldset>
-            </AdminFormMain>
-          </AdminFormContent>
-        </div>
+                  </div>
+                ))}
+              </Field>
+            </Fieldset>
+          </div>
+        </AdminFormContent>
       </form>
     </>
   )

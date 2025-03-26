@@ -5,6 +5,7 @@ import { updateTag } from '@/app/(admin)/beta/admin/tags/actions'
 import { Metadata } from 'next'
 import { getMetadataTitle } from '@/libs/metadata'
 import { notFound } from 'next/navigation'
+import { AdminPage } from '@/components/admin/layout/AdminPage'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -51,10 +52,12 @@ export default async function AdminTagEdit(props: {
   }
 
   return (
-    <AdminTagForm
-      title="Upravit štítek"
-      tag={data.tag}
-      action={updateTag.bind(null, data.tag.id)}
-    />
+    <AdminPage>
+      <AdminTagForm
+        title="Upravit štítek"
+        tag={data.tag}
+        action={updateTag.bind(null, data.tag.id)}
+      />
+    </AdminPage>
   )
 }
