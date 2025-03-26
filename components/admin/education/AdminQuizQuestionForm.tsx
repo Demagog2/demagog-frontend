@@ -4,7 +4,7 @@ import { gql, useFragment } from '@/__generated__'
 import { quizSchema } from '@/libs/education/quiz-schema'
 import { FragmentType } from '@apollo/client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { useFieldArray, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { AdminFormHeader } from '../layout/AdminFormHeader'
 import { AdminPageTitle } from '../layout/AdminPageTitle'
@@ -17,11 +17,14 @@ import { Label } from '../forms/Label'
 import { Input } from '../forms/Input'
 import { Textarea } from '../forms/Textarea'
 import { ErrorMessage } from '../forms/ErrorMessage'
-import { useState } from 'react'
 import { Switch } from '../forms/Switch'
 import { SwitchField } from '../forms/SwitchField'
 import { Controller } from 'react-hook-form'
 import { TrashIcon } from '@heroicons/react/24/outline'
+import { FormAction } from '@/libs/forms/form-action'
+import { useFormToasts } from '../forms/hooks/use-form-toasts'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { useFormState } from 'react-dom'
 
 const AdminQuizDataFragment = gql(`
   fragment AdminQuizData on QuizQuestion {
@@ -39,14 +42,18 @@ type FieldValues = z.output<typeof quizSchema>
 
 export function AdminQuizQuestionForm(props: {
   title: string
+  action: FormAction
   description?: string
   quiz?: FragmentType<typeof AdminQuizDataFragment>
 }) {
   const quiz = useFragment(AdminQuizDataFragment, props.quiz)
-  const [answerCount, setAnswerCount] = useState(quiz?.quizAnswers?.length ?? 1)
+  const [state, formAction] = useFormState(props.action, { state: 'initial' })
+
+  useFormToasts(state)
 
   const {
     register,
+    trigger,
     control,
     formState: { errors, isValid },
   } = useForm<FieldValues>({
@@ -54,24 +61,24 @@ export function AdminQuizQuestionForm(props: {
     defaultValues: {
       title: quiz?.title ?? '',
       description: quiz?.description ?? '',
-      quizAnswers: quiz?.quizAnswers?.map((answer) => ({
-        id: answer.id,
-        text: answer.text,
-        isCorrect: answer.isCorrect,
-      })) ?? [{ id: '1', text: '', isCorrect: false }],
+      quizAnswers:
+        quiz?.quizAnswers?.map((answer) => ({
+          text: answer.text,
+          isCorrect: answer.isCorrect,
+        })) ?? [],
+      ...(state?.state === 'initial' ? {} : state.fields),
     },
   })
 
-  const addAnswer = () => {
-    setAnswerCount((index) => index + 1)
-  }
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: 'quizAnswers',
+  })
 
-  const removeAnswer = (indexToRemove: number) => {
-    setAnswerCount((index) => Math.max(1, index - 1))
-  }
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
-    <form action="#">
+    <form action={formAction} onSubmit={handleSubmitForm}>
       <AdminFormHeader>
         <AdminPageTitle title={props.title} description={props.description} />
         <AdminFormActions>
@@ -107,9 +114,9 @@ export function AdminQuizQuestionForm(props: {
             <Legend className="text-base font-semibold leading-7 text-gray-900">
               Odpovědi
             </Legend>
-            {Array.from({ length: answerCount }).map((answer, index) => (
+            {fields.map((field, index) => (
               <div
-                key={index}
+                key={field.id}
                 className="space-y-4 border-b border-gray-900/10 pb-4"
               >
                 <Field>
@@ -119,7 +126,7 @@ export function AdminQuizQuestionForm(props: {
                     </Label>
                     <button
                       type="button"
-                      onClick={() => removeAnswer(index)}
+                      onClick={() => remove(index)}
                       className="ml-4 p-2 text-gray-400 hover:text-indigo-600"
                       title="Odstranit odpověď"
                     >
@@ -162,7 +169,12 @@ export function AdminQuizQuestionForm(props: {
             <div className="mt-4">
               <button
                 type="button"
-                onClick={addAnswer}
+                onClick={() =>
+                  append({
+                    text: '',
+                    isCorrect: false,
+                  })
+                }
                 className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               >
                 Přidat odpověď
