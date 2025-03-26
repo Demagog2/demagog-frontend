@@ -2,6 +2,7 @@ import { AdminQuizQuestionForm } from '@/components/admin/education/AdminQuizQue
 import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { getMetadataTitle } from '@/libs/metadata'
 import { Metadata } from 'next'
+import { createQuizQuestion } from '../actions'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Nová kvízová otázka', 'Administrace'),
@@ -10,7 +11,10 @@ export const metadata: Metadata = {
 export default async function AdminQuizQuestionNew() {
   return (
     <AdminPage>
-      <AdminQuizQuestionForm title="Nová kvízová otázka" />
+      <AdminQuizQuestionForm
+        action={createQuizQuestion}
+        title="Nová kvízová otázka"
+      />
     </AdminPage>
   )
 }

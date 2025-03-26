@@ -5,6 +5,7 @@ import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { CreateButton } from '@/components/admin/layout/buttons/CreateButton'
 import { serverQuery } from '@/libs/apollo-client-server'
+import formatDate from '@/libs/format-date'
 import { getMetadataTitle } from '@/libs/metadata'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
@@ -29,6 +30,7 @@ export default async function AdminEducation(props: PropsWithSearchParams) {
               id
               title
               description
+              createdAt
             }
           }
           pageInfo {
@@ -62,7 +64,11 @@ export default async function AdminEducation(props: PropsWithSearchParams) {
       <table className="admin-content-table">
         <thead>
           <tr>
-            <th>Název</th>
+            <th scope="col">Název</th>
+            <th scope="col">Vytvořeno</th>
+            <th scope="col">
+              <span className="sr-only">Edit</span>
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -75,7 +81,18 @@ export default async function AdminEducation(props: PropsWithSearchParams) {
 
             return (
               <tr key={node.id}>
-                <td>{node.title}</td>
+                <td>
+                  <a href={`/beta/admin/education/${node.id}`}>{node.title}</a>
+                </td>
+                <td>{formatDate(node.createdAt)}</td>
+                <td>
+                  <a
+                    href={`/beta/admin/education/${node.id}/edit`}
+                    className="text-indigo-600 hover:text-indigo-900"
+                  >
+                    Upravit
+                  </a>
+                </td>
               </tr>
             )
           })}
