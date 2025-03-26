@@ -12,9 +12,6 @@ export function HomepageNextPage({ data }: Props) {
     <div className="container">
       <div className="row g-5 g-lg-10 flex-lg-row-reverse">
         <div className="col col-12">
-          <ArticleTags tags={data.articleTags} />
-        </div>
-        <div className="col col-12">
           <div className="row row-cols-1 row-cols-lg-2 g-10">
             {data.homepageArticlesV3.nodes?.flatMap((article) => {
               if (!article) {
