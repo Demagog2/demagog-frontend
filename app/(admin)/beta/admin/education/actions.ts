@@ -10,6 +10,8 @@ import {
   UpdateQuizQuestionMutation,
   UpdateQuizQuestionMutationVariables,
 } from '@/__generated__/graphql'
+import { serverMutation } from '@/libs/apollo-client-server'
+import { redirect } from 'next/navigation'
 
 const adminCreateQuizQuestionMutation = gql(`
   mutation CreateQuizQuestion($input: CreateQuizQuestionInput!) {
@@ -48,7 +50,6 @@ export const createQuizQuestion = new CreateActionBuilder<
 
     if (data?.createQuizQuestion?.errors?.length) {
       console.log(data.createQuizQuestion.errors)
-      return null
     }
 
     return null
@@ -86,3 +87,27 @@ export const updateQuizQuestion = new UpdateActionBuilder<
     }
   })
   .build()
+
+const adminDeleteQuizQuestionMutation = gql(`
+      mutation AdminDeleteQuizQuestion($id: ID!){
+        deleteQuizQuestion(id: $id) {
+          success
+          errors
+        }
+      }
+    `)
+
+export async function deleteQuizQuestion(quizQuestionId: string) {
+  const { data } = await serverMutation({
+    mutation: adminDeleteQuizQuestionMutation,
+    variables: {
+      id: quizQuestionId,
+    },
+  })
+
+  if (data?.deleteQuizQuestion?.success) {
+    redirect(`/beta/admin/education`)
+  } else if (data?.deleteQuizQuestion?.errors) {
+    console.log(data.deleteQuizQuestion.errors)
+  }
+}

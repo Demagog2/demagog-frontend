@@ -1,5 +1,6 @@
 import { gql } from '@/__generated__'
 import { AdminSearch } from '@/components/admin/AdminSearch'
+import AdminQuizQuestionDeleteDialog from '@/components/admin/education/AdminQuizQuestionDeleteDialog'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { AdminPageHeader } from '@/components/admin/layout/AdminPageHeader'
 import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
@@ -31,6 +32,7 @@ export default async function AdminEducation(props: PropsWithSearchParams) {
               title
               description
               createdAt
+              ...AdminQuizQuestionDelete
             }
           }
           pageInfo {
@@ -92,6 +94,7 @@ export default async function AdminEducation(props: PropsWithSearchParams) {
                   >
                     Upravit
                   </a>
+                  <AdminQuizQuestionDeleteDialog quizQuestion={node} />
                 </td>
               </tr>
             )

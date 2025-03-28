@@ -23,6 +23,7 @@ const AdminQuizQuestionDetailQuery = gql(`
       title
       description
       quizAnswers {
+        id
         text
         isCorrect
       }
@@ -94,33 +95,28 @@ export default async function AdminQuizQuestionDetail(props: {
               <div>
                 <p className="font-semibold">Odpovědi:</p>
                 <div className="mt-2 space-y-2 w-full max-w-xl">
-                  {quizQuestion.quizAnswers?.map(
-                    (
-                      answer: { text: string; isCorrect: boolean },
-                      index: number
-                    ) => (
-                      <div
-                        key={index}
-                        className={`p-3 rounded-md ${
-                          answer.isCorrect
-                            ? 'bg-green-50 border border-green-200'
-                            : 'bg-gray-50 border border-gray-200'
-                        }`}
-                      >
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">
-                            {String.fromCharCode(65 + index)}.
+                  {quizQuestion.quizAnswers?.map((answer, index) => (
+                    <div
+                      key={answer.id}
+                      className={`p-3 rounded-md border ${
+                        answer.isCorrect
+                          ? 'bg-green-50 border-green-200'
+                          : 'bg-gray-50 border-gray-200'
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">
+                          {String.fromCharCode(65 + index)}.
+                        </span>
+                        <span>{answer.text}</span>
+                        {answer.isCorrect && (
+                          <span className="text-green-600 text-sm">
+                            (Správná odpověď)
                           </span>
-                          <span>{answer.text}</span>
-                          {answer.isCorrect && (
-                            <span className="text-green-600 text-sm">
-                              (Správná odpověď)
-                            </span>
-                          )}
-                        </div>
+                        )}
                       </div>
-                    )
-                  )}
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
