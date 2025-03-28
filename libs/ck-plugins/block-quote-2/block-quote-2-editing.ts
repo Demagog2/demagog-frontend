@@ -50,6 +50,11 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
       ],
     })
 
+    const pencilIconPath = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+  </svg>`
+
     // View -> Model
     editor.conversion
       .for('upcast')
@@ -116,7 +121,23 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
         if (!speakerId) {
           const container = writer.createContainerElement('blockquote', {
             cite: link,
+            class: 'relative',
           })
+
+          const pencilIcon = writer.createUIElement(
+            'span',
+            {
+              class:
+                'absolute top-2 right-2 cursor-pointer text-gray-400 hover:text-gray-600 z-10',
+              'data-edit-quote': 'true',
+            },
+            function (domDocument) {
+              const domElement = this.toDomElement(domDocument)
+              domElement.innerHTML = pencilIconPath
+              return domElement
+            }
+          )
+          writer.insert(writer.createPositionAt(container, 0), pencilIcon)
 
           if (link || media || quotedAt || speakerCustomName) {
             const quoteMetadata = writer.createUIElement(
@@ -152,7 +173,24 @@ export class BlockQuoteEditingWithSpeakerEditing extends Plugin {
           'data-link': link,
           ...(media ? { 'data-media': media } : {}),
           ...(quotedAt ? { 'data-quoted-at': quotedAt } : {}),
+          class: 'relative',
         })
+
+        const pencilIcon = writer.createUIElement(
+          'span',
+          {
+            class:
+              'absolute top-2 right-2 cursor-pointer text-gray-400 hover:text-gray-600 z-10',
+            'data-edit-quote': 'true',
+          },
+          function (domDocument) {
+            const domElement = this.toDomElement(domDocument)
+            domElement.innerHTML = pencilIconPath
+            return domElement
+          }
+        )
+
+        writer.insert(writer.createPositionAt(blockQuote, 0), pencilIcon)
 
         const authorElement = writer.createUIElement(
           'span',
