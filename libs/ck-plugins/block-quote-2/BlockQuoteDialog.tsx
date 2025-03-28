@@ -37,13 +37,13 @@ export function BlockQuoteDialog({
   const [loading, setLoading] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedSpeakerId, setSelectedSpeakerId] = useState<string>(
-    defaultValues?.speakerId || ''
+    defaultValues?.speakerId ?? ''
   )
-  const [link, setLink] = useState(defaultValues?.link || '')
-  const [media, setMedia] = useState(defaultValues?.media || '')
-  const [quotedAt, setQuotedAt] = useState(defaultValues?.quotedAt || '')
+  const [link, setLink] = useState(defaultValues?.link ?? '')
+  const [media, setMedia] = useState(defaultValues?.media ?? '')
+  const [quotedAt, setQuotedAt] = useState(defaultValues?.quotedAt ?? '')
   const [speakerCustomName, setSpeakerCustomName] = useState(
-    defaultValues?.speakerCustomName || ''
+    defaultValues?.speakerCustomName ?? ''
   )
 
   // eslint-disable-next-line react-hooks/exhaustive-deps
