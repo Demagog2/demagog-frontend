@@ -29,9 +29,10 @@ export function ArticleState(
       {article.published &&
         article.publishedAt &&
         !isSameOrAfterToday(article.publishedAt) && (
-          <>
-            <ClockIcon /> Bude zveřejněný {displayDate(article.publishedAt)}
-          </>
+          <div className="flex items-center">
+            <ClockIcon height={17} className="mr-1" /> Bude zveřejněný{' '}
+            {displayDate(article.publishedAt)}
+          </div>
         )}
       {!article.published && (
         <span className="text-gray-400">Nezveřejněný</span>
