@@ -23,6 +23,7 @@ import { Switch } from '../forms/Switch'
 import { SwitchField } from '../forms/SwitchField'
 import { Textarea } from '../forms/Textarea'
 import { AdminFormContent } from '../layout/AdminFormContent'
+import { AdminImageInput } from '../images/AdminImageInput'
 
 const AdminUserFormFieldsDataFragment = gql(`
   fragment AdminUserFormFieldsData on Query {
@@ -68,6 +69,7 @@ export function AdminUserForm(props: {
   } = useForm<FieldValues>({
     resolver: zodResolver(userSchema),
     defaultValues: {
+      avatar: user?.avatar ?? '',
       firstName: user?.firstName ?? '',
       lastName: user?.lastName ?? '',
       email: user?.email ?? '',
@@ -194,20 +196,20 @@ export function AdminUserForm(props: {
                     label="Zobrazit uživatele v sekci O nás?"
                   />
                 </div>
-                {/*
-                 <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
-                    <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
-                      <Label htmlFor="avatar">
-                        Vybrat obrázek
-                        <span className="ml-3 text-sm/6 text-gray-600">
-                          nepovinné
-                        </span>
-                      </Label>
 
-                      <AdminImageInput control={control} name="avatar" />
-                    </div>
+                <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
+                  <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
+                    <Label htmlFor="avatar">
+                      Vybrat obrázek
+                      <span className="ml-3 text-sm/6 text-gray-600">
+                        nepovinné
+                      </span>
+                    </Label>
+
+                    <AdminImageInput control={control} name="avatar" />
                   </div>
-                 */}
+                </div>
+
                 <div className="col-span-full">
                   <Field>
                     <Label htmlFor="positionDescription">

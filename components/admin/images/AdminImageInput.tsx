@@ -131,10 +131,10 @@ export function AdminImageInput<T extends FieldValues>({
 
       <div className="mt-6 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
         <div className="text-center">
-          {imagePreview ? (
+          {imagePreview || field.value ? (
             <>
               <img
-                src={imagePreview}
+                src={imagePreview || field.value}
                 alt="Preview"
                 className="max-w-full h-auto rounded-lg"
               />

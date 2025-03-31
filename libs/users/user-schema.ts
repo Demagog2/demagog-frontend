@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { imageFileSchema } from '../images/schema'
 
 export const userSchema = z.object({
   firstName: z
@@ -17,4 +18,5 @@ export const userSchema = z.object({
   userPublic: z.preprocess((value) => value === 'on', z.boolean()).optional(),
   bio: z.string().optional(),
   positionDescription: z.string().optional(),
+  avatar: z.union([z.string(), imageFileSchema]).optional(),
 })
