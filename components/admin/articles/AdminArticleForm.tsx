@@ -157,7 +157,7 @@ function buildDefaultValues(
     title: article.title,
     pinned: article.pinned,
     perex: article.perex ?? '',
-    published: article.pinned,
+    published: article.published,
     publishedAt: dateInputFormat(article.publishedAt),
     articleTags: article.articleTags.map((tag) => tag.id),
     illustrationCaption: article.illustrationCaption ?? '',
