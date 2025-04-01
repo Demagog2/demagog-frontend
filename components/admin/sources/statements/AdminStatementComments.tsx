@@ -4,6 +4,7 @@ import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { AdminActivity } from './AdminActivity'
 import { takeRight } from 'lodash'
+import { pluralize } from '@/libs/pluralize'
 
 const SHOW_ALL_THRESHOLD = 3
 
@@ -15,7 +16,7 @@ export function AdminStatementComments(props: { statementId: string }) {
       query AdminStatementCommentsQuery($id: Int!) {
         ...AdminStatementCommentInput
         statementV2(id: $id, includeUnpublished: true) {
-          commentsCount
+          activitiesCount
           activities {
             edges {
               node {
@@ -51,16 +52,44 @@ export function AdminStatementComments(props: { statementId: string }) {
     return null
   }
 
-  const activities = statement.activities.edges
+  const activities = showAll
+    ? statement.activities.edges
+    : takeRight(statement.activities.edges, SHOW_ALL_THRESHOLD)
 
   return (
     <div className="flow-root">
+      {statement.activitiesCount > SHOW_ALL_THRESHOLD && (
+        <>
+          {showAll ? (
+            <a
+              className="text-sm text-indigo-600 cursor-pointer"
+              onClick={() => setShowAll(false)}
+            >
+              Zobrazit jen poslední {SHOW_ALL_THRESHOLD} aktivity
+            </a>
+          ) : (
+            <a
+              className="text-sm text-indigo-600 cursor-pointer"
+              onClick={() => setShowAll(true)}
+            >
+              Zobrazit 4{' '}
+              {pluralize(
+                statement.activitiesCount - SHOW_ALL_THRESHOLD,
+                'předchozí aktivitu',
+                'předchozí aktivity',
+                'předchozí aktivity'
+              )}
+            </a>
+          )}
+        </>
+      )}
+
       <ul role="list" className="mt-8 -mb-8">
         {activities?.map((activityItem, activityItemIdx: number) => {
           if (!activityItem) {
             return null
           }
-          console.log(activityItem)
+
           return (
             <li key={activityItemIdx}>
               <div className="relative pb-8">
