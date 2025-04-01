@@ -199,11 +199,8 @@ export function AdminUserForm(props: {
 
                 <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
                   <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
-                    <Label htmlFor="avatar">
+                    <Label htmlFor="avatar" isOptional>
                       Vybrat obrázek
-                      <span className="ml-3 text-sm/6 text-gray-600">
-                        nepovinné
-                      </span>
                     </Label>
 
                     <AdminImageInput control={control} name="avatar" />
@@ -212,11 +209,8 @@ export function AdminUserForm(props: {
 
                 <div className="col-span-full">
                   <Field>
-                    <Label htmlFor="positionDescription">
+                    <Label htmlFor="positionDescription" isOptional>
                       Popis pozice
-                      <span className="ml-3 text-sm/6 text-gray-600">
-                        nepovinné
-                      </span>
                     </Label>
 
                     <Input
@@ -230,11 +224,8 @@ export function AdminUserForm(props: {
                 </div>
                 <div className="col-span-full">
                   <Field>
-                    <Label htmlFor="bio">
+                    <Label htmlFor="bio" isOptional>
                       Bio
-                      <span className="ml-3 text-sm/6 text-gray-600">
-                        nepovinné
-                      </span>
                     </Label>
                     <Textarea
                       id="bio"
