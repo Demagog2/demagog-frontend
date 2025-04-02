@@ -5,6 +5,8 @@ import { ArticleLink } from './ArticleLink'
 import { Article } from './Article'
 import classNames from 'classnames'
 import { ArticleResponsivePerex } from './ArticleResponsivePerex'
+import { getPreviewImageSize as getPreviewImageSize } from '@/libs/images/path'
+import Image from 'next/image'
 
 export const ArticleDetailFragment = gql(`
   fragment ArticleDetail on Article {
@@ -34,12 +36,13 @@ export const ArticleDetailFragment = gql(`
 export default function ArticleItem(props: {
   article: FragmentType<typeof ArticleDetailFragment>
   isEmbedded?: boolean
+  largerPreview?: boolean
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
   const article = useFragment(ArticleDetailFragment, props.article)
 
-  const { isEmbedded = false } = props
+  const { isEmbedded = false, largerPreview = false } = props
 
   return (
     <Article pinned={article.pinned}>
@@ -58,7 +61,8 @@ export default function ArticleItem(props: {
         >
           <div className="w-100">
             <ArticleLink className="illustration" article={article}>
-              <img
+              <Image
+                {...getPreviewImageSize(largerPreview)}
                 src={mediaUrl + article.illustration}
                 className="w-100 rounded-m"
                 alt={`Ilustrační obrázek k ${article.title}`}

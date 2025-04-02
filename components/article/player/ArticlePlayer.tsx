@@ -62,6 +62,8 @@ export function ArticlePlayer(props: {
               className="w-100 rounded-l"
               src={imagePath(article.illustration)}
               alt={`Ilustrační obrázek v výstupu ${article.title}`}
+              width={960}
+              height={540}
             />
           )}
         </div>

@@ -32,7 +32,9 @@ export function FacebookFactcheckFirstPage(props: {
               return []
             }
 
-            return [<ArticleItem key={article?.id} article={article} />]
+            return [
+              <ArticleItem key={article?.id} article={article} largerPreview />,
+            ]
           })}
         </div>
       </div>

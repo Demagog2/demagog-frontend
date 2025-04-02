@@ -22,6 +22,8 @@ export function ArticleIllustration(props: {
         className="mt-md-7 mt-3 rounded-l w-100"
         alt="illustration"
         src={imagePath(article.image)}
+        width={960}
+        height={540}
       />
       {article.caption && <figcaption>{article.caption}</figcaption>}
     </figure>

@@ -17,9 +17,10 @@ export const ArticleV2PreviewFragment = gql(`
 export function ArticleV2Preview(props: {
   isEmbedded?: boolean
   article: FragmentType<typeof ArticleV2PreviewFragment>
+  largerPreview?: boolean
 }) {
   const article = useFragment(ArticleV2PreviewFragment, props.article)
-  const { isEmbedded = false } = props
+  const { isEmbedded = false, largerPreview = false } = props
 
   if (!article) {
     return null
@@ -31,10 +32,17 @@ export function ArticleV2Preview(props: {
         <SingleStatementArticlePreview
           isEmbedded={isEmbedded}
           article={article}
+          largerPreview={largerPreview}
         />
       )
     case 'Article':
-      return <ArticleItem isEmbedded={isEmbedded} article={article} />
+      return (
+        <ArticleItem
+          isEmbedded={isEmbedded}
+          article={article}
+          largerPreview={largerPreview}
+        />
+      )
     default:
       return null
   }

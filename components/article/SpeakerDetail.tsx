@@ -26,6 +26,8 @@ export default function ArticleSpeaker(props: {
       className="symbol symbol-40px rounded-circle bg-gray-500 overflow-hidden margin-bottom"
     >
       <img
+        width={36}
+        height={36}
         src={mediaUrl + sourceSpeaker.speaker.avatar}
         alt={sourceSpeaker.fullName}
       />
