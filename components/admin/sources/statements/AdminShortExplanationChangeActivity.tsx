@@ -2,11 +2,11 @@ import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminUserAvatar } from '../../users/AdminUserAvatar'
 import { PencilSquareIcon } from '@heroicons/react/20/solid'
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import {
   AdminActivityChangeDialog,
   ForwardedProps,
-} from '../../layout/dialogs/AdminActivityChangeDialog'
+} from '../../layout/dialogs/AdminShortExplanationChangeDialog'
 
 const AdminShortExplanationChangeActivityFragment = gql(`
     fragment AdminShortExplanationChangeActivity on ShortExplanationChangeActivity {
