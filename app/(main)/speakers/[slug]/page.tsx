@@ -21,14 +21,16 @@ import {
   VeracityFilters,
 } from '@/app/(main)/statements/page'
 import { Metadata } from 'next'
-import { getMetadataTitle } from '@/libs/metadata'
+import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 import { pluralize } from '@/libs/pluralize'
 import { notFound } from 'next/navigation'
 import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
 const PAGE_SIZE = 10
 
-export async function generateMetadata(props: {
+export async function generateMetadata({
+  params,
+}: {
   params: { slug: string }
 }): Promise<Metadata> {
   const {
@@ -48,7 +50,7 @@ export async function generateMetadata(props: {
         }
       `),
     variables: {
-      id: String(parseParamId(props.params.slug)),
+      id: String(parseParamId(params.slug)),
     },
   })
 
@@ -63,6 +65,7 @@ export async function generateMetadata(props: {
         : speaker.fullName
     ),
     description: `Demagog.cz ověřil již ${speaker.verifiedStatementsCount} ${pluralize(speaker.verifiedStatementsCount, 'faktický výrok', 'faktické výroky', 'faktických výroků')} politika*čky`,
+    ...getRobotsMetadata(),
   }
 }
 

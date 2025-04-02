@@ -8,7 +8,7 @@ import { gql } from '@/__generated__'
 import { getStringParam } from '@/libs/query-params'
 import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
-import { getMetadataTitle } from '@/libs/metadata'
+import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 
 const SEARCH_PAGE_SIZE = 10
 
@@ -22,6 +22,7 @@ export async function generateMetadata(
         : 'Vyhledávání výstupů'
     ),
     description: 'Hledejte mezi výstupy Demagog.cz',
+    ...getRobotsMetadata(),
   }
 }
 

@@ -9,10 +9,12 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { Metadata } from 'next'
-import { getMetadataTitle } from '@/libs/metadata'
+import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 import { truncate } from 'lodash'
 
-export async function generateMetadata(props: {
+export async function generateMetadata({
+  params,
+}: {
   params: { slug: string }
 }): Promise<Metadata> {
   const {
@@ -27,13 +29,14 @@ export async function generateMetadata(props: {
       }
     `),
     variables: {
-      slug: props.params.slug,
+      slug: params.slug,
     },
   })
 
   return {
     title: getMetadataTitle(articleTagBySlug?.title ?? 'Neznamy tag'),
     description: truncate(articleTagBySlug?.description ?? '', { length: 255 }),
+    ...getRobotsMetadata(),
   }
 }
 

@@ -18,7 +18,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { StatementCount } from '@/components/filtering/StatementCount'
 import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
-import { getMetadataTitle } from '@/libs/metadata'
+import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
 const PAGE_SIZE = 10
@@ -27,6 +27,7 @@ export const metadata: Metadata = {
   title: getMetadataTitle('Přehled ověřených výroků'),
   description:
     'Za svou existenci Demagog.cz už ověřil tisíce výroků politiků a političek. V následujícím rozhraní můžete výroky volně procházet.',
+  ...getRobotsMetadata(),
 }
 
 const TagFiltersFragment = gql(`
