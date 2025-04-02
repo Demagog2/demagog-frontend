@@ -3,7 +3,25 @@ import type { MetadataRoute } from 'next'
 const DEFAULT_RULE = {
   userAgent: '*',
   allow: '/',
-  disallow: ['/admin/', '/beta/admin'],
+  disallow: [
+    '/admin/',
+    '/beta/admin',
+    '*?q=*',
+    '*?veracity=*',
+    '*&veracity=*',
+    '*?veracities=*',
+    '*&veracities=*',
+    '*?hodnoceni*',
+    '*&hodnoceni*',
+    '*?recnik*',
+    '*&recnik*',
+    '*?oblast*',
+    '*&oblast*',
+    '*?tema*',
+    '*&tema*',
+    '*?hc_location*',
+    '*&hc_location*',
+  ],
 }
 
 const DISSALLOW_ALL_RULE = {
