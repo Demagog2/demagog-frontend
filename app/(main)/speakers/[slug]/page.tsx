@@ -25,6 +25,8 @@ import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 import { pluralize } from '@/libs/pluralize'
 import { notFound } from 'next/navigation'
 import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
+import { DefaultMetadata } from '@/libs/constants/metadata'
+import { imagePath } from '@/libs/images/path'
 
 const PAGE_SIZE = 10
 
@@ -37,18 +39,22 @@ export async function generateMetadata({
     data: { speakerV2: speaker },
   } = await query({
     query: gql(`
-        query SpeakerDetailMetadata(
-          $id: ID!
-        ) {
-          speakerV2(id: $id) {
-            fullName
-            body {
-              shortName
-            }
-            verifiedStatementsCount
+      query SpeakerDetailMetadata(
+        $id: ID!
+      ) {
+        speakerV2(id: $id) {
+          slug
+          fullName
+          firstName
+          lastName
+          body {
+            shortName
           }
+          verifiedStatementsCount
+          avatar(size: detail)
         }
-      `),
+      }
+    `),
     variables: {
       id: String(parseParamId(params.slug)),
     },
@@ -58,13 +64,35 @@ export async function generateMetadata({
     notFound()
   }
 
+  const title = getMetadataTitle(
+    speaker.body
+      ? `${speaker.fullName} (${speaker.body.shortName})`
+      : speaker.fullName
+  )
+  const description = `Demagog.cz ověřil již ${speaker.verifiedStatementsCount} ${pluralize(speaker.verifiedStatementsCount, 'faktický výrok', 'faktické výroky', 'faktických výroků')} politika*čky ${speaker.fullName}`
+  const images = speaker.avatar ? { images: imagePath(speaker.avatar) } : {}
+  const url = `${DefaultMetadata.openGraph?.url}/politici/${speaker.slug}`
+
   return {
-    title: getMetadataTitle(
-      speaker.body
-        ? `${speaker.fullName} (${speaker.body.shortName})`
-        : speaker.fullName
-    ),
-    description: `Demagog.cz ověřil již ${speaker.verifiedStatementsCount} ${pluralize(speaker.verifiedStatementsCount, 'faktický výrok', 'faktické výroky', 'faktických výroků')} politika*čky`,
+    title,
+    description,
+    openGraph: {
+      ...DefaultMetadata.openGraph,
+      ...images,
+      url,
+      title,
+      description,
+      type: 'profile',
+      firstName: speaker.firstName,
+      lastName: speaker.lastName,
+    },
+    twitter: {
+      ...DefaultMetadata.twitter,
+      ...images,
+      title,
+      description,
+      card: 'summary_large_image',
+    },
     ...getRobotsMetadata(),
   }
 }
