@@ -1,39 +1,17 @@
 'use client'
 
 import classNames from 'classnames'
-import { PropsWithChildren, useCallback, useEffect, useState } from 'react'
-
-// The component will fold when viewport is narrower or equal to the breakpoint
-const BREAKPOINT = 992
+import { PropsWithChildren, useCallback, useState } from 'react'
 
 // The height of the expander in the folded (non-expanded) state
 const EXPANDER_FOLDED_HEIGHT = 100
 
 export function Expander(props: PropsWithChildren<{ className: string }>) {
-  const [isFoldingRequired, setFoldingRequired] = useState(false)
-
-  // Needs to be in use effect, otherwise window is not defined on SSR
-  useEffect(() => {
-    setFoldingRequired(window.innerWidth <= BREAKPOINT)
-  }, [])
-
   const [isFolded, setFolded] = useState(true)
 
   const toggleFolded = useCallback(() => {
     setFolded(!isFolded)
   }, [isFolded, setFolded])
-
-  const onWindowResize = useCallback(() => {
-    setFoldingRequired(window.innerWidth <= BREAKPOINT)
-  }, [setFoldingRequired])
-
-  useEffect(() => {
-    window.addEventListener('resize', onWindowResize)
-
-    return () => {
-      window.removeEventListener('resize', onWindowResize)
-    }
-  }, [onWindowResize])
 
   return (
     <div className={props.className}>
