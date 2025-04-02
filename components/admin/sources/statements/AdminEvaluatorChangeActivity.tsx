@@ -1,25 +1,27 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
-import { ArrowPathIcon } from '@heroicons/react/20/solid'
-import { ASSESSMENT_STATUS_LABELS } from '@/libs/constants/assessment'
+import { UsersIcon } from '@heroicons/react/20/solid'
 
-const AdminEvaluationStatusChangeActivityFragment = gql(`
-  fragment AdminEvaluationStatusChangeActivity on EvaluationStatusChangeActivity {
+const AdminEvaluatorChangeActivityFragment = gql(`
+    fragment AdminEvaluatorChangeActivity on EvaluatorChangeActivity {
       createdAt
-      id
-      oldStatus
-      newStatus
+      newEvaluator {
+          fullName
+      }
+      oldEvaluator {
+          fullName
+      }
       user {
         fullName
       }
     }
   `)
 
-export function AdminEvaluationStatusChangeActivity(props: {
-  activity: FragmentType<typeof AdminEvaluationStatusChangeActivityFragment>
+export function AdminEvaluatorChangeActivity(props: {
+  activity: FragmentType<typeof AdminEvaluatorChangeActivityFragment>
 }) {
   const activityItem = useFragment(
-    AdminEvaluationStatusChangeActivityFragment,
+    AdminEvaluatorChangeActivityFragment,
     props.activity
   )
 
@@ -28,38 +30,23 @@ export function AdminEvaluationStatusChangeActivity(props: {
       <div>
         <div className="relative px-1">
           <div className="flex size-8 items-center justify-center rounded-full bg-gray-100 ring-8 ring-white">
-            <ArrowPathIcon
-              aria-hidden="true"
-              className="size-5 text-gray-500"
-            />
+            <UsersIcon aria-hidden="true" className="size-5 text-gray-500" />
           </div>
         </div>
       </div>
       <div className="min-w-0 flex-1 py-1.5">
         <p className="text-sm text-gray-500">
+          Uživatel{' '}
           <span className="font-medium text-gray-900">
-            {activityItem?.user?.fullName}
+            {activityItem?.user.fullName}
           </span>{' '}
-          změnil/a status z{' '}
+          změnil/a ověřovatele{' '}
           <span className="font-medium text-gray-900">
-            {' '}
-            "
-            {
-              ASSESSMENT_STATUS_LABELS[
-                activityItem.oldStatus as keyof typeof ASSESSMENT_STATUS_LABELS
-              ]
-            }
-            "
+            {activityItem?.oldEvaluator?.fullName}
           </span>{' '}
           na{' '}
           <span className="font-medium text-gray-900">
-            "
-            {
-              ASSESSMENT_STATUS_LABELS[
-                activityItem.newStatus as keyof typeof ASSESSMENT_STATUS_LABELS
-              ]
-            }
-            "
+            {activityItem?.newEvaluator?.fullName}
           </span>{' '}
           <time
             className="mt-0.5 text-sm text-gray-500"
