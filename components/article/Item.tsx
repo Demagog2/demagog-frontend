@@ -62,6 +62,7 @@ export default function ArticleItem(props: {
           <div className="w-100">
             <ArticleLink className="illustration" article={article}>
               <Image
+                loading={largerPreview ? 'eager' : 'lazy'}
                 {...getPreviewImageSize(largerPreview)}
                 src={mediaUrl + article.illustration}
                 className="rounded-m"
