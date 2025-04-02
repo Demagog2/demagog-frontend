@@ -64,7 +64,7 @@ export default function ArticleItem(props: {
               <Image
                 {...getPreviewImageSize(largerPreview)}
                 src={mediaUrl + article.illustration}
-                className="w-100 rounded-m"
+                className="rounded-m"
                 alt={`Ilustrační obrázek k ${article.title}`}
               />
             </ArticleLink>

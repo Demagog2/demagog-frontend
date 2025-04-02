@@ -2,6 +2,7 @@ import YouTube from 'react-youtube'
 import PlayIcon from '@/assets/icons/play.svg'
 import { useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
+import { getPreviewImageSize } from '@/libs/images/path'
 
 const opts = {
   playerVars: {
@@ -36,6 +37,7 @@ export function VideoModal() {
         onClick={() => setIsModalOpen(true)}
       >
         <img
+          {...getPreviewImageSize(true)}
           className="w-100"
           src="/images/homepage-intro-video-thumbnail.png"
           alt="thumb"
