@@ -4,7 +4,7 @@ import { AssessmentVeracityIcon } from '@/components/statement/AssessmentVeracit
 import { AssessmentVeracityLabel } from '@/components/statement/AssessmentVeracityLabel'
 import { query } from '@/libs/apollo-client'
 import formatDate from '@/libs/format-date'
-import { getMetadataTitle } from '@/libs/metadata'
+import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 import { parseParamId } from '@/libs/query-params'
 import truncate from '@/libs/truncate'
 import { Metadata } from 'next'
@@ -17,7 +17,9 @@ import TagIcon from '@/assets/icons/tag.svg'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementHeader } from '@/components/statement/StatementHeader'
 
-export async function generateMetadata(props: {
+export async function generateMetadata({
+  params,
+}: {
   params: { slug: string }
 }): Promise<Metadata> {
   const {
@@ -45,7 +47,7 @@ export async function generateMetadata(props: {
       }
     `),
     variables: {
-      id: parseParamId(props.params.slug),
+      id: parseParamId(params.slug),
     },
   })
 
@@ -76,6 +78,7 @@ export async function generateMetadata(props: {
       title,
       description,
     },
+    ...getRobotsMetadata(),
   }
 }
 

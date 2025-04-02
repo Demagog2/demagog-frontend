@@ -18,7 +18,7 @@ import {
 import { parsePage } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
-import { getMetadataTitle } from '@/libs/metadata'
+import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 import { PromiseArticleIntro } from '@/components/promises/PromiseArticleSegments'
 
 const SEARCH_PAGE_SIZE = 2000
@@ -43,6 +43,7 @@ export async function generateMetadata(props: {
 
   return {
     title: getMetadataTitle(governmentPromisesEvaluationBySlug?.title ?? ''),
+    ...getRobotsMetadata(),
   }
 }
 

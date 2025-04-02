@@ -9,7 +9,7 @@ import type { SearchQuery } from '@/__generated__/graphql'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
-import { getMetadataTitle } from '@/libs/metadata'
+import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 import { permanentRedirect } from 'next/navigation'
 import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 
@@ -24,6 +24,7 @@ export async function generateMetadata(
     ),
     description:
       'Hledejte mezi výstupy Demagog.cz, konkrétními faktickými výroky či v databázi politiků a političek',
+    ...getRobotsMetadata(),
   }
 }
 

@@ -7,7 +7,7 @@ import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactchec
 import { Pagination } from '@/components/article/Pagination'
 import ArticleTags from '@/components/article/Tags'
 import { query } from '@/libs/apollo-client'
-import { getMetadataTitle } from '@/libs/metadata'
+import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   title: getMetadataTitle('Spolupráce s Facebookem'),
   description:
     'Demagog.cz se v květnu 2020 zapojil do sítě nezávislých fact-checkingových partnerů, kteří pro společnost Facebook ověřují pravdivost vybraného facebookového a instagramového obsahu. Pokud se ukáže, že jde o nepravdivý nebo zav...',
+  ...getRobotsMetadata(),
 }
 
 export default async function FacebookCollaboration(

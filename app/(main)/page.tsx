@@ -4,13 +4,14 @@ import { notFound } from 'next/navigation'
 import { HomepageFirstPage } from '@/components/homepage/HomepageFirstPage'
 import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
 import { PropsWithSearchParams } from '@/libs/params'
-import { getMetadataTitle } from '@/libs/metadata'
+import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
 import { getStringParam } from '@/libs/query-params'
 import { query } from '@/libs/apollo-client'
 import { buildGraphQLVariables } from '@/libs/pagination'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Ověřujeme pro Vás'),
+  ...getRobotsMetadata(),
 }
 
 export default async function Homepage(props: PropsWithSearchParams) {
