@@ -2,6 +2,7 @@ import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminCommentActivity } from './AdminCommentActivity'
 import { AdminEvaluationStatusChangeActivity } from './AdminEvaluationStatusChangeActivity'
 import { AdminEvaluatorChangeActivity } from './AdminEvaluatorChangeActivity'
+import { AdminShortExplanationChangeActivity } from './AdminShortExplanationChangeActivity'
 
 const AdminActivityFragment = gql(`
   fragment AdminActivity on ActivityUnion {
@@ -13,6 +14,9 @@ const AdminActivityFragment = gql(`
     }
     ... on EvaluatorChangeActivity {
       ...AdminEvaluatorChangeActivity
+    }
+    ... on ShortExplanationChangeActivity {
+      ...AdminShortExplanationChangeActivity
     }
   }
 `)
@@ -30,6 +34,9 @@ export function AdminActivity(props: {
     }
     case 'EvaluatorChangeActivity': {
       return <AdminEvaluatorChangeActivity activity={activity} />
+    }
+    case 'ShortExplanationChangeActivity': {
+      return <AdminShortExplanationChangeActivity activity={activity} />
     }
     default: {
       return null

@@ -40,7 +40,7 @@ export function AdminEvaluationStatusChangeActivity(props: {
           <span className="font-medium text-gray-900">
             {activityItem?.user?.fullName}
           </span>{' '}
-          změnil/a status z{' '}
+          změnil/a status{' '}
           <span className="font-medium text-gray-900">
             {' '}
             "
@@ -51,7 +51,7 @@ export function AdminEvaluationStatusChangeActivity(props: {
             }
             "
           </span>{' '}
-          na{' '}
+          na status{' '}
           <span className="font-medium text-gray-900">
             "
             {
