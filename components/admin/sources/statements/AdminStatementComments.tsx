@@ -86,7 +86,7 @@ export function AdminStatementComments(props: { statementId: string }) {
 
       <ul role="list" className="mt-8 -mb-8">
         {activities?.map((activityItem, activityItemIdx: number) => {
-          if (!activityItem) {
+          if (!activityItem?.node) {
             return null
           }
 

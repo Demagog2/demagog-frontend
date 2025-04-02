@@ -43,23 +43,23 @@ export function AdminEvaluationStatusChangeActivity(props: {
           změnil/a status{' '}
           <span className="font-medium text-gray-900">
             {' '}
-            "
+            &quot;
             {
               ASSESSMENT_STATUS_LABELS[
                 activityItem.oldStatus as keyof typeof ASSESSMENT_STATUS_LABELS
               ]
             }
-            "
+            &quot;
           </span>{' '}
           na status{' '}
           <span className="font-medium text-gray-900">
-            "
+            &quot;
             {
               ASSESSMENT_STATUS_LABELS[
                 activityItem.newStatus as keyof typeof ASSESSMENT_STATUS_LABELS
               ]
             }
-            "
+            &quot;
           </span>{' '}
           <time
             className="mt-0.5 text-sm text-gray-500"
