@@ -5,7 +5,7 @@ export function getMetadataTitle(...subtitles: string[]) {
 }
 
 export function getRobotsMetadata(): Partial<Metadata> {
-  if (process.env.DISSALLOW_ALL_RULE === 'true') {
+  if (process.env.ROBOTS_ALLOW_NOTHING === 'true') {
     return {
       robots: {
         index: false,
