@@ -3,6 +3,7 @@ import ArticleSpeaker from './SpeakerDetail'
 import formatDate from '@/libs/format-date'
 import { Article } from './Article'
 import classNames from 'classnames'
+import { getPreviewImageSize } from '@/libs/images/path'
 
 export const SingleStatementArticlePreviewFragment = gql(`
     fragment SingleStatementArticlePreviewFragment on SingleStatementArticle {
@@ -36,10 +37,11 @@ export const SingleStatementArticlePreviewFragment = gql(`
 export function SingleStatementArticlePreview(props: {
   article: FragmentType<typeof SingleStatementArticlePreviewFragment>
   isEmbedded?: boolean
+  largerPreview?: boolean
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL ?? ''
 
-  const { isEmbedded = false } = props
+  const { isEmbedded = false, largerPreview = false } = props
 
   const article = useFragment(
     SingleStatementArticlePreviewFragment,
@@ -71,6 +73,7 @@ export function SingleStatementArticlePreview(props: {
             <a href={articlePath} className="illustration">
               <img
                 src={mediaUrl + article.illustration}
+                {...getPreviewImageSize(largerPreview)}
                 className="w-100"
                 alt={`Ilustrační obrázek k ${article.title}`}
               />

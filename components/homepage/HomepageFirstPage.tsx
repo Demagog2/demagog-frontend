@@ -30,7 +30,13 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
                 return null
               }
 
-              return [<ArticleV2Preview article={article} key={article?.id} />]
+              return [
+                <ArticleV2Preview
+                  article={article}
+                  key={article?.id}
+                  largerPreview
+                />,
+              ]
             })}
           </div>
         </div>
