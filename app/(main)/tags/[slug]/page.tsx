@@ -9,27 +9,41 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { Metadata } from 'next'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getCanonicalRelativeUrl,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 import { truncate } from 'lodash'
 
-export async function generateMetadata({
-  params,
-}: {
-  params: { slug: string }
-}): Promise<Metadata> {
+export async function generateMetadata(
+  props: PropsWithSearchParams<{
+    params: { slug: string }
+  }>
+): Promise<Metadata> {
+  const after = getStringParam(props.searchParams.after)
+  const before = getStringParam(props.searchParams.before)
+
   const {
     data: { articleTagBySlug },
   } = await query({
     query: gql(`
-      query ArticleTagMetadata($slug: String!) {
+      query ArticleTagMetadata($first: Int, $last: Int, $slug: String!, $after: String, $before: String) {
         articleTagBySlug(slug: $slug) {
           title
           description
+          articlesV2(first: $first, last: $last, after: $after, before: $before) {
+            pageInfo {
+              hasPreviousPage
+            }
+          }
         }
       }
     `),
     variables: {
-      slug: params.slug,
+      slug: props.params.slug,
+      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
     },
   })
 
@@ -37,6 +51,14 @@ export async function generateMetadata({
     title: getMetadataTitle(articleTagBySlug?.title ?? 'Neznamy tag'),
     description: truncate(articleTagBySlug?.description ?? '', { length: 255 }),
     ...getRobotsMetadata(),
+    ...getCanonicalMetadata(
+      getCanonicalRelativeUrl(
+        `/tag/${props.params.slug}`,
+        articleTagBySlug?.articlesV2.pageInfo.hasPreviousPage ?? false,
+        after,
+        before
+      )
+    ),
   }
 }
 

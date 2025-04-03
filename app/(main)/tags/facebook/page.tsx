@@ -7,17 +7,54 @@ import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactchec
 import { Pagination } from '@/components/article/Pagination'
 import ArticleTags from '@/components/article/Tags'
 import { query } from '@/libs/apollo-client'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getCanonicalRelativeUrl,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { getStringParam } from '@/libs/query-params'
 import { Metadata } from 'next'
 
-export const metadata: Metadata = {
-  title: getMetadataTitle('Spolupráce s Facebookem'),
-  description:
-    'Demagog.cz se v květnu 2020 zapojil do sítě nezávislých fact-checkingových partnerů, kteří pro společnost Facebook ověřují pravdivost vybraného facebookového a instagramového obsahu. Pokud se ukáže, že jde o nepravdivý nebo zav...',
-  ...getRobotsMetadata(),
+export async function generateMetadata(
+  props: PropsWithSearchParams
+): Promise<Metadata> {
+  const after = getStringParam(props.searchParams.after)
+  const before = getStringParam(props.searchParams.before)
+
+  const {
+    data: {
+      facebookFactchecks: { pageInfo },
+    },
+  } = await query({
+    query: gql(`
+      query facebookCollaborationMetadata($first: Int, $last: Int, $after: String, $before: String) {
+        facebookFactchecks(first: $first, last: $last, after: $after, before: $before) {
+          pageInfo {
+            hasPreviousPage
+          }
+        }
+      }
+    `),
+    variables: { ...buildGraphQLVariables({ before, after, pageSize: 10 }) },
+  })
+
+  return {
+    title: getMetadataTitle('Spolupráce s Facebookem'),
+    description:
+      'Demagog.cz se v květnu 2020 zapojil do sítě nezávislých fact-checkingových partnerů, kteří pro společnost Facebook ověřují pravdivost vybraného facebookového a instagramového obsahu. Pokud se ukáže, že jde o nepravdivý nebo zav...',
+    ...getRobotsMetadata(),
+    ...getCanonicalMetadata(
+      getCanonicalRelativeUrl(
+        '/spoluprace-s-facebookem',
+        pageInfo.hasPreviousPage,
+        after,
+        before
+      )
+    ),
+  }
 }
 
 export default async function FacebookCollaboration(

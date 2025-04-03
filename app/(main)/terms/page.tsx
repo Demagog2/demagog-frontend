@@ -1,5 +1,9 @@
 import { gql } from '@/__generated__'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 import { Metadata } from 'next'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { notFound } from 'next/navigation'
@@ -25,6 +29,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: getMetadataTitle(data.page.title),
     ...getRobotsMetadata(),
+    ...getCanonicalMetadata('/zasady-zpracovani-osobnich-udaju'),
   }
 }
 

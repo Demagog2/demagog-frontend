@@ -4,7 +4,11 @@ import { AssessmentVeracityIcon } from '@/components/statement/AssessmentVeracit
 import { AssessmentVeracityLabel } from '@/components/statement/AssessmentVeracityLabel'
 import { query } from '@/libs/apollo-client'
 import formatDate from '@/libs/format-date'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 import { parseParamId } from '@/libs/query-params'
 import truncate from '@/libs/truncate'
 import { Metadata } from 'next'
@@ -79,6 +83,7 @@ export async function generateMetadata({
       description,
     },
     ...getRobotsMetadata(),
+    ...getCanonicalMetadata(`/vyrok/${statement.id}`),
   }
 }
 

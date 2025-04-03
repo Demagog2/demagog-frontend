@@ -10,15 +10,28 @@ import { FormCheckbox } from '@/components/filtering/controls/FormCheckbox'
 import { PropsWithSearchParams } from '@/libs/params'
 import { gql } from '@/__generated__'
 import { Metadata } from 'next'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 
 const PAGE_SIZE = 24
 
-export const metadata: Metadata = {
-  title: getMetadataTitle('Přehled politiků a političek'),
-  description:
-    'Za svou existenci Demagog.cz už ověřil výroky stovek politiků a političek.',
-  ...getRobotsMetadata(),
+export async function generateMetadata({
+  searchParams,
+}: PropsWithSearchParams): Promise<Metadata> {
+  const page = parsePage(searchParams.page)
+
+  return {
+    title: getMetadataTitle('Přehled politiků a političek'),
+    description:
+      'Za svou existenci Demagog.cz už ověřil výroky stovek politiků a političek.',
+    ...getRobotsMetadata(),
+    ...getCanonicalMetadata(
+      page === 1 ? '/vypis-recniku' : `/vypis-recniku?page=${page}`
+    ),
+  }
 }
 
 type BodyFilterProps = {

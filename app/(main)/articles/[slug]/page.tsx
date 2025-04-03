@@ -8,7 +8,11 @@ import { DebateArticleMetadata } from '@/components/article/metadata/DebateArtic
 import { StaticArticleMetadata } from '@/components/article/metadata/StaticArticleMetadata'
 import { Metadata } from 'next'
 import { permanentRedirect } from 'next/navigation'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 import { Iframely } from '@/components/site/Iframely'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { truncate } from 'lodash'
@@ -98,6 +102,7 @@ export async function generateMetadata(props: {
       card: 'summary_large_image',
     },
     ...getRobotsMetadata(),
+    ...getCanonicalMetadata(`/diskuze/${article.slug}`),
   }
 }
 

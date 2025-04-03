@@ -1,12 +1,17 @@
 import { query } from '@/libs/apollo-client'
 import { WorkshopOffer } from '@/components/workshops/WorkshopOffer'
 import { gql } from '@/__generated__'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Workshopy'),
   ...getRobotsMetadata(),
+  ...getCanonicalMetadata('/workshopy'),
 }
 
 export default async function Workshops() {
