@@ -6,6 +6,8 @@ import { EvaluatorStatementFilter } from './EvaluatorStatementFilter'
 import { UnassignedEvaluatorStatementFilter } from './UnassignedEvaluatorStatementFilter'
 import type { ISource } from '../Source'
 import type { Evaluator } from '../Evaluator'
+import { HasBeenOnceApprovedStatementFilter } from './HasBeenOnceApprovedStatementFilter'
+import { IStatementFilter } from './StatementFilter'
 
 export class FiltersFactory {
   constructor(private readonly source: ISource) {}
@@ -38,10 +40,12 @@ export class FiltersFactory {
     ]
   }
 
-  private getEvaluationStatusStatementFilters() {
-    return [...STATUS_FILTER_LABELS.keys()].map(
+  private getEvaluationStatusStatementFilters(): IStatementFilter[] {
+    const filters: IStatementFilter[] = [...STATUS_FILTER_LABELS.keys()].map(
       (key) => new EvaluationStatusStatementFilter(key)
     )
+
+    return [...filters, new HasBeenOnceApprovedStatementFilter()]
   }
 
   private getEvaluators(): Evaluator[] {
