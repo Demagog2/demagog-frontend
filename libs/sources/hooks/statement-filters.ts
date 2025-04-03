@@ -4,38 +4,39 @@ import { useCallback, useEffect, useState } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 
 export function useStatementFilters() {
-  const [state, setState] = useState<any | null>(null)
+  const [state, setState] = useState<string[]>([])
   const pathname = usePathname()
   const searchParams = useSearchParams()
   const router = useRouter()
 
   useEffect(() => {
     if (!searchParams) {
-      setState(null)
+      setState([])
       return
     }
 
-    if (searchParams.has('filter')) {
-      setState(searchParams.get('filter'))
-    }
+    const filters = searchParams.getAll('filter')
+    setState(filters)
   }, [searchParams])
 
   const onStatementsFilterUpdate = useCallback(
     (filter: string) => {
-      setState(filter)
+      const newFilters = state.includes(filter)
+        ? state.filter((f) => f !== filter)
+        : [...state, filter]
 
-      // Make sure we update the url after the state is changed
-      // so the location change listener can detect that the state
-      // is already set
-      router.push(`${pathname}?filter=${filter}`)
+      setState(newFilters)
+
+      // Update URL with all filters
+      const params = new URLSearchParams()
+      newFilters.forEach((f) => params.append('filter', f))
+      router.push(`${pathname}?${params.toString()}`)
     },
-    [pathname, router]
+    [pathname, router, state]
   )
 
   const onRemoveStatementsFilters = useCallback(() => {
-    setState(null)
-
-    // Reset the search part of location
+    setState([])
     router.push(pathname ?? '')
   }, [pathname, router])
 

@@ -129,7 +129,7 @@ export function AdminSourcesFilters(props: {
 
   const sourceViewModel = new SourceDetailPresenter(
     source,
-    state ? [state] : []
+    state ? state : []
   ).buildViewModel()
 
   return (
