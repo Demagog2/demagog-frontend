@@ -3,12 +3,17 @@ import { AboutUsQuery } from '@/__generated__/graphql'
 import { AboutUsContent } from '@/components/about-us/AboutUsContent'
 import { AboutUsMenu } from '@/components/about-us/AboutUsMenu'
 import { query } from '@/libs/apollo-client'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('O nás'),
   ...getRobotsMetadata(),
+  ...getCanonicalMetadata('/o-nas'),
 }
 
 export default async function AboutUs() {

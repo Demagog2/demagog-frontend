@@ -21,7 +21,11 @@ import {
   VeracityFilters,
 } from '@/app/(main)/statements/page'
 import { Metadata } from 'next'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 import { pluralize } from '@/libs/pluralize'
 import { notFound } from 'next/navigation'
 import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
@@ -32,9 +36,10 @@ const PAGE_SIZE = 10
 
 export async function generateMetadata({
   params,
-}: {
-  params: { slug: string }
-}): Promise<Metadata> {
+  searchParams,
+}: PropsWithSearchParams<{ params: { slug: string } }>): Promise<Metadata> {
+  const page = parsePage(searchParams.page)
+
   const {
     data: { speakerV2: speaker },
   } = await query({
@@ -94,6 +99,11 @@ export async function generateMetadata({
       card: 'summary_large_image',
     },
     ...getRobotsMetadata(),
+    ...getCanonicalMetadata(
+      page === 1
+        ? `/politici/${speaker.slug}`
+        : `/politici/${speaker.slug}?page=${page}`
+    ),
   }
 }
 

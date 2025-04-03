@@ -4,14 +4,46 @@ import { notFound } from 'next/navigation'
 import { HomepageFirstPage } from '@/components/homepage/HomepageFirstPage'
 import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
 import { PropsWithSearchParams } from '@/libs/params'
-import { getMetadataTitle, getRobotsMetadata } from '@/libs/metadata'
+import {
+  getCanonicalMetadata,
+  getCanonicalRelativeUrl,
+  getMetadataTitle,
+  getRobotsMetadata,
+} from '@/libs/metadata'
 import { getStringParam } from '@/libs/query-params'
 import { query } from '@/libs/apollo-client'
 import { buildGraphQLVariables } from '@/libs/pagination'
 
-export const metadata: Metadata = {
-  title: getMetadataTitle('Ověřujeme pro Vás'),
-  ...getRobotsMetadata(),
+export async function generateMetadata(
+  props: PropsWithSearchParams
+): Promise<Metadata> {
+  const after = getStringParam(props.searchParams.after)
+  const before = getStringParam(props.searchParams.before)
+
+  const {
+    data: {
+      homepageArticlesV3: { pageInfo },
+    },
+  } = await query({
+    query: gql(`
+       query homepageMetadata($first: Int, $last: Int, $after: String, $before: String) {
+        homepageArticlesV3(first: $first, last: $last, after: $after, before: $before) {
+          pageInfo {
+            hasPreviousPage
+          }
+        }
+      }
+    `),
+    variables: { ...buildGraphQLVariables({ before, after, pageSize: 10 }) },
+  })
+
+  return {
+    title: getMetadataTitle('Ověřujeme pro Vás'),
+    ...getRobotsMetadata(),
+    ...getCanonicalMetadata(
+      getCanonicalRelativeUrl('', pageInfo.hasPreviousPage, after, before)
+    ),
+  }
 }
 
 export default async function Homepage(props: PropsWithSearchParams) {
@@ -35,9 +67,6 @@ export default async function Homepage(props: PropsWithSearchParams) {
             hasPreviousPage
             ...PaginationFragment
           }
-        }
-        articleTags(limit: 5) {
-          ...ArticleTagDetail
         }
         ...MostSearchedSpeakers
       }
