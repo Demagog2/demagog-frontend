@@ -904,7 +904,7 @@ function AdminAssessmentForm(props: {
           </Fieldset>
 
           <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
-            Komentáře
+            Aktivita
           </div>
 
           <AdminStatementComments statementId={statement.id} />
