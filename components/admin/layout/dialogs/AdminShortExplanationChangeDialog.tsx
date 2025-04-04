@@ -8,6 +8,7 @@ import {
   DialogTitle,
 } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
+import { highlightTextDifferences } from '@/libs/diff'
 
 export type ForwardedProps = {
   openDialog(): void
@@ -18,6 +19,8 @@ export const AdminActivityChangeDialog = forwardRef<
   { oldExplanation: string; newExplanation: string }
 >(function AdminActivityChangeDialog(props, ref) {
   const [open, setOpen] = useState(false)
+  const { oldTextWithHighlights, newTextWithHighlights } =
+    highlightTextDifferences(props.oldExplanation, props.newExplanation)
 
   useImperativeHandle(ref, () => ({
     openDialog() {
@@ -70,9 +73,12 @@ export const AdminActivityChangeDialog = forwardRef<
                       Původní
                     </h4>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        {props.oldExplanation}
-                      </p>
+                      <p
+                        className="text-sm text-gray-500"
+                        dangerouslySetInnerHTML={{
+                          __html: oldTextWithHighlights,
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
@@ -82,9 +88,12 @@ export const AdminActivityChangeDialog = forwardRef<
                       Upraveno
                     </h4>
                     <div className="mt-2">
-                      <p className="text-sm text-gray-500">
-                        {props.newExplanation}
-                      </p>
+                      <p
+                        className="text-sm text-gray-500"
+                        dangerouslySetInnerHTML={{
+                          __html: newTextWithHighlights,
+                        }}
+                      />
                     </div>
                   </div>
                 </div>
