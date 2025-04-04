@@ -3,12 +3,12 @@ import { AdminStatementCommentInput } from '../AdminStatementCommentInput'
 import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { AdminActivity } from './AdminActivity'
-import { takeRight } from 'lodash'
+import { reverse, takeRight } from 'lodash'
 import { pluralize } from '@/libs/pluralize'
 
 const SHOW_ALL_THRESHOLD = 3
 
-export function AdminStatementComments(props: { statementId: string }) {
+export function AdminStatementActivities(props: { statementId: string }) {
   const [showAll, setShowAll] = useState(false)
 
   const { data, refetch, loading } = useQuery(
@@ -52,9 +52,11 @@ export function AdminStatementComments(props: { statementId: string }) {
     return null
   }
 
+  const activitiesData = reverse([...(statement.activities.edges || [])])
+
   const activities = showAll
-    ? statement.activities.edges
-    : takeRight(statement.activities.edges, SHOW_ALL_THRESHOLD)
+    ? activitiesData
+    : takeRight(activitiesData, SHOW_ALL_THRESHOLD)
 
   return (
     <div className="flow-root">
@@ -72,12 +74,12 @@ export function AdminStatementComments(props: { statementId: string }) {
               className="text-sm text-indigo-600 cursor-pointer"
               onClick={() => setShowAll(true)}
             >
-              Zobrazit 4{' '}
+              Zobrazit {statement.activitiesCount - SHOW_ALL_THRESHOLD}{' '}
               {pluralize(
                 statement.activitiesCount - SHOW_ALL_THRESHOLD,
                 'předchozí aktivitu',
                 'předchozí aktivity',
-                'předchozí aktivity'
+                'předchozích aktivit'
               )}
             </a>
           )}
