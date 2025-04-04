@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, forwardRef, useImperativeHandle } from 'react'
+import { useState, forwardRef, useImperativeHandle, ReactNode } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -8,7 +8,6 @@ import {
   DialogTitle,
 } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import { nicerLinksNoTruncate } from '@/libs/comments/text'
 
 export type ForwardedProps = {
   openDialog(): void
@@ -16,7 +15,7 @@ export type ForwardedProps = {
 
 export const AdminExplanationHtmlChangeDialog = forwardRef<
   ForwardedProps,
-  { oldExplanation: string; newExplanation: string }
+  { oldExplanation: ReactNode; newExplanation: ReactNode }
 >(function AdminExplanationHtmlChangeDialog(props, ref) {
   const [open, setOpen] = useState(false)
 
@@ -70,12 +69,8 @@ export const AdminExplanationHtmlChangeDialog = forwardRef<
                     <h4 className="text-sm font-medium text-gray-900">
                       Původní
                     </h4>
-                    <div
-                      className="mt-2 text-sm text-gray-500"
-                      dangerouslySetInnerHTML={{
-                        __html: nicerLinksNoTruncate(props.oldExplanation),
-                      }}
-                    ></div>
+
+                    {props.oldExplanation}
                   </div>
                 </div>
                 <div>
@@ -83,12 +78,7 @@ export const AdminExplanationHtmlChangeDialog = forwardRef<
                     <h4 className="text-sm font-medium text-gray-900">
                       Upraveno
                     </h4>
-                    <div
-                      className="mt-2 text-sm text-gray-500"
-                      dangerouslySetInnerHTML={{
-                        __html: nicerLinksNoTruncate(props.newExplanation),
-                      }}
-                    ></div>
+                    {props.newExplanation}
                   </div>
                 </div>
               </div>

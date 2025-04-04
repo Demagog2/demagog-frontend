@@ -7,12 +7,22 @@ import {
   AdminExplanationHtmlChangeDialog,
   ForwardedProps,
 } from '../../layout/dialogs/AdminExplanationHtmlChangeDialog'
+import { AdminRichTextContent } from '../../rich-text/AdminRichTextContent'
 
 const AdminExplanationHtmlChangeActivityFragment = gql(`
     fragment AdminExplanationHtmlChangeActivity on ExplanationHtmlChangeActivity {
       updatedAt
       oldExplanationHtml
       newExplanationHtml
+
+      newExplanationHtmlContent {
+        ...AdminRichTextContent
+      }
+
+      oldExplanationHtmlContent {
+        ...AdminRichTextContent
+      }
+
       user {
          ...AdminUserAvatar
         id
@@ -65,8 +75,16 @@ export function AdminExplanationHtmlChangeActivity(props: {
       </div>
       <AdminExplanationHtmlChangeDialog
         ref={dialogRef}
-        oldExplanation={activityItem.oldExplanationHtml ?? ''}
-        newExplanation={activityItem.newExplanationHtml ?? ''}
+        oldExplanation={
+          <AdminRichTextContent
+            content={activityItem.oldExplanationHtmlContent}
+          />
+        }
+        newExplanation={
+          <AdminRichTextContent
+            content={activityItem.newExplanationHtmlContent}
+          />
+        }
       />
     </>
   )
