@@ -5,19 +5,21 @@ import { useState } from 'react'
 import { AdminActivity } from './AdminActivity'
 import { reverse, takeRight } from 'lodash'
 import { pluralize } from '@/libs/pluralize'
+import { ActivityTypeEnum } from '@/__generated__/graphql'
 
 const SHOW_ALL_THRESHOLD = 3
 
 export function AdminStatementActivities(props: { statementId: string }) {
   const [showAll, setShowAll] = useState(false)
+  const [commentsOnly, setCommentsOnly] = useState(false)
 
   const { data, refetch, loading } = useQuery(
     gql(`
-      query AdminStatementCommentsQuery($id: Int!) {
+      query AdminStatementCommentsQuery($id: Int!, $filter: ActivityFilterInput) {
         ...AdminStatementCommentInput
         statementV2(id: $id, includeUnpublished: true) {
           activitiesCount
-          activities {
+          activities(first: 100, filter: $filter) {
             edges {
               node {
                 ...AdminActivity
@@ -27,7 +29,14 @@ export function AdminStatementActivities(props: { statementId: string }) {
         }
       }
     `),
-    { variables: { id: parseInt(props.statementId, 10) } }
+    {
+      variables: {
+        id: parseInt(props.statementId, 10),
+        filter: commentsOnly
+          ? { activityType: ActivityTypeEnum.CommentCreated }
+          : {},
+      },
+    }
   )
 
   const [createComment, { loading: isPending }] = useMutation(
@@ -60,31 +69,39 @@ export function AdminStatementActivities(props: { statementId: string }) {
 
   return (
     <div className="flow-root">
-      {statement.activitiesCount > SHOW_ALL_THRESHOLD && (
-        <>
-          {showAll ? (
-            <a
-              className="text-sm text-indigo-600 cursor-pointer"
-              onClick={() => setShowAll(false)}
-            >
-              Zobrazit jen poslední {SHOW_ALL_THRESHOLD} aktivity
-            </a>
-          ) : (
-            <a
-              className="text-sm text-indigo-600 cursor-pointer"
-              onClick={() => setShowAll(true)}
-            >
-              Zobrazit {statement.activitiesCount - SHOW_ALL_THRESHOLD}{' '}
-              {pluralize(
-                statement.activitiesCount - SHOW_ALL_THRESHOLD,
-                'předchozí aktivitu',
-                'předchozí aktivity',
-                'předchozích aktivit'
-              )}
-            </a>
-          )}
-        </>
-      )}
+      <div className="flex justify-between items-center mb-4">
+        {statement.activitiesCount > SHOW_ALL_THRESHOLD && (
+          <>
+            {showAll ? (
+              <a
+                className="text-sm text-indigo-600 cursor-pointer"
+                onClick={() => setShowAll(false)}
+              >
+                Zobrazit jen poslední {SHOW_ALL_THRESHOLD} aktivity
+              </a>
+            ) : (
+              <a
+                className="text-sm text-indigo-600 cursor-pointer"
+                onClick={() => setShowAll(true)}
+              >
+                Zobrazit {statement.activitiesCount - SHOW_ALL_THRESHOLD}{' '}
+                {pluralize(
+                  statement.activitiesCount - SHOW_ALL_THRESHOLD,
+                  'předchozí aktivitu',
+                  'předchozí aktivity',
+                  'předchozích aktivit'
+                )}
+              </a>
+            )}
+          </>
+        )}
+        <button
+          onClick={() => setCommentsOnly(!commentsOnly)}
+          className="text-sm px-3 py-1 rounded-md hover:text-indigo-700 bg-gray-100 text-gray-700"
+        >
+          {commentsOnly ? 'Všechny aktivity' : 'Pouze komentáře'}
+        </button>
+      </div>
 
       <ul role="list" className="mt-8 -mb-8">
         {activities?.map((activityItem, activityItemIdx: number) => {

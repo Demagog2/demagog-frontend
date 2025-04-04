@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, forwardRef, useImperativeHandle } from 'react'
+import { useState, forwardRef, useImperativeHandle, useEffect } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -9,6 +9,7 @@ import {
 } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { highlightTextDifferences } from '@/libs/diff'
+import { lockScroll, unlockScroll } from '@/libs/scroll-lock'
 
 export type ForwardedProps = {
   openDialog(): void
@@ -27,6 +28,15 @@ export const AdminActivityChangeDialog = forwardRef<
       setOpen(true)
     },
   }))
+
+  useEffect(() => {
+    if (open) {
+      lockScroll() // Lock scrolling when the dialog is open
+    } else {
+      unlockScroll() // Unlock scrolling when the dialog is closed
+    }
+    return () => unlockScroll() // Ensure scrolling is unlocked on unmount
+  }, [open])
 
   return (
     <Dialog
