@@ -4,6 +4,7 @@ import { AdminEvaluationStatusChangeActivity } from './AdminEvaluationStatusChan
 import { AdminEvaluatorChangeActivity } from './AdminEvaluatorChangeActivity'
 import { AdminShortExplanationChangeActivity } from './AdminShortExplanationChangeActivity'
 import { AdminExplanationHtmlChangeActivity } from './AdminExplanationHtmlChangeActivity'
+import { AdminVeracityChangeActivity } from './AdminVeracityChangeActivity'
 
 const AdminActivityFragment = gql(`
   fragment AdminActivity on ActivityUnion {
@@ -21,6 +22,9 @@ const AdminActivityFragment = gql(`
     }
     ... on ExplanationHtmlChangeActivity {
       ...AdminExplanationHtmlChangeActivity
+    }
+    ... on VeracityChangeActivity {
+      ...AdminVeracityChangeActivity
     }
   }
 `)
@@ -44,6 +48,9 @@ export function AdminActivity(props: {
     }
     case 'ExplanationHtmlChangeActivity': {
       return <AdminExplanationHtmlChangeActivity activity={activity} />
+    }
+    case 'VeracityChangeActivity': {
+      return <AdminVeracityChangeActivity activity={activity} />
     }
     default: {
       return null
