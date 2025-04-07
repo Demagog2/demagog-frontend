@@ -69,7 +69,7 @@ export function AdminStatementActivities(props: { statementId: string }) {
 
   return (
     <div className="flow-root">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-col gap-3">
         {statement.activitiesCount > SHOW_ALL_THRESHOLD && (
           <>
             {showAll ? (
@@ -97,7 +97,7 @@ export function AdminStatementActivities(props: { statementId: string }) {
         )}
         <button
           onClick={() => setCommentsOnly(!commentsOnly)}
-          className="text-sm px-3 py-1 rounded-md hover:text-indigo-700 bg-gray-100 text-gray-700"
+          className="text-sm px-3 py-1 rounded-md hover:text-indigo-700 bg-gray-100 text-gray-700 max-w-fit"
         >
           {commentsOnly ? 'Všechny aktivity' : 'Pouze komentáře'}
         </button>
