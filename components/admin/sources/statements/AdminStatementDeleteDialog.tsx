@@ -23,6 +23,7 @@ const AdminStatementDeleteDialogFragment = gql(`
 export default function AdminStatementDeleteDialog(props: {
   statement: FragmentType<typeof AdminStatementDeleteDialogFragment>
   sourceId: string
+  className?: string
 }) {
   const statement = useFragment(
     AdminStatementDeleteDialogFragment,
@@ -52,7 +53,7 @@ export default function AdminStatementDeleteDialog(props: {
     >
       <TrashIcon
         onClick={() => dialogRef.current?.openDialog()}
-        className="h-6 w-6 text-gray-400 hover:text-indigo-900 ml-3 cursor-pointer"
+        className="h-7 w-7 text-gray-400 hover:text-indigo-900 ml-3 cursor-pointer"
         title="Odstranit"
       />
     </AdminDeleteDialog>
