@@ -19,6 +19,7 @@ export function AdminStatementActivities(props: { statementId: string }) {
         ...AdminStatementCommentInput
         statementV2(id: $id, includeUnpublished: true) {
           activitiesCount
+          commentsCount
           activities(first: 100, filter: $filter) {
             edges {
               node {
@@ -77,7 +78,21 @@ export function AdminStatementActivities(props: { statementId: string }) {
                 className="text-sm text-indigo-600 cursor-pointer"
                 onClick={() => setShowAll(false)}
               >
-                Zobrazit jen poslední {SHOW_ALL_THRESHOLD} aktivity
+                Zobrazit jen poslední {SHOW_ALL_THRESHOLD}{' '}
+                {commentsOnly ? 'komentáře' : 'aktivity'}
+              </a>
+            ) : commentsOnly ? (
+              <a
+                className="text-sm text-indigo-600 cursor-pointer"
+                onClick={() => setShowAll(true)}
+              >
+                Zobrazit {statement.commentsCount - SHOW_ALL_THRESHOLD}{' '}
+                {pluralize(
+                  statement.commentsCount - SHOW_ALL_THRESHOLD,
+                  'předchozí komentář',
+                  'předchozí komentáře',
+                  'předchozích komentářů'
+                )}
               </a>
             ) : (
               <a
