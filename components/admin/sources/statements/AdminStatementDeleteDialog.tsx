@@ -23,7 +23,6 @@ const AdminStatementDeleteDialogFragment = gql(`
 export default function AdminStatementDeleteDialog(props: {
   statement: FragmentType<typeof AdminStatementDeleteDialogFragment>
   sourceId: string
-  className?: string
 }) {
   const statement = useFragment(
     AdminStatementDeleteDialogFragment,

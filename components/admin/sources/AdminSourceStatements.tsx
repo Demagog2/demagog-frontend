@@ -105,15 +105,17 @@ export function AdminSourceStatements({
                             {statement.sourceSpeaker.fullName}
                           </a>
                         </h3>{' '}
-                        <div className="flex items-center flex-wrap">
+                        <div className="flex items-center justify-end flex-wrap">
                           <div className="inline-flex text-gray-400 hover:text-indigo-900">
                             <a
                               href={`/beta/admin/sources/${source.id}/statements/${statement.id}`}
                               className="inline-flex items-end"
                               title="Detail výroku"
                             >
-                              <p className="">Na detail výroku</p>
-                              <ArrowTopRightOnSquareIcon className="h-7 w-7 ml-3 cursor-pointer" />
+                              <p className="text-sm text-right">
+                                Na detail výroku
+                              </p>
+                              <ArrowTopRightOnSquareIcon className="h-7 w-7 ml-2 cursor-pointer shrink-0" />
                             </a>
                           </div>
                           {isAuthorized(['statements:edit']) && (
