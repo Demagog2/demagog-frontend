@@ -14,7 +14,7 @@ pnpm dev
 bun dev
 ```
 
-Dobre rano <3
+<p>Dobre rano <3</p>
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
