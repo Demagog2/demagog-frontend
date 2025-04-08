@@ -18,8 +18,7 @@ export function AdminStatementActivities(props: { statementId: string }) {
       query AdminStatementCommentsQuery($id: Int!, $filter: ActivityFilterInput) {
         ...AdminStatementCommentInput
         statementV2(id: $id, includeUnpublished: true) {
-          activitiesCount
-          commentsCount
+          activitiesCount(filter: $filter)
           activities(first: 100, filter: $filter) {
             edges {
               node {
@@ -81,19 +80,6 @@ export function AdminStatementActivities(props: { statementId: string }) {
                 Zobrazit jen poslední {SHOW_ALL_THRESHOLD}{' '}
                 {commentsOnly ? 'komentáře' : 'aktivity'}
               </a>
-            ) : commentsOnly ? (
-              <a
-                className="text-sm text-indigo-600 cursor-pointer"
-                onClick={() => setShowAll(true)}
-              >
-                Zobrazit {statement.commentsCount - SHOW_ALL_THRESHOLD}{' '}
-                {pluralize(
-                  statement.commentsCount - SHOW_ALL_THRESHOLD,
-                  'předchozí komentář',
-                  'předchozí komentáře',
-                  'předchozích komentářů'
-                )}
-              </a>
             ) : (
               <a
                 className="text-sm text-indigo-600 cursor-pointer"
@@ -102,9 +88,9 @@ export function AdminStatementActivities(props: { statementId: string }) {
                 Zobrazit {statement.activitiesCount - SHOW_ALL_THRESHOLD}{' '}
                 {pluralize(
                   statement.activitiesCount - SHOW_ALL_THRESHOLD,
-                  'předchozí aktivitu',
-                  'předchozí aktivity',
-                  'předchozích aktivit'
+                  commentsOnly ? 'předchozí komentář' : 'předchozí aktivitu',
+                  commentsOnly ? 'předchozí komentáře' : 'předchozí aktivity',
+                  commentsOnly ? 'předchozích komentářů' : 'předchozích aktivit'
                 )}
               </a>
             )}
