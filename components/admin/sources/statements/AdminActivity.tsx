@@ -5,6 +5,7 @@ import { AdminEvaluatorChangeActivity } from './AdminEvaluatorChangeActivity'
 import { AdminShortExplanationChangeActivity } from './AdminShortExplanationChangeActivity'
 import { AdminExplanationHtmlChangeActivity } from './AdminExplanationHtmlChangeActivity'
 import { AdminVeracityChangeActivity } from './AdminVeracityChangeActivity'
+import { AdminSourceSpeakerChangeActivity } from './AdminSourceSpeakerChangeActivity'
 
 const AdminActivityFragment = gql(`
   fragment AdminActivity on ActivityUnion {
@@ -25,6 +26,9 @@ const AdminActivityFragment = gql(`
     }
     ... on VeracityChangeActivity {
       ...AdminVeracityChangeActivity
+    }
+    ... on SourceSpeakerChangeActivity {
+      ...AdminSourceSpeakerChangeActivity
     }
   }
 `)
@@ -51,6 +55,9 @@ export function AdminActivity(props: {
     }
     case 'VeracityChangeActivity': {
       return <AdminVeracityChangeActivity activity={activity} />
+    }
+    case 'SourceSpeakerChangeActivity': {
+      return <AdminSourceSpeakerChangeActivity activity={activity} />
     }
     default: {
       return null
