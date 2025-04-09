@@ -100,24 +100,31 @@ export function AdminSourceStatements({
                       <div className="flex justify-between gap-2">
                         <h3 className="text-base font-medium text-gray-900 break-words flex-1">
                           <a
-                            href={`/beta/admin/speakers/${statement.sourceSpeaker.speaker.id}`}
+                            href={`/beta/admin/sources/${source.id}/statements/${statement.id}`}
                           >
                             {statement.sourceSpeaker.fullName}
                           </a>
-                        </h3>
-                        <a
-                          href={`/beta/admin/sources/${source.id}/statements/${statement.id}`}
-                          className="inline-flex text-indigo-600 hover:text-indigo-900"
-                          title="Detail výroku"
-                        >
-                          <ArrowTopRightOnSquareIcon className="h-6 w-6 text-gray-400 hover:text-indigo-900 ml-3 cursor-pointer" />
-                        </a>
-                        {isAuthorized(['statements:edit']) && (
-                          <AdminStatementDeleteDialog
-                            statement={statement}
-                            sourceId={source.id}
-                          />
-                        )}
+                        </h3>{' '}
+                        <div className="flex items-center justify-end flex-wrap">
+                          <div className="inline-flex text-gray-400 hover:text-indigo-900">
+                            <a
+                              href={`/beta/admin/sources/${source.id}/statements/${statement.id}`}
+                              className="inline-flex items-end"
+                              title="Detail výroku"
+                            >
+                              <p className="text-sm text-right">
+                                Na detail výroku
+                              </p>
+                              <ArrowTopRightOnSquareIcon className="h-7 w-7 ml-2 cursor-pointer shrink-0" />
+                            </a>
+                          </div>
+                          {isAuthorized(['statements:edit']) && (
+                            <AdminStatementDeleteDialog
+                              statement={statement}
+                              sourceId={source.id}
+                            />
+                          )}
+                        </div>
                       </div>
 
                       {statement.assessment.evaluationStatus ===
@@ -128,9 +135,13 @@ export function AdminSourceStatements({
                         />
                       )}
                       {statement.content ? (
-                        <p className="mt-3 text-sm text-gray-500">
-                          &bdquo;{statement.content}&rdquo;
-                        </p>
+                        <a
+                          href={`/beta/admin/sources/${source.id}/statements/${statement.id}`}
+                        >
+                          <p className="mt-3 text-sm text-gray-500">
+                            &bdquo;{statement.content}&rdquo;
+                          </p>
+                        </a>
                       ) : null}
                     </div>
                   </div>
