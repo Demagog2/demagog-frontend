@@ -15,12 +15,14 @@ interface AdminImageInputProps<T extends FieldValues> {
   control: Control<T>
   name: Path<T>
   required?: boolean
+  redCrossOption?: boolean
 }
 
 export function AdminImageInput<T extends FieldValues>({
   control,
   name,
   required = true,
+  redCrossOption = false,
 }: AdminImageInputProps<T>) {
   const { field } = useController({
     control,
@@ -117,24 +119,26 @@ export function AdminImageInput<T extends FieldValues>({
 
   return (
     <div>
-      <SwitchField
-        htmlFor="addCross"
-        label="Přidat červený křížek přes obrázek"
-      >
-        <Switch
-          id="addCross"
-          name="addCross"
-          checked={addCross}
-          onChange={setAddCross}
-        />
-      </SwitchField>
+      {redCrossOption && (
+        <SwitchField
+          htmlFor="addCross"
+          label="Přidat červený křížek přes obrázek"
+        >
+          <Switch
+            id="addCross"
+            name="addCross"
+            checked={addCross}
+            onChange={setAddCross}
+          />
+        </SwitchField>
+      )}
 
       <div className="mt-6 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
         <div className="text-center">
-          {imagePreview ? (
+          {imagePreview || field.value ? (
             <>
               <img
-                src={imagePreview}
+                src={imagePreview || field.value}
                 alt="Preview"
                 className="max-w-full h-auto rounded-lg"
               />

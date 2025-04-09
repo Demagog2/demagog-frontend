@@ -18,7 +18,8 @@ export class Statement {
     private readonly commentsCount: number,
     private readonly evaluator: Evaluator | null,
     private readonly veracity?: string,
-    private readonly promiseRating?: string
+    private readonly promiseRating?: string,
+    private readonly onceApproved?: boolean
   ) {}
 
   public getId() {
@@ -90,5 +91,9 @@ export class Statement {
 
   public getExplanationCharactersLength() {
     return this.explanationCharactersLength
+  }
+
+  public hasBeenOnceApproved() {
+    return this.onceApproved
   }
 }

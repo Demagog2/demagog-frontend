@@ -48,7 +48,7 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
     [field]
   )
 
-  const handleDrop = useCallback((file: File) => {
+  const handleImageUpload = useCallback((file: File) => {
     const fileReader = new FileReader()
 
     fileReader.onload = () => {
@@ -118,7 +118,7 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
             if (file) {
               field.onChange(file)
 
-              handleDrop(file)
+              handleImageUpload(file)
             }
           }}
         />

@@ -10,6 +10,7 @@ import { redirect } from 'next/navigation'
 import { cookies } from 'next/headers'
 import { ADMIN_BANNER_VISIBILITY_COOKIE } from '@/libs/constants/cookies'
 import { ToastContainer } from 'react-toastify'
+import { getBetaAdminEducationEnabled } from '@/libs/flags'
 
 // Invalidate pages after n seconds
 // See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
@@ -46,7 +47,11 @@ export default async function AdminLayout({
     <html lang="cs" className="h-full">
       <body className="h-full">
         {adminData && (
-          <AdminClientLayout isBannerVisible={isBannerVisible} data={adminData}>
+          <AdminClientLayout
+            isBannerVisible={isBannerVisible}
+            data={adminData}
+            isEducationSectionEnabled={await getBetaAdminEducationEnabled()}
+          >
             {children}
             <ToastContainer theme="light" />
           </AdminClientLayout>

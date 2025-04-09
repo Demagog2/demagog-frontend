@@ -1,17 +1,10 @@
-import { ChatBubbleLeftEllipsisIcon } from '@heroicons/react/20/solid'
 import { gql } from '@/__generated__'
-import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
-import {
-  highlightMentions,
-  newlinesToParagraphsAndBreaks,
-  nicerLinks,
-} from '@/libs/comments/text'
 import { AdminStatementCommentInput } from '../AdminStatementCommentInput'
 import { useMutation, useQuery } from '@apollo/client'
-import { pluralize } from '@/libs/pluralize'
 import { useState } from 'react'
+import { AdminActivity } from './AdminActivity'
 import { takeRight } from 'lodash'
-import { AdminUserAvatar } from '../../users/AdminUserAvatar'
+import { pluralize } from '@/libs/pluralize'
 
 const SHOW_ALL_THRESHOLD = 3
 
@@ -23,16 +16,12 @@ export function AdminStatementComments(props: { statementId: string }) {
       query AdminStatementCommentsQuery($id: Int!) {
         ...AdminStatementCommentInput
         statementV2(id: $id, includeUnpublished: true) {
-          commentsCount
-          comments {
-            id
-            content
-            createdAt
-            user {
-              ...AdminUserAvatar
-              id
-              fullName
-              avatar(size: small)
+          activitiesCount
+          activities {
+            edges {
+              node {
+                ...AdminActivity
+              }
             }
           }
         }
@@ -54,7 +43,7 @@ export function AdminStatementComments(props: { statementId: string }) {
   )
 
   if (loading) {
-    return <div>Nahvrávám&hellip;</div>
+    return <div>Nahrávám&hellip;</div>
   }
 
   const statement = data?.statementV2
@@ -63,20 +52,20 @@ export function AdminStatementComments(props: { statementId: string }) {
     return null
   }
 
-  const comments = showAll
-    ? statement.comments
-    : takeRight(statement.comments, SHOW_ALL_THRESHOLD)
+  const activities = showAll
+    ? statement.activities.edges
+    : takeRight(statement.activities.edges, SHOW_ALL_THRESHOLD)
 
   return (
     <div className="flow-root">
-      {statement.commentsCount > SHOW_ALL_THRESHOLD && (
+      {statement.activitiesCount > SHOW_ALL_THRESHOLD && (
         <>
           {showAll ? (
             <a
               className="text-sm text-indigo-600 cursor-pointer"
               onClick={() => setShowAll(false)}
             >
-              Zobrazit jen poslední {SHOW_ALL_THRESHOLD} komentáře
+              Zobrazit jen poslední {SHOW_ALL_THRESHOLD} aktivity
             </a>
           ) : (
             <a
@@ -85,10 +74,10 @@ export function AdminStatementComments(props: { statementId: string }) {
             >
               Zobrazit 4{' '}
               {pluralize(
-                statement.commentsCount - SHOW_ALL_THRESHOLD,
-                'předchozí komentář',
-                'předchozí komentáře',
-                'předchozích komentářů'
+                statement.activitiesCount - SHOW_ALL_THRESHOLD,
+                'předchozí aktivitu',
+                'předchozí aktivity',
+                'předchozí aktivity'
               )}
             </a>
           )}
@@ -96,73 +85,28 @@ export function AdminStatementComments(props: { statementId: string }) {
       )}
 
       <ul role="list" className="mt-8 -mb-8">
-        {comments.map((activityItem, activityItemIdx) => (
-          <li key={activityItem.id}>
-            <div className="relative pb-8">
-              {activityItemIdx !== comments.length - 1 && (
-                <span
-                  aria-hidden="true"
-                  className="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
-                />
-              )}
+        {activities?.map((activityItem, activityItemIdx: number) => {
+          if (!activityItem?.node) {
+            return null
+          }
 
-              <div className="relative flex items-start space-x-3">
-                <>
-                  <div className="relative">
-                    <AdminUserAvatar
-                      user={activityItem.user}
-                      size="extra-large"
-                    />
+          return (
+            <li key={activityItemIdx}>
+              <div className="relative pb-8">
+                {activityItemIdx !== activities.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
+                  />
+                )}
 
-                    {/* {activityItem.user.avatar && (
-                      <img
-                        alt={activityItem.user.fullName}
-                        src={imagePath(activityItem.user.avatar)}
-                        className="flex size-10 items-center justify-center rounded-full bg-gray-400 ring-8 ring-white"
-                      />
-                    )} */}
-
-                    <span className="absolute -bottom-0.5 -right-1 rounded-tl bg-white px-0.5 py-px">
-                      <ChatBubbleLeftEllipsisIcon
-                        aria-hidden="true"
-                        className="size-5 text-gray-400"
-                      />
-                    </span>
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div>
-                      <div className="text-sm">
-                        <a
-                          href={`/beta/admin/users/${activityItem.user.id}`}
-                          className="font-medium text-gray-900"
-                        >
-                          {activityItem.user.fullName}
-                        </a>
-                      </div>
-                      <time
-                        className="mt-0.5 text-sm text-gray-500"
-                        dateTime={activityItem.createdAt}
-                        title={displayDateTime(activityItem.createdAt)}
-                      >
-                        {displayDateTimeRelative(activityItem.createdAt)}
-                      </time>
-                    </div>
-                    <div className="mt-2 text-sm text-gray-700">
-                      <div
-                        className="admin-comment"
-                        dangerouslySetInnerHTML={{
-                          __html: newlinesToParagraphsAndBreaks(
-                            highlightMentions(nicerLinks(activityItem.content))
-                          ),
-                        }}
-                      />
-                    </div>
-                  </div>
-                </>
+                <div className="relative flex items-start space-x-3">
+                  <AdminActivity activity={activityItem.node} />
+                </div>
               </div>
-            </div>
-          </li>
-        ))}
+            </li>
+          )
+        })}
       </ul>
 
       <AdminStatementCommentInput

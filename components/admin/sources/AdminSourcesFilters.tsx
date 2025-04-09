@@ -58,6 +58,7 @@ void gql(`
         key
         name
       }
+      approvedOnce
     }
   }
 `)
@@ -65,7 +66,7 @@ void gql(`
 const AdminSourcesFilterFragment = gql(`
   fragment AdminSourcesFilters on Source {
     ...SourceStatements
-    id 
+    id
     name
     sourceUrl
     releasedAt
@@ -128,7 +129,7 @@ export function AdminSourcesFilters(props: {
 
   const sourceViewModel = new SourceDetailPresenter(
     source,
-    state ? [state] : []
+    state ? state : []
   ).buildViewModel()
 
   return (

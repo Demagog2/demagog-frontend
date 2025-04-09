@@ -41,6 +41,7 @@ import {
   Bars3Icon,
   Cog6ToothIcon,
   XMarkIcon,
+  AcademicCapIcon,
 } from '@heroicons/react/24/outline'
 import { MagnifyingGlassIcon } from '@heroicons/react/20/solid'
 import { UserMenu } from '@/components/admin/UserMenu'
@@ -117,6 +118,7 @@ const AdminClientLayoutFragment = gql(`
 export default function AdminClientLayout(
   props: PropsWithChildren<{
     isBannerVisible: boolean
+    isEducationSectionEnabled: boolean
     data: FragmentType<typeof AdminClientLayoutFragment>
   }>
 ) {
@@ -126,12 +128,26 @@ export default function AdminClientLayout(
 
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
+  const navigationContent = [
+    ...content,
+    ...(props.isEducationSectionEnabled
+      ? [
+          {
+            name: 'Vzdělání',
+            href: '/beta/admin/education',
+            icon: AcademicCapIcon,
+          },
+        ]
+      : []),
+  ]
+
   return (
     <div>
+      {/* Mobile sidebar */}
       <Dialog
         open={sidebarOpen}
         onClose={setSidebarOpen}
-        className="relative z-50"
+        className="relative z-50 lg:hidden"
       >
         <DialogBackdrop
           transition
@@ -173,7 +189,7 @@ export default function AdminClientLayout(
                       Výstupy
                     </div>
                     <ul role="list" className="-mx-2 space-y-1 mt-2">
-                      {content.map((item) => (
+                      {navigationContent.map((item) => (
                         <li key={item.name}>
                           <a
                             href={item.href}
@@ -258,7 +274,6 @@ export default function AdminClientLayout(
                                 'h-6 w-6 shrink-0'
                               )}
                             />
-
                             {item.name}
                           </a>
                         </li>
@@ -285,19 +300,109 @@ export default function AdminClientLayout(
         </div>
       </Dialog>
 
-      <div>
+      <div className="hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-50 lg:block lg:w-24 lg:bg-white lg:pb-4 lg:flex lg:flex-col">
+        <div className="flex h-16 shrink-0 items-center justify-center">
+          <TitleIcon alt="Demagog.cz Administrace" className="h-9 w-auto" />
+        </div>
+        <div className="flex-1 overflow-y-auto">
+          <nav className="mt-3 mx-2">
+            <ul role="list" className="flex flex-col items-center gap-y-7">
+              <li>
+                <div className="text-xs font-semibold text-gray-400 text-center">
+                  Výstupy
+                </div>
+                <ul role="list" className="-mx-2 mt-2">
+                  {navigationContent.map((item) => (
+                    <li className="w-full" key={item.name}>
+                      <a
+                        href={item.href}
+                        className={classNames(
+                          pathname?.startsWith(item.href)
+                            ? 'text-indigo-600 bg-gray-50'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
+                          'group flex flex-col items-center rounded-md py-2 text-xs font-semibold text-wrap'
+                        )}
+                      >
+                        <item.icon
+                          aria-hidden="true"
+                          className="size-5 shrink-0"
+                        />
+                        <span className="text-center mt-1">{item.name}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+              <li>
+                <div className="text-xs font-semibold text-gray-400 text-center">
+                  Kontext
+                </div>
+                <ul role="list" className="-mx-2 mt-2">
+                  {context.map((item) => (
+                    <li className="w-full" key={item.name}>
+                      <a
+                        href={item.href}
+                        className={classNames(
+                          pathname?.startsWith(item.href)
+                            ? 'text-indigo-600 bg-gray-50'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
+                          'group flex flex-col items-center rounded-md py-2 text-xs font-semibold text-wrap'
+                        )}
+                      >
+                        <item.icon
+                          aria-hidden="true"
+                          className="size-5 shrink-0"
+                        />
+                        <span className="text-center mt-1">{item.name}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+              <li>
+                <div className="text-xs font-semibold text-gray-400 text-center">
+                  O nás
+                </div>
+                <ul role="list" className="-mx-2 mt-2">
+                  {aboutUs.map((item) => (
+                    <li className="w-full" key={item.name}>
+                      <a
+                        href={item.href}
+                        className={classNames(
+                          pathname?.startsWith(item.href)
+                            ? 'text-indigo-600 bg-gray-50'
+                            : 'text-gray-700 hover:bg-gray-50 hover:text-indigo-600',
+                          'group flex flex-col items-center rounded-md py-2 text-xs font-semibold text-wrap'
+                        )}
+                      >
+                        <item.icon
+                          aria-hidden="true"
+                          className="size-5 shrink-0"
+                        />
+                        <span className="text-center mt-1">{item.name}</span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+
+      <div className="lg:pl-24">
         <div className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8">
           <button
             type="button"
             onClick={() => setSidebarOpen(true)}
-            className="-m-2.5 p-2.5 text-gray-700"
+            className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
           >
             <span className="sr-only">Open sidebar</span>
             <Bars3Icon aria-hidden="true" className="h-6 w-6" />
           </button>
 
           {/* Separator */}
-          <div aria-hidden="true" className="h-6 w-px bg-gray-200" />
+          <div aria-hidden="true" className="lg:hidden h-6 w-px bg-gray-200" />
 
           <div className="flex flex-1 gap-x-4 self-stretch lg:gap-x-6">
             <form action="#" method="GET" className="relative flex flex-1">

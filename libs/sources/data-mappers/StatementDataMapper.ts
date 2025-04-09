@@ -24,6 +24,7 @@ export function createStatementFromQuery(
         )
       : null,
     statement.assessment.veracity?.key,
-    statement.assessment.promiseRating?.key
+    statement.assessment.promiseRating?.key,
+    statement.assessment.approvedOnce
   )
 }
