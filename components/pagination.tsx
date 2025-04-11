@@ -22,7 +22,7 @@ export function Pagination({
       const params = new URLSearchParams(searchParams ?? '')
 
       if (value === 1) {
-        return pathname
+        return pathname ?? ''
       }
 
       params.set('page', String(value))
