@@ -1,12 +1,9 @@
 import { gql, FragmentType, useFragment } from '@/__generated__'
 import { InformationCircleIcon } from '@heroicons/react/20/solid'
-import { AdminStatement } from './segments/AdminStatement'
 import React from 'react'
 import { Iframely } from '@/components/site/Iframely'
-import { AdminArticleV2Preview } from './AdminArticlePreview'
-import { AdminArticleQuote } from './segments/AdminArticleQuote'
 import { AdminStatementWithExplanation } from './segments/AdminStatementWithExplanation'
-import { nicerLinksNoTruncate } from '@/libs/comments/text'
+import { AdminRichTextContent } from '../rich-text/AdminRichTextContent'
 
 const AdminArticleContentFragment = gql(`
   fragment AdminArticleContent on Article {
@@ -19,27 +16,7 @@ const AdminArticleContentFragment = gql(`
       segmentType
       textHtml
       content {
-        edges {
-          node {
-            ... on ArticleNode {
-              article {
-                ...AdminArticleV2Preview
-              }
-            }
-            ... on TextNode {
-              text
-            }
-            ... on BlockQuoteNode {
-              ...AdminArticleQuote
-            }
-            ... on StatementNode {
-              statement {
-                ...AdminStatement
-              }
-            }
-          }
-          cursor
-        }
+        ...AdminRichTextContent
       }
       statements(includeUnpublished: true) {
         id
@@ -80,49 +57,7 @@ export function AdminArticleContent(props: {
         <p className="mt-8 text-xl leading-8">{article.perex}</p>
         {article.segments.map((segment) =>
           segment.segmentType === 'text' ? (
-            <div key={segment.id} className="mt-10 article-content">
-              {segment.content.edges?.map((edge) => {
-                if (!edge?.node) {
-                  return null
-                }
-
-                const { node, cursor } = edge
-
-                if (node.__typename === 'TextNode') {
-                  return (
-                    <div
-                      key={cursor}
-                      dangerouslySetInnerHTML={{
-                        __html: nicerLinksNoTruncate(node.text),
-                      }}
-                    />
-                  )
-                }
-
-                if (node.__typename === 'StatementNode' && node.statement) {
-                  return (
-                    <AdminStatement
-                      className="mt-8 bg-gray-200 rounded-2xl"
-                      key={cursor}
-                      statement={node.statement}
-                    />
-                  )
-                }
-
-                if (node.__typename === 'BlockQuoteNode') {
-                  return <AdminArticleQuote key={cursor} node={node} />
-                }
-
-                if (node.__typename === 'ArticleNode' && node.article) {
-                  return (
-                    <AdminArticleV2Preview
-                      key={cursor}
-                      article={node.article}
-                    />
-                  )
-                }
-              })}
-            </div>
+            <AdminRichTextContent key={segment.id} content={segment.content} />
           ) : (
             <div
               key={segment.id}

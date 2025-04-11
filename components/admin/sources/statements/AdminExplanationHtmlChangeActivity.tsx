@@ -7,12 +7,22 @@ import {
   AdminExplanationHtmlChangeDialog,
   ForwardedProps,
 } from '../../layout/dialogs/AdminExplanationHtmlChangeDialog'
+import { AdminRichTextContentDiffed } from '../../rich-text/AdminRichTextContentDiffed'
 
 const AdminExplanationHtmlChangeActivityFragment = gql(`
     fragment AdminExplanationHtmlChangeActivity on ExplanationHtmlChangeActivity {
-      createdAt
+      updatedAt
       oldExplanationHtml
       newExplanationHtml
+
+      newExplanationHtmlContent {
+        ...AdminRichTextContentDiffed
+      }
+
+      oldExplanationHtmlContent {
+        ...AdminRichTextContentDiffed
+      }
+
       user {
          ...AdminUserAvatar
         id
@@ -56,17 +66,29 @@ export function AdminExplanationHtmlChangeActivity(props: {
           <span className="font-medium text-gray-900">odůvodnění</span>{' '}
           <time
             className="mt-0.5 text-sm text-gray-500"
-            dateTime={activityItem.createdAt}
-            title={displayDateTime(activityItem.createdAt ?? '')}
+            dateTime={activityItem.updatedAt}
+            title={displayDateTime(activityItem.updatedAt ?? '')}
           >
-            {displayDateTimeRelative(activityItem.createdAt ?? '')}
+            {displayDateTimeRelative(activityItem.updatedAt ?? '')}
           </time>
         </div>
       </div>
       <AdminExplanationHtmlChangeDialog
         ref={dialogRef}
-        oldExplanation={activityItem.oldExplanationHtml ?? ''}
-        newExplanation={activityItem.newExplanationHtml ?? ''}
+        oldExplanation={
+          <AdminRichTextContentDiffed
+            mode="old"
+            newContent={activityItem.newExplanationHtmlContent}
+            oldContent={activityItem.oldExplanationHtmlContent}
+          />
+        }
+        newExplanation={
+          <AdminRichTextContentDiffed
+            mode="new"
+            newContent={activityItem.newExplanationHtmlContent}
+            oldContent={activityItem.oldExplanationHtmlContent}
+          />
+        }
       />
     </>
   )
