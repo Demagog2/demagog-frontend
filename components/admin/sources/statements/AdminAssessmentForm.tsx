@@ -42,7 +42,7 @@ import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminExpertsField } from './AdminExpertsList'
 import { AdminEvaluationStatusControl } from './controls/AdminEvaluationStatusControl'
 import { AdminSourceStatementStep } from '../AdminSourceStatementStep'
-import { AdminStatementComments } from './AdminStatementComments'
+import { AdminStatementActivities } from './AdminStatementActivities'
 import { useQuery } from '@apollo/client'
 import { pluralize } from '@/libs/pluralize'
 import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
@@ -907,7 +907,7 @@ function AdminAssessmentForm(props: {
             Aktivita
           </div>
 
-          <AdminStatementComments statementId={statement.id} />
+          <AdminStatementActivities statementId={statement.id} />
         </AdminFormSidebar>
       </AdminFormContent>
     </form>

@@ -3,21 +3,23 @@ import { AdminStatementCommentInput } from '../AdminStatementCommentInput'
 import { useMutation, useQuery } from '@apollo/client'
 import { useState } from 'react'
 import { AdminActivity } from './AdminActivity'
-import { takeRight } from 'lodash'
+import { reverse, takeRight } from 'lodash'
 import { pluralize } from '@/libs/pluralize'
+import { ActivityTypeEnum } from '@/__generated__/graphql'
 
 const SHOW_ALL_THRESHOLD = 3
 
-export function AdminStatementComments(props: { statementId: string }) {
+export function AdminStatementActivities(props: { statementId: string }) {
   const [showAll, setShowAll] = useState(false)
+  const [commentsOnly, setCommentsOnly] = useState(false)
 
   const { data, refetch, loading } = useQuery(
     gql(`
-      query AdminStatementCommentsQuery($id: Int!) {
+      query AdminStatementCommentsQuery($id: Int!, $filter: ActivityFilterInput) {
         ...AdminStatementCommentInput
         statementV2(id: $id, includeUnpublished: true) {
-          activitiesCount
-          activities {
+          activitiesCount(filter: $filter)
+          activities(first: 100, filter: $filter) {
             edges {
               node {
                 ...AdminActivity
@@ -27,7 +29,14 @@ export function AdminStatementComments(props: { statementId: string }) {
         }
       }
     `),
-    { variables: { id: parseInt(props.statementId, 10) } }
+    {
+      variables: {
+        id: parseInt(props.statementId, 10),
+        filter: commentsOnly
+          ? { activityType: ActivityTypeEnum.CommentCreated }
+          : {},
+      },
+    }
   )
 
   const [createComment, { loading: isPending }] = useMutation(
@@ -52,37 +61,48 @@ export function AdminStatementComments(props: { statementId: string }) {
     return null
   }
 
+  const activitiesData = reverse([...(statement.activities.edges || [])])
+
   const activities = showAll
-    ? statement.activities.edges
-    : takeRight(statement.activities.edges, SHOW_ALL_THRESHOLD)
+    ? activitiesData
+    : takeRight(activitiesData, SHOW_ALL_THRESHOLD)
 
   return (
     <div className="flow-root">
-      {statement.activitiesCount > SHOW_ALL_THRESHOLD && (
-        <>
-          {showAll ? (
-            <a
-              className="text-sm text-indigo-600 cursor-pointer"
-              onClick={() => setShowAll(false)}
-            >
-              Zobrazit jen poslední {SHOW_ALL_THRESHOLD} aktivity
-            </a>
-          ) : (
-            <a
-              className="text-sm text-indigo-600 cursor-pointer"
-              onClick={() => setShowAll(true)}
-            >
-              Zobrazit 4{' '}
-              {pluralize(
-                statement.activitiesCount - SHOW_ALL_THRESHOLD,
-                'předchozí aktivitu',
-                'předchozí aktivity',
-                'předchozí aktivity'
-              )}
-            </a>
-          )}
-        </>
-      )}
+      <div className="flex flex-col gap-3">
+        {statement.activitiesCount > SHOW_ALL_THRESHOLD && (
+          <>
+            {showAll ? (
+              <a
+                className="text-sm text-indigo-600 cursor-pointer"
+                onClick={() => setShowAll(false)}
+              >
+                Zobrazit jen poslední {SHOW_ALL_THRESHOLD}{' '}
+                {commentsOnly ? 'komentáře' : 'aktivity'}
+              </a>
+            ) : (
+              <a
+                className="text-sm text-indigo-600 cursor-pointer"
+                onClick={() => setShowAll(true)}
+              >
+                Zobrazit {statement.activitiesCount - SHOW_ALL_THRESHOLD}{' '}
+                {pluralize(
+                  statement.activitiesCount - SHOW_ALL_THRESHOLD,
+                  commentsOnly ? 'předchozí komentář' : 'předchozí aktivitu',
+                  commentsOnly ? 'předchozí komentáře' : 'předchozí aktivity',
+                  commentsOnly ? 'předchozích komentářů' : 'předchozích aktivit'
+                )}
+              </a>
+            )}
+          </>
+        )}
+        <button
+          onClick={() => setCommentsOnly(!commentsOnly)}
+          className="text-sm px-3 py-1 rounded-md hover:text-indigo-700 bg-gray-100 text-gray-700 max-w-fit"
+        >
+          {commentsOnly ? 'Všechny aktivity' : 'Pouze komentáře'}
+        </button>
+      </div>
 
       <ul role="list" className="mt-8 -mb-8">
         {activities?.map((activityItem, activityItemIdx: number) => {

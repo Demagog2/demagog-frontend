@@ -10,7 +10,7 @@ import {
 
 const AdminShortExplanationChangeActivityFragment = gql(`
     fragment AdminShortExplanationChangeActivity on ShortExplanationChangeActivity {
-      createdAt
+      updatedAt
       oldExplanation
       newExplanation
       user {
@@ -56,10 +56,10 @@ export function AdminShortExplanationChangeActivity(props: {
           <span className="font-medium text-gray-900">zkrácené odůvodnění</span>{' '}
           <time
             className="mt-0.5 text-sm text-gray-500"
-            dateTime={activityItem.createdAt}
-            title={displayDateTime(activityItem.createdAt ?? '')}
+            dateTime={activityItem.updatedAt ?? ''}
+            title={displayDateTime(activityItem.updatedAt ?? '')}
           >
-            {displayDateTimeRelative(activityItem.createdAt ?? '')}
+            {displayDateTimeRelative(activityItem.updatedAt ?? '')}
           </time>
         </div>
       </div>
