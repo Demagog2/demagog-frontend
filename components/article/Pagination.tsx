@@ -12,6 +12,9 @@ export const PaginationFragment = gql(`
     }
 `)
 
+/**
+ * @deprecated Use `NumericalPagination` instead.
+ */
 export function Pagination(props: {
   pageInfo: FragmentType<typeof PaginationFragment>
 }) {
