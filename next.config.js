@@ -9,6 +9,7 @@ const nextConfig = {
         // and before all files including _next/public files which
         // allows overriding page files
         { source: '/diskuze/:slug', destination: '/articles/:slug' },
+        { source: '/diskuze', destination: '/articles' },
         { source: '/o-nas', destination: '/about-us' },
         { source: '/politici/:id', destination: '/speakers/:id' },
         { source: '/sliby/:slug', destination: '/promises/:slug' },

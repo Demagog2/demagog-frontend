@@ -33,7 +33,7 @@ export default function NavSearch(props: LinkProps) {
         className="menu-link d-flex align-items-center text-white text-none state-hover-color-secondary min-h-40px"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span className="me-2">{props.title}</span>
+        <span className="me-2 d-xl-none d-xxl-inline">{props.title}</span>
         <SearchIcon />
       </a>
       <div className={`dropmenu ${isOpen ? 'open' : ''}`}>{props.children}</div>
