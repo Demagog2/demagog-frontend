@@ -3,31 +3,34 @@ import { gql } from '@/__generated__'
 import { query } from '@/libs/apollo-client'
 import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
 import { PropsWithSearchParams } from '@/libs/params'
-import { parsePage } from '@/libs/pagination'
+import { fromPageToCursor, parsePage } from '@/libs/pagination'
 import { Metadata } from 'next'
 import {
   getCanonicalMetadata,
   getMetadataTitle,
   getRobotsMetadata,
 } from '@/libs/metadata'
-import { getStringParam } from '@/libs/query-params'
-import { buildGraphQLVariables } from '@/libs/pagination'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
+import { NumericalPagination } from '@/components/article/NumericalPagination'
 
 export async function generateMetadata({
   searchParams,
 }: PropsWithSearchParams): Promise<Metadata> {
   const page = parsePage(searchParams.page)
+  if (searchParams.page === '1') {
+    redirect('/diskuze')
+  }
   return {
-    title: getMetadataTitle('Přehled všech diskuzí'),
+    title: getMetadataTitle(
+      'Přehled všech diskuzí' + (page > 1 ? ` - strana ${page}` : '')
+    ),
     ...getRobotsMetadata(),
     ...getCanonicalMetadata(page === 1 ? '/diskuze' : `/diskuze?page=${page}`),
   }
 }
 
 export default async function Articles(props: PropsWithSearchParams) {
-  const after = getStringParam(props.searchParams.after)
-  const before = getStringParam(props.searchParams.before)
+  const page = parsePage(props.searchParams.page)
 
   const { data } = await query({
     query: gql(`
@@ -44,16 +47,16 @@ export default async function Articles(props: PropsWithSearchParams) {
           }
           pageInfo {
             hasPreviousPage
-            ...PaginationFragment
+            ...NumericalPagination
           }
         }
         ...MostSearchedSpeakers
       }
     `),
-    variables: { ...buildGraphQLVariables({ before, after, pageSize: 10 }) },
+    variables: fromPageToCursor(page, 10),
   })
 
-  if (!data.homepageArticlesV3) {
+  if (!data.homepageArticlesV3 || data.homepageArticlesV3.nodes?.length === 0) {
     notFound()
   }
 
@@ -70,7 +73,10 @@ export default async function Articles(props: PropsWithSearchParams) {
               return [<ArticleV2Preview article={article} key={article?.id} />]
             })}
 
-            <Pagination pageInfo={data.homepageArticlesV3.pageInfo} />
+            <NumericalPagination
+              page={page}
+              pageInfo={data.homepageArticlesV3.pageInfo}
+            />
           </div>
         </div>
       </div>
