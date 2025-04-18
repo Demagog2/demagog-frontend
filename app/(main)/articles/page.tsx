@@ -1,4 +1,3 @@
-import { Pagination } from '@/components/article/Pagination'
 import { gql } from '@/__generated__'
 import { query } from '@/libs/apollo-client'
 import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
