@@ -250,8 +250,6 @@ export function AdminStatementFromTranscriptForm(props: {
               <p className="text-sm  text-gray-500">
                 Bude přidána jako první komentář v diskuzi k výroku.
               </p>
-
-              <ErrorMessage message={errors.statementType?.message} />
             </Field>
           </Fieldset>
         </div>
