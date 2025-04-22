@@ -78,6 +78,7 @@ export const createStatement = new CreateActionBuilder<
       },
       sourceId: data.sourceId,
       statementType: data.statementType as StatementType,
+      firstCommentContent: data.firstCommentContent,
 
       excerptedAt: new Date().toISOString(),
       important: false,
@@ -237,7 +238,7 @@ const adminBulkPublishStatementsMutation = gql(`
       }
     }
   }
-`);
+`)
 
 export async function bulkPublishStatements(sourceId: string) {
   const { data } = await serverMutation({

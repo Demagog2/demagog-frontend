@@ -99,6 +99,7 @@ export function AdminStatementFromTranscriptForm(props: {
             },
             sourceId: data.sourceId,
             statementType: StatementType.Factual,
+            firstCommentContent: data.firstCommentContent,
 
             excerptedAt: new Date().toISOString(),
             important: false,
