@@ -50,12 +50,13 @@ export const createUser = new CreateActionBuilder<
   typeof adminCreateUserMutation
 >(userSchema)
   .withMutation(adminCreateUserMutation, (data) => {
-    const { emailNotifications = false, ...rest } = data
+    const { emailNotifications = false, userPublic = false, ...rest } = data
 
     return {
       input: {
         ...rest,
         emailNotifications,
+        userPublic,
       },
     }
   })
@@ -85,13 +86,14 @@ export const updateUser = new UpdateActionBuilder<
   typeof adminUpdateUserMutation
 >(userSchema)
   .withMutation(adminUpdateUserMutation, (id, data) => {
-    const { emailNotifications = false, ...rest } = data
+    const { emailNotifications = false, userPublic = false, ...rest } = data
 
     return {
       id: Number(id),
       input: {
         ...rest,
         emailNotifications,
+        userPublic,
       },
     }
   })
