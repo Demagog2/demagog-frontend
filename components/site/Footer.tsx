@@ -122,11 +122,43 @@ export default function Footer() {
                   </h6>
                 </div>
               </div>
+              <div className="d-flex">
+                <div className="mw-100px w-100 me-5 mb-5">
+                  <a
+                    href="https://cedmohub.eu/cs/"
+                    title="CEDMO"
+                    target="_blank"
+                  >
+                    <img
+                      className="h-80px"
+                      src="/images/cedmo.jpg"
+                      alt="CEDMO"
+                    />
+                  </a>
+                </div>
+              </div>
+              <div className="d-flex">
+                <div className="mw-100px w-100 me-5 mb-5">
+                  <a title="EFCSN" href="https://efcsn.com/" target="_blank">
+                    <img
+                      className="mw-100 w-100"
+                      src="/images/badge-verified-member.png"
+                      alt="EFCSN"
+                    />
+                  </a>
+                </div>
+                <div>
+                  <h6 className="small">
+                    Demagog.cz je členem evropské sítě fact-checkingových
+                    organizací EFCSN.
+                  </h6>
+                </div>
+              </div>
             </div>
             <div className="col col-12 col-md-6 col-lg-12">
               <div className="row g-5">
                 <div className="col col-12 col-lg-4">
-                  <h6 className="mb-2">Projekt Demagog.cz podporují:</h6>
+                  <h6 className="mb-4">Projekt Demagog.cz podporují:</h6>
                   <div className="d-flex flex-wrap align-items-center">
                     <a
                       className="me-4 mb-4"
@@ -167,7 +199,7 @@ export default function Footer() {
                   </div>
                 </div>
                 <div className="col col-12 col-lg-4">
-                  <h6 className="mb-2">Projekt Demagog.cz spolupracuje s:</h6>
+                  <h6 className="mb-4">Projekt Demagog.cz spolupracuje s:</h6>
                   <div className="d-flex flex-wrap align-items-center">
                     <a
                       className="me-4 mb-4"
@@ -199,31 +231,6 @@ export default function Footer() {
                         loading="lazy"
                         className="h-50px"
                         src="/images/elvai.svg"
-                      />
-                    </a>
-                  </div>
-                </div>
-                <div className="col col-12 col-lg-4">
-                  <div className="mt-4">
-                    <a
-                      className="me-4 mb-4"
-                      href="https://cedmohub.eu/cs/"
-                      title="CEDMO"
-                      target="_blank"
-                    >
-                      <img
-                        className="h-80px"
-                        src="/images/cedmo.jpg"
-                        alt="CEDMO"
-                      />
-                    </a>
-                  </div>
-                  <div className="mt-4">
-                    <a className="me-4" title="EFCSN" href="https://efcsn.com/">
-                      <img
-                        className="h-80px"
-                        src="/images/badge-verified-member.png"
-                        alt="EFCSN"
                       />
                     </a>
                   </div>
