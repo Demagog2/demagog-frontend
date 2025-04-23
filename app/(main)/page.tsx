@@ -1,54 +1,38 @@
 import { Metadata } from 'next'
 import { gql } from '@/__generated__'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { HomepageFirstPage } from '@/components/homepage/HomepageFirstPage'
 import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
 import { PropsWithSearchParams } from '@/libs/params'
 import {
   getCanonicalMetadata,
-  getCanonicalRelativeUrl,
   getMetadataTitle,
   getRobotsMetadata,
 } from '@/libs/metadata'
-import { getStringParam } from '@/libs/query-params'
 import { query } from '@/libs/apollo-client'
-import { buildGraphQLVariables } from '@/libs/pagination'
+import { fromPageToCursor, parsePage } from '@/libs/pagination'
+import { NumericalPagination } from '@/components/article/NumericalPagination'
 
 export async function generateMetadata(
   props: PropsWithSearchParams
 ): Promise<Metadata> {
-  const after = getStringParam(props.searchParams.after)
-  const before = getStringParam(props.searchParams.before)
+  const page = parsePage(props.searchParams.page)
 
-  const {
-    data: {
-      homepageArticlesV3: { pageInfo },
-    },
-  } = await query({
-    query: gql(`
-       query homepageMetadata($first: Int, $last: Int, $after: String, $before: String) {
-        homepageArticlesV3(first: $first, last: $last, after: $after, before: $before) {
-          pageInfo {
-            hasPreviousPage
-          }
-        }
-      }
-    `),
-    variables: { ...buildGraphQLVariables({ before, after, pageSize: 10 }) },
-  })
+  if (props.searchParams.page === '1') {
+    redirect('')
+  }
 
   return {
-    title: getMetadataTitle('Ověřujeme pro Vás'),
-    ...getRobotsMetadata(),
-    ...getCanonicalMetadata(
-      getCanonicalRelativeUrl('', pageInfo.hasPreviousPage, after, before)
+    title: getMetadataTitle(
+      'Ověřujeme pro Vás' + (page > 1 ? ` - strana ${page}` : '')
     ),
+    ...getRobotsMetadata(),
+    ...getCanonicalMetadata(page === 1 ? '' : `/?page=${page}`),
   }
 }
 
 export default async function Homepage(props: PropsWithSearchParams) {
-  const after = getStringParam(props.searchParams.after)
-  const before = getStringParam(props.searchParams.before)
+  const page = parsePage(props.searchParams.page)
 
   const { data } = await query({
     query: gql(`
@@ -65,22 +49,30 @@ export default async function Homepage(props: PropsWithSearchParams) {
           }
           pageInfo {
             hasPreviousPage
-            ...PaginationFragment
+            ...NumericalPagination
           }
         }
         ...MostSearchedSpeakers
       }
     `),
-    variables: { ...buildGraphQLVariables({ before, after, pageSize: 10 }) },
+    variables: fromPageToCursor(page, 10),
   })
 
-  if (!data.homepageArticlesV3) {
+  if (!data.homepageArticlesV3 || data.homepageArticlesV3.nodes?.length === 0) {
     notFound()
   }
 
-  return !data.homepageArticlesV3.pageInfo.hasPreviousPage ? (
-    <HomepageFirstPage data={data} />
-  ) : (
-    <HomepageNextPage data={data} />
+  return (
+    <>
+      {!data.homepageArticlesV3.pageInfo.hasPreviousPage ? (
+        <HomepageFirstPage data={data} />
+      ) : (
+        <HomepageNextPage data={data} />
+      )}
+      <NumericalPagination
+        pageInfo={data.homepageArticlesV3.pageInfo}
+        page={page}
+      />
+    </>
   )
 }
