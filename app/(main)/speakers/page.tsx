@@ -15,6 +15,7 @@ import {
   getMetadataTitle,
   getRobotsMetadata,
 } from '@/libs/metadata'
+import { redirect } from 'next/navigation'
 
 const PAGE_SIZE = 24
 
@@ -22,6 +23,13 @@ export async function generateMetadata({
   searchParams,
 }: PropsWithSearchParams): Promise<Metadata> {
   const page = parsePage(searchParams.page)
+
+  if (searchParams.page === '1') {
+    redirect('/vypis-recniku')
+  }
+
+  console.log('searchParams.page', searchParams.page)
+  console.log('page', page)
 
   return {
     title: getMetadataTitle('Přehled politiků a političek'),
