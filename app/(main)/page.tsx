@@ -1,39 +1,22 @@
 import { Metadata } from 'next'
 import { gql } from '@/__generated__'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
 import { HomepageFirstPage } from '@/components/homepage/HomepageFirstPage'
-import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
-import { PropsWithSearchParams } from '@/libs/params'
 import {
   getCanonicalMetadata,
   getMetadataTitle,
   getRobotsMetadata,
 } from '@/libs/metadata'
 import { query } from '@/libs/apollo-client'
-import { fromPageToCursor, parsePage } from '@/libs/pagination'
-import { NumericalPagination } from '@/components/article/NumericalPagination'
+import { buildGraphQLVariables } from '@/libs/pagination'
 
-export async function generateMetadata(
-  props: PropsWithSearchParams
-): Promise<Metadata> {
-  const page = parsePage(props.searchParams.page)
-
-  if (props.searchParams.page === '1') {
-    redirect('')
-  }
-
-  return {
-    title: getMetadataTitle(
-      'Ověřujeme pro Vás' + (page > 1 ? ` - strana ${page}` : '')
-    ),
-    ...getRobotsMetadata(),
-    ...getCanonicalMetadata(page === 1 ? '' : `/?page=${page}`),
-  }
+export const metadata: Metadata = {
+  title: getMetadataTitle('Ověřujeme pro Vás'),
+  ...getRobotsMetadata(),
+  ...getCanonicalMetadata('/'),
 }
 
-export default async function Homepage(props: PropsWithSearchParams) {
-  const page = parsePage(props.searchParams.page)
-
+export default async function Homepage() {
   const { data } = await query({
     query: gql(`
       query homepageData($first: Int, $last: Int, $after: String, $before: String) {
@@ -47,15 +30,11 @@ export default async function Homepage(props: PropsWithSearchParams) {
             }
             ...ArticleV2PreviewFragment
           }
-          pageInfo {
-            hasPreviousPage
-            ...NumericalPagination
-          }
         }
         ...MostSearchedSpeakers
       }
     `),
-    variables: fromPageToCursor(page, 10),
+    variables: { ...buildGraphQLVariables({ pageSize: 6 }) },
   })
 
   if (!data.homepageArticlesV3 || data.homepageArticlesV3.nodes?.length === 0) {
@@ -64,15 +43,7 @@ export default async function Homepage(props: PropsWithSearchParams) {
 
   return (
     <>
-      {!data.homepageArticlesV3.pageInfo.hasPreviousPage ? (
-        <HomepageFirstPage data={data} />
-      ) : (
-        <HomepageNextPage data={data} />
-      )}
-      <NumericalPagination
-        pageInfo={data.homepageArticlesV3.pageInfo}
-        page={page}
-      />
+      <HomepageFirstPage data={data} />
     </>
   )
 }
