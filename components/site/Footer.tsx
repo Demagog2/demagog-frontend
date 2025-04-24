@@ -91,13 +91,14 @@ export default function Footer() {
                  d-lg-none"
                 >
                   <div className="d-flex">
-                    <div className="mw-100px w-100 me-5 mb-5">
+                    <div className="me-5 mb-5">
                       <a
                         href="https://ifcncodeofprinciples.poynter.org/profile/demagogcz"
                         target="_blank"
                       >
                         <img
-                          className="mw-100 w-100"
+                          width={100}
+                          height={123}
                           src="https://cdn.ifcncodeofprinciples.poynter.org/storage/badges/36C9D629-AED1-C760-8B88-9FD45DD9156F.png"
                           alt="Demagog.cz is IFCN signatory"
                         />
@@ -111,13 +112,14 @@ export default function Footer() {
                     </div>
                   </div>
                   <div className="d-flex">
-                    <div className="mw-100px w-100 me-5 mb-5">
+                    <div className="me-5 mb-5">
                       <a
                         href="https://fb.me/Third-Party-Fact-Checking"
                         target="_blank"
                       >
                         <img
-                          className="mw-100 w-100"
+                          width={100}
+                          height={125}
                           src="/images/Digital_Badge_Fact-Checkers_FOR_DARK_BACKGROUND.png"
                           alt="Demagog.cz is IFCN signatory"
                         />
@@ -131,14 +133,15 @@ export default function Footer() {
                     </div>
                   </div>
                   <div className="d-flex">
-                    <div className="mw-100px w-100 me-5 mb-5">
+                    <div className="me-5 mb-5">
                       <a
                         href="https://cedmohub.eu/cs/"
                         title="CEDMO"
                         target="_blank"
                       >
                         <img
-                          className="h-80px"
+                          width={250}
+                          height={80}
                           src="/images/cedmo.jpg"
                           alt="CEDMO"
                         />
@@ -146,14 +149,15 @@ export default function Footer() {
                     </div>
                   </div>
                   <div className="d-flex">
-                    <div className="mw-100px w-100 me-5 mb-5">
+                    <div className="me-5 mb-5">
                       <a
                         title="EFCSN"
                         href="https://efcsn.com/"
                         target="_blank"
                       >
                         <img
-                          className="mw-100 w-100"
+                          width={100}
+                          height={100}
                           src="/images/badge-verified-member.png"
                           alt="EFCSN"
                         />
@@ -261,14 +265,14 @@ export default function Footer() {
             {/** BADGES - Desktop only */}
             <div className="col-12 col-lg-4 d-none d-lg-block">
               <div className="d-flex">
-                <div className="mw-100px w-100 me-5 mb-5">
+                <div className="me-5 mb-5">
                   <a
                     href="https://ifcncodeofprinciples.poynter.org/profile/demagogcz"
                     target="_blank"
-                    rel="noopener"
                   >
                     <img
-                      className="mw-100 w-100"
+                      width={100}
+                      height={123}
                       src="https://cdn.ifcncodeofprinciples.poynter.org/storage/badges/36C9D629-AED1-C760-8B88-9FD45DD9156F.png"
                       alt="Demagog.cz is IFCN signatory"
                     />
@@ -282,14 +286,14 @@ export default function Footer() {
                 </div>
               </div>
               <div className="d-flex">
-                <div className="mw-100px w-100 me-5 mb-5">
+                <div className="me-5 mb-5">
                   <a
                     href="https://fb.me/Third-Party-Fact-Checking"
                     target="_blank"
-                    rel="noopener"
                   >
                     <img
-                      className="mw-100 w-100"
+                      width={100}
+                      height={125}
                       src="/images/Digital_Badge_Fact-Checkers_FOR_DARK_BACKGROUND.png"
                       alt="Demagog.cz is IFCN signatory"
                     />
@@ -303,15 +307,15 @@ export default function Footer() {
                 </div>
               </div>
               <div className="d-flex">
-                <div className="mw-100px w-100 me-5 mb-5">
+                <div className="me-5 mb-5">
                   <a
                     href="https://cedmohub.eu/cs/"
                     title="CEDMO"
                     target="_blank"
-                    rel="noopener"
                   >
                     <img
-                      className="h-80px"
+                      width={250}
+                      height={80}
                       src="/images/cedmo.jpg"
                       alt="CEDMO"
                     />
@@ -319,15 +323,11 @@ export default function Footer() {
                 </div>
               </div>
               <div className="d-flex">
-                <div className="mw-100px w-100 me-5 mb-5">
-                  <a
-                    title="EFCSN"
-                    href="https://efcsn.com/"
-                    target="_blank"
-                    rel="noopener"
-                  >
+                <div className="me-5 mb-5">
+                  <a title="EFCSN" href="https://efcsn.com/" target="_blank">
                     <img
-                      className="mw-100 w-100"
+                      width={100}
+                      height={100}
                       src="/images/badge-verified-member.png"
                       alt="EFCSN"
                     />
