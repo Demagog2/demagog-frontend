@@ -314,3 +314,22 @@
     text-underline-offset: 3px;
   }
 }
+
+.share-icon svg {
+  width: 18px;
+  height: 18px;
+  fill: rgb(173, 181, 189);
+  transition: fill 0.3s ease;
+}
+
+.share-icon.facebook:hover svg {
+  fill: #0866ff;
+}
+
+.share-icon.x:hover svg {
+  fill: #000000;
+}
+
+.link-icon:hover {
+  color: #25ad23;
+}
