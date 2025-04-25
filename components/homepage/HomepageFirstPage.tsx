@@ -1,7 +1,6 @@
 import HomeSidebar from '@/components/site/HomeSidebar'
 import DonateWidget from '@/components/site/DonateWidget'
 import { MostSearchedSpeakers } from '@/components/speaker/MostSearchedSpeakers'
-import { Pagination } from '@/components/article/Pagination'
 import { ArticleV2Preview } from '@/components/article/ArticleV2Preview'
 import { drop, take } from 'lodash'
 import { HomepageDataQuery } from '@/__generated__/graphql'
@@ -50,8 +49,14 @@ export function HomepageFirstPage({ data }: { data: HomepageDataQuery }) {
 
           return [<ArticleV2Preview article={article} key={article?.id} />]
         })}
-
-        <Pagination pageInfo={data.homepageArticlesV3.pageInfo} />
+        <div className="d-flex">
+          <a
+            href={'/diskuze'}
+            className="btn h-50px fs-6 me-2 mb-2 px-8 w-auto"
+          >
+            <span>Zobrazit všechny články</span>
+          </a>
+        </div>
       </div>
 
       <div className="bg-light text-dark p-5 p-lg-10 rounded-l mt-10">
