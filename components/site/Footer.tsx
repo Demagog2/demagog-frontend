@@ -1,5 +1,6 @@
 import Newsletter from './Newsletter'
 import Social from './Social'
+import ElvaiIcon from '../../assets/icons/elvai.svg'
 
 export default function Footer() {
   return (
@@ -184,7 +185,8 @@ export default function Footer() {
                           target="_blank"
                         >
                           <img
-                            className="h-50px"
+                            width={120}
+                            height={50}
                             src="/images/nfnz_light.svg"
                             alt="Nadační fond nezávislé žurnalistiky"
                           />
@@ -196,7 +198,8 @@ export default function Footer() {
                           target="_blank"
                         >
                           <img
-                            className="h-50px"
+                            width={120}
+                            height={50}
                             src="/images/npo.svg"
                             alt="Národní plán obnovy"
                           />
@@ -208,7 +211,8 @@ export default function Footer() {
                           target="_blank"
                         >
                           <img
-                            className="h-50px"
+                            width={186}
+                            height={50}
                             src="/images/eu.svg"
                             alt="Next Generation EU"
                           />
@@ -227,7 +231,8 @@ export default function Footer() {
                           target="_blank"
                         >
                           <img
-                            className="h-50px"
+                            width={96}
+                            height={50}
                             src="/images/little_greta_white.svg"
                             alt="Little Greta"
                           />
@@ -239,7 +244,8 @@ export default function Footer() {
                           target="_blank"
                         >
                           <img
-                            className="h-50px"
+                            width={150}
+                            height={50}
                             src="/images/newton_media_light.svg"
                             alt="Newton Media"
                           />
@@ -249,12 +255,7 @@ export default function Footer() {
                           href="https://elv.ai/"
                           target="_blank"
                         >
-                          <img
-                            alt="Elv.ai"
-                            loading="lazy"
-                            className="h-50px"
-                            src="/images/elvai.svg"
-                          />
+                          <ElvaiIcon width={186} height={50} />
                         </a>
                       </div>
                     </div>
