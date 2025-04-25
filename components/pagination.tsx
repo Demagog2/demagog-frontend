@@ -20,6 +20,11 @@ export function Pagination({
   const createHref = useCallback(
     (value: number) => {
       const params = new URLSearchParams(searchParams ?? '')
+
+      if (value === 1) {
+        return pathname ?? ''
+      }
+
       params.set('page', String(value))
 
       return `${pathname}?${params.toString()}`

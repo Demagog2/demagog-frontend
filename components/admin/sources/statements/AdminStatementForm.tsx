@@ -193,12 +193,10 @@ export function AdminStatementForm(props: {
 
               <Textarea
                 id="firstCommentContent"
-                {...register('firstCommentContent', { required: true })}
+                {...register('firstCommentContent')}
                 rows={5}
                 placeholder="Vložte či vepište znění..."
               />
-
-              <ErrorMessage message={errors.statementType?.message} />
             </Field>
           </Fieldset>
         </div>

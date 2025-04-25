@@ -27,7 +27,7 @@ import {
   getRobotsMetadata,
 } from '@/libs/metadata'
 import { pluralize } from '@/libs/pluralize'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { imagePath } from '@/libs/images/path'
@@ -38,6 +38,10 @@ export async function generateMetadata({
   params,
   searchParams,
 }: PropsWithSearchParams<{ params: { slug: string } }>): Promise<Metadata> {
+  if (searchParams.page === '1') {
+    redirect(`/politici/${params.slug}`)
+  }
+
   const page = parsePage(searchParams.page)
 
   const {

@@ -180,31 +180,33 @@ export function StatementHeader(
                       isEmbedded,
                   })}
                 >
-                  <blockquote
-                    className={classNames(
-                      'p-3 bg-dark text-white rounded-m  position-relative min-h-50px',
-                      {
-                        'mb-2': !isVertical,
-                        'mt-4 mb-4': isVertical,
-                        'fs-8 fs-md-7': isEmbedded,
-                        'fs-6': !isEmbedded,
-                      }
-                    )}
-                  >
-                    <span
-                      className={classNames('popover-arrow', {
-                        'arrow-north-statement-item': isVertical,
-                        'arrow-east': !isVertical,
-                      })}
-                    ></span>
-                    <span
-                      className={classNames('position-relative', {
-                        'fs-8 fs-md-7': isEmbedded,
-                        'fs-6': !isEmbedded,
-                      })}
-                      dangerouslySetInnerHTML={{ __html: statement.content }}
-                    ></span>
-                  </blockquote>
+                  <a href={'/vyrok/' + statement.id}>
+                    <blockquote
+                      className={classNames(
+                        'p-3 bg-dark text-white rounded-m  position-relative min-h-50px',
+                        {
+                          'mb-2': !isVertical,
+                          'mt-4 mb-4': isVertical,
+                          'fs-8 fs-md-7': isEmbedded,
+                          'fs-6': !isEmbedded,
+                        }
+                      )}
+                    >
+                      <span
+                        className={classNames('popover-arrow', {
+                          'arrow-north-statement-item': isVertical,
+                          'arrow-east': !isVertical,
+                        })}
+                      ></span>
+                      <span
+                        className={classNames('position-relative', {
+                          'fs-8 fs-md-7': isEmbedded,
+                          'fs-6': !isEmbedded,
+                        })}
+                        dangerouslySetInnerHTML={{ __html: statement.content }}
+                      ></span>
+                    </blockquote>
+                  </a>
 
                   {!isVertical &&
                     statement.source.medium?.name &&
