@@ -157,13 +157,6 @@ export function StatementFullExplanation(props: {
           </a>
           <div className="d-flex justify-content-center gap-2">
             <a
-              className="d-flex text-gray align-items-center text-none"
-              href={'/vyrok/' + statement.id}
-            >
-              <LinkIcon className="h-15px" />
-              <span className="ms-1">trvalý odkaz</span>
-            </a>
-            <a
               href={`https://www.facebook.com/sharer/sharer.php?u=${'https://demagog.cz/vyrok/' + statement.id}`}
               target="_blank"
               className="share-icon facebook"
@@ -179,9 +172,15 @@ export function StatementFullExplanation(props: {
             >
               <XIcon />
             </a>
+            <a
+              className="d-none d-lg-flex text-gray align-items-center text-none"
+              href={'/vyrok/' + statement.id}
+            >
+              <LinkIcon width={18} height={18} />
+            </a>
 
             <button
-              className="d-flex text-gray align-items-center text-none border-0 bg-transparent"
+              className="d-flex text-gray align-items-center text-none border-0 bg-transparent d-lg-none"
               onClick={handleShare}
               title="Sdílet"
               type="button"
