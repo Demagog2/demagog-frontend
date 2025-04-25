@@ -53,6 +53,9 @@ export default async function FacebookCollaboration(
             facebookFactchecks(first: $first, last: $last, after: $after, before: $before) {
               ...FacebookFactcheckFirstPageFragment
               ...FacebookFactcheckNextPageFragment
+              nodes {
+                id
+              }
               pageInfo {
                 hasPreviousPage
                 ...NumericalPagination
@@ -66,7 +69,7 @@ export default async function FacebookCollaboration(
     variables: fromPageToCursor(page, 10),
   })
 
-  if (!data.facebookFactchecks) {
+  if (!data.facebookFactchecks || data.facebookFactchecks.nodes?.length === 0) {
     notFound()
   }
 
