@@ -155,7 +155,7 @@ export function StatementFullExplanation(props: {
               <>zobrazit celé odůvodnění</>
             )}
           </a>
-          <div className="d-flex justify-content-center gap-2">
+          <div className="d-flex align-items-center gap-2">
             <a
               href={`https://www.facebook.com/sharer/sharer.php?u=${'https://demagog.cz/vyrok/' + statement.id}`}
               target="_blank"
@@ -173,7 +173,7 @@ export function StatementFullExplanation(props: {
               <XIcon />
             </a>
             <a
-              className="d-none d-lg-flex text-gray align-items-center text-none"
+              className="d-none d-lg-flex text-gray align-items-center text-none link-icon"
               href={'/vyrok/' + statement.id}
             >
               <LinkIcon width={18} height={18} />
