@@ -2,6 +2,8 @@ import FacebookIcon from '@/assets/icons/facebook.svg'
 import InstagramIcon from '@/assets/icons/instagram.svg'
 import XIcon from '@/assets/icons/x.svg'
 import TiktokIcon from '@/assets/icons/tiktok.svg'
+import ThreadsIcon from '@/assets/icons/threads.svg'
+import BlueskyIcon from '@/assets/icons/bluesky.svg'
 
 export default function SiteSocial() {
   return (
@@ -15,44 +17,64 @@ export default function SiteSocial() {
       </div>
       <div className="d-flex flex-wrap">
         <a
-          className="btn white me-2 mb-2 ps-2"
+          className="btn white me-2 mb-2"
           href="https://www.facebook.com/Demagog.CZ"
           target="_blank"
+          title="Facebook - Demagog.cz"
         >
-          <span className="w-30px h-30px me-2">
+          <span className="w-30px h-30px">
             <FacebookIcon />
           </span>
-          <span className="fw-bolder">Facebook</span>
         </a>
         <a
-          className="btn white me-2 mb-2 ps-2"
+          className="btn white me-2 mb-2"
           href="https://www.instagram.com/demagog.cz/"
           target="_blank"
+          title="Instagram - Demagog.cz"
         >
-          <span className="w-30px h-30px me-2">
+          <span className="w-30px h-30px">
             <InstagramIcon />
           </span>
-          <span className="fw-bolder">Instagram</span>
         </a>
         <a
           className="btn white me-2 mb-2"
           href="https://twitter.com/DemagogCZ"
           target="_blank"
+          title="X - Demagog.cz"
         >
-          <span className="w-30px h-30px me-2 d-inline-flex align-items-center justify-content-center text-dark">
+          <span className="w-30px h-30px">
             <XIcon />
           </span>
-          <span className="fw-bolder">X</span>
         </a>
         <a
-          className="btn white me-2 mb-2 ps-2"
+          className="btn white me-2 mb-2"
           href="https://www.tiktok.com/@demagog.cz"
           target="_blank"
+          title="TikTok - Demagog.cz"
         >
-          <span className="w-30px h-30px me-2  d-inline-flex align-items-center justify-content-center">
+          <span className="w-30px h-30px">
             <TiktokIcon />
           </span>
-          <span className="fw-bolder">TikTok</span>
+        </a>
+        <a
+          className="btn white me-2 mb-2"
+          href="https://www.threads.com/@demagog.cz"
+          target="_blank"
+          title="Threads - Demagog.cz"
+        >
+          <span className="w-30px h-30px">
+            <ThreadsIcon />
+          </span>
+        </a>
+        <a
+          className="btn white me-2 mb-2"
+          href="https://bsky.app/profile/did:plc:zsxci35tprtsk6fpcup65q2r"
+          target="_blank"
+          title="Bluesky - Demagog.cz"
+        >
+          <span className="w-30px h-30px">
+            <BlueskyIcon />
+          </span>
         </a>
       </div>
     </div>
