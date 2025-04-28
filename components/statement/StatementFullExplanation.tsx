@@ -174,6 +174,8 @@ export function StatementFullExplanation(props: {
             </a>
             <a
               className="d-none d-lg-flex text-gray align-items-center text-none"
+              title="Přejít na výrok"
+              target="_blank"
               href={'/vyrok/' + statement.id}
             >
               <LinkIcon width={18} height={18} />
