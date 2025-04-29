@@ -7,13 +7,13 @@ import { PropsWithChildren } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerLink } from '../speaker/SpeakerLink'
 import classNames from 'classnames'
-import SocialShareButtons from '../SocialShareButtons'
+import { StatementSocialShareButtons } from './StatementSocialShareButtons'
 
 const StatementHeaderFragment = gql(`
   fragment StatementHeader on Statement {
     id
     content
-    ...SocialShareButtons
+    ...StatementSocialShareButtons
     sourceSpeaker {
       speaker {
         avatar(size: detail)
@@ -250,7 +250,7 @@ export function StatementHeader(
               {statement.assessment.shortExplanation === null ? (
                 <div className="d-block">
                   <div
-                    className={classNames('scroll-vertical mh-400px', {
+                    className={classNames('scroll-vertical mh-400px py-2', {
                       'fs-8 fs-md-7': isEmbedded,
                       'fs-6': !isEmbedded,
                     })}
@@ -259,7 +259,12 @@ export function StatementHeader(
                     }}
                   ></div>
                   <div className="d-flex justify-content-end">
-                    <SocialShareButtons statement={statement} />
+                    {
+                      <StatementSocialShareButtons
+                        statement={statement}
+                        showDetailUrl
+                      />
+                    }
                   </div>
                 </div>
               ) : (

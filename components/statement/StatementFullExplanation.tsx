@@ -8,12 +8,12 @@ import React, { useRef, useState } from 'react'
 import { StatementHeader } from './StatementHeader'
 import { StatementDisplayMode } from './StatementHeader'
 import classNames from 'classnames'
-import SocialShareButtons from '../SocialShareButtons'
+import { StatementSocialShareButtons } from './StatementSocialShareButtons'
 
 const StatementFullExplanationFragment = gql(`
   fragment StatementFullExplanation on Statement {
     ...StatementHeader
-    ...SocialShareButtons
+    ...StatementSocialShareButtons
     id
     assessment {
       explanationContent {
@@ -138,7 +138,7 @@ export function StatementFullExplanation(props: {
               <>zobrazit celé odůvodnění</>
             )}
           </a>
-          <SocialShareButtons statement={statement} />
+          {<StatementSocialShareButtons statement={statement} showDetailUrl />}
         </div>
       </>
     </StatementHeader>

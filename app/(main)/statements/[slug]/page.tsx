@@ -20,7 +20,7 @@ import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import TagIcon from '@/assets/icons/tag.svg'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementHeader } from '@/components/statement/StatementHeader'
-import SocialShareButtons from '@/components/SocialShareButtons'
+import { StatementSocialShareButtons } from '@/components/statement/StatementSocialShareButtons'
 
 export async function generateMetadata({
   params,
@@ -97,7 +97,7 @@ export default async function Statement(props: { params: { slug: string } }) {
         statementV2(id: $id) {
           ...SourceSpeakerAvatar
           ...StatementFullExplanation
-          ...SocialShareButtons
+          ...StatementSocialShareButtons
           assessment {
             shortExplanation
             explanationHtml
@@ -191,10 +191,7 @@ export default async function Statement(props: { params: { slug: string } }) {
                     formatDate(statement.source.releasedAt)}
                 </span>
               </cite>
-              <SocialShareButtons
-                statement={statement}
-                excludeStatementDetailLink
-              />
+              <StatementSocialShareButtons statement={statement} />
             </div>
 
             {statement.tags.length > 0 && (
