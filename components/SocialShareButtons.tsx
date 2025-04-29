@@ -5,6 +5,7 @@ import XIcon from '@/assets/icons/x.svg'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import Link2Icon from '@/assets/icons/link2.svg'
 import classNames from 'classnames'
+import ShareIcon from '@/assets/icons/share.svg'
 
 const SocialShareButtonsFragment = gql(`
   fragment SocialShareButtons on Statement {
@@ -63,11 +64,11 @@ export default function SocialShareButtons(props: {
       </a>
 
       <a
-        className="d-block d-lg-none share-icon link-icon"
+        className="d-block d-lg-none share-icon link-icon cursor-pointer"
         onClick={handleShare}
         title="Sdílet"
       >
-        <Link2Icon />
+        <ShareIcon />
       </a>
     </div>
   )
