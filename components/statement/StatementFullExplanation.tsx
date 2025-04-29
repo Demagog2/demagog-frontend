@@ -8,13 +8,12 @@ import React, { useRef, useState } from 'react'
 import { StatementHeader } from './StatementHeader'
 import { StatementDisplayMode } from './StatementHeader'
 import classNames from 'classnames'
-import { LinkIcon } from '@heroicons/react/24/outline'
-import FacebookIcon from '@/assets/icons/facebook.svg'
-import XIcon from '@/assets/icons/x.svg'
+import { StatementSocialShareButtons } from './StatementSocialShareButtons'
 
 const StatementFullExplanationFragment = gql(`
   fragment StatementFullExplanation on Statement {
     ...StatementHeader
+    ...StatementSocialShareButtons
     id
     assessment {
       explanationContent {
@@ -55,22 +54,6 @@ export function StatementFullExplanation(props: {
   )
   const [openExplanation, setOpenExplanation] = useState(false)
   const contentEl = useRef<HTMLDivElement>(null)
-
-  const handleShare = async (e: React.MouseEvent) => {
-    e.preventDefault()
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: 'Demagog.cz - Ověřování výroků',
-          url: `https://demagog.cz/vyrok/${statement.id}`,
-        })
-      } catch (error) {
-        console.error('Error sharing:', error)
-      }
-    } else {
-      alert('Sdílení není ve vašem prohlížeči podporováno.')
-    }
-  }
 
   return (
     <StatementHeader
@@ -155,39 +138,7 @@ export function StatementFullExplanation(props: {
               <>zobrazit celé odůvodnění</>
             )}
           </a>
-          <div className="d-flex justify-content-center gap-2">
-            <a
-              href={`https://www.facebook.com/sharer/sharer.php?u=${'https://demagog.cz/vyrok/' + statement.id}`}
-              target="_blank"
-              className="share-icon facebook"
-              title="Sdílet na Facebooku"
-            >
-              <FacebookIcon />
-            </a>
-            <a
-              href={`https://twitter.com/intent/tweet?url=${'https://demagog.cz/vyrok/' + statement.id}`}
-              target="_blank"
-              className="share-icon x"
-              title="Sdílet na síti X"
-            >
-              <XIcon />
-            </a>
-            <a
-              className="d-none d-lg-flex text-gray align-items-center text-none"
-              href={'/vyrok/' + statement.id}
-            >
-              <LinkIcon width={18} height={18} />
-            </a>
-
-            <button
-              className="d-flex text-gray align-items-center text-none border-0 bg-transparent d-lg-none"
-              onClick={handleShare}
-              title="Sdílet"
-              type="button"
-            >
-              <LinkIcon width={18} height={18} className="link-icon" />
-            </button>
-          </div>
+          {<StatementSocialShareButtons statement={statement} showDetailUrl />}
         </div>
       </>
     </StatementHeader>

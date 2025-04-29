@@ -20,6 +20,7 @@ import { StatementDisplayMode } from '@/libs/statements/display-mode'
 import TagIcon from '@/assets/icons/tag.svg'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementHeader } from '@/components/statement/StatementHeader'
+import { StatementSocialShareButtons } from '@/components/statement/StatementSocialShareButtons'
 
 export async function generateMetadata({
   params,
@@ -96,6 +97,7 @@ export default async function Statement(props: { params: { slug: string } }) {
         statementV2(id: $id) {
           ...SourceSpeakerAvatar
           ...StatementFullExplanation
+          ...StatementSocialShareButtons
           assessment {
             shortExplanation
             explanationHtml
@@ -179,14 +181,19 @@ export default async function Statement(props: { params: { slug: string } }) {
               dangerouslySetInnerHTML={{ __html: statement.content }}
             />
           </blockquote>
+
           <div className="mt-2 mt-md-4 fs-8">
-            <cite>
-              {statement.source.medium?.name},{' '}
-              <span className="date">
-                {statement.source?.releasedAt &&
-                  formatDate(statement.source.releasedAt)}
-              </span>
-            </cite>
+            <div className="d-flex justify-content-between gap-2">
+              <cite>
+                {statement.source.medium?.name},{' '}
+                <span className="date">
+                  {statement.source?.releasedAt &&
+                    formatDate(statement.source.releasedAt)}
+                </span>
+              </cite>
+              <StatementSocialShareButtons statement={statement} />
+            </div>
+
             {statement.tags.length > 0 && (
               <>
                 <div className="row">

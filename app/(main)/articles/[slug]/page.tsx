@@ -19,6 +19,7 @@ import { truncate } from 'lodash'
 import { imagePath } from '@/libs/images/path'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
+import { ArticleSocialShareButtons } from '@/components/article/ArticleSocialShareButtons'
 
 export const revalidate = 180
 export const dynamic = 'force-static'
@@ -120,6 +121,7 @@ export default async function Article(props: { params: { slug: string } }) {
             articleType
             perex
             showPlayer
+            ...ArticleSocialShareButtons
             ...DebateAticleMetadata
             ...FacebookFactcheckMetadata
             ...StaticArticleMetadata
@@ -158,6 +160,10 @@ export default async function Article(props: { params: { slug: string } }) {
         <div>
           <div>
             <h1 className="display-1 fw-bold px-3 px-sm-0">{article.title}</h1>
+            <div className="d-flex justify-content-end">
+              <ArticleSocialShareButtons article={article} />
+            </div>
+
             {article.showPlayer ? (
               <ArticlePlayer article={article} />
             ) : (

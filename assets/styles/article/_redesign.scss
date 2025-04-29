@@ -18,6 +18,10 @@
     text-underline-offset: 3px;
   }
 
+  .link-icon:hover svg {
+    fill: #25ad23;
+  }
+
   .custom-list {
     border-radius: 31px;
     padding: 25px 27px;
