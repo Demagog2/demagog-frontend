@@ -1,6 +1,7 @@
 import FacebookIcon from '@/assets/icons/facebook.svg'
 import InstagramIcon from '@/assets/icons/instagram.svg'
 import XIcon from '@/assets/icons/x.svg'
+import TiktokIcon from '@/assets/icons/tiktok.svg'
 
 export default function SiteSocial() {
   return (
@@ -16,6 +17,7 @@ export default function SiteSocial() {
         <a
           className="btn white me-2 mb-2 ps-2"
           href="https://www.facebook.com/Demagog.CZ"
+          target="_blank"
         >
           <span className="w-30px h-30px me-2">
             <FacebookIcon />
@@ -25,17 +27,32 @@ export default function SiteSocial() {
         <a
           className="btn white me-2 mb-2 ps-2"
           href="https://www.instagram.com/demagog.cz/"
+          target="_blank"
         >
           <span className="w-30px h-30px me-2">
             <InstagramIcon />
           </span>
           <span className="fw-bolder">Instagram</span>
         </a>
-        <a className="btn white me-2 mb-2" href="https://twitter.com/DemagogCZ">
+        <a
+          className="btn white me-2 mb-2"
+          href="https://twitter.com/DemagogCZ"
+          target="_blank"
+        >
           <span className="w-30px h-30px me-2 d-inline-flex align-items-center justify-content-center text-dark">
             <XIcon />
           </span>
           <span className="fw-bolder">X</span>
+        </a>
+        <a
+          className="btn white me-2 mb-2 ps-2"
+          href="https://www.tiktok.com/@demagog.cz"
+          target="_blank"
+        >
+          <span className="w-30px h-30px me-2  d-inline-flex align-items-center justify-content-center">
+            <TiktokIcon />
+          </span>
+          <span className="fw-bolder">TikTok</span>
         </a>
       </div>
     </div>
