@@ -1,5 +1,6 @@
 'use server'
 
+import { omit } from 'lodash'
 import { gql } from '@/__generated__'
 import {
   accordionItemSchema,
@@ -178,12 +179,14 @@ export const updateAccordionItem = new UpdateActionBuilder<
   UpdateAccordionItemMutationVariables,
   typeof adminUpdateAccordionItemMutation
 >(accordionItemSchema)
-  .withMutation(adminUpdateAccordionItemMutation, (id, data) => ({
-    input: {
-      id,
-      ...data,
-    },
-  }))
+  .withMutation(adminUpdateAccordionItemMutation, (id, data) => {
+    return ({
+      input: {
+        id,
+        ...omit(data, ['accordionSectionId']),
+      },
+    })
+  })
   .build()
 
 const adminDeleteAccordionItemMutation = gql(`
