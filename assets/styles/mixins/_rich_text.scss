@@ -21,7 +21,7 @@
   @extend .mt-1, .text-muted, .small;
 }
 
-@mixin socialShareButtons {
+@mixin social-share-buttons {
   .share-icon svg {
     width: 18px;
     height: 18px;
