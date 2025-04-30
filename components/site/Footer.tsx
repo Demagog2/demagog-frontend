@@ -66,7 +66,7 @@ export default function Footer() {
                     </a>
                   </div>
                   <div className="mb-4">
-                    <span className="small">+420 775 275 177</span>
+                    <span className="small">+420 739 148 011</span>
                   </div>
                   <h6 className="small mb-1">
                     Výtky k hodnocením, workshopy, různé
