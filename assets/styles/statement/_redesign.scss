@@ -1,5 +1,7 @@
 @import '../mixins/rich_text';
 
+@include socialShareButtons;
+
 .accordion-content,
 .statement-detail {
   @include perex;
@@ -313,23 +315,4 @@
     text-decoration: underline;
     text-underline-offset: 3px;
   }
-}
-
-.share-icon svg {
-  width: 18px;
-  height: 18px;
-  fill: rgb(173, 181, 189);
-  transition: fill 0.3s ease;
-}
-
-.share-icon.facebook:hover svg {
-  fill: #0866ff;
-}
-
-.share-icon.x:hover svg {
-  fill: #000000;
-}
-
-.share-icon.link-icon:hover svg {
-  fill: #25ad23;
 }

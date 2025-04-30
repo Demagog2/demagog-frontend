@@ -20,3 +20,32 @@
 @mixin figcaption {
   @extend .mt-1, .text-muted, .small;
 }
+
+@mixin socialShareButtons {
+  .share-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: rgb(173, 181, 189);
+    transition: fill 0.3s ease;
+  }
+
+  .share-icon.facebook:hover svg {
+    fill: #0866ff;
+  }
+
+  .share-icon.x:hover svg {
+    fill: #000000;
+  }
+
+  .link-icon {
+    width: 18px;
+    height: 18px;
+    color: rgb(173, 181, 189);
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .link-icon:hover {
+    color: #25ad23;
+  }
+}
