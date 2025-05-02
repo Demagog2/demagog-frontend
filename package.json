@@ -47,6 +47,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hook-form": "^7.53.0",
+    "react-image-crop": "^11.0.10",
     "react-mentions": "^4.4.10",
     "react-toastify": "^10.0.6",
     "react-youtube": "^10.1.0",

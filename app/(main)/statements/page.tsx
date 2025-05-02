@@ -1,21 +1,15 @@
 import TitleIcon from '@/assets/icons/statements.svg'
 import { query } from '@/libs/apollo-client'
-import {
-  TAG_FILTER_INPUT_NAME,
-  TagFilter,
-} from '@/components/filtering/TagFilter'
-import { VeracityFilter } from '@/components/filtering/VeracityFilter'
+import { TAG_FILTER_INPUT_NAME } from '@/components/filtering/TagFilter'
 import { parsePage } from '@/libs/pagination'
-import { FilterSection } from '@/components/filtering/FilterSection'
-import { ReleasedYearFilter } from '@/components/filtering/ReleasedYearFilter'
+
 import { FilterForm } from '@/components/filtering/FilterForm'
 import {
   getNumericalArrayParams,
   getStringArrayParams,
   getStringParam,
 } from '@/libs/query-params'
-import { FragmentType, gql, useFragment } from '@/__generated__'
-import { StatementCount } from '@/components/filtering/StatementCount'
+import { gql } from '@/__generated__'
 import { PropsWithSearchParams } from '@/libs/params'
 import { Metadata } from 'next'
 import {
@@ -24,6 +18,9 @@ import {
   getRobotsMetadata,
 } from '@/libs/metadata'
 import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
+import { TagFilters } from '@/components/filters/TagFilters'
+import { VeracityFilters } from '@/components/filters/VeracityFilters'
+import { ReleasedYearFilters } from '@/components/filters/ReleasedYearFilters'
 
 const PAGE_SIZE = 10
 
@@ -39,86 +36,6 @@ export async function generateMetadata({
     ...getRobotsMetadata(),
     ...getCanonicalMetadata(page === 1 ? '/vyroky' : `/vyroky?page=${page}`),
   }
-}
-
-const TagFiltersFragment = gql(`
-  fragment TagFilters on SearchResultStatement {
-    tags {
-      tag {
-        id
-      }
-      ...TagFilter
-    }
-  }
-`)
-
-export function TagFilters(props: {
-  data: FragmentType<typeof TagFiltersFragment>
-}) {
-  const data = useFragment(TagFiltersFragment, props.data)
-
-  return (
-    <FilterSection name="Témata" defaultOpen>
-      {data.tags?.map((tagAggregate) => (
-        <TagFilter
-          key={tagAggregate.tag.id}
-          tag={tagAggregate}
-          renderLabel={StatementCount}
-        />
-      ))}
-    </FilterSection>
-  )
-}
-
-const VeracityFiltersFragment = gql(`
-  fragment VeracityFilters on SearchResultStatement {
-    veracities {
-      veracity {
-        id
-      }
-      ...VeracityFilter
-    }
-  }
-`)
-
-export function VeracityFilters(props: {
-  data: FragmentType<typeof VeracityFiltersFragment>
-}) {
-  const data = useFragment(VeracityFiltersFragment, props.data)
-
-  return (
-    <FilterSection name="Hodnocení">
-      {data.veracities?.map((veracityAggregate) => (
-        <VeracityFilter
-          key={veracityAggregate.veracity.id}
-          veracity={veracityAggregate}
-        />
-      ))}
-    </FilterSection>
-  )
-}
-
-const ReleasedYearFiltersFragment = gql(`
-  fragment ReleasedYearFilters on SearchResultStatement {
-    years {
-      year
-      ...ReleasedYearFilter
-    }
-  }
-`)
-
-export function ReleasedYearFilters(props: {
-  data: FragmentType<typeof ReleasedYearFiltersFragment>
-}) {
-  const data = useFragment(ReleasedYearFiltersFragment, props.data)
-
-  return (
-    <FilterSection name="Roky">
-      {data.years?.map((yearAggregate) => (
-        <ReleasedYearFilter key={yearAggregate.year} year={yearAggregate} />
-      ))}
-    </FilterSection>
-  )
 }
 
 export default async function Statements(props: PropsWithSearchParams) {

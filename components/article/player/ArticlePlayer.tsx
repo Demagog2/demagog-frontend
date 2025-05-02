@@ -1,7 +1,7 @@
 'use client'
 
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { imagePath } from '@/libs/images/path'
+import { getPreviewImageSize, imagePath } from '@/libs/images/path'
 import PlayIcon from '@/assets/icons/play-icon.svg'
 import { ArticleFullscreenPlayer } from './ArticleFullscreenPlayer'
 import { useCallback, useEffect, useState } from 'react'
@@ -62,8 +62,7 @@ export function ArticlePlayer(props: {
               className="w-100 rounded-l"
               src={imagePath(article.illustration)}
               alt={`Ilustrační obrázek v výstupu ${article.title}`}
-              width={960}
-              height={540}
+              {...getPreviewImageSize('large')}
             />
           )}
         </div>

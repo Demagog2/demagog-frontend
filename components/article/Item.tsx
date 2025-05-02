@@ -63,7 +63,7 @@ export default function ArticleItem(props: {
             <ArticleLink className="illustration" article={article}>
               <Image
                 loading={largerPreview ? 'eager' : 'lazy'}
-                {...getPreviewImageSize(largerPreview)}
+                {...getPreviewImageSize(largerPreview ? 'medium' : 'small')}
                 src={mediaUrl + article.illustration}
                 className="rounded-m"
                 alt={`Ilustrační obrázek k ${article.title}`}

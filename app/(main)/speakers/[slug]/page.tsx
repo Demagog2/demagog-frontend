@@ -15,11 +15,6 @@ import { parsePage } from '@/libs/pagination'
 import { gql } from '@/__generated__'
 import { SpeakerLink } from '@/components/speaker/SpeakerLink'
 import { PropsWithSearchParams } from '@/libs/params'
-import {
-  ReleasedYearFilters,
-  TagFilters,
-  VeracityFilters,
-} from '@/app/(main)/statements/page'
 import { Metadata } from 'next'
 import {
   getCanonicalMetadata,
@@ -31,6 +26,9 @@ import { notFound, redirect } from 'next/navigation'
 import { StatementFullExplanation } from '@/components/statement/StatementFullExplanation'
 import { DefaultMetadata } from '@/libs/constants/metadata'
 import { imagePath } from '@/libs/images/path'
+import { TagFilters } from '@/components/filters/TagFilters'
+import { VeracityFilters } from '@/components/filters/VeracityFilters'
+import { ReleasedYearFilters } from '@/components/filters/ReleasedYearFilters'
 
 const PAGE_SIZE = 10
 

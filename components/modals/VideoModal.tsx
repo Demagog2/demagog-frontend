@@ -37,7 +37,7 @@ export function VideoModal() {
         onClick={() => setIsModalOpen(true)}
       >
         <img
-          {...getPreviewImageSize(true)}
+          {...getPreviewImageSize('medium')}
           className="w-100"
           src="/images/homepage-intro-video-thumbnail.png"
           alt="thumb"
