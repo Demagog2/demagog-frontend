@@ -22,15 +22,21 @@ export const nicerLinksNoTruncate = (text: string) =>
     options: {
       attributes: { name: 'target', value: '_blank' },
       exclude(link) {
+        link =
+          link.startsWith('https://') || link.startsWith('http://')
+            ? link
+            : `https://${link}`
+
         try {
-          const parsedHost = new URL(link).host;
+          const parsedHost = new URL(link).host
           return (
+            parsedHost === 'www.w3.org' ||
             parsedHost === 'cdn.iframe.ly' ||
             parsedHost === 'www.instagram.com' ||
             parsedHost === 'demagog.cz'
-          );
+          )
         } catch {
-          return false; // Exclude invalid URLs
+          return false // Exclude invalid URLs
         }
       },
     },
