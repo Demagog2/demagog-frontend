@@ -73,7 +73,7 @@ export function SingleStatementArticlePreview(props: {
             <a href={articlePath} className="illustration">
               <img
                 src={mediaUrl + article.illustration}
-                {...getPreviewImageSize(largerPreview)}
+                {...getPreviewImageSize(largerPreview ? 'medium' : 'small')}
                 className="w-100"
                 alt={`Ilustrační obrázek k ${article.title}`}
               />

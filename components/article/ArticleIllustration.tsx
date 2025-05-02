@@ -1,5 +1,6 @@
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { imagePath } from '@/libs/images/path'
+import { imagePath, getPreviewImageSize } from '@/libs/images/path'
+import Image from 'next/image'
 
 const ArticleIllustrationFragment = gql(`
   fragment ArticleIllustration on Article {
@@ -18,12 +19,11 @@ export function ArticleIllustration(props: {
   }
   return (
     <figure>
-      <img
-        className="mt-md-7 mt-3 rounded-l w-100"
+      <Image
+        className="mt-md-7 mt-3 rounded-l w-100 h-auto"
         alt="illustration"
         src={imagePath(article.image)}
-        width={960}
-        height={540}
+        {...getPreviewImageSize('large')}
       />
       {article.caption && <figcaption>{article.caption}</figcaption>}
     </figure>
