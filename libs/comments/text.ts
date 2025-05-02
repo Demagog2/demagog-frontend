@@ -22,11 +22,16 @@ export const nicerLinksNoTruncate = (text: string) =>
     options: {
       attributes: { name: 'target', value: '_blank' },
       exclude(link) {
-        return (
-          link.startsWith('cdn.iframe.ly') ||
-          link.startsWith('www.instagram.com') ||
-          link.startsWith('https://demagog.cz/rails/active_storage')
-        )
+        try {
+          const parsedHost = new URL(link).host;
+          return (
+            parsedHost === 'cdn.iframe.ly' ||
+            parsedHost === 'www.instagram.com' ||
+            parsedHost === 'demagog.cz'
+          );
+        } catch {
+          return false; // Exclude invalid URLs
+        }
       },
     },
   })
