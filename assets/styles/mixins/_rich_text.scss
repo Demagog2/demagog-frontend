@@ -33,11 +33,12 @@
     fill: #0866ff;
   }
 
-  .share-icon.x:hover svg {
+  .share-icon.x:hover svg,
+  .share-icon.threads:hover svg {
     fill: #000000;
   }
 
-  .link-icon {
+  .share-icon.link-icon {
     width: 18px;
     height: 18px;
     color: rgb(173, 181, 189);
@@ -45,7 +46,7 @@
     transition: all 0.3s ease-in-out;
   }
 
-  .link-icon:hover {
-    color: #25ad23;
+  .share-icon.link-icon:hover svg {
+    fill: #25ad23;
   }
 }

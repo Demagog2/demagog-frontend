@@ -4,6 +4,7 @@ import FacebookIcon from '@/assets/icons/facebook.svg'
 import XIcon from '@/assets/icons/x.svg'
 import Link2Icon from '@/assets/icons/link2.svg'
 import ShareIcon from '@/assets/icons/share.svg'
+import ThreadsBlackIcon from '@/assets/icons/threads-black.svg'
 import { getMetadataTitle } from '@/libs/metadata'
 
 export function SocialShareButtons(props: {
@@ -47,6 +48,14 @@ export function SocialShareButtons(props: {
         title="Sdílet na síti X"
       >
         <XIcon />
+      </a>
+      <a
+        href={`https://www.threads.net/intent/post?url=${sharingUrl}&text=${sharingTitle}`}
+        target="_blank"
+        className="share-icon threads"
+        title="Sdílet na Threads"
+      >
+        <ThreadsBlackIcon />
       </a>
       {detailUrl && (
         <a
