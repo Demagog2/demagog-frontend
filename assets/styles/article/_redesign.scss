@@ -3,6 +3,7 @@
 .article-redesign {
   @include perex;
   @include unsafe-data-wrapper;
+  @include social-share-buttons;
 
   figure figcaption {
     @include figcaption;
@@ -16,10 +17,6 @@
     color: $dark;
     text-decoration: underline;
     text-underline-offset: 3px;
-  }
-
-  .link-icon:hover svg {
-    fill: #25ad23;
   }
 
   .custom-list {
