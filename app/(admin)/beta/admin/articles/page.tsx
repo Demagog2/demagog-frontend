@@ -36,6 +36,16 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
             node {
               id
               title
+              articleType
+              published
+              integrations {
+                efcsn {
+                  createdAt
+                }
+                euroClimate {
+                  createdAt 
+                }
+              }
               ...ArticleBadge
               ...ArticleState
               ...PublishedArticleLink
@@ -75,6 +85,7 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
               <th scope="col">Typ článku</th>
               <th scope="col">Stav</th>
               <th scope="col">Odkaz</th>
+              <th scope="col">Integrace</th>
               <th scope="col">
                 <span className="sr-only">Edit</span>
               </th>
@@ -102,6 +113,22 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                   <td>
                     <PublishedArticleLink article={edge.node} />
                   </td>
+                  {/** TODO add number of integrations */}
+                  {edge.node.articleType === 'facebook_factcheck' &&
+                  edge.node.published ? (
+                    <td className="text-center">
+                      <a
+                        href={`/beta/admin/articles/${edge.node.id}/integrations`}
+                        className="text-indigo-600 hover:text-indigo-900"
+                        title="Zobrazit integrace"
+                      >
+                        Číslo
+                      </a>
+                    </td>
+                  ) : (
+                    <td></td>
+                  )}
+
                   <td>
                     <a
                       href={`/beta/admin/articles/${edge.node.id}/edit`}
