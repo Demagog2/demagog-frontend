@@ -2,6 +2,7 @@
 
 import StatementAssessment from '@/components/statement/Assessment'
 import TagIcon from '@/assets/icons/tag.svg'
+import PackmanIcon from '@/assets/icons/packman.svg'
 import formatDate from '@/libs/format-date'
 import { PropsWithChildren } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
@@ -222,13 +223,18 @@ export function StatementHeader(
 
                   {!isVertical && statement.tags.length > 0 && (
                     <div className="row">
-                      <div className="col col-auto">
-                        {statement.tags.map((tag) => (
-                          <div key={tag.id} className="d-inline-block me-2">
-                            <TagIcon className="h-15px" />
-                            <span className="fs-8">{tag.name}</span>
-                          </div>
-                        ))}
+                      <div className="col col-auto d-flex align-items-start w-100 justify-content-between justify-content-sm-start">
+                        <div className="d-flex flex-wrap">
+                          {statement.tags.map((tag) => (
+                            <div key={tag.id} className="d-inline-block me-2">
+                              <TagIcon className="h-15px" />
+                              <span className="fs-8">{tag.name}</span>
+                            </div>
+                          ))}
+                        </div>
+                        <div className="d-inline-block">
+                          <PackmanIcon className="h-15px ms-auto" />
+                        </div>
                       </div>
                     </div>
                   )}
