@@ -12,6 +12,8 @@ import EfcsnIcon from '@/assets/icons/efcsn.svg'
 import { Button } from '@headlessui/react'
 import formatDate from '@/libs/format-date'
 import { CheckIcon } from '@heroicons/react/20/solid'
+import { ExternalServiceEnum } from '@/__generated__/graphql'
+import { AdminPublishIntegrationButton } from '@/components/admin/articles/integrations/AdminPublisIntegrationButton'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -48,7 +50,7 @@ export default async function AdminArticleIntegrations(props: {
 }) {
   const { data } = await serverQuery({
     query: gql(`
-      query AdminArticleIntegrations($id: ID!) { 
+      query AdminArticleIntegrations($id: ID!) {
         article(id: $id) {
           id
           title
@@ -114,13 +116,10 @@ export default async function AdminArticleIntegrations(props: {
                 </div>
               )}
             </div>
-            <Button
-              type="button"
-              //onClick={() => publishEfcsnArticle(data.article.id)}
-              className="pointer absolute right-6 top-6 text-indigo-600 hover:text-indigo-900"
-            >
-              Zveřejnit
-            </Button>
+            <AdminPublishIntegrationButton
+              articleId={data.article.id}
+              service={ExternalServiceEnum.Efcsn}
+            />
           </div>
         </div>
       </AdminPageContent>
