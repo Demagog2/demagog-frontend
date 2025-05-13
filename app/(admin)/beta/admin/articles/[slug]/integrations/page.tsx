@@ -9,11 +9,9 @@ import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { AdminPageContent } from '@/components/admin/layout/AdminPageContent'
 import { LinkButton } from '@/components/admin/forms/LinkButton'
 import EfcsnIcon from '@/assets/icons/efcsn.svg'
-import { Button } from '@headlessui/react'
-import formatDate from '@/libs/format-date'
-import { CheckIcon } from '@heroicons/react/20/solid'
+import EuroclimateIcon from '@/assets/icons/euroclimate.svg'
+import { AdminIntegrationCard } from '@/components/admin/articles/AdminIntegrationCard'
 import { ExternalServiceEnum } from '@/__generated__/graphql'
-import { AdminPublishIntegrationButton } from '@/components/admin/articles/integrations/AdminPublisIntegrationButton'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -88,39 +86,26 @@ export default async function AdminArticleIntegrations(props: {
         </LinkButton>
       </AdminPageHeader>
       <AdminPageContent>
-        <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 border-t border-l border-r border-gray-100 shadow grid grid-cols-1">
-          <div className="rounded-tl-lg rounded-tr-lg rounded-bl-lg rounded-br-lg group relative bg-white p-6 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500">
-            <div>
-              <span className="inline-flex rounded-lg ring-4 ring-white">
-                <EfcsnIcon className="w-12 h-12 text-black" />
-              </span>
-            </div>
-            <div className="mt-3">
-              <h3 className="text-base font-semibold text-gray-900">
-                European Fact-Checking Standards Network
-              </h3>
-              {data.article.integrations?.efcsn?.createdAt && (
-                <div className="flex items-baseline gap-2">
-                  <div>
-                    <span className="flex bg-green-500 size-4 items-center justify-center rounded-full ring-4 ring-white">
-                      <CheckIcon
-                        aria-hidden="true"
-                        className="size-3 text-white"
-                      />
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm text-gray-500">
-                    Zveřejněno{' '}
-                    {formatDate(data.article.integrations.efcsn.createdAt)}
-                  </p>
-                </div>
-              )}
-            </div>
-            <AdminPublishIntegrationButton
-              articleId={data.article.id}
-              service={ExternalServiceEnum.Efcsn}
-            />
-          </div>
+        <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow">
+          <AdminIntegrationCard
+            title="European Fact-Checking Standards Network"
+            icon={EfcsnIcon}
+            createdAt={data.article.integrations?.efcsn?.createdAt}
+            articleId={data.article.id}
+            service={ExternalServiceEnum.Efcsn}
+            isIntegrated={!!data.article.integrations?.efcsn?.createdAt}
+            cardPosition="top"
+          />
+
+          <AdminIntegrationCard
+            title="Euro climate check"
+            icon={EuroclimateIcon}
+            createdAt={data.article.integrations?.euroClimate?.createdAt}
+            articleId={data.article.id}
+            service={ExternalServiceEnum.EuroClimate}
+            isIntegrated={!!data.article.integrations?.euroClimate?.createdAt}
+            cardPosition="bottom"
+          />
         </div>
       </AdminPageContent>
     </AdminPage>

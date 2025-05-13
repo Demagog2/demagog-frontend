@@ -97,6 +97,11 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                 return null
               }
 
+              const integrationCount = [
+                edge.node.integrations?.efcsn,
+                edge.node.integrations?.euroClimate,
+              ].filter(Boolean).length
+
               return (
                 <tr key={edge.node.id}>
                   <td>
@@ -113,16 +118,15 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                   <td>
                     <PublishedArticleLink article={edge.node} />
                   </td>
-                  {/** TODO add number of integrations */}
                   {edge.node.articleType === 'facebook_factcheck' &&
                   edge.node.published ? (
                     <td className="text-center">
                       <a
                         href={`/beta/admin/articles/${edge.node.id}/integrations`}
-                        className="text-indigo-600 hover:text-indigo-900"
+                        className="block text-indigo-600 hover:text-indigo-900 py-2 px-4"
                         title="Zobrazit integrace"
                       >
-                        Číslo
+                        {integrationCount}
                       </a>
                     </td>
                   ) : (
