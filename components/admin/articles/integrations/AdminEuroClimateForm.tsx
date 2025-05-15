@@ -248,7 +248,7 @@ export function AdminEuroClimateForm() {
                       appearanceUrl: '',
                       appearanceDate: '',
                       archiveUrl: '',
-                      format: undefined,
+                      format: 'other',
                     })
                   }
                 >
