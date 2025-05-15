@@ -80,6 +80,7 @@ export async function AdminSourceHeader(props: {
               ,{' '}
               <a
                 href={source.sourceUrl ?? ''}
+                target="_blank"
                 className="text-indigo-600 hover:underline"
               >
                 odkaz
