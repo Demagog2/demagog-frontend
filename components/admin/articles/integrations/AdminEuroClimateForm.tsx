@@ -34,7 +34,7 @@ export function AdminEuroClimateForm() {
     register,
     control,
     watch,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<FieldValues>({
     resolver: zodResolver(euroclimateFormSchema),
     defaultValues: {
