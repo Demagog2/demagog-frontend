@@ -4,17 +4,21 @@ import React from 'react'
 import { AdminPublishIntegrationButton } from './integrations/AdminPublisIntegrationButton'
 import { ExternalServiceEnum } from '@/__generated__/graphql'
 import classNames from 'classnames'
+import { PropsWithChildren } from 'react'
+
 type CardPosition = 'top' | 'bottom'
 
-export function AdminIntegrationCard(props: {
-  articleId: string
-  service: ExternalServiceEnum
-  title: string
-  icon: React.ElementType
-  createdAt?: string
-  isIntegrated?: boolean
-  cardPosition?: CardPosition
-}) {
+export function AdminIntegrationCard(
+  props: PropsWithChildren<{
+    articleId: string
+    service: ExternalServiceEnum
+    title: string
+    icon: React.ElementType
+    createdAt?: string
+    isIntegrated?: boolean
+    cardPosition?: CardPosition
+  }>
+) {
   return (
     <div
       className={classNames(
@@ -54,6 +58,11 @@ export function AdminIntegrationCard(props: {
             </div>
             <p className="mt-2 text-sm text-gray-500">Nezveřejněno</p>
           </div>
+        )}
+      </div>
+      <div>
+        {props.children && (
+          <div className="mt-4 text-sm text-gray-500">{props.children}</div>
         )}
       </div>
       <AdminPublishIntegrationButton
