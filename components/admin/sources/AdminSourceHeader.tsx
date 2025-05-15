@@ -10,6 +10,7 @@ import {
 import AdminSourceDeleteDialog from '@/components/admin/sources/AdminSourceDeleteDialog'
 import { AdminSourceBulkPublishButton } from '@/components/admin/sources/AdminSourceBulkPublishButton'
 import NewStatementDropdown from './statements/controls/NewStatementDropdown'
+import { displayDate } from '@/libs/date-time'
 
 const AdminSourceHeaderDataFragment = gql(`
   fragment AdminSourceHeaderData on Query {
@@ -22,6 +23,11 @@ const AdminSourceHeaderFragment = gql(`
     id
     name
     ...AdminSourceDelete
+    medium {
+      name
+    }
+    releasedAt
+    sourceUrl
   }
 `)
 
@@ -62,6 +68,25 @@ export async function AdminSourceHeader(props: {
         <h2 className="mt-2 text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
           {source.name}
         </h2>
+        <p className="mt-1 text-sm text-gray-700">
+          {source.medium?.name}
+
+          {source.releasedAt && (
+            <> ze dne {displayDate(source.releasedAt ?? '')}</>
+          )}
+
+          {source.sourceUrl && (
+            <>
+              ,{' '}
+              <a
+                href={source.sourceUrl ?? ''}
+                className="text-indigo-600 hover:underline"
+              >
+                odkaz
+              </a>
+            </>
+          )}
+        </p>
       </div>
       <div className="flex justify-between">
         <div className="mt-5 flex space-x-2  px-4 sm:px-6 lg:px-8">
