@@ -1,69 +1,145 @@
+import {
+  EuroClimateFormat,
+  EuroClimateSubtopic,
+  EuroClimateTopic,
+} from '@/__generated__/graphql'
 import { z } from 'zod'
 
 // Define the topics and their subtopics
 export const topic = {
-  'Extrémní výkyvy počasí': {
+  [EuroClimateTopic.ExtremeWeatherEvents]: {
     label: 'Extrémní výkyvy počasí',
     subtopics: [
-      { id: 'subtopic-a-1', label: 'Rostoucí teploty' },
-      { id: 'subtopic-a-2', label: 'Vlny veder' },
-      { id: 'subtopic-a-3', label: 'Povodně' },
-      { id: 'subtopic-a-4', label: 'Nedostatek vody' },
-      { id: 'subtopic-a-5', label: 'Jiné' },
+      {
+        id: EuroClimateSubtopic.IncreasingTemperatures,
+        label: 'Rostoucí teploty',
+      },
+      {
+        id: EuroClimateSubtopic.Heatwaves,
+        label: 'Vlny veder',
+      },
+      {
+        id: EuroClimateSubtopic.Floods,
+        label: 'Povodně',
+      },
+      {
+        id: EuroClimateSubtopic.WaterScarcity,
+        label: 'Nedostatek vody',
+      },
+      {
+        id: EuroClimateSubtopic.Other,
+        label: 'Jiné',
+      },
     ],
   },
-  Doprava: {
+  [EuroClimateTopic.Transport]: {
     label: 'Doprava',
     subtopics: [
       {
-        id: 'subtopic-b-1',
+        id: EuroClimateSubtopic.ElectricCars,
         label: 'Elektrická auta',
-        value: 'Elektrická auta',
       },
-      { id: 'subtopic-b-2', label: 'Jiné', value: 'Jiné' },
+      {
+        id: EuroClimateSubtopic.Other,
+        label: 'Jiné',
+      },
     ],
   },
-  'Obnovitelné zdroje': {
+  [EuroClimateTopic.Renewables]: {
     label: 'Obnovitelné zdroje',
     subtopics: [
-      { id: 'subtopic-c-1', label: 'Větrná energie' },
-      { id: 'subtopic-c-2', label: 'Solární panely' },
-      { id: 'subtopic-c-3', label: 'Pobřežní větrná energie' },
-      { id: 'subtopic-c-4', label: 'Jiné' },
+      {
+        id: EuroClimateSubtopic.WindEnergy,
+        label: 'Větrná energie',
+      },
+      {
+        id: EuroClimateSubtopic.SolarPv,
+        label: 'Solární panely',
+      },
+      {
+        id: EuroClimateSubtopic.OffshoreWindEnergy,
+        label: 'Pobřežní větrná energie',
+      },
+      {
+        id: EuroClimateSubtopic.Other,
+        label: 'Jiné',
+      },
     ],
   },
-  'Konspirační teorie': {
+  [EuroClimateTopic.ConspiracyTheories]: {
     label: 'Konspirační teorie',
     subtopics: [
-      { id: 'subtopic-d-1', label: 'Chemtrails' },
-      { id: 'subtopic-d-2', label: 'Agenda 2030' },
-      { id: 'subtopic-d-3', label: 'Patnáctiminutová města' },
-      { id: 'subtopic-d-4', label: 'HAARP' },
-      { id: 'subtopic-d-5', label: 'Jiné' },
+      {
+        id: EuroClimateSubtopic.Chemtrails,
+        label: 'Chemtrails',
+      },
+      {
+        id: EuroClimateSubtopic.Agenda_2030,
+        label: 'Agenda 2030',
+      },
+      {
+        id: EuroClimateSubtopic.FifteenMinuteCities,
+        label: 'Patnáctiminutová města',
+      },
+      {
+        id: EuroClimateSubtopic.Haarp,
+        label: 'HAARP',
+      },
+      {
+        id: EuroClimateSubtopic.Other,
+        label: 'Jiné',
+      },
     ],
   },
-  'Fosilní paliva': {
+  [EuroClimateTopic.FossilFuels]: {
     label: 'Fosilní paliva',
     subtopics: [
-      { id: 'subtopic-e-1', label: 'Zemní plyn' },
-      { id: 'subtopic-e-2', label: 'Ropa' },
-      { id: 'subtopic-e-3', label: 'Uhlí' },
-      { id: 'subtopic-e-4', label: 'Jiné' },
+      {
+        id: EuroClimateSubtopic.NaturalGas,
+        label: 'Zemní plyn',
+      },
+      {
+        id: EuroClimateSubtopic.Oil,
+        label: 'Ropa',
+      },
+      {
+        id: EuroClimateSubtopic.Coal,
+        label: 'Uhlí',
+      },
+      {
+        id: EuroClimateSubtopic.Other,
+        label: 'Jiné',
+      },
     ],
   },
-  Odpad: {
+  [EuroClimateTopic.Waste]: {
     label: 'Odpad',
     subtopics: [
-      { id: 'subtopic-f-1', label: 'Plasty' },
-      { id: 'subtopic-f-4', label: 'Jiné' },
+      {
+        id: EuroClimateSubtopic.Plastic,
+        label: 'Plasty',
+      },
+      {
+        id: EuroClimateSubtopic.Other,
+        label: 'Jiné',
+      },
     ],
   },
-  Jiné: {
+  [EuroClimateTopic.Other]: {
     label: 'Jiné',
     subtopics: [
-      { id: 'subtopic-g-1', label: 'Popírání změny klimatu' },
-      { id: 'subtopic-g-2', label: 'Spotřeba masa' },
-      { id: 'subtopic-g-3', label: 'Jiné' },
+      {
+        id: EuroClimateSubtopic.ClimateChangeDenial,
+        label: 'Popírání změny klimatu',
+      },
+      {
+        id: EuroClimateSubtopic.MeatConsumption,
+        label: 'Spotřeba masa',
+      },
+      {
+        id: EuroClimateSubtopic.Other,
+        label: 'Jiné',
+      },
     ],
   },
 }
@@ -89,11 +165,11 @@ export const distortionType = [
 ]
 
 export const formatType = [
-  { label: 'Obrázek', value: 'image' },
-  { label: 'Video', value: 'video' },
-  { label: 'Text', value: 'text' },
-  { label: 'Zvuk', value: 'audio' },
-  { label: 'Jiné', value: 'other' },
+  { label: 'Obrázek', value: EuroClimateFormat.Image },
+  { label: 'Video', value: EuroClimateFormat.Video },
+  { label: 'Text', value: EuroClimateFormat.Text },
+  { label: 'Zvuk', value: EuroClimateFormat.Audio },
+  { label: 'Jiné', value: EuroClimateFormat.Other },
 ]
 
 // Create a type for the topic IDs
@@ -121,9 +197,12 @@ export const euroclimateFormSchema = z
           appearanceUrl: z.string().min(1, 'Zadejte URL'),
           appearanceDate: z.string(),
           archiveUrl: z.string().optional(),
-          format: z.enum(['image', 'video', 'text', 'audio', 'other'], {
-            required_error: 'Vyberte formát',
-          }),
+          format: z.enum(
+            formatType.map((format) => format.value) as [string, ...string[]],
+            {
+              required_error: 'Vyberte formát',
+            }
+          ),
         })
       )
       .min(1, 'Musíte přidat alespoň jeden výskyt'),
