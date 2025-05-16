@@ -178,12 +178,10 @@ type TopicId = keyof typeof topic
 export type Topic = typeof topic
 export type TopicKey = keyof Topic
 
-// Create a type for the subtopic IDs
-type SubtopicId = (typeof topic)[TopicId]['subtopics'][number]['id']
-
 // Create the form schema
 export const euroclimateFormSchema = z
   .object({
+    articleId: z.string(),
     topic: z.enum(Object.keys(topic) as [string, ...string[]], {
       required_error: 'Zvolte téma',
     }),

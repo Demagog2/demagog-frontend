@@ -25,7 +25,10 @@ import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 
 type FieldValues = z.output<typeof euroclimateFormSchema>
 
-export function AdminEuroClimateForm(props: { action: FormAction }) {
+export function AdminEuroClimateForm(props: {
+  action: FormAction
+  articleId: string
+}) {
   const [state, formAction] = useFormState(props.action, { state: 'initial' })
   const [isFormVisible, setIsFormVisible] = useState(false)
 
@@ -40,6 +43,7 @@ export function AdminEuroClimateForm(props: { action: FormAction }) {
   } = useForm<FieldValues>({
     resolver: zodResolver(euroclimateFormSchema),
     defaultValues: {
+      articleId: props.articleId,
       topic: undefined,
       subtopics: [],
       distortionType: [],
@@ -80,12 +84,13 @@ export function AdminEuroClimateForm(props: { action: FormAction }) {
 
       {isFormVisible && (
         <form action={formAction} onSubmit={handleSubmitForm}>
+          <input type="hidden" {...register('articleId')} />
+
           <div className="w-full border-t border-gray-900/10 mt-6">
             <div className="flex justify-end mt-6">
               <SubmitButton />
             </div>
             <AdminFormContent>
-              <input type="hidden" name="articleId" />
               <div className="col-span-12 gap-y-5">
                 <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
                   <Legend className=" text-base font-semibold leading-7 text-gray-900">

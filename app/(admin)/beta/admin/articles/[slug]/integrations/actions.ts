@@ -10,8 +10,9 @@ import {
   PublishIntegrationArticleMutationVariables,
 } from '@/__generated__/graphql'
 import { serverMutation } from '@/libs/apollo-client-server'
-import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
+import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
 import { euroclimateFormSchema } from '@/libs/integrations/Euro-climate-schema'
+import { redirect } from 'next/navigation'
 
 const publishIntegrationArticleMutation = gql(`
   mutation PublishIntegrationArticle($input: PublishIntegrationArticleMutationInput!) {
@@ -56,18 +57,18 @@ export async function publishIntegrationArticle(
   throw new Error('Unknown response type')
 }
 
-export const createEuroClimateArticle = new UpdateActionBuilder<
+export const createEuroClimateArticle = new CreateActionBuilder<
   typeof euroclimateFormSchema,
   PublishIntegrationArticleMutation,
   PublishIntegrationArticleMutationVariables,
   typeof publishIntegrationArticleMutation
 >(euroclimateFormSchema)
-  .withMutation(publishIntegrationArticleMutation, (id, data) => {
+  .withMutation(publishIntegrationArticleMutation, (data) => {
     // TODO: Add distortion type
 
     return {
       input: {
-        articleId: id,
+        articleId: data.articleId,
         externalService: ExternalServiceEnum.EuroClimate,
         euroClimateIntegration: {
           ...data,
@@ -81,5 +82,17 @@ export const createEuroClimateArticle = new UpdateActionBuilder<
         },
       },
     }
+  })
+  .withRedirectUrl((data) => {
+    if (
+      data.publishIntegrationArticle?.__typename ===
+      'PublishIntegrationArticleSuccess'
+    ) {
+      redirect(
+        `/beta/admin/articles/${data?.publishIntegrationArticle?.article?.id}/integrations`
+      )
+    }
+
+    return null
   })
   .build()

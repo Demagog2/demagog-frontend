@@ -13,6 +13,7 @@ import EuroclimateIcon from '@/assets/icons/euroclimate.svg'
 import { AdminIntegrationCard } from '@/components/admin/articles/AdminIntegrationCard'
 import { ExternalServiceEnum } from '@/__generated__/graphql'
 import { AdminEuroClimateForm } from '@/components/admin/articles/integrations/AdminEuroClimateForm'
+import { createEuroClimateArticle } from './actions'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -107,7 +108,10 @@ export default async function AdminArticleIntegrations(props: {
             isIntegrated={!!data.article.integrations?.euroClimate?.createdAt}
             cardPosition="bottom"
           >
-            <AdminEuroClimateForm />
+            <AdminEuroClimateForm
+              action={createEuroClimateArticle}
+              articleId={data.article.id}
+            />
           </AdminIntegrationCard>
         </div>
       </AdminPageContent>
