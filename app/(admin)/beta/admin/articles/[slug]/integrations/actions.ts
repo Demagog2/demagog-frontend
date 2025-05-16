@@ -12,7 +12,6 @@ import {
 import { serverMutation } from '@/libs/apollo-client-server'
 import { UpdateActionBuilder } from '@/libs/forms/builders/UpdateActionBuilder'
 import { euroclimateFormSchema } from '@/libs/integrations/Euro-climate-schema'
-import { redirect } from 'next/navigation'
 
 const publishIntegrationArticleMutation = gql(`
   mutation PublishIntegrationArticle($input: PublishIntegrationArticleMutationInput!) {
@@ -23,14 +22,6 @@ const publishIntegrationArticleMutation = gql(`
       ... on PublishIntegrationArticleSuccess {
         article {
           id
-          integrations {
-            euroClimate {
-              externalId
-            }
-            efcsn {
-              externalId
-            }
-          }
         }
       }
     }
@@ -72,7 +63,7 @@ export const createEuroClimateArticle = new UpdateActionBuilder<
   typeof publishIntegrationArticleMutation
 >(euroclimateFormSchema)
   .withMutation(publishIntegrationArticleMutation, (id, data) => {
-    // TODO: Add distortion type and replace data.appearances[0] with data.appearance once the schema is updated
+    // TODO: Add distortion type
 
     return {
       input: {
@@ -83,10 +74,10 @@ export const createEuroClimateArticle = new UpdateActionBuilder<
           topic: data.topic as EuroClimateTopic,
           subtopics: data.subtopics as EuroClimateSubtopic[],
           // distortionType: data.distortionType as EuroClimateDistortionType,
-          appearanceDate: data.appearances[0].appearanceDate,
-          appearanceUrl: data.appearances[0].appearanceUrl,
-          format: data.appearances[0].format as EuroClimateFormat,
-          archiveUrl: data.appearances[0].archiveUrl,
+          appearanceDate: data.appearance.appearanceDate,
+          appearanceUrl: data.appearance.appearanceUrl,
+          format: data.appearance.format as EuroClimateFormat,
+          archiveUrl: data.appearance.archiveUrl,
         },
       },
     }

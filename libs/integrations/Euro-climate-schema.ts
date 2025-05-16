@@ -191,21 +191,17 @@ export const euroclimateFormSchema = z
     distortionType: z
       .array(z.string())
       .min(1, 'Vyberte alespoň jeden typ dezinformace'),
-    appearances: z
-      .array(
-        z.object({
-          appearanceUrl: z.string().min(1, 'Zadejte URL'),
-          appearanceDate: z.string(),
-          archiveUrl: z.string().optional(),
-          format: z.enum(
-            formatType.map((format) => format.value) as [string, ...string[]],
-            {
-              required_error: 'Vyberte formát',
-            }
-          ),
-        })
-      )
-      .min(1, 'Musíte přidat alespoň jeden výskyt'),
+    appearance: z.object({
+      appearanceUrl: z.string().min(1, 'Zadejte URL'),
+      appearanceDate: z.string(),
+      archiveUrl: z.string().optional(),
+      format: z.enum(
+        formatType.map((format) => format.value) as [string, ...string[]],
+        {
+          required_error: 'Vyberte formát',
+        }
+      ),
+    }),
   })
   .refine(
     (data) => {

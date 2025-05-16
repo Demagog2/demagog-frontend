@@ -16,48 +16,45 @@ import {
 import { Multiselect } from '../../forms/Multiselect'
 import { Select } from '../../forms/Select'
 import { SubmitButton } from '../../forms/SubmitButton'
-import {
-  ChevronUpIcon,
-  PlusCircleIcon,
-  TrashIcon,
-  ChevronDownIcon,
-} from '@heroicons/react/24/outline'
-import { useFieldArray } from 'react-hook-form'
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
+import { FormAction } from '@/libs/forms/form-action'
+import { useFormState } from 'react-dom'
+import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
+import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 
 type FieldValues = z.output<typeof euroclimateFormSchema>
 
-export function AdminEuroClimateForm() {
+export function AdminEuroClimateForm(props: { action: FormAction }) {
+  const [state, formAction] = useFormState(props.action, { state: 'initial' })
   const [isFormVisible, setIsFormVisible] = useState(false)
+
+  useFormToasts(state)
 
   const {
     register,
     control,
     watch,
-    formState: { errors },
+    trigger,
+    formState: { isValid, errors },
   } = useForm<FieldValues>({
     resolver: zodResolver(euroclimateFormSchema),
     defaultValues: {
       topic: undefined,
       subtopics: [],
       distortionType: [],
-      appearances: [
-        {
-          appearanceUrl: '',
-          appearanceDate: '',
-          archiveUrl: '',
-          format: 'other',
-        },
-      ],
+      appearance: {
+        appearanceUrl: '',
+        appearanceDate: '',
+        archiveUrl: '',
+        format: 'other',
+      },
     },
   })
 
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: 'appearances',
-  })
-
   const selectedTopic = watch('topic')
+
+  const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
   return (
     <>
@@ -82,186 +79,143 @@ export function AdminEuroClimateForm() {
       </div>
 
       {isFormVisible && (
-        <div className="w-full border-t border-gray-900/10 mt-6">
-          <div className="flex justify-end mt-6">
-            <SubmitButton />
-          </div>
-          <AdminFormContent>
-            <div className="col-span-12 gap-y-5">
-              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                <Legend className=" text-base font-semibold leading-7 text-gray-900">
-                  Podrobnosti o článku
-                </Legend>
-                <div className="grid sm:grid-cols-2 gap-4">
-                  <Field>
-                    <Label htmlFor="topic">Téma</Label>
-                    <Controller
-                      control={control}
-                      name="topic"
-                      render={({ field }) => (
-                        <Select
-                          id="topic"
-                          items={Object.entries(topic).map(
-                            ([id, topicData]) => ({
-                              label: topicData.label,
-                              value: id,
-                            })
-                          )}
-                          placeholder="Vyberte téma"
-                          onChange={(item) => field.onChange(item?.value)}
-                          defaultValue={field.value}
-                          canRemoveItem
-                        />
-                      )}
-                    />
-                    <ErrorMessage message={errors.topic?.message} />
-                  </Field>
+        <form action={formAction} onSubmit={handleSubmitForm}>
+          <div className="w-full border-t border-gray-900/10 mt-6">
+            <div className="flex justify-end mt-6">
+              <SubmitButton />
+            </div>
+            <AdminFormContent>
+              <input type="hidden" name="articleId" />
+              <div className="col-span-12 gap-y-5">
+                <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+                  <Legend className=" text-base font-semibold leading-7 text-gray-900">
+                    Podrobnosti o článku
+                  </Legend>
+                  <div className="grid sm:grid-cols-2 gap-4">
+                    <Field>
+                      <Label htmlFor="topic">Téma</Label>
+                      <Controller
+                        control={control}
+                        name="topic"
+                        render={({ field }) => (
+                          <Select
+                            id="topic"
+                            items={Object.entries(topic).map(
+                              ([id, topicData]) => ({
+                                label: topicData.label,
+                                value: id,
+                              })
+                            )}
+                            placeholder="Vyberte téma"
+                            onChange={(item) => field.onChange(item?.value)}
+                            defaultValue={field.value}
+                            canRemoveItem
+                          />
+                        )}
+                      />
+                      <ErrorMessage message={errors.topic?.message} />
+                    </Field>
 
-                  <Field>
-                    <Label htmlFor="subtopics">Podtéma</Label>
+                    <Field>
+                      <Label htmlFor="subtopics">Podtéma</Label>
 
+                      <Multiselect
+                        control={control}
+                        items={
+                          selectedTopic
+                            ? topic[
+                                selectedTopic as keyof typeof topic
+                              ].subtopics.map((item) => ({
+                                label: item.label,
+                                value: item.id,
+                              }))
+                            : []
+                        }
+                        name="subtopics"
+                        placeholder="Vyberte podtémata"
+                      />
+                    </Field>
+                  </div>
+                </Fieldset>
+                <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+                  <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+                    Podrobnosti o tvrzení
+                  </Legend>
+                  <Field>
+                    <Label htmlFor="disctortionType">Typ dezinformace</Label>
                     <Multiselect
                       control={control}
-                      items={
-                        selectedTopic
-                          ? topic[
-                              selectedTopic as keyof typeof topic
-                            ].subtopics.map((item) => ({
-                              label: item.label,
-                              value: item.id,
-                            }))
-                          : []
-                      }
-                      name="subtopics"
-                      placeholder="Vyberte podtémata"
+                      items={distortionType}
+                      name="distortionType"
+                      placeholder="Vyberte typ dezinformace"
                     />
                   </Field>
-                </div>
-              </Fieldset>
-              <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                  Podrobnosti o tvrzení
-                </Legend>
-                <Field>
-                  <Label htmlFor="disctortionType">Typ dezinformace</Label>
-                  <Multiselect
-                    control={control}
-                    items={distortionType}
-                    name="distortionType"
-                    placeholder="Vyberte typ dezinformace"
-                  />
-                </Field>
-              </Fieldset>
+                </Fieldset>
+                <Fieldset className="space-y-4 col-span-8 border-b border-gray-900/10 pb-8 px-6">
+                  <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+                    Výskyt tvrzení
+                  </Legend>
 
-              {fields.map((field, index) => (
-                <>
-                  <Fieldset
-                    key={field.id}
-                    className="space-y-4 col-span-8 border-b border-gray-900/10 pb-8 px-6"
-                  >
-                    <div className="flex justify-between items-center">
-                      <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                        Výskyt tvrzení #{index + 1}
-                      </Legend>
-                      {index > 0 && (
-                        <button
-                          type="button"
-                          onClick={() => remove(index)}
-                          className="ml-4 p-2 text-gray-400 hover:text-indigo-600"
-                          title="Odstranit výskyt"
-                        >
-                          <TrashIcon className="h-5 w-5" />
-                        </button>
-                      )}
-                    </div>
-
+                  <Field>
+                    <Label htmlFor="appearanceUrl">URL výskytu tvrzení</Label>
+                    <Input
+                      type="text"
+                      id="appearanceUrl"
+                      placeholder="Zadejte URL"
+                      {...register('appearance.appearanceUrl', {
+                        required: true,
+                      })}
+                    />
+                    <ErrorMessage
+                      message={errors.appearance?.appearanceUrl?.message}
+                    />
+                  </Field>
+                  <div className="grid sm:grid-cols-2 gap-4">
                     <Field>
-                      <Label htmlFor={`appearanceUrl-${index}`}>
-                        URL výskytu tvrzení
-                      </Label>
+                      <Label htmlFor="appearanceDate">Datum výskytu</Label>
                       <Input
-                        type="text"
-                        id={`appearanceUrl-${index}`}
-                        placeholder="Zadejte URL"
-                        {...register(`appearances.${index}.appearanceUrl`, {
-                          required: true,
-                        })}
+                        type="date"
+                        {...register('appearance.appearanceDate')}
+                      />
+                    </Field>
+                    <Field>
+                      <Label htmlFor="format">Formát šíření</Label>
+                      <Controller
+                        control={control}
+                        name="appearance.format"
+                        render={({ field }) => (
+                          <Select
+                            id="format"
+                            items={formatType}
+                            placeholder="Vyberte formát"
+                            onChange={(item) => field.onChange(item?.value)}
+                            defaultValue={field.value}
+                            canRemoveItem
+                          />
+                        )}
                       />
                       <ErrorMessage
-                        message={
-                          errors.appearances?.[index]?.appearanceUrl?.message
-                        }
+                        message={errors.appearance?.format?.message}
                       />
                     </Field>
-                    <div className="grid sm:grid-cols-2 gap-4">
-                      <Field>
-                        <Label htmlFor={`appearanceDate-${index}`}>
-                          Datum výskytu
-                        </Label>
-                        <Input
-                          type="date"
-                          {...register(`appearances.${index}.appearanceDate`)}
-                        />
-                      </Field>
-                      <Field>
-                        <Label htmlFor={`format-${index}`}>Formát šíření</Label>
-                        <Controller
-                          control={control}
-                          name={`appearances.${index}.format`}
-                          render={({ field }) => (
-                            <Select
-                              id={`format-${index}`}
-                              items={formatType}
-                              placeholder="Vyberte formát"
-                              onChange={(item) => field.onChange(item?.value)}
-                              defaultValue={field.value}
-                              canRemoveItem
-                            />
-                          )}
-                        />
-                        <ErrorMessage
-                          message={errors.appearances?.[index]?.format?.message}
-                        />
-                      </Field>
-                    </div>
+                  </div>
 
-                    <Field>
-                      <Label htmlFor={`archiveUrl-${index}`} isOptional>
-                        Archivní URL
-                      </Label>
-                      <Input
-                        type="text"
-                        id={`archiveUrl-${index}`}
-                        placeholder="Zadejte archivní URL"
-                        {...register(`appearances.${index}.archiveUrl`)}
-                      />
-                    </Field>
-                  </Fieldset>
-                </>
-              ))}
-              <div className="flex justify-end mt-4">
-                <button
-                  type="button"
-                  className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                  onClick={() =>
-                    append({
-                      appearanceUrl: '',
-                      appearanceDate: '',
-                      archiveUrl: '',
-                      format: 'other',
-                    })
-                  }
-                >
-                  <PlusCircleIcon
-                    aria-hidden="true"
-                    className="-ml-0.5 h-5 w-5"
-                  />
-                  Přidat výskyt
-                </button>
+                  <Field>
+                    <Label htmlFor="archiveUrl" isOptional>
+                      Archivní URL
+                    </Label>
+                    <Input
+                      type="text"
+                      id="archiveUrl"
+                      placeholder="Zadejte archivní URL"
+                      {...register('appearance.archiveUrl')}
+                    />
+                  </Field>
+                </Fieldset>
               </div>
-            </div>
-          </AdminFormContent>
-        </div>
+            </AdminFormContent>
+          </div>
+        </form>
       )}
     </>
   )
