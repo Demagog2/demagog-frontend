@@ -59,6 +59,7 @@ export default async function AdminArticleIntegrations(props: {
               createdAt
             }
             euroClimate {
+              ...AdminEuroClimateFormData
               createdAt
             }
           }
@@ -111,6 +112,7 @@ export default async function AdminArticleIntegrations(props: {
             <AdminEuroClimateForm
               action={createEuroClimateArticle}
               articleId={data.article.id}
+              data={data.article.integrations?.euroClimate ?? undefined}
             />
           </AdminIntegrationCard>
         </div>

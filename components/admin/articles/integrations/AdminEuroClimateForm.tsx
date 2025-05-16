@@ -22,13 +22,27 @@ import { FormAction } from '@/libs/forms/form-action'
 import { useFormState } from 'react-dom'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
+import { FragmentType, gql, useFragment } from '@/__generated__'
+
+const AdminEuroClimateFormDataFragment = gql(`
+    fragment AdminEuroClimateFormData on EuroClimateIntegration {
+      topic
+      subtopics
+      appearanceDate
+      appearanceUrl
+      archiveUrl
+      format
+    }
+  `)
 
 type FieldValues = z.output<typeof euroclimateFormSchema>
 
 export function AdminEuroClimateForm(props: {
   action: FormAction
   articleId: string
+  data?: FragmentType<typeof AdminEuroClimateFormDataFragment>
 }) {
+  const data = useFragment(AdminEuroClimateFormDataFragment, props.data)
   const [state, formAction] = useFormState(props.action, { state: 'initial' })
   const [isFormVisible, setIsFormVisible] = useState(false)
 
@@ -44,14 +58,14 @@ export function AdminEuroClimateForm(props: {
     resolver: zodResolver(euroclimateFormSchema),
     defaultValues: {
       articleId: props.articleId,
-      topic: undefined,
-      subtopics: [],
-      distortionType: [],
+      topic: data?.topic ?? '',
+      subtopics: data?.subtopics ?? [],
+      // distortionType: [],
       appearance: {
-        appearanceUrl: '',
-        appearanceDate: '',
-        archiveUrl: '',
-        format: 'other',
+        appearanceUrl: data?.appearanceUrl ?? '',
+        appearanceDate: data?.appearanceDate ?? '',
+        archiveUrl: data?.archiveUrl ?? '',
+        format: data?.format ?? '',
       },
     },
   })
@@ -142,7 +156,7 @@ export function AdminEuroClimateForm(props: {
                     </Field>
                   </div>
                 </Fieldset>
-                <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+                {/* <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
                   <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
                     Podrobnosti o tvrzení
                   </Legend>
@@ -155,7 +169,7 @@ export function AdminEuroClimateForm(props: {
                       placeholder="Vyberte typ dezinformace"
                     />
                   </Field>
-                </Fieldset>
+                </Fieldset> */}
                 <Fieldset className="space-y-4 col-span-8 border-b border-gray-900/10 pb-8 px-6">
                   <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
                     Výskyt tvrzení

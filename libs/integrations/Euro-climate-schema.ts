@@ -186,9 +186,9 @@ export const euroclimateFormSchema = z
       required_error: 'Zvolte téma',
     }),
     subtopics: z.array(z.string()).min(1, 'Zvolte alespoň jedno podtéma'),
-    distortionType: z
-      .array(z.string())
-      .min(1, 'Vyberte alespoň jeden typ dezinformace'),
+    // distortionType: z
+    //   .array(z.string())
+    //   .min(1, 'Vyberte alespoň jeden typ dezinformace'),
     appearance: z.object({
       appearanceUrl: z.string().min(1, 'Zadejte URL'),
       appearanceDate: z.string(),
