@@ -116,7 +116,7 @@
 
     .content-text-node {
       p {
-        @extend .mt-6, .fs-8, .fs-md-7;
+        @extend .mt-6, , .mb-2, .fs-8, .fs-md-7;
       }
 
       h2 {
@@ -172,6 +172,30 @@
           }
         }
       }
+
+      ul,
+      ol {
+        @extend .mb-0;
+
+        li {
+          @extend .li-item, .fs-8;
+        }
+
+        li.li-item:not(:last-child) {
+          margin-bottom: 19px;
+        }
+      }
+
+      ol {
+        padding-left: 1.5rem;
+        list-style-position: outside;
+
+        li {
+          padding-left: 0.5rem;
+          position: relative;
+        }
+      }
+
       .ck-editor_demagog-box-wrapper.bg-grey {
         @extend .border-0, .bg-lightgrey;
       }
@@ -190,6 +214,11 @@
           ol li {
             font-size: $h7-font-size !important;
           }
+        }
+
+        ul li,
+        ol li {
+          font-size: $h7-font-size !important;
         }
       }
     }
