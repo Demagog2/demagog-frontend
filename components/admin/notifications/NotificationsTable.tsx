@@ -9,7 +9,8 @@ import classNames from 'classnames'
 import { ToggleReadButton } from './ToggleReadButton'
 import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
 import { groupBy, sortBy } from 'lodash'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
 
 const NotificationsTableFragment = gql(`
   fragment NotificationsTable on NotificationConnection {
@@ -39,6 +40,8 @@ export function NotificationsTable(props: {
   notifications: FragmentType<typeof NotificationsTableFragment>
   allNotifications?: boolean
 }) {
+  const router = useRouter()
+
   const notifications = useFragment(
     NotificationsTableFragment,
     props.notifications
@@ -62,6 +65,21 @@ export function NotificationsTable(props: {
     [notificationsByStatementId]
   )
 
+  const { allNotifications } = props
+
+  const onClick = useCallback(
+    async (notification: { id: string; statement: { id: string } }) => {
+      const markAsReadFn = allNotifications
+        ? markAsReadAndRedirect(notification.id)
+        : markStatementNotificationsAsReadAndRedirect(notification.statement.id)
+
+      const result = await markAsReadFn
+      if (result.type === 'success') {
+        router.push(result.redirectUrl)
+      }
+    },
+    [allNotifications, router]
+  )
   return (
     <table className="admin-content-table">
       <thead>
@@ -85,11 +103,7 @@ export function NotificationsTable(props: {
                   'text-start hover:bg-gray-50 hover:text-indigo-600 cursor-pointer',
                   { 'bg-blue-100 hover:bg-gray-100': !notification.isRead }
                 )}
-                onClick={() =>
-                  props.allNotifications
-                    ? markAsReadAndRedirect(notification.id)
-                    : markStatementNotificationsAsReadAndRedirect(statementId)
-                }
+                onClick={() => onClick(notification)}
               >
                 <td className="!whitespace-normal">
                   {props.allNotifications ? (
