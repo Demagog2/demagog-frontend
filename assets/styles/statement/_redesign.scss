@@ -97,6 +97,8 @@
   }
 
   .content-text-node {
+    @include lists;
+
     h2 {
       @extend .mt-8, .fs-5, .fs-md-2;
       font-weight: 800;
@@ -142,17 +144,10 @@
 
       ul,
       ol {
-        @extend .mb-0;
-
-        li {
-          @extend .li-item, .fs-8;
-        }
-
-        li.li-item:not(:last-child) {
-          margin-bottom: 19px;
-        }
+        @extend .mt-0;
       }
     }
+
     .ck-editor_demagog-box-wrapper.bg-grey {
       @extend .border-0, .bg-lightgrey;
     }
@@ -170,6 +165,11 @@
         ol li {
           font-size: $h7-font-size !important;
         }
+      }
+
+      ul li,
+      ol li {
+        font-size: $h7-font-size !important;
       }
     }
     .scroll-vertical .ck-editor_demagog-box-wrapper.float-right {
