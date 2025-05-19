@@ -95,6 +95,8 @@
   }
 
   .content-text-node {
+    @include lists;
+
     h2 {
       @extend .mt-8, .fs-5, .fs-md-2;
       font-weight: 800;
@@ -140,38 +142,7 @@
 
       ul,
       ol {
-        @extend .mb-0;
-
-        li {
-          @extend .li-item, .fs-8;
-        }
-
-        li.li-item:not(:last-child) {
-          margin-bottom: 19px;
-        }
-      }
-    }
-
-    ul,
-    ol {
-      @extend .mb-0;
-
-      li {
-        @extend .li-item, .fs-8;
-      }
-
-      li.li-item:not(:last-child) {
-        margin-bottom: 19px;
-      }
-    }
-
-    ol {
-      padding-left: 1.5rem;
-      list-style-position: outside;
-
-      li {
-        padding-left: 0.5rem;
-        position: relative;
+        @extend .mt-0;
       }
     }
 
