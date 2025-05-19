@@ -29,9 +29,15 @@ export function ToggleReadButton(props: {
     evt.stopPropagation()
 
     if (isRead) {
-      await markAsUnread(notification.id)
+      const result = await markAsUnread(notification.id)
+      if (result.type === 'success') {
+        router.push(result.redirectUrl)
+      }
     } else {
-      await markAsRead(notification.id)
+      const result = await markAsRead(notification.id)
+      if (result.type === 'success') {
+        router.push(result.redirectUrl)
+      }
     }
 
     router.refresh()

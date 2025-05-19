@@ -2,7 +2,6 @@
 
 import { gql } from '@/__generated__'
 import { serverMutation } from '@/libs/apollo-client-server'
-import { redirect } from 'next/navigation'
 
 const UpdateNotification = gql(`
   mutation UpdateNotification($id: ID!, $input: UpdateNotificationInput!) {
@@ -32,9 +31,10 @@ export async function markAsReadAndRedirect(notificationId: string) {
   })
 
   if (data?.updateNotification?.notification) {
-    redirect(
-      `/beta/admin/sources/${data.updateNotification?.notification.statement.source.id}/statements/${data.updateNotification?.notification.statement.id}`
-    )
+    return {
+      type: 'success' as const,
+      redirectUrl: `/beta/admin/sources/${data.updateNotification?.notification.statement.source.id}/statements/${data.updateNotification?.notification.statement.id}`,
+    }
   }
 
   return {
@@ -70,9 +70,10 @@ export async function markStatementNotificationsAsReadAndRedirect(
   })
 
   if (data?.markUnreadNotificationsAsRead?.notifications.length) {
-    redirect(
-      `/beta/admin/sources/${data.markUnreadNotificationsAsRead?.notifications?.[0].statement.source.id}/statements/${statementId}`
-    )
+    return {
+      type: 'success' as const,
+      redirectUrl: `/beta/admin/sources/${data.markUnreadNotificationsAsRead?.notifications?.[0].statement.source.id}/statements/${statementId}`,
+    }
   }
 
   return {
@@ -82,11 +83,11 @@ export async function markStatementNotificationsAsReadAndRedirect(
 }
 
 export async function markAsUnread(notificationId: string) {
-  toggleReadState(notificationId, null)
+  return toggleReadState(notificationId, null)
 }
 
 export async function markAsRead(notificationId: string) {
-  toggleReadState(notificationId, new Date().toISOString())
+  return toggleReadState(notificationId, new Date().toISOString())
 }
 
 async function toggleReadState(notificationId: string, readAt: string | null) {
@@ -101,7 +102,10 @@ async function toggleReadState(notificationId: string, readAt: string | null) {
   })
 
   if (data?.updateNotification?.notification) {
-    redirect(`/beta/admin/notifications/all`)
+    return {
+      type: 'success' as const,
+      redirectUrl: `/beta/admin/notifications/all`,
+    }
   }
 
   return {
