@@ -19,4 +19,7 @@ export const userSchema = z.object({
   bio: z.string().optional(),
   positionDescription: z.string().optional(),
   avatar: z.union([z.string(), imageFileSchema]).optional(),
+  deleteAvatar: z
+    .preprocess((value) => value === 'true', z.boolean())
+    .optional(),
 })
