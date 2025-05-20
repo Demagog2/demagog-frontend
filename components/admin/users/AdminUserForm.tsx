@@ -199,11 +199,12 @@ export function AdminUserForm(props: {
 
                 <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
                   <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
-                    <Label htmlFor="avatar" isOptional>
-                      Vybrat obrázek
-                    </Label>
-
-                    <AdminImageInput control={control} name="avatar" />
+                    <AdminImageInput
+                      control={control}
+                      name="avatar"
+                      required={false}
+                      labelName="Vybrat obrázek"
+                    />
                   </div>
                 </div>
 

@@ -10,12 +10,14 @@ import {
   type FieldValues,
   type Path,
 } from 'react-hook-form'
+import { Label } from '../forms/Label'
 
 interface AdminImageInputProps<T extends FieldValues> {
   control: Control<T>
   name: Path<T>
   required?: boolean
   redCrossOption?: boolean
+  labelName?: string
 }
 
 export function AdminImageInput<T extends FieldValues>({
@@ -23,6 +25,7 @@ export function AdminImageInput<T extends FieldValues>({
   name,
   required = true,
   redCrossOption = false,
+  labelName,
 }: AdminImageInputProps<T>) {
   const { field } = useController({
     control,
@@ -110,6 +113,16 @@ export function AdminImageInput<T extends FieldValues>({
     [addCross, processImage]
   )
 
+  const handleRemoveImage = () => {
+    setImagePreview(null)
+    setOriginalFile(null)
+    field.onChange('')
+    const fileInput = document.getElementById(field.name) as HTMLInputElement
+    if (fileInput) {
+      fileInput.value = ''
+    }
+  }
+
   // Re-process the image whenever addCross changes
   useEffect(() => {
     if (originalFile) {
@@ -132,49 +145,65 @@ export function AdminImageInput<T extends FieldValues>({
           />
         </SwitchField>
       )}
-
-      <div className="mt-6 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
-        <div className="text-center">
-          {imagePreview || field.value ? (
-            <>
-              <img
-                src={imagePreview || field.value}
-                alt="Preview"
-                className="max-w-full h-auto rounded-lg"
-              />
-            </>
-          ) : (
-            <PhotoIcon
-              className="mx-auto h-12 w-12 text-gray-300"
-              aria-hidden="true"
-            />
-          )}
-
-          <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
-            <label
-              htmlFor={field.name}
-              className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
-            >
-              <span>Vyberte soubor</span>
-              <input
-                ref={field.ref}
-                id={field.name}
-                name={field.name}
-                type="file"
-                className="sr-only"
-                accept="image/*"
-                onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  if (file) {
-                    handleDrop(file)
-                  }
-                }}
-              />
-            </label>
+      <div className="mt-6">
+        {labelName && (
+          <div className="mb-2">
+            <Label htmlFor={field.name} isOptional={!required}>
+              {labelName}
+            </Label>
           </div>
-          <p className="text-xs leading-5 text-gray-600">
-            PNG, JPG, GIF až do velikosti 10MB
-          </p>
+        )}
+
+        <div className="flex flex-col items-center justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
+          <div className="text-center flex flex-col items-center justify-center">
+            {imagePreview || field.value ? (
+              <>
+                <img
+                  src={imagePreview || field.value}
+                  alt="Preview"
+                  className="max-w-full h-auto rounded-lg"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="mt-4 inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+                >
+                  Odebrat obrázek
+                </button>
+              </>
+            ) : (
+              <PhotoIcon
+                className="mx-auto h-12 w-12 text-gray-300"
+                aria-hidden="true"
+              />
+            )}
+
+            <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
+              <label
+                htmlFor={field.name}
+                className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
+              >
+                <span>Vyberte soubor</span>
+                <input
+                  ref={field.ref}
+                  id={field.name}
+                  name={field.name}
+                  type="file"
+                  className="sr-only"
+                  accept="image/*"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    if (file) {
+                      handleDrop(file)
+                    }
+                  }}
+                />
+              </label>
+            </div>
+            <p className="text-xs leading-5 text-gray-600">
+              PNG, JPG, GIF až do velikosti 10MB
+            </p>
+          </div>
         </div>
       </div>
     </div>

@@ -74,6 +74,7 @@ const adminUpdateSpeakerMutation = gql(`
     updateSpeaker(id: $id, speakerInput: $speakerInput) {
       speaker {
         id
+        avatar
       }
     }
   }
@@ -86,13 +87,14 @@ export const updateSpeaker = new UpdateActionBuilder<
   typeof adminUpdateSpeakerMutation
 >(speakerSchema)
   .withMutation(adminUpdateSpeakerMutation, (id, data) => {
-    const { memberships = [], ...rest } = data
+    const { memberships = [], avatar, ...rest } = data
 
     return {
       id,
       speakerInput: {
         ...rest,
         memberships,
+        avatar: avatar === '' ? null : avatar,
       },
     }
   })
