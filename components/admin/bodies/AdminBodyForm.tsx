@@ -22,6 +22,7 @@ import { SwitchField } from '../forms/SwitchField'
 import { schema } from '@/libs/bodies/schema'
 import { dateInputFormat } from '@/libs/date-time'
 import { AdminFormContent } from '../layout/AdminFormContent'
+import { AdminImageInput } from '../images/AdminImageInput'
 
 const AdminBodyDataFragment = gql(`
   fragment AdminBodyData on Body {
@@ -29,6 +30,7 @@ const AdminBodyDataFragment = gql(`
     shortName
     isParty
     link
+    logo
     foundedAt
     isInactive
     terminatedAt
@@ -59,6 +61,7 @@ export function AdminBodyForm(props: {
       shortName: body?.shortName ?? '',
       isParty: body?.isParty ?? false,
       link: body?.link ?? '',
+      logo: body?.logo ?? '',
       foundedAt: body?.foundedAt ? dateInputFormat(body.foundedAt) : '',
       isInactive: body?.isInactive ?? false,
       terminatedAt: body?.terminatedAt
@@ -68,7 +71,7 @@ export function AdminBodyForm(props: {
   })
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
-  /* --TODO-- add logo input */
+
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
@@ -130,6 +133,14 @@ export function AdminBodyForm(props: {
                   atp.)
                 </Label>
                 <Input id="link" {...register('link')} />
+              </Field>
+              <Field>
+                <AdminImageInput
+                  control={control}
+                  name="logo"
+                  required={false}
+                  labelName="Vybrat logo"
+                />
               </Field>
             </Fieldset>
             <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
