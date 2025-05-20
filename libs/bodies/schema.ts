@@ -7,6 +7,7 @@ export const schema = z.object({
   isParty: z.preprocess((value) => value === 'on', z.boolean()).optional(),
   link: z.string().trim().optional(),
   logo: z.union([z.string(), imageFileSchema]).optional(),
+  deleteLogo: z.preprocess((value) => value === 'true', z.boolean()).optional(),
   foundedAt: z.string().optional(),
   isInactive: z.preprocess((value) => value === 'on', z.boolean()).optional(),
   terminatedAt: z.string().optional(),
