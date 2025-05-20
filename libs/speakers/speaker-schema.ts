@@ -19,6 +19,9 @@ export const speakerSchema = z.object({
     .trim()
     .min(1, 'Příjmení musí obsahovat alespoň jeden znak.'),
   avatar: z.union([z.string(), imageFileSchema]).optional(),
+  deleteAvatar: z
+    .preprocess((value) => value === 'true', z.boolean())
+    .optional(),
   role: z.string().trim().optional(),
   wikidataId: z.string().trim().optional(),
   websiteUrl: z.string().trim().optional(),

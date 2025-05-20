@@ -69,6 +69,7 @@ export function AdminSpeakerForm(props: {
     control,
     register,
     trigger,
+    setValue,
     formState: { isValid, errors },
   } = useForm<FieldValues>({
     resolver: zodResolver(speakerSchema),
@@ -88,6 +89,7 @@ export function AdminSpeakerForm(props: {
           body: membership.body.name ?? '',
           bodyId: membership.body.id,
         })) ?? [],
+      deleteAvatar: false,
       ...(state?.state === 'initial' ? {} : state.fields),
     },
   })
@@ -102,6 +104,8 @@ export function AdminSpeakerForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
+        <input type="hidden" {...register('deleteAvatar')} />
+
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />
           <AdminFormActions>
@@ -141,6 +145,7 @@ export function AdminSpeakerForm(props: {
                   name="avatar"
                   labelName="Vybrat obrázek"
                   required={false}
+                  onDeleteImage={() => setValue('deleteAvatar', true)}
                 />
               </div>
             </Fieldset>

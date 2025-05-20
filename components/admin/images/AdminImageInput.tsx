@@ -18,6 +18,8 @@ interface AdminImageInputProps<T extends FieldValues> {
   required?: boolean
   redCrossOption?: boolean
   labelName?: string
+  // TODO: Once we have all forms covered, remove ? (optional)
+  onDeleteImage?(): void
 }
 
 export function AdminImageInput<T extends FieldValues>({
@@ -26,6 +28,7 @@ export function AdminImageInput<T extends FieldValues>({
   required = true,
   redCrossOption = false,
   labelName,
+  onDeleteImage,
 }: AdminImageInputProps<T>) {
   const { field } = useController({
     control,
@@ -113,15 +116,12 @@ export function AdminImageInput<T extends FieldValues>({
     [addCross, processImage]
   )
 
-  const handleRemoveImage = () => {
+  const handleRemoveImage = useCallback(() => {
     setImagePreview(null)
     setOriginalFile(null)
     field.onChange('')
-    const fileInput = document.getElementById(field.name) as HTMLInputElement
-    if (fileInput) {
-      fileInput.value = ''
-    }
-  }
+    onDeleteImage?.()
+  }, [field, onDeleteImage])
 
   // Re-process the image whenever addCross changes
   useEffect(() => {
