@@ -53,6 +53,7 @@ export function AdminBodyForm(props: {
     control,
     register,
     trigger,
+    setValue,
     formState: { isValid, errors },
   } = useForm<FieldValues>({
     resolver: zodResolver(schema),
@@ -62,6 +63,7 @@ export function AdminBodyForm(props: {
       isParty: body?.isParty ?? false,
       link: body?.link ?? '',
       logo: body?.logo ?? '',
+      deleteLogo: false,
       foundedAt: body?.foundedAt ? dateInputFormat(body.foundedAt) : '',
       isInactive: body?.isInactive ?? false,
       terminatedAt: body?.terminatedAt
@@ -75,6 +77,7 @@ export function AdminBodyForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
+        <input type="hidden" {...register('deleteLogo')} />
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />
           <AdminFormActions>
@@ -140,6 +143,7 @@ export function AdminBodyForm(props: {
                   name="logo"
                   required={false}
                   labelName="Vybrat logo"
+                  onDeleteImage={() => setValue('deleteLogo', true)}
                 />
               </Field>
             </Fieldset>
