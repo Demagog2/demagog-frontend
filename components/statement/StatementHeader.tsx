@@ -2,7 +2,6 @@
 
 import StatementAssessment from '@/components/statement/Assessment'
 import TagIcon from '@/assets/icons/tag.svg'
-import PackmanIcon from '@/assets/icons/packman.svg'
 import formatDate from '@/libs/format-date'
 import { PropsWithChildren } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
