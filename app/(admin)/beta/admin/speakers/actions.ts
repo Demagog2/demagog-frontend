@@ -87,14 +87,13 @@ export const updateSpeaker = new UpdateActionBuilder<
   typeof adminUpdateSpeakerMutation
 >(speakerSchema)
   .withMutation(adminUpdateSpeakerMutation, (id, data) => {
-    const { memberships = [], avatar, ...rest } = data
+    const { memberships = [], ...rest } = data
 
     return {
       id,
       speakerInput: {
         ...rest,
         memberships,
-        avatar: avatar === '' ? null : avatar,
       },
     }
   })
