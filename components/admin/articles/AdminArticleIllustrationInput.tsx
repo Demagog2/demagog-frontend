@@ -48,6 +48,7 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
   article?: FragmentType<typeof AdminArticleIllustrationFragment>
   control: Control<T>
   name: Path<T>
+  onDeleteImage?: () => void
 }) {
   const { field } = useController({
     control: props.control,
@@ -75,8 +76,9 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
 
       // Update form field value to null instructing server to remove the image
       field.onChange(null)
+      props.onDeleteImage?.()
     },
-    [field]
+    [field, props.onDeleteImage]
   )
 
   const handleImageUpload = useCallback((file: File) => {

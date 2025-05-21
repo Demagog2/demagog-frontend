@@ -27,6 +27,9 @@ const sharedArticleSchema = z.object({
   articleTags: z.array(z.string()).optional(),
   illustration: imageFileSchema.optional(),
   illustrationCaption: z.string().optional(),
+  deleteIllustration: z
+    .preprocess((value) => value === 'true', z.boolean())
+    .optional(),
 })
 
 export const schema = z.discriminatedUnion('articleType', [
