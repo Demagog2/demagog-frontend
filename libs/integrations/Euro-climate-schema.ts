@@ -6,7 +6,13 @@ import {
 import { z } from 'zod'
 
 // Define the topics and their subtopics
-export const topic = {
+export const topics: Record<
+  EuroClimateTopic,
+  {
+    label: string
+    subtopics: Array<{ id: EuroClimateSubtopic; label: string }>
+  }
+> = {
   [EuroClimateTopic.ExtremeWeatherEvents]: {
     label: 'Extrémní výkyvy počasí',
     subtopics: [
@@ -173,19 +179,18 @@ export const formatType = [
 ]
 
 // Create a type for the topic IDs
-type TopicId = keyof typeof topic
-
-export type Topic = typeof topic
-export type TopicKey = keyof Topic
+type TopicId = keyof typeof topics
 
 // Create the form schema
 export const euroclimateFormSchema = z
   .object({
     articleId: z.string(),
-    topic: z.enum(Object.keys(topic) as [string, ...string[]], {
+    topic: z.nativeEnum(EuroClimateTopic, {
       required_error: 'Zvolte téma',
     }),
-    subtopics: z.array(z.string()).min(1, 'Zvolte alespoň jedno podtéma'),
+    subtopics: z
+      .array(z.nativeEnum(EuroClimateSubtopic))
+      .min(1, 'Zvolte alespoň jedno podtéma'),
     // distortionType: z
     //   .array(z.string())
     //   .min(1, 'Vyberte alespoň jeden typ dezinformace'),
@@ -193,18 +198,15 @@ export const euroclimateFormSchema = z
       appearanceUrl: z.string().min(1, 'Zadejte URL'),
       appearanceDate: z.string(),
       archiveUrl: z.string().optional(),
-      format: z.enum(
-        formatType.map((format) => format.value) as [string, ...string[]],
-        {
-          required_error: 'Vyberte formát',
-        }
-      ),
+      format: z.nativeEnum(EuroClimateFormat, {
+        required_error: 'Vyberte formát',
+      }),
     }),
   })
   .refine(
     (data) => {
       // Validate that the selected subtopic belongs to the selected topic
-      const selectedTopic = topic[data.topic as TopicId]
+      const selectedTopic = topics[data.topic as TopicId]
       return data.subtopics.every((subtopicId) =>
         selectedTopic.subtopics.some((subtopic) => subtopic.id === subtopicId)
       )

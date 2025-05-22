@@ -1,8 +1,10 @@
 import { useFormStatus } from 'react-dom'
 import { Spinner } from './Spinner'
 
-export function SubmitButton(props: { isPending?: boolean }) {
+export function SubmitButton(props: { isPending?: boolean; label?: string }) {
   const { pending: isFormBeingSubmitted } = useFormStatus()
+
+  const { label = 'Uložit' } = props
 
   return (
     <button
@@ -14,7 +16,7 @@ export function SubmitButton(props: { isPending?: boolean }) {
         <Spinner className="text-white w-4 h-4" />
       )}
 
-      {isFormBeingSubmitted ? 'Ukládání...' : 'Uložit'}
+      {isFormBeingSubmitted ? 'Ukládání...' : label}
     </button>
   )
 }
