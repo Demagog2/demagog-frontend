@@ -6,7 +6,7 @@
 .statement-detail {
   @include perex;
   @include unsafe-data-wrapper;
-  @include statementTags;
+  @include statement-tags;
 
   figure figcaption {
     @include figcaption;
@@ -319,5 +319,5 @@
 }
 
 .s-statement {
-  @include statementTags;
+  @include statement-tags;
 }

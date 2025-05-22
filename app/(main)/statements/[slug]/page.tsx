@@ -191,7 +191,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               <StatementSocialShareButtons statement={statement} />
             </div>
 
-            <StatementTags tags={statement} />
+            <StatementTags statement={statement} />
           </div>
           <div className="assessment-veracity d-flex flex-column flex-md-row align-items-md-center justify-content-md-start mt-6 mt-md-10">
             <div className="fs-4 fw-bold me-md-6 flex-shrink-0">

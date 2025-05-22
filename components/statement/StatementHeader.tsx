@@ -217,7 +217,7 @@ export function StatementHeader(
                       </cite>
                     )}
 
-                  {!isVertical && <StatementTags tags={statement} />}
+                  {!isVertical && <StatementTags statement={statement} />}
                 </div>
               </div>
             </div>

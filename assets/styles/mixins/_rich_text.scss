@@ -76,7 +76,7 @@
   }
 }
 
-@mixin statementTags {
+@mixin statement-tags {
   .separator::after {
     content: '|';
     padding-left: 0.5rem;

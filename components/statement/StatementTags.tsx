@@ -11,19 +11,19 @@ const StatementTagsFragment = gql(`
   `)
 
 export function StatementTags(props: {
-  tags: FragmentType<typeof StatementTagsFragment>
+  statement: FragmentType<typeof StatementTagsFragment>
 }) {
-  const tags = useFragment(StatementTagsFragment, props.tags)
+  const statement = useFragment(StatementTagsFragment, props.statement)
 
   return (
     <div className="row">
       <div className="col col-auto">
         <PackmanIcon className="h-15px me-1 align-text-center translate-up" />
-        {tags.tags.length > 0 &&
-          tags.tags.map((tag, index) => (
+        {statement.tags.length > 0 &&
+          statement.tags.map((tag, index) => (
             <div key={tag.id} className="d-inline-block">
               <span
-                className={`fs-8 ${index < tags.tags.length - 1 ? 'separator' : ''}`}
+                className={`fs-8 ${index < statement.tags.length - 1 ? 'separator' : ''}`}
               >
                 {tag.name}
               </span>
