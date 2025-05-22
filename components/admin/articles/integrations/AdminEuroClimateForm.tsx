@@ -10,7 +10,6 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
 import {
   topic,
-  distortionType,
   formatType,
 } from '@/libs/integrations/Euro-climate-schema'
 import { Multiselect } from '../../forms/Multiselect'
