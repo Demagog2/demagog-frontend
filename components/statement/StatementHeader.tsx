@@ -1,14 +1,13 @@
 'use client'
 
 import StatementAssessment from '@/components/statement/Assessment'
-import TagIcon from '@/assets/icons/tag.svg'
 import formatDate from '@/libs/format-date'
 import { PropsWithChildren } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerLink } from '../speaker/SpeakerLink'
 import classNames from 'classnames'
 import { StatementSocialShareButtons } from './StatementSocialShareButtons'
-import PackmanIcon from '@/assets/icons/packman.svg'
+import { StatementTags } from './StatementTags'
 
 const StatementHeaderFragment = gql(`
   fragment StatementHeader on Statement {
@@ -32,10 +31,7 @@ const StatementHeaderFragment = gql(`
         name
       }
     }
-    tags {
-      id
-      name
-    }
+    ...StatementTags
     assessment {
       veracity {
         key
@@ -221,27 +217,7 @@ export function StatementHeader(
                       </cite>
                     )}
 
-                  {!isVertical && statement.tags.length > 0 && (
-                    <div className="row">
-                      <div className="col col-auto d-flex align-items-start w-100 justify-content-between justify-content-sm-start">
-                        <div className="d-flex flex-wrap">
-                          <div className="d-inline-block">
-                            <PackmanIcon className="h-15px me-1" />
-                          </div>
-                          {statement.tags.map((tag, index) => (
-                            <div key={tag.id} className="d-inline-block me-2">
-                              {index > 0 ? (
-                                <span className="mt-1"> | </span>
-                              ) : (
-                                ''
-                              )}
-                              <span className="fs-8">{tag.name}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  {!isVertical && <StatementTags tags={statement} />}
                 </div>
               </div>
             </div>
