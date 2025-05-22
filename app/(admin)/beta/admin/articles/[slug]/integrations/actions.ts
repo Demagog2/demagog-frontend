@@ -71,7 +71,6 @@ export const createEuroClimateArticle = new CreateActionBuilder<
         articleId: data.articleId,
         externalService: ExternalServiceEnum.EuroClimate,
         euroClimateIntegration: {
-          ...data,
           topic: data.topic as EuroClimateTopic,
           subtopics: data.subtopics as EuroClimateSubtopic[],
           // distortionType: data.distortionType as EuroClimateDistortionType,

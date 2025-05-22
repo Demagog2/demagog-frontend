@@ -52,6 +52,8 @@ export class CreateActionBuilder<
     ): Promise<FormState> => {
       const parsedInput = safeParse(this.schema, formData)
 
+      console.log(formData)
+
       if (parsedInput.success) {
         invariant(this.mutation, 'Mutation was not defined')
         invariant(this.variables, 'Variables were not defined')
@@ -93,6 +95,8 @@ export class CreateActionBuilder<
       }
 
       Sentry.captureException(parsedInput.error)
+
+      console.error(parsedInput.error)
 
       return {
         state: 'error',

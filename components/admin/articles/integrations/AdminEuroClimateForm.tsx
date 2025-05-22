@@ -8,10 +8,7 @@ import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { ErrorMessage } from '@/components/admin/forms/ErrorMessage'
-import {
-  topic,
-  formatType,
-} from '@/libs/integrations/Euro-climate-schema'
+import { topics, formatType } from '@/libs/integrations/Euro-climate-schema'
 import { Multiselect } from '../../forms/Multiselect'
 import { Select } from '../../forms/Select'
 import { SubmitButton } from '../../forms/SubmitButton'
@@ -57,14 +54,14 @@ export function AdminEuroClimateForm(props: {
     resolver: zodResolver(euroclimateFormSchema),
     defaultValues: {
       articleId: props.articleId,
-      topic: data?.topic ?? '',
+      topic: data?.topic,
       subtopics: data?.subtopics ?? [],
       // distortionType: [],
       appearance: {
         appearanceUrl: data?.appearanceUrl ?? '',
         appearanceDate: data?.appearanceDate ?? '',
         archiveUrl: data?.archiveUrl ?? '',
-        format: data?.format ?? '',
+        format: data?.format,
       },
     },
   })
@@ -101,7 +98,7 @@ export function AdminEuroClimateForm(props: {
 
           <div className="w-full border-t border-gray-900/10 mt-6">
             <div className="flex justify-end mt-6">
-              <SubmitButton />
+              <SubmitButton label="Uložit do EuroClimate" />
             </div>
             <AdminFormContent>
               <div className="col-span-12 gap-y-5">
@@ -116,19 +113,22 @@ export function AdminEuroClimateForm(props: {
                         control={control}
                         name="topic"
                         render={({ field }) => (
-                          <Select
-                            id="topic"
-                            items={Object.entries(topic).map(
-                              ([id, topicData]) => ({
-                                label: topicData.label,
-                                value: id,
-                              })
-                            )}
-                            placeholder="Vyberte téma"
-                            onChange={(item) => field.onChange(item?.value)}
-                            defaultValue={field.value}
-                            canRemoveItem
-                          />
+                          <>
+                            <input type="hidden" {...field} />
+                            <Select
+                              id="topic"
+                              items={Object.entries(topics).map(
+                                ([id, topicData]) => ({
+                                  label: topicData.label,
+                                  value: id,
+                                })
+                              )}
+                              placeholder="Vyberte téma"
+                              onChange={(item) => field.onChange(item?.value)}
+                              defaultValue={field.value}
+                              canRemoveItem
+                            />
+                          </>
                         )}
                       />
                       <ErrorMessage message={errors.topic?.message} />
@@ -138,18 +138,18 @@ export function AdminEuroClimateForm(props: {
                       <Label htmlFor="subtopics">Podtéma</Label>
 
                       <Multiselect
+                        name="subtopics"
                         control={control}
                         items={
                           selectedTopic
-                            ? topic[
-                                selectedTopic as keyof typeof topic
+                            ? topics[
+                                selectedTopic as keyof typeof topics
                               ].subtopics.map((item) => ({
                                 label: item.label,
                                 value: item.id,
                               }))
                             : []
                         }
-                        name="subtopics"
                         placeholder="Vyberte podtémata"
                       />
                     </Field>
@@ -169,7 +169,7 @@ export function AdminEuroClimateForm(props: {
                     />
                   </Field>
                 </Fieldset> */}
-                <Fieldset className="space-y-4 col-span-8 border-b border-gray-900/10 pb-8 px-6">
+                <Fieldset className="space-y-4 col-span-8 border-b border-gray-900/10 pb-8">
                   <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
                     Výskyt tvrzení
                   </Legend>
@@ -202,14 +202,17 @@ export function AdminEuroClimateForm(props: {
                         control={control}
                         name="appearance.format"
                         render={({ field }) => (
-                          <Select
-                            id="format"
-                            items={formatType}
-                            placeholder="Vyberte formát"
-                            onChange={(item) => field.onChange(item?.value)}
-                            defaultValue={field.value}
-                            canRemoveItem
-                          />
+                          <>
+                            <input type="hidden" {...field} />
+                            <Select
+                              id="format"
+                              items={formatType}
+                              placeholder="Vyberte formát"
+                              onChange={(item) => field.onChange(item?.value)}
+                              defaultValue={field.value}
+                              canRemoveItem
+                            />
+                          </>
                         )}
                       />
                       <ErrorMessage
