@@ -17,11 +17,10 @@ import { notFound } from 'next/navigation'
 import { ArticleQuote } from '@/components/article/ArticleQuote'
 import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
-import TagIcon from '@/assets/icons/tag.svg'
-import PackmanIcon from '@/assets/icons/packman.svg'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementHeader } from '@/components/statement/StatementHeader'
 import { StatementSocialShareButtons } from '@/components/statement/StatementSocialShareButtons'
+import { StatementTags } from '@/components/statement/StatementTags'
 
 export async function generateMetadata({
   params,
@@ -134,10 +133,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               name
             }
           }
-          tags {
-            id
-            name
-          }
+          ...StatementTags
           mentioningArticles {
             ... on Article {
               id
@@ -194,24 +190,8 @@ export default async function Statement(props: { params: { slug: string } }) {
               </cite>
               <StatementSocialShareButtons statement={statement} />
             </div>
-            {statement.tags.length > 0 && (
-              <div className="row">
-                <div className="col col-auto d-flex align-items-start w-100 justify-content-between justify-content-sm-start">
-                  <div className="d-flex flex-wrap">
-                    {statement.tags.map((tag) => (
-                      <div key={tag.id} className="d-inline-block me-2">
-                        <TagIcon className="h-15px" />
-                        <span className="fs-8">{tag.name}</span>
-                      </div>
-                    ))}
-                  </div>
 
-                  <div className="d-inline-block">
-                    <PackmanIcon className="h-15px align-text-top" />
-                  </div>
-                </div>
-              </div>
-            )}{' '}
+            <StatementTags statement={statement} />
           </div>
           <div className="assessment-veracity d-flex flex-column flex-md-row align-items-md-center justify-content-md-start mt-6 mt-md-10">
             <div className="fs-4 fw-bold me-md-6 flex-shrink-0">

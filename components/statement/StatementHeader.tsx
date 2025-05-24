@@ -1,13 +1,13 @@
 'use client'
 
 import StatementAssessment from '@/components/statement/Assessment'
-import TagIcon from '@/assets/icons/tag.svg'
 import formatDate from '@/libs/format-date'
 import { PropsWithChildren } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerLink } from '../speaker/SpeakerLink'
 import classNames from 'classnames'
 import { StatementSocialShareButtons } from './StatementSocialShareButtons'
+import { StatementTags } from './StatementTags'
 
 const StatementHeaderFragment = gql(`
   fragment StatementHeader on Statement {
@@ -31,10 +31,7 @@ const StatementHeaderFragment = gql(`
         name
       }
     }
-    tags {
-      id
-      name
-    }
+    ...StatementTags
     assessment {
       veracity {
         key
@@ -220,18 +217,7 @@ export function StatementHeader(
                       </cite>
                     )}
 
-                  {!isVertical && statement.tags.length > 0 && (
-                    <div className="row">
-                      <div className="col col-auto">
-                        {statement.tags.map((tag) => (
-                          <div key={tag.id} className="d-inline-block me-2">
-                            <TagIcon className="h-15px" />
-                            <span className="fs-8">{tag.name}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
+                  {!isVertical && <StatementTags statement={statement} />}
                 </div>
               </div>
             </div>

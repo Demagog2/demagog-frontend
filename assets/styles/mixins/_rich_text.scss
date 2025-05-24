@@ -75,3 +75,19 @@
     }
   }
 }
+
+@mixin statement-tags {
+  .separator::after {
+    content: '|';
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    color: #adb5bd;
+    font-size: inherit;
+    line-height: inherit;
+    vertical-align: baseline;
+    display: inline;
+  }
+  .translate-up {
+    transform: translateY(-1px);
+  }
+}
