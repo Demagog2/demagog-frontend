@@ -19,6 +19,7 @@ import { useFormState } from 'react-dom'
 import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { dateInputFormat } from '@/libs/date-time'
 
 const AdminEuroClimateFormDataFragment = gql(`
     fragment AdminEuroClimateFormData on EuroClimateIntegration {
@@ -59,7 +60,9 @@ export function AdminEuroClimateForm(props: {
       // distortionType: [],
       appearance: {
         appearanceUrl: data?.appearanceUrl ?? '',
-        appearanceDate: data?.appearanceDate ?? '',
+        appearanceDate: data?.appearanceDate
+          ? dateInputFormat(data.appearanceDate)
+          : '',
         archiveUrl: data?.archiveUrl ?? '',
         format: data?.format,
       },
