@@ -19,16 +19,15 @@ export function StatementTags(props: {
     <div className="row">
       <div className="col col-auto">
         <PackmanIcon className="h-15px me-1 align-text-center translate-up" />
-        {statement.tags.length > 0 &&
-          statement.tags.map((tag, index) => (
-            <div key={tag.id} className="d-inline-block">
-              <span
-                className={`fs-8 ${index < statement.tags.length - 1 ? 'separator' : ''}`}
-              >
-                {tag.name}
-              </span>
-            </div>
-          ))}
+        {statement.tags.map((tag, index) => (
+          <div key={tag.id} className="d-inline-block">
+            <span
+              className={`fs-8 ${index < statement.tags.length - 1 ? 'separator' : ''}`}
+            >
+              {tag.name}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   )
