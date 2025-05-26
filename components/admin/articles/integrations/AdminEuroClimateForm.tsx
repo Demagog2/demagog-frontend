@@ -20,9 +20,18 @@ import { useFormToasts } from '@/components/admin/forms/hooks/use-form-toasts'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { dateInputFormat } from '@/libs/date-time'
+import { useAuthorization } from '@/libs/authorization/use-authorization'
+import classNames from 'classnames'
+import { AlertMessage } from '../../layout/AlertMessage'
 
-const AdminEuroClimateFormDataFragment = gql(`
-    fragment AdminEuroClimateFormData on EuroClimateIntegration {
+const AdminEuroClimateFormAuthorizationDataFragment = gql(`
+    fragment AdminEuroClimateFormAuthorizationData on Query {
+      ...Authorization
+    }
+  `)
+
+const AdminEuroClimateFormArticleDataFragment = gql(`
+    fragment AdminEuroClimateFormArticleData on EuroClimateIntegration {
       topic
       subtopics
       appearanceDate
@@ -37,11 +46,21 @@ type FieldValues = z.output<typeof euroclimateFormSchema>
 export function AdminEuroClimateForm(props: {
   action: FormAction
   articleId: string
-  data?: FragmentType<typeof AdminEuroClimateFormDataFragment>
+  articleData?: FragmentType<typeof AdminEuroClimateFormArticleDataFragment>
+  data: FragmentType<typeof AdminEuroClimateFormAuthorizationDataFragment>
 }) {
-  const data = useFragment(AdminEuroClimateFormDataFragment, props.data)
+  const articleData = useFragment(
+    AdminEuroClimateFormArticleDataFragment,
+    props.articleData
+  )
+  const data = useFragment(
+    AdminEuroClimateFormAuthorizationDataFragment,
+    props.data
+  )
   const [state, formAction] = useFormState(props.action, { state: 'initial' })
   const [isFormVisible, setIsFormVisible] = useState(false)
+
+  const { isAuthorized } = useAuthorization(data)
 
   useFormToasts(state)
 
@@ -55,16 +74,16 @@ export function AdminEuroClimateForm(props: {
     resolver: zodResolver(euroclimateFormSchema),
     defaultValues: {
       articleId: props.articleId,
-      topic: data?.topic,
-      subtopics: data?.subtopics ?? [],
+      topic: articleData?.topic,
+      subtopics: articleData?.subtopics ?? [],
       // distortionType: [],
       appearance: {
-        appearanceUrl: data?.appearanceUrl ?? '',
-        appearanceDate: data?.appearanceDate
-          ? dateInputFormat(data.appearanceDate)
+        appearanceUrl: articleData?.appearanceUrl ?? '',
+        appearanceDate: articleData?.appearanceDate
+          ? dateInputFormat(articleData.appearanceDate)
           : '',
-        archiveUrl: data?.archiveUrl ?? '',
-        format: data?.format,
+        archiveUrl: articleData?.archiveUrl ?? '',
+        format: articleData?.format,
       },
     },
   })
@@ -96,69 +115,84 @@ export function AdminEuroClimateForm(props: {
       </div>
 
       {isFormVisible && (
-        <form action={formAction} onSubmit={handleSubmitForm}>
-          <input type="hidden" {...register('articleId')} />
+        <>
+          {!isAuthorized(['articles:edit']) && (
+            <AlertMessage
+              title="Formulář je uzamčen"
+              message="Pro zveřejňování článku do extermích systémů nemáte oprávnění. Kontaktujte administrátora."
+              className="mt-3"
+            />
+          )}
 
-          <div className="w-full border-t border-gray-900/10 mt-6">
-            <div className="flex justify-end mt-6">
-              <SubmitButton label="Uložit do EuroClimate" />
-            </div>
-            <AdminFormContent>
-              <div className="col-span-12 gap-y-5">
-                <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                  <Legend className=" text-base font-semibold leading-7 text-gray-900">
-                    Podrobnosti o článku
-                  </Legend>
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <Field>
-                      <Label htmlFor="topic">Téma</Label>
-                      <Controller
-                        control={control}
-                        name="topic"
-                        render={({ field }) => (
-                          <>
-                            <input type="hidden" {...field} />
-                            <Select
-                              id="topic"
-                              items={Object.entries(topics).map(
-                                ([id, topicData]) => ({
-                                  label: topicData.label,
-                                  value: id,
-                                })
-                              )}
-                              placeholder="Vyberte téma"
-                              onChange={(item) => field.onChange(item?.value)}
-                              defaultValue={field.value}
-                              canRemoveItem
-                            />
-                          </>
-                        )}
-                      />
-                      <ErrorMessage message={errors.topic?.message} />
-                    </Field>
+          <form action={formAction} onSubmit={handleSubmitForm}>
+            <input type="hidden" {...register('articleId')} />
 
-                    <Field>
-                      <Label htmlFor="subtopics">Podtéma</Label>
+            <div
+              className={classNames(
+                'w-full border-t border-gray-900/10 mt-6',
+                !isAuthorized(['articles:edit']) &&
+                  'opacity-50 pointer-events-none'
+              )}
+            >
+              <div className="flex justify-end mt-6">
+                <SubmitButton label="Uložit do EuroClimate" />
+              </div>
+              <AdminFormContent>
+                <div className="col-span-12 gap-y-5">
+                  <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+                    <Legend className=" text-base font-semibold leading-7 text-gray-900">
+                      Podrobnosti o článku
+                    </Legend>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <Field>
+                        <Label htmlFor="topic">Téma</Label>
+                        <Controller
+                          control={control}
+                          name="topic"
+                          render={({ field }) => (
+                            <>
+                              <input type="hidden" {...field} />
+                              <Select
+                                id="topic"
+                                items={Object.entries(topics).map(
+                                  ([id, topicData]) => ({
+                                    label: topicData.label,
+                                    value: id,
+                                  })
+                                )}
+                                placeholder="Vyberte téma"
+                                onChange={(item) => field.onChange(item?.value)}
+                                defaultValue={field.value}
+                                canRemoveItem
+                              />
+                            </>
+                          )}
+                        />
+                        <ErrorMessage message={errors.topic?.message} />
+                      </Field>
 
-                      <Multiselect
-                        name="subtopics"
-                        control={control}
-                        items={
-                          selectedTopic
-                            ? topics[
-                                selectedTopic as keyof typeof topics
-                              ].subtopics.map((item) => ({
-                                label: item.label,
-                                value: item.id,
-                              }))
-                            : []
-                        }
-                        placeholder="Vyberte podtémata"
-                      />
-                    </Field>
-                  </div>
-                </Fieldset>
-                {/* <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+                      <Field>
+                        <Label htmlFor="subtopics">Podtéma</Label>
+
+                        <Multiselect
+                          name="subtopics"
+                          control={control}
+                          items={
+                            selectedTopic
+                              ? topics[
+                                  selectedTopic as keyof typeof topics
+                                ].subtopics.map((item) => ({
+                                  label: item.label,
+                                  value: item.id,
+                                }))
+                              : []
+                          }
+                          placeholder="Vyberte podtémata"
+                        />
+                      </Field>
+                    </div>
+                  </Fieldset>
+                  {/* <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
                   <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
                     Podrobnosti o tvrzení
                   </Legend>
@@ -172,74 +206,75 @@ export function AdminEuroClimateForm(props: {
                     />
                   </Field>
                 </Fieldset> */}
-                <Fieldset className="space-y-4 col-span-8 border-b border-gray-900/10 pb-8">
-                  <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                    Výskyt tvrzení
-                  </Legend>
+                  <Fieldset className="space-y-4 col-span-8 border-b border-gray-900/10 pb-8">
+                    <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+                      Výskyt tvrzení
+                    </Legend>
 
-                  <Field>
-                    <Label htmlFor="appearanceUrl">URL výskytu tvrzení</Label>
-                    <Input
-                      type="text"
-                      id="appearanceUrl"
-                      placeholder="Zadejte URL"
-                      {...register('appearance.appearanceUrl', {
-                        required: true,
-                      })}
-                    />
-                    <ErrorMessage
-                      message={errors.appearance?.appearanceUrl?.message}
-                    />
-                  </Field>
-                  <div className="grid sm:grid-cols-2 gap-4">
                     <Field>
-                      <Label htmlFor="appearanceDate">Datum výskytu</Label>
+                      <Label htmlFor="appearanceUrl">URL výskytu tvrzení</Label>
                       <Input
-                        type="date"
-                        {...register('appearance.appearanceDate')}
-                      />
-                    </Field>
-                    <Field>
-                      <Label htmlFor="format">Formát šíření</Label>
-                      <Controller
-                        control={control}
-                        name="appearance.format"
-                        render={({ field }) => (
-                          <>
-                            <input type="hidden" {...field} />
-                            <Select
-                              id="format"
-                              items={formatType}
-                              placeholder="Vyberte formát"
-                              onChange={(item) => field.onChange(item?.value)}
-                              defaultValue={field.value}
-                              canRemoveItem
-                            />
-                          </>
-                        )}
+                        type="text"
+                        id="appearanceUrl"
+                        placeholder="Zadejte URL"
+                        {...register('appearance.appearanceUrl', {
+                          required: true,
+                        })}
                       />
                       <ErrorMessage
-                        message={errors.appearance?.format?.message}
+                        message={errors.appearance?.appearanceUrl?.message}
                       />
                     </Field>
-                  </div>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      <Field>
+                        <Label htmlFor="appearanceDate">Datum výskytu</Label>
+                        <Input
+                          type="date"
+                          {...register('appearance.appearanceDate')}
+                        />
+                      </Field>
+                      <Field>
+                        <Label htmlFor="format">Formát šíření</Label>
+                        <Controller
+                          control={control}
+                          name="appearance.format"
+                          render={({ field }) => (
+                            <>
+                              <input type="hidden" {...field} />
+                              <Select
+                                id="format"
+                                items={formatType}
+                                placeholder="Vyberte formát"
+                                onChange={(item) => field.onChange(item?.value)}
+                                defaultValue={field.value}
+                                canRemoveItem
+                              />
+                            </>
+                          )}
+                        />
+                        <ErrorMessage
+                          message={errors.appearance?.format?.message}
+                        />
+                      </Field>
+                    </div>
 
-                  <Field>
-                    <Label htmlFor="archiveUrl" isOptional>
-                      Archivní URL
-                    </Label>
-                    <Input
-                      type="text"
-                      id="archiveUrl"
-                      placeholder="Zadejte archivní URL"
-                      {...register('appearance.archiveUrl')}
-                    />
-                  </Field>
-                </Fieldset>
-              </div>
-            </AdminFormContent>
-          </div>
-        </form>
+                    <Field>
+                      <Label htmlFor="archiveUrl" isOptional>
+                        Archivní URL
+                      </Label>
+                      <Input
+                        type="text"
+                        id="archiveUrl"
+                        placeholder="Zadejte archivní URL"
+                        {...register('appearance.archiveUrl')}
+                      />
+                    </Field>
+                  </Fieldset>
+                </div>
+              </AdminFormContent>
+            </div>
+          </form>
+        </>
       )}
     </>
   )
