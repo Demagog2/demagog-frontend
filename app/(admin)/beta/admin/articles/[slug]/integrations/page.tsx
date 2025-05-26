@@ -14,6 +14,8 @@ import { AdminIntegrationCard } from '@/components/admin/articles/AdminIntegrati
 import { ExternalServiceEnum } from '@/__generated__/graphql'
 import { AdminEuroClimateForm } from '@/components/admin/articles/integrations/AdminEuroClimateForm'
 import { createEuroClimateArticle } from './actions'
+import { AlertMessage } from '@/components/admin/layout/AlertMessage'
+import { useAuthorizationServer } from '@/libs/authorization/use-authorization-server'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -59,11 +61,14 @@ export default async function AdminArticleIntegrations(props: {
               createdAt
             }
             euroClimate {
-              ...AdminEuroClimateFormData
+              ...AdminEuroClimateFormArticleData
               createdAt
             }
           }
         }
+        ...AdminEuroClimateFormAuthorizationData
+        ...AdminIntegrationCardAuthorizationData
+        ...Authorization
       }
     `),
     variables: {
@@ -74,6 +79,9 @@ export default async function AdminArticleIntegrations(props: {
   if (!data?.article) {
     notFound()
   }
+
+  const isAuthorized = useAuthorizationServer(data)
+
   return (
     <AdminPage>
       <AdminPageHeader>
@@ -88,6 +96,12 @@ export default async function AdminArticleIntegrations(props: {
           Zpět
         </LinkButton>
       </AdminPageHeader>
+      {!isAuthorized(['articles:edit']) && (
+        <AlertMessage
+          title="Integrace uzamčeny"
+          message="Nemáte oprávnění spravovat integrace článku."
+        />
+      )}
       <AdminPageContent>
         <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow">
           <AdminIntegrationCard
@@ -98,6 +112,7 @@ export default async function AdminArticleIntegrations(props: {
             service={ExternalServiceEnum.Efcsn}
             isIntegrated={!!data.article.integrations?.efcsn?.createdAt}
             cardPosition="top"
+            data={data}
           />
 
           <AdminIntegrationCard
@@ -108,11 +123,13 @@ export default async function AdminArticleIntegrations(props: {
             service={ExternalServiceEnum.EuroClimate}
             isIntegrated={!!data.article.integrations?.euroClimate?.createdAt}
             cardPosition="bottom"
+            data={data}
           >
             <AdminEuroClimateForm
               action={createEuroClimateArticle}
               articleId={data.article.id}
-              data={data.article.integrations?.euroClimate ?? undefined}
+              articleData={data.article.integrations?.euroClimate ?? undefined}
+              data={data}
             />
           </AdminIntegrationCard>
         </div>

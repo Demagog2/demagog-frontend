@@ -5,6 +5,14 @@ import { AdminPublishIntegrationButton } from './integrations/AdminPublisIntegra
 import { ExternalServiceEnum } from '@/__generated__/graphql'
 import classNames from 'classnames'
 import { PropsWithChildren } from 'react'
+import { FragmentType, gql, useFragment } from '@/__generated__'
+import { useAuthorization } from '@/libs/authorization/use-authorization'
+
+const AdminIntegrationCardAuthorizationDataFragment = gql(`
+    fragment AdminIntegrationCardAuthorizationData on Query {
+      ...Authorization
+    }
+  `)
 
 type CardPosition = 'top' | 'bottom'
 
@@ -17,8 +25,16 @@ export function AdminIntegrationCard(
     createdAt?: string
     isIntegrated?: boolean
     cardPosition?: CardPosition
+    data: FragmentType<typeof AdminIntegrationCardAuthorizationDataFragment>
   }>
 ) {
+  const data = useFragment(
+    AdminIntegrationCardAuthorizationDataFragment,
+    props.data
+  )
+
+  const { isAuthorized } = useAuthorization(data)
+
   return (
     <div
       className={classNames(
@@ -69,6 +85,7 @@ export function AdminIntegrationCard(
         articleId={props.articleId}
         service={props.service}
         isIntegrated={props.isIntegrated}
+        isAuthorized={isAuthorized(['articles:edit'])}
       />
     </div>
   )
