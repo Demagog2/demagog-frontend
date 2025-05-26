@@ -2,6 +2,7 @@
 
 import { gql } from '@/__generated__'
 import {
+  EuroClimateDistortion,
   EuroClimateFormat,
   EuroClimateSubtopic,
   EuroClimateTopic,
@@ -11,7 +12,10 @@ import {
 } from '@/__generated__/graphql'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
-import { euroclimateFormSchema } from '@/libs/integrations/Euro-climate-schema'
+import {
+  distortionType,
+  euroclimateFormSchema,
+} from '@/libs/integrations/Euro-climate-schema'
 import { redirect } from 'next/navigation'
 
 const publishIntegrationArticleMutation = gql(`
@@ -73,8 +77,8 @@ export const createEuroClimateArticle = new CreateActionBuilder<
         euroClimateIntegration: {
           topic: data.topic as EuroClimateTopic,
           subtopics: data.subtopics as EuroClimateSubtopic[],
-          // distortionType: data.distortionType as EuroClimateDistortionType,
-          distortions: ['UNPROVEN'], // FIXME: Fix in the distortion type task
+          // distortions: data.distortionType as EuroClimateDistortionType,
+          distortions: [EuroClimateDistortion.Unproven], // FIXME: Replace by real data in the distortions task
           appearanceDate: data.appearance.appearanceDate,
           appearanceUrl: data.appearance.appearanceUrl,
           format: data.appearance.format as EuroClimateFormat,
