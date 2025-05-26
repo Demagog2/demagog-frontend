@@ -87,10 +87,7 @@ export default function Footer() {
                   </div>
                 </div>
                 {/** BADGES */}
-                <div
-                  className="col-12 col-md-6
-                 d-lg-none"
-                >
+                <div className="col-12 col-md-6 d-lg-none">
                   <div className="d-flex">
                     <div className="me-5 mb-5">
                       <a
