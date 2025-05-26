@@ -98,6 +98,7 @@ export default async function AdminArticleIntegrations(props: {
             service={ExternalServiceEnum.Efcsn}
             isIntegrated={!!data.article.integrations?.efcsn?.createdAt}
             cardPosition="top"
+            backofficeUrl={process.env.NEXT_PUBLIC_EFCSN_BACKOFFICE_URL ?? ''}
           />
 
           <AdminIntegrationCard
@@ -108,6 +109,9 @@ export default async function AdminArticleIntegrations(props: {
             service={ExternalServiceEnum.EuroClimate}
             isIntegrated={!!data.article.integrations?.euroClimate?.createdAt}
             cardPosition="bottom"
+            backofficeUrl={
+              process.env.NEXT_PUBLIC_EUROCLIMATE_BACKOFFICE_URL ?? ''
+            }
           >
             <AdminEuroClimateForm
               action={createEuroClimateArticle}
