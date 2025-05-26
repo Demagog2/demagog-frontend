@@ -74,6 +74,7 @@ export const createEuroClimateArticle = new CreateActionBuilder<
           topic: data.topic as EuroClimateTopic,
           subtopics: data.subtopics as EuroClimateSubtopic[],
           // distortionType: data.distortionType as EuroClimateDistortionType,
+          distortions: ['UNPROVEN'], // FIXME: Fix in the distortion type task
           appearanceDate: data.appearance.appearanceDate,
           appearanceUrl: data.appearance.appearanceUrl,
           format: data.appearance.format as EuroClimateFormat,
