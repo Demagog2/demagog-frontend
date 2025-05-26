@@ -2,6 +2,7 @@
 
 import { gql } from '@/__generated__'
 import {
+  EuroClimateDistortion,
   EuroClimateFormat,
   EuroClimateSubtopic,
   EuroClimateTopic,
@@ -73,7 +74,8 @@ export const createEuroClimateArticle = new CreateActionBuilder<
         euroClimateIntegration: {
           topic: data.topic as EuroClimateTopic,
           subtopics: data.subtopics as EuroClimateSubtopic[],
-          // distortionType: data.distortionType as EuroClimateDistortionType,
+          // distortions: data.distortionType as EuroClimateDistortionType,
+          distortions: [EuroClimateDistortion.Unproven], // FIXME: Replace by real data in the distortions task
           appearanceDate: data.appearance.appearanceDate,
           appearanceUrl: data.appearance.appearanceUrl,
           format: data.appearance.format as EuroClimateFormat,

@@ -7,6 +7,8 @@ import classNames from 'classnames'
 import { PropsWithChildren } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
+
 
 const AdminIntegrationCardAuthorizationDataFragment = gql(`
     fragment AdminIntegrationCardAuthorizationData on Query {
@@ -26,6 +28,7 @@ export function AdminIntegrationCard(
     isIntegrated?: boolean
     cardPosition?: CardPosition
     data: FragmentType<typeof AdminIntegrationCardAuthorizationDataFragment>
+    backofficeUrl: string
   }>
 ) {
   const data = useFragment(
@@ -48,9 +51,16 @@ export function AdminIntegrationCard(
       )}
     >
       <div>
-        <span className="inline-flex rounded-lg ring-4 ring-white">
+        <a
+          className="inline-flex itens-center gap-2 rounded-lg ring-4 ring-white transition-all duration-200 hover:scale-110  cursor-pointer group"
+          title={`Přejít do administrace ${props.title}`}
+          href={props.backofficeUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           <props.icon className="w-auto h-10" />
-        </span>
+          <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-indigo-900" />
+        </a>
       </div>
       <div className="mt-3">
         <h3 className="text-base font-semibold text-gray-900">{props.title}</h3>
