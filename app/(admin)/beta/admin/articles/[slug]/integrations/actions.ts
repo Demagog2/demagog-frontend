@@ -12,10 +12,7 @@ import {
 } from '@/__generated__/graphql'
 import { serverMutation } from '@/libs/apollo-client-server'
 import { CreateActionBuilder } from '@/libs/forms/builders/CreateActionBuilder'
-import {
-  distortionType,
-  euroclimateFormSchema,
-} from '@/libs/integrations/Euro-climate-schema'
+import { euroclimateFormSchema } from '@/libs/integrations/Euro-climate-schema'
 import { redirect } from 'next/navigation'
 
 const publishIntegrationArticleMutation = gql(`
