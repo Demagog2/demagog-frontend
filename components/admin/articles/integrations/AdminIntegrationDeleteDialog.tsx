@@ -7,11 +7,13 @@ import {
   AdminDeleteDialog,
   ForwardedProps,
 } from '../../layout/dialogs/AdminDeleteDialog'
+import classNames from 'classnames'
 
 export default function AdminIntegrationDelete(props: {
   articleId: string
   title: string
   service: ExternalServiceEnum
+  className?: string
 }) {
   const handleDeleteIntegration = useCallback(async () => {
     await deleteIntegrationArticle(props.articleId, props.service)
@@ -22,7 +24,10 @@ export default function AdminIntegrationDelete(props: {
   return (
     <AdminDeleteDialog
       ref={dialogRef}
-      className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
+      className={classNames(
+        'inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600',
+        props.className
+      )}
       title="Smazat integraci článku"
       description={
         <>

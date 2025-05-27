@@ -8,7 +8,6 @@ import { PropsWithChildren } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
-import AdminIntegrationDeleteDialog from './integrations/AdminIntegrationDeleteDialog'
 
 const AdminIntegrationCardAuthorizationDataFragment = gql(`
     fragment AdminIntegrationCardAuthorizationData on Query {
@@ -62,22 +61,15 @@ export function AdminIntegrationCard(
             <props.icon className="w-auto h-10" />
             <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-indigo-900" />
           </a>
-          <div className="flex items-center gap-2">
-            <div className="flex-shrink-0">
-              <AdminPublishIntegrationButton
-                articleId={props.articleId}
-                service={props.service}
-                isIntegrated={props.isIntegrated}
-                isAuthorized={isAuthorized(['articles:edit'])}
-              />
-            </div>
-            <div className="flex-shrink-0">
-              <AdminIntegrationDeleteDialog
-                articleId={props.articleId}
-                service={props.service}
-                title={props.title}
-              />
-            </div>
+
+          <div>
+            <AdminPublishIntegrationButton
+              articleId={props.articleId}
+              service={props.service}
+              isIntegrated={props.isIntegrated}
+              isAuthorized={isAuthorized(['articles:edit'])}
+              title={props.title}
+            />
           </div>
         </div>
         <div className="mt-3">
