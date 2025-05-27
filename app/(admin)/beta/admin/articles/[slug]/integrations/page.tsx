@@ -105,6 +105,7 @@ export default async function AdminArticleIntegrations(props: {
       <AdminPageContent>
         <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-200 shadow">
           <AdminIntegrationCard
+            hasPublishButton={true}
             title="European Fact-Checking Standards Network"
             icon={EfcsnIcon}
             createdAt={data.article.integrations?.efcsn?.createdAt}
@@ -117,6 +118,7 @@ export default async function AdminArticleIntegrations(props: {
           />
 
           <AdminIntegrationCard
+            hasPublishButton={false}
             title="Euro climate check"
             icon={EuroclimateIcon}
             createdAt={data.article.integrations?.euroClimate?.createdAt}

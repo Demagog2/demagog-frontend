@@ -8,6 +8,7 @@ import { PropsWithChildren } from 'react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { useAuthorization } from '@/libs/authorization/use-authorization'
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline'
+import AdminIntegrationDeleteDialog from './integrations/AdminIntegrationDeleteDialog'
 
 const AdminIntegrationCardAuthorizationDataFragment = gql(`
     fragment AdminIntegrationCardAuthorizationData on Query {
@@ -28,6 +29,7 @@ export function AdminIntegrationCard(
     cardPosition?: CardPosition
     data: FragmentType<typeof AdminIntegrationCardAuthorizationDataFragment>
     backofficeUrl: string
+    hasPublishButton: boolean
   }>
 ) {
   const data = useFragment(
@@ -36,6 +38,8 @@ export function AdminIntegrationCard(
   )
 
   const { isAuthorized } = useAuthorization(data)
+
+  const canEditArticle = isAuthorized(['articles:edit'])
 
   return (
     <>
@@ -63,13 +67,25 @@ export function AdminIntegrationCard(
           </a>
 
           <div>
-            <AdminPublishIntegrationButton
-              articleId={props.articleId}
-              service={props.service}
-              isIntegrated={props.isIntegrated}
-              isAuthorized={isAuthorized(['articles:edit'])}
-              title={props.title}
-            />
+            {props.hasPublishButton && (
+              <AdminPublishIntegrationButton
+                articleId={props.articleId}
+                service={props.service}
+                isAuthorized={canEditArticle}
+                title={props.title}
+              />
+            )}
+            {props.isIntegrated && (
+              <AdminIntegrationDeleteDialog
+                articleId={props.articleId}
+                service={props.service}
+                title={props.title}
+                className={
+                  !canEditArticle ? 'opacity-50 pointer-events-none' : '' // Move this inside the component
+                }
+                disabled={!canEditArticle}
+              />
+            )}
           </div>
         </div>
         <div className="mt-3">
