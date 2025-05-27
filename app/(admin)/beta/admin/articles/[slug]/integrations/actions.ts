@@ -65,8 +65,6 @@ export const createEuroClimateArticle = new CreateActionBuilder<
   typeof publishIntegrationArticleMutation
 >(euroclimateFormSchema)
   .withMutation(publishIntegrationArticleMutation, (data) => {
-    // TODO: Add distortion type
-
     return {
       input: {
         articleId: data.articleId,
@@ -74,8 +72,7 @@ export const createEuroClimateArticle = new CreateActionBuilder<
         euroClimateIntegration: {
           topic: data.topic as EuroClimateTopic,
           subtopics: data.subtopics as EuroClimateSubtopic[],
-          // distortions: data.distortionType as EuroClimateDistortionType,
-          distortions: [EuroClimateDistortion.Unproven], // FIXME: Replace by real data in the distortions task
+          distortions: data.distortions as EuroClimateDistortion[],
           appearanceDate: data.appearance.appearanceDate,
           appearanceUrl: data.appearance.appearanceUrl,
           format: data.appearance.format as EuroClimateFormat,
