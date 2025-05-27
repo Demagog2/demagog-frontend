@@ -1,6 +1,7 @@
 'use client'
 
 import { useCallback, useRef } from 'react'
+import { useRouter } from 'next/navigation'
 import { deleteIntegrationArticle } from '@/app/(admin)/beta/admin/articles/[slug]/integrations/actions'
 import { ExternalServiceEnum } from '@/__generated__/graphql'
 import {
@@ -8,16 +9,28 @@ import {
   ForwardedProps,
 } from '../../layout/dialogs/AdminDeleteDialog'
 import classNames from 'classnames'
+import { toast } from 'react-toastify'
 
 export default function AdminIntegrationDelete(props: {
   articleId: string
   title: string
   service: ExternalServiceEnum
   className?: string
+  disabled?: boolean
 }) {
+  const router = useRouter()
+
+  const { articleId, service } = props
+
   const handleDeleteIntegration = useCallback(async () => {
-    await deleteIntegrationArticle(props.articleId, props.service)
-  }, [props.articleId, props.service])
+    const result = await deleteIntegrationArticle(articleId, service)
+
+    if (result.success) {
+      router.refresh()
+    } else {
+      toast.error(result.message)
+    }
+  }, [articleId, service, router])
 
   const dialogRef = useRef<ForwardedProps | null>(null)
 
@@ -36,6 +49,7 @@ export default function AdminIntegrationDelete(props: {
         </>
       }
       onDelete={handleDeleteIntegration}
+      disabled={props.disabled}
     />
   )
 }

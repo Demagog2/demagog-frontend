@@ -28,11 +28,12 @@ export const AdminDeleteDialog = forwardRef<
     title: string
     description: JSX.Element
     onDelete(): Promise<void>
+    disabled?: boolean
   }>
 >(function AdminDeleteDialog(props, ref) {
   const [open, setOpen] = useState(false)
 
-  const { onDelete } = props
+  const { onDelete, disabled = false } = props
 
   const handleDelete = useCallback(async () => {
     await onDelete()
@@ -52,6 +53,7 @@ export const AdminDeleteDialog = forwardRef<
       {props.children ?? (
         <Button
           onClick={() => setOpen(true)}
+          disabled={disabled}
           className={classNames(
             'text-indigo-600 hover:text-indigo-900 ml-3',
             props.className
