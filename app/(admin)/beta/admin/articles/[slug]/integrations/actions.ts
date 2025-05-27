@@ -94,3 +94,46 @@ export const createEuroClimateArticle = new CreateActionBuilder<
     return null
   })
   .build()
+
+const adminDeleteIntegrationArticleMutation = gql(`
+      mutation AdminDeleteIntegrationArticle($input: DeleteIntegrationArticleMutationInput!) {
+        deleteIntegrationArticle(input: $input) {
+          ... on DeleteIntegrationArticleSuccess {
+            article {
+              id
+            }
+          }
+          ... on DeleteIntegrationArticleError {
+            message
+          }
+        }
+      }
+    `)
+
+export async function deleteIntegrationArticle(
+  articleId: string,
+  externalService: ExternalServiceEnum
+) {
+  const { data } = await serverMutation({
+    mutation: adminDeleteIntegrationArticleMutation,
+    variables: {
+      input: { articleId, externalService },
+    },
+  })
+
+  if (
+    data?.deleteIntegrationArticle?.__typename ===
+    'DeleteIntegrationArticleError'
+  ) {
+    return { error: true, message: data.deleteIntegrationArticle.message }
+  }
+
+  if (
+    data?.deleteIntegrationArticle?.__typename ===
+    'DeleteIntegrationArticleSuccess'
+  ) {
+    return { success: true, article: data?.deleteIntegrationArticle?.article }
+  }
+
+  throw new Error('Unknown response type')
+}
