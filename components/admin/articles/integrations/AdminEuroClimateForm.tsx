@@ -3,7 +3,10 @@ import { Field, Fieldset, Legend } from '@headlessui/react'
 import { AdminFormContent } from '../../layout/AdminFormContent'
 import { Label } from '../../../admin/forms/Label'
 import { Input } from '../../../admin/forms/Input'
-import { euroclimateFormSchema } from '@/libs/integrations/Euro-climate-schema'
+import {
+  distortionType,
+  euroclimateFormSchema,
+} from '@/libs/integrations/Euro-climate-schema'
 import { z } from 'zod'
 import { Controller, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -38,6 +41,7 @@ const AdminEuroClimateFormArticleDataFragment = gql(`
       appearanceUrl
       archiveUrl
       format
+      distortions
     }
   `)
 
@@ -76,7 +80,7 @@ export function AdminEuroClimateForm(props: {
       articleId: props.articleId,
       topic: articleData?.topic,
       subtopics: articleData?.subtopics ?? [],
-      // distortionType: [],
+      distortions: articleData?.distortions ?? [],
       appearance: {
         appearanceUrl: articleData?.appearanceUrl ?? '',
         appearanceDate: articleData?.appearanceDate
@@ -103,12 +107,12 @@ export function AdminEuroClimateForm(props: {
           {isFormVisible ? (
             <>
               <ChevronUpIcon className="h-5 w-5 mr-1" />
-              Skrýt formulář
+              Skrýt
             </>
           ) : (
             <>
               <ChevronDownIcon className="h-5 w-5 mr-1" />
-              Zobrazit formulář
+              Doplňující informace
             </>
           )}
         </button>
@@ -189,23 +193,28 @@ export function AdminEuroClimateForm(props: {
                           }
                           placeholder="Vyberte podtémata"
                         />
+                        <ErrorMessage message={errors.subtopics?.message} />
                       </Field>
                     </div>
                   </Fieldset>
-                  {/* <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
-                  <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
-                    Podrobnosti o tvrzení
-                  </Legend>
-                  <Field>
-                    <Label htmlFor="disctortionType">Typ dezinformace</Label>
-                    <Multiselect
-                      control={control}
-                      items={distortionType}
-                      name="distortionType"
-                      placeholder="Vyberte typ dezinformace"
-                    />
-                  </Field>
-                </Fieldset> */}
+                  <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
+                    <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
+                      Podrobnosti o tvrzení
+                    </Legend>
+                    <Field>
+                      <Label htmlFor="disctortionType">Typ dezinformace</Label>
+                      <Multiselect
+                        control={control}
+                        items={distortionType.map((item) => ({
+                          label: item.label,
+                          value: item.value,
+                        }))}
+                        name="distortions"
+                        placeholder="Vyberte typ dezinformace"
+                      />
+                      <ErrorMessage message={errors.distortions?.message} />
+                    </Field>
+                  </Fieldset>
                   <Fieldset className="space-y-4 col-span-8 border-b border-gray-900/10 pb-8">
                     <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">
                       Výskyt tvrzení
@@ -231,6 +240,9 @@ export function AdminEuroClimateForm(props: {
                         <Input
                           type="date"
                           {...register('appearance.appearanceDate')}
+                        />
+                        <ErrorMessage
+                          message={errors.appearance?.appearanceDate?.message}
                         />
                       </Field>
                       <Field>

@@ -1,4 +1,5 @@
 import {
+  EuroClimateDistortion,
   EuroClimateFormat,
   EuroClimateSubtopic,
   EuroClimateTopic,
@@ -151,23 +152,48 @@ export const topics: Record<
 }
 
 export const distortionType = [
-  { label: 'Neprokázané', value: 'Nepotvrzene' },
-  { label: 'Satira považovaná za pravdivou', value: 'distortion-b' },
+  { label: 'Neprokázané', value: EuroClimateDistortion.Unproven },
+  {
+    label: 'Satira považovaná za pravdivou',
+    value: EuroClimateDistortion.SatireBelievedToBeTrue,
+  },
   {
     label:
       'Špatně označené, nesprávně přiřazené nebo nesprávně identifikované informace',
-    value: 'distortion-c',
+    value:
+      EuroClimateDistortion.MislabelledMisattributedOrMisidentifiedInformation,
   },
-  { label: 'Zavádějící informace', value: 'distortion-d' },
-  { label: 'Nadhodnocené / podhodnocené', value: 'distortion-e' },
-  { label: 'Zaměněné nebo smíchané informace', value: 'distortion-f' },
-  { label: 'Upravený obsah', value: 'distortion-g' },
-  { label: 'Nahraný (inscenovaný) obsah', value: 'distortion-h' },
-  { label: 'Přetvořený obsah', value: 'distortion-i' },
-  { label: 'Vykonstruované informace', value: 'distortion-j' },
-  { label: 'Podvodný obsah', value: 'distortion-k' },
-  { label: 'Koordinované neautentické chování', value: 'distortion-l' },
-  { label: 'Pravdivé', value: 'distortion-m' },
+  {
+    label: 'Zavádějící informace',
+    value: EuroClimateDistortion.MisleadingInformation,
+  },
+  {
+    label: 'Nadhodnocené / podhodnocené',
+    value: EuroClimateDistortion.OverstatedUnderstated,
+  },
+  {
+    label: 'Zaměněné nebo smíchané informace',
+    value: EuroClimateDistortion.Conflated,
+  },
+  { label: 'Upravený obsah', value: EuroClimateDistortion.EditedContent },
+  {
+    label: 'Nahraný (inscenovaný) obsah',
+    value: EuroClimateDistortion.StagedContent,
+  },
+  {
+    label: 'Přetvořený obsah',
+    value: EuroClimateDistortion.TransformedContent,
+  },
+  {
+    label: 'Vykonstruované informace',
+    value: EuroClimateDistortion.FabricatedInformation,
+  },
+  { label: 'Podvodný obsah', value: EuroClimateDistortion.ImposterContent },
+  {
+    label: 'Koordinované neautentické chování',
+    value: EuroClimateDistortion.CoordinatedInauthenticBehaviour,
+  },
+  { label: 'Pravdivé', value: EuroClimateDistortion.True },
 ]
 
 export const formatType = [
@@ -191,12 +217,12 @@ export const euroclimateFormSchema = z
     subtopics: z
       .array(z.nativeEnum(EuroClimateSubtopic))
       .min(1, 'Zvolte alespoň jedno podtéma'),
-    // distortionType: z
-    //   .array(z.string())
-    //   .min(1, 'Vyberte alespoň jeden typ dezinformace'),
+    distortions: z
+      .array(z.nativeEnum(EuroClimateDistortion))
+      .min(1, 'Vyberte alespoň jeden typ dezinformace'),
     appearance: z.object({
       appearanceUrl: z.string().min(1, 'Zadejte URL'),
-      appearanceDate: z.string(),
+      appearanceDate: z.string().min(1, 'Zadejte datum výskytu'),
       archiveUrl: z.string().optional(),
       format: z.nativeEnum(EuroClimateFormat, {
         required_error: 'Vyberte formát',
