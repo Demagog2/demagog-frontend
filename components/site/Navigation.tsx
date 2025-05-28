@@ -22,6 +22,7 @@ export const NavigationFragment = gql(`
 
 export function Navigation(props: {
   data: FragmentType<typeof NavigationFragment>
+  articlesPageEnabled: boolean
 }) {
   const data = useFragment(NavigationFragment, props.data)
 
@@ -34,7 +35,9 @@ export function Navigation(props: {
           <NavSearchForm />
         </div>
         <ul className="list menu-list d-flex flex-column flex-xl-row align-items-start align-items-xl-center px-5 p-xl-0">
-          <NavItemLink title="Diskuze" url="/diskuze" />
+          {props.articlesPageEnabled && (
+            <NavItemLink title="Diskuze" url="/diskuze" />
+          )}
           <NavItemLink title="Ze sítí" url="/spoluprace-s-facebookem" />
           <NavItemLink title="Politici" url="/vypis-recniku" />
           <NavItemLink title="Výroky" url="/vyroky" />

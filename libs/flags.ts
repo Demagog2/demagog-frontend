@@ -27,3 +27,10 @@ export const getBetaAdminEducationEnabled = flag<boolean>({
     return process.env.EDUCATION === 'true'
   },
 })
+
+export const getArticlesPageEnabled = flag<boolean>({
+  key: 'beta.articles-page-enabled',
+  decide() {
+    return process.env.ENABLE_ARTICLES_PAGES === 'true'
+  },
+})

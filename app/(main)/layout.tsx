@@ -7,6 +7,7 @@ import { Inter } from 'next/font/google'
 import { gql } from '@/__generated__'
 import { query } from '@/libs/apollo-client'
 import { DefaultMetadata } from '@/libs/constants/metadata'
+import { getArticlesPageEnabled } from '@/libs/flags'
 
 // Invalidate pages after n seconds
 // See: https://nextjs.org/docs/app/api-reference/file-conventions/route-segment-config#revalidate
@@ -34,11 +35,13 @@ export default async function RootLayout({
     `),
   })
 
+  const articlesPageEnabled = await getArticlesPageEnabled()
+
   return (
     <html lang="cs">
       <GoogleTagManager gtmId="GTM-NDL7SQZ6" />
       <body>
-        <Header data={data} />
+        <Header data={data} articlesPageEnabled={articlesPageEnabled} />
         <main>{children}</main>
         <Footer />
       </body>
