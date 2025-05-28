@@ -19,12 +19,14 @@ import { AdminFormContent } from '../layout/AdminFormContent'
 import { Field, Fieldset, Textarea } from '@headlessui/react'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminFormHeader } from '../layout/AdminFormHeader'
+import { AdminImageInput } from '../images/AdminImageInput'
 
 const AdminWorkshopDataFragment = gql(`
     fragment AdminWorkshopData on Workshop {
       name
       description
       price
+      image
     }
   `)
 
@@ -44,6 +46,7 @@ export function AdminWorkshopForm(props: {
   const {
     register,
     trigger,
+    control,
     formState: { errors, isValid },
   } = useForm<FieldValues>({
     resolver: zodResolver(workshopSchema),
@@ -51,6 +54,7 @@ export function AdminWorkshopForm(props: {
       name: workshop?.name ?? '',
       description: workshop?.description ?? '',
       price: workshop ? workshop.price : 0,
+      image: workshop?.image ?? '',
       ...(state.state === 'initial' ? {} : state.fields),
     },
   })
@@ -97,6 +101,7 @@ export function AdminWorkshopForm(props: {
               />
               <ErrorMessage message={errors.description?.message} />
             </Field>
+
             <div className="grid grid-cols-12 ">
               <Field className="col-span-3">
                 <Label htmlFor="price">Cena</Label>
@@ -108,6 +113,14 @@ export function AdminWorkshopForm(props: {
                 <ErrorMessage message={errors.price?.message} />
               </Field>
             </div>
+            <Field>
+              <AdminImageInput
+                control={control}
+                name="image"
+                required={false}
+                labelName="Vybrat ilustrační obrázek"
+              />
+            </Field>
           </Fieldset>
         </div>
       </AdminFormContent>

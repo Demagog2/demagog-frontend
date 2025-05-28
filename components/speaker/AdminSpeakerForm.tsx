@@ -22,6 +22,7 @@ import { AdminFormContent } from '../admin/layout/AdminFormContent'
 import { AdminBodySelect } from '../admin/sources/AdminBodySelect'
 import { dateInputFormat } from '@/libs/date-time'
 import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
+import { AdminImageInput } from '../admin/images/AdminImageInput'
 
 const AdminSpeakerFormFragment = gql(`
   fragment AdminSpeakerForm on Query {
@@ -33,6 +34,7 @@ const AdminSpeakerDataFragment = gql(`
   fragment AdminSpeakerData on Speaker {
     firstName
     lastName
+    avatar
     role
     wikidataId
     websiteUrl
@@ -67,12 +69,14 @@ export function AdminSpeakerForm(props: {
     control,
     register,
     trigger,
+    setValue,
     formState: { isValid, errors },
   } = useForm<FieldValues>({
     resolver: zodResolver(speakerSchema),
     defaultValues: {
       firstName: speaker?.firstName ?? '',
       lastName: speaker?.lastName ?? '',
+      avatar: speaker?.avatar ?? '',
       role: speaker?.role ?? '',
       wikidataId: speaker?.wikidataId ?? '',
       websiteUrl: speaker?.websiteUrl ?? '',
@@ -85,6 +89,7 @@ export function AdminSpeakerForm(props: {
           body: membership.body.name ?? '',
           bodyId: membership.body.id,
         })) ?? [],
+      deleteAvatar: false,
       ...(state?.state === 'initial' ? {} : state.fields),
     },
   })
@@ -99,6 +104,8 @@ export function AdminSpeakerForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
+        <input type="hidden" {...register('deleteAvatar')} />
+
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />
           <AdminFormActions>
@@ -132,6 +139,15 @@ export function AdminSpeakerForm(props: {
                 />{' '}
                 <ErrorMessage message={errors.lastName?.message} />
               </Field>
+              <div>
+                <AdminImageInput
+                  control={control}
+                  name="avatar"
+                  labelName="Vybrat obrázek"
+                  required={false}
+                  onDeleteImage={() => setValue('deleteAvatar', true)}
+                />
+              </div>
             </Fieldset>
             <Fieldset className="space-y-4 w-full border-b border-gray-900/10 pb-8">
               <Legend className="mt-8 text-base font-semibold leading-7 text-gray-900">

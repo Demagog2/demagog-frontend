@@ -66,7 +66,7 @@ export default function Footer() {
                     </a>
                   </div>
                   <div className="mb-4">
-                    <span className="small">+420 739 148 011</span>
+                    <span className="small">+420 775 275 177</span>
                   </div>
                   <h6 className="small mb-1">
                     Výtky k hodnocením, workshopy, různé
@@ -87,10 +87,7 @@ export default function Footer() {
                   </div>
                 </div>
                 {/** BADGES */}
-                <div
-                  className="col-12 col-md-6 
-                 d-lg-none"
-                >
+                <div className="col-12 col-md-6 d-lg-none">
                   <div className="d-flex">
                     <div className="me-5 mb-5">
                       <a

@@ -65,6 +65,7 @@ export function AdminUserForm(props: {
     control,
     register,
     trigger,
+    setValue,
     formState: { isValid, errors },
   } = useForm<FieldValues>({
     resolver: zodResolver(userSchema),
@@ -78,6 +79,7 @@ export function AdminUserForm(props: {
       positionDescription: user?.positionDescription ?? '',
       bio: user?.bio ?? '',
       roleId: user?.role.id,
+      deleteAvatar: false,
       ...(state?.state === 'initial' ? {} : state.fields),
     },
   })
@@ -87,6 +89,7 @@ export function AdminUserForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
+        <input type="hidden" {...register('deleteAvatar')} />
         <AdminFormHeader>
           <AdminPageTitle title={props.title} />
           <AdminFormActions>
@@ -199,11 +202,13 @@ export function AdminUserForm(props: {
 
                 <div className="sm:col-span-3 sm:col-start-1 flex items-center gap-2">
                   <div className="col-span-12 grow gap-y-5 grid grid-cols-1">
-                    <Label htmlFor="avatar" isOptional>
-                      Vybrat obrázek
-                    </Label>
-
-                    <AdminImageInput control={control} name="avatar" />
+                    <AdminImageInput
+                      control={control}
+                      name="avatar"
+                      required={false}
+                      labelName="Vybrat obrázek"
+                      onDeleteImage={() => setValue('deleteAvatar', true)}
+                    />
                   </div>
                 </div>
 

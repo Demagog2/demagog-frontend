@@ -75,6 +75,7 @@ export function AdminArticleSingleStatementForm(props: {
       ),
       statementId: article?.segments?.[0]?.statementId ?? undefined,
       illustrationCaption: article?.illustrationCaption ?? '',
+      deleteIllustration: false,
     },
   })
 
@@ -83,6 +84,7 @@ export function AdminArticleSingleStatementForm(props: {
   return (
     <>
       <form action={formAction} onSubmit={handleSubmitForm}>
+        <input type="hidden" {...register('deleteIllustration')} />
         <AdminFormHeader>
           <AdminPageTitle title={props.title} description={props.description} />
 
@@ -113,6 +115,7 @@ export function AdminArticleSingleStatementForm(props: {
                   <AdminArticleIllustrationInput
                     article={article}
                     control={control}
+                    onDeleteImage={() => setValue('deleteIllustration', true)}
                     name="illustration"
                   />
                 </Field>

@@ -245,6 +245,7 @@ export function AdminArticleForm(props: {
     resolver: zodResolver(schema),
     defaultValues: {
       perex: article?.perex ?? undefined,
+      deleteIllustration: false,
       ...buildDefaultValues(article),
       ...(state?.state === 'initial' ? {} : state.fields),
     },
@@ -309,6 +310,7 @@ export function AdminArticleForm(props: {
       onSubmit={handleSubmitForm}
       encType="multipart/form-data"
     >
+      <input type="hidden" {...register('deleteIllustration')} />
       <AdminFormHeader>
         <AdminPageTitle title={props.title} description={props.description} />
 
@@ -361,6 +363,7 @@ export function AdminArticleForm(props: {
             <AdminArticleIllustrationInput
               article={article}
               control={control}
+              onDeleteImage={() => setValue('deleteIllustration', true)}
               name="illustration"
             />
 

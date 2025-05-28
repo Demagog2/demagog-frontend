@@ -74,6 +74,7 @@ const adminUpdateSpeakerMutation = gql(`
     updateSpeaker(id: $id, speakerInput: $speakerInput) {
       speaker {
         id
+        avatar
       }
     }
   }
