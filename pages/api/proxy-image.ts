@@ -19,6 +19,21 @@ export default async function handler(
     return res.status(400).json({ error: 'URL parameter is required' })
   }
 
+  // Validate that the URL is from an allowed domain
+  const allowedDomains = [
+    'https://demagog.cz',
+    'https://www.demagog.cz',
+    'https://api.demagog.cz',
+  ]
+
+  const isAllowedDomain = allowedDomains.some((domain) =>
+    url.startsWith(domain)
+  )
+
+  if (!isAllowedDomain) {
+    return res.status(403).json({ error: 'Domain not allowed' })
+  }
+
   try {
     // Fetch the image from the external server
     const response = await fetch(url)
