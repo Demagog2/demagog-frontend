@@ -17,8 +17,8 @@ const IMAGE_SIZES = {
     height: 202,
   },
   small: {
-    width: 320,
-    height: 180,
+    width: 260,
+    height: 146,
   },
 }
 
