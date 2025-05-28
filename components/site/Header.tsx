@@ -9,6 +9,7 @@ const THRESHOLD = 100
 
 export default function Header(props: {
   data: FragmentType<typeof NavigationFragment>
+  articlesPageEnabled: boolean
 }) {
   const scrollTopRef = useRef<number>(0)
   const headerRef = useRef<HTMLDivElement>(null)
@@ -47,7 +48,10 @@ export default function Header(props: {
               <img className="h-100" src="/logo_white.svg" alt="Logo" />
             </a>
 
-            <Navigation data={props.data} />
+            <Navigation
+              data={props.data}
+              articlesPageEnabled={props.articlesPageEnabled}
+            />
           </div>
         </div>
       </div>

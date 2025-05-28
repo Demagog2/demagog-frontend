@@ -3,6 +3,7 @@
 .article-redesign {
   @include perex;
   @include unsafe-data-wrapper;
+  @include social-share-buttons;
 
   figure figcaption {
     @include figcaption;

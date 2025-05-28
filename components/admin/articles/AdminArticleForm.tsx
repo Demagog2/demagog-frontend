@@ -30,6 +30,7 @@ import { z } from 'zod'
 import { schema } from '@/libs/articles/schema'
 import { useFormState } from 'react-dom'
 import { AdminSourcesList } from '@/components/admin/articles/AdminSourcesList'
+import { GlobeAltIcon } from '@heroicons/react/24/outline'
 
 import {
   DocumentTextIcon,
@@ -636,6 +637,18 @@ export function AdminArticleForm(props: {
                 )}
               />
             </Field>
+            <span className="hidden sm:block w-full sm:w-fit lg:w-full">
+              <a
+                href={`/beta/admin/articles/${article?.id}/integrations`}
+                className="inline-flex items-center w-full justify-center rounded-md bg-white px-6 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              >
+                <GlobeAltIcon
+                  aria-hidden="true"
+                  className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
+                />
+                Integrace
+              </a>
+            </span>
           </Fieldset>
         </AdminFormSidebar>
       </AdminFormContent>

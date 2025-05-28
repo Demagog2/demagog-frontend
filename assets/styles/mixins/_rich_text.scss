@@ -21,6 +21,36 @@
   @extend .mt-1, .text-muted, .small;
 }
 
+@mixin social-share-buttons {
+  .share-icon svg {
+    width: 18px;
+    height: 18px;
+    fill: rgb(173, 181, 189);
+    transition: fill 0.3s ease;
+  }
+
+  .share-icon.facebook:hover svg {
+    fill: #0866ff;
+  }
+
+  .share-icon.x:hover svg,
+  .share-icon.threads:hover svg {
+    fill: #000000;
+  }
+
+  .share-icon.link-icon {
+    width: 18px;
+    height: 18px;
+    color: rgb(173, 181, 189);
+    text-decoration: none;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .share-icon.link-icon:hover svg {
+    fill: #25ad23;
+  }
+}
+
 @mixin lists {
   ul,
   ol {
@@ -43,5 +73,21 @@
       padding-left: 0.5rem;
       position: relative;
     }
+  }
+}
+
+@mixin statement-tags {
+  .separator::after {
+    content: '|';
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+    color: #adb5bd;
+    font-size: inherit;
+    line-height: inherit;
+    vertical-align: baseline;
+    display: inline;
+  }
+  .translate-up {
+    transform: translateY(-1px);
   }
 }

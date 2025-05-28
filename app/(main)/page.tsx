@@ -2,8 +2,6 @@ import { Metadata } from 'next'
 import { gql } from '@/__generated__'
 import { notFound } from 'next/navigation'
 import { HomepageFirstPage } from '@/components/homepage/HomepageFirstPage'
-import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
-import { PropsWithSearchParams } from '@/libs/params'
 import {
   getCanonicalMetadata,
   getCanonicalRelativeUrl,
@@ -13,6 +11,9 @@ import {
 import { getStringParam } from '@/libs/query-params'
 import { query } from '@/libs/apollo-client'
 import { buildGraphQLVariables } from '@/libs/pagination'
+import { getArticlesPageEnabled } from '@/libs/flags'
+import { PropsWithSearchParams } from '@/libs/params'
+import { HomepageNextPage } from '@/components/homepage/HomepageNextPage'
 
 export async function generateMetadata(
   props: PropsWithSearchParams
@@ -74,12 +75,14 @@ export default async function Homepage(props: PropsWithSearchParams) {
     variables: { ...buildGraphQLVariables({ before, after, pageSize: 10 }) },
   })
 
-  if (!data.homepageArticlesV3) {
+  const articlesPageEnabled = await getArticlesPageEnabled()
+
+  if (!data.homepageArticlesV3 || data.homepageArticlesV3.nodes?.length === 0) {
     notFound()
   }
 
   return !data.homepageArticlesV3.pageInfo.hasPreviousPage ? (
-    <HomepageFirstPage data={data} />
+    <HomepageFirstPage data={data} articlesPageEnabled={articlesPageEnabled} />
   ) : (
     <HomepageNextPage data={data} />
   )

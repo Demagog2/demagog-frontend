@@ -4,15 +4,16 @@ import { ArticleV2Preview } from '../article/ArticleV2Preview'
 import { ArticleQuote } from '../article/ArticleQuote'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { StatementHeader } from './StatementHeader'
 import { StatementDisplayMode } from './StatementHeader'
 import classNames from 'classnames'
-import { LinkIcon } from '@heroicons/react/24/outline'
+import { StatementSocialShareButtons } from './StatementSocialShareButtons'
 
 const StatementFullExplanationFragment = gql(`
   fragment StatementFullExplanation on Statement {
     ...StatementHeader
+    ...StatementSocialShareButtons
     id
     assessment {
       explanationContent {
@@ -137,13 +138,7 @@ export function StatementFullExplanation(props: {
               <>zobrazit celé odůvodnění</>
             )}
           </a>
-          <a
-            className="d-flex text-gray align-items-center text-none"
-            href={'/vyrok/' + statement.id}
-          >
-            <LinkIcon className="h-15px" />
-            <span className="ms-1">trvalý odkaz</span>
-          </a>
+          {<StatementSocialShareButtons statement={statement} showDetailUrl />}
         </div>
       </>
     </StatementHeader>

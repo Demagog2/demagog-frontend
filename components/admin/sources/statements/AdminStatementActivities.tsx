@@ -104,30 +104,34 @@ export function AdminStatementActivities(props: { statementId: string }) {
         </button>
       </div>
 
-      <ul role="list" className="mt-8 -mb-8">
-        {activities?.map((activityItem, activityItemIdx: number) => {
-          if (!activityItem?.node) {
-            return null
-          }
+      {activities?.length === 0 ? (
+        <p className="text-gray-500 text-sm p-3 mt-3">Zatím žádné aktivity.</p>
+      ) : (
+        <ul role="list" className="mt-8 -mb-8">
+          {activities?.map((activityItem, activityItemIdx: number) => {
+            if (!activityItem?.node) {
+              return null
+            }
 
-          return (
-            <li key={activityItemIdx}>
-              <div className="relative pb-8">
-                {activityItemIdx !== activities.length - 1 && (
-                  <span
-                    aria-hidden="true"
-                    className="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
-                  />
-                )}
+            return (
+              <li key={activityItemIdx}>
+                <div className="relative pb-8">
+                  {activityItemIdx !== activities.length - 1 && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute left-5 top-5 -ml-px h-full w-0.5 bg-gray-200"
+                    />
+                  )}
 
-                <div className="relative flex items-start space-x-3">
-                  <AdminActivity activity={activityItem.node} />
+                  <div className="relative flex items-start space-x-3">
+                    <AdminActivity activity={activityItem.node} />
+                  </div>
                 </div>
-              </div>
-            </li>
-          )
-        })}
-      </ul>
+              </li>
+            )
+          })}
+        </ul>
+      )}
 
       <AdminStatementCommentInput
         data={data}

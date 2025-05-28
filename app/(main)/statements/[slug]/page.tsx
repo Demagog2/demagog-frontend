@@ -17,9 +17,10 @@ import { notFound } from 'next/navigation'
 import { ArticleQuote } from '@/components/article/ArticleQuote'
 import { SourceSpeakerAvatar } from '@/components/statement/SourceSpeakerAvatar'
 import { StatementDisplayMode } from '@/libs/statements/display-mode'
-import TagIcon from '@/assets/icons/tag.svg'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementHeader } from '@/components/statement/StatementHeader'
+import { StatementSocialShareButtons } from '@/components/statement/StatementSocialShareButtons'
+import { StatementTags } from '@/components/statement/StatementTags'
 
 export async function generateMetadata({
   params,
@@ -96,6 +97,7 @@ export default async function Statement(props: { params: { slug: string } }) {
         statementV2(id: $id) {
           ...SourceSpeakerAvatar
           ...StatementFullExplanation
+          ...StatementSocialShareButtons
           assessment {
             shortExplanation
             explanationHtml
@@ -131,10 +133,7 @@ export default async function Statement(props: { params: { slug: string } }) {
               name
             }
           }
-          tags {
-            id
-            name
-          }
+          ...StatementTags
           mentioningArticles {
             ... on Article {
               id
@@ -179,28 +178,20 @@ export default async function Statement(props: { params: { slug: string } }) {
               dangerouslySetInnerHTML={{ __html: statement.content }}
             />
           </blockquote>
+
           <div className="mt-2 mt-md-4 fs-8">
-            <cite>
-              {statement.source.medium?.name},{' '}
-              <span className="date">
-                {statement.source?.releasedAt &&
-                  formatDate(statement.source.releasedAt)}
-              </span>
-            </cite>
-            {statement.tags.length > 0 && (
-              <>
-                <div className="row">
-                  <div className="col col-auto">
-                    {statement.tags.map((tag) => (
-                      <div key={tag.id} className="d-inline-block me-2">
-                        <TagIcon className="h-15px" />
-                        <span className="fs-8">{tag.name}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </>
-            )}
+            <div className="d-flex justify-content-between gap-2">
+              <cite>
+                {statement.source.medium?.name},{' '}
+                <span className="date">
+                  {statement.source?.releasedAt &&
+                    formatDate(statement.source.releasedAt)}
+                </span>
+              </cite>
+              <StatementSocialShareButtons statement={statement} />
+            </div>
+
+            <StatementTags statement={statement} />
           </div>
           <div className="assessment-veracity d-flex flex-column flex-md-row align-items-md-center justify-content-md-start mt-6 mt-md-10">
             <div className="fs-4 fw-bold me-md-6 flex-shrink-0">

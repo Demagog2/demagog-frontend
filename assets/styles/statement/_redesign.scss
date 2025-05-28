@@ -1,9 +1,12 @@
 @import '../mixins/rich_text';
 
+@include social-share-buttons;
+
 .accordion-content,
 .statement-detail {
   @include perex;
   @include unsafe-data-wrapper;
+  @include statement-tags;
 
   figure figcaption {
     @include figcaption;
@@ -313,4 +316,8 @@
     text-decoration: underline;
     text-underline-offset: 3px;
   }
+}
+
+.s-statement {
+  @include statement-tags;
 }

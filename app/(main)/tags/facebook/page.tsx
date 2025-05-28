@@ -4,55 +4,40 @@
 import { gql } from '@/__generated__'
 import { FacebookFactcheckFirstPage } from '@/components/article/FacebookFactcheckFirstPage'
 import { FacebookFactcheckNextPage } from '@/components/article/FacebookFactcheckNextPage'
-import { Pagination } from '@/components/article/Pagination'
+import { NumericalPagination } from '@/components/article/NumericalPagination'
 import ArticleTags from '@/components/article/Tags'
 import { query } from '@/libs/apollo-client'
 import {
   getCanonicalMetadata,
-  getCanonicalRelativeUrl,
   getMetadataTitle,
   getRobotsMetadata,
 } from '@/libs/metadata'
-import { buildGraphQLVariables } from '@/libs/pagination'
+import { fromPageToCursor, parsePage } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
-import { getStringParam } from '@/libs/query-params'
+
 import { Metadata } from 'next'
+import { notFound, redirect } from 'next/navigation'
 
 export async function generateMetadata(
   props: PropsWithSearchParams
 ): Promise<Metadata> {
-  const after = getStringParam(props.searchParams.after)
-  const before = getStringParam(props.searchParams.before)
+  const page = parsePage(props.searchParams.page)
 
-  const {
-    data: {
-      facebookFactchecks: { pageInfo },
-    },
-  } = await query({
-    query: gql(`
-      query facebookCollaborationMetadata($first: Int, $last: Int, $after: String, $before: String) {
-        facebookFactchecks(first: $first, last: $last, after: $after, before: $before) {
-          pageInfo {
-            hasPreviousPage
-          }
-        }
-      }
-    `),
-    variables: { ...buildGraphQLVariables({ before, after, pageSize: 10 }) },
-  })
+  if (props.searchParams.page === '1') {
+    redirect('/spoluprace-s-facebookem')
+  }
 
   return {
-    title: getMetadataTitle('Spolupráce s Facebookem'),
+    title: getMetadataTitle(
+      'Spolupráce s Facebookem' + (page > 1 ? ` - strana ${page}` : '')
+    ),
     description:
       'Demagog.cz se v květnu 2020 zapojil do sítě nezávislých fact-checkingových partnerů, kteří pro společnost Facebook ověřují pravdivost vybraného facebookového a instagramového obsahu. Pokud se ukáže, že jde o nepravdivý nebo zav...',
     ...getRobotsMetadata(),
     ...getCanonicalMetadata(
-      getCanonicalRelativeUrl(
-        '/spoluprace-s-facebookem',
-        pageInfo.hasPreviousPage,
-        after,
-        before
-      )
+      page === 1
+        ? '/spoluprace-s-facebookem'
+        : `/spoluprace-s-facebookem?page=${page}`
     ),
   }
 }
@@ -60,8 +45,7 @@ export async function generateMetadata(
 export default async function FacebookCollaboration(
   props: PropsWithSearchParams
 ) {
-  const after = getStringParam(props.searchParams.after)
-  const before = getStringParam(props.searchParams.before)
+  const page = parsePage(props.searchParams.page)
 
   const { data } = await query({
     query: gql(`
@@ -69,9 +53,12 @@ export default async function FacebookCollaboration(
             facebookFactchecks(first: $first, last: $last, after: $after, before: $before) {
               ...FacebookFactcheckFirstPageFragment
               ...FacebookFactcheckNextPageFragment
+              nodes {
+                id
+              }
               pageInfo {
                 hasPreviousPage
-                ...PaginationFragment
+                ...NumericalPagination
               }
             }
             articleTags(limit: 5) {
@@ -79,10 +66,12 @@ export default async function FacebookCollaboration(
             }
           }
         `),
-    variables: {
-      ...buildGraphQLVariables({ before, after, pageSize: 10 }),
-    },
+    variables: fromPageToCursor(page, 10),
   })
+
+  if (!data.facebookFactchecks || data.facebookFactchecks.nodes?.length === 0) {
+    notFound()
+  }
 
   return (
     <div className="container">
@@ -118,7 +107,10 @@ export default async function FacebookCollaboration(
           />
         )}
 
-        <Pagination pageInfo={data.facebookFactchecks.pageInfo} />
+        <NumericalPagination
+          pageInfo={data.facebookFactchecks.pageInfo}
+          page={page}
+        />
       </div>
     </div>
   )

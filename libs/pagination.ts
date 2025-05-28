@@ -102,3 +102,12 @@ export function buildGraphQLVariables({
 
   return { first: pageSize }
 }
+
+export function fromPageToCursor(page: number, pageSize: number) {
+  if (page === 1) {
+    return { after: null, first: pageSize }
+  }
+
+  const cursor = (page - 1) * pageSize
+  return { after: btoa(cursor.toString()), first: pageSize }
+}
