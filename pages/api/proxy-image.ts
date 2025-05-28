@@ -4,6 +4,11 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // Only allow in development mode
+  if (process.env.NODE_ENV !== 'development') {
+    return res.status(404).json({ error: 'Not found' })
+  }
+
   if (req.method !== 'GET') {
     return res.status(405).json({ error: 'Method not allowed' })
   }
