@@ -57,6 +57,7 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
 
   const article = useFragment(AdminArticleIllustrationFragment, props.article)
   const imgRef = useRef<HTMLImageElement>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [crop, setCrop] = useState<Crop>()
   const [isCropping, setIsCropping] = useState(false)
   const [originalImage, setOriginalImage] = useState<string | null>(null)
@@ -64,6 +65,8 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
   const [articlePreview, setArticlePreview] = useState<string | null>(
     article?.large ? imagePath(article.large) : null
   )
+
+  const { onDeleteImage } = props
 
   const handleRemoveArticle = useCallback(
     (evt: React.MouseEvent<HTMLElement>) => {
@@ -76,23 +79,17 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
 
       // Update form field value to null instructing server to remove the image
       field.onChange(null)
-      props.onDeleteImage?.()
+
+      onDeleteImage?.()
     },
-    [field, props.onDeleteImage]
+    [field, onDeleteImage]
   )
 
   const handleImageUpload = useCallback((file: File) => {
-    const fileReader = new FileReader()
-
-    fileReader.onload = () => {
-      if (fileReader.result) {
-        const imageUrl = fileReader.result.toString()
-        setOriginalImage(imageUrl)
-        setIsCropping(true)
-      }
-    }
-
-    fileReader.readAsDataURL(file)
+    // Convert file to blob URL to ensure consistent handling
+    const blobUrl = URL.createObjectURL(file)
+    setOriginalImage(blobUrl)
+    setIsCropping(true)
   }, [])
 
   const onImageLoad = useCallback(
@@ -103,20 +100,45 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
     []
   )
 
+  // Helper function to get a CORS-safe image URL for development
+  const getCORSSafeImageUrl = useCallback((imageUrl: string) => {
+    // In development, proxy server images through Next.js to avoid CORS
+    if (
+      process.env.NODE_ENV === 'development' &&
+      imageUrl.startsWith('https://')
+    ) {
+      // Encode the image URL to pass it as a query parameter
+      const encodedUrl = encodeURIComponent(imageUrl)
+      return `/api/proxy-image?url=${encodedUrl}`
+    }
+    return imageUrl
+  }, [])
+
+  // Helper function to load server image and convert to blob URL for cropping
+  const loadImageForCropping = useCallback(
+    async (imageUrl: string) => {
+      const corseSafeUrl = getCORSSafeImageUrl(imageUrl)
+      setOriginalImage(corseSafeUrl)
+      setIsCropping(true)
+    },
+    [getCORSSafeImageUrl]
+  )
+
   const handleCropComplete = useCallback(() => {
     if (!imgRef.current || !crop) return
 
     const canvas = document.createElement('canvas')
     const scaleX = imgRef.current.naturalWidth / imgRef.current.width
     const scaleY = imgRef.current.naturalHeight / imgRef.current.height
-    const pixelRatio = window.devicePixelRatio
+
+    // Set canvas size to the actual crop size (not scaled by pixelRatio)
     canvas.width = Math.floor(crop.width * scaleX)
     canvas.height = Math.floor(crop.height * scaleY)
 
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    ctx.scale(pixelRatio, pixelRatio)
+    // Don't scale the context by pixelRatio to avoid coordinate confusion
     ctx.imageSmoothingQuality = 'high'
 
     const cropX = crop.x * scaleX
@@ -124,36 +146,66 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
 
     // Create a new image to handle CORS
     const img = new Image()
+    // Always try to use CORS
     img.crossOrigin = 'anonymous'
     img.src = originalImage ?? ''
 
     img.onload = () => {
-      ctx.drawImage(
-        img,
-        cropX,
-        cropY,
-        crop.width * scaleX,
-        crop.height * scaleY,
-        0,
-        0,
-        crop.width * scaleX,
-        crop.height * scaleY
-      )
+      try {
+        ctx.drawImage(
+          img,
+          cropX,
+          cropY,
+          crop.width * scaleX,
+          crop.height * scaleY,
+          0,
+          0,
+          canvas.width,
+          canvas.height
+        )
 
-      // Convert canvas to blob
-      canvas.toBlob(
-        (blob) => {
-          if (!blob) return
-          const croppedFile = new File([blob], 'cropped-image.jpg', {
-            type: 'image/jpeg',
-          })
-          field.onChange(croppedFile)
-          setArticlePreview(URL.createObjectURL(blob))
-          setIsCropping(false)
-        },
-        'image/jpeg',
-        0.95
-      )
+        // Convert canvas to blob
+        canvas.toBlob(
+          (blob) => {
+            if (!blob) return
+            const croppedFile = new File([blob], 'cropped-image.jpg', {
+              type: 'image/jpeg',
+            })
+
+            // Set the file in react-hook-form
+            field.onChange(croppedFile)
+
+            // Also set the file in the file input for form submission
+            if (fileInputRef.current) {
+              const dataTransfer = new DataTransfer()
+              dataTransfer.items.add(croppedFile)
+              fileInputRef.current.files = dataTransfer.files
+            }
+
+            // Create preview URL and update state
+            const previewUrl = URL.createObjectURL(blob)
+            setArticlePreview(previewUrl)
+            setIsCropping(false)
+
+            // Clean up the original image blob URL if it exists
+            if (originalImage?.startsWith('blob:')) {
+              URL.revokeObjectURL(originalImage)
+            }
+            setOriginalImage(null)
+          },
+          'image/jpeg',
+          0.95
+        )
+      } catch (error) {
+        console.error('Error cropping image:', error)
+        // If canvas operations fail, just exit cropping mode
+        setIsCropping(false)
+      }
+    }
+
+    img.onerror = () => {
+      console.error('Error loading image for cropping')
+      setIsCropping(false)
     }
   }, [crop, field, originalImage])
 
@@ -212,13 +264,12 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
                 onClick={() => {
                   // If we have an article with original image, use that
                   if (article?.original) {
-                    setOriginalImage(imagePath(article.original))
+                    loadImageForCropping(imagePath(article.original))
                   }
                   // Otherwise use the current preview
                   else if (articlePreview) {
-                    setOriginalImage(articlePreview)
+                    loadImageForCropping(articlePreview)
                   }
-                  setIsCropping(true)
                 }}
                 className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
@@ -250,18 +301,21 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
                 </label>
               </div>
               <p className="text-xs leading-5 text-gray-600">
-                Formáty .png, .jpg, .jpeg nebo .gif. Velikost max 4 MB.
+                Formáty .webp,. png, .jpg, .jpeg nebo .gif. Velikost max 4 MB.
               </p>
             </div>
           </div>
         )}
       </div>
 
-      <div className="mt-2">
+      <div
+        className="mt-2"
+        style={{ display: articlePreview ? 'none' : 'block' }}
+      >
         <input
           id="illustration"
           type="file"
-          accept="image/png, image/jpg, image/jpeg, image/gif"
+          accept="image/webp, image/png, image/jpg, image/jpeg, image/gif"
           name={field.name}
           onChange={(evt) => {
             const file = evt.target.files?.[0]
@@ -270,6 +324,7 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
               handleImageUpload(file)
             }
           }}
+          ref={fileInputRef}
         />
       </div>
     </section>
