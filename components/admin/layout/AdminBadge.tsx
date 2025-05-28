@@ -18,7 +18,7 @@ export function AdminBadge(props: AdminBadgeProps) {
 
       {props.onRemove && (
         <button
-          onMouseDown={props.onRemove}
+          onPointerDown={props.onRemove}
           type="button"
           className="group relative -mr-1 size-3.5 rounded-sm hover:bg-gray-500/20"
         >
@@ -29,7 +29,6 @@ export function AdminBadge(props: AdminBadgeProps) {
           >
             <path d="M4 4l6 6m0-6l-6 6" />
           </svg>
-          <span className="absolute -inset-1" />
         </button>
       )}
     </span>
