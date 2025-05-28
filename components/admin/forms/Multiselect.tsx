@@ -90,8 +90,6 @@ export function Multiselect<T extends FieldValues>(props: {
                                       (value: string) => value !== item.value
                                     )
                                   )
-
-                                  props.onChange?.()
                                 }
                           }
                         >
