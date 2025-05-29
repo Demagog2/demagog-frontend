@@ -73,6 +73,7 @@ export function AdminEuroClimateForm(props: {
     control,
     watch,
     trigger,
+    setValue,
     formState: { isValid, errors },
   } = useForm<FieldValues>({
     resolver: zodResolver(euroclimateFormSchema),
@@ -165,7 +166,10 @@ export function AdminEuroClimateForm(props: {
                                   })
                                 )}
                                 placeholder="Vyberte téma"
-                                onChange={(item) => field.onChange(item?.value)}
+                                onChange={(item) => {
+                                  field.onChange(item?.value)
+                                  setValue('subtopics', [])
+                                }}
                                 defaultValue={field.value}
                                 canRemoveItem
                               />
