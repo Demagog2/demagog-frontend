@@ -29,18 +29,23 @@ export function AdminPublishIntegrationButton(props: Props) {
     setIsLoading(true)
 
     try {
-      await publishIntegrationArticle(props.articleId, props.service)
-      toast.success(
-        `Článek byl úspěšně publikován do ${ServiceNames[props.service]}`
+      const result = await publishIntegrationArticle(
+        props.articleId,
+        props.service
       )
-      router.refresh()
-    } catch (error) {
-      toast.error('Nepodařilo se publikovat článek. Zkuste to prosím znovu.')
-      console.error('Publish error:', error)
+      if (result.success) {
+        router.refresh()
+        toast.success(
+          `Článek byl úspěšně publikován do ${ServiceNames[props.service]}`
+        )
+      } else {
+        toast.error(result.message)
+        console.error('Publish error:', result.error)
+      }
     } finally {
       setIsLoading(false)
     }
-  }, [props.articleId, props.service])
+  }, [props.articleId, props.service, router])
 
   return (
     <Button
