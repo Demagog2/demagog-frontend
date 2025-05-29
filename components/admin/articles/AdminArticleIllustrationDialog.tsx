@@ -4,7 +4,6 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import {
-  Button,
   Dialog,
   DialogBackdrop,
   DialogPanel,
@@ -17,6 +16,7 @@ import { Input } from '@/components/admin/forms/Input'
 import { callApi } from '@/libs/api'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import invariant from 'ts-invariant'
+import { SecondaryButton } from '../layout/buttons/SecondaryButton'
 
 export function AdminArticleIllustrationDialog(props: {
   isOpen: boolean
@@ -138,14 +138,9 @@ export function AdminArticleIllustrationDialog(props: {
                         </Field>
                       )}
 
-                      <div className="mt-2">
-                        <Button
-                          type="submit"
-                          className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-                        >
-                          Vygenerovat
-                        </Button>
-                      </div>
+                      <SecondaryButton type="submit" className="w-full mt-2">
+                        Vygenerovat
+                      </SecondaryButton>
                     </Fieldset>
                   </form>
                 </div>
@@ -164,13 +159,13 @@ export function AdminArticleIllustrationDialog(props: {
               >
                 Uložit k článku
               </button>
-              <button
+              <SecondaryButton
                 type="button"
                 onClick={props.onClose}
-                className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
+                className="mt-2 w-full"
               >
                 Zavřít
-              </button>
+              </SecondaryButton>
             </div>
           </DialogPanel>
         </div>
