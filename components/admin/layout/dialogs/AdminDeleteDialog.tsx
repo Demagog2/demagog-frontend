@@ -116,7 +116,7 @@ export const AdminDeleteDialog = forwardRef<
                 <SecondaryButton
                   type="button"
                   onClick={() => setOpen(false)}
-                  className="w-full mt-3"
+                  className="w-full mt-3 sm:mt-0"
                 >
                   Zavřít
                 </SecondaryButton>
