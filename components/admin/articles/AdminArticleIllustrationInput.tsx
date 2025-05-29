@@ -18,6 +18,7 @@ import ReactCrop, {
   makeAspectCrop,
 } from 'react-image-crop'
 import 'react-image-crop/dist/ReactCrop.css'
+import { SecondaryButton } from '../layout/buttons/SecondaryButton'
 
 const AdminArticleIllustrationFragment = gql(`
   fragment AdminArticleIllustration on Article {
@@ -230,15 +231,15 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
               />
             </ReactCrop>
             <div className="mt-4 flex justify-end gap-x-2">
-              <Button
+              <SecondaryButton
+                type="button"
                 onClick={() => {
                   setIsCropping(false)
                   setOriginalImage(null)
                 }}
-                className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               >
                 Zrušit
-              </Button>
+              </SecondaryButton>
               <Button
                 onClick={handleCropComplete}
                 className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
@@ -260,7 +261,9 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
               </figcaption>
             </figure>
             <div className="mt-2 flex gap-x-2">
-              <Button
+              <SecondaryButton
+                type="button"
+                icon={<PhotoIcon />}
                 onClick={() => {
                   // If we have an article with original image, use that
                   if (article?.original) {
@@ -271,18 +274,17 @@ export function AdminArticleIllustrationInput<T extends FieldValues>(props: {
                     loadImageForCropping(articlePreview)
                   }
                 }}
-                className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                <PhotoIcon aria-hidden="true" className="-ml-0.5 h-5 w-5" />
                 Oříznout
-              </Button>
-              <Button
+              </SecondaryButton>
+              <SecondaryButton
+                type="button"
                 onClick={handleRemoveArticle}
-                className="inline-flex items-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-indigo-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                icon={<TrashIcon />}
+                iconPosition="left"
               >
-                <TrashIcon aria-hidden="true" className="-ml-0.5 h-5 w-5" />
                 Smazat obrázek
-              </Button>
+              </SecondaryButton>
             </div>
           </>
         ) : (

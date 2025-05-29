@@ -24,6 +24,7 @@ import { FormAction } from '@/libs/forms/form-action'
 import { useFormToasts } from '../forms/hooks/use-form-toasts'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { useFormState } from 'react-dom'
+import { SecondaryButton } from '../layout/buttons/SecondaryButton'
 
 const AdminQuizDataFragment = gql(`
   fragment AdminQuizData on QuizQuestion {
@@ -109,7 +110,7 @@ export function AdminQuizQuestionForm(props: {
               <ErrorMessage message={errors.description?.message} />
             </Field>
           </Fieldset>
-          <Fieldset className="space-y-4 w-full pb-8">
+          <Fieldset className="space-y-4 w-full pb-8 mt-3">
             <Legend className="text-base font-semibold leading-7 text-gray-900">
               Odpovědi
             </Legend>
@@ -166,7 +167,7 @@ export function AdminQuizQuestionForm(props: {
               </div>
             ))}
             <div className="mt-4">
-              <button
+              <SecondaryButton
                 type="button"
                 onClick={() =>
                   append({
@@ -174,10 +175,9 @@ export function AdminQuizQuestionForm(props: {
                     isCorrect: false,
                   })
                 }
-                className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               >
                 Přidat odpověď
-              </button>
+              </SecondaryButton>
             </div>
           </Fieldset>
         </div>
