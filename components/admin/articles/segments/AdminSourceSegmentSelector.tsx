@@ -49,7 +49,7 @@ export function AdminSourceSegmentSelector(props: {
           Vyberte diskuzi
         </h3>
         <p className="mt-1 text-sm text-gray-500">
-          Vyberte se seznamu diskuzi s vyroky, ktere budou zobrazeny v clanku.
+          Vyberte ze seznamu diskuzi s výroky, které budou zobrazeny v článku.
         </p>
       </div>
       <ul role="list" className="divide-y divide-gray-100">
@@ -113,6 +113,7 @@ export function AdminSourceSegmentSelector(props: {
                 <dd className="text-sm leading-6 text-gray-900">
                   <button
                     type="button"
+                    title="Potvrdit výběr"
                     className="rounded-full bg-indigo-600 p-1 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                     onClick={() => props.onChange?.(source.id)}
                   >

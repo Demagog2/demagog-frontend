@@ -37,6 +37,7 @@ import {
   ChatBubbleLeftIcon,
   ChevronUpDownIcon,
   CheckIcon,
+  AcademicCapIcon,
 } from '@heroicons/react/24/outline'
 import { AdminSegmentSelector } from './AdminSegmentSelector'
 import { AdminArticleIllustrationInput } from './AdminArticleIllustrationInput'
@@ -55,6 +56,7 @@ import { AdminFormSidebar } from '../layout/AdminFormSidebar'
 import { useEffect, useMemo } from 'react'
 import { ErrorMessage } from '../forms/ErrorMessage'
 import { isEmpty } from 'lodash'
+import { AdminQuizQuestionList } from './AdminQuizQuestionList'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -93,6 +95,14 @@ const items = [
     icon: ChatBubbleLeftIcon,
     background: 'bg-yellow-500',
   },
+
+  {
+    segmentType: 'quiz_question' as const,
+    title: 'Kvízové otázky',
+    description: 'Vyberte kvíz, který bude zobrazen v článku',
+    icon: AcademicCapIcon,
+    background: 'bg-purple-500',
+  },
 ]
 
 const AdminArticleFormFragment = gql(`
@@ -123,6 +133,16 @@ const AdminArticleFormFieldsFragment = gql(`
         id
       }
       statementId
+      quizQuestion {
+      id
+      title
+      description
+      quizAnswers {
+        id
+        text
+        isCorrect
+      }
+    }
     }
     articleTags {
       id
@@ -201,6 +221,7 @@ function buildDefaultValues(
     case ArticleTypeEnum.FacebookFactcheck:
     case ArticleTypeEnum.GovernmentPromisesEvaluation:
     case ArticleTypeEnum.SingleStatement:
+    case ArticleTypeEnum.Education:
     case ArticleTypeEnum.Static:
     case ArticleTypeEnum.Default:
       return {
@@ -264,6 +285,17 @@ export function AdminArticleForm(props: {
     () => `article:form:${article?.id}`,
     [article?.id]
   )
+
+  const filteredItems = useMemo(() => {
+    return items.filter((item) => {
+      if (selectedArticleType === ArticleTypeEnum.Education) {
+        return (
+          item.segmentType === 'quiz_question' || item.segmentType === 'text'
+        )
+      }
+      return item.segmentType !== 'quiz_question'
+    })
+  }, [selectedArticleType])
 
   useEffect(() => {
     if (!isEmpty(errors)) {
@@ -413,13 +445,17 @@ export function AdminArticleForm(props: {
           </Field>
 
           <AdminSegmentSelector
-            segments={items.map((item) => ({
+            segments={filteredItems.map((item) => ({
               ...item,
               onClick: () => {
                 if (item.segmentType === 'text') {
                   append({ segmentType: item.segmentType, textHtml: '' })
-                } else {
+                }
+                if (item.segmentType === 'source_statements') {
                   append({ segmentType: item.segmentType, sourceId: '' })
+                }
+                if (item.segmentType === 'quiz_question') {
+                  append({ segmentType: item.segmentType, quizQuestionId: '' })
                 }
               },
             }))}
@@ -458,7 +494,7 @@ export function AdminArticleForm(props: {
 
                   <Button onClick={() => remove(index)}>Odebrat</Button>
                 </>
-              ) : (
+              ) : field.segmentType === 'source_statements' ? (
                 <Controller
                   control={control}
                   name={`segments.${index}.sourceId`}
@@ -472,8 +508,25 @@ export function AdminArticleForm(props: {
                       />
                     </>
                   )}
-                ></Controller>
-              )}
+                />
+              ) : field.segmentType === 'quiz_question' ? (
+                <Controller
+                  control={control}
+                  name={`segments.${index}.quizQuestionId`}
+                  render={({ field }) => (
+                    <>
+                      <input type="hidden" {...field} />
+                      <AdminQuizQuestionList
+                        selectedQuizQuestionId={field.value}
+                        onRemoveSegment={() => remove(index)}
+                        onChange={(quizQuestionId) =>
+                          field.onChange(quizQuestionId)
+                        }
+                      />
+                    </>
+                  )}
+                />
+              ) : null}
             </div>
           ))}
 
