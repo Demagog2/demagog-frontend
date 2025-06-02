@@ -134,15 +134,15 @@ const AdminArticleFormFieldsFragment = gql(`
       }
       statementId
       quizQuestion {
-      id
-      title
-      description
-      quizAnswers {
         id
-        text
-        isCorrect
+        title
+        description
+        quizAnswers {
+          id
+          text
+          isCorrect
+        }
       }
-    }
     }
     articleTags {
       id
@@ -200,6 +200,11 @@ function buildDefaultValues(
             return {
               segmentType: 'promise' as const,
               statementId: segment.statementId ?? '',
+            }
+          case 'quiz_question':
+            return {
+              segmentType: 'quiz_question' as const,
+              quizQuestionId: segment.quizQuestion?.id ?? '',
             }
           default:
             return null
