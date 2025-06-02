@@ -55,7 +55,7 @@ export default function ArticleItem(props: {
       >
         <div
           className={classNames('col', {
-            'mt-4 mt-md-7 ps-0 ms-md-7 mb-2 mb-md-5 col-4': isEmbedded,
+            'mt-4 mt-md-7 ps-0 ms-md-7 mb-2 mb-md-5 col-4 col-xl-3': isEmbedded,
             'col-md-5 col-12': !isEmbedded,
           })}
         >
@@ -65,7 +65,7 @@ export default function ArticleItem(props: {
                 loading={largerPreview ? 'eager' : 'lazy'}
                 {...getPreviewImageSize(largerPreview ? 'medium' : 'small')}
                 src={mediaUrl + article.illustration}
-                className="rounded-m"
+                className="rounded-m w-100 h-auto"
                 alt={`Ilustrační obrázek k ${article.title}`}
               />
             </ArticleLink>
@@ -85,7 +85,7 @@ export default function ArticleItem(props: {
         </div>
         <div
           className={classNames('col', {
-            'mt-4 mt-md-7 col-7 col-md-6 mb-3 mb-md-6': isEmbedded,
+            'mt-4 mt-md-7 col-7 col-md-6 col-xl-7 mb-3 mb-md-6': isEmbedded,
             'col-12 col-md-7': !isEmbedded,
           })}
         >
