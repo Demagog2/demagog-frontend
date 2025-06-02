@@ -48,6 +48,7 @@ import { pluralize } from '@/libs/pluralize'
 import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
 import { useSelector } from '@xstate/react'
 import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
+import { displayDate } from '@/libs/date-time'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -103,6 +104,7 @@ const AdminStatementAssessmentFragment = gql(`
       id
       sourceUrl
       name
+      releasedAt
       ...AdminSourceSpeakerControl
     }
     articleTags {
@@ -342,6 +344,10 @@ function AdminAssessmentForm(props: {
       </>
     ) : null
 
+    const sourceDate = statement.source.releasedAt ? (
+      <> ze dne {displayDate(statement.source.releasedAt)}</>
+    ) : null
+
     const highlightedStatementLink = statement.statementTranscriptPosition ? (
       <>
         {' '}
@@ -362,6 +368,7 @@ function AdminAssessmentForm(props: {
         <>
           Ověřování faktického výroku {statement.sourceSpeaker.fullName} z
           diskuze {statement.source.name}
+          {sourceDate}
           {sourceLink}
           {highlightedStatementLink}
         </>
@@ -373,6 +380,7 @@ function AdminAssessmentForm(props: {
         <>
           Ověřování slibu {statement.sourceSpeaker.fullName} z diskuze{' '}
           {statement.source.name}
+          {sourceDate}
           {sourceLink}
           {highlightedStatementLink}
         </>
@@ -383,6 +391,7 @@ function AdminAssessmentForm(props: {
       <>
         Ověřování silvestrovského výroku {statement.sourceSpeaker.fullName} z
         diskuze {statement.source.name}
+        {sourceDate}
         {sourceLink}
         {highlightedStatementLink}
       </>
