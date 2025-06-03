@@ -14,6 +14,8 @@ export function toArticleTypeEnum(
       return ArticleTypeEnum.SingleStatement
     case 'static':
       return ArticleTypeEnum.Static
+    case 'education':
+      return ArticleTypeEnum.Education
     default:
       return undefined
   }

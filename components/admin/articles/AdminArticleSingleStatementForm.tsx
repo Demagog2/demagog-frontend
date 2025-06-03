@@ -7,7 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { SubmitButton } from '../forms/SubmitButton'
-import { Button, Field, Fieldset } from '@headlessui/react'
+import { Field, Fieldset } from '@headlessui/react'
 import { Label } from '../forms/Label'
 import { Input } from '../forms/Input'
 import { AdminArticleIllustrationInput } from './AdminArticleIllustrationInput'
@@ -26,6 +26,7 @@ import { FormAction } from '@/libs/forms/form-action'
 import { AdminFormContent } from '../layout/AdminFormContent'
 import { AdminFormMain } from '../layout/AdminFormMain'
 import { AdminFormSidebar } from '../layout/AdminFormSidebar'
+import { SecondaryButton } from '../layout/buttons/SecondaryButton'
 
 const AdminArticleSingleStatementFormFragment = gql(`
   fragment AdminArticleSingleStatementFormFields on Article {
@@ -147,12 +148,12 @@ export function AdminArticleSingleStatementForm(props: {
             <div className="min-w-[25%] gap-y-5 grid grid-cols-1 content-start">
               <Fieldset className="space-y-4">
                 <Field>
-                  <Button
+                  <SecondaryButton
+                    type="button"
                     onClick={() => setDialogOpen(true)}
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto whitespace-nowrap"
                   >
                     Vygenerovat obrázek pro tweet
-                  </Button>
+                  </SecondaryButton>
                 </Field>
 
                 <SwitchField

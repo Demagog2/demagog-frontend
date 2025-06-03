@@ -1,7 +1,7 @@
 import formatDate from '@/libs/format-date'
 import { CheckIcon, XMarkIcon } from '@heroicons/react/20/solid'
 import React from 'react'
-import { AdminPublishIntegrationButton } from './integrations/AdminPublisIntegrationButton'
+import { AdminPublishIntegrationButton } from './integrations/AdminPublishIntegrationButton'
 import { ExternalServiceEnum } from '@/__generated__/graphql'
 import classNames from 'classnames'
 import { PropsWithChildren } from 'react'
@@ -54,7 +54,7 @@ export function AdminIntegrationCard(
           }
         )}
       >
-        <div className="flex justify-between items-center">
+        <div className="flex justify-between items-center flex-wrap">
           <a
             className="inline-flex itens-center gap-2 rounded-lg ring-4 ring-white transition-all duration-200 hover:scale-110  cursor-pointer group"
             title={`Přejít do administrace ${props.title}`}
@@ -66,7 +66,7 @@ export function AdminIntegrationCard(
             <ArrowTopRightOnSquareIcon className="w-5 h-5 text-gray-400 group-hover:text-indigo-900" />
           </a>
 
-          <div>
+          <div className="flex justify-center">
             {props.hasPublishButton && (
               <AdminPublishIntegrationButton
                 articleId={props.articleId}

@@ -15,6 +15,10 @@ const segmentSchema = z.discriminatedUnion('segmentType', [
     segmentType: z.literal('promise'),
     statementId: z.string(),
   }),
+  z.object({
+    segmentType: z.literal('quiz_question'),
+    quizQuestionId: z.string().min(1, 'Vyberte kvízovou otázku'),
+  }),
 ])
 
 const sharedArticleSchema = z.object({
@@ -59,6 +63,11 @@ export const schema = z.discriminatedUnion('articleType', [
       titleEn: z.string().trim().min(1, 'Zadejte anglický název článku.'),
       articleVeracity: z.string(),
       // articleVeracity: z.enum(ARTICLE_VERACITY_OPTIONS.map(({ value }) => value)),
+    })
+    .merge(sharedArticleSchema),
+  z
+    .object({
+      articleType: z.literal(ArticleTypeEnum.Education),
     })
     .merge(sharedArticleSchema),
 ])

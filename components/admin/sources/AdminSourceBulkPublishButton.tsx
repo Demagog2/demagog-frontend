@@ -3,6 +3,7 @@
 import { bulkPublishStatements } from '@/app/(admin)/beta/admin/sources/actions'
 import { Dialog, Transition } from '@headlessui/react'
 import { Fragment, useState } from 'react'
+import { SecondaryButton } from '../layout/buttons/SecondaryButton'
 
 interface AdminSourceBulkPublishButtonProps {
   sourceId: string
@@ -26,12 +27,9 @@ export function AdminSourceBulkPublishButton({
 
   return (
     <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-      >
+      <SecondaryButton type="button" onClick={() => setIsOpen(true)}>
         Zveřejnit všechny schválené výroky
-      </button>
+      </SecondaryButton>
 
       <Transition show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={setIsOpen}>
@@ -65,14 +63,13 @@ export function AdminSourceBulkPublishButton({
                   >
                     {isLoading ? 'Zveřejňuji...' : 'Zveřejnit'}
                   </button>
-                  <button
+                  <SecondaryButton
                     type="button"
                     disabled={isLoading}
-                    className="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0 disabled:opacity-50 disabled:cursor-not-allowed"
                     onClick={() => setIsOpen(false)}
                   >
                     Zrušit
-                  </button>
+                  </SecondaryButton>
                 </div>
               </Dialog.Panel>
             </div>

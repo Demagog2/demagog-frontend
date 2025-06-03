@@ -26,6 +26,8 @@ export function ArticleTypeBadge(props: {
         article.articleType === 'facebook_factcheck',
       'bg-pink-50 text-pink-700 ring-pink-700/10':
         article.articleType === 'government_promises_evaluation',
+      'bg-purple-50 text-purple-700 ring-purple-600/10':
+        article.articleType === 'education',
     }
   )
 
