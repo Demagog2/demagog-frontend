@@ -23,6 +23,7 @@ import { AdminBodySelect } from '../admin/sources/AdminBodySelect'
 import { dateInputFormat } from '@/libs/date-time'
 import { PlusCircleIcon, TrashIcon } from '@heroicons/react/24/outline'
 import { AdminImageInput } from '../admin/images/AdminImageInput'
+import { SecondaryButton } from '../admin/layout/buttons/SecondaryButton'
 
 const AdminSpeakerFormFragment = gql(`
   fragment AdminSpeakerForm on Query {
@@ -213,22 +214,18 @@ export function AdminSpeakerForm(props: {
                 Příslušnost ke stranám/skupinám
               </Legend>
 
-              <button
+              <SecondaryButton
                 type="button"
-                className="inline-flex justify-center gap-x-1.5 rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
                 onClick={() =>
                   append({
                     bodyId: '',
                     bodyName: '',
                   })
                 }
+                icon={<PlusCircleIcon />}
               >
-                <PlusCircleIcon
-                  aria-hidden="true"
-                  className="-ml-0.5 h-5 w-5"
-                />
                 Přidat stranu
-              </button>
+              </SecondaryButton>
               <Field>
                 {fields.map((field, index) => (
                   <div key={field.id} className="flex gap-4">

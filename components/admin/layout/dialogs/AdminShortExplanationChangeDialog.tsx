@@ -10,6 +10,7 @@ import {
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { highlightTextDifferences } from '@/libs/diff'
 import { lockScroll, unlockScroll } from '@/libs/scroll-lock'
+import { SecondaryButton } from '../buttons/SecondaryButton'
 
 export type ForwardedProps = {
   openDialog(): void
@@ -110,14 +111,10 @@ export const AdminActivityChangeDialog = forwardRef<
               </div>
             </div>
 
-            <div className="px-4 py-4 sm:px-6 sm:py-6">
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="mt-3 flex justify-self-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto"
-              >
+            <div className="flex justify-center px-4 py-4 sm:px-6 sm:py-6">
+              <SecondaryButton type="button" onClick={() => setOpen(false)}>
                 Zavřít
-              </button>
+              </SecondaryButton>
             </div>
           </DialogPanel>
         </div>

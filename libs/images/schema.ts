@@ -21,7 +21,7 @@ export const imageFileSchema = z
   )
   .refine(
     (file) => !file || ACCEPTED_IMAGE_TYPES.includes(file.type),
-    'Pouze soubory.jpg, .jpeg, .png, .webp jsou podporovány.'
+    'Pouze soubory .jpg, .jpeg, .png, .webp jsou podporovány.'
   )
 
 export const contentImageSchema = z.object({

@@ -44,7 +44,7 @@ export function ToggleReadButton(props: {
   }
 
   return (
-    <SecondaryButton className="ml-3" onClick={handleToggle}>
+    <SecondaryButton type="button" className="ml-3" onClick={handleToggle}>
       {!isRead ? 'Označit jako přečteno' : 'Označit jako nepřečteno'}
     </SecondaryButton>
   )
