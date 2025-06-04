@@ -18,6 +18,7 @@ const AdminArticleHeaderFragment = gql(`
   fragment AdminArticleHeader on Article {
     id
     title
+    articleType
     ...PublishedArticleLink
     ...ArticleState
     ...AdminArticleTags
@@ -52,18 +53,21 @@ export function AdminArticleHeader(props: {
         </div>
       </div>
       <div className="mt-5 flex lg:ml-4 lg:mt-0">
-        <span className="hidden sm:block">
-          <a
-            href={`/beta/admin/articles/${article.id}/integrations`}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            <GlobeAltIcon
-              aria-hidden="true"
-              className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-            />
-            Integrace
-          </a>
-        </span>
+        {article.articleType === 'facebook_factcheck' && (
+          <span className="hidden sm:block">
+            <a
+              href={`/beta/admin/articles/${article.id}/integrations`}
+              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              <GlobeAltIcon
+                aria-hidden="true"
+                className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
+              />
+              Integrace
+            </a>
+          </span>
+        )}
+
         <span className="ml-3 hidden sm:block">
           <a
             href={`/beta/admin/articles/${article.id}/edit`}
@@ -97,7 +101,7 @@ export function AdminArticleHeader(props: {
         {/* Dropdown */}
         <Menu as="div" className="relative ml-3 sm:hidden">
           <MenuButton className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400">
-            More
+            Další
             <ChevronDownIcon
               aria-hidden="true"
               className="-mr-1 ml-1.5 h-5 w-5 text-gray-400"
@@ -117,13 +121,21 @@ export function AdminArticleHeader(props: {
               </a>
             </MenuItem>
             <MenuItem>
-              <a
-                href="#"
+              <PublishedArticleLink
+                article={article}
                 className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-              >
-                View
-              </a>
+              />
             </MenuItem>
+            {article.articleType === 'facebook_factcheck' && (
+              <MenuItem>
+                <a
+                  href={`/beta/admin/articles/${article.id}/integrations`}
+                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                >
+                  Integrace
+                </a>
+              </MenuItem>
+            )}
           </MenuItems>
         </Menu>
       </div>
