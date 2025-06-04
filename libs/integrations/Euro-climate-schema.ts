@@ -221,9 +221,13 @@ export const euroclimateFormSchema = z
       .array(z.nativeEnum(EuroClimateDistortion))
       .min(1, 'Vyberte alespoň jeden typ dezinformace'),
     appearance: z.object({
-      appearanceUrl: z.string().min(1, 'Zadejte URL'),
+      appearanceUrl: z.string().url('Zadejte platnou URL'),
       appearanceDate: z.string().min(1, 'Zadejte datum výskytu'),
-      archiveUrl: z.string().optional(),
+      archiveUrl: z
+        .string()
+        .url('Zadejte platnou URL')
+        .optional()
+        .or(z.literal('')),
       format: z.nativeEnum(EuroClimateFormat, {
         required_error: 'Vyberte formát',
       }),
