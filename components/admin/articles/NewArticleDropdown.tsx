@@ -48,7 +48,9 @@ export default function NewArticleDropdown() {
                 aria-hidden="true"
                 className="mr-3 h-5 w-5 text-gray-400 group-hover:text-gray-500 grow-0"
               />
-              <div className="grow-0">Komentář / ověřeno / factcheck</div>
+              <div className="grow-0">
+                Komentář / ověřeno / factcheck / kvíz
+              </div>
             </a>
           </MenuItem>
         </div>
