@@ -4,6 +4,7 @@ import React from 'react'
 import { Iframely } from '@/components/site/Iframely'
 import { AdminStatementWithExplanation } from './segments/AdminStatementWithExplanation'
 import { AdminRichTextContent } from '../rich-text/AdminRichTextContent'
+import { AdminQuizQuestionDetail } from '../education/AdminQuizQuestionDetail'
 
 const AdminArticleContentFragment = gql(`
   fragment AdminArticleContent on Article {
@@ -15,6 +16,9 @@ const AdminArticleContentFragment = gql(`
       id
       segmentType
       textHtml
+      quizQuestion {
+        ...AdminQuizQuestionDetail
+      }
       content {
         ...AdminRichTextContent
       }
@@ -55,23 +59,42 @@ export function AdminArticleContent(props: {
           </figure>
         )}
         <p className="mt-8 text-xl leading-8">{article.perex}</p>
-        {article.segments.map((segment) =>
-          segment.segmentType === 'text' ? (
-            <AdminRichTextContent key={segment.id} content={segment.content} />
-          ) : (
-            <div
-              key={segment.id}
-              className="mt-10 divide-y divide-gray-100 px-4 pt-8 pb-5"
-            >
-              {segment.statements.map((statement) => (
-                <AdminStatementWithExplanation
-                  key={statement.id}
-                  statement={statement}
+        {article.segments.map((segment) => {
+          switch (segment.segmentType) {
+            case 'text':
+              return (
+                <AdminRichTextContent
+                  key={segment.id}
+                  content={segment.content}
                 />
-              ))}
-            </div>
-          )
-        )}
+              )
+
+            case 'quiz_question':
+              return (
+                <div className="py-5">
+                  <AdminQuizQuestionDetail
+                    key={segment.id}
+                    quizQuestion={segment.quizQuestion}
+                  />
+                </div>
+              )
+
+            case 'source_statements':
+              return (
+                <div
+                  key={segment.id}
+                  className="mt-10 divide-y divide-gray-100 px-4 pt-8 pb-5"
+                >
+                  {segment.statements.map((statement) => (
+                    <AdminStatementWithExplanation
+                      key={statement.id}
+                      statement={statement}
+                    />
+                  ))}
+                </div>
+              )
+          }
+        })}
       </div>
       <Iframely />
     </div>
