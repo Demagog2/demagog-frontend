@@ -7,6 +7,7 @@ import { reverse, takeRight } from 'lodash'
 import { pluralize } from '@/libs/pluralize'
 import { ActivityTypeEnum } from '@/__generated__/graphql'
 import { getActivityCount } from '@/app/(admin)/beta/admin/sources/[slug]/statements/[id]/actions'
+import { Spinner } from '../../forms/Spinner'
 
 const SHOW_ALL_THRESHOLD = 3
 
@@ -15,6 +16,7 @@ export function AdminStatementActivities(props: { statementId: string }) {
   const [commentsOnly, setCommentsOnly] = useState(false)
   const [newActivitiesCount, setNewActivitiesCount] = useState(0)
   const [showNewActivitiesButton, setShowNewActivitiesButton] = useState(false)
+  const [isFetchingNew, setIsFetchingNew] = useState(false)
 
   const filter = useMemo(() => {
     return commentsOnly ? { activityType: ActivityTypeEnum.CommentCreated } : {}
@@ -52,14 +54,9 @@ export function AdminStatementActivities(props: { statementId: string }) {
     const interval = setInterval(async () => {
       const count = await getActivityCount(props.statementId, filter)
 
-      console.table({
-        count,
-        initialActivitiesCount,
-        result: count > initialActivitiesCount,
-      })
-
       if (count > initialActivitiesCount) {
         setShowNewActivitiesButton(true)
+        setNewActivitiesCount(count - initialActivitiesCount)
       } else {
         setShowNewActivitiesButton(false)
       }
@@ -67,27 +64,6 @@ export function AdminStatementActivities(props: { statementId: string }) {
 
     return () => clearInterval(interval)
   }, [props.statementId, filter, initialActivitiesCount])
-
-  // useEffect(() => {
-  //   if (
-  //     initialActivitiesCount !== null &&
-  //     newActivitiesData?.statementV2?.activitiesCount
-  //   ) {
-  //     const newCount =
-  //       newActivitiesData.statementV2.activitiesCount - initialActivitiesCount
-
-  //     if (newCount > 0) {
-  //       setNewActivitiesCount(newCount)
-  //       setShowNewActivitiesButton(true)
-  //       console.log(newCount)
-  //       console.log(showNewActivitiesButton)
-  //       console.log(initialActivitiesCount)
-  //     } else {
-  //       setNewActivitiesCount(0)
-  //       setShowNewActivitiesButton(false)
-  //     }
-  //   }
-  // }, [newActivitiesData?.statementV2?.activitiesCount, initialActivitiesCount])
 
   const [createComment, { loading: isPending }] = useMutation(
     gql(`
@@ -109,6 +85,17 @@ export function AdminStatementActivities(props: { statementId: string }) {
 
   if (!statement) {
     return null
+  }
+
+  const handleFetchNewActivities = async () => {
+    setIsFetchingNew(true)
+    try {
+      await refetch()
+      setShowNewActivitiesButton(false)
+      setNewActivitiesCount(0)
+    } finally {
+      setIsFetchingNew(false)
+    }
   }
 
   const activitiesData = reverse([...(statement.activities.edges || [])])
@@ -184,7 +171,29 @@ export function AdminStatementActivities(props: { statementId: string }) {
         </ul>
       )}
 
-      {showNewActivitiesButton && <button>Zobrazit nové aktivity</button>}
+      {showNewActivitiesButton && (
+        <button
+          onClick={handleFetchNewActivities}
+          type="button"
+          disabled={isFetchingNew}
+          className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 mt-8 text-sm font-semibold text-white cursor-pointer shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        >
+          {isFetchingNew ? (
+            <>
+              <Spinner className="text-white" />
+              Načítám...
+            </>
+          ) : (
+            `Načíst ${newActivitiesCount} 
+          ${pluralize(
+            newActivitiesCount,
+            'novou aktivitu',
+            'nové aktivity',
+            'nových aktivit'
+          )}`
+          )}
+        </button>
+      )}
 
       <AdminStatementCommentInput
         data={data}
