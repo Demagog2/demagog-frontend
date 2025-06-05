@@ -1,17 +1,29 @@
 import { gql } from '@/__generated__'
 import { AdminStatementCommentInput } from '../AdminStatementCommentInput'
 import { useMutation, useQuery } from '@apollo/client'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AdminActivity } from './AdminActivity'
 import { reverse, takeRight } from 'lodash'
 import { pluralize } from '@/libs/pluralize'
 import { ActivityTypeEnum } from '@/__generated__/graphql'
+import { getActivityCount } from '@/app/(admin)/beta/admin/sources/[slug]/statements/[id]/actions'
+import { Spinner } from '../../forms/Spinner'
+import { SecondaryButton } from '../../layout/buttons/SecondaryButton'
+import { toast } from 'react-toastify'
+import * as Sentry from '@sentry/browser'
 
 const SHOW_ALL_THRESHOLD = 3
 
 export function AdminStatementActivities(props: { statementId: string }) {
   const [showAll, setShowAll] = useState(false)
   const [commentsOnly, setCommentsOnly] = useState(false)
+  const [newActivitiesCount, setNewActivitiesCount] = useState(0)
+  const [showNewActivitiesButton, setShowNewActivitiesButton] = useState(false)
+  const [isFetchingNew, setIsFetchingNew] = useState(false)
+
+  const filter = useMemo(() => {
+    return commentsOnly ? { activityType: ActivityTypeEnum.CommentCreated } : {}
+  }, [commentsOnly])
 
   const { data, refetch, loading } = useQuery(
     gql(`
@@ -32,12 +44,34 @@ export function AdminStatementActivities(props: { statementId: string }) {
     {
       variables: {
         id: parseInt(props.statementId, 10),
-        filter: commentsOnly
-          ? { activityType: ActivityTypeEnum.CommentCreated }
-          : {},
+        filter,
       },
     }
   )
+
+  const initialActivitiesCount = useMemo(() => {
+    return data?.statementV2?.activitiesCount ?? 0
+  }, [data?.statementV2?.activitiesCount])
+
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      try {
+        const count = await getActivityCount(props.statementId, filter)
+
+        if (count > initialActivitiesCount) {
+          setShowNewActivitiesButton(true)
+          setNewActivitiesCount(count - initialActivitiesCount)
+        } else {
+          setShowNewActivitiesButton(false)
+        }
+      } catch (error) {
+        Sentry.captureException(error)
+        toast.error('Nepodařilo se načíst nové aktivity')
+      }
+    }, 30000)
+
+    return () => clearInterval(interval)
+  }, [props.statementId, filter, initialActivitiesCount])
 
   const [createComment, { loading: isPending }] = useMutation(
     gql(`
@@ -59,6 +93,17 @@ export function AdminStatementActivities(props: { statementId: string }) {
 
   if (!statement) {
     return null
+  }
+
+  const handleFetchNewActivities = async () => {
+    setIsFetchingNew(true)
+    try {
+      await refetch()
+      setShowNewActivitiesButton(false)
+      setNewActivitiesCount(0)
+    } finally {
+      setIsFetchingNew(false)
+    }
   }
 
   const activitiesData = reverse([...(statement.activities.edges || [])])
@@ -96,6 +141,7 @@ export function AdminStatementActivities(props: { statementId: string }) {
             )}
           </>
         )}
+
         <button
           onClick={() => setCommentsOnly(!commentsOnly)}
           className="text-sm px-3 py-1 rounded-md hover:text-indigo-700 bg-gray-100 text-gray-700 max-w-fit"
@@ -131,6 +177,36 @@ export function AdminStatementActivities(props: { statementId: string }) {
             )
           })}
         </ul>
+      )}
+
+      {showNewActivitiesButton && (
+        <SecondaryButton
+          onClick={handleFetchNewActivities}
+          type="button"
+          disabled={isFetchingNew}
+          className="mt-4"
+        >
+          {isFetchingNew ? (
+            <>
+              <Spinner className="text-white" />
+              Načítám...
+            </>
+          ) : (
+            `Zobrazit ${newActivitiesCount}
+          ${pluralize(
+            newActivitiesCount,
+            filter?.activityType === ActivityTypeEnum.CommentCreated
+              ? 'nový komentář'
+              : 'novou aktivitu',
+            filter?.activityType === ActivityTypeEnum.CommentCreated
+              ? 'nové komentáře'
+              : 'nové aktivity',
+            filter?.activityType === ActivityTypeEnum.CommentCreated
+              ? 'nových komentářů'
+              : 'nových aktivit'
+          )}`
+          )}
+        </SecondaryButton>
       )}
 
       <AdminStatementCommentInput
