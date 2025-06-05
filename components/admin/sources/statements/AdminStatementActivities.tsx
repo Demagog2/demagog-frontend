@@ -8,6 +8,9 @@ import { pluralize } from '@/libs/pluralize'
 import { ActivityTypeEnum } from '@/__generated__/graphql'
 import { getActivityCount } from '@/app/(admin)/beta/admin/sources/[slug]/statements/[id]/actions'
 import { Spinner } from '../../forms/Spinner'
+import { SecondaryButton } from '../../layout/buttons/SecondaryButton'
+import { toast } from 'react-toastify'
+import * as Sentry from '@sentry/browser'
 
 const SHOW_ALL_THRESHOLD = 3
 
@@ -52,15 +55,20 @@ export function AdminStatementActivities(props: { statementId: string }) {
 
   useEffect(() => {
     const interval = setInterval(async () => {
-      const count = await getActivityCount(props.statementId, filter)
+      try {
+        const count = await getActivityCount(props.statementId, filter)
 
-      if (count > initialActivitiesCount) {
-        setShowNewActivitiesButton(true)
-        setNewActivitiesCount(count - initialActivitiesCount)
-      } else {
-        setShowNewActivitiesButton(false)
+        if (count > initialActivitiesCount) {
+          setShowNewActivitiesButton(true)
+          setNewActivitiesCount(count - initialActivitiesCount)
+        } else {
+          setShowNewActivitiesButton(false)
+        }
+      } catch (error) {
+        Sentry.captureException(error)
+        toast.error('Nepodařilo se načíst nové aktivity')
       }
-    }, 3000)
+    }, 30000)
 
     return () => clearInterval(interval)
   }, [props.statementId, filter, initialActivitiesCount])
@@ -172,11 +180,11 @@ export function AdminStatementActivities(props: { statementId: string }) {
       )}
 
       {showNewActivitiesButton && (
-        <button
+        <SecondaryButton
           onClick={handleFetchNewActivities}
           type="button"
           disabled={isFetchingNew}
-          className="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 mt-8 text-sm font-semibold text-white cursor-pointer shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          className="mt-4"
         >
           {isFetchingNew ? (
             <>
@@ -184,15 +192,21 @@ export function AdminStatementActivities(props: { statementId: string }) {
               Načítám...
             </>
           ) : (
-            `Načíst ${newActivitiesCount} 
+            `Zobrazit ${newActivitiesCount}
           ${pluralize(
             newActivitiesCount,
-            'novou aktivitu',
-            'nové aktivity',
-            'nových aktivit'
+            filter?.activityType === ActivityTypeEnum.CommentCreated
+              ? 'nový komentář'
+              : 'novou aktivitu',
+            filter?.activityType === ActivityTypeEnum.CommentCreated
+              ? 'nové komentáře'
+              : 'nové aktivity',
+            filter?.activityType === ActivityTypeEnum.CommentCreated
+              ? 'nových komentářů'
+              : 'nových aktivit'
           )}`
           )}
-        </button>
+        </SecondaryButton>
       )}
 
       <AdminStatementCommentInput
