@@ -6,6 +6,7 @@ import { AdminActivity } from './AdminActivity'
 import { reverse, takeRight } from 'lodash'
 import { pluralize } from '@/libs/pluralize'
 import { ActivityTypeEnum } from '@/__generated__/graphql'
+import { getActivityCount } from '@/app/(admin)/beta/admin/sources/[slug]/statements/[id]/actions'
 
 const SHOW_ALL_THRESHOLD = 3
 
@@ -14,6 +15,10 @@ export function AdminStatementActivities(props: { statementId: string }) {
   const [commentsOnly, setCommentsOnly] = useState(false)
   const [newActivitiesCount, setNewActivitiesCount] = useState(0)
   const [showNewActivitiesButton, setShowNewActivitiesButton] = useState(false)
+
+  const filter = useMemo(() => {
+    return commentsOnly ? { activityType: ActivityTypeEnum.CommentCreated } : {}
+  }, [commentsOnly])
 
   const { data, refetch, loading } = useQuery(
     gql(`
@@ -34,39 +39,34 @@ export function AdminStatementActivities(props: { statementId: string }) {
     {
       variables: {
         id: parseInt(props.statementId, 10),
-        filter: commentsOnly
-          ? { activityType: ActivityTypeEnum.CommentCreated }
-          : {},
+        filter,
       },
     }
   )
 
-  const {
-    data: newActivitiesData,
-    startPolling,
-    stopPolling,
-  } = useQuery(
-    gql(`
-        query AdminNewActivitiesData ($id: Int!, $filter: ActivityFilterInput) {
-          statementV2(id: $id, includeUnpublished: true) {
-            activitiesCount(filter: $filter)
-          }
-        }
-      `),
-    {
-      pollInterval: 3000,
-      variables: {
-        id: parseInt(props.statementId, 10),
-        filter: commentsOnly
-          ? { activityType: ActivityTypeEnum.CommentCreated }
-          : {},
-      },
-    }
-  )
+  const initialActivitiesCount = useMemo(() => {
+    return data?.statementV2?.activitiesCount ?? 0
+  }, [data?.statementV2?.activitiesCount])
 
-  // const initialActivitiesCount = useMemo(() => {
-  //   return data?.statementV2?.activitiesCount ?? null
-  // }, [data?.statementV2?.activitiesCount])
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const count = await getActivityCount(props.statementId, filter)
+
+      console.table({
+        count,
+        initialActivitiesCount,
+        result: count > initialActivitiesCount,
+      })
+
+      if (count > initialActivitiesCount) {
+        setShowNewActivitiesButton(true)
+      } else {
+        setShowNewActivitiesButton(false)
+      }
+    }, 3000)
+
+    return () => clearInterval(interval)
+  }, [props.statementId, filter, initialActivitiesCount])
 
   // useEffect(() => {
   //   if (
@@ -88,10 +88,6 @@ export function AdminStatementActivities(props: { statementId: string }) {
   //     }
   //   }
   // }, [newActivitiesData?.statementV2?.activitiesCount, initialActivitiesCount])
-
-  // console.log(`radek 92 show new activities button: ${showNewActivitiesButton}`)
-  // console.log(`radek 93 initial activities count ${initialActivitiesCount}`)
-  // console.log(`radek 94 ${newActivitiesCount}`)
 
   const [createComment, { loading: isPending }] = useMutation(
     gql(`
@@ -187,6 +183,8 @@ export function AdminStatementActivities(props: { statementId: string }) {
           })}
         </ul>
       )}
+
+      {showNewActivitiesButton && <button>Zobrazit nové aktivity</button>}
 
       <AdminStatementCommentInput
         data={data}
