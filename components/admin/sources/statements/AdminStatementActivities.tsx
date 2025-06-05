@@ -1,7 +1,7 @@
 import { gql } from '@/__generated__'
 import { AdminStatementCommentInput } from '../AdminStatementCommentInput'
 import { useMutation, useQuery } from '@apollo/client'
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { AdminActivity } from './AdminActivity'
 import { reverse, takeRight } from 'lodash'
 import { pluralize } from '@/libs/pluralize'
@@ -12,6 +12,8 @@ const SHOW_ALL_THRESHOLD = 3
 export function AdminStatementActivities(props: { statementId: string }) {
   const [showAll, setShowAll] = useState(false)
   const [commentsOnly, setCommentsOnly] = useState(false)
+  const [newActivitiesCount, setNewActivitiesCount] = useState(0)
+  const [showNewActivitiesButton, setShowNewActivitiesButton] = useState(false)
 
   const { data, refetch, loading } = useQuery(
     gql(`
@@ -38,6 +40,58 @@ export function AdminStatementActivities(props: { statementId: string }) {
       },
     }
   )
+
+  const {
+    data: newActivitiesData,
+    startPolling,
+    stopPolling,
+  } = useQuery(
+    gql(`
+        query AdminNewActivitiesData ($id: Int!, $filter: ActivityFilterInput) {
+          statementV2(id: $id, includeUnpublished: true) {
+            activitiesCount(filter: $filter)
+          }
+        }
+      `),
+    {
+      pollInterval: 3000,
+      variables: {
+        id: parseInt(props.statementId, 10),
+        filter: commentsOnly
+          ? { activityType: ActivityTypeEnum.CommentCreated }
+          : {},
+      },
+    }
+  )
+
+  // const initialActivitiesCount = useMemo(() => {
+  //   return data?.statementV2?.activitiesCount ?? null
+  // }, [data?.statementV2?.activitiesCount])
+
+  // useEffect(() => {
+  //   if (
+  //     initialActivitiesCount !== null &&
+  //     newActivitiesData?.statementV2?.activitiesCount
+  //   ) {
+  //     const newCount =
+  //       newActivitiesData.statementV2.activitiesCount - initialActivitiesCount
+
+  //     if (newCount > 0) {
+  //       setNewActivitiesCount(newCount)
+  //       setShowNewActivitiesButton(true)
+  //       console.log(newCount)
+  //       console.log(showNewActivitiesButton)
+  //       console.log(initialActivitiesCount)
+  //     } else {
+  //       setNewActivitiesCount(0)
+  //       setShowNewActivitiesButton(false)
+  //     }
+  //   }
+  // }, [newActivitiesData?.statementV2?.activitiesCount, initialActivitiesCount])
+
+  // console.log(`radek 92 show new activities button: ${showNewActivitiesButton}`)
+  // console.log(`radek 93 initial activities count ${initialActivitiesCount}`)
+  // console.log(`radek 94 ${newActivitiesCount}`)
 
   const [createComment, { loading: isPending }] = useMutation(
     gql(`
@@ -96,6 +150,7 @@ export function AdminStatementActivities(props: { statementId: string }) {
             )}
           </>
         )}
+
         <button
           onClick={() => setCommentsOnly(!commentsOnly)}
           className="text-sm px-3 py-1 rounded-md hover:text-indigo-700 bg-gray-100 text-gray-700 max-w-fit"
