@@ -184,11 +184,11 @@ export function AdminStatementActivities(props: { statementId: string }) {
           onClick={handleFetchNewActivities}
           type="button"
           disabled={isFetchingNew}
-          className="mt-4"
+          className="mt-8"
         >
           {isFetchingNew ? (
             <>
-              <Spinner className="text-white" />
+              <Spinner className="text-dark" />
               Načítám...
             </>
           ) : (
