@@ -8,8 +8,7 @@ import classNames from 'classnames'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementFullExplanation } from '../statement/StatementFullExplanation'
 import { StatementHeader } from '../statement/StatementHeader'
-import { useState } from 'react'
-import { CheckIcon } from '@heroicons/react/24/outline'
+import { ArticleQuizSegment } from './ArticleQuizSegment'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -44,14 +43,7 @@ const ArticleSegmentsFragment = gql(`
         }
       }
       quizQuestion {
-        id
-        title
-        description
-        quizAnswers {
-          id
-          isCorrect
-          text
-        }
+        ...ArticleQuizSegment
       }
     }
     debateStats {
@@ -73,7 +65,6 @@ export function ArticleSegments(props: ArticleStatementsProps) {
     ArticleSegmentsFragment,
     props.data
   )
-  const [selectedAnswerId, setSelectedAnswerId] = useState<string | null>(null)
 
   return (
     <>
@@ -162,86 +153,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
             </div>
           )}
           {segment.segmentType === 'quiz_question' && segment.quizQuestion && (
-            <div className="row justify-content-center mt-5">
-              <div className="col-12 col-md-8">
-                <div className="card shadow-sm">
-                  <div className="card-body">
-                    <h3 className="card-title mb-4">
-                      {segment.quizQuestion.title}
-                    </h3>
-                    {segment.quizQuestion.description && (
-                      <p className="card-text mb-4">
-                        {segment.quizQuestion.description}
-                      </p>
-                    )}
-                    <div className="d-flex flex-column gap-3">
-                      {segment.quizQuestion.quizAnswers.map((answer) => (
-                        <button
-                          key={answer.id}
-                          className={classNames('btn text-start', {
-                            'btn-outline-success text-black bg-success bg-opacity-10':
-                              selectedAnswerId && answer.isCorrect,
-                            'btn-outline-danger text-dark':
-                              selectedAnswerId && !answer.isCorrect,
-                            'btn-outline-primary': !selectedAnswerId,
-                          })}
-                          onClick={() => setSelectedAnswerId(answer.id)}
-                          disabled={selectedAnswerId !== null}
-                        >
-                          {answer.text}
-                          {selectedAnswerId !== null && (
-                            <span
-                              className={classNames('ms-2 fs-5 float-end', {
-                                'text-success': answer.isCorrect,
-                                'text-danger': !answer.isCorrect,
-                              })}
-                            >
-                              {answer.isCorrect ? '✓' : '✗'}
-                            </span>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                    {selectedAnswerId !== null && (
-                      <div
-                        className={classNames(
-                          'mt-4 p-3 rounded',
-                          'bg-light border',
-                          'd-flex align-items-center gap-3'
-                        )}
-                      >
-                        <div className="flex-grow-1">
-                          <div className="d-flex align-items-center gap-2">
-                            <CheckIcon
-                              className="flex-shrink-0"
-                              width={20}
-                              color="green"
-                            />
-                            <p className="text-xl mb-0">
-                              Správná odpověď:{' '}
-                              {
-                                segment.quizQuestion.quizAnswers.find(
-                                  (answer) => answer.isCorrect
-                                )?.text
-                              }
-                            </p>
-                          </div>
-                          <p className="mb-0">
-                            {segment.quizQuestion.description && (
-                              <span className="d-block mt-2">
-                                Jedná se o názor autora, nemůžeme ověřit,
-                                protože nám neříká, co znamená „výrazně zlepší
-                                život seniorů.“
-                              </span>
-                            )}
-                          </p>
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ArticleQuizSegment quizQuestion={segment.quizQuestion} />
           )}
         </div>
       ))}

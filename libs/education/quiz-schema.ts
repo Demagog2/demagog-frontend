@@ -3,6 +3,7 @@ import { z } from 'zod'
 const quizAnswerSchema = z.object({
   text: z.string().min(1, 'Odpověď musí obsahovat alespoň jeden znak.'),
   isCorrect: z.preprocess((value) => value === 'on', z.boolean()),
+  reason: z.string().optional(),
 })
 
 export const quizSchema = z.object({
