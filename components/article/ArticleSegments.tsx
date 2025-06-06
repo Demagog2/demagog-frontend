@@ -8,8 +8,6 @@ import classNames from 'classnames'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementFullExplanation } from '../statement/StatementFullExplanation'
 import { StatementHeader } from '../statement/StatementHeader'
-import { useState } from 'react'
-import { CheckIcon } from '@heroicons/react/24/outline'
 import { ArticleQuizSegment } from './ArticleQuizSegment'
 
 const ArticleSegmentsFragment = gql(`
