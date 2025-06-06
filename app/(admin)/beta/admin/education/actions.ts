@@ -39,6 +39,7 @@ export const createQuizQuestion = new CreateActionBuilder<
         quizAnswers: quizAnswers.map((answer) => ({
           text: answer.text,
           isCorrect: answer.isCorrect,
+          reason: answer.reason,
         })),
       },
     }
@@ -82,6 +83,7 @@ export const updateQuizQuestion = new UpdateActionBuilder<
         quizAnswers: quizAnswers.map((answer) => ({
           text: answer.text,
           isCorrect: answer.isCorrect,
+          reason: answer.reason,
         })),
       },
     }

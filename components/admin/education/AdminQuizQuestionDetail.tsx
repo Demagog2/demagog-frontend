@@ -11,6 +11,7 @@ export const AdminQuizQuestionDetailFragment = gql(`
         id
         isCorrect
         text
+        reason
       }
     }
   `)
@@ -22,6 +23,10 @@ export function AdminQuizQuestionDetail(props: {
   const quizQuestion = useFragment(
     AdminQuizQuestionDetailFragment,
     props.quizQuestion
+  )
+
+  const correctAnswer = quizQuestion?.quizAnswers.find(
+    (answer) => answer.isCorrect
   )
 
   if (!quizQuestion) {
@@ -49,31 +54,41 @@ export function AdminQuizQuestionDetail(props: {
       </div>
       <div className="divide-y divide-gray-100 px-4 py-5 sm:px-6">
         <div className="flex flex-col">
-          <div className="space-y-4 text-gray-600">
+          <div className="text-gray-600">
             <p className="font-semibold">Odpovědi:</p>
-            <div className="mt-2 space-y-2 w-full max-w-xl">
+            <div className="w-full max-w-xl">
               {quizQuestion?.quizAnswers.map((answer, index) => (
-                <div
-                  key={answer.id}
-                  className={`p-3 rounded-md border ${
-                    answer.isCorrect
-                      ? 'bg-green-50 border-green-200'
-                      : 'bg-gray-50 border-gray-200'
-                  }`}
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="font-medium">
-                      {String.fromCharCode(65 + index)}.
-                    </span>
-                    <span>{answer.text}</span>
-                    {answer.isCorrect && (
-                      <span className="text-green-600 text-sm">
-                        (Správná odpověď)
+                <>
+                  <div
+                    key={answer.id}
+                    className={`p-3 rounded-md border mt-2 ${
+                      answer.isCorrect
+                        ? 'bg-green-50 border-green-200'
+                        : 'bg-gray-50 border-gray-200'
+                    }`}
+                  >
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">
+                        {String.fromCharCode(65 + index)}.
                       </span>
-                    )}
+                      <span>{answer.text}</span>
+                      {answer.isCorrect && (
+                        <span className="text-green-600 text-sm">
+                          (Správná odpověď)
+                        </span>
+                      )}
+                    </div>
                   </div>
-                </div>
+                </>
               ))}
+              {correctAnswer && (
+                <div className="mt-4">
+                  <p className="font-semibold">
+                    Správná odpověď: {correctAnswer.text}
+                  </p>
+                  <p className="mt-2">{correctAnswer.reason}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -34,6 +34,7 @@ const AdminQuizDataFragment = gql(`
       id
       text
       isCorrect
+      reason
     }
   }
 `)
@@ -65,6 +66,7 @@ export function AdminQuizQuestionForm(props: {
         quiz?.quizAnswers?.map((answer) => ({
           text: answer.text,
           isCorrect: answer.isCorrect,
+          reason: answer.reason ?? '',
         })) ?? [],
       ...(state?.state === 'initial' ? {} : state.fields),
     },
@@ -77,6 +79,7 @@ export function AdminQuizQuestionForm(props: {
 
   const { handleSubmitForm } = useFormSubmit(isValid, trigger)
 
+  console.log('Quiz data:', quiz?.quizAnswers)
   return (
     <form action={formAction} onSubmit={handleSubmitForm}>
       <AdminFormHeader>
@@ -163,6 +166,34 @@ export function AdminQuizQuestionForm(props: {
                       label="Správná odpověď"
                     />
                   </div>
+                  <Controller
+                    name={`quizAnswers.${index}.isCorrect`}
+                    control={control}
+                    render={({ field: { value: isCorrect } }) => (
+                      <>
+                        {isCorrect && (
+                          <Field className="mt-4">
+                            <Label
+                              htmlFor={`quizAnswers.${index}.reason`}
+                              isOptional
+                            >
+                              Odůvodnění
+                            </Label>
+                            <Textarea
+                              id={`quizAnswers.${index}.reason`}
+                              {...register(`quizAnswers.${index}.reason`)}
+                              placeholder="Zadejte vysvětlení, proč je tato odpověď správná..."
+                            />
+                            <ErrorMessage
+                              message={
+                                errors.quizAnswers?.[index]?.reason?.message
+                              }
+                            />
+                          </Field>
+                        )}
+                      </>
+                    )}
+                  />
                 </Field>
               </div>
             ))}
@@ -173,6 +204,7 @@ export function AdminQuizQuestionForm(props: {
                   append({
                     text: '',
                     isCorrect: false,
+                    reason: '',
                   })
                 }
               >

@@ -14,6 +14,7 @@ const ArticleQuizSegmentFragment = gql(`
         id
         isCorrect
         text
+        reason
       }
     }
   `)
@@ -26,6 +27,9 @@ export function ArticleQuizSegment(props: {
     props.quizQuestion
   )
   const [selectedAnswerId, setSelectedAnswerId] = useState<string | null>(null)
+  const correctAnswer = quizQuestion?.quizAnswers.find(
+    (answer) => answer.isCorrect
+  )
 
   return (
     <div className="row justify-content-center mt-5">
@@ -64,7 +68,7 @@ export function ArticleQuizSegment(props: {
                 </button>
               ))}
             </div>
-            {selectedAnswerId !== null && (
+            {selectedAnswerId !== null && correctAnswer && (
               <div
                 className={classNames(
                   'mt-4 p-3 rounded',
@@ -80,21 +84,11 @@ export function ArticleQuizSegment(props: {
                       color="green"
                     />
                     <p className="text-xl fw-bold mb-0">
-                      Správná odpověď:{' '}
-                      {
-                        quizQuestion.quizAnswers.find(
-                          (answer) => answer.isCorrect
-                        )?.text
-                      }
+                      Správná odpověď: {correctAnswer.text}
                     </p>
                   </div>
                   <p className="mb-0">
-                    {quizQuestion.description && (
-                      <span className="d-block mt-2">
-                        Jedná se o názor autora, nemůžeme ověřit, protože nám
-                        neříká, co znamená „výrazně zlepší život seniorů.“
-                      </span>
-                    )}
+                    <span className="d-block mt-2">{correctAnswer.reason}</span>
                   </p>
                 </div>
               </div>
