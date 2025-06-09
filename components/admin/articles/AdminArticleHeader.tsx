@@ -13,6 +13,7 @@ import { PublishedArticleLink } from '@/components/admin/articles/PublishedArtic
 import { AdminArticleTags } from '@/components/admin/articles/AdminArticleTags'
 import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 import { AdminArticleBreadcrumbs } from './AdminArticleBreadcrumbs'
+import { AdminArticlePreviewButton } from './AdminArticlePreviewButton'
 
 const AdminArticleHeaderFragment = gql(`
   fragment AdminArticleHeader on Article {
@@ -24,6 +25,7 @@ const AdminArticleHeaderFragment = gql(`
     ...AdminArticleTags
     ...AdminArticleDeleteDialog
     ...AdminArticleBreadcrumbs
+    ...AdminArticlePreviewButton
   }
 `)
 
@@ -67,7 +69,13 @@ export function AdminArticleHeader(props: {
             </a>
           </span>
         )}
-
+        <span className="ml-3 hidden sm:block">
+          <AdminArticlePreviewButton
+            article={article}
+            icon
+            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+          />
+        </span>
         <span className="ml-3 hidden sm:block">
           <a
             href={`/beta/admin/articles/${article.id}/edit`}
@@ -80,7 +88,6 @@ export function AdminArticleHeader(props: {
             Upravit
           </a>
         </span>
-
         <span className="ml-3 hidden sm:block">
           <PublishedArticleLink
             article={article}
@@ -92,12 +99,10 @@ export function AdminArticleHeader(props: {
             />
           </PublishedArticleLink>
         </span>
-
         <AdminArticleDeleteDialog
           article={article}
           className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
         />
-
         {/* Dropdown */}
         <Menu as="div" className="relative ml-3 sm:hidden">
           <MenuButton className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400">
@@ -121,10 +126,14 @@ export function AdminArticleHeader(props: {
               </a>
             </MenuItem>
             <MenuItem>
-              <PublishedArticleLink
-                article={article}
-                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-              />
+              <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                <PublishedArticleLink article={article} />
+              </span>
+            </MenuItem>
+            <MenuItem>
+              <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                <AdminArticlePreviewButton article={article} />
+              </span>
             </MenuItem>
             {article.articleType === 'facebook_factcheck' && (
               <MenuItem>
