@@ -13,7 +13,10 @@ import { PublishedArticleLink } from '@/components/admin/articles/PublishedArtic
 import { AdminArticleTags } from '@/components/admin/articles/AdminArticleTags'
 import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 import { AdminArticleBreadcrumbs } from './AdminArticleBreadcrumbs'
-import { AdminArticlePreviewButton } from './AdminArticlePreviewButton'
+import {
+  AdminArticlePreviewButton,
+  previewButtonStyles,
+} from './AdminArticlePreviewButton'
 
 const AdminArticleHeaderFragment = gql(`
   fragment AdminArticleHeader on Article {
@@ -70,11 +73,7 @@ export function AdminArticleHeader(props: {
           </span>
         )}
         <span className="ml-3 hidden sm:block">
-          <AdminArticlePreviewButton
-            article={article}
-            icon
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          />
+          <AdminArticlePreviewButton article={article} icon />
         </span>
         <span className="ml-3 hidden sm:block">
           <a
@@ -131,8 +130,11 @@ export function AdminArticleHeader(props: {
               </span>
             </MenuItem>
             <MenuItem>
-              <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                <AdminArticlePreviewButton article={article} />
+              <span>
+                <AdminArticlePreviewButton
+                  article={article}
+                  className={previewButtonStyles.inDropDownMenu}
+                />
               </span>
             </MenuItem>
             {article.articleType === 'facebook_factcheck' && (
