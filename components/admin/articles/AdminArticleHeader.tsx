@@ -13,14 +13,13 @@ import { PublishedArticleLink } from '@/components/admin/articles/PublishedArtic
 import { AdminArticleTags } from '@/components/admin/articles/AdminArticleTags'
 import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 import { AdminArticleBreadcrumbs } from './AdminArticleBreadcrumbs'
-import {
-  AdminArticlePreviewButton,
-  previewButtonStyles,
-} from './AdminArticlePreviewButton'
+import { AdminArticlePreviewButton } from './AdminArticlePreviewButton'
+import { SecondaryLinkButton } from '../layout/buttons/SecondaryLinkButton'
 
 const AdminArticleHeaderFragment = gql(`
   fragment AdminArticleHeader on Article {
     id
+    slug
     title
     articleType
     published
@@ -61,16 +60,12 @@ export function AdminArticleHeader(props: {
       <div className="mt-5 flex lg:ml-4 lg:mt-0">
         {article.articleType === 'facebook_factcheck' && (
           <span className="hidden sm:block">
-            <a
+            <SecondaryLinkButton
               href={`/beta/admin/articles/${article.id}/integrations`}
-              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              icon={<GlobeAltIcon />}
             >
-              <GlobeAltIcon
-                aria-hidden="true"
-                className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-              />
               Integrace
-            </a>
+            </SecondaryLinkButton>
           </span>
         )}
         {article.published ? (
@@ -92,16 +87,12 @@ export function AdminArticleHeader(props: {
         )}
 
         <span className="ml-3 hidden sm:block">
-          <a
+          <SecondaryLinkButton
             href={`/beta/admin/articles/${article.id}/edit`}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            icon={<PencilIcon />}
           >
-            <PencilIcon
-              aria-hidden="true"
-              className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-            />
             Upravit
-          </a>
+          </SecondaryLinkButton>
         </span>
         <AdminArticleDeleteDialog
           article={article}
@@ -137,12 +128,13 @@ export function AdminArticleHeader(props: {
               </MenuItem>
             ) : (
               <MenuItem>
-                <span>
-                  <AdminArticlePreviewButton
-                    article={article}
-                    className={previewButtonStyles.inDropDownMenu}
-                  />
-                </span>
+                <a
+                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 hover:bg-gray-100"
+                  href={`/diskuze/${article.slug}/preview`}
+                  target="_blank"
+                >
+                  Náhled
+                </a>
               </MenuItem>
             )}
             {article.articleType === 'facebook_factcheck' && (
