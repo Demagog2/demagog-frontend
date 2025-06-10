@@ -21,6 +21,7 @@ import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import { ArticleSocialShareButtons } from '@/components/article/ArticleSocialShareButtons'
 import { serverQuery } from '@/libs/apollo-client-server'
+import { AdminPreviewBanner } from '@/components/article/ArticlePreviewBanner'
 
 export const revalidate = 180
 export const dynamic = 'force-static'
@@ -119,10 +120,12 @@ export default async function ArticlePreview(props: {
       query ArticlePreviewDetail($slug: ID!) {
         articleV3(id: $slug) {
           ... on Article {
+            id
             title
             articleType
             perex
             showPlayer
+            published
             ...ArticleSocialShareButtons
             ...DebateAticleMetadata
             ...FacebookFactcheckMetadata
@@ -130,6 +133,7 @@ export default async function ArticlePreview(props: {
             ...ArticleSegments
             ...ArticlePlayer
             ...ArticleIllustration
+            ...AdminPreviewBanner
           }
           ... on SingleStatementArticle {
             statement {
@@ -160,38 +164,43 @@ export default async function ArticlePreview(props: {
   }
 
   return (
-    <div className="container px-3 article-redesign text-align-start col-sm-8 mx-sm-auto">
-      <div>
+    <>
+      <AdminPreviewBanner article={article} />
+      <div className="container px-3 article-redesign text-align-start col-sm-8 mx-sm-auto">
         <div>
           <div>
-            <h1 className="display-1 fw-bold px-3 px-sm-0">{article.title}</h1>
-            <div className="d-flex justify-content-end">
-              <ArticleSocialShareButtons article={article} />
-            </div>
+            <div>
+              <h1 className="display-1 fw-bold px-3 px-sm-0">
+                {article.title}
+              </h1>
+              <div className="d-flex justify-content-end">
+                <ArticleSocialShareButtons article={article} />
+              </div>
 
-            {article.showPlayer ? (
-              <ArticlePlayer article={article} />
-            ) : (
-              <ArticleIllustration article={article} />
-            )}
-            <div className="mt-4 mt-md-9">
-              <span className="perex">{article.perex}</span>
+              {article.showPlayer ? (
+                <ArticlePlayer article={article} />
+              ) : (
+                <ArticleIllustration article={article} />
+              )}
+              <div className="mt-4 mt-md-9">
+                <span className="perex">{article.perex}</span>
+              </div>
             </div>
+            <DebateArticleMetadata article={article} />
+            <FacebookFactcheckMetadata article={article} />
+            <StaticArticleMetadata article={article} />
           </div>
-          <DebateArticleMetadata article={article} />
-          <FacebookFactcheckMetadata article={article} />
-          <StaticArticleMetadata article={article} />
+          <div>
+            <ArticleSegments data={article} />
+          </div>
         </div>
-        <div>
-          <ArticleSegments data={article} />
-        </div>
+        <Iframely />
+        <Script
+          src="https://platform.twitter.com/widgets.js"
+          strategy="lazyOnload"
+          crossOrigin="anonymous"
+        />
       </div>
-      <Iframely />
-      <Script
-        src="https://platform.twitter.com/widgets.js"
-        strategy="lazyOnload"
-        crossOrigin="anonymous"
-      />
-    </div>
+    </>
   )
 }
