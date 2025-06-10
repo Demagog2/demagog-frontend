@@ -57,6 +57,7 @@ import { useEffect, useMemo } from 'react'
 import { ErrorMessage } from '../forms/ErrorMessage'
 import { isEmpty } from 'lodash'
 import { AdminQuizQuestionList } from './AdminQuizQuestionList'
+import { AdminArticlePreviewButton } from './AdminArticlePreviewButton'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -149,6 +150,7 @@ const AdminArticleFormFieldsFragment = gql(`
     }
     illustrationCaption
     ...AdminArticleIllustration
+    ...AdminArticlePreviewButton
   }
 `)
 
@@ -352,6 +354,7 @@ export function AdminArticleForm(props: {
         <AdminPageTitle title={props.title} description={props.description} />
 
         <AdminFormActions>
+          {article?.id && <AdminArticlePreviewButton article={article} icon />}
           <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
           <SubmitButton />
