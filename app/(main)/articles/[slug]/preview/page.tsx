@@ -23,8 +23,7 @@ import { ArticleSocialShareButtons } from '@/components/article/ArticleSocialSha
 import { serverQuery } from '@/libs/apollo-client-server'
 import { AdminPreviewBanner } from '@/components/article/ArticlePreviewBanner'
 
-export const revalidate = 180
-export const dynamic = 'force-static'
+export const dynamic = 'force-dynamic'
 
 export async function generateStaticParams() {
   const { data } = await query({
