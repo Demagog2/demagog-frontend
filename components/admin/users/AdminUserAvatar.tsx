@@ -19,6 +19,15 @@ export function AdminUserAvatar(props: {
 
   const { size = 'small' } = props
 
+  return <AdminUserAvatarPure user={user} size={size} />
+}
+
+export function AdminUserAvatarPure(props: {
+  user: { fullName: string; avatar?: string | null }
+  size?: 'small' | 'large' | 'extra-large'
+}) {
+  const { size = 'small', user } = props
+
   return (
     <>
       {!user.avatar ? (
