@@ -8,6 +8,10 @@ const nextConfig = {
         // These rewrites are checked after headers/redirects
         // and before all files including _next/public files which
         // allows overriding page files
+        {
+          source: '/diskuze/:slug/preview',
+          destination: '/articles/:slug/preview',
+        },
         { source: '/diskuze/:slug', destination: '/articles/:slug' },
         { source: '/diskuze', destination: '/articles' },
         { source: '/o-nas', destination: '/about-us' },
