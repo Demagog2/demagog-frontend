@@ -23,6 +23,7 @@ const AdminArticleHeaderFragment = gql(`
     id
     title
     articleType
+    published
     ...PublishedArticleLink
     ...ArticleState
     ...AdminArticleTags
@@ -72,9 +73,24 @@ export function AdminArticleHeader(props: {
             </a>
           </span>
         )}
-        <span className="ml-3 hidden sm:block">
-          <AdminArticlePreviewButton article={article} icon />
-        </span>
+        {article.published ? (
+          <span className="ml-3 hidden sm:block">
+            <PublishedArticleLink
+              article={article}
+              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              <LinkIcon
+                aria-hidden="true"
+                className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
+              />
+            </PublishedArticleLink>
+          </span>
+        ) : (
+          <span className="ml-3 hidden sm:block">
+            <AdminArticlePreviewButton article={article} icon />
+          </span>
+        )}
+
         <span className="ml-3 hidden sm:block">
           <a
             href={`/beta/admin/articles/${article.id}/edit`}
@@ -86,17 +102,6 @@ export function AdminArticleHeader(props: {
             />
             Upravit
           </a>
-        </span>
-        <span className="ml-3 hidden sm:block">
-          <PublishedArticleLink
-            article={article}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            <LinkIcon
-              aria-hidden="true"
-              className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-            />
-          </PublishedArticleLink>
         </span>
         <AdminArticleDeleteDialog
           article={article}
@@ -124,19 +129,22 @@ export function AdminArticleHeader(props: {
                 Upravit
               </a>
             </MenuItem>
-            <MenuItem>
-              <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                <PublishedArticleLink article={article} />
-              </span>
-            </MenuItem>
-            <MenuItem>
-              <span>
-                <AdminArticlePreviewButton
-                  article={article}
-                  className={previewButtonStyles.inDropDownMenu}
-                />
-              </span>
-            </MenuItem>
+            {article.published ? (
+              <MenuItem>
+                <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                  <PublishedArticleLink article={article} />
+                </span>
+              </MenuItem>
+            ) : (
+              <MenuItem>
+                <span>
+                  <AdminArticlePreviewButton
+                    article={article}
+                    className={previewButtonStyles.inDropDownMenu}
+                  />
+                </span>
+              </MenuItem>
+            )}
             {article.articleType === 'facebook_factcheck' && (
               <MenuItem>
                 <a

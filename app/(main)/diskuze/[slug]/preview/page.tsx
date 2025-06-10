@@ -1,6 +1,5 @@
 import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
-import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { ArticlePlayer } from '@/components/article/player/ArticlePlayer'
 import { ArticleIllustration } from '@/components/article/ArticleIllustration'
 import { ArticleSegments } from '@/components/article/ArticleSegments'
@@ -8,7 +7,7 @@ import { FacebookFactcheckMetadata } from '@/components/article/metadata/Faceboo
 import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
 import { StaticArticleMetadata } from '@/components/article/metadata/StaticArticleMetadata'
 import { Metadata } from 'next'
-import { permanentRedirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import {
   getCanonicalMetadata,
   getMetadataTitle,
@@ -21,6 +20,7 @@ import { imagePath } from '@/libs/images/path'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import { ArticleSocialShareButtons } from '@/components/article/ArticleSocialShareButtons'
+import { serverQuery } from '@/libs/apollo-client-server'
 
 export const revalidate = 180
 export const dynamic = 'force-static'
@@ -28,7 +28,7 @@ export const dynamic = 'force-static'
 export async function generateStaticParams() {
   const { data } = await query({
     query: gql(`
-      query articleGenerateStaticParams($first: Int) {
+      query articlePreviewGenerateStaticParams($first: Int) {
         homepageArticlesV3(first: $first) {
           nodes {
             ... on Article {
@@ -60,7 +60,7 @@ export async function generateMetadata(props: {
     data: { articleV2: article },
   } = await query({
     query: gql(`
-      query ArticleMetadata($id: ID!) {
+      query ArticlePreviewMetadata($id: ID!) {
         articleV2(id: $id) {
           slug
           title
@@ -107,12 +107,14 @@ export async function generateMetadata(props: {
   }
 }
 
-export default async function Article(props: { params: { slug: string } }) {
+export default async function ArticlePreview(props: {
+  params: { slug: string }
+}) {
   const { slug } = props.params
 
   const {
-    data: { articleV3: article },
-  } = await query({
+    data: { articleV3: article, currentUser },
+  } = await serverQuery({
     query: gql(`
       query ArticlePreviewDetail($slug: ID!) {
         articleV3(id: $slug) {
@@ -135,6 +137,9 @@ export default async function Article(props: { params: { slug: string } }) {
             }
           }
         }
+        currentUser {
+          id
+        }
       }
     `),
     variables: {
@@ -142,16 +147,16 @@ export default async function Article(props: { params: { slug: string } }) {
     },
   })
 
-  if (!article) {
+  if (!currentUser?.id) {
+    redirect(`/login?redirect=/diskuze/${slug}/preview`)
+  }
+
+  if (
+    !article ||
+    article.__typename === 'SingleStatementArticle' ||
+    article.__typename !== 'Article'
+  ) {
     notFound()
-  }
-
-  if (article.__typename === 'SingleStatementArticle') {
-    permanentRedirect(`/statements/${article.statement?.id}`)
-  }
-
-  if (article.__typename !== 'Article') {
-    return null
   }
 
   return (
