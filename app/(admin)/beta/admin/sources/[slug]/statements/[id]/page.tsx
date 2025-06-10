@@ -8,6 +8,7 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { ApolloClientProvider } from '@/components/util/ApolloClientProvider'
 import { getAuthorizationToken } from '@/libs/apollo-client'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
+import { ActionCableProvider } from '@/libs/web-sockets/ActionCableProvider'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -62,13 +63,15 @@ export default async function AdminStatementDetail(props: {
 
   return (
     <ApolloClientProvider authorizationToken={getAuthorizationToken()}>
-      <AdminPage>
-        <AdminAssessmentFormController
-          data={data}
-          statementId={parseInt(data.statementV2.id, 10)}
-          action={updateStatementAssessment.bind(null, props.params.id)}
-        />
-      </AdminPage>
+      <ActionCableProvider authorizationToken={getAuthorizationToken()}>
+        <AdminPage>
+          <AdminAssessmentFormController
+            data={data}
+            statementId={parseInt(data.statementV2.id, 10)}
+            action={updateStatementAssessment.bind(null, props.params.id)}
+          />
+        </AdminPage>
+      </ActionCableProvider>
     </ApolloClientProvider>
   )
 }
