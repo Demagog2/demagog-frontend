@@ -87,7 +87,7 @@ export default async function ArticlePreview(props: {
     data: { articleV3: article, currentUser },
   } = await serverQuery({
     query: gql(`
-      query ArticlePreviewDetail($slug: ID!) {
+      query ArticlePreviewDetail($slug: ID!, $includeUnpublished: Boolean) {
         articleV3(id: $slug) {
           ... on Article {
             id
@@ -118,6 +118,7 @@ export default async function ArticlePreview(props: {
     `),
     variables: {
       slug: slug,
+      includeUnpublished: true,
     },
   })
 
@@ -135,8 +136,8 @@ export default async function ArticlePreview(props: {
 
   return (
     <>
-      <AdminPreviewBanner article={article} />
       <div className="container px-3 article-redesign text-align-start col-sm-8 mx-sm-auto">
+        <AdminPreviewBanner article={article} />
         <div>
           <div>
             <div>
@@ -161,7 +162,7 @@ export default async function ArticlePreview(props: {
             <StaticArticleMetadata article={article} />
           </div>
           <div>
-            <ArticleSegments data={article} />
+            <ArticleSegments data={article} showUnpublishedBadge />
           </div>
         </div>
         <Iframely />

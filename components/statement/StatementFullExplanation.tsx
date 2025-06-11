@@ -47,6 +47,7 @@ export function StatementFullExplanation(props: {
   statement: FragmentType<typeof StatementFullExplanationFragment>
   displayMode?: StatementDisplayMode
   className?: string
+  showUnpublishedBadge?: boolean
 }) {
   const statement = useFragment(
     StatementFullExplanationFragment,
@@ -60,6 +61,7 @@ export function StatementFullExplanation(props: {
       statement={statement}
       displayMode={props.displayMode}
       className="mb-10"
+      showUnpublishedBadge={props.showUnpublishedBadge}
     >
       <>
         <div

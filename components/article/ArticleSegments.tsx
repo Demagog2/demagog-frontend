@@ -15,7 +15,7 @@ const ArticleSegmentsFragment = gql(`
     segments {
       id
       segmentType
-      statements {
+      statements(includeUnpublished: $includeUnpublished) {
         id
         ...StatementFullExplanation
       }
@@ -60,12 +60,15 @@ type ArticleStatementsProps = {
   data: FragmentType<typeof ArticleSegmentsFragment>
 }
 
-export function ArticleSegments(props: ArticleStatementsProps) {
+export function ArticleSegments(
+  props: ArticleStatementsProps & {
+    showUnpublishedBadge?: boolean
+  }
+) {
   const { segments, debateStats, showPlayer } = useFragment(
     ArticleSegmentsFragment,
     props.data
   )
-
   return (
     <>
       {segments.map((segment) => (
@@ -146,6 +149,7 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                       key={statement.id}
                       statement={statement}
                       className="mb-10"
+                      showUnpublishedBadge={props.showUnpublishedBadge}
                     />
                   ))}
                 </div>

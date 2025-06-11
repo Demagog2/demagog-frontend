@@ -114,7 +114,7 @@ export default async function Article(props: { params: { slug: string } }) {
     data: { articleV3: article },
   } = await query({
     query: gql(`
-      query ArticleDetail($slug: ID!) {
+      query ArticleDetail($slug: ID!, $includeUnpublished: Boolean) {
         articleV3(id: $slug) {
           ... on Article {
             title
@@ -139,6 +139,7 @@ export default async function Article(props: { params: { slug: string } }) {
     `),
     variables: {
       slug: slug,
+      includeUnpublished: false,
     },
   })
 
