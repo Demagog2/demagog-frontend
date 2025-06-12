@@ -17,7 +17,7 @@ const ArticleFullscrenPlayerFragment = gql(`
       ...YouTubeVideo
     }
     segments {
-      statements {
+      statements(includeUnpublished: $includeUnpublished) {
         id
         statementVideoMark {
           start

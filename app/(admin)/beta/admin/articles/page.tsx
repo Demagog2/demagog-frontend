@@ -35,6 +35,7 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
           edges {
             node {
               id
+              slug
               title
               articleType
               published
@@ -116,7 +117,16 @@ export default async function AdminArticles(props: PropsWithSearchParams) {
                     <ArticleState article={edge.node} />
                   </td>
                   <td>
-                    <PublishedArticleLink article={edge.node} />
+                    {edge.node.published ? (
+                      <PublishedArticleLink article={edge.node} />
+                    ) : edge.node.articleType !== 'single_statement' ? (
+                      <a
+                        href={`/diskuze/${edge.node.slug}/preview`}
+                        target="_blank"
+                      >
+                        Náhled
+                      </a>
+                    ) : null}
                   </td>
                   {edge.node.articleType === 'facebook_factcheck' &&
                   edge.node.published ? (

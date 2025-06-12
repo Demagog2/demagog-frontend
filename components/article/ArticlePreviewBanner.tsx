@@ -13,8 +13,8 @@ export function AdminPreviewBanner(props: {
 }) {
   const article = useFragment(AdminPreviewBannerFragment, props.article)
   return (
-    <div className="position-relative bg-primary text-white py-3 mb-4">
-      <div className="container">
+    <div className="position-fixed top-0 custom-index start-0 w-100 bg-primary text-white py-2">
+      <div className="container position-relative">
         <div className="d-flex align-items-center justify-content-center">
           <EyeIcon className="me-2" width={20} height={20} aria-hidden="true" />
           <span className="fs-5 fw-bold">
