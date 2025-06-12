@@ -60,11 +60,7 @@ type ArticleStatementsProps = {
   data: FragmentType<typeof ArticleSegmentsFragment>
 }
 
-export function ArticleSegments(
-  props: ArticleStatementsProps & {
-    showUnpublishedBadge?: boolean
-  }
-) {
+export function ArticleSegments(props: ArticleStatementsProps & {}) {
   const { segments, debateStats, showPlayer } = useFragment(
     ArticleSegmentsFragment,
     props.data
@@ -149,7 +145,6 @@ export function ArticleSegments(
                       key={statement.id}
                       statement={statement}
                       className="mb-10"
-                      showUnpublishedBadge={props.showUnpublishedBadge}
                     />
                   ))}
                 </div>

@@ -162,7 +162,7 @@ export default async function ArticlePreview(props: {
             <StaticArticleMetadata article={article} />
           </div>
           <div>
-            <ArticleSegments data={article} showUnpublishedBadge />
+            <ArticleSegments data={article} />
           </div>
         </div>
         <Iframely />
