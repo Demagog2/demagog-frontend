@@ -8,25 +8,21 @@ import { AdminPageTitle } from '@/components/admin/layout/AdminPageTitle'
 import { serverQuery } from '@/libs/apollo-client-server'
 import { getMetadataTitle } from '@/libs/metadata'
 import { notFound } from 'next/navigation'
+import { AdminQuizQuestionDetail } from '@/components/admin/education/AdminQuizQuestionDetail'
 
-const AdminQuizQuestionDetailMetadataQuery = gql(`
-  query AdminQuizQuestionDetailMetadata($id: ID!) {
+const AdminQuizQuestionMetadataQuery = gql(`
+  query AdminQuizQuestionMetadata($id: ID!) {
     quizQuestion(id: $id) {
       title
     }
   }
 `)
 
-const AdminQuizQuestionDetailQuery = gql(`
-  query AdminQuizQuestionDetail($id: ID!) {
+const AdminQuizQuestionQuery = gql(`
+  query AdminQuizQuestion($id: ID!) {
     quizQuestion(id: $id) {
       title
-      description
-      quizAnswers {
-        id
-        text
-        isCorrect
-      }
+      ...AdminQuizQuestionDetail
     }
   }
 `)
@@ -37,7 +33,7 @@ export async function generateMetadata(props: {
   const {
     data: { quizQuestion },
   } = await serverQuery({
-    query: AdminQuizQuestionDetailMetadataQuery,
+    query: AdminQuizQuestionMetadataQuery,
     variables: {
       id: props.params.slug,
     },
@@ -51,11 +47,11 @@ export async function generateMetadata(props: {
   }
 }
 
-export default async function AdminQuizQuestionDetail(props: {
+export default async function AdminQuizQuestion(props: {
   params: { slug: string }
 }) {
   const { data } = await serverQuery({
-    query: AdminQuizQuestionDetailQuery,
+    query: AdminQuizQuestionQuery,
     variables: {
       id: props.params.slug,
     },
@@ -83,44 +79,7 @@ export default async function AdminQuizQuestionDetail(props: {
       </AdminPageHeader>
       <AdminPageContent>
         <div className="px-4 sm:px-6 lg:px-8 text-sm">
-          <div className="flex flex-col">
-            <h3 className="text-2xl font-bold text-gray-800 mb-4">
-              {quizQuestion.title}
-            </h3>
-            <div className="space-y-4 text-gray-600">
-              <div>
-                <p className="font-semibold">Popis:</p>
-                <p>{quizQuestion.description ?? 'Nevyplněno'}</p>
-              </div>
-              <div>
-                <p className="font-semibold">Odpovědi:</p>
-                <div className="mt-2 space-y-2 w-full max-w-xl">
-                  {quizQuestion.quizAnswers?.map((answer, index) => (
-                    <div
-                      key={answer.id}
-                      className={`p-3 rounded-md border ${
-                        answer.isCorrect
-                          ? 'bg-green-50 border-green-200'
-                          : 'bg-gray-50 border-gray-200'
-                      }`}
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="font-medium">
-                          {String.fromCharCode(65 + index)}.
-                        </span>
-                        <span>{answer.text}</span>
-                        {answer.isCorrect && (
-                          <span className="text-green-600 text-sm">
-                            (Správná odpověď)
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
+          <AdminQuizQuestionDetail quizQuestion={quizQuestion} />
         </div>
       </AdminPageContent>
     </AdminPage>

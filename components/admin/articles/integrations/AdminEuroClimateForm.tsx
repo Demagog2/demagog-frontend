@@ -129,7 +129,7 @@ export function AdminEuroClimateForm(props: {
             />
           )}
 
-          <form action={formAction} onSubmit={handleSubmitForm}>
+          <form action={formAction} onSubmit={handleSubmitForm} noValidate>
             <input type="hidden" {...register('articleId')} />
 
             <div
@@ -227,7 +227,7 @@ export function AdminEuroClimateForm(props: {
                     <Field>
                       <Label htmlFor="appearanceUrl">URL výskytu tvrzení</Label>
                       <Input
-                        type="text"
+                        type="url"
                         id="appearanceUrl"
                         placeholder="Zadejte URL"
                         {...register('appearance.appearanceUrl', {
@@ -279,10 +279,13 @@ export function AdminEuroClimateForm(props: {
                         Archivní URL
                       </Label>
                       <Input
-                        type="text"
+                        type="url"
                         id="archiveUrl"
                         placeholder="Zadejte archivní URL"
                         {...register('appearance.archiveUrl')}
+                      />
+                      <ErrorMessage
+                        message={errors.appearance?.archiveUrl?.message}
                       />
                     </Field>
                   </Fieldset>

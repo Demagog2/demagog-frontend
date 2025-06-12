@@ -57,6 +57,8 @@ import { useEffect, useMemo } from 'react'
 import { ErrorMessage } from '../forms/ErrorMessage'
 import { isEmpty } from 'lodash'
 import { AdminQuizQuestionList } from './AdminQuizQuestionList'
+import { AdminArticlePreviewButton } from './AdminArticlePreviewButton'
+import { SecondaryLinkButton } from '../layout/buttons/SecondaryLinkButton'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -149,6 +151,7 @@ const AdminArticleFormFieldsFragment = gql(`
     }
     illustrationCaption
     ...AdminArticleIllustration
+    ...AdminArticlePreviewButton
   }
 `)
 
@@ -352,6 +355,7 @@ export function AdminArticleForm(props: {
         <AdminPageTitle title={props.title} description={props.description} />
 
         <AdminFormActions>
+          {article?.id && <AdminArticlePreviewButton article={article} icon />}
           <LinkButton href="/beta/admin/articles">Zpět</LinkButton>
 
           <SubmitButton />
@@ -695,18 +699,15 @@ export function AdminArticleForm(props: {
                 )}
               />
             </Field>
-            <span className="hidden sm:block w-full sm:w-fit lg:w-full">
-              <a
+            {article?.articleType === 'facebook_factcheck' && (
+              <SecondaryLinkButton
                 href={`/beta/admin/articles/${article?.id}/integrations`}
-                className="inline-flex items-center w-full justify-center rounded-md bg-white px-6 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+                icon={<GlobeAltIcon />}
+                className="justify-center w-fit lg:w-full"
               >
-                <GlobeAltIcon
-                  aria-hidden="true"
-                  className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-                />
                 Integrace
-              </a>
-            </span>
+              </SecondaryLinkButton>
+            )}
           </Fieldset>
         </AdminFormSidebar>
       </AdminFormContent>

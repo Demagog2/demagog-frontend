@@ -11,6 +11,7 @@ import AdminSourceDeleteDialog from '@/components/admin/sources/AdminSourceDelet
 import { AdminSourceBulkPublishButton } from '@/components/admin/sources/AdminSourceBulkPublishButton'
 import NewStatementDropdown from './statements/controls/NewStatementDropdown'
 import { displayDate } from '@/libs/date-time'
+import { SecondaryLinkButton } from '../layout/buttons/SecondaryLinkButton'
 
 const AdminSourceHeaderDataFragment = gql(`
   fragment AdminSourceHeaderData on Query {
@@ -96,31 +97,28 @@ export async function AdminSourceHeader(props: {
           )}
 
           {isBetaAdminSourceStatsEnabled && (
-            <a
+            <SecondaryLinkButton
               href={`/beta/admin/sources/${source.id}/stats`}
-              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
               Statistiky
-            </a>
+            </SecondaryLinkButton>
           )}
 
           {isBetaAdminStatementReorderingEnabled &&
             isAuthorized(['statements:sort']) && (
-              <a
+              <SecondaryLinkButton
                 href={`/beta/admin/sources/${source.id}/statements/reorder`}
-                className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               >
                 Seřadit výroky
-              </a>
+              </SecondaryLinkButton>
             )}
 
           {isAuthorized(['statements:edit']) && (
-            <a
+            <SecondaryLinkButton
               href={`/beta/admin/sources/${source.id}/statements-video-marks`}
-              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
               Propojení s videozáznamem
-            </a>
+            </SecondaryLinkButton>
           )}
 
           {isBetaAdminStatementBulkPublishingEnabled &&
@@ -134,16 +132,12 @@ export async function AdminSourceHeader(props: {
           )}
 
           <span className="hidden sm:block">
-            <a
+            <SecondaryLinkButton
               href={`/beta/admin/sources/${source.id}/edit`}
-              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+              icon={<PencilIcon />}
             >
-              <PencilIcon
-                aria-hidden="true"
-                className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-              />
               Upravit
-            </a>
+            </SecondaryLinkButton>
           </span>
         </div>
       </div>

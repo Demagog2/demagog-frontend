@@ -1,3 +1,4 @@
+'use client'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { SpeakerWithStats } from '@/components/speaker/SpeakerWithStats'
 import { ArticleV2Preview } from './ArticleV2Preview'
@@ -7,13 +8,14 @@ import classNames from 'classnames'
 import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementFullExplanation } from '../statement/StatementFullExplanation'
 import { StatementHeader } from '../statement/StatementHeader'
+import { ArticleQuizSegment } from './ArticleQuizSegment'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
     segments {
       id
       segmentType
-      statements {
+      statements(includeUnpublished: $includeUnpublished) {
         id
         ...StatementFullExplanation
       }
@@ -40,6 +42,9 @@ const ArticleSegmentsFragment = gql(`
           cursor
         }
       }
+      quizQuestion {
+        ...ArticleQuizSegment
+      }
     }
     debateStats {
       ...SpeakerWithStats
@@ -55,7 +60,7 @@ type ArticleStatementsProps = {
   data: FragmentType<typeof ArticleSegmentsFragment>
 }
 
-export function ArticleSegments(props: ArticleStatementsProps) {
+export function ArticleSegments(props: ArticleStatementsProps & {}) {
   const { segments, debateStats, showPlayer } = useFragment(
     ArticleSegmentsFragment,
     props.data
@@ -145,6 +150,9 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                 </div>
               </div>
             </div>
+          )}
+          {segment.segmentType === 'quiz_question' && segment.quizQuestion && (
+            <ArticleQuizSegment quizQuestion={segment.quizQuestion} />
           )}
         </div>
       ))}

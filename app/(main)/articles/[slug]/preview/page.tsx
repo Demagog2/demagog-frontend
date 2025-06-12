@@ -1,4 +1,3 @@
-import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
 import { ArticlePlayer } from '@/components/article/player/ArticlePlayer'
 import { ArticleIllustration } from '@/components/article/ArticleIllustration'
@@ -7,7 +6,7 @@ import { FacebookFactcheckMetadata } from '@/components/article/metadata/Faceboo
 import { DebateArticleMetadata } from '@/components/article/metadata/DebateArticleMetadata'
 import { StaticArticleMetadata } from '@/components/article/metadata/StaticArticleMetadata'
 import { Metadata } from 'next'
-import { permanentRedirect } from 'next/navigation'
+import { redirect } from 'next/navigation'
 import {
   getCanonicalMetadata,
   getMetadataTitle,
@@ -20,47 +19,19 @@ import { imagePath } from '@/libs/images/path'
 import { notFound } from 'next/navigation'
 import Script from 'next/script'
 import { ArticleSocialShareButtons } from '@/components/article/ArticleSocialShareButtons'
+import { serverQuery } from '@/libs/apollo-client-server'
+import { AdminPreviewBanner } from '@/components/article/ArticlePreviewBanner'
 
-export const revalidate = 180
-export const dynamic = 'force-static'
-
-// Return a list of `params` to populate the [slug] dynamic segment
-export async function generateStaticParams() {
-  const { data } = await query({
-    query: gql(`
-      query articleGenerateStaticParams($first: Int) {
-        homepageArticlesV3(first: $first) {
-          nodes {
-            ... on Article {
-              slug
-            }
-            ... on SingleStatementArticle {
-              slug
-            }
-          }
-        }
-      }
-    `),
-    variables: {
-      first: 20,
-    },
-  })
-
-  return (
-    data.homepageArticlesV3?.nodes?.flatMap((node) =>
-      node ? [{ slug: node.slug }] : []
-    ) ?? []
-  )
-}
+export const dynamic = 'force-dynamic'
 
 export async function generateMetadata(props: {
   params: { slug: string }
 }): Promise<Metadata> {
   const {
     data: { articleV2: article },
-  } = await query({
+  } = await serverQuery({
     query: gql(`
-      query ArticleMetadata($id: ID!) {
+      query ArticlePreviewMetadata($id: ID!) {
         articleV2(id: $id) {
           slug
           title
@@ -107,20 +78,24 @@ export async function generateMetadata(props: {
   }
 }
 
-export default async function Article(props: { params: { slug: string } }) {
+export default async function ArticlePreview(props: {
+  params: { slug: string }
+}) {
   const { slug } = props.params
 
   const {
-    data: { articleV3: article },
-  } = await query({
+    data: { articleV3: article, currentUser },
+  } = await serverQuery({
     query: gql(`
-      query ArticleDetail($slug: ID!, $includeUnpublished: Boolean) {
+      query ArticlePreviewDetail($slug: ID!, $includeUnpublished: Boolean) {
         articleV3(id: $slug) {
           ... on Article {
+            id
             title
             articleType
             perex
             showPlayer
+            published
             ...ArticleSocialShareButtons
             ...DebateAticleMetadata
             ...FacebookFactcheckMetadata
@@ -128,6 +103,7 @@ export default async function Article(props: { params: { slug: string } }) {
             ...ArticleSegments
             ...ArticlePlayer
             ...ArticleIllustration
+            ...AdminPreviewBanner
           }
           ... on SingleStatementArticle {
             statement {
@@ -135,59 +111,67 @@ export default async function Article(props: { params: { slug: string } }) {
             }
           }
         }
+        currentUser {
+          id
+        }
       }
     `),
     variables: {
       slug: slug,
-      includeUnpublished: false,
+      includeUnpublished: true,
     },
   })
 
-  if (!article) {
+  if (!currentUser?.id) {
+    redirect(`/login?redirect=/diskuze/${slug}/preview`)
+  }
+
+  if (
+    !article ||
+    article.__typename === 'SingleStatementArticle' ||
+    article.__typename !== 'Article'
+  ) {
     notFound()
   }
 
-  if (article.__typename === 'SingleStatementArticle') {
-    permanentRedirect(`/statements/${article.statement?.id}`)
-  }
-
-  if (article.__typename !== 'Article') {
-    return null
-  }
-
   return (
-    <div className="container px-3 article-redesign text-align-start col-sm-8 mx-sm-auto">
-      <div>
+    <>
+      <div className="container px-3 article-redesign text-align-start col-sm-8 mx-sm-auto">
+        <AdminPreviewBanner article={article} />
         <div>
           <div>
-            <h1 className="display-1 fw-bold px-3 px-sm-0">{article.title}</h1>
-            <div className="d-flex justify-content-end">
-              <ArticleSocialShareButtons article={article} />
-            </div>
+            <div>
+              <h1 className="display-1 fw-bold px-3 px-sm-0">
+                {article.title}
+              </h1>
+              <div className="d-flex justify-content-end">
+                <ArticleSocialShareButtons article={article} />
+              </div>
 
-            {article.showPlayer ? (
-              <ArticlePlayer article={article} />
-            ) : (
-              <ArticleIllustration article={article} />
-            )}
-            <div className="mt-4 mt-md-9">
-              <span className="perex">{article.perex}</span>
+              {article.showPlayer ? (
+                <ArticlePlayer article={article} />
+              ) : (
+                <ArticleIllustration article={article} />
+              )}
+              <div className="mt-4 mt-md-9">
+                <span className="perex">{article.perex}</span>
+              </div>
             </div>
+            <DebateArticleMetadata article={article} />
+            <FacebookFactcheckMetadata article={article} />
+            <StaticArticleMetadata article={article} />
           </div>
-          <DebateArticleMetadata article={article} />
-          <FacebookFactcheckMetadata article={article} />
-          <StaticArticleMetadata article={article} />
+          <div>
+            <ArticleSegments data={article} />
+          </div>
         </div>
-        <div>
-          <ArticleSegments data={article} />
-        </div>
+        <Iframely />
+        <Script
+          src="https://platform.twitter.com/widgets.js"
+          strategy="lazyOnload"
+          crossOrigin="anonymous"
+        />
       </div>
-      <Iframely />
-      <Script
-        src="https://platform.twitter.com/widgets.js"
-        strategy="lazyOnload"
-        crossOrigin="anonymous"
-      />
-    </div>
+    </>
   )
 }

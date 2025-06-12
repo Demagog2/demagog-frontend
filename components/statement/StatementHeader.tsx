@@ -13,6 +13,7 @@ const StatementHeaderFragment = gql(`
   fragment StatementHeader on Statement {
     id
     content
+    published
     ...StatementSocialShareButtons
     sourceSpeaker {
       speaker {
@@ -70,8 +71,16 @@ export function StatementHeader(
         <div
           className={classNames('s-statement', props.className, {
             'bg-lightgrey radius-22px mt-6 px-4 px-md-6': isEmbedded,
+            'position-relative': !statement.published,
           })}
         >
+          {!statement.published && (
+            <div className="position-absolute start-0 top-0 translate-middle-y">
+              <span className="badge rounded-pill bg-light text-danger border border-danger px-2 py-1 mt-5 small fw-semibold">
+                Nezveřejněno
+              </span>
+            </div>
+          )}
           <div
             className={classNames('g-6', {
               'flex-column': isVertical,

@@ -4,5 +4,5 @@ export const ARTICLE_TYPE_LABEL: Record<string, string> = {
   single_statement: 'Jednotlivý výrok',
   facebook_factcheck: 'Facebook factcheck',
   government_promises_evaluation: 'Sliby',
-  education: 'Vzdělávací blok',
+  education: 'Kvíz',
 }

@@ -405,6 +405,7 @@ function AdminAssessmentForm(props: {
     statement.source.id,
     statement.id,
     statement.statementTranscriptPosition,
+    statement.source.releasedAt,
   ])
 
   const formRef = useRef<HTMLFormElement>(null)

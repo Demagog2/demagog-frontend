@@ -13,16 +13,22 @@ import { PublishedArticleLink } from '@/components/admin/articles/PublishedArtic
 import { AdminArticleTags } from '@/components/admin/articles/AdminArticleTags'
 import AdminArticleDeleteDialog from '@/components/admin/articles/AdminArticleDeleteDialog'
 import { AdminArticleBreadcrumbs } from './AdminArticleBreadcrumbs'
+import { AdminArticlePreviewButton } from './AdminArticlePreviewButton'
+import { SecondaryLinkButton } from '../layout/buttons/SecondaryLinkButton'
 
 const AdminArticleHeaderFragment = gql(`
   fragment AdminArticleHeader on Article {
     id
+    slug
     title
+    articleType
+    published
     ...PublishedArticleLink
     ...ArticleState
     ...AdminArticleTags
     ...AdminArticleDeleteDialog
     ...AdminArticleBreadcrumbs
+    ...AdminArticlePreviewButton
   }
 `)
 
@@ -52,52 +58,50 @@ export function AdminArticleHeader(props: {
         </div>
       </div>
       <div className="mt-5 flex lg:ml-4 lg:mt-0">
-        <span className="hidden sm:block">
-          <a
-            href={`/beta/admin/articles/${article.id}/integrations`}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            <GlobeAltIcon
-              aria-hidden="true"
-              className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-            />
-            Integrace
-          </a>
-        </span>
+        {article.articleType === 'facebook_factcheck' && (
+          <span className="hidden sm:block">
+            <SecondaryLinkButton
+              href={`/beta/admin/articles/${article.id}/integrations`}
+              icon={<GlobeAltIcon />}
+            >
+              Integrace
+            </SecondaryLinkButton>
+          </span>
+        )}
+        {article.published ? (
+          <span className="ml-3 hidden sm:block">
+            <PublishedArticleLink
+              article={article}
+              className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            >
+              <LinkIcon
+                aria-hidden="true"
+                className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
+              />
+            </PublishedArticleLink>
+          </span>
+        ) : article.articleType !== 'single_statement' ? (
+          <span className="ml-3 hidden sm:block">
+            <AdminArticlePreviewButton article={article} icon />
+          </span>
+        ) : null}
+
         <span className="ml-3 hidden sm:block">
-          <a
+          <SecondaryLinkButton
             href={`/beta/admin/articles/${article.id}/edit`}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            icon={<PencilIcon />}
           >
-            <PencilIcon
-              aria-hidden="true"
-              className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-            />
             Upravit
-          </a>
+          </SecondaryLinkButton>
         </span>
-
-        <span className="ml-3 hidden sm:block">
-          <PublishedArticleLink
-            article={article}
-            className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-          >
-            <LinkIcon
-              aria-hidden="true"
-              className="-ml-0.5 mr-1.5 h-5 w-5 text-gray-400"
-            />
-          </PublishedArticleLink>
-        </span>
-
         <AdminArticleDeleteDialog
           article={article}
           className="inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 hover:text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
         />
-
         {/* Dropdown */}
         <Menu as="div" className="relative ml-3 sm:hidden">
           <MenuButton className="inline-flex items-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:ring-gray-400">
-            More
+            Další
             <ChevronDownIcon
               aria-hidden="true"
               className="-mr-1 ml-1.5 h-5 w-5 text-gray-400"
@@ -116,14 +120,33 @@ export function AdminArticleHeader(props: {
                 Upravit
               </a>
             </MenuItem>
-            <MenuItem>
-              <a
-                href="#"
-                className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
-              >
-                View
-              </a>
-            </MenuItem>
+            {article.published ? (
+              <MenuItem>
+                <span className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
+                  <PublishedArticleLink article={article} />
+                </span>
+              </MenuItem>
+            ) : article.articleType !== 'single_statement' ? (
+              <MenuItem>
+                <a
+                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 hover:bg-gray-100"
+                  href={`/diskuze/${article.slug}/preview`}
+                  target="_blank"
+                >
+                  Náhled
+                </a>
+              </MenuItem>
+            ) : null}
+            {article.articleType === 'facebook_factcheck' && (
+              <MenuItem>
+                <a
+                  href={`/beta/admin/articles/${article.id}/integrations`}
+                  className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100"
+                >
+                  Integrace
+                </a>
+              </MenuItem>
+            )}
           </MenuItems>
         </Menu>
       </div>
