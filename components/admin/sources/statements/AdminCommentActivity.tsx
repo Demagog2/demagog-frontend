@@ -21,6 +21,33 @@ const AdminCommentActivityFragment = gql(`
         fullName
         avatar(size: small)
       }
+      reply {
+        id
+        content
+        createdAt
+        user {
+          id
+          fullName
+        }
+      }
+      replies {
+        id
+        content
+        createdAt
+        user {
+          id
+          fullName
+        }
+      }
+    }
+    reply {
+      id
+      content
+      createdAt
+      user {
+        id
+        fullName
+      }
     }
   }
 `)
@@ -32,6 +59,36 @@ export function AdminCommentActivity(props: {
   onFocusInput?: () => void
 }) {
   const activityItem = useFragment(AdminCommentActivityFragment, props.activity)
+
+  const isReply = activityItem.comment.reply !== null
+  const replyToComment = activityItem.comment.reply
+
+  function ReplyPreview({
+    replyToComment,
+  }: {
+    replyToComment: { content: string; user: { fullName: string } }
+  }) {
+    const truncatedReplyContent =
+      replyToComment.content.length > 50
+        ? replyToComment.content.substring(0, 50) + '...'
+        : replyToComment.content
+
+    return (
+      <div className="mb-3 bg-gray-100 rounded-lg p-3 border-l-2 border-l-indigo-400 text-sm">
+        <div className="text-gray-600 mb-1">
+          {activityItem.comment.reply?.user.fullName}
+        </div>
+        <div
+          className="text-gray-500"
+          dangerouslySetInnerHTML={{
+            __html: newlinesToParagraphsAndBreaks(
+              highlightMentions(nicerLinks(truncatedReplyContent ?? ''))
+            ),
+          }}
+        />
+      </div>
+    )
+  }
 
   return (
     <>
@@ -46,6 +103,9 @@ export function AdminCommentActivity(props: {
         </span>
       </div>
       <div className="min-w-0 flex-1">
+        {isReply && replyToComment && (
+          <ReplyPreview replyToComment={replyToComment} />
+        )}
         <div className="flex items-center justify-between gap-2">
           <div>
             <div className="text-sm">

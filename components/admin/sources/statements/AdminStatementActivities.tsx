@@ -57,6 +57,15 @@ export function AdminStatementActivities(props: {
                   comment {
                     id
                   }
+                  reply {
+                    id
+                    content
+                    createdAt
+                    user {
+                      id
+                      fullName
+                    }
+                  }
                 }
               }
             }
@@ -102,6 +111,14 @@ export function AdminStatementActivities(props: {
           createComment(commentInput: $commentInput) {
             comment {
               id
+              reply {
+                id
+                content
+                user {
+                  id
+                  fullName
+                }
+              }
             }
           }
         }
@@ -267,9 +284,11 @@ export function AdminStatementActivities(props: {
                 commentInput: {
                   statementId: props.statementId,
                   content: message,
+                  ...(commentIdToReply && { replyId: commentIdToReply }),
                 },
               },
               onCompleted() {
+                setCommentIdToReply(null)
                 refetch()
               },
             })
