@@ -19,6 +19,14 @@ const AdminCommentReplyFragment = gql(`
         avatar(size: small)
       }
     }
+    reply {
+      id
+      content
+      user {
+        id
+        fullName
+      }
+    }
   }
 `)
 
