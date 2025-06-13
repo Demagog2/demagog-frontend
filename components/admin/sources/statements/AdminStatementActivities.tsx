@@ -11,15 +11,32 @@ import { Spinner } from '../../forms/Spinner'
 import { SecondaryButton } from '../../layout/buttons/SecondaryButton'
 import { toast } from 'react-toastify'
 import * as Sentry from '@sentry/browser'
+import { AdminCommentReplyActivity } from './AdminCommentReplyActivity'
+import { useRef } from 'react'
 
 const SHOW_ALL_THRESHOLD = 3
 
-export function AdminStatementActivities(props: { statementId: string }) {
+export function AdminStatementActivities(props: {
+  statementId: string
+  commentRepliesEnabled?: boolean
+}) {
   const [showAll, setShowAll] = useState(false)
   const [commentsOnly, setCommentsOnly] = useState(false)
   const [newActivitiesCount, setNewActivitiesCount] = useState(0)
   const [showNewActivitiesButton, setShowNewActivitiesButton] = useState(false)
   const [isFetchingNew, setIsFetchingNew] = useState(false)
+  const [commentIdToReply, setCommentIdToReply] = useState<string | null>(null)
+  const inputRef = useRef<HTMLDivElement>(null)
+
+  const focusInput = () => {
+    inputRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+    setTimeout(() => {
+      inputRef.current?.querySelector('textarea')?.focus()
+    }, 400)
+  }
 
   const filter = useMemo(() => {
     return commentsOnly ? { activityType: ActivityTypeEnum.CommentCreated } : {}
@@ -35,6 +52,12 @@ export function AdminStatementActivities(props: { statementId: string }) {
             edges {
               node {
                 ...AdminActivity
+                ... on CommentActivity {
+                  ...AdminCommentReply
+                  comment {
+                    id
+                  }
+                }
               }
             }
           }
@@ -84,6 +107,18 @@ export function AdminStatementActivities(props: { statementId: string }) {
         }
     `)
   )
+
+  const replyToComment = useMemo(() => {
+    if (!commentIdToReply || !data?.statementV2?.activities?.edges) return null
+
+    const nodes = data.statementV2.activities.edges.flatMap((edge) => {
+      return edge?.node && edge?.node.__typename === 'CommentActivity'
+        ? [edge.node]
+        : []
+    })
+
+    return nodes.find((node) => node.comment.id === commentIdToReply)
+  }, [commentIdToReply, data?.statementV2?.activities?.edges])
 
   if (loading) {
     return <div>Nahrávám&hellip;</div>
@@ -170,7 +205,12 @@ export function AdminStatementActivities(props: { statementId: string }) {
                   )}
 
                   <div className="relative flex items-start space-x-3">
-                    <AdminActivity activity={activityItem.node} />
+                    <AdminActivity
+                      activity={activityItem.node}
+                      commentRepliesEnabled={props.commentRepliesEnabled}
+                      onReplyToComment={setCommentIdToReply}
+                      onFocusInput={focusInput}
+                    />
                   </div>
                 </div>
               </li>
@@ -208,25 +248,34 @@ export function AdminStatementActivities(props: { statementId: string }) {
           )}
         </SecondaryButton>
       )}
+      <div ref={inputRef}>
+        {commentIdToReply && (
+          <AdminCommentReplyActivity
+            onCancelReply={setCommentIdToReply}
+            replyToComment={replyToComment}
+          />
+        )}
 
-      <AdminStatementCommentInput
-        data={data}
-        isPending={isPending}
-        statementId={props.statementId}
-        onSubmit={(message) =>
-          createComment({
-            variables: {
-              commentInput: {
-                statementId: props.statementId,
-                content: message,
+        <AdminStatementCommentInput
+          data={data}
+          isPending={isPending}
+          statementId={props.statementId}
+          isReply={!!commentIdToReply}
+          onSubmit={(message) =>
+            createComment({
+              variables: {
+                commentInput: {
+                  statementId: props.statementId,
+                  content: message,
+                },
               },
-            },
-            onCompleted() {
-              refetch()
-            },
-          })
-        }
-      />
+              onCompleted() {
+                refetch()
+              },
+            })
+          }
+        />
+      </div>
     </div>
   )
 }
