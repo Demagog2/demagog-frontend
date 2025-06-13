@@ -177,6 +177,7 @@ export function AdminAssessmentFormController(props: {
   action: FormAction
   statementId: number
   data: FragmentType<typeof AdminAssessmentFormFragment>
+  commentRepliesEnabled?: boolean
 }) {
   const { data, loading, refetch } = useQuery(AdminStatementClientQuery, {
     variables: { id: props.statementId },
@@ -204,6 +205,7 @@ function AdminAssessmentForm(props: {
   data: FragmentType<typeof AdminAssessmentFormFragment>
   statement: FragmentType<typeof AdminStatementAssessmentFragment>
   refetch: () => void
+  commentRepliesEnabled?: boolean
 }) {
   const data = useFragment(AdminAssessmentFormFragment, props.data)
   const statement = useFragment(
@@ -917,7 +919,10 @@ function AdminAssessmentForm(props: {
             Aktivita
           </div>
 
-          <AdminStatementActivities statementId={statement.id} />
+          <AdminStatementActivities
+            statementId={statement.id}
+            commentRepliesEnabled={props.commentRepliesEnabled}
+          />
         </AdminFormSidebar>
       </AdminFormContent>
     </form>
