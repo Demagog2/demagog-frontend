@@ -39,11 +39,21 @@ const AdminActivityFragment = gql(`
 
 export function AdminActivity(props: {
   activity: FragmentType<typeof AdminActivityFragment>
+  commentRepliesEnabled?: boolean
+  onReplyToComment?: (commentId: string | null) => void
+  onFocusInput?: () => void
 }) {
   const activity = useFragment(AdminActivityFragment, props.activity)
   switch (activity.__typename) {
     case 'CommentActivity': {
-      return <AdminCommentActivity activity={activity} />
+      return (
+        <AdminCommentActivity
+          activity={activity}
+          commentRepliesEnabled={props.commentRepliesEnabled}
+          onReplyToComment={props.onReplyToComment}
+          onFocusInput={props.onFocusInput}
+        />
+      )
     }
     case 'EvaluationStatusChangeActivity': {
       return <AdminEvaluationStatusChangeActivity activity={activity} />

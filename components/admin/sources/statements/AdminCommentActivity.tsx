@@ -7,6 +7,7 @@ import {
   nicerLinks,
 } from '@/libs/comments/text'
 import { FragmentType, gql, useFragment } from '@/__generated__'
+import { ArrowUturnLeftIcon } from '@heroicons/react/24/outline'
 
 const AdminCommentActivityFragment = gql(`
   fragment AdminCommentActivity on CommentActivity {
@@ -20,14 +21,75 @@ const AdminCommentActivityFragment = gql(`
         fullName
         avatar(size: small)
       }
+      reply {
+        id
+        content
+        createdAt
+        user {
+          id
+          fullName
+        }
+      }
+      replies {
+        id
+        content
+        createdAt
+        user {
+          id
+          fullName
+        }
+      }
+    }
+    reply {
+      id
+      content
+      createdAt
+      user {
+        id
+        fullName
+      }
     }
   }
 `)
 
 export function AdminCommentActivity(props: {
   activity: FragmentType<typeof AdminCommentActivityFragment>
+  commentRepliesEnabled?: boolean
+  onReplyToComment?: (commentId: string | null) => void
+  onFocusInput?: () => void
 }) {
   const activityItem = useFragment(AdminCommentActivityFragment, props.activity)
+
+  const isReply = activityItem.comment.reply !== null
+  const replyToComment = activityItem.comment.reply
+
+  function ReplyPreview({
+    replyToComment,
+  }: {
+    replyToComment: { content: string; user: { fullName: string } }
+  }) {
+    const truncatedReplyContent =
+      replyToComment.content.length > 50
+        ? replyToComment.content.substring(0, 50) + '...'
+        : replyToComment.content
+
+    return (
+      <div className="mb-3 bg-gray-100 rounded-lg p-3 border-l-2 border-l-indigo-400 text-sm">
+        <div className="text-gray-600 mb-1">
+          {activityItem.comment.reply?.user.fullName}
+        </div>
+        <div
+          className="text-gray-500"
+          dangerouslySetInnerHTML={{
+            __html: newlinesToParagraphsAndBreaks(
+              highlightMentions(nicerLinks(truncatedReplyContent ?? ''))
+            ),
+          }}
+        />
+      </div>
+    )
+  }
+
   return (
     <>
       <div className="relative">
@@ -41,23 +103,47 @@ export function AdminCommentActivity(props: {
         </span>
       </div>
       <div className="min-w-0 flex-1">
-        <div>
-          <div className="text-sm">
-            <a
-              href={`/beta/admin/users/${activityItem?.comment.user?.id}`}
-              className="font-medium text-gray-900"
+        {isReply && replyToComment && (
+          <ReplyPreview replyToComment={replyToComment} />
+        )}
+        <div className="flex items-center justify-between gap-2">
+          <div>
+            <div className="text-sm">
+              <a
+                href={`/beta/admin/users/${activityItem?.comment.user?.id}`}
+                className="font-medium text-gray-900"
+              >
+                {activityItem?.comment.user?.fullName}
+              </a>
+            </div>
+            <time
+              className="mt-0.5 text-sm text-gray-500"
+              dateTime={activityItem.comment.createdAt}
+              title={displayDateTime(activityItem.comment.createdAt ?? '')}
             >
-              {activityItem?.comment.user?.fullName}
-            </a>
+              {displayDateTimeRelative(activityItem.comment.createdAt ?? '')}
+            </time>
           </div>
-          <time
-            className="mt-0.5 text-sm text-gray-500"
-            dateTime={activityItem.comment.createdAt}
-            title={displayDateTime(activityItem.comment.createdAt ?? '')}
-          >
-            {displayDateTimeRelative(activityItem.comment.createdAt ?? '')}
-          </time>
+          {props.commentRepliesEnabled && (
+            <button
+              className="text-gray-500 hover:text-indigo-600"
+              type="button"
+              title="Odpovědět na komentář"
+              onClick={(e) => {
+                e.preventDefault()
+                props.onFocusInput?.()
+                props.onReplyToComment?.(activityItem.comment.id)
+              }}
+            >
+              <ArrowUturnLeftIcon
+                width={20}
+                height={20}
+                className="text-gray-500 hover:text-indigo-600 cursor-pointer"
+              />
+            </button>
+          )}
         </div>
+
         <div className="mt-2 text-sm text-gray-700">
           <div
             className="admin-comment"

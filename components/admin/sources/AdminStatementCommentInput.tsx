@@ -22,6 +22,7 @@ export function AdminStatementCommentInput(props: {
   isPending?: boolean
   statementId: string
   onSubmit(message: string): void
+  isReply?: boolean
 }) {
   const localStorageKey = `statement:comment-input${props.statementId}`
 
@@ -61,12 +62,12 @@ export function AdminStatementCommentInput(props: {
         <div className="min-w-0 flex-1">
           <div className="border-b border-gray-200 pb-px focus-within:border-b-2 focus-within:border-indigo-600 focus-within:pb-0">
             <label htmlFor="comment" className="sr-only">
-              Přidejte komentář
+              Přidejte {props.isReply ? 'odpověď' : 'komentář'}
             </label>
             <MentionsInput
               id="comment"
               className="admin-comment-input"
-              placeholder="Přidejte komentář"
+              placeholder={`Přidejte ${props.isReply ? 'odpověď' : 'komentář'}`}
               rows={4}
               value={message}
               onChange={(_, value) => {
