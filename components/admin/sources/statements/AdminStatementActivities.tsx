@@ -25,8 +25,21 @@ export function AdminStatementActivities(props: {
   const [newActivitiesCount, setNewActivitiesCount] = useState(0)
   const [showNewActivitiesButton, setShowNewActivitiesButton] = useState(false)
   const [isFetchingNew, setIsFetchingNew] = useState(false)
-  const [commentIdToReply, setCommentIdToReply] = useState<string | null>(null)
   const inputRef = useRef<HTMLDivElement>(null)
+  const localStorageKey = `reply-preview-${props.statementId}`
+  const [commentIdToReply, setCommentIdToReply] = useState<string | null>(
+    localStorage.getItem(localStorageKey) ?? null
+  )
+
+  const handleReplyToComment = (commentId: string | null) => {
+    if (commentId) {
+      localStorage.setItem(localStorageKey, commentId)
+      setCommentIdToReply(commentId)
+    } else {
+      localStorage.removeItem(localStorageKey)
+      setCommentIdToReply(null)
+    }
+  }
 
   const focusInput = () => {
     inputRef.current?.scrollIntoView({
@@ -225,7 +238,7 @@ export function AdminStatementActivities(props: {
                     <AdminActivity
                       activity={activityItem.node}
                       commentRepliesEnabled={props.commentRepliesEnabled}
-                      onReplyToComment={setCommentIdToReply}
+                      onReplyToComment={handleReplyToComment}
                       onFocusInput={focusInput}
                     />
                   </div>
@@ -268,7 +281,7 @@ export function AdminStatementActivities(props: {
       <div ref={inputRef}>
         {commentIdToReply && (
           <AdminCommentReplyActivity
-            onCancelReply={setCommentIdToReply}
+            onCancelReply={handleReplyToComment}
             replyToComment={replyToComment}
           />
         )}
