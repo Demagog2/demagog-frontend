@@ -144,7 +144,7 @@ export function ArticleSegments(props: ArticleStatementsProps & {}) {
                       <SpeakerWithStats
                         data={debateStat}
                         activeVeracity={activeVeracity}
-                        onStatsClick={(veracity) => setActiveVeracity(veracity)}
+                        onStatsClick={setActiveVeracity}
                       />
                     </div>
                   </div>
@@ -155,7 +155,7 @@ export function ArticleSegments(props: ArticleStatementsProps & {}) {
                 <div className="mt-5 mt-lg-10">
                   {segment.statements
                     .filter((statement) => {
-                      if (!activeVeracity || activeVeracity === null) {
+                      if (!activeVeracity) {
                         return true
                       }
 

@@ -82,9 +82,6 @@ export function SpeakerWithStats(props: {
                   active: props.activeVeracity === 'true',
                 })}
                 title="Pravda"
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=true&recnici[]=<%= speaker.id %>"
-                data-count="<%= stats[:true] %>"
                 onClick={() => handleStatsClick('true')}
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-primary rounded-circle me-2 flex-shrink-0">
@@ -109,9 +106,6 @@ export function SpeakerWithStats(props: {
                   active: props.activeVeracity === 'unverifiable',
                 })}
                 title="Neověřitelné"
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=unverifiable&recnici[]=<%= speaker.id %>"
-                data-count="<%= stats[:unverifiable] %>"
                 onClick={() => handleStatsClick('unverifiable')}
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-gray rounded-circle me-2 flex-shrink-0">
@@ -138,9 +132,6 @@ export function SpeakerWithStats(props: {
                   active: props.activeVeracity === 'untrue',
                 })}
                 title="Nepravda"
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=untrue&recnici[]=<%= speaker.id %>"
-                data-count="<%= stats[:untrue] %>"
                 onClick={() => handleStatsClick('untrue')}
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-red rounded-circle me-2 flex-shrink-0">
@@ -165,9 +156,6 @@ export function SpeakerWithStats(props: {
                   active: props.activeVeracity === 'misleading',
                 })}
                 title="Zavádějící"
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=misleading&recnici[]=<%= speaker.id %>"
-                data-count="<%= stats[:misleading] %>"
                 onClick={() => handleStatsClick('misleading')}
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-secondary rounded-circle me-2 flex-shrink-0">
