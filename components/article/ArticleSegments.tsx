@@ -9,6 +9,7 @@ import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementFullExplanation } from '../statement/StatementFullExplanation'
 import { StatementHeader } from '../statement/StatementHeader'
 import { ArticleQuizSegment } from './ArticleQuizSegment'
+import { useState } from 'react'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -17,6 +18,11 @@ const ArticleSegmentsFragment = gql(`
       segmentType
       statements {
         id
+        assessment {
+          veracity {
+            key
+          }
+        }
         ...StatementFullExplanation
       }
       content {
@@ -65,6 +71,8 @@ export function ArticleSegments(props: ArticleStatementsProps) {
     ArticleSegmentsFragment,
     props.data
   )
+
+  const [activeVeracity, setActiveVeracity] = useState<string | null>(null)
 
   return (
     <>
@@ -133,7 +141,11 @@ export function ArticleSegments(props: ArticleStatementsProps) {
                     className="col-12 col-sm-11 col-md-8 col-lg-6  col-xl-5 col-xxl-4"
                   >
                     <div className="speakers-overview-speaker">
-                      <SpeakerWithStats data={debateStat} />
+                      <SpeakerWithStats
+                        data={debateStat}
+                        activeVeracity={activeVeracity}
+                        onStatsClick={(veracity) => setActiveVeracity(veracity)}
+                      />
                     </div>
                   </div>
                 ))}
@@ -141,13 +153,23 @@ export function ArticleSegments(props: ArticleStatementsProps) {
 
               <div className="col-12">
                 <div className="mt-5 mt-lg-10">
-                  {segment.statements.map((statement) => (
-                    <StatementFullExplanation
-                      key={statement.id}
-                      statement={statement}
-                      className="mb-10"
-                    />
-                  ))}
+                  {segment.statements
+                    .filter((statement) => {
+                      if (!activeVeracity || activeVeracity === null) {
+                        return true
+                      }
+
+                      return (
+                        statement.assessment.veracity?.key === activeVeracity
+                      )
+                    })
+                    .map((statement) => (
+                      <StatementFullExplanation
+                        key={statement.id}
+                        statement={statement}
+                        className="mb-10"
+                      />
+                    ))}
                 </div>
               </div>
             </div>
