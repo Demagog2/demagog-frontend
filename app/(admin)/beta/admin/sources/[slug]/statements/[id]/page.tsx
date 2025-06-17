@@ -8,6 +8,7 @@ import { getMetadataTitle } from '@/libs/metadata'
 import { ApolloClientProvider } from '@/components/util/ApolloClientProvider'
 import { getAuthorizationToken } from '@/libs/apollo-client'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
+import { getCommentRepliesEnabled } from '@/libs/flags'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -49,6 +50,8 @@ const AdminStatementDetailQuery = gql(`
 export default async function AdminStatementDetail(props: {
   params: { slug: string; id: string }
 }) {
+  const commentRepliesEnabled = await getCommentRepliesEnabled()
+
   const { data } = await serverQuery({
     query: AdminStatementDetailQuery,
     variables: {
@@ -67,6 +70,7 @@ export default async function AdminStatementDetail(props: {
           data={data}
           statementId={parseInt(data.statementV2.id, 10)}
           action={updateStatementAssessment.bind(null, props.params.id)}
+          commentRepliesEnabled={commentRepliesEnabled}
         />
       </AdminPage>
     </ApolloClientProvider>

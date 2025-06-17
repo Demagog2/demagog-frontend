@@ -80,11 +80,11 @@ export function AdminArticleHeader(props: {
               />
             </PublishedArticleLink>
           </span>
-        ) : (
+        ) : article.articleType !== 'single_statement' ? (
           <span className="ml-3 hidden sm:block">
             <AdminArticlePreviewButton article={article} icon />
           </span>
-        )}
+        ) : null}
 
         <span className="ml-3 hidden sm:block">
           <SecondaryLinkButton
@@ -126,7 +126,7 @@ export function AdminArticleHeader(props: {
                   <PublishedArticleLink article={article} />
                 </span>
               </MenuItem>
-            ) : (
+            ) : article.articleType !== 'single_statement' ? (
               <MenuItem>
                 <a
                   className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100 hover:bg-gray-100"
@@ -136,7 +136,7 @@ export function AdminArticleHeader(props: {
                   Náhled
                 </a>
               </MenuItem>
-            )}
+            ) : null}
             {article.articleType === 'facebook_factcheck' && (
               <MenuItem>
                 <a

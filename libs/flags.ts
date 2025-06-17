@@ -34,3 +34,10 @@ export const getArticlesPageEnabled = flag<boolean>({
     return process.env.ENABLE_ARTICLES_PAGES === 'true'
   },
 })
+
+export const getCommentRepliesEnabled = flag<boolean>({
+  key: 'beta.admin.comment-replies-enabled',
+  decide() {
+    return process.env.COMMENT_REPLIES_ENABLED === 'true'
+  },
+})

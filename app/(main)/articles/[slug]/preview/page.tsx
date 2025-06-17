@@ -1,4 +1,3 @@
-import { query } from '@/libs/apollo-client'
 import { gql } from '@/__generated__'
 import { ArticlePlayer } from '@/components/article/player/ArticlePlayer'
 import { ArticleIllustration } from '@/components/article/ArticleIllustration'
@@ -25,40 +24,12 @@ import { AdminPreviewBanner } from '@/components/article/ArticlePreviewBanner'
 
 export const dynamic = 'force-dynamic'
 
-export async function generateStaticParams() {
-  const { data } = await query({
-    query: gql(`
-      query articlePreviewGenerateStaticParams($first: Int) {
-        homepageArticlesV3(first: $first) {
-          nodes {
-            ... on Article {
-              slug
-            }
-            ... on SingleStatementArticle {
-              slug
-            }
-          }
-        }
-      }
-    `),
-    variables: {
-      first: 20,
-    },
-  })
-
-  return (
-    data.homepageArticlesV3?.nodes?.flatMap((node) =>
-      node ? [{ slug: node.slug }] : []
-    ) ?? []
-  )
-}
-
 export async function generateMetadata(props: {
   params: { slug: string }
 }): Promise<Metadata> {
   const {
     data: { articleV2: article },
-  } = await query({
+  } = await serverQuery({
     query: gql(`
       query ArticlePreviewMetadata($id: ID!) {
         articleV2(id: $id) {
@@ -116,7 +87,7 @@ export default async function ArticlePreview(props: {
     data: { articleV3: article, currentUser },
   } = await serverQuery({
     query: gql(`
-      query ArticlePreviewDetail($slug: ID!) {
+      query ArticlePreviewDetail($slug: ID!, $includeUnpublished: Boolean) {
         articleV3(id: $slug) {
           ... on Article {
             id
@@ -147,6 +118,7 @@ export default async function ArticlePreview(props: {
     `),
     variables: {
       slug: slug,
+      includeUnpublished: true,
     },
   })
 
@@ -164,8 +136,8 @@ export default async function ArticlePreview(props: {
 
   return (
     <>
-      <AdminPreviewBanner article={article} />
       <div className="container px-3 article-redesign text-align-start col-sm-8 mx-sm-auto">
+        <AdminPreviewBanner article={article} />
         <div>
           <div>
             <div>

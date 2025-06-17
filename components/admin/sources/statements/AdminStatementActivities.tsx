@@ -11,15 +11,45 @@ import { Spinner } from '../../forms/Spinner'
 import { SecondaryButton } from '../../layout/buttons/SecondaryButton'
 import { toast } from 'react-toastify'
 import * as Sentry from '@sentry/browser'
+import { AdminCommentReplyActivity } from './AdminCommentReplyActivity'
+import { useRef } from 'react'
 
 const SHOW_ALL_THRESHOLD = 3
 
-export function AdminStatementActivities(props: { statementId: string }) {
+export function AdminStatementActivities(props: {
+  statementId: string
+  commentRepliesEnabled?: boolean
+}) {
   const [showAll, setShowAll] = useState(false)
   const [commentsOnly, setCommentsOnly] = useState(false)
   const [newActivitiesCount, setNewActivitiesCount] = useState(0)
   const [showNewActivitiesButton, setShowNewActivitiesButton] = useState(false)
   const [isFetchingNew, setIsFetchingNew] = useState(false)
+  const inputRef = useRef<HTMLDivElement>(null)
+  const localStorageKey = `reply-preview-${props.statementId}`
+  const [commentIdToReply, setCommentIdToReply] = useState<string | null>(
+    localStorage.getItem(localStorageKey) ?? null
+  )
+
+  const handleReplyToComment = (commentId: string | null) => {
+    if (commentId) {
+      localStorage.setItem(localStorageKey, commentId)
+      setCommentIdToReply(commentId)
+    } else {
+      localStorage.removeItem(localStorageKey)
+      setCommentIdToReply(null)
+    }
+  }
+
+  const focusInput = () => {
+    inputRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'start',
+    })
+    setTimeout(() => {
+      inputRef.current?.querySelector('textarea')?.focus()
+    }, 400)
+  }
 
   const filter = useMemo(() => {
     return commentsOnly ? { activityType: ActivityTypeEnum.CommentCreated } : {}
@@ -35,6 +65,21 @@ export function AdminStatementActivities(props: { statementId: string }) {
             edges {
               node {
                 ...AdminActivity
+                ... on CommentActivity {
+                  ...AdminCommentReply
+                  comment {
+                    id
+                  }
+                  reply {
+                    id
+                    content
+                    createdAt
+                    user {
+                      id
+                      fullName
+                    }
+                  }
+                }
               }
             }
           }
@@ -79,11 +124,31 @@ export function AdminStatementActivities(props: { statementId: string }) {
           createComment(commentInput: $commentInput) {
             comment {
               id
+              reply {
+                id
+                content
+                user {
+                  id
+                  fullName
+                }
+              }
             }
           }
         }
     `)
   )
+
+  const replyToComment = useMemo(() => {
+    if (!commentIdToReply || !data?.statementV2?.activities?.edges) return null
+
+    const nodes = data.statementV2.activities.edges.flatMap((edge) => {
+      return edge?.node && edge?.node.__typename === 'CommentActivity'
+        ? [edge.node]
+        : []
+    })
+
+    return nodes.find((node) => node.comment.id === commentIdToReply)
+  }, [commentIdToReply, data?.statementV2?.activities?.edges])
 
   if (loading) {
     return <div>Nahrávám&hellip;</div>
@@ -170,7 +235,12 @@ export function AdminStatementActivities(props: { statementId: string }) {
                   )}
 
                   <div className="relative flex items-start space-x-3">
-                    <AdminActivity activity={activityItem.node} />
+                    <AdminActivity
+                      activity={activityItem.node}
+                      commentRepliesEnabled={props.commentRepliesEnabled}
+                      onReplyToComment={handleReplyToComment}
+                      onFocusInput={focusInput}
+                    />
                   </div>
                 </div>
               </li>
@@ -208,25 +278,36 @@ export function AdminStatementActivities(props: { statementId: string }) {
           )}
         </SecondaryButton>
       )}
+      <div ref={inputRef}>
+        {commentIdToReply && (
+          <AdminCommentReplyActivity
+            onCancelReply={handleReplyToComment}
+            replyToComment={replyToComment}
+          />
+        )}
 
-      <AdminStatementCommentInput
-        data={data}
-        isPending={isPending}
-        statementId={props.statementId}
-        onSubmit={(message) =>
-          createComment({
-            variables: {
-              commentInput: {
-                statementId: props.statementId,
-                content: message,
+        <AdminStatementCommentInput
+          data={data}
+          isPending={isPending}
+          statementId={props.statementId}
+          isReply={!!commentIdToReply}
+          onSubmit={(message) =>
+            createComment({
+              variables: {
+                commentInput: {
+                  statementId: props.statementId,
+                  content: message,
+                  ...(commentIdToReply && { replyId: commentIdToReply }),
+                },
               },
-            },
-            onCompleted() {
-              refetch()
-            },
-          })
-        }
-      />
+              onCompleted() {
+                setCommentIdToReply(null)
+                refetch()
+              },
+            })
+          }
+        />
+      </div>
     </div>
   )
 }

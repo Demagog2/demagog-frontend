@@ -16,7 +16,7 @@ const ArticleSegmentsFragment = gql(`
     segments {
       id
       segmentType
-      statements {
+      statements(includeUnpublished: $includeUnpublished) {
         id
         assessment {
           veracity {
@@ -66,7 +66,7 @@ type ArticleStatementsProps = {
   data: FragmentType<typeof ArticleSegmentsFragment>
 }
 
-export function ArticleSegments(props: ArticleStatementsProps) {
+export function ArticleSegments(props: ArticleStatementsProps & {}) {
   const { segments, debateStats, showPlayer } = useFragment(
     ArticleSegmentsFragment,
     props.data

@@ -5,6 +5,10 @@
   @include unsafe-data-wrapper;
   @include social-share-buttons;
 
+  .custom-index {
+    z-index: 1080;
+  }
+
   figure figcaption {
     @include figcaption;
   }
