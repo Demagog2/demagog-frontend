@@ -98,3 +98,30 @@ export const updateUser = new UpdateActionBuilder<
     }
   })
   .build()
+
+const adminUpdateUserActivenessMutation = gql(`
+  mutation UpdateUserActiveness($id: Int!, $userActive: Boolean!) {
+    updateUserActiveness(id: $id, userActive: $userActive) {
+      user {
+        id
+        active
+        fullName
+      }
+    }
+  }
+`)
+
+export async function updateUserActiveness(id: number, active: boolean) {
+  const { data } = await serverMutation({
+    mutation: adminUpdateUserActivenessMutation,
+    variables: {
+      id,
+      userActive: active,
+    },
+  })
+  if (data?.updateUserActiveness?.user) {
+    return { success: true, user: data.updateUserActiveness.user }
+  } else {
+    return { success: false }
+  }
+}
