@@ -1,3 +1,4 @@
+'use client'
 import Image from 'next/image'
 import classNames from 'classnames'
 import { FragmentType, gql, useFragment } from '@/__generated__'
@@ -26,10 +27,16 @@ export const SpeakerWithStatsFragment = gql(`
 
 export function SpeakerWithStats(props: {
   data: FragmentType<typeof SpeakerWithStatsFragment>
+  activeVeracity?: string | null
+  onStatsClick: (veracity: string | null) => void
 }) {
   const mediaUrl = process.env.NEXT_PUBLIC_MEDIA_URL
 
   const { speaker, stats } = useFragment(SpeakerWithStatsFragment, props.data)
+
+  const handleStatsClick = (veracity: string) => {
+    props.onStatsClick(props.activeVeracity === veracity ? null : veracity)
+  }
 
   if (!speaker) {
     return null
@@ -72,11 +79,10 @@ export function SpeakerWithStats(props: {
               <div
                 className={classNames('d-flex align-items-center mb-5', {
                   'cursor-pointer stat-link': (stats?.true ?? 0) > 0,
+                  active: props.activeVeracity === 'true',
                 })}
                 title="Pravda"
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=true&recnici[]=<%= speaker.id %>"
-                data-count="<%= stats[:true] %>"
+                onClick={() => handleStatsClick('true')}
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-primary rounded-circle me-2 flex-shrink-0">
                   <svg
@@ -97,11 +103,10 @@ export function SpeakerWithStats(props: {
               <div
                 className={classNames('d-flex align-items-center mb-5', {
                   'cursor-pointer stat-link': (stats?.unverifiable ?? 0) > 0,
+                  active: props.activeVeracity === 'unverifiable',
                 })}
                 title="Neověřitelné"
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=unverifiable&recnici[]=<%= speaker.id %>"
-                data-count="<%= stats[:unverifiable] %>"
+                onClick={() => handleStatsClick('unverifiable')}
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-gray rounded-circle me-2 flex-shrink-0">
                   <svg
@@ -124,11 +129,10 @@ export function SpeakerWithStats(props: {
               <div
                 className={classNames('d-flex align-items-center mb-5', {
                   'cursor-pointer stat-link': (stats?.untrue ?? 0) > 0,
+                  active: props.activeVeracity === 'untrue',
                 })}
                 title="Nepravda"
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=untrue&recnici[]=<%= speaker.id %>"
-                data-count="<%= stats[:untrue] %>"
+                onClick={() => handleStatsClick('untrue')}
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-red rounded-circle me-2 flex-shrink-0">
                   <svg
@@ -149,11 +153,10 @@ export function SpeakerWithStats(props: {
               <div
                 className={classNames('d-flex align-items-center mb-5', {
                   'cursor-pointer stat-link': (stats?.misleading ?? 0) > 0,
+                  active: props.activeVeracity === 'misleading',
                 })}
                 title="Zavádějící"
-                data-action="click->components--stats#toggleLink"
-                data-url="?hodnoceni[]=misleading&recnici[]=<%= speaker.id %>"
-                data-count="<%= stats[:misleading] %>"
+                onClick={() => handleStatsClick('misleading')}
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-secondary rounded-circle me-2 flex-shrink-0">
                   <svg
