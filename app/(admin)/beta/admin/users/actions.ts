@@ -112,16 +112,20 @@ const adminUpdateUserActivenessMutation = gql(`
 `)
 
 export async function updateUserActiveness(id: number, active: boolean) {
-  const { data } = await serverMutation({
-    mutation: adminUpdateUserActivenessMutation,
-    variables: {
-      id,
-      userActive: active,
-    },
-  })
-  if (data?.updateUserActiveness?.user) {
-    return { success: true, user: data.updateUserActiveness.user }
-  } else {
-    return { success: false }
+  try {
+    const { data } = await serverMutation({
+      mutation: adminUpdateUserActivenessMutation,
+      variables: {
+        id,
+        userActive: active,
+      },
+    })
+    if (data?.updateUserActiveness?.user) {
+      return { success: true, user: data.updateUserActiveness.user }
+    } else {
+      return { success: false }
+    }
+  } catch (e) {
+    console.error(e)
   }
 }
