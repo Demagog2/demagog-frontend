@@ -1,9 +1,9 @@
 .state-line {
-  background: linear-gradient(currentColor,currentColor);
+  background: linear-gradient(currentColor, currentColor);
   background-position: 0 100%;
   background-repeat: no-repeat;
   background-size: 0 2px;
-  transition: background-size .3s;
+  transition: background-size 0.3s;
   display: inline;
 
   &:hover,
@@ -13,11 +13,11 @@
 }
 
 .state-bg {
-  background: linear-gradient(currentColor,currentColor);
+  background: linear-gradient(currentColor, currentColor);
   background-position: 0 100%;
   background-repeat: no-repeat;
   background-size: 0 100%;
-  transition: background-size .3s;
+  transition: background-size 0.3s;
   display: inline;
 
   &:hover {
@@ -64,6 +64,10 @@
     span:first-child {
       transform: scale(1.15);
     }
-
+  }
+  &.active {
+    span:first-child {
+      transform: scale(1.15);
+    }
   }
 }

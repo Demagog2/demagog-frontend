@@ -15,6 +15,7 @@ import { getBooleanParam, getStringParam } from '@/libs/query-params'
 import { AdminPageTabs } from '@/components/admin/layout/AdminPageTabs'
 import AdminUserDeleteDialog from '@/components/admin/users/AdminUserDeleteDialog'
 import { Authorize } from '@/components/admin/Authorize'
+import { AdminUserActiveness } from '@/components/admin/users/AdminUserActiveness'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Tým', 'Administrace'),
@@ -31,8 +32,10 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
       query AdminUsers($includeInactive: Boolean, $limit: Int, $term: String) {
          users(includeInactive: $includeInactive, limit: $limit, name: $term) {
           ...AdminUserDelete
+          ...AdminUserActiveness
           fullName
           id
+          active
           positionDescription
           bio
           role {
@@ -72,7 +75,11 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
         <AdminPageHeader>
           <AdminPageTitle title="Tým" description="Seznam členů týmu" />
           <div className="sm:flex">
-            <AdminSearch label="Hledat dle jména" defaultValue={term} />
+            <AdminSearch label="Hledat dle jména" defaultValue={term}>
+              {includeInactive && (
+                <input type="hidden" name="includeInactive" value="true" />
+              )}
+            </AdminSearch>
             <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
               <Authorize permissions={['users:edit']} data={data}>
                 <CreateButton href={'/beta/admin/users/new'}>
@@ -126,6 +133,7 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
                                 permissions={['users:edit']}
                                 data={data}
                               >
+                                <AdminUserActiveness user={user} />
                                 <a href={`/beta/admin/users/${user.id}/edit`}>
                                   <PencilIcon
                                     className="h-6 w-6 text-gray-400 hover:text-indigo-600 cursor-pointer"
