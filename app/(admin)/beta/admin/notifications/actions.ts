@@ -82,6 +82,22 @@ export async function markStatementNotificationsAsReadAndRedirect(
   }
 }
 
+type MarkAllNotificationsAsReadResult = { success: boolean }
+
+export async function markAllNotificationsAsRead(): Promise<MarkAllNotificationsAsReadResult> {
+  const { data } = await serverMutation({
+    mutation: MarkUnreadNotificationsAsRead,
+  })
+
+  if (data?.markUnreadNotificationsAsRead?.notifications.length) {
+    return {
+      success: true,
+    }
+  } else {
+    return { success: false }
+  }
+}
+
 export async function markAsUnread(notificationId: string) {
   return toggleReadState(notificationId, null)
 }
