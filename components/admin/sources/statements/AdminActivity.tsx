@@ -42,6 +42,7 @@ export function AdminActivity(props: {
   commentRepliesEnabled?: boolean
   onReplyToComment?: (commentId: string | null) => void
   onFocusInput?: () => void
+  onScrollToComment?: (commentId: string) => void
 }) {
   const activity = useFragment(AdminActivityFragment, props.activity)
   switch (activity.__typename) {
@@ -52,6 +53,7 @@ export function AdminActivity(props: {
           commentRepliesEnabled={props.commentRepliesEnabled}
           onReplyToComment={props.onReplyToComment}
           onFocusInput={props.onFocusInput}
+          onScrollToComment={props.onScrollToComment}
         />
       )
     }

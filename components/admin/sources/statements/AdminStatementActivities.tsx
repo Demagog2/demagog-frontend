@@ -41,7 +41,7 @@ export function AdminStatementActivities(props: {
     }
   }
 
-  const focusInput = () => {
+  const scrollToInput = () => {
     inputRef.current?.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
@@ -49,6 +49,31 @@ export function AdminStatementActivities(props: {
     setTimeout(() => {
       inputRef.current?.querySelector('textarea')?.focus()
     }, 400)
+  }
+
+  const scrollToComment = (commentId: string) => {
+    const highlight = (element: HTMLElement) => {
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest',
+      })
+      element.classList.add('admin-comment-highlight')
+      setTimeout(() => {
+        element.classList.remove('admin-comment-highlight')
+      }, 1000)
+    }
+
+    const tryScroll = () => {
+      const element = document.getElementById(commentId)
+      if (element) {
+        highlight(element)
+      } else if (!showAll) {
+        setShowAll(true)
+        setTimeout(tryScroll, 100)
+      }
+    }
+    tryScroll()
   }
 
   const filter = useMemo(() => {
@@ -239,7 +264,8 @@ export function AdminStatementActivities(props: {
                       activity={activityItem.node}
                       commentRepliesEnabled={props.commentRepliesEnabled}
                       onReplyToComment={handleReplyToComment}
-                      onFocusInput={focusInput}
+                      onFocusInput={scrollToInput}
+                      onScrollToComment={scrollToComment}
                     />
                   </div>
                 </div>

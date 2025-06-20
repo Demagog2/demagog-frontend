@@ -35,6 +35,12 @@
     }
   }
 
+  .admin-comment-highlight {
+    transition: background-color 0.2s ease;
+    @apply bg-yellow-50 rounded-xl
+  }
+
+
   /* CK Editor dialog styles */
   .ck-dialog .ck-list {
     @apply !mt-2 space-y-1;
