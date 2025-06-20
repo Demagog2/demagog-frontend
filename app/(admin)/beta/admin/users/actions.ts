@@ -127,5 +127,7 @@ export async function updateUserActiveness(id: number, active: boolean) {
     }
   } catch (e) {
     console.error(e)
+
+    return { success: false }
   }
 }

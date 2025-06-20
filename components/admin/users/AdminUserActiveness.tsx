@@ -25,7 +25,7 @@ export function AdminUserActiveness(props: {
       onClick={async () => {
         const result = await updateUserActiveness(Number(user.id), !user.active)
 
-        if (result?.success) {
+        if (result.success) {
           router.refresh()
           toast.success(
             `Uživatel ${result.user?.fullName} byl úspěšně ${result.user?.active ? 'aktivován' : 'deaktivován'}.`
