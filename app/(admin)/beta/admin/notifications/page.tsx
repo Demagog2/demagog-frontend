@@ -14,6 +14,8 @@ import { PropsWithSearchParams } from '@/libs/params'
 import { BellSlashIcon } from '@heroicons/react/24/outline'
 import { NotificationsTable } from '@/components/admin/notifications/NotificationsTable'
 
+import { MarkAllAsRead } from '@/components/admin/notifications/MarkAllAsRead'
+
 export const metadata: Metadata = {
   title: getMetadataTitle('Nepřečtené', 'Notifikační centrum', 'Administrace'),
 }
@@ -40,6 +42,8 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
     },
   })
 
+  const hasUnreadNotifications = data.notificationsV2.totalCount > 0
+
   const tabs = [
     {
       name: 'Nepřečtené',
@@ -60,11 +64,14 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
           title="Notifikační centrum"
           description="Nepřečtená upozornění"
         />
+        {hasUnreadNotifications && <MarkAllAsRead />}
       </AdminPageHeader>
       <AdminPageContent>
         <AdminPageTabs tabs={tabs} />
 
-        {data.notificationsV2.totalCount === 0 ? (
+        {hasUnreadNotifications ? (
+          <NotificationsTable notifications={data.notificationsV2} />
+        ) : (
           <div className="text-center mt-10">
             <BellSlashIcon
               aria-hidden="true"
@@ -75,8 +82,6 @@ export default async function AdminNotifications(props: PropsWithSearchParams) {
               Nemáte žádná nepřečtená oznámení.
             </h3>
           </div>
-        ) : (
-          <NotificationsTable notifications={data.notificationsV2} />
         )}
       </AdminPageContent>
       <AdminPagination pageInfo={data.notificationsV2.pageInfo} />

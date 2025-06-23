@@ -13,6 +13,7 @@ import { buildGraphQLVariables } from '@/libs/pagination'
 import { PropsWithSearchParams } from '@/libs/params'
 import { BellSlashIcon } from '@heroicons/react/24/outline'
 import { NotificationsTable } from '@/components/admin/notifications/NotificationsTable'
+import { MarkAllAsRead } from '@/components/admin/notifications/MarkAllAsRead'
 
 export const metadata: Metadata = {
   title: getMetadataTitle('Všechny', 'Notifikační centrum', 'Administrace'),
@@ -62,6 +63,7 @@ export default async function AdminNotificationsAll(
           title="Notifikační centrum"
           description="Všechna upozornění"
         />
+        <MarkAllAsRead />
       </AdminPageHeader>
       <AdminPageContent>
         <AdminPageTabs tabs={tabs} />
