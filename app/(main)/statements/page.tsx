@@ -124,7 +124,7 @@ export default async function Statements(props: PropsWithSearchParams) {
             <StatementFullExplanation
               key={statement.id}
               statement={statement}
-              className="article-redesign mb-10"
+              className="statement-container mb-10"
             />
           ))}
         </FilterForm>

@@ -156,7 +156,7 @@ export default async function Article(props: { params: { slug: string } }) {
   }
 
   return (
-    <div className="container px-3 article-redesign text-align-start col-sm-8 mx-sm-auto">
+    <div className="container px-3 article-container text-align-start col-sm-8 mx-sm-auto">
       <div>
         <div>
           <div>

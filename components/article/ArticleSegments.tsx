@@ -92,7 +92,7 @@ export function ArticleSegments(props: ArticleStatementsProps & {}) {
         <div key={segment.id}>
           {segment.segmentType === 'text' && (
             <div className="row justify-content-center">
-              <div className="col fs-6 content-redesign">
+              <div className="col fs-6 article-content">
                 {segment.content.edges?.map((edge) => {
                   if (!edge?.node) {
                     return null
