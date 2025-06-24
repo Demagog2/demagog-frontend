@@ -61,7 +61,7 @@ export function ActionCableProvider(
       return `ws://localhost:3000/cable?token=${authorizationToken}`
     }
 
-    return `wss://api.demagog.cz/cable`
+    return `ws://api.demagog.cz/cable`
   }, [authorizationToken])
 
   const consumer = useMemo(() => {
