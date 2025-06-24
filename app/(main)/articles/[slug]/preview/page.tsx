@@ -136,7 +136,7 @@ export default async function ArticlePreview(props: {
 
   return (
     <>
-      <div className="container px-3 article-redesign text-align-start col-sm-8 mx-sm-auto">
+      <div className="container px-3 article-container text-align-start col-sm-8 mx-sm-auto">
         <AdminPreviewBanner article={article} />
         <div>
           <div>

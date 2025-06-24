@@ -91,3 +91,62 @@
     transform: translateY(-1px);
   }
 }
+
+@mixin content-text-node-base {
+  @include lists;
+
+  h2 {
+    @extend .mt-8, .fs-5, .fs-md-2;
+    font-weight: 800;
+  }
+
+  h3 {
+    @extend .mt-8, .fs-7, .fs-md-4;
+    font-weight: 700;
+  }
+
+  p {
+    @extend .mt-6, .fs-8, .fs-md-7;
+  }
+
+  figure.image,
+  figure.embed {
+    @extend .mt-6;
+  }
+
+  figure img {
+    border-radius: 31px;
+    height: auto;
+  }
+
+  figure.image figcaption,
+  figure.image figcaption a {
+    @include figcaption;
+  }
+
+  .ck-editor_demagog-box-wrapper {
+    @extend .border, .border-dark, .mt-6;
+    border-radius: 31px;
+    padding: 20px 25px;
+    text-align: start;
+
+    > :first-child,
+    > p:first-of-type {
+      margin-top: 0 !important;
+    }
+
+    h3,
+    h2 {
+      @extend .mt-0, .mb-3;
+    }
+
+    ul,
+    ol {
+      @extend .mt-0;
+    }
+
+    &.bg-grey {
+      @extend .border-0, .bg-lightgrey;
+    }
+  }
+}
