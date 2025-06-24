@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic'
 import { FragmentType, gql, useFragment } from '@/__generated__'
-import React, { useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFormState } from 'react-dom'
 import { useFormSubmit } from '@/libs/forms/hooks/form-submit-hook'
 import { FormAction } from '@/libs/forms/form-action'
@@ -49,6 +49,11 @@ import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
 import { useSelector } from '@xstate/react'
 import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
 import { displayDate } from '@/libs/date-time'
+import {
+  PresenceUpdated,
+  useStatementSubscription,
+} from '@/libs/web-sockets/ActionCableProvider'
+import { AdminUserAvatarPure } from '@/components/admin/users/AdminUserAvatar'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -212,6 +217,21 @@ function AdminAssessmentForm(props: {
     AdminStatementAssessmentFragment,
     props.statement
   )
+
+  const [presentUsers, setPresentUsers] = useState<
+    { id: number; fullName: string }[]
+  >([])
+
+  const onPresenceUpdate = useCallback((message: PresenceUpdated) => {
+    setPresentUsers(
+      message.present_users.map((presentUser) => ({
+        id: presentUser.id,
+        fullName: presentUser.display_name,
+      }))
+    )
+  }, [])
+
+  useStatementSubscription(statement.id, onPresenceUpdate)
 
   const [formState, formAction] = useFormState(props.action, {
     state: 'initial',
@@ -917,6 +937,14 @@ function AdminAssessmentForm(props: {
 
           <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
             Aktivita
+          </div>
+
+          <div className="mb-4">
+            <div>Aktivni uzivatele:</div>
+
+            {presentUsers.map((user) => (
+              <AdminUserAvatarPure key={user.id} user={user} size="small" />
+            ))}
           </div>
 
           <AdminStatementActivities
