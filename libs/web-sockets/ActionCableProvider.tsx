@@ -56,11 +56,17 @@ export function ActionCableProvider(
 ) {
   const { authorizationToken } = props
 
-  const consumer = useMemo(() => {
-    return createConsumer(
-      `ws://localhost:3000/cable?token=${authorizationToken}`
-    )
+  const wsUrl = useMemo(() => {
+    if (authorizationToken) {
+      return `ws://localhost:3000/cable?token=${authorizationToken}`
+    }
+
+    return `wss://api.demagog.cz/cable`
   }, [authorizationToken])
+
+  const consumer = useMemo(() => {
+    return createConsumer(wsUrl)
+  }, [wsUrl])
 
   return (
     <ActionCable.Provider value={consumer}>
