@@ -41,3 +41,10 @@ export const getCommentRepliesEnabled = flag<boolean>({
     return process.env.COMMENT_REPLIES_ENABLED === 'true'
   },
 })
+
+export const getActiveUsersEnabled = flag<boolean>({
+  key: 'beta.admin.statement-show-active-users',
+  decide() {
+    return process.env.STATEMENT_SHOW_ACTIVE_USERS === 'true'
+  },
+})
