@@ -183,6 +183,7 @@ export function AdminAssessmentFormController(props: {
   statementId: number
   data: FragmentType<typeof AdminAssessmentFormFragment>
   commentRepliesEnabled?: boolean
+  activeUsersEnabled?: boolean
 }) {
   const { data, loading, refetch } = useQuery(AdminStatementClientQuery, {
     variables: { id: props.statementId },
@@ -201,6 +202,7 @@ export function AdminAssessmentFormController(props: {
       {...props}
       statement={data.statementV2}
       refetch={refetch}
+      activeUsersEnabled={props.activeUsersEnabled}
     />
   )
 }
@@ -211,6 +213,7 @@ function AdminAssessmentForm(props: {
   statement: FragmentType<typeof AdminStatementAssessmentFragment>
   refetch: () => void
   commentRepliesEnabled?: boolean
+  activeUsersEnabled?: boolean
 }) {
   const data = useFragment(AdminAssessmentFormFragment, props.data)
   const statement = useFragment(
@@ -938,14 +941,15 @@ function AdminAssessmentForm(props: {
           <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
             Aktivita
           </div>
+          {props.activeUsersEnabled && (
+            <div className="mb-4">
+              <div>Aktivni uzivatele:</div>
 
-          <div className="mb-4">
-            <div>Aktivni uzivatele:</div>
-
-            {presentUsers.map((user) => (
-              <AdminUserAvatarPure key={user.id} user={user} size="small" />
-            ))}
-          </div>
+              {presentUsers.map((user) => (
+                <AdminUserAvatarPure key={user.id} user={user} size="small" />
+              ))}
+            </div>
+          )}
 
           <AdminStatementActivities
             statementId={statement.id}
