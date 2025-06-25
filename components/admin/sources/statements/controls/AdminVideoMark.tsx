@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo } from 'react'
 import { Input } from '@/components/admin/forms/Input'
+import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
 
 interface AdminVideoMarkProps {
   onChange: (value: number) => void
@@ -35,14 +36,112 @@ export function AdminVideoMark({ onChange, value, name }: AdminVideoMarkProps) {
     [onChange]
   )
 
+  const handleSegmentIncrement = useCallback(
+    (segment: 'hours' | 'minutes' | 'seconds') => {
+      let seconds = value
+      const hours = Math.floor(seconds / 3600)
+      seconds = seconds - hours * 3600
+      const minutes = Math.floor(seconds / 60)
+      seconds = seconds - minutes * 60
+
+      if (segment === 'hours') {
+        const newHours = hours >= 23 ? 0 : hours + 1
+        onChange(newHours * 3600 + minutes * 60 + seconds)
+      } else if (segment === 'minutes') {
+        const newMinutes = minutes >= 59 ? 0 : minutes + 1
+        onChange(hours * 3600 + newMinutes * 60 + seconds)
+      } else {
+        const newSeconds = seconds >= 59 ? 0 : seconds + 1
+        onChange(hours * 3600 + minutes * 60 + newSeconds)
+      }
+    },
+    [value, onChange]
+  )
+
+  const handleSegmentDecrement = useCallback(
+    (segment: 'hours' | 'minutes' | 'seconds') => {
+      let seconds = value
+      const hours = Math.floor(seconds / 3600)
+      seconds = seconds - hours * 3600
+      const minutes = Math.floor(seconds / 60)
+      seconds = seconds - minutes * 60
+
+      if (segment === 'hours') {
+        const newHours = hours <= 0 ? 23 : hours - 1
+        onChange(newHours * 3600 + minutes * 60 + seconds)
+      } else if (segment === 'minutes') {
+        const newMinutes = minutes <= 0 ? 59 : minutes - 1
+        onChange(hours * 3600 + newMinutes * 60 + seconds)
+      } else {
+        const newSeconds = seconds <= 0 ? 59 : seconds - 1
+        onChange(hours * 3600 + minutes * 60 + newSeconds)
+      }
+    },
+    [value, onChange]
+  )
+
   return (
-    <Input
-      type="time"
-      step="1"
-      value={timeValue}
-      name={name}
-      onChange={handleTimeChange}
-      className="w-[120px]"
-    />
+    <div className="m-5">
+      <div className="flex align-items-center justify-content-center w-[70px] ms-3 md:ms-2">
+        <button
+          type="button"
+          title="Navýšit hodiny"
+          onClick={() => handleSegmentIncrement('hours')}
+          className="hover:bg-gray-100 rounded px-1"
+        >
+          <ChevronUpIcon width={16} height={16} />
+        </button>
+        <button
+          type="button"
+          title="Navýšit minuty"
+          onClick={() => handleSegmentIncrement('minutes')}
+          className="hover:bg-gray-100 rounded px-1"
+        >
+          <ChevronUpIcon width={16} height={16} />
+        </button>
+        <button
+          type="button"
+          title="Navýšit sekundy"
+          onClick={() => handleSegmentIncrement('seconds')}
+          className="hover:bg-gray-100 rounded px-1"
+        >
+          <ChevronUpIcon width={16} height={16} />
+        </button>
+      </div>
+      <Input
+        type="time"
+        step="1"
+        value={timeValue}
+        name={name}
+        onChange={handleTimeChange}
+        className="w-[120px]"
+      />
+      <div className="flex align-items-center justify-content-center w-[80px] mt-2  ms-3 md:ms-2">
+        <button
+          type="button"
+          title="Snížit hodiny"
+          onClick={() => handleSegmentDecrement('hours')}
+          className="hover:bg-gray-100 rounded px-1"
+        >
+          <ChevronDownIcon width={16} height={16} />
+        </button>
+        <button
+          type="button"
+          title="Snížit minuty"
+          onClick={() => handleSegmentDecrement('minutes')}
+          className="hover:bg-gray-100 rounded px-1"
+        >
+          <ChevronDownIcon width={16} height={16} />
+        </button>
+        <button
+          type="button"
+          title="Snížit sekundy"
+          onClick={() => handleSegmentDecrement('seconds')}
+          className="hover:bg-gray-100 rounded px-1"
+        >
+          <ChevronDownIcon width={16} height={16} />
+        </button>
+      </div>
+    </div>
   )
 }
