@@ -36,3 +36,17 @@ export function displayTime(timeInSeconds: number): string {
 export function isSameOrAfterToday(date: string): boolean {
   return DateTime.fromISO(date).diffNow().as('seconds') <= 0
 }
+
+export function incrementTime(
+  timeInSeconds: number,
+  unit: 'seconds' | 'minutes' | 'hours'
+): number {
+  switch (unit) {
+    case 'hours':
+      return timeInSeconds + 3600
+    case 'minutes':
+      return timeInSeconds + 60
+    case 'seconds':
+      return timeInSeconds + 1
+  }
+}
