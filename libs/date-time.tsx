@@ -41,12 +41,19 @@ export function incrementTime(
   timeInSeconds: number,
   unit: 'seconds' | 'minutes' | 'hours'
 ): number {
+  let hours = Math.floor(timeInSeconds / 3600)
+  let minutes = Math.floor((timeInSeconds % 3600) / 60)
+  let seconds = timeInSeconds % 60
+
   switch (unit) {
     case 'hours':
-      return timeInSeconds + 3600
+      hours = hours >= 23 ? 0 : hours + 1
+      return hours * 3600 + minutes * 60 + seconds
     case 'minutes':
-      return timeInSeconds + 60
+      minutes = minutes >= 59 ? 0 : minutes + 1
+      return hours * 3600 + minutes * 60 + seconds
     case 'seconds':
-      return timeInSeconds + 1
+      seconds = seconds >= 59 ? 0 : seconds + 1
+      return hours * 3600 + minutes * 60 + seconds
   }
 }
