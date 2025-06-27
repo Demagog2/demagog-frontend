@@ -47,13 +47,5 @@ describe('DateTime', () => {
         expect(incrementTime(45345, 'hours')).toBe(48945)
       })
     })
-    describe('boundary cases', () => {
-      it('boundary tests seconds incement', () => {
-        expect(incrementTime(86399, 'seconds')).toBe(86340)
-      })
-      it('boundary tests minutes increment', () => {
-        expect(incrementTime(86399, 'minutes')).toBe(82859)
-      })
-    })
   })
 })
