@@ -3,6 +3,7 @@
 import { useCallback, useMemo } from 'react'
 import { Input } from '@/components/admin/forms/Input'
 import { ChevronUpIcon, ChevronDownIcon } from '@heroicons/react/24/outline'
+import { incrementTime } from '@/libs/date-time'
 
 interface AdminVideoMarkProps {
   onChange: (value: number) => void
@@ -38,22 +39,8 @@ export function AdminVideoMark({ onChange, value, name }: AdminVideoMarkProps) {
 
   const handleSegmentIncrement = useCallback(
     (segment: 'hours' | 'minutes' | 'seconds') => {
-      let seconds = value
-      const hours = Math.floor(seconds / 3600)
-      seconds = seconds - hours * 3600
-      const minutes = Math.floor(seconds / 60)
-      seconds = seconds - minutes * 60
-
-      if (segment === 'hours') {
-        const newHours = hours >= 23 ? 0 : hours + 1
-        onChange(newHours * 3600 + minutes * 60 + seconds)
-      } else if (segment === 'minutes') {
-        const newMinutes = minutes >= 59 ? 0 : minutes + 1
-        onChange(hours * 3600 + newMinutes * 60 + seconds)
-      } else {
-        const newSeconds = seconds >= 59 ? 0 : seconds + 1
-        onChange(hours * 3600 + minutes * 60 + newSeconds)
-      }
+      const newTime = incrementTime(value, segment)
+      onChange(newTime)
     },
     [value, onChange]
   )
