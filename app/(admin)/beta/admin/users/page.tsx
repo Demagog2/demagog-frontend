@@ -103,31 +103,42 @@ export default async function AdminUsers(props: PropsWithSearchParams) {
                   <div className="border-b border-t border-gray-200 bg-white shadow-sm sm:rounded-lg sm:border">
                     <div className="px-4 py-6 sm:px-6 lg:gap-x-8 lg:p-8">
                       <div className="sm:flex">
-                        <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
-                          {!user.avatar ? (
-                            <span className="inline-block overflow-hidden rounded-lg bg-gray-100">
-                              <svg
-                                fill="currentColor"
-                                viewBox="0 0 24 24"
-                                className="h-full w-full object-cover text-gray-300"
-                              >
-                                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-                              </svg>
-                            </span>
-                          ) : (
-                            <img
-                              alt={user.fullName}
-                              src={imagePath(user.avatar)}
-                              className="w-full rounded-lg object-cover h-auto"
-                            />
-                          )}
-                        </div>
+                        <a
+                          href={`/beta/admin/users/${user.id}`}
+                          title="Přejít na detail uživatele"
+                        >
+                          <div className="aspect-h-1 aspect-w-1 w-full flex-shrink-0 overflow-hidden rounded-lg sm:aspect-none sm:h-40 sm:w-40">
+                            {!user.avatar ? (
+                              <span className="inline-block overflow-hidden rounded-lg bg-gray-100">
+                                <svg
+                                  fill="currentColor"
+                                  viewBox="0 0 24 24"
+                                  className="h-full w-full object-cover text-gray-300"
+                                >
+                                  <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                                </svg>
+                              </span>
+                            ) : (
+                              <img
+                                alt={user.fullName}
+                                src={imagePath(user.avatar)}
+                                className="w-full rounded-lg object-cover h-auto"
+                              />
+                            )}
+                          </div>
+                        </a>
 
                         <div className="flex-grow mt-6 sm:ml-6 sm:mt-0 lg:ml-8">
                           <div className="flex justify-between items-center">
-                            <h3 className="text-base font-medium text-gray-900">
-                              {user.fullName}
-                            </h3>
+                            <a
+                              href={`/beta/admin/users/${user.id}`}
+                              title="Přejít na detail uživatele"
+                            >
+                              <h3 className="text-base font-medium text-gray-900">
+                                {user.fullName}
+                              </h3>
+                            </a>
+
                             <div className="flex space-x-3">
                               <Authorize
                                 permissions={['users:edit']}

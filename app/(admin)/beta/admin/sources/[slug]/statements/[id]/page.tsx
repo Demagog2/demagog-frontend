@@ -9,6 +9,8 @@ import { ApolloClientProvider } from '@/components/util/ApolloClientProvider'
 import { getAuthorizationToken } from '@/libs/apollo-client'
 import { AdminPage } from '@/components/admin/layout/AdminPage'
 import { getCommentRepliesEnabled } from '@/libs/flags'
+import { ActionCableProvider } from '@/libs/web-sockets/ActionCableProvider'
+import { getActiveUsersEnabled } from '@/libs/flags'
 
 export async function generateMetadata(props: {
   params: { slug: string }
@@ -51,6 +53,7 @@ export default async function AdminStatementDetail(props: {
   params: { slug: string; id: string }
 }) {
   const commentRepliesEnabled = await getCommentRepliesEnabled()
+  const activeUsersEnabled = await getActiveUsersEnabled()
 
   const { data } = await serverQuery({
     query: AdminStatementDetailQuery,
@@ -65,14 +68,17 @@ export default async function AdminStatementDetail(props: {
 
   return (
     <ApolloClientProvider authorizationToken={getAuthorizationToken()}>
-      <AdminPage>
-        <AdminAssessmentFormController
-          data={data}
-          statementId={parseInt(data.statementV2.id, 10)}
-          action={updateStatementAssessment.bind(null, props.params.id)}
-          commentRepliesEnabled={commentRepliesEnabled}
-        />
-      </AdminPage>
+      <ActionCableProvider authorizationToken={getAuthorizationToken()}>
+        <AdminPage>
+          <AdminAssessmentFormController
+            data={data}
+            statementId={parseInt(data.statementV2.id, 10)}
+            action={updateStatementAssessment.bind(null, props.params.id)}
+            commentRepliesEnabled={commentRepliesEnabled}
+            activeUsersEnabled={activeUsersEnabled}
+          />
+        </AdminPage>
+      </ActionCableProvider>
     </ApolloClientProvider>
   )
 }

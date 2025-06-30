@@ -138,7 +138,7 @@ export function AdminVideoStatementMarksForm(props: FormProps) {
       </AdminFormHeader>
 
       <AdminFormContent>
-        <AdminFormMain className="col-span-12 lg:col-span-7">
+        <AdminFormMain className="col-span-12 xl:col-span-7">
           <>
             {source.videoType === 'youtube' && (
               <YouTubeVideo ref={videoRef} source={source} />
@@ -158,7 +158,7 @@ export function AdminVideoStatementMarksForm(props: FormProps) {
           </>
         </AdminFormMain>
 
-        <AdminFormSidebar className="col-1 col-span-12 lg:col-span-5">
+        <AdminFormSidebar className="col-1 col-span-12 xl:col-span-5">
           {fields.map((field, index) => (
             <Fragment key={field.id}>
               <StatementInput

@@ -36,3 +36,45 @@ export function displayTime(timeInSeconds: number): string {
 export function isSameOrAfterToday(date: string): boolean {
   return DateTime.fromISO(date).diffNow().as('seconds') <= 0
 }
+
+export function incrementTime(
+  timeInSeconds: number,
+  unit: 'seconds' | 'minutes' | 'hours'
+): number {
+  let hours = Math.floor(timeInSeconds / 3600)
+  let minutes = Math.floor((timeInSeconds % 3600) / 60)
+  let seconds = timeInSeconds % 60
+
+  switch (unit) {
+    case 'hours':
+      hours = hours >= 23 ? 0 : hours + 1
+      return hours * 3600 + minutes * 60 + seconds
+    case 'minutes':
+      minutes = minutes >= 59 ? 0 : minutes + 1
+      return hours * 3600 + minutes * 60 + seconds
+    case 'seconds':
+      seconds = seconds >= 59 ? 0 : seconds + 1
+      return hours * 3600 + minutes * 60 + seconds
+  }
+}
+
+export function decrementTime(
+  timeInSeconds: number,
+  unit: 'seconds' | 'minutes' | 'hours'
+): number {
+  let hours = Math.floor(timeInSeconds / 3600)
+  let minutes = Math.floor((timeInSeconds % 3600) / 60)
+  let seconds = timeInSeconds % 60
+
+  switch (unit) {
+    case 'hours':
+      hours = hours <= 0 ? 23 : hours - 1
+      return hours * 3600 + minutes * 60 + seconds
+    case 'minutes':
+      minutes = minutes <= 0 ? 59 : minutes - 1
+      return hours * 3600 + minutes * 60 + seconds
+    case 'seconds':
+      seconds = seconds <= 0 ? 59 : seconds - 1
+      return hours * 3600 + minutes * 60 + seconds
+  }
+}

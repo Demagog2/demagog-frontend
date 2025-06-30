@@ -9,7 +9,7 @@ import { nicerLinksNoTruncate } from '@/libs/comments/text'
 import { StatementFullExplanation } from '../statement/StatementFullExplanation'
 import { StatementHeader } from '../statement/StatementHeader'
 import { ArticleQuizSegment } from './ArticleQuizSegment'
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 const ArticleSegmentsFragment = gql(`
   fragment ArticleSegments on Article {
@@ -72,7 +72,19 @@ export function ArticleSegments(props: ArticleStatementsProps & {}) {
     props.data
   )
 
+  const statementsRef = useRef<HTMLDivElement>(null)
   const [activeVeracity, setActiveVeracity] = useState<string | null>(null)
+
+  const handleStatsClick = (veracity: string | null) => {
+    setActiveVeracity(veracity)
+
+    if (statementsRef.current) {
+      statementsRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      })
+    }
+  }
 
   return (
     <>
@@ -80,7 +92,7 @@ export function ArticleSegments(props: ArticleStatementsProps & {}) {
         <div key={segment.id}>
           {segment.segmentType === 'text' && (
             <div className="row justify-content-center">
-              <div className="col fs-6 content-redesign">
+              <div className="col fs-6 article-content">
                 {segment.content.edges?.map((edge) => {
                   if (!edge?.node) {
                     return null
@@ -144,7 +156,7 @@ export function ArticleSegments(props: ArticleStatementsProps & {}) {
                       <SpeakerWithStats
                         data={debateStat}
                         activeVeracity={activeVeracity}
-                        onStatsClick={setActiveVeracity}
+                        onStatsClick={handleStatsClick}
                       />
                     </div>
                   </div>
@@ -152,7 +164,7 @@ export function ArticleSegments(props: ArticleStatementsProps & {}) {
               </div>
 
               <div className="col-12">
-                <div className="mt-5 mt-lg-10">
+                <div className="mt-5 mt-lg-10" ref={statementsRef}>
                   {segment.statements
                     .filter((statement) => {
                       if (!activeVeracity) {

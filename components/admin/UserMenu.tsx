@@ -3,16 +3,12 @@ import { ChevronDownIcon } from '@heroicons/react/20/solid'
 import { FragmentType, gql, useFragment } from '@/__generated__'
 import { AdminUserAvatar } from './users/AdminUserAvatar'
 
-const userNavigation = [
-  { name: 'Your profile', href: '#' },
-  { name: 'Sign out', href: '#' },
-]
-
 const UserMenuFragment = gql(`
   fragment UserMenu on Query {
     currentUser {
       ...AdminUserAvatar
       fullName
+      id
     }
   }
 `)
@@ -21,6 +17,11 @@ export function UserMenu(props: {
   data: FragmentType<typeof UserMenuFragment>
 }) {
   const data = useFragment(UserMenuFragment, props.data)
+
+  const userNavigation = [
+    { name: 'Můj profil', href: `/beta/admin/users/${data.currentUser.id}` },
+    { name: 'Odhlásit se', href: '#' },
+  ]
 
   return (
     <Menu as="div" className="relative">

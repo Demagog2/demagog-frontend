@@ -92,7 +92,9 @@ export default async function AdminSources(props: PropsWithSearchParams) {
           description="Seznam diskuzí s výroky politiků."
         />
         <div className="sm:flex">
-          <AdminSearch label="Hledat diskuzi" defaultValue={term} />
+          <AdminSearch label="Hledat diskuzi" defaultValue={term}>
+            <input type="hidden" name="showAll" value={showAll.toString()} />
+          </AdminSearch>
           <div className="mt-3 sm:ml-4 sm:mt-0 sm:flex-none flex-shrink-0">
             <CreateButton href="/beta/admin/sources/new">
               Nová diskuze
