@@ -7,6 +7,7 @@ import { FormMessage } from '@/libs/forms/form-message'
 import { TypedDocumentNode } from '@graphql-typed-document-node/core'
 import { ApolloError } from '@apollo/client'
 import { omit } from 'lodash'
+import * as Sentry from '@sentry/nextjs'
 
 export class UpdateActionBuilder<
   T extends ZodType,
@@ -86,6 +87,10 @@ export class UpdateActionBuilder<
           fields: this.getFormFields(parsedInput.data),
         }
       }
+
+      Sentry.captureMessage(
+        `Validation error: ${JSON.stringify(parsedInput.error)}`
+      )
 
       return {
         state: 'error',
