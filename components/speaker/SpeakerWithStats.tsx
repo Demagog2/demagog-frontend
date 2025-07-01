@@ -80,9 +80,12 @@ export function SpeakerWithStats(props: {
                 className={classNames('d-flex align-items-center mb-5', {
                   'cursor-pointer stat-link': (stats?.true ?? 0) > 0,
                   active: props.activeVeracity === 'true',
+                  disabled: stats?.true === 0,
                 })}
                 title="Pravda"
-                onClick={() => handleStatsClick('true')}
+                onClick={() =>
+                  (stats?.true ?? 0) > 0 && handleStatsClick('true')
+                }
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-primary rounded-circle me-2 flex-shrink-0">
                   <svg
@@ -104,9 +107,13 @@ export function SpeakerWithStats(props: {
                 className={classNames('d-flex align-items-center mb-5', {
                   'cursor-pointer stat-link': (stats?.unverifiable ?? 0) > 0,
                   active: props.activeVeracity === 'unverifiable',
+                  disabled: stats?.unverifiable === 0,
                 })}
                 title="Neověřitelné"
-                onClick={() => handleStatsClick('unverifiable')}
+                onClick={() =>
+                  (stats?.unverifiable ?? 0) > 0 &&
+                  handleStatsClick('unverifiable')
+                }
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-gray rounded-circle me-2 flex-shrink-0">
                   <svg
@@ -130,9 +137,12 @@ export function SpeakerWithStats(props: {
                 className={classNames('d-flex align-items-center mb-5', {
                   'cursor-pointer stat-link': (stats?.untrue ?? 0) > 0,
                   active: props.activeVeracity === 'untrue',
+                  disabled: stats?.untrue === 0,
                 })}
                 title="Nepravda"
-                onClick={() => handleStatsClick('untrue')}
+                onClick={() =>
+                  (stats?.untrue ?? 0) > 0 && handleStatsClick('untrue')
+                }
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-red rounded-circle me-2 flex-shrink-0">
                   <svg
@@ -154,9 +164,12 @@ export function SpeakerWithStats(props: {
                 className={classNames('d-flex align-items-center mb-5', {
                   'cursor-pointer stat-link': (stats?.misleading ?? 0) > 0,
                   active: props.activeVeracity === 'misleading',
+                  disabled: stats?.misleading === 0,
                 })}
                 title="Zavádějící"
-                onClick={() => handleStatsClick('misleading')}
+                onClick={() =>
+                  (stats?.misleading ?? 0) > 0 && handleStatsClick('misleading')
+                }
               >
                 <span className="w-35px h-35px d-flex align-items-center justify-content-center bg-secondary rounded-circle me-2 flex-shrink-0">
                   <svg
