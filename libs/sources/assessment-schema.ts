@@ -1,4 +1,5 @@
 import { z } from 'zod'
+import { ASSESSMENT_STATUS_BEING_EVALUATED } from '../constants/assessment'
 
 export const assessmentSchema = z
   .object({
@@ -16,7 +17,13 @@ export const assessmentSchema = z
     evaluatorId: z.string().optional(),
     published: z.preprocess((value) => value === 'on', z.boolean()).optional(),
   })
-  .refine((data) => data.statementType !== 'promise' || data.title?.length, {
-    message: 'Zadejte název.',
-    path: ['title'],
-  })
+  .refine(
+    (data) =>
+      data.evaluationStatus !== ASSESSMENT_STATUS_BEING_EVALUATED ||
+      data.statementType !== 'promise' ||
+      data.title?.length,
+    {
+      message: 'Zadejte název.',
+      path: ['title'],
+    }
+  )
