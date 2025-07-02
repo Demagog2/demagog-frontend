@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import classNames from 'classnames'
 import DonateWidget from '@/components/site/DonateWidget'
 
