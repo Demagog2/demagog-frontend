@@ -1,4 +1,5 @@
-import { ButtonView, toWidget, type Editor, icons } from 'ckeditor5'
+import { ButtonView, toWidget, type Editor } from 'ckeditor5'
+import { IconHtml } from '@ckeditor/ckeditor5-icons'
 
 import '@ckeditor/ckeditor5-media-embed/theme/mediaembed.css'
 
@@ -117,7 +118,7 @@ export function Embed(editor: Editor) {
 
     view.set({
       label: 'Insert embed',
-      icon: icons.html,
+      icon: IconHtml,
       tooltip: true,
     })
 
