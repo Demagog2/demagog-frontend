@@ -28,6 +28,8 @@ export function Navigation(props: {
 
   const [isOpen, setIsOpen] = useState(false)
 
+  const handleDonateClick = () => setIsOpen(false)
+
   return (
     <div className="d-flex align-items-center">
       <nav className={`nav d-none d-xl-flex ${isOpen ? 'open' : ''}`}>
@@ -58,6 +60,8 @@ export function Navigation(props: {
           </NavSubItem>
           <NavItemLink title="O nás" url="/o-nas" />
           <NavItemLink title="Workshopy" url="/workshopy" />
+
+          <DonateModal isInHamburgerMenu onClick={handleDonateClick} />
         </ul>
       </nav>
       <NavSearch title="Vyhledávání">

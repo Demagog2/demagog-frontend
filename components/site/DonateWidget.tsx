@@ -7,7 +7,7 @@ export default function DonateWidget() {
   const [amount, setAmount] = useState('')
 
   return (
-    <div className="bg-light text-dark p-5 p-lg-8 rounded-l d-none d-lg-flex">
+    <div className="bg-light text-dark p-5 p-lg-8 rounded-l d-flex">
       <div className="w-100">
         <h2 className="fs-2">Podpořte Demagog.cz</h2>
         <div className="mt-2">

@@ -4,8 +4,12 @@ import { NavDonateButton } from '@/components/site/NavDonateButton'
 import { useCallback, useEffect, useState } from 'react'
 import classNames from 'classnames'
 import DonateWidget from '@/components/site/DonateWidget'
+import { NavDonateLink } from '../site/NavDonateLink'
 
-export function DonateModal() {
+export function DonateModal(props: {
+  isInHamburgerMenu?: boolean
+  onClick?: () => void
+}) {
   const [isModalOpen, setIsModalOpen] = useState(false)
 
   const onKeyDown = useCallback(
@@ -27,7 +31,11 @@ export function DonateModal() {
 
   return (
     <div>
-      <NavDonateButton onClick={() => setIsModalOpen(true)} />
+      {props.isInHamburgerMenu ? (
+        <NavDonateLink onClick={() => setIsModalOpen(true)} />
+      ) : (
+        <NavDonateButton onClick={() => setIsModalOpen(true)} />
+      )}
 
       <div
         className={classNames('modal', {
