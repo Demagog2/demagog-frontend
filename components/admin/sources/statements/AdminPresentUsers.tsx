@@ -49,7 +49,7 @@ export function AdminPresentUsers(props: { presentUsers: PresentUser[] }) {
                 {showMoreUsers && (
                   <div className="absolute right-full right-1 mt-1 px-2 py-1 rounded-lg bg-gray-200 w-max">
                     {invisibleUsers.map((user) => (
-                      <p>{user.fullName}</p>
+                      <p key={user.id}>{user.fullName}</p>
                     ))}
                   </div>
                 )}
