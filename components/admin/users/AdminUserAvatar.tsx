@@ -33,7 +33,7 @@ export function AdminUserAvatarPure(props: {
       {!user.avatar ? (
         <span
           className={classNames(
-            'inline-flex items-center justify-center rounded-full bg-gray-500',
+            'inline-flex items-center justify-center rounded-full bg-gray-500 ring-2 ring-white',
             {
               'h-6 w-6': size === 'small',
               'h-8 w-8': size === 'large',

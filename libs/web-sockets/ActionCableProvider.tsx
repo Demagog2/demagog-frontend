@@ -19,6 +19,7 @@ export type PresenceUpdated = {
     last_name: string
     joined_at: string
     display_name: string
+    avatar?: string | null
   }[]
 }
 
