@@ -54,6 +54,8 @@ import {
   useStatementSubscription,
 } from '@/libs/web-sockets/ActionCableProvider'
 import { AdminUserAvatarPure } from '@/components/admin/users/AdminUserAvatar'
+import { AdminPresentUsers } from './AdminPresentUsers'
+import { PresentUser } from './AdminPresentUsers'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -221,9 +223,7 @@ function AdminAssessmentForm(props: {
     props.statement
   )
 
-  const [presentUsers, setPresentUsers] = useState<
-    { id: number; fullName: string }[]
-  >([])
+  const [presentUsers, setPresentUsers] = useState<PresentUser[]>([])
 
   const onPresenceUpdate = useCallback((message: PresenceUpdated) => {
     setPresentUsers(
@@ -941,6 +941,7 @@ function AdminAssessmentForm(props: {
           <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
             Aktivita
           </div>
+
           {props.activeUsersEnabled && (
             <div className="mb-4">
               <div>Aktivni uzivatele:</div>
@@ -949,6 +950,10 @@ function AdminAssessmentForm(props: {
                 <AdminUserAvatarPure key={user.id} user={user} size="small" />
               ))}
             </div>
+          )}
+
+          {props.activeUsersEnabled && (
+            <AdminPresentUsers presentUsers={presentUsers} />
           )}
 
           <AdminStatementActivities
