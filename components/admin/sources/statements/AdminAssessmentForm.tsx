@@ -49,13 +49,15 @@ import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
 import { useSelector } from '@xstate/react'
 import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
 import { displayDate } from '@/libs/date-time'
+import { toast } from 'react-toastify'
 import {
+  ActivityCreatedMessage,
   PresenceUpdated,
   useStatementSubscription,
 } from '@/libs/web-sockets/ActionCableProvider'
-import { AdminUserAvatarPure } from '@/components/admin/users/AdminUserAvatar'
 import { AdminPresentUsers } from './AdminPresentUsers'
 import { PresentUser } from './AdminPresentUsers'
+import { AdminActivityToast } from './AdminActivityToast'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -234,7 +236,25 @@ function AdminAssessmentForm(props: {
     )
   }, [])
 
-  useStatementSubscription(statement.id, onPresenceUpdate)
+  const onActivityCreated = useCallback((message: ActivityCreatedMessage) => {
+    if (message.activity.activity_type !== 'comment_created') {
+      return
+    }
+    const activityToastData = {
+      activityType: 'comment_created',
+      createdAt: message.activity.created_at,
+      message: message.activity.comment.content,
+      user: {
+        fullName: message.activity.user.display_name,
+      },
+    }
+
+    toast(<AdminActivityToast activityData={activityToastData} />)
+  }, [])
+
+  // TODO: Do not show your own commment notification (based on the user id)
+
+  useStatementSubscription(statement.id, onPresenceUpdate, onActivityCreated)
 
   const [formState, formAction] = useFormState(props.action, {
     state: 'initial',
@@ -941,16 +961,6 @@ function AdminAssessmentForm(props: {
           <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
             Aktivita
           </div>
-
-          {props.activeUsersEnabled && (
-            <div className="mb-4">
-              <div>Aktivni uzivatele:</div>
-
-              {presentUsers.map((user) => (
-                <AdminUserAvatarPure key={user.id} user={user} size="small" />
-              ))}
-            </div>
-          )}
 
           {props.activeUsersEnabled && (
             <AdminPresentUsers presentUsers={presentUsers} />

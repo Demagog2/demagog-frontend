@@ -24,12 +24,13 @@ type Story = StoryObj<typeof AdminActivityToast>
 export const Default: Story = {
   args: {
     activityData: {
+      activityType: 'comment_created',
       user: {
         fullName: 'Jezevec Chrujda',
         avatar: avatarExample,
       },
-      time: 'teď',
-      message: 'Přidal nový komentář',
+      createdAt: '',
+      message: 'Jak potkal svou velkou lasecku',
     },
   },
 }
@@ -41,9 +42,10 @@ export const LongMessage: Story = {
         fullName: 'Jezevec Chrujda',
         avatar: null,
       },
-      time: 'teď',
+      activityType: 'comment_created',
+      createdAt: '7.7.2025',
       message:
-        'Přidal nový komentář v diskuzi o Tchoři Smradolfovi, který chtěl Chrujdovi ukrást mapu nakreslenou na březovou kůru, která by ho zavedla k pokladu.',
+        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
     },
   },
 }

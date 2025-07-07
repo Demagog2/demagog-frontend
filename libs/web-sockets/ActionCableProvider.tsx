@@ -23,11 +23,55 @@ export type PresenceUpdated = {
   }[]
 }
 
-type StatementChannelMessages = PresenceUpdated
+interface User {
+  id: number
+  first_name: string
+  last_name: string
+  display_name: string
+  avatar?: string | null
+}
+
+interface Comment {
+  id: number
+  content: string
+  created_at: string // ISO8601 format
+}
+
+interface Reply {
+  id: number
+  content: string
+  created_at: string // ISO8601 format
+}
+
+// Activity metadata for comment creation
+interface CommentActivityMetadata {
+  comment_id: number
+  content: string
+  reply_id?: number | null
+}
+
+export interface CommentActivity {
+  id: number
+  activity_type: 'comment_created'
+  user: User
+  metadata: CommentActivityMetadata
+  created_at: string // ISO8601 format
+  updated_at: string // ISO8601 format
+  comment: Comment
+  reply?: Reply
+}
+
+export interface ActivityCreatedMessage {
+  type: 'activity_created'
+  activity: CommentActivity
+}
+
+type StatementChannelMessages = PresenceUpdated | ActivityCreatedMessage
 
 export function useStatementSubscription(
   statementId: string,
-  onPresenceUpdated: (message: PresenceUpdated) => void
+  onPresenceUpdated: (message: PresenceUpdated) => void,
+  onActivityCreated: (message: ActivityCreatedMessage) => void
 ) {
   const consumer = useContext(ActionCable)
 
@@ -42,6 +86,10 @@ export function useStatementSubscription(
           if (message.type === 'presence_updated') {
             onPresenceUpdated(message)
           }
+
+          if (message.type === 'activity_created') {
+            onActivityCreated(message)
+          }
         },
       }
     )
@@ -49,7 +97,7 @@ export function useStatementSubscription(
     return () => {
       subscription?.unsubscribe()
     }
-  }, [statementId, consumer, onPresenceUpdated])
+  }, [statementId, consumer, onPresenceUpdated, onActivityCreated])
 }
 
 export function ActionCableProvider(
