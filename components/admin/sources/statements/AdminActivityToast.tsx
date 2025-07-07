@@ -46,7 +46,7 @@ export function AdminActivityToast(props: {
               <span className="sr-only">Zavřít</span>
             </button>
           </div>
-          {activityData.activityType === 'CommentActivity' && (
+          {activityData.activityType === 'comment_created' && (
             <p className="text-sm text-gray-900 mb-2 leading-relaxed">
               Přidal/a nový komentář:
               <p className="text-sm text-gray-700 mb-2 leading-relaxed">
