@@ -51,6 +51,7 @@ import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
 import { displayDate } from '@/libs/date-time'
 import { toast } from 'react-toastify'
 import {
+  ActivityCreatedMessage,
   CommentActivity,
   PresenceUpdated,
   useStatementSubscription,
@@ -237,21 +238,25 @@ function AdminAssessmentForm(props: {
     )
   }, [])
 
-  const onCommentCreated = useCallback((message: CommentActivity) => {
+  const onActivityCreated = useCallback((message: ActivityCreatedMessage) => {
+    if (message.activity.activity_type !== 'comment_created') {
+      return
+    }
     const activityToastData = {
       activityType: 'comment_created',
-      createdAt: message.created_at,
-      message: message.comment.content,
+      createdAt: message.activity.created_at,
+      message: message.activity.comment.content,
       user: {
-        fullName: message.user.display_name,
+        fullName: message.activity.user.display_name,
       },
     }
+
     toast(<AdminActivityToast activityData={activityToastData} />)
   }, [])
 
   // TODO: Do not show your own commment notification (based on the user id)
 
-  useStatementSubscription(statement.id, onPresenceUpdate, onCommentCreated)
+  useStatementSubscription(statement.id, onPresenceUpdate, onActivityCreated)
 
   const [formState, formAction] = useFormState(props.action, {
     state: 'initial',

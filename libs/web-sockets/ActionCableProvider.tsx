@@ -61,7 +61,7 @@ export interface CommentActivity {
   reply?: Reply
 }
 
-interface ActivityCreatedMessage {
+export interface ActivityCreatedMessage {
   type: 'activity_created'
   activity: CommentActivity
 }
@@ -71,7 +71,7 @@ type StatementChannelMessages = PresenceUpdated | ActivityCreatedMessage
 export function useStatementSubscription(
   statementId: string,
   onPresenceUpdated: (message: PresenceUpdated) => void,
-  onCommentCreated: (message: CommentActivity) => void
+  onActivityCreated: (message: ActivityCreatedMessage) => void
 ) {
   const consumer = useContext(ActionCable)
 
@@ -87,11 +87,8 @@ export function useStatementSubscription(
             onPresenceUpdated(message)
           }
 
-          if (
-            message.type === 'activity_created' &&
-            message.activity.activity_type === 'comment_created'
-          ) {
-            onCommentCreated(message.activity)
+          if (message.type === 'activity_created') {
+            onActivityCreated(message)
           }
         },
       }
@@ -100,7 +97,7 @@ export function useStatementSubscription(
     return () => {
       subscription?.unsubscribe()
     }
-  }, [statementId, consumer, onPresenceUpdated, onCommentCreated])
+  }, [statementId, consumer, onPresenceUpdated, onActivityCreated])
 }
 
 export function ActionCableProvider(
