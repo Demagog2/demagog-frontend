@@ -49,13 +49,15 @@ import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
 import { useSelector } from '@xstate/react'
 import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
 import { displayDate } from '@/libs/date-time'
+import { toast } from 'react-toastify'
 import {
+  CommentActivity,
   PresenceUpdated,
   useStatementSubscription,
 } from '@/libs/web-sockets/ActionCableProvider'
-import { AdminUserAvatarPure } from '@/components/admin/users/AdminUserAvatar'
 import { AdminPresentUsers } from './AdminPresentUsers'
 import { PresentUser } from './AdminPresentUsers'
+import { AdminActivityToast } from './AdminActivityToast'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -233,6 +235,10 @@ function AdminAssessmentForm(props: {
       }))
     )
   }, [])
+
+  // TODO: Create new function onCommentCreated and inside the function call toast() with our new AdminActivityToast component
+  // TODO: Map the data and make sure the function is inside of the useCallback
+  // TODO: Do not show your own commment notification (based on the user id)
 
   useStatementSubscription(statement.id, onPresenceUpdate)
 
@@ -941,16 +947,6 @@ function AdminAssessmentForm(props: {
           <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
             Aktivita
           </div>
-
-          {props.activeUsersEnabled && (
-            <div className="mb-4">
-              <div>Aktivni uzivatele:</div>
-
-              {presentUsers.map((user) => (
-                <AdminUserAvatarPure key={user.id} user={user} size="small" />
-              ))}
-            </div>
-          )}
 
           {props.activeUsersEnabled && (
             <AdminPresentUsers presentUsers={presentUsers} />

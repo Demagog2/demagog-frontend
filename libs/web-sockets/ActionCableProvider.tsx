@@ -23,7 +23,52 @@ export type PresenceUpdated = {
   }[]
 }
 
-type StatementChannelMessages = PresenceUpdated
+interface User {
+  id: number
+  first_name: string
+  last_name: string
+  display_name: string
+  avatar?: string | null
+}
+
+interface Comment {
+  id: number
+  content: string
+  created_at: string // ISO8601 format
+}
+
+interface Reply {
+  id: number
+  content: string
+  created_at: string // ISO8601 format
+}
+
+// Activity metadata for comment creation
+interface CommentActivityMetadata {
+  comment_id: number
+  content: string
+  reply_id?: number | null
+}
+
+export interface CommentActivity {
+  id: number
+  activity_type: 'comment_created'
+  user: User
+  metadata: CommentActivityMetadata
+  created_at: string // ISO8601 format
+  updated_at: string // ISO8601 format
+  comment: Comment
+  reply?: Reply
+}
+
+interface ActivityCreatedMessage {
+  type: 'activity_created'
+  activity: CommentActivity
+}
+
+type StatementChannelMessages = PresenceUpdated | ActivityCreatedMessage
+
+// TODO: Add new param onCommentCreated
 
 export function useStatementSubscription(
   statementId: string,
@@ -42,6 +87,8 @@ export function useStatementSubscription(
           if (message.type === 'presence_updated') {
             onPresenceUpdated(message)
           }
+
+          // TODO: Call onCommentCreated when message is activity_created and message.activity.activity_type is comment_created
         },
       }
     )
@@ -49,6 +96,8 @@ export function useStatementSubscription(
     return () => {
       subscription?.unsubscribe()
     }
+
+    // TODO: Add onCommentCreated to dependency list
   }, [statementId, consumer, onPresenceUpdated])
 }
 
