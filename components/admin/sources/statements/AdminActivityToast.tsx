@@ -1,8 +1,8 @@
 'use client'
 
+import { displayDateTime, displayDateTimeRelative } from '@/libs/date-time'
 import { AdminUserAvatarPure } from '../../users/AdminUserAvatar'
 import { XMarkIcon } from '@heroicons/react/24/outline'
-import classNames from 'classnames'
 import { truncate } from 'lodash'
 
 export type ActivityToastData = {
@@ -10,7 +10,8 @@ export type ActivityToastData = {
     fullName: string
     avatar?: string | null
   }
-  time: string
+  activityType: string
+  createdAt: string
   message: string
 }
 
@@ -20,10 +21,10 @@ export function AdminActivityToast(props: {
   className?: string
 }) {
   const { activityData, onClose } = props
-  const message = truncate(activityData.message ?? '', { length: 80 })
+  const message = truncate(activityData.message ?? '', { length: 50 })
 
   return (
-    <div className={classNames('fixed top-4 right-4 z-50 w-80 max-w-sm')}>
+    <div className="fixed top-4 right-4 z-50 w-80 max-w-sm">
       <div className="flex items-start space-x-3 p-4 bg-white rounded-lg shadow-xl border border-gray-200 hover:shadow-2xl transition-all duration-200">
         <div className="flex-shrink-0">
           <AdminUserAvatarPure user={activityData.user} size="large" />
@@ -45,13 +46,21 @@ export function AdminActivityToast(props: {
               <span className="sr-only">Zavřít</span>
             </button>
           </div>
+          {activityData.activityType === 'CommentActivity' && (
+            <p className="text-sm text-gray-900 mb-2 leading-relaxed">
+              Přidal/a nový komentář:
+              <p className="text-sm text-gray-700 mb-2 leading-relaxed">
+                {message}
+              </p>
+            </p>
+          )}
 
-          <p className="text-sm text-gray-700 mb-2 leading-relaxed">
-            {message}
-          </p>
-
-          <time className="text-xs text-gray-500 font-medium">
-            {activityData.time}
+          <time
+            className="mt-0.5 text-sm text-gray-500"
+            dateTime={activityData.createdAt}
+            title={displayDateTime(activityData.createdAt ?? '')}
+          >
+            {displayDateTimeRelative(activityData.createdAt ?? '')}
           </time>
         </div>
       </div>

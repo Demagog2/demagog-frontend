@@ -68,11 +68,10 @@ interface ActivityCreatedMessage {
 
 type StatementChannelMessages = PresenceUpdated | ActivityCreatedMessage
 
-// TODO: Add new param onCommentCreated
-
 export function useStatementSubscription(
   statementId: string,
-  onPresenceUpdated: (message: PresenceUpdated) => void
+  onPresenceUpdated: (message: PresenceUpdated) => void,
+  onCommentCreated: (message: CommentActivity) => void
 ) {
   const consumer = useContext(ActionCable)
 
@@ -88,7 +87,12 @@ export function useStatementSubscription(
             onPresenceUpdated(message)
           }
 
-          // TODO: Call onCommentCreated when message is activity_created and message.activity.activity_type is comment_created
+          if (
+            message.type === 'activity_created' &&
+            message.activity.activity_type === 'comment_created'
+          ) {
+            onCommentCreated(message.activity)
+          }
         },
       }
     )
@@ -96,9 +100,7 @@ export function useStatementSubscription(
     return () => {
       subscription?.unsubscribe()
     }
-
-    // TODO: Add onCommentCreated to dependency list
-  }, [statementId, consumer, onPresenceUpdated])
+  }, [statementId, consumer, onPresenceUpdated, onCommentCreated])
 }
 
 export function ActionCableProvider(

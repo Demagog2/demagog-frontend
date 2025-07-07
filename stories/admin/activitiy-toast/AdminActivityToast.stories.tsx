@@ -28,7 +28,7 @@ export const Default: Story = {
         fullName: 'Jezevec Chrujda',
         avatar: avatarExample,
       },
-      time: 'teď',
+      createdAt: '',
       message: 'Přidal nový komentář',
     },
   },
@@ -41,9 +41,10 @@ export const LongMessage: Story = {
         fullName: 'Jezevec Chrujda',
         avatar: null,
       },
-      time: 'teď',
+      activityType: 'CommentActivity',
+      createdAt: '7.7.2025',
       message:
-        'Přidal nový komentář v diskuzi o Tchoři Smradolfovi, který chtěl Chrujdovi ukrást mapu nakreslenou na březovou kůru, která by ho zavedla k pokladu.',
+        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
     },
   },
 }

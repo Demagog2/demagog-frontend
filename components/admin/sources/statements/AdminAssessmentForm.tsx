@@ -58,6 +58,7 @@ import {
 import { AdminPresentUsers } from './AdminPresentUsers'
 import { PresentUser } from './AdminPresentUsers'
 import { AdminActivityToast } from './AdminActivityToast'
+import { comment } from 'postcss'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -236,11 +237,21 @@ function AdminAssessmentForm(props: {
     )
   }, [])
 
-  // TODO: Create new function onCommentCreated and inside the function call toast() with our new AdminActivityToast component
-  // TODO: Map the data and make sure the function is inside of the useCallback
+  const onCommentCreated = useCallback((message: CommentActivity) => {
+    const activityToastData = {
+      activityType: 'comment_created',
+      createdAt: message.created_at,
+      message: message.comment.content,
+      user: {
+        fullName: message.user.display_name,
+      },
+    }
+    toast(<AdminActivityToast activityData={activityToastData} />)
+  }, [])
+
   // TODO: Do not show your own commment notification (based on the user id)
 
-  useStatementSubscription(statement.id, onPresenceUpdate)
+  useStatementSubscription(statement.id, onPresenceUpdate, onCommentCreated)
 
   const [formState, formAction] = useFormState(props.action, {
     state: 'initial',
