@@ -942,8 +942,6 @@ function AdminAssessmentForm(props: {
             Aktivita
           </div>
 
-          {/* TODO: Here will be the new component AdminAssessmentForm */}
-
           {props.activeUsersEnabled && (
             <div className="mb-4">
               <div>Aktivni uzivatele:</div>
