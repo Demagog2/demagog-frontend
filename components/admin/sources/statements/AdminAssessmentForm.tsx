@@ -42,7 +42,10 @@ import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminExpertsField } from './AdminExpertsList'
 import { AdminEvaluationStatusControl } from './controls/AdminEvaluationStatusControl'
 import { AdminSourceStatementStep } from '../AdminSourceStatementStep'
-import { AdminStatementActivities } from './AdminStatementActivities'
+import {
+  AdminStatementActivities,
+  AdminStatementActivitiesRef,
+} from './AdminStatementActivities'
 import { useQuery } from '@apollo/client'
 import { pluralize } from '@/libs/pluralize'
 import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
@@ -226,6 +229,7 @@ function AdminAssessmentForm(props: {
   )
 
   const [presentUsers, setPresentUsers] = useState<PresentUser[]>([])
+  const activitiesRef = useRef<AdminStatementActivitiesRef>(null)
 
   const onPresenceUpdate = useCallback((message: PresenceUpdated) => {
     setPresentUsers(
@@ -970,6 +974,7 @@ function AdminAssessmentForm(props: {
           )}
 
           <AdminStatementActivities
+            ref={activitiesRef}
             statementId={statement.id}
             commentRepliesEnabled={props.commentRepliesEnabled}
           />

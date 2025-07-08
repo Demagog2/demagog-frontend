@@ -1,7 +1,13 @@
 import { gql } from '@/__generated__'
 import { AdminStatementCommentInput } from '../AdminStatementCommentInput'
 import { useMutation, useQuery } from '@apollo/client'
-import { useEffect, useMemo, useState } from 'react'
+import {
+  useEffect,
+  useMemo,
+  useState,
+  forwardRef,
+  useImperativeHandle,
+} from 'react'
 import { AdminActivity } from './AdminActivity'
 import { reverse, takeRight } from 'lodash'
 import { pluralize } from '@/libs/pluralize'
@@ -16,10 +22,17 @@ import { useRef } from 'react'
 
 const SHOW_ALL_THRESHOLD = 3
 
-export function AdminStatementActivities(props: {
-  statementId: string
-  commentRepliesEnabled?: boolean
-}) {
+export interface AdminStatementActivitiesRef {
+  refetch: () => Promise<{ data?: unknown; errors?: unknown }>
+}
+
+export const AdminStatementActivities = forwardRef<
+  AdminStatementActivitiesRef,
+  {
+    statementId: string
+    commentRepliesEnabled?: boolean
+  }
+>(function AdminStatementActivities(props, ref) {
   const [showAll, setShowAll] = useState(false)
   const [commentsOnly, setCommentsOnly] = useState(false)
   const [newActivitiesCount, setNewActivitiesCount] = useState(0)
@@ -117,6 +130,15 @@ export function AdminStatementActivities(props: {
         filter,
       },
     }
+  )
+
+  // Expose refetch function to the parent component
+  useImperativeHandle(
+    ref,
+    () => ({
+      refetch,
+    }),
+    [refetch]
   )
 
   const initialActivitiesCount = useMemo(() => {
@@ -336,4 +358,4 @@ export function AdminStatementActivities(props: {
       </div>
     </div>
   )
-}
+})
