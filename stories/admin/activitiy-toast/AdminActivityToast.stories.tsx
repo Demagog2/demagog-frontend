@@ -68,6 +68,7 @@ export const WithReactToastify: Story = {
         message:
           'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
       },
+      onScrollToComment: '',
     },
   },
   decorators: [

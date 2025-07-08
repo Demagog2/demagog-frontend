@@ -253,9 +253,34 @@ function AdminAssessmentForm(props: {
       },
     }
 
+    const scrollToComment = (commentId: string) => {
+      const highlight = (element: HTMLElement) => {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        })
+        element.classList.add('admin-comment-highlight')
+        setTimeout(() => {
+          element.classList.remove('admin-comment-highlight')
+        }, 1000)
+      }
+
+      const tryScroll = () => {
+        const element = document.getElementById(commentId)
+        if (element) {
+          highlight(element)
+        }
+      }
+      tryScroll()
+    }
+
     toast(AdminActivityToast, {
       hideProgressBar: true,
-      data: { activityData: activityToastData },
+      data: {
+        activityData: activityToastData,
+        onScrollToComment: scrollToComment,
+      },
     })
   }, [])
 
