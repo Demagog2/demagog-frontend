@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { AdminActivityToast } from '@/components/admin/sources/statements/AdminActivityToast'
+import { ToastContainer, toast } from 'react-toastify'
 
 const meta: Meta<typeof AdminActivityToast> = {
   title: 'Admin/ActivityToast/AdminActivityToast',
@@ -48,4 +49,30 @@ export const LongMessage: Story = {
         'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
     },
   },
+}
+
+export const WithReactToastify: Story = {
+  args: {
+    activityData: {
+      commentId: '12345',
+      user: {
+        fullName: 'Jezevec Chrujda',
+        avatar: null,
+      },
+      activityType: 'comment_created',
+      message:
+        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
+    },
+  },
+  decorators: [
+    (Story) => {
+      return (
+        <div style={{ margin: '3em', height: '100vh' }}>
+          <button onClick={() => toast(<Story />)}>Click me!</button>
+
+          <ToastContainer theme="light" />
+        </div>
+      )
+    },
+  ],
 }

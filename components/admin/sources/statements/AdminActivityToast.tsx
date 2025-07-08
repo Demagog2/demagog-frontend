@@ -74,6 +74,7 @@ export function AdminActivityToast(props: { activityData: ActivityToastData }) {
               <span className="sr-only">Zavřít</span>
             </button>
           </div>
+          {/* FIXME: We cannot have p inside of p */}
           {activityData.activityType === 'comment_created' && (
             <p className="text-sm text-gray-900 mb-2 leading-relaxed">
               Přidal/a nový komentář:
