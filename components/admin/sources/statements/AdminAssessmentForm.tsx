@@ -279,7 +279,10 @@ function AdminAssessmentForm(props: {
       hideProgressBar: true,
       data: {
         activityData: activityToastData,
-        onScrollToComment: scrollToComment,
+        onScrollToComment: () =>
+          activitiesRef.current?.refetch().then(() => {
+            scrollToComment(message.activity.comment.id.toString())
+          }),
       },
     })
   }, [])
