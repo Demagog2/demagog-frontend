@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { AdminActivityToast } from '@/components/admin/sources/statements/AdminActivityToast'
 import { ToastContainer, toast } from 'react-toastify'
+import { action } from '@storybook/addon-actions'
 
 const meta: Meta<typeof AdminActivityToast> = {
   title: 'Admin/ActivityToast/AdminActivityToast',
@@ -34,6 +35,7 @@ export const Default: Story = {
         },
         message: 'Jak potkal svou velkou lasecku',
       },
+      onScrollToComment: action('onScrollToComment'),
     },
   },
 }
@@ -51,6 +53,7 @@ export const LongMessage: Story = {
         message:
           'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
       },
+      onScrollToComment: action('onScrollToComment'),
     },
   },
 }
@@ -68,7 +71,7 @@ export const WithReactToastify: Story = {
         message:
           'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
       },
-      onScrollToComment: '',
+      onScrollToComment: action('onScrollToComment'),
     },
   },
   decorators: [
