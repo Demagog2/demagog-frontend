@@ -65,14 +65,23 @@ export const WithReactToastify: Story = {
     },
   },
   decorators: [
-    (Story) => {
-      return (
-        <div style={{ margin: '3em', height: '100vh' }}>
-          <button onClick={() => toast(<Story />)}>Click me!</button>
+    (Story) => (
+      <div style={{ margin: '3em', height: '100vh' }}>
+        <ToastContainer theme="light" />
 
-          <ToastContainer theme="light" />
-        </div>
-      )
-    },
+        <Story />
+      </div>
+    ),
   ],
+  render: (args) => (
+    <>
+      <button
+        onClick={() =>
+          toast(<AdminActivityToast {...args} />, { hideProgressBar: true })
+        }
+      >
+        Click me!
+      </button>
+    </>
+  ),
 }

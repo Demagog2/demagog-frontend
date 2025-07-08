@@ -249,9 +249,14 @@ function AdminAssessmentForm(props: {
       },
     }
 
-    toast(<AdminActivityToast activityData={activityToastData} />, {
-      hideProgressBar: true,
-    })
+    toast(
+      (toastProps) => (
+        <AdminActivityToast {...toastProps} activityData={activityToastData} />
+      ),
+      {
+        hideProgressBar: true,
+      }
+    )
   }, [])
 
   // TODO: Do not show your own commment notification (based on the user id)

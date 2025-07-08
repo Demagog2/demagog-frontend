@@ -1,10 +1,11 @@
 'use client'
 
+import 'react-toastify/dist/ReactToastify.css'
 import { AdminUserAvatarPure } from '../../users/AdminUserAvatar'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { truncate } from 'lodash'
-import React from 'react'
-import { toast } from 'react-toastify'
+import React, { useCallback } from 'react'
+import { ToastContentProps } from 'react-toastify'
 
 export type ActivityToastData = {
   user: {
@@ -16,8 +17,10 @@ export type ActivityToastData = {
   message: string
 }
 
-export function AdminActivityToast(props: { activityData: ActivityToastData }) {
-  const { activityData } = props
+export function AdminActivityToast(
+  props: { activityData: ActivityToastData } & ToastContentProps
+) {
+  const { activityData, closeToast } = props
   const message = truncate(activityData.message ?? '', { length: 50 })
 
   const scrollToComment = (commentId: string) => {
@@ -42,10 +45,14 @@ export function AdminActivityToast(props: { activityData: ActivityToastData }) {
     tryScroll()
   }
 
-  const handleClose = (e: React.MouseEvent) => {
-    e.stopPropagation()
-    toast.dismiss()
-  }
+  const handleClose = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation()
+
+      closeToast()
+    },
+    [closeToast]
+  )
 
   return (
     <div
