@@ -18,9 +18,13 @@ export type ActivityToastData = {
 }
 
 export function AdminActivityToast(
-  props: { activityData: ActivityToastData } & ToastContentProps
+  props: ToastContentProps<{ activityData: ActivityToastData }>
 ) {
-  const { activityData, closeToast } = props
+  const {
+    data: { activityData },
+    closeToast,
+  } = props
+
   const message = truncate(activityData.message ?? '', { length: 50 })
 
   const scrollToComment = (commentId: string) => {

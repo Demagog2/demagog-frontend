@@ -24,44 +24,50 @@ type Story = StoryObj<typeof AdminActivityToast>
 
 export const Default: Story = {
   args: {
-    activityData: {
-      activityType: 'comment_created',
-      commentId: '1234',
-      user: {
-        fullName: 'Jezevec Chrujda',
-        avatar: avatarExample,
+    data: {
+      activityData: {
+        activityType: 'comment_created',
+        commentId: '1234',
+        user: {
+          fullName: 'Jezevec Chrujda',
+          avatar: avatarExample,
+        },
+        message: 'Jak potkal svou velkou lasecku',
       },
-      message: 'Jak potkal svou velkou lasecku',
     },
   },
 }
 
 export const LongMessage: Story = {
   args: {
-    activityData: {
-      commentId: '12345',
-      user: {
-        fullName: 'Jezevec Chrujda',
-        avatar: null,
+    data: {
+      activityData: {
+        commentId: '12345',
+        user: {
+          fullName: 'Jezevec Chrujda',
+          avatar: null,
+        },
+        activityType: 'comment_created',
+        message:
+          'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
       },
-      activityType: 'comment_created',
-      message:
-        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
     },
   },
 }
 
 export const WithReactToastify: Story = {
   args: {
-    activityData: {
-      commentId: '12345',
-      user: {
-        fullName: 'Jezevec Chrujda',
-        avatar: null,
+    data: {
+      activityData: {
+        commentId: '12345',
+        user: {
+          fullName: 'Jezevec Chrujda',
+          avatar: null,
+        },
+        activityType: 'comment_created',
+        message:
+          'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
       },
-      activityType: 'comment_created',
-      message:
-        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
     },
   },
   decorators: [
@@ -77,7 +83,10 @@ export const WithReactToastify: Story = {
     <>
       <button
         onClick={() =>
-          toast(<AdminActivityToast {...args} />, { hideProgressBar: true })
+          toast(<AdminActivityToast {...args} />, {
+            hideProgressBar: true,
+            data: args.data,
+          })
         }
       >
         Click me!
