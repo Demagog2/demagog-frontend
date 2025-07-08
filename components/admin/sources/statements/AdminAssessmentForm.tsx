@@ -42,7 +42,10 @@ import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminExpertsField } from './AdminExpertsList'
 import { AdminEvaluationStatusControl } from './controls/AdminEvaluationStatusControl'
 import { AdminSourceStatementStep } from '../AdminSourceStatementStep'
-import { AdminStatementActivities } from './AdminStatementActivities'
+import {
+  AdminStatementActivities,
+  AdminStatementActivitiesRef,
+} from './AdminStatementActivities'
 import { useQuery } from '@apollo/client'
 import { pluralize } from '@/libs/pluralize'
 import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
@@ -90,6 +93,9 @@ const AdminAssessmentFormFragment = gql(`
     ...AdminPromiseRatingSelect
     ...AdminVeracitySelect
     ...AdminExpertSelect
+    currentUser {
+      id
+    }
   }
 `)
 
@@ -226,6 +232,7 @@ function AdminAssessmentForm(props: {
   )
 
   const [presentUsers, setPresentUsers] = useState<PresentUser[]>([])
+  const activitiesRef = useRef<AdminStatementActivitiesRef>(null)
 
   const onPresenceUpdate = useCallback((message: PresenceUpdated) => {
     setPresentUsers(
@@ -237,7 +244,10 @@ function AdminAssessmentForm(props: {
   }, [])
 
   const onActivityCreated = useCallback((message: ActivityCreatedMessage) => {
-    if (message.activity.activity_type !== 'comment_created') {
+    if (
+      message.activity.activity_type !== 'comment_created' ||
+      data.currentUser.id === message.activity.user.id.toString()
+    ) {
       return
     }
     const activityToastData = {
@@ -249,12 +259,39 @@ function AdminAssessmentForm(props: {
       },
     }
 
-    toast(<AdminActivityToast activityData={activityToastData} />, {
+    const scrollToComment = (commentId: string) => {
+      const highlight = (element: HTMLElement) => {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        })
+        element.classList.add('admin-comment-highlight')
+        setTimeout(() => {
+          element.classList.remove('admin-comment-highlight')
+        }, 1000)
+      }
+
+      const tryScroll = () => {
+        const element = document.getElementById(commentId)
+        if (element) {
+          highlight(element)
+        }
+      }
+      tryScroll()
+    }
+
+    toast(AdminActivityToast, {
       hideProgressBar: true,
+      data: {
+        activityData: activityToastData,
+        onScrollToComment: () =>
+          activitiesRef.current?.refetch().then(() => {
+            scrollToComment(message.activity.comment.id.toString())
+          }),
+      },
     })
   }, [])
-
-  // TODO: Do not show your own commment notification (based on the user id)
 
   useStatementSubscription(statement.id, onPresenceUpdate, onActivityCreated)
 
@@ -969,6 +1006,7 @@ function AdminAssessmentForm(props: {
           )}
 
           <AdminStatementActivities
+            ref={activitiesRef}
             statementId={statement.id}
             commentRepliesEnabled={props.commentRepliesEnabled}
           />

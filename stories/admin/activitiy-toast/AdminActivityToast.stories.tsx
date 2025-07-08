@@ -1,5 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react'
 import { AdminActivityToast } from '@/components/admin/sources/statements/AdminActivityToast'
+import { ToastContainer, toast } from 'react-toastify'
+import { action } from '@storybook/addon-actions'
 
 const meta: Meta<typeof AdminActivityToast> = {
   title: 'Admin/ActivityToast/AdminActivityToast',
@@ -23,29 +25,76 @@ type Story = StoryObj<typeof AdminActivityToast>
 
 export const Default: Story = {
   args: {
-    activityData: {
-      activityType: 'comment_created',
-      commentId: '1234',
-      user: {
-        fullName: 'Jezevec Chrujda',
-        avatar: avatarExample,
+    data: {
+      activityData: {
+        activityType: 'comment_created',
+        commentId: '1234',
+        user: {
+          fullName: 'Jezevec Chrujda',
+          avatar: avatarExample,
+        },
+        message: 'Jak potkal svou velkou lasecku',
       },
-      message: 'Jak potkal svou velkou lasecku',
+      onScrollToComment: action('onScrollToComment'),
     },
   },
 }
 
 export const LongMessage: Story = {
   args: {
-    activityData: {
-      commentId: '12345',
-      user: {
-        fullName: 'Jezevec Chrujda',
-        avatar: null,
+    data: {
+      activityData: {
+        commentId: '12345',
+        user: {
+          fullName: 'Jezevec Chrujda',
+          avatar: null,
+        },
+        activityType: 'comment_created',
+        message:
+          'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
       },
-      activityType: 'comment_created',
-      message:
-        'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
+      onScrollToComment: action('onScrollToComment'),
     },
   },
+}
+
+export const WithReactToastify: Story = {
+  args: {
+    data: {
+      activityData: {
+        commentId: '12345',
+        user: {
+          fullName: 'Jezevec Chrujda',
+          avatar: null,
+        },
+        activityType: 'comment_created',
+        message:
+          'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
+      },
+      onScrollToComment: action('onScrollToComment'),
+    },
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ margin: '3em', height: '100vh' }}>
+        <ToastContainer theme="light" />
+
+        <Story />
+      </div>
+    ),
+  ],
+  render: (args) => (
+    <>
+      <button
+        onClick={() =>
+          toast(<AdminActivityToast {...args} />, {
+            hideProgressBar: true,
+            data: args.data,
+          })
+        }
+      >
+        Click me!
+      </button>
+    </>
+  ),
 }
