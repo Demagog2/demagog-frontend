@@ -2,9 +2,8 @@
 
 import 'react-toastify/dist/ReactToastify.css'
 import { AdminUserAvatarPure } from '../../users/AdminUserAvatar'
-import { XMarkIcon } from '@heroicons/react/24/outline'
 import { truncate } from 'lodash'
-import React, { useCallback } from 'react'
+import React from 'react'
 import { ToastContentProps } from 'react-toastify'
 
 export type ActivityToastData = {

@@ -93,6 +93,9 @@ const AdminAssessmentFormFragment = gql(`
     ...AdminPromiseRatingSelect
     ...AdminVeracitySelect
     ...AdminExpertSelect
+    currentUser {
+      id
+    }
   }
 `)
 
@@ -241,7 +244,10 @@ function AdminAssessmentForm(props: {
   }, [])
 
   const onActivityCreated = useCallback((message: ActivityCreatedMessage) => {
-    if (message.activity.activity_type !== 'comment_created') {
+    if (
+      message.activity.activity_type !== 'comment_created' ||
+      data.currentUser.id === message.activity.user.id.toString()
+    ) {
       return
     }
     const activityToastData = {
@@ -286,8 +292,6 @@ function AdminAssessmentForm(props: {
       },
     })
   }, [])
-
-  // TODO: Do not show your own commment notification (based on the user id)
 
   useStatementSubscription(statement.id, onPresenceUpdate, onActivityCreated)
 
