@@ -25,11 +25,11 @@ export const Default: Story = {
   args: {
     activityData: {
       activityType: 'comment_created',
+      commentId: '1234',
       user: {
         fullName: 'Jezevec Chrujda',
         avatar: avatarExample,
       },
-      createdAt: '',
       message: 'Jak potkal svou velkou lasecku',
     },
   },
@@ -38,12 +38,12 @@ export const Default: Story = {
 export const LongMessage: Story = {
   args: {
     activityData: {
+      commentId: '12345',
       user: {
         fullName: 'Jezevec Chrujda',
         avatar: null,
       },
       activityType: 'comment_created',
-      createdAt: '7.7.2025',
       message:
         'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Molestiae mollitia odit, est alias ab atque!',
     },
