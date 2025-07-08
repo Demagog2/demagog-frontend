@@ -242,14 +242,16 @@ function AdminAssessmentForm(props: {
     }
     const activityToastData = {
       activityType: 'comment_created',
-      createdAt: message.activity.created_at,
+      commentId: message.activity.comment.id.toString(),
       message: message.activity.comment.content,
       user: {
         fullName: message.activity.user.display_name,
       },
     }
 
-    toast(<AdminActivityToast activityData={activityToastData} />)
+    toast(<AdminActivityToast activityData={activityToastData} />, {
+      hideProgressBar: true,
+    })
   }, [])
 
   // TODO: Do not show your own commment notification (based on the user id)
