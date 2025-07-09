@@ -42,18 +42,25 @@ import { AdminEvaluatorSelector } from './AdminEvaluatorSelect'
 import { AdminExpertsField } from './AdminExpertsList'
 import { AdminEvaluationStatusControl } from './controls/AdminEvaluationStatusControl'
 import { AdminSourceStatementStep } from '../AdminSourceStatementStep'
-import { AdminStatementActivities } from './AdminStatementActivities'
+import {
+  AdminStatementActivities,
+  AdminStatementActivitiesRef,
+} from './AdminStatementActivities'
 import { useQuery } from '@apollo/client'
 import { pluralize } from '@/libs/pluralize'
 import { useAutoSaveFormMachine } from './hooks/auto-save-form-machine'
 import { useSelector } from '@xstate/react'
 import { LoadingMessage } from '@/components/admin/forms/LoadingMessage'
 import { displayDate } from '@/libs/date-time'
+import { toast } from 'react-toastify'
 import {
+  ActivityCreatedMessage,
   PresenceUpdated,
   useStatementSubscription,
 } from '@/libs/web-sockets/ActionCableProvider'
-import { AdminUserAvatarPure } from '@/components/admin/users/AdminUserAvatar'
+import { AdminPresentUsers } from './AdminPresentUsers'
+import { PresentUser } from './AdminPresentUsers'
+import { AdminActivityToast } from './AdminActivityToast'
 
 const RichTextEditor = dynamic(
   () => import('@/components/admin/forms/RichTextEditor'),
@@ -86,6 +93,9 @@ const AdminAssessmentFormFragment = gql(`
     ...AdminPromiseRatingSelect
     ...AdminVeracitySelect
     ...AdminExpertSelect
+    currentUser {
+      id
+    }
   }
 `)
 
@@ -221,9 +231,8 @@ function AdminAssessmentForm(props: {
     props.statement
   )
 
-  const [presentUsers, setPresentUsers] = useState<
-    { id: number; fullName: string }[]
-  >([])
+  const [presentUsers, setPresentUsers] = useState<PresentUser[]>([])
+  const activitiesRef = useRef<AdminStatementActivitiesRef>(null)
 
   const onPresenceUpdate = useCallback((message: PresenceUpdated) => {
     setPresentUsers(
@@ -234,7 +243,57 @@ function AdminAssessmentForm(props: {
     )
   }, [])
 
-  useStatementSubscription(statement.id, onPresenceUpdate)
+  const onActivityCreated = useCallback((message: ActivityCreatedMessage) => {
+    if (
+      message.activity.activity_type !== 'comment_created' ||
+      data.currentUser.id === message.activity.user.id.toString()
+    ) {
+      return
+    }
+    const activityToastData = {
+      activityType: 'comment_created',
+      commentId: message.activity.comment.id.toString(),
+      message: message.activity.comment.content,
+      user: {
+        fullName: message.activity.user.display_name,
+      },
+    }
+
+    const scrollToComment = (commentId: string) => {
+      const highlight = (element: HTMLElement) => {
+        element.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start',
+          inline: 'nearest',
+        })
+        element.classList.add('admin-comment-highlight')
+        setTimeout(() => {
+          element.classList.remove('admin-comment-highlight')
+        }, 1000)
+      }
+
+      const tryScroll = () => {
+        const element = document.getElementById(commentId)
+        if (element) {
+          highlight(element)
+        }
+      }
+      tryScroll()
+    }
+
+    toast(AdminActivityToast, {
+      hideProgressBar: true,
+      data: {
+        activityData: activityToastData,
+        onScrollToComment: () =>
+          activitiesRef.current?.refetch().then(() => {
+            scrollToComment(message.activity.comment.id.toString())
+          }),
+      },
+    })
+  }, [])
+
+  useStatementSubscription(statement.id, onPresenceUpdate, onActivityCreated)
 
   const [formState, formAction] = useFormState(props.action, {
     state: 'initial',
@@ -941,17 +1000,13 @@ function AdminAssessmentForm(props: {
           <div className="text-base font-semibold leading-7 text-gray-900 mb-4 mt-8">
             Aktivita
           </div>
-          {props.activeUsersEnabled && (
-            <div className="mb-4">
-              <div>Aktivni uzivatele:</div>
 
-              {presentUsers.map((user) => (
-                <AdminUserAvatarPure key={user.id} user={user} size="small" />
-              ))}
-            </div>
+          {props.activeUsersEnabled && (
+            <AdminPresentUsers presentUsers={presentUsers} />
           )}
 
           <AdminStatementActivities
+            ref={activitiesRef}
             statementId={statement.id}
             commentRepliesEnabled={props.commentRepliesEnabled}
           />

@@ -9,6 +9,8 @@ import NavSearch from './NavSearch'
 import NavSubLink from './NavSubLink'
 import classNames from 'classnames'
 import { DonateModal } from '@/components/modals/DonateModal'
+import { NavDonateLink } from './NavDonateLink'
+import { NavDonateButton } from './NavDonateButton'
 
 export const NavigationFragment = gql(`
   fragment Navigation on Query {
@@ -26,11 +28,17 @@ export function Navigation(props: {
 }) {
   const data = useFragment(NavigationFragment, props.data)
 
-  const [isOpen, setIsOpen] = useState(false)
+  const [isNavigationOpen, setIsNavigationOpen] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
+
+  const handleDonateClick = () => {
+    setIsNavigationOpen(false)
+    setIsModalOpen(true)
+  }
 
   return (
     <div className="d-flex align-items-center">
-      <nav className={`nav d-none d-xl-flex ${isOpen ? 'open' : ''}`}>
+      <nav className={`nav d-none d-xl-flex ${isNavigationOpen ? 'open' : ''}`}>
         <div className="text-white w-100 px-5 my-5 d-flex d-xl-none">
           <NavSearchForm />
         </div>
@@ -58,6 +66,8 @@ export function Navigation(props: {
           </NavSubItem>
           <NavItemLink title="O nás" url="/o-nas" />
           <NavItemLink title="Workshopy" url="/workshopy" />
+
+          <NavDonateLink onClick={handleDonateClick} />
         </ul>
       </nav>
       <NavSearch title="Vyhledávání">
@@ -67,19 +77,23 @@ export function Navigation(props: {
       </NavSearch>
 
       <div className="menu-item ms-2 ms-xl-10 d-none d-xl-flex">
-        <DonateModal />
+        <NavDonateButton onClick={handleDonateClick} />
       </div>
 
       <div className="menu-item d-flex d-xl-none ms-2">
         <a
           className={classNames('nav-link d-flex w-40px h-40px', {
-            open: isOpen,
+            open: isNavigationOpen,
           })}
-          onClick={() => setIsOpen(!isOpen)}
+          onClick={() => setIsNavigationOpen(!isNavigationOpen)}
         >
           <span className="nav-icon"></span>
         </a>
       </div>
+      <DonateModal
+        onClose={() => setIsModalOpen(false)}
+        isModalOpen={isModalOpen}
+      />
     </div>
   )
 }
