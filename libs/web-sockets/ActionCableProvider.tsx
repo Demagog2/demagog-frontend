@@ -96,7 +96,7 @@ export function useStatementSubscription(
 
     const pingInterval = setInterval(() => {
       if (subscription) {
-        subscription.send({ type: 'ping zuzu' })
+        subscription.send({ type: 'ping' })
       }
     }, 5000)
 
