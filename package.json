@@ -23,7 +23,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.7",
-    "@ckeditor/ckeditor5-react": "^9.5.0",
+    "@ckeditor/ckeditor5-react": "^9.3.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@headlessui/react": "^2.1.8",
     "@heroicons/react": "^2.1.5",
@@ -35,7 +35,7 @@
     "@xstate/react": "^5.0.0",
     "anchorme": "^3.0.8",
     "apollo-upload-client": "^18.0.1",
-    "ckeditor5": "^45.2.1",
+    "ckeditor5": "^43.1.1",
     "classnames": "^2.3.2",
     "cookies-next": "^4.1.1",
     "diff": "^7.0.0",
