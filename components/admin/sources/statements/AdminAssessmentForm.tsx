@@ -239,6 +239,7 @@ function AdminAssessmentForm(props: {
       message.present_users.map((presentUser) => ({
         id: presentUser.id,
         fullName: presentUser.display_name,
+        avatar: presentUser.avatar,
       }))
     )
   }, [])
