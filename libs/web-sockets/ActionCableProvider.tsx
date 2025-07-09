@@ -61,9 +61,15 @@ export interface CommentActivity {
   reply?: Reply
 }
 
+export interface ExplanationChange {
+  id: number
+  activity_type: 'explanation_html_changed'
+  user: User
+}
+
 export interface ActivityCreatedMessage {
   type: 'activity_created'
-  activity: CommentActivity
+  activity: CommentActivity | ExplanationChange
 }
 
 type StatementChannelMessages = PresenceUpdated | ActivityCreatedMessage

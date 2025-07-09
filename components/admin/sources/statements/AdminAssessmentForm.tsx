@@ -232,6 +232,7 @@ function AdminAssessmentForm(props: {
   )
 
   const [presentUsers, setPresentUsers] = useState<PresentUser[]>([])
+  const [activeUserId, setActiveUserId] = useState<number | null>(null)
   const activitiesRef = useRef<AdminStatementActivitiesRef>(null)
 
   const onPresenceUpdate = useCallback((message: PresenceUpdated) => {
@@ -245,53 +246,59 @@ function AdminAssessmentForm(props: {
   }, [])
 
   const onActivityCreated = useCallback((message: ActivityCreatedMessage) => {
-    if (
-      message.activity.activity_type !== 'comment_created' ||
-      data.currentUser.id === message.activity.user.id.toString()
-    ) {
-      return
-    }
-    const activityToastData = {
-      activityType: 'comment_created',
-      commentId: message.activity.comment.id.toString(),
-      message: message.activity.comment.content,
-      user: {
-        fullName: message.activity.user.display_name,
-      },
-    }
-
-    const scrollToComment = (commentId: string) => {
-      const highlight = (element: HTMLElement) => {
-        element.scrollIntoView({
-          behavior: 'smooth',
-          block: 'start',
-          inline: 'nearest',
-        })
-        element.classList.add('admin-comment-highlight')
-        setTimeout(() => {
-          element.classList.remove('admin-comment-highlight')
-        }, 1000)
+    if (message.activity.activity_type === 'comment_created') {
+      if (data.currentUser.id === message.activity.user.id.toString()) {
+        return
       }
 
-      const tryScroll = () => {
-        const element = document.getElementById(commentId)
-        if (element) {
-          highlight(element)
+      const commentId = message.activity.comment.id.toString()
+
+      const activityToastData = {
+        activityType: 'comment_created',
+        commentId: commentId,
+        message: message.activity.comment.content,
+        user: {
+          fullName: message.activity.user.display_name,
+        },
+      }
+
+      const scrollToComment = (commentId: string) => {
+        const highlight = (element: HTMLElement) => {
+          element.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+            inline: 'nearest',
+          })
+          element.classList.add('admin-comment-highlight')
+          setTimeout(() => {
+            element.classList.remove('admin-comment-highlight')
+          }, 1000)
         }
+
+        const tryScroll = () => {
+          const element = document.getElementById(commentId)
+          if (element) {
+            highlight(element)
+          }
+        }
+        tryScroll()
       }
-      tryScroll()
+
+      toast(AdminActivityToast, {
+        hideProgressBar: true,
+        data: {
+          activityData: activityToastData,
+          onScrollToComment: () =>
+            activitiesRef.current?.refetch().then(() => {
+              scrollToComment(commentId)
+            }),
+        },
+      })
     }
 
-    toast(AdminActivityToast, {
-      hideProgressBar: true,
-      data: {
-        activityData: activityToastData,
-        onScrollToComment: () =>
-          activitiesRef.current?.refetch().then(() => {
-            scrollToComment(message.activity.comment.id.toString())
-          }),
-      },
-    })
+    if (message.activity.activity_type === 'explanation_html_changed') {
+      setActiveUserId(message.activity.user.id)
+    }
   }, [])
 
   useStatementSubscription(statement.id, onPresenceUpdate, onActivityCreated)
@@ -1003,7 +1010,10 @@ function AdminAssessmentForm(props: {
           </div>
 
           {props.activeUsersEnabled && (
-            <AdminPresentUsers presentUsers={presentUsers} />
+            <AdminPresentUsers
+              presentUsers={presentUsers}
+              activeUserId={activeUserId}
+            />
           )}
 
           <AdminStatementActivities

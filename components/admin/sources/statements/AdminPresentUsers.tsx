@@ -9,8 +9,11 @@ export type PresentUser = {
   avatar?: string | null
 }
 
-export function AdminPresentUsers(props: { presentUsers: PresentUser[] }) {
-  const { presentUsers } = props
+export function AdminPresentUsers(props: {
+  presentUsers: PresentUser[]
+  activeUserId: number | null
+}) {
+  const { presentUsers, activeUserId } = props
   const maxVisibleUsers = 10
   const hasMoreUsers = presentUsers.length > maxVisibleUsers
   const visibleUsers = presentUsers.slice(0, maxVisibleUsers)
@@ -33,7 +36,12 @@ export function AdminPresentUsers(props: { presentUsers: PresentUser[] }) {
         <>
           <div className="flex -space-x-0.5">
             {visibleUsers.map((user) => (
-              <AdminUserAvatarPure key={user.id} user={user} size="small" />
+              <AdminUserAvatarPure
+                key={user.id}
+                user={user}
+                size="small"
+                isActive={user.id === activeUserId}
+              />
             ))}
             {hasMoreUsers && (
               <div className="relative">
