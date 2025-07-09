@@ -1,10 +1,5 @@
 import classNames from 'classnames'
-import { ButtonView, Editor } from 'ckeditor5'
-import {
-  IconObjectFullWidth,
-  IconObjectRight,
-  IconColorPalette,
-} from '@ckeditor/ckeditor5-icons'
+import { ButtonView, Editor, icons } from 'ckeditor5'
 import { BoxCommand } from './box-command'
 import { BoxToggleBgCommand } from './box-toggle-bg-command'
 import { BoxToggleFloatCommand } from './box-toggle-float-command'
@@ -122,7 +117,7 @@ export function Box(editor: Editor) {
 
     view.set({
       label: editor.locale.t('Rámeček'),
-      icon: IconObjectFullWidth,
+      icon: icons.objectFullWidth,
       isToggleable: true,
       tooltip: true,
     })
@@ -137,7 +132,7 @@ export function Box(editor: Editor) {
 
     view.set({
       label: editor.locale.t('Obtékání'),
-      icon: IconObjectRight,
+      icon: icons.objectBlockRight,
       isToggleable: true,
       tooltip: true,
     })
@@ -152,7 +147,7 @@ export function Box(editor: Editor) {
 
     view.set({
       label: editor.locale.t('Pozadí'),
-      icon: IconColorPalette,
+      icon: icons.colorPalette,
       isToggleable: true,
       tooltip: true,
     })

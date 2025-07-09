@@ -1,5 +1,4 @@
-import { ButtonView, Dialog, Plugin, View } from 'ckeditor5'
-import { IconQuote } from '@ckeditor/ckeditor5-icons'
+import { ButtonView, Dialog, Plugin, View, icons } from 'ckeditor5'
 import { BlockQuoteEditingWithSpeakerEditing } from './block-quote-2-editing'
 import { BlockQuoteWithSpeakerCommmand } from './block-quote-2-command'
 import { createRoot } from 'react-dom/client'
@@ -52,7 +51,7 @@ export class BlockQuoteWithSpeaker extends Plugin {
 
       view.set({
         label: editor.locale.t('Citát'),
-        icon: IconQuote,
+        icon: icons.quote,
         isToggleable: true,
         tooltip: true,
       })
