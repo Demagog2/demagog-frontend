@@ -25,15 +25,17 @@ export function AdminUserAvatar(props: {
 export function AdminUserAvatarPure(props: {
   user: { fullName: string; avatar?: string | null }
   size?: 'small' | 'large' | 'extra-large'
+  isActive?: boolean
 }) {
-  const { size = 'small', user } = props
+  const { size = 'small', user, isActive = false } = props
 
   return (
     <>
       {!user.avatar ? (
         <span
           className={classNames(
-            'inline-flex items-center justify-center rounded-full bg-gray-500 ring-2 ring-white',
+            'inline-flex items-center justify-center rounded-full bg-gray-500 ring-2',
+            isActive ? 'ring-green' : 'ring-white',
             {
               'h-6 w-6': size === 'small',
               'h-8 w-8': size === 'large',
@@ -56,7 +58,7 @@ export function AdminUserAvatarPure(props: {
             'rounded-full',
             'bg-gray-50',
             'ring-2',
-            'ring-white',
+            isActive ? 'ring-green' : 'ring-white',
             {
               'h-6 w-6 min-w-6': size === 'small',
               'h-8 w-8 min-w-8': size === 'large',
