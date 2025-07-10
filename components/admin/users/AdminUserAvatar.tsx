@@ -25,9 +25,9 @@ export function AdminUserAvatar(props: {
 export function AdminUserAvatarPure(props: {
   user: { fullName: string; avatar?: string | null }
   size?: 'small' | 'large' | 'extra-large'
-  isActive?: boolean
+  isTyping?: boolean
 }) {
-  const { size = 'small', user, isActive = false } = props
+  const { size = 'small', user, isTyping = false } = props
 
   return (
     <>
@@ -35,7 +35,7 @@ export function AdminUserAvatarPure(props: {
         <span
           className={classNames(
             'inline-flex items-center justify-center rounded-full bg-gray-500 ring-2',
-            isActive ? 'ring-green' : 'ring-white',
+            isTyping ? 'ring-green-400' : 'ring-white',
             {
               'h-6 w-6': size === 'small',
               'h-8 w-8': size === 'large',
@@ -58,7 +58,7 @@ export function AdminUserAvatarPure(props: {
             'rounded-full',
             'bg-gray-50',
             'ring-2',
-            isActive ? 'ring-green' : 'ring-white',
+            isTyping ? 'ring-green-400' : 'ring-white',
             {
               'h-6 w-6 min-w-6': size === 'small',
               'h-8 w-8 min-w-8': size === 'large',

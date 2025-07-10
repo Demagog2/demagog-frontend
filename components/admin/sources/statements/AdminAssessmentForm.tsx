@@ -56,6 +56,7 @@ import { toast } from 'react-toastify'
 import {
   ActivityCreatedMessage,
   PresenceUpdated,
+  TypingData,
   useStatementSubscription,
 } from '@/libs/web-sockets/ActionCableProvider'
 import { AdminPresentUsers } from './AdminPresentUsers'
@@ -232,7 +233,7 @@ function AdminAssessmentForm(props: {
   )
 
   const [presentUsers, setPresentUsers] = useState<PresentUser[]>([])
-  const [activeUserId, setActiveUserId] = useState<number | null>(null)
+  const [typingUserIds, setTypingUserIds] = useState<number[]>([])
   const activitiesRef = useRef<AdminStatementActivitiesRef>(null)
 
   const onPresenceUpdate = useCallback((message: PresenceUpdated) => {
@@ -245,63 +246,96 @@ function AdminAssessmentForm(props: {
     )
   }, [])
 
-  const onActivityCreated = useCallback((message: ActivityCreatedMessage) => {
-    if (message.activity.activity_type === 'comment_created') {
-      if (data.currentUser.id === message.activity.user.id.toString()) {
-        return
-      }
-
-      const commentId = message.activity.comment.id.toString()
-
-      const activityToastData = {
-        activityType: 'comment_created',
-        commentId: commentId,
-        message: message.activity.comment.content,
-        user: {
-          fullName: message.activity.user.display_name,
-        },
-      }
-
-      const scrollToComment = (commentId: string) => {
-        const highlight = (element: HTMLElement) => {
-          element.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start',
-            inline: 'nearest',
-          })
-          element.classList.add('admin-comment-highlight')
-          setTimeout(() => {
-            element.classList.remove('admin-comment-highlight')
-          }, 1000)
+  const onActivityCreated = useCallback(
+    (message: ActivityCreatedMessage) => {
+      if (message.activity.activity_type === 'comment_created') {
+        if (data.currentUser.id === message.activity.user.id.toString()) {
+          return
         }
 
-        const tryScroll = () => {
-          const element = document.getElementById(commentId)
-          if (element) {
-            highlight(element)
+        const commentId = message.activity.comment.id.toString()
+
+        const activityToastData = {
+          activityType: 'comment_created',
+          commentId: commentId,
+          message: message.activity.comment.content,
+          user: {
+            fullName: message.activity.user.display_name,
+            avatar: message.activity.user.avatar,
+          },
+        }
+
+        const scrollToComment = (commentId: string) => {
+          const highlight = (element: HTMLElement) => {
+            element.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start',
+              inline: 'nearest',
+            })
+            element.classList.add('admin-comment-highlight')
+            setTimeout(() => {
+              element.classList.remove('admin-comment-highlight')
+            }, 1000)
           }
+
+          const tryScroll = () => {
+            const element = document.getElementById(commentId)
+            if (element) {
+              highlight(element)
+            }
+          }
+          tryScroll()
         }
-        tryScroll()
+
+        toast(AdminActivityToast, {
+          hideProgressBar: true,
+          data: {
+            activityData: activityToastData,
+            onScrollToComment: () =>
+              activitiesRef.current?.refetch().then(() => {
+                scrollToComment(commentId)
+              }),
+          },
+        })
+      }
+    },
+    [data.currentUser.id]
+  )
+
+  const onTypingData = useCallback((message: TypingData) => {
+    setTypingUserIds((prev) => {
+      const newSet = new Set(prev)
+
+      if (message.is_typing) {
+        newSet.add(message.user.id)
+      } else {
+        newSet.delete(message.user.id)
       }
 
-      toast(AdminActivityToast, {
-        hideProgressBar: true,
-        data: {
-          activityData: activityToastData,
-          onScrollToComment: () =>
-            activitiesRef.current?.refetch().then(() => {
-              scrollToComment(commentId)
-            }),
-        },
-      })
-    }
-
-    if (message.activity.activity_type === 'explanation_html_changed') {
-      setActiveUserId(message.activity.user.id)
-    }
+      return Array.from(newSet)
+    })
   }, [])
 
-  useStatementSubscription(statement.id, onPresenceUpdate, onActivityCreated)
+  const subscription = useStatementSubscription(
+    statement.id,
+    onPresenceUpdate,
+    onActivityCreated,
+    onTypingData
+  )
+
+  const sendTypingStatus = useCallback(
+    (isTyping: boolean) => {
+      subscription?.perform('typing', { is_typing: isTyping })
+    },
+    [subscription]
+  )
+
+  useStatementSubscription(
+    statement.id,
+    onPresenceUpdate,
+    onActivityCreated,
+    onTypingData
+  )
 
   const [formState, formAction] = useFormState(props.action, {
     state: 'initial',
@@ -752,6 +786,8 @@ function AdminAssessmentForm(props: {
                               autoSaveActorRef.send({
                                 type: 'Form field updated',
                               })
+
+                              sendTypingStatus(true)
                             }}
                             rows={3}
                             placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
@@ -866,6 +902,8 @@ function AdminAssessmentForm(props: {
                               autoSaveActorRef.send({
                                 type: 'Form field updated',
                               })
+
+                              sendTypingStatus(true)
                             }}
                           />
                         </div>
@@ -1012,7 +1050,7 @@ function AdminAssessmentForm(props: {
           {props.activeUsersEnabled && (
             <AdminPresentUsers
               presentUsers={presentUsers}
-              activeUserId={activeUserId}
+              typingUserIds={typingUserIds}
             />
           )}
 

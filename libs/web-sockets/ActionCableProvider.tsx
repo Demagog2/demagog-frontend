@@ -61,28 +61,33 @@ export interface CommentActivity {
   reply?: Reply
 }
 
-export interface ExplanationChange {
-  id: number
-  activity_type: 'explanation_html_changed'
-  user: User
-}
-
 export interface ActivityCreatedMessage {
   type: 'activity_created'
-  activity: CommentActivity | ExplanationChange
+  activity: CommentActivity
 }
 
-type StatementChannelMessages = PresenceUpdated | ActivityCreatedMessage
+export interface TypingData {
+  type: 'user_typing'
+  user: User
+  is_typing: boolean
+}
+
+type StatementChannelMessages =
+  | PresenceUpdated
+  | ActivityCreatedMessage
+  | TypingData
 
 export function useStatementSubscription(
   statementId: string,
   onPresenceUpdated: (message: PresenceUpdated) => void,
-  onActivityCreated: (message: ActivityCreatedMessage) => void
+  onActivityCreated: (message: ActivityCreatedMessage) => void,
+  onTypingData: (message: TypingData) => void
 ) {
   const consumer = useContext(ActionCable)
+  const subscription = useMemo(() => {
+    if (!consumer) return null
 
-  useEffect(() => {
-    const subscription = consumer?.subscriptions.create(
+    return consumer.subscriptions.create(
       {
         channel: 'StatementChannel',
         statement_id: statementId,
@@ -96,10 +101,22 @@ export function useStatementSubscription(
           if (message.type === 'activity_created') {
             onActivityCreated(message)
           }
+
+          if (message.type === 'user_typing') {
+            onTypingData(message)
+          }
         },
       }
     )
+  }, [
+    statementId,
+    consumer,
+    onPresenceUpdated,
+    onActivityCreated,
+    onTypingData,
+  ])
 
+  useEffect(() => {
     const pingInterval = setInterval(() => {
       if (subscription) {
         subscription.send({ type: 'ping' })
@@ -108,9 +125,18 @@ export function useStatementSubscription(
 
     return () => {
       clearInterval(pingInterval)
-      subscription?.unsubscribe()
     }
-  }, [statementId, consumer, onPresenceUpdated, onActivityCreated])
+  }, [subscription])
+
+  useEffect(() => {
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe()
+      }
+    }
+  }, [subscription])
+
+  return subscription
 }
 
 export function ActionCableProvider(

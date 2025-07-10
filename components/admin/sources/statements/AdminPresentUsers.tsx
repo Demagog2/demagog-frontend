@@ -11,9 +11,9 @@ export type PresentUser = {
 
 export function AdminPresentUsers(props: {
   presentUsers: PresentUser[]
-  activeUserId: number | null
+  typingUserIds: number[]
 }) {
-  const { presentUsers, activeUserId } = props
+  const { presentUsers, typingUserIds } = props
   const maxVisibleUsers = 10
   const hasMoreUsers = presentUsers.length > maxVisibleUsers
   const visibleUsers = presentUsers.slice(0, maxVisibleUsers)
@@ -40,7 +40,7 @@ export function AdminPresentUsers(props: {
                 key={user.id}
                 user={user}
                 size="small"
-                isActive={user.id === activeUserId}
+                isTyping={typingUserIds.includes(user.id)}
               />
             ))}
             {hasMoreUsers && (
