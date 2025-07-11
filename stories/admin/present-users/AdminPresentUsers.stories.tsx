@@ -28,12 +28,14 @@ const exampleAvatar2 =
 export const Empty: Story = {
   args: {
     presentUsers: [],
+    typingUserIds: [],
   },
 }
 
 export const OneUser: Story = {
   args: {
     presentUsers: [{ id: 1, avatar: null, fullName: 'Jezevec Chrujda' }],
+    typingUserIds: [1],
   },
 }
 
@@ -42,6 +44,7 @@ export const UserWithAvatar: Story = {
     presentUsers: [
       { id: 2, avatar: exampleAvatar, fullName: 'Sovicka Stanicka' },
     ],
+    typingUserIds: [2],
   },
 }
 export const UsersWithAvatars: Story = {
@@ -53,6 +56,7 @@ export const UsersWithAvatars: Story = {
       { id: 5, avatar: exampleAvatar, fullName: 'Krtek Krtouch' },
       { id: 6, avatar: exampleAvatar2, fullName: 'Sovicka Stanicka' },
     ],
+    typingUserIds: [2, 3, 5],
   },
 }
 export const TooManyUsers: Story = {
@@ -71,6 +75,7 @@ export const TooManyUsers: Story = {
       { id: 12, avatar: exampleAvatar, fullName: 'Krtek Krtouch' },
       { id: 13, avatar: exampleAvatar2, fullName: 'Sovicka Stanicka' },
     ],
+    typingUserIds: [2, 3, 5, 6, 7, 8],
   },
 }
 
@@ -89,5 +94,6 @@ export const TooManyUsersWithoutAvatar: Story = {
       { id: 12, avatar: null, fullName: 'Krtek Krtouch' },
       { id: 13, avatar: null, fullName: 'Sovicka Stanicka' },
     ],
+    typingUserIds: [2, 8],
   },
 }

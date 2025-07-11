@@ -6,6 +6,7 @@ import {
   useMemo,
   useContext,
   useEffect,
+  useCallback,
 } from 'react'
 import { Consumer, createConsumer } from '@rails/actioncable'
 
@@ -66,17 +67,28 @@ export interface ActivityCreatedMessage {
   activity: CommentActivity
 }
 
-type StatementChannelMessages = PresenceUpdated | ActivityCreatedMessage
+export interface TypingData {
+  type: 'user_typing'
+  user: User
+  is_typing: boolean
+}
+
+type StatementChannelMessages =
+  | PresenceUpdated
+  | ActivityCreatedMessage
+  | TypingData
 
 export function useStatementSubscription(
   statementId: string,
   onPresenceUpdated: (message: PresenceUpdated) => void,
-  onActivityCreated: (message: ActivityCreatedMessage) => void
+  onActivityCreated: (message: ActivityCreatedMessage) => void,
+  onTypingData: (message: TypingData) => void
 ) {
   const consumer = useContext(ActionCable)
+  const subscription = useMemo(() => {
+    if (!consumer) return null
 
-  useEffect(() => {
-    const subscription = consumer?.subscriptions.create(
+    return consumer.subscriptions.create(
       {
         channel: 'StatementChannel',
         statement_id: statementId,
@@ -90,14 +102,49 @@ export function useStatementSubscription(
           if (message.type === 'activity_created') {
             onActivityCreated(message)
           }
+
+          if (message.type === 'user_typing') {
+            onTypingData(message)
+          }
         },
       }
     )
+  }, [
+    statementId,
+    consumer,
+    onPresenceUpdated,
+    onActivityCreated,
+    onTypingData,
+  ])
+
+  const sendTypingStatus = useCallback(
+    (isTyping: boolean) => {
+      subscription?.perform('typing', { is_typing: isTyping })
+    },
+    [subscription]
+  )
+
+  useEffect(() => {
+    const pingInterval = setInterval(() => {
+      if (subscription) {
+        subscription.send({ type: 'ping' })
+      }
+    }, 5000)
 
     return () => {
-      subscription?.unsubscribe()
+      clearInterval(pingInterval)
     }
-  }, [statementId, consumer, onPresenceUpdated, onActivityCreated])
+  }, [subscription])
+
+  useEffect(() => {
+    return () => {
+      if (subscription) {
+        subscription.unsubscribe()
+      }
+    }
+  }, [subscription])
+
+  return { sendTypingStatus }
 }
 
 export function ActionCableProvider(
