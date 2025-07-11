@@ -895,9 +895,6 @@ function AdminAssessmentForm(props: {
 
                               sendTypingStatus(true)
                             }}
-                            onBlur={() => {
-                              sendTypingStatus(false)
-                            }}
                           />
                         </div>
                       )}
