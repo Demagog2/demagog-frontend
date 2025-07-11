@@ -226,7 +226,7 @@ export const AdminStatementActivities = forwardRef<
 
   return (
     <div className="flow-root">
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 xl:mt-8">
         {statement.activitiesCount > SHOW_ALL_THRESHOLD && (
           <>
             {showAll ? (
@@ -265,7 +265,10 @@ export const AdminStatementActivities = forwardRef<
       {activities?.length === 0 ? (
         <p className="text-gray-500 text-sm p-3 mt-3">Zatím žádné aktivity.</p>
       ) : (
-        <ul role="list" className="mt-8 -mb-8">
+        <ul
+          role="list"
+          className="mt-8 lg:mt-12 -mb-8 overflow-y-auto max-h-screen min-h-[400px]"
+        >
           {activities?.map((activityItem, activityItemIdx: number) => {
             if (!activityItem?.node) {
               return null

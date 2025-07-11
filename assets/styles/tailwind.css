@@ -59,6 +59,11 @@
   }
 
   /* CK Editor content and admin article detail styles */
+
+  .ck-content {
+    @apply !max-h-screen !min-h-[400px] !overflow-y-auto;
+  }
+
   .ck .ck-content,
   .article-content {
     .ck-editor_demagog-box-wrapper> :first-child {
