@@ -6,6 +6,7 @@ import {
   useMemo,
   useContext,
   useEffect,
+  useCallback,
 } from 'react'
 import { Consumer, createConsumer } from '@rails/actioncable'
 
@@ -116,6 +117,13 @@ export function useStatementSubscription(
     onTypingData,
   ])
 
+  const sendTypingStatus = useCallback(
+    (isTyping: boolean) => {
+      subscription?.perform('typing', { is_typing: isTyping })
+    },
+    [subscription]
+  )
+
   useEffect(() => {
     const pingInterval = setInterval(() => {
       if (subscription) {
@@ -136,7 +144,7 @@ export function useStatementSubscription(
     }
   }, [subscription])
 
-  return subscription
+  return { sendTypingStatus }
 }
 
 export function ActionCableProvider(

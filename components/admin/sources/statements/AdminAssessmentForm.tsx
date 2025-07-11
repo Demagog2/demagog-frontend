@@ -316,21 +316,7 @@ function AdminAssessmentForm(props: {
     })
   }, [])
 
-  const subscription = useStatementSubscription(
-    statement.id,
-    onPresenceUpdate,
-    onActivityCreated,
-    onTypingData
-  )
-
-  const sendTypingStatus = useCallback(
-    (isTyping: boolean) => {
-      subscription?.perform('typing', { is_typing: isTyping })
-    },
-    [subscription]
-  )
-
-  useStatementSubscription(
+  const { sendTypingStatus } = useStatementSubscription(
     statement.id,
     onPresenceUpdate,
     onActivityCreated,

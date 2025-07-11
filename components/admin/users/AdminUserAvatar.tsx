@@ -26,15 +26,23 @@ export function AdminUserAvatarPure(props: {
   user: { fullName: string; avatar?: string | null }
   size?: 'small' | 'large' | 'extra-large'
   isTyping?: boolean
+  onMouseEnter?: () => void
+  onMouseLeave?: () => void
 }) {
-  const { size = 'small', user, isTyping = false } = props
+  const {
+    size = 'small',
+    user,
+    isTyping = false,
+    onMouseEnter,
+    onMouseLeave,
+  } = props
 
   return (
     <>
       {!user.avatar ? (
         <span
           className={classNames(
-            'inline-flex items-center justify-center rounded-full bg-gray-500 ring-2',
+            'inline-flex items-center justify-center rounded-full bg-gray-500 ring-2 cursor-default',
             isTyping ? 'ring-green-400' : 'ring-white',
             {
               'h-6 w-6': size === 'small',
@@ -42,6 +50,8 @@ export function AdminUserAvatarPure(props: {
               'size-10': size === 'extra-large',
             }
           )}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
         >
           <span className="text-sm font-medium leading-none text-white">
             {user.fullName
@@ -65,7 +75,8 @@ export function AdminUserAvatarPure(props: {
               'size-10': size === 'extra-large',
             }
           )}
-          title={user.fullName}
+          onMouseEnter={onMouseEnter}
+          onMouseLeave={onMouseLeave}
         />
       )}
     </>
