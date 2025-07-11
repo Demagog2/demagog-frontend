@@ -23,7 +23,7 @@ export function AdminPresentUsers(props: {
   const [hoveredUserId, setHoveredUserId] = useState<number | null>(null)
 
   return (
-    <div className="mb-4">
+    <div className="mb-10">
       <div className="mb-3">
         <h3 className="text-sm font-semibold text-gray-900">
           Aktivní uživatelé:
@@ -35,7 +35,7 @@ export function AdminPresentUsers(props: {
         </div>
       ) : (
         <>
-          <div className="flex -space-x-0.5 relative">
+          <div className="flex -space-x-0.5 relative text-sm">
             {visibleUsers.map((user) => (
               <div key={user.id}>
                 <AdminUserAvatarPure
@@ -49,8 +49,10 @@ export function AdminPresentUsers(props: {
                 {hoveredUserId === user.id && (
                   <div className="absolute top-full left-0 mt-1 px-2 py-1 rounded-lg bg-gray-200 w-max rounded-lg shadow-lg whitespace-nowrap z-10">
                     <div className="text-start">
-                      <p>{user.fullName}</p>
-                      {typingUserIds.includes(user.id) && <p>Píše...</p>}
+                      <p>
+                        {user.fullName}
+                        {typingUserIds.includes(user.id) && ' píše...'}
+                      </p>
                     </div>
                   </div>
                 )}
