@@ -789,6 +789,9 @@ function AdminAssessmentForm(props: {
 
                               sendTypingStatus(true)
                             }}
+                            onBlur={() => {
+                              sendTypingStatus(false)
+                            }}
                             rows={3}
                             placeholder={`Zadejte zkráceně odůvodnění ${isPromise ? 'slibu' : 'výroku'}...`}
                             disabled={isStatementFieldDisabled}
@@ -904,6 +907,9 @@ function AdminAssessmentForm(props: {
                               })
 
                               sendTypingStatus(true)
+                            }}
+                            onBlur={() => {
+                              sendTypingStatus(false)
                             }}
                           />
                         </div>
