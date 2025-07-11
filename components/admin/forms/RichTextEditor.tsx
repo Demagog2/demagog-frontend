@@ -35,13 +35,14 @@ import { Box } from '@/libs/ck-plugins/box/box'
 import { BoxToolbar } from '@/libs/ck-plugins/box/box-toolbar'
 import { MsWordPaste } from '@/libs/ck-plugins/ms-word-paste/ms-word-paste'
 
-export default function RickTextEditor(props: {
+export default function RichTextEditor(props: {
   includeHeadings?: boolean
   includeStatements?: boolean
   value: string
   onChange(value: string): void
+  onBlur?(): void
 }) {
-  const { onChange } = props
+  const { onChange, onBlur } = props
 
   const handleChange = useCallback(
     (_: EventInfo, editor: Editor) => {
@@ -177,6 +178,7 @@ export default function RickTextEditor(props: {
       data={props.value}
       onChange={handleChange}
       config={config}
+      onBlur={onBlur}
     />
   )
 }
