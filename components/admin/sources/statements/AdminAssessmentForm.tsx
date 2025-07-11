@@ -883,6 +883,7 @@ function AdminAssessmentForm(props: {
                             type="hidden"
                             name={field.name}
                             value={field.value}
+                            onBlur={() => sendTypingStatus(false)}
                           />
                           <RichTextEditor
                             includeHeadings
